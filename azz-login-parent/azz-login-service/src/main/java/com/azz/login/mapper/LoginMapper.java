@@ -5,13 +5,12 @@
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
-package com.azz.platform.goods.mapper;
-
-import java.util.List;
+package com.azz.login.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
-import com.azz.platform.goods.pojo.Demo;
+import com.azz.login.pojo.Login;
 
 /**
  * <P>TODO</P>
@@ -19,8 +18,8 @@ import com.azz.platform.goods.pojo.Demo;
  * @author 刘建麟  2018年10月14日 上午9:22:36
  */
 @Mapper
-public interface DemoMapper {
+public interface LoginMapper {
 	
-	List<Demo> getName();
+	Login getLogin(@Param("name") String name,@Param("password") String password);
 }
 

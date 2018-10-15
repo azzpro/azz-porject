@@ -1,8 +1,8 @@
 server:
-  port: 7288
+  port: 7287
 spring:
   application:
-    name: azz-goods-service
+    name: azz-login-service
   messages:
     basename: i18n/Messages
   datasource:

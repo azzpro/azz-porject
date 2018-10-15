@@ -13,6 +13,7 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 public class AzzPlatformWebApplication extends SpringBootServletInitializer{
 
 	public static void main(String[] args) {
+		System.setProperty("spring.devtools.restart.enabled", "true");
 		SpringApplication.run(AzzPlatformWebApplication.class, args);
 	}
 	

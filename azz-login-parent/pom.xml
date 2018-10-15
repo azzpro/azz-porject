@@ -10,4 +10,9 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
+	<modules>
+		<module>azz-login-api</module>
+		<module>azz-login-pojo</module>
+		<module>azz-login-service</module>
+	</modules>
 </project>

@@ -31,7 +31,7 @@ public class LoginServiceImpl implements LoginService{
 	 * @see com.azz.login.api.LoginService#getLogin(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Login getLogin(@RequestParam("name") String name,@RequestParam("password") String password) {
+	public Login getLogin(String name,String password) {
 		return loginMapper.getLogin(name, password);
 	}
 	

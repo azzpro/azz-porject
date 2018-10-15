@@ -10,7 +10,10 @@ package com.azz.platform.goods.pojo.bo;
 import java.io.Serializable;
 import java.util.List;
 
+import com.azz.core.common.QueryPage;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * <P>TODO</P>
@@ -18,7 +21,8 @@ import lombok.Data;
  * @author 黄智聪  2018年10月15日 下午2:42:56
  */
 @Data
-public class DemoSearchParam implements Serializable{
+@EqualsAndHashCode(callSuper = false)
+public class DemoSearchParam extends QueryPage implements Serializable{
     
     private static final long serialVersionUID = -4757815162304652090L;
     

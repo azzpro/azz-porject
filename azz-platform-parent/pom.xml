@@ -19,4 +19,5 @@
 		<module>azz-order-api</module>
 		<module>azz-platform-web</module>
 	</modules>
+	
 </project>

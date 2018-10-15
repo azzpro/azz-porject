@@ -20,6 +20,10 @@
 			<artifactId>azz-goods-pojo</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>azz-goods-api</finalName>

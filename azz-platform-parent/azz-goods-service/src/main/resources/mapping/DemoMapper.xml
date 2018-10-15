@@ -10,4 +10,14 @@
 	<select id="getName" resultMap="BaseResultMap">
 		select * from demo
 	</select>
+	
+	<select id="getDemoInfosByIds" resultType="com.azz.platform.goods.pojo.vo.DemoInfo" parameterType="com.azz.platform.goods.pojo.bo.DemoSearchParam">
+		select * from demo
+		<where>
+			id in 
+			<foreach collection="list" item="id" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+		</where>
+	</select>
 </mapper>

@@ -10,6 +10,18 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	
+	<dependencies>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.azz</groupId>
+			<artifactId>azz-common-core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+	
 	<build>
 		<finalName>azz-order-pojo</finalName>
 	</build>

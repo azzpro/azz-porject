@@ -16,7 +16,7 @@ import com.azz.platform.goods.api.DemoService;
  * @version 1.0
  * @author 刘建麟  2018年10月14日 下午4:03:15
  */
-@FeignClient(value = "azz_goods_service")
+@FeignClient(value = "azz-goods-service")
 public interface DemoServiceClient extends DemoService{
 }
 

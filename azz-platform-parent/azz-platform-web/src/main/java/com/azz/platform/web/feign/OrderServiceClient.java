@@ -16,7 +16,7 @@ import com.azz.order.api.OrderService;
  * @version 1.0
  * @author 刘建麟  2018年10月15日 上午9:43:14
  */
-@FeignClient(value = "azz_order_service")
+@FeignClient(value = "azz-order-service")
 public interface OrderServiceClient extends OrderService{
 
 }

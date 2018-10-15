@@ -2,7 +2,7 @@ server:
   port: 7289
 spring:
   application:
-    name: azz_order_service    
+    name: azz-order-service    
   messages:
     basename: i18n/Messages  
   datasource:

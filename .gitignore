@@ -1,0 +1,16 @@
+.classpath
+.factorypath
+.project
+*.class
+MANIFEST.MF
+**/.settings
+org.eclipse.core.resources.prefs
+org.eclipse.jdt.apt.core.prefs
+org.eclipse.jdt.core.prefs
+org.eclipse.m2e.core.prefs
+com.springframwork.ide.eclipse.prefs
+org.springframwork.ide.eclipse.prefs
+pom.properties
+target
+.settings
+.metadata

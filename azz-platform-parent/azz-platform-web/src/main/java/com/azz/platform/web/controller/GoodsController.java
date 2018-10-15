@@ -7,19 +7,13 @@
  
 package com.azz.platform.web.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSONObject;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
-import com.azz.login.api.LoginService;
-import com.azz.order.api.OrderService;
 import com.azz.platform.goods.api.DemoService;
-import com.azz.platform.goods.pojo.Demo;
 import com.azz.platform.goods.pojo.bo.DemoSearchParam;
 import com.azz.platform.goods.pojo.vo.DemoInfo;
 

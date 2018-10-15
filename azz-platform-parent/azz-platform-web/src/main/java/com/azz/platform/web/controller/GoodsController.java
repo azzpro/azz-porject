@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
+import com.azz.login.api.LoginService;
 import com.azz.order.api.OrderService;
 import com.azz.platform.goods.api.DemoService;
 import com.azz.platform.goods.pojo.Demo;
@@ -51,7 +52,7 @@ public class GoodsController {
 	
 	@RequestMapping("getDemoInfosByIds")
 	public JsonResult<Pagination<DemoInfo>> getDemoInfosByIds(DemoSearchParam param) {
-	    return ds.getDemoInfosByIds(param);
+		return ds.getDemoInfosByIds(param);
 	}
 	
 	

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.azz.login.api.LoginService;
 import com.azz.login.pojo.Login;
 
 /**
@@ -26,9 +27,9 @@ import com.azz.login.pojo.Login;
 @RequestMapping("/api/login")
 @CrossOrigin
 public class LoginController {
-	/*
+	
 	@Autowired
-	private LoginServiceClient lsc;
+	private LoginService lsc;
 	
 	@RequestMapping(value="goLogin",produces = "application/json;charset=UTF-8")
 	public JSONObject goLogin(String data) {
@@ -44,6 +45,6 @@ public class LoginController {
 			jb.put("data", jb1);
 		}
 		return jb;
-	}*/
+	}
 }
 

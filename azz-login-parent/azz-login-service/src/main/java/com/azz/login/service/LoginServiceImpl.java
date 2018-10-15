@@ -8,6 +8,7 @@
 package com.azz.login.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.login.api.LoginService;
@@ -30,7 +31,7 @@ public class LoginServiceImpl implements LoginService{
 	 * @see com.azz.login.api.LoginService#getLogin(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Login getLogin(String name, String password) {
+	public Login getLogin(@RequestParam("name") String name,@RequestParam("password") String password) {
 		return loginMapper.getLogin(name, password);
 	}
 	

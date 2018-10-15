@@ -7,8 +7,8 @@
  
 package com.azz.login.api;
 
+import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.login.pojo.Login;
 
@@ -17,6 +17,7 @@ import com.azz.login.pojo.Login;
  * @version 1.0
  * @author 刘建麟  2018年10月15日 下午2:52:17
  */
+@FeignClient("azz-login-service")
 public interface LoginService {
 	
 	/**
@@ -27,6 +28,6 @@ public interface LoginService {
 	 * @author 刘建麟  2018年10月15日 下午2:57:58
 	 */
 	@GetMapping("getLogin")
-	Login getLogin(@RequestParam("name") String name,@RequestParam("password") String password);
+	Login getLogin(String name, String password);
 }
 

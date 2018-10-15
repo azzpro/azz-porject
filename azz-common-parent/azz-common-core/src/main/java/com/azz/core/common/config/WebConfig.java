@@ -10,7 +10,6 @@ package com.azz.core.common.config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
@@ -21,7 +20,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
-    
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
@@ -29,11 +27,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
                 .allowedMethods(CorsConfiguration.ALL)
                 .allowedOrigins(CorsConfiguration.ALL);
         super.addCorsMappings(registry);
-    }
-    
-    @Override  
-    public void addInterceptors(InterceptorRegistry registry) {  
-        //注册自定义拦截器，添加拦截路径和排除拦截路径  
     }
 }
 

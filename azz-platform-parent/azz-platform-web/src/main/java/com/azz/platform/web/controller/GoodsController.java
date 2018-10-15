@@ -11,14 +11,16 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
-import com.azz.order.pojo.Order;
+import com.azz.core.common.JsonResult;
+import com.azz.core.common.page.Pagination;
+import com.azz.order.api.OrderService;
+import com.azz.platform.goods.api.DemoService;
 import com.azz.platform.goods.pojo.Demo;
-import com.azz.platform.web.feign.DemoServiceClient;
-import com.azz.platform.web.feign.OrderServiceClient;
+import com.azz.platform.goods.pojo.bo.DemoSearchParam;
+import com.azz.platform.goods.pojo.vo.DemoInfo;
 
 /**
  * <P>TODO</P>
@@ -31,20 +33,27 @@ public class GoodsController {
 
 	
 	@Autowired
-	private DemoServiceClient dsc;
+	private DemoService ds;
 	
-	@Autowired
-	private OrderServiceClient osc;
+	/*@Autowired
+	private OrderService os;
 	
 	@RequestMapping("getGoods")
 	public JSONObject getGoods() {
 		JSONObject jb = new JSONObject();
-		osc.getD();
-	    List<Demo> name = dsc.getName();
+		os.getD();
+	    List<Demo> name = ds.getName();
 	   // List<Order> orders = osc.getName();
 		jb.put("data", name);
 	//	jb.put("msg", orders);
 		return jb;
+	}*/
+	
+	@RequestMapping("getDemoInfosByIds")
+	public JsonResult<Pagination<DemoInfo>> getDemoInfosByIds(DemoSearchParam param) {
+	    return ds.getDemoInfosByIds(param);
 	}
+	
+	
 }
 

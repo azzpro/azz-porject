@@ -10,6 +10,8 @@ package com.azz.platform.goods.pojo.bo;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import com.azz.core.common.QueryPage;
 
 import lombok.Data;
@@ -26,6 +28,7 @@ public class DemoSearchParam extends QueryPage implements Serializable{
     
     private static final long serialVersionUID = -4757815162304652090L;
     
+    @NotNull(message = "id不允许为空")
     private List<String> ids;
 
 }

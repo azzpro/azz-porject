@@ -9,6 +9,7 @@ package com.azz.order.api;
 
 import java.util.List;
 
+import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.azz.order.pojo.Order;
@@ -18,6 +19,7 @@ import com.azz.order.pojo.Order;
  * @version 1.0
  * @author 刘建麟  2018年10月14日 上午11:38:20
  */
+@FeignClient("azz-order-service")
 public interface OrderService {
 	
 	@GetMapping("getOrder")

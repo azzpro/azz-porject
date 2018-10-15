@@ -7,13 +7,16 @@
 package com.azz.core.common;
 
 
+import java.io.Serializable;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class QueryPage{
+public class QueryPage implements Serializable{
 
+    private static final long serialVersionUID = -2736927232050618484L;
 
     /**
      * 每页条数

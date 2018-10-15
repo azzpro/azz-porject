@@ -9,16 +9,12 @@ package com.azz.platform.order.service;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.order.api.OrderService;
 import com.azz.order.pojo.Order;
-import com.azz.platform.goods.pojo.Demo;
 import com.azz.platform.order.mapper.OrderMapper;
-import com.azz.platform.order.service.feign.GoodsServiceClient;
 
 /**
  * <P>TODO</P>
@@ -29,15 +25,11 @@ import com.azz.platform.order.service.feign.GoodsServiceClient;
 public class OrderServiceImpl implements OrderService{
 
 	@Autowired
-	private GoodsServiceClient gsc;
-	
-	@Autowired
 	private OrderMapper om;
 	
 	@Override
 	public List<Order> getName() {
-		List<Demo> name = gsc.getName();
-		System.out.println("Goods Service 调用 Order Service...."+name.size());
+		System.out.println("Goods Service 调用 Order Service....");
 		return om.getName();
 	}
 

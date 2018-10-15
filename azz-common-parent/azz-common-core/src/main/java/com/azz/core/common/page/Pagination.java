@@ -13,6 +13,7 @@ import java.util.List;
 import com.github.pagehelper.Page;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * <P>分页数据封装</P>
@@ -20,6 +21,7 @@ import lombok.Data;
  * @author 彭斌  2018年10月15日 下午2:37:44
  */
 @Data
+@NoArgsConstructor
 public class Pagination<T> implements Serializable {
     private static final long serialVersionUID = -3333370388316673393L;
     /**

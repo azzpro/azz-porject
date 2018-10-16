@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.azz.platform.goods.mapper.ProductMapper">
+	<resultMap id="BaseResultMap" type="com.azz.platform.goods.pojo.vo.ProductInfo">
+		<result column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="description" property="description" />
+	</resultMap>
+	
+	<select id="getProductList" parameterType="com.azz.platform.goods.pojo.bo.ProductSearchParam" resultMap="BaseResultMap">
+		select 
+			id,name,description 
+		from product 
+		<if test="name != null" >
+			where `name` LIKE concat('%',#{name},'%') 
+		</if>
+	</select>
+</mapper>

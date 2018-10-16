@@ -1,4 +1,4 @@
-package com.azz.login;
+package com.azz;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,9 +8,9 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 @EnableEurekaClient
 @EnableFeignClients
 @SpringBootApplication
-public class AzzLoginServiceApplication {
+public class AzzGoodsServiceApplication {
 
 	public static void main(String[] args) {
-		 SpringApplication.run(AzzLoginServiceApplication.class, args);
+		 SpringApplication.run(AzzGoodsServiceApplication.class, args);
 	}
 }

@@ -4,21 +4,21 @@ import java.util.Date;
 
 public class PlatformRolePermission implements Serializable {
     /**
-     * Ö÷¼ü
+     * ä¸»é”®
      *
      * @mbg.generated
      */
     private Long id;
 
     /**
-     * ½ÇÉ«id
+     * è§’è‰²id
      *
      * @mbg.generated
      */
     private Long roleId;
 
     /**
-     * È¨ÏŞid
+     * æƒé™id
      *
      * @mbg.generated
      */
@@ -27,21 +27,21 @@ public class PlatformRolePermission implements Serializable {
     private Date createTime;
 
     /**
-     * ´´½¨ÈË
+     * åˆ›å»ºäºº
      *
      * @mbg.generated
      */
     private String creator;
 
     /**
-     * ×îºóĞŞ¸ÄÊ±¼ä
+     * æœ€åä¿®æ”¹æ—¶é—´
      *
      * @mbg.generated
      */
     private Date lastModifyTime;
 
     /**
-     * ĞŞ¸ÄÈË
+     * ä¿®æ”¹äºº
      *
      * @mbg.generated
      */
@@ -50,10 +50,10 @@ public class PlatformRolePermission implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Ö÷¼ü<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_role_permission.id
+     * ä¸»é”®<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_role_permission.id
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_role_permission.id
+     * @return è¿”å›å€¼å¯¹åº” platform_role_permission.id
      *
      * @mbg.generated
      */
@@ -62,10 +62,10 @@ public class PlatformRolePermission implements Serializable {
     }
 
     /**
-     * Ö÷¼ü<br/>
+     * ä¸»é”®<br/>
      * platform_role_permission.id
      *
-     * @param id Öµ¶ÔÓ¦ platform_role_permission.id
+     * @param id å€¼å¯¹åº” platform_role_permission.id
      *
      * @mbg.generated
      */
@@ -74,10 +74,10 @@ public class PlatformRolePermission implements Serializable {
     }
 
     /**
-     * ½ÇÉ«id<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_role_permission.role_id
+     * è§’è‰²id<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_role_permission.role_id
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_role_permission.role_id
+     * @return è¿”å›å€¼å¯¹åº” platform_role_permission.role_id
      *
      * @mbg.generated
      */
@@ -86,10 +86,10 @@ public class PlatformRolePermission implements Serializable {
     }
 
     /**
-     * ½ÇÉ«id<br/>
+     * è§’è‰²id<br/>
      * platform_role_permission.role_id
      *
-     * @param roleId Öµ¶ÔÓ¦ platform_role_permission.role_id
+     * @param roleId å€¼å¯¹åº” platform_role_permission.role_id
      *
      * @mbg.generated
      */
@@ -98,10 +98,10 @@ public class PlatformRolePermission implements Serializable {
     }
 
     /**
-     * È¨ÏŞid<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_role_permission.permission_id
+     * æƒé™id<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_role_permission.permission_id
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_role_permission.permission_id
+     * @return è¿”å›å€¼å¯¹åº” platform_role_permission.permission_id
      *
      * @mbg.generated
      */
@@ -110,10 +110,10 @@ public class PlatformRolePermission implements Serializable {
     }
 
     /**
-     * È¨ÏŞid<br/>
+     * æƒé™id<br/>
      * platform_role_permission.permission_id
      *
-     * @param permissionId Öµ¶ÔÓ¦ platform_role_permission.permission_id
+     * @param permissionId å€¼å¯¹åº” platform_role_permission.permission_id
      *
      * @mbg.generated
      */
@@ -123,9 +123,9 @@ public class PlatformRolePermission implements Serializable {
 
     /**
      * <br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_role_permission.create_time
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_role_permission.create_time
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_role_permission.create_time
+     * @return è¿”å›å€¼å¯¹åº” platform_role_permission.create_time
      *
      * @mbg.generated
      */
@@ -137,7 +137,7 @@ public class PlatformRolePermission implements Serializable {
      * <br/>
      * platform_role_permission.create_time
      *
-     * @param createTime Öµ¶ÔÓ¦ platform_role_permission.create_time
+     * @param createTime å€¼å¯¹åº” platform_role_permission.create_time
      *
      * @mbg.generated
      */
@@ -146,10 +146,10 @@ public class PlatformRolePermission implements Serializable {
     }
 
     /**
-     * ´´½¨ÈË<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_role_permission.creator
+     * åˆ›å»ºäºº<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_role_permission.creator
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_role_permission.creator
+     * @return è¿”å›å€¼å¯¹åº” platform_role_permission.creator
      *
      * @mbg.generated
      */
@@ -158,10 +158,10 @@ public class PlatformRolePermission implements Serializable {
     }
 
     /**
-     * ´´½¨ÈË<br/>
+     * åˆ›å»ºäºº<br/>
      * platform_role_permission.creator
      *
-     * @param creator Öµ¶ÔÓ¦ platform_role_permission.creator
+     * @param creator å€¼å¯¹åº” platform_role_permission.creator
      *
      * @mbg.generated
      */
@@ -170,10 +170,10 @@ public class PlatformRolePermission implements Serializable {
     }
 
     /**
-     * ×îºóĞŞ¸ÄÊ±¼ä<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_role_permission.last_modify_time
+     * æœ€åä¿®æ”¹æ—¶é—´<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_role_permission.last_modify_time
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_role_permission.last_modify_time
+     * @return è¿”å›å€¼å¯¹åº” platform_role_permission.last_modify_time
      *
      * @mbg.generated
      */
@@ -182,10 +182,10 @@ public class PlatformRolePermission implements Serializable {
     }
 
     /**
-     * ×îºóĞŞ¸ÄÊ±¼ä<br/>
+     * æœ€åä¿®æ”¹æ—¶é—´<br/>
      * platform_role_permission.last_modify_time
      *
-     * @param lastModifyTime Öµ¶ÔÓ¦ platform_role_permission.last_modify_time
+     * @param lastModifyTime å€¼å¯¹åº” platform_role_permission.last_modify_time
      *
      * @mbg.generated
      */
@@ -194,10 +194,10 @@ public class PlatformRolePermission implements Serializable {
     }
 
     /**
-     * ĞŞ¸ÄÈË<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_role_permission.modifier
+     * ä¿®æ”¹äºº<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_role_permission.modifier
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_role_permission.modifier
+     * @return è¿”å›å€¼å¯¹åº” platform_role_permission.modifier
      *
      * @mbg.generated
      */
@@ -206,10 +206,10 @@ public class PlatformRolePermission implements Serializable {
     }
 
     /**
-     * ĞŞ¸ÄÈË<br/>
+     * ä¿®æ”¹äºº<br/>
      * platform_role_permission.modifier
      *
-     * @param modifier Öµ¶ÔÓ¦ platform_role_permission.modifier
+     * @param modifier å€¼å¯¹åº” platform_role_permission.modifier
      *
      * @mbg.generated
      */

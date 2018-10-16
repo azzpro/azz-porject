@@ -5,28 +5,28 @@ import java.util.Date;
 
 public class PlatformRole implements Serializable {
     /**
-     * Ö÷¼ü
+     * ä¸»é”®
      *
      * @mbg.generated
      */
     private Long id;
 
     /**
-     * ½ÇÉ«Ãû³Æ
+     * è§’è‰²åç§°
      *
      * @mbg.generated
      */
     private String roleName;
 
     /**
-     * ±¸×¢
+     * å¤‡æ³¨
      *
      * @mbg.generated
      */
     private String remark;
 
     /**
-     * ×´Ì¬  0ÎŞĞ§  1ÓĞĞ§
+     * çŠ¶æ€  0æ— æ•ˆ  1æœ‰æ•ˆ
      *
      * @mbg.generated
      */
@@ -35,21 +35,21 @@ public class PlatformRole implements Serializable {
     private Date createTime;
 
     /**
-     * ´´½¨ÈË
+     * åˆ›å»ºäºº
      *
      * @mbg.generated
      */
     private String creator;
 
     /**
-     * ×îºóĞŞ¸ÄÊ±¼ä
+     * æœ€åä¿®æ”¹æ—¶é—´
      *
      * @mbg.generated
      */
     private Date lastModifyTime;
 
     /**
-     * ĞŞ¸ÄÈË
+     * ä¿®æ”¹äºº
      *
      * @mbg.generated
      */
@@ -58,10 +58,10 @@ public class PlatformRole implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Ö÷¼ü<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_role.id
+     * ä¸»é”®<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_role.id
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_role.id
+     * @return è¿”å›å€¼å¯¹åº” platform_role.id
      *
      * @mbg.generated
      */
@@ -70,10 +70,10 @@ public class PlatformRole implements Serializable {
     }
 
     /**
-     * Ö÷¼ü<br/>
+     * ä¸»é”®<br/>
      * platform_role.id
      *
-     * @param id Öµ¶ÔÓ¦ platform_role.id
+     * @param id å€¼å¯¹åº” platform_role.id
      *
      * @mbg.generated
      */
@@ -82,10 +82,10 @@ public class PlatformRole implements Serializable {
     }
 
     /**
-     * ½ÇÉ«Ãû³Æ<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_role.role_name
+     * è§’è‰²åç§°<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_role.role_name
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_role.role_name
+     * @return è¿”å›å€¼å¯¹åº” platform_role.role_name
      *
      * @mbg.generated
      */
@@ -94,10 +94,10 @@ public class PlatformRole implements Serializable {
     }
 
     /**
-     * ½ÇÉ«Ãû³Æ<br/>
+     * è§’è‰²åç§°<br/>
      * platform_role.role_name
      *
-     * @param roleName Öµ¶ÔÓ¦ platform_role.role_name
+     * @param roleName å€¼å¯¹åº” platform_role.role_name
      *
      * @mbg.generated
      */
@@ -106,10 +106,10 @@ public class PlatformRole implements Serializable {
     }
 
     /**
-     * ±¸×¢<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_role.remark
+     * å¤‡æ³¨<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_role.remark
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_role.remark
+     * @return è¿”å›å€¼å¯¹åº” platform_role.remark
      *
      * @mbg.generated
      */
@@ -118,10 +118,10 @@ public class PlatformRole implements Serializable {
     }
 
     /**
-     * ±¸×¢<br/>
+     * å¤‡æ³¨<br/>
      * platform_role.remark
      *
-     * @param remark Öµ¶ÔÓ¦ platform_role.remark
+     * @param remark å€¼å¯¹åº” platform_role.remark
      *
      * @mbg.generated
      */
@@ -130,10 +130,10 @@ public class PlatformRole implements Serializable {
     }
 
     /**
-     * ×´Ì¬  0ÎŞĞ§  1ÓĞĞ§<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_role.status
+     * çŠ¶æ€  0æ— æ•ˆ  1æœ‰æ•ˆ<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_role.status
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_role.status
+     * @return è¿”å›å€¼å¯¹åº” platform_role.status
      *
      * @mbg.generated
      */
@@ -142,10 +142,10 @@ public class PlatformRole implements Serializable {
     }
 
     /**
-     * ×´Ì¬  0ÎŞĞ§  1ÓĞĞ§<br/>
+     * çŠ¶æ€  0æ— æ•ˆ  1æœ‰æ•ˆ<br/>
      * platform_role.status
      *
-     * @param status Öµ¶ÔÓ¦ platform_role.status
+     * @param status å€¼å¯¹åº” platform_role.status
      *
      * @mbg.generated
      */
@@ -155,9 +155,9 @@ public class PlatformRole implements Serializable {
 
     /**
      * <br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_role.create_time
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_role.create_time
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_role.create_time
+     * @return è¿”å›å€¼å¯¹åº” platform_role.create_time
      *
      * @mbg.generated
      */
@@ -169,7 +169,7 @@ public class PlatformRole implements Serializable {
      * <br/>
      * platform_role.create_time
      *
-     * @param createTime Öµ¶ÔÓ¦ platform_role.create_time
+     * @param createTime å€¼å¯¹åº” platform_role.create_time
      *
      * @mbg.generated
      */
@@ -178,10 +178,10 @@ public class PlatformRole implements Serializable {
     }
 
     /**
-     * ´´½¨ÈË<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_role.creator
+     * åˆ›å»ºäºº<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_role.creator
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_role.creator
+     * @return è¿”å›å€¼å¯¹åº” platform_role.creator
      *
      * @mbg.generated
      */
@@ -190,10 +190,10 @@ public class PlatformRole implements Serializable {
     }
 
     /**
-     * ´´½¨ÈË<br/>
+     * åˆ›å»ºäºº<br/>
      * platform_role.creator
      *
-     * @param creator Öµ¶ÔÓ¦ platform_role.creator
+     * @param creator å€¼å¯¹åº” platform_role.creator
      *
      * @mbg.generated
      */
@@ -202,10 +202,10 @@ public class PlatformRole implements Serializable {
     }
 
     /**
-     * ×îºóĞŞ¸ÄÊ±¼ä<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_role.last_modify_time
+     * æœ€åä¿®æ”¹æ—¶é—´<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_role.last_modify_time
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_role.last_modify_time
+     * @return è¿”å›å€¼å¯¹åº” platform_role.last_modify_time
      *
      * @mbg.generated
      */
@@ -214,10 +214,10 @@ public class PlatformRole implements Serializable {
     }
 
     /**
-     * ×îºóĞŞ¸ÄÊ±¼ä<br/>
+     * æœ€åä¿®æ”¹æ—¶é—´<br/>
      * platform_role.last_modify_time
      *
-     * @param lastModifyTime Öµ¶ÔÓ¦ platform_role.last_modify_time
+     * @param lastModifyTime å€¼å¯¹åº” platform_role.last_modify_time
      *
      * @mbg.generated
      */
@@ -226,10 +226,10 @@ public class PlatformRole implements Serializable {
     }
 
     /**
-     * ĞŞ¸ÄÈË<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_role.modifier
+     * ä¿®æ”¹äºº<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_role.modifier
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_role.modifier
+     * @return è¿”å›å€¼å¯¹åº” platform_role.modifier
      *
      * @mbg.generated
      */
@@ -238,10 +238,10 @@ public class PlatformRole implements Serializable {
     }
 
     /**
-     * ĞŞ¸ÄÈË<br/>
+     * ä¿®æ”¹äºº<br/>
      * platform_role.modifier
      *
-     * @param modifier Öµ¶ÔÓ¦ platform_role.modifier
+     * @param modifier å€¼å¯¹åº” platform_role.modifier
      *
      * @mbg.generated
      */

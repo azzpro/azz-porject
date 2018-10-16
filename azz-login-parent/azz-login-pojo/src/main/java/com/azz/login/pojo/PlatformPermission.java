@@ -5,63 +5,63 @@ import java.util.Date;
 
 public class PlatformPermission implements Serializable {
     /**
-     * Ö÷¼ü
+     * ä¸»é”®
      *
      * @mbg.generated
      */
     private Long id;
 
     /**
-     * È¨ÏŞ±àºÅ
+     * æƒé™ç¼–å·
      *
      * @mbg.generated
      */
     private String permissionCode;
 
     /**
-     * È¨ÏŞÃû³Æ
+     * æƒé™åç§°
      *
      * @mbg.generated
      */
     private String permissionName;
 
     /**
-     * ÉÏ¼¶È¨ÏŞ±àºÅ
+     * ä¸Šçº§æƒé™ç¼–å·
      *
      * @mbg.generated
      */
     private String parentPermissionCode;
 
     /**
-     * ÅÅĞò
+     * æ’åº
      *
      * @mbg.generated
      */
     private Integer sort;
 
     /**
-     * µÈ¼¶
+     * ç­‰çº§
      *
      * @mbg.generated
      */
     private Integer level;
 
     /**
-     * È¨ÏŞ¶ÔÓ¦µÄurl
+     * æƒé™å¯¹åº”çš„url
      *
      * @mbg.generated
      */
     private String pageUrl;
 
     /**
-     * ±¸×¢
+     * å¤‡æ³¨
      *
      * @mbg.generated
      */
     private String remark;
 
     /**
-     * ×´Ì¬  0ÎŞĞ§  1ÓĞĞ§
+     * çŠ¶æ€  0æ— æ•ˆ  1æœ‰æ•ˆ
      *
      * @mbg.generated
      */
@@ -70,21 +70,21 @@ public class PlatformPermission implements Serializable {
     private Date createTime;
 
     /**
-     * ´´½¨ÈË
+     * åˆ›å»ºäºº
      *
      * @mbg.generated
      */
     private String creator;
 
     /**
-     * ×îºóĞŞ¸ÄÊ±¼ä
+     * æœ€åä¿®æ”¹æ—¶é—´
      *
      * @mbg.generated
      */
     private Date lastModifyTime;
 
     /**
-     * ĞŞ¸ÄÈË
+     * ä¿®æ”¹äºº
      *
      * @mbg.generated
      */
@@ -93,10 +93,10 @@ public class PlatformPermission implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Ö÷¼ü<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_permission.id
+     * ä¸»é”®<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_permission.id
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_permission.id
+     * @return è¿”å›å€¼å¯¹åº” platform_permission.id
      *
      * @mbg.generated
      */
@@ -105,10 +105,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * Ö÷¼ü<br/>
+     * ä¸»é”®<br/>
      * platform_permission.id
      *
-     * @param id Öµ¶ÔÓ¦ platform_permission.id
+     * @param id å€¼å¯¹åº” platform_permission.id
      *
      * @mbg.generated
      */
@@ -117,10 +117,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * È¨ÏŞ±àºÅ<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_permission.permission_code
+     * æƒé™ç¼–å·<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_permission.permission_code
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_permission.permission_code
+     * @return è¿”å›å€¼å¯¹åº” platform_permission.permission_code
      *
      * @mbg.generated
      */
@@ -129,10 +129,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * È¨ÏŞ±àºÅ<br/>
+     * æƒé™ç¼–å·<br/>
      * platform_permission.permission_code
      *
-     * @param permissionCode Öµ¶ÔÓ¦ platform_permission.permission_code
+     * @param permissionCode å€¼å¯¹åº” platform_permission.permission_code
      *
      * @mbg.generated
      */
@@ -141,10 +141,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * È¨ÏŞÃû³Æ<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_permission.permission_name
+     * æƒé™åç§°<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_permission.permission_name
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_permission.permission_name
+     * @return è¿”å›å€¼å¯¹åº” platform_permission.permission_name
      *
      * @mbg.generated
      */
@@ -153,10 +153,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * È¨ÏŞÃû³Æ<br/>
+     * æƒé™åç§°<br/>
      * platform_permission.permission_name
      *
-     * @param permissionName Öµ¶ÔÓ¦ platform_permission.permission_name
+     * @param permissionName å€¼å¯¹åº” platform_permission.permission_name
      *
      * @mbg.generated
      */
@@ -165,10 +165,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * ÉÏ¼¶È¨ÏŞ±àºÅ<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_permission.parent_permission_code
+     * ä¸Šçº§æƒé™ç¼–å·<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_permission.parent_permission_code
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_permission.parent_permission_code
+     * @return è¿”å›å€¼å¯¹åº” platform_permission.parent_permission_code
      *
      * @mbg.generated
      */
@@ -177,10 +177,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * ÉÏ¼¶È¨ÏŞ±àºÅ<br/>
+     * ä¸Šçº§æƒé™ç¼–å·<br/>
      * platform_permission.parent_permission_code
      *
-     * @param parentPermissionCode Öµ¶ÔÓ¦ platform_permission.parent_permission_code
+     * @param parentPermissionCode å€¼å¯¹åº” platform_permission.parent_permission_code
      *
      * @mbg.generated
      */
@@ -189,10 +189,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * ÅÅĞò<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_permission.sort
+     * æ’åº<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_permission.sort
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_permission.sort
+     * @return è¿”å›å€¼å¯¹åº” platform_permission.sort
      *
      * @mbg.generated
      */
@@ -201,10 +201,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * ÅÅĞò<br/>
+     * æ’åº<br/>
      * platform_permission.sort
      *
-     * @param sort Öµ¶ÔÓ¦ platform_permission.sort
+     * @param sort å€¼å¯¹åº” platform_permission.sort
      *
      * @mbg.generated
      */
@@ -213,10 +213,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * µÈ¼¶<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_permission.level
+     * ç­‰çº§<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_permission.level
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_permission.level
+     * @return è¿”å›å€¼å¯¹åº” platform_permission.level
      *
      * @mbg.generated
      */
@@ -225,10 +225,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * µÈ¼¶<br/>
+     * ç­‰çº§<br/>
      * platform_permission.level
      *
-     * @param level Öµ¶ÔÓ¦ platform_permission.level
+     * @param level å€¼å¯¹åº” platform_permission.level
      *
      * @mbg.generated
      */
@@ -237,10 +237,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * È¨ÏŞ¶ÔÓ¦µÄurl<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_permission.page_url
+     * æƒé™å¯¹åº”çš„url<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_permission.page_url
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_permission.page_url
+     * @return è¿”å›å€¼å¯¹åº” platform_permission.page_url
      *
      * @mbg.generated
      */
@@ -249,10 +249,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * È¨ÏŞ¶ÔÓ¦µÄurl<br/>
+     * æƒé™å¯¹åº”çš„url<br/>
      * platform_permission.page_url
      *
-     * @param pageUrl Öµ¶ÔÓ¦ platform_permission.page_url
+     * @param pageUrl å€¼å¯¹åº” platform_permission.page_url
      *
      * @mbg.generated
      */
@@ -261,10 +261,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * ±¸×¢<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_permission.remark
+     * å¤‡æ³¨<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_permission.remark
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_permission.remark
+     * @return è¿”å›å€¼å¯¹åº” platform_permission.remark
      *
      * @mbg.generated
      */
@@ -273,10 +273,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * ±¸×¢<br/>
+     * å¤‡æ³¨<br/>
      * platform_permission.remark
      *
-     * @param remark Öµ¶ÔÓ¦ platform_permission.remark
+     * @param remark å€¼å¯¹åº” platform_permission.remark
      *
      * @mbg.generated
      */
@@ -285,10 +285,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * ×´Ì¬  0ÎŞĞ§  1ÓĞĞ§<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_permission.status
+     * çŠ¶æ€  0æ— æ•ˆ  1æœ‰æ•ˆ<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_permission.status
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_permission.status
+     * @return è¿”å›å€¼å¯¹åº” platform_permission.status
      *
      * @mbg.generated
      */
@@ -297,10 +297,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * ×´Ì¬  0ÎŞĞ§  1ÓĞĞ§<br/>
+     * çŠ¶æ€  0æ— æ•ˆ  1æœ‰æ•ˆ<br/>
      * platform_permission.status
      *
-     * @param status Öµ¶ÔÓ¦ platform_permission.status
+     * @param status å€¼å¯¹åº” platform_permission.status
      *
      * @mbg.generated
      */
@@ -310,9 +310,9 @@ public class PlatformPermission implements Serializable {
 
     /**
      * <br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_permission.create_time
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_permission.create_time
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_permission.create_time
+     * @return è¿”å›å€¼å¯¹åº” platform_permission.create_time
      *
      * @mbg.generated
      */
@@ -324,7 +324,7 @@ public class PlatformPermission implements Serializable {
      * <br/>
      * platform_permission.create_time
      *
-     * @param createTime Öµ¶ÔÓ¦ platform_permission.create_time
+     * @param createTime å€¼å¯¹åº” platform_permission.create_time
      *
      * @mbg.generated
      */
@@ -333,10 +333,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * ´´½¨ÈË<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_permission.creator
+     * åˆ›å»ºäºº<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_permission.creator
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_permission.creator
+     * @return è¿”å›å€¼å¯¹åº” platform_permission.creator
      *
      * @mbg.generated
      */
@@ -345,10 +345,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * ´´½¨ÈË<br/>
+     * åˆ›å»ºäºº<br/>
      * platform_permission.creator
      *
-     * @param creator Öµ¶ÔÓ¦ platform_permission.creator
+     * @param creator å€¼å¯¹åº” platform_permission.creator
      *
      * @mbg.generated
      */
@@ -357,10 +357,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * ×îºóĞŞ¸ÄÊ±¼ä<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_permission.last_modify_time
+     * æœ€åä¿®æ”¹æ—¶é—´<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_permission.last_modify_time
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_permission.last_modify_time
+     * @return è¿”å›å€¼å¯¹åº” platform_permission.last_modify_time
      *
      * @mbg.generated
      */
@@ -369,10 +369,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * ×îºóĞŞ¸ÄÊ±¼ä<br/>
+     * æœ€åä¿®æ”¹æ—¶é—´<br/>
      * platform_permission.last_modify_time
      *
-     * @param lastModifyTime Öµ¶ÔÓ¦ platform_permission.last_modify_time
+     * @param lastModifyTime å€¼å¯¹åº” platform_permission.last_modify_time
      *
      * @mbg.generated
      */
@@ -381,10 +381,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * ĞŞ¸ÄÈË<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_permission.modifier
+     * ä¿®æ”¹äºº<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_permission.modifier
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_permission.modifier
+     * @return è¿”å›å€¼å¯¹åº” platform_permission.modifier
      *
      * @mbg.generated
      */
@@ -393,10 +393,10 @@ public class PlatformPermission implements Serializable {
     }
 
     /**
-     * ĞŞ¸ÄÈË<br/>
+     * ä¿®æ”¹äºº<br/>
      * platform_permission.modifier
      *
-     * @param modifier Öµ¶ÔÓ¦ platform_permission.modifier
+     * @param modifier å€¼å¯¹åº” platform_permission.modifier
      *
      * @mbg.generated
      */

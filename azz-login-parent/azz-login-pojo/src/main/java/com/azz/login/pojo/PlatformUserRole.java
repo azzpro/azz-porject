@@ -5,21 +5,21 @@ import java.util.Date;
 
 public class PlatformUserRole implements Serializable {
     /**
-     * Ö÷¼ü
+     * ä¸»é”®
      *
      * @mbg.generated
      */
     private Long id;
 
     /**
-     * ÓÃ»§id
+     * ç”¨æˆ·id
      *
      * @mbg.generated
      */
     private Long userId;
 
     /**
-     * ½ÇÉ«id
+     * è§’è‰²id
      *
      * @mbg.generated
      */
@@ -28,21 +28,21 @@ public class PlatformUserRole implements Serializable {
     private Date createTime;
 
     /**
-     * ´´½¨ÈË
+     * åˆ›å»ºäºº
      *
      * @mbg.generated
      */
     private String creator;
 
     /**
-     * ×îºóĞŞ¸ÄÊ±¼ä
+     * æœ€åä¿®æ”¹æ—¶é—´
      *
      * @mbg.generated
      */
     private Date lastModifyTime;
 
     /**
-     * ĞŞ¸ÄÈË
+     * ä¿®æ”¹äºº
      *
      * @mbg.generated
      */
@@ -51,10 +51,10 @@ public class PlatformUserRole implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Ö÷¼ü<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user_role.id
+     * ä¸»é”®<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user_role.id
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user_role.id
+     * @return è¿”å›å€¼å¯¹åº” platform_user_role.id
      *
      * @mbg.generated
      */
@@ -63,10 +63,10 @@ public class PlatformUserRole implements Serializable {
     }
 
     /**
-     * Ö÷¼ü<br/>
+     * ä¸»é”®<br/>
      * platform_user_role.id
      *
-     * @param id Öµ¶ÔÓ¦ platform_user_role.id
+     * @param id å€¼å¯¹åº” platform_user_role.id
      *
      * @mbg.generated
      */
@@ -75,10 +75,10 @@ public class PlatformUserRole implements Serializable {
     }
 
     /**
-     * ÓÃ»§id<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user_role.user_id
+     * ç”¨æˆ·id<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user_role.user_id
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user_role.user_id
+     * @return è¿”å›å€¼å¯¹åº” platform_user_role.user_id
      *
      * @mbg.generated
      */
@@ -87,10 +87,10 @@ public class PlatformUserRole implements Serializable {
     }
 
     /**
-     * ÓÃ»§id<br/>
+     * ç”¨æˆ·id<br/>
      * platform_user_role.user_id
      *
-     * @param userId Öµ¶ÔÓ¦ platform_user_role.user_id
+     * @param userId å€¼å¯¹åº” platform_user_role.user_id
      *
      * @mbg.generated
      */
@@ -99,10 +99,10 @@ public class PlatformUserRole implements Serializable {
     }
 
     /**
-     * ½ÇÉ«id<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user_role.role_id
+     * è§’è‰²id<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user_role.role_id
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user_role.role_id
+     * @return è¿”å›å€¼å¯¹åº” platform_user_role.role_id
      *
      * @mbg.generated
      */
@@ -111,10 +111,10 @@ public class PlatformUserRole implements Serializable {
     }
 
     /**
-     * ½ÇÉ«id<br/>
+     * è§’è‰²id<br/>
      * platform_user_role.role_id
      *
-     * @param roleId Öµ¶ÔÓ¦ platform_user_role.role_id
+     * @param roleId å€¼å¯¹åº” platform_user_role.role_id
      *
      * @mbg.generated
      */
@@ -124,9 +124,9 @@ public class PlatformUserRole implements Serializable {
 
     /**
      * <br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user_role.create_time
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user_role.create_time
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user_role.create_time
+     * @return è¿”å›å€¼å¯¹åº” platform_user_role.create_time
      *
      * @mbg.generated
      */
@@ -138,7 +138,7 @@ public class PlatformUserRole implements Serializable {
      * <br/>
      * platform_user_role.create_time
      *
-     * @param createTime Öµ¶ÔÓ¦ platform_user_role.create_time
+     * @param createTime å€¼å¯¹åº” platform_user_role.create_time
      *
      * @mbg.generated
      */
@@ -147,10 +147,10 @@ public class PlatformUserRole implements Serializable {
     }
 
     /**
-     * ´´½¨ÈË<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user_role.creator
+     * åˆ›å»ºäºº<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user_role.creator
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user_role.creator
+     * @return è¿”å›å€¼å¯¹åº” platform_user_role.creator
      *
      * @mbg.generated
      */
@@ -159,10 +159,10 @@ public class PlatformUserRole implements Serializable {
     }
 
     /**
-     * ´´½¨ÈË<br/>
+     * åˆ›å»ºäºº<br/>
      * platform_user_role.creator
      *
-     * @param creator Öµ¶ÔÓ¦ platform_user_role.creator
+     * @param creator å€¼å¯¹åº” platform_user_role.creator
      *
      * @mbg.generated
      */
@@ -171,10 +171,10 @@ public class PlatformUserRole implements Serializable {
     }
 
     /**
-     * ×îºóĞŞ¸ÄÊ±¼ä<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user_role.last_modify_time
+     * æœ€åä¿®æ”¹æ—¶é—´<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user_role.last_modify_time
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user_role.last_modify_time
+     * @return è¿”å›å€¼å¯¹åº” platform_user_role.last_modify_time
      *
      * @mbg.generated
      */
@@ -183,10 +183,10 @@ public class PlatformUserRole implements Serializable {
     }
 
     /**
-     * ×îºóĞŞ¸ÄÊ±¼ä<br/>
+     * æœ€åä¿®æ”¹æ—¶é—´<br/>
      * platform_user_role.last_modify_time
      *
-     * @param lastModifyTime Öµ¶ÔÓ¦ platform_user_role.last_modify_time
+     * @param lastModifyTime å€¼å¯¹åº” platform_user_role.last_modify_time
      *
      * @mbg.generated
      */
@@ -195,10 +195,10 @@ public class PlatformUserRole implements Serializable {
     }
 
     /**
-     * ĞŞ¸ÄÈË<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user_role.modifier
+     * ä¿®æ”¹äºº<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user_role.modifier
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user_role.modifier
+     * @return è¿”å›å€¼å¯¹åº” platform_user_role.modifier
      *
      * @mbg.generated
      */
@@ -207,10 +207,10 @@ public class PlatformUserRole implements Serializable {
     }
 
     /**
-     * ĞŞ¸ÄÈË<br/>
+     * ä¿®æ”¹äºº<br/>
      * platform_user_role.modifier
      *
-     * @param modifier Öµ¶ÔÓ¦ platform_user_role.modifier
+     * @param modifier å€¼å¯¹åº” platform_user_role.modifier
      *
      * @mbg.generated
      */

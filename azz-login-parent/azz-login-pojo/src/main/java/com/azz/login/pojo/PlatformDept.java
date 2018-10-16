@@ -6,35 +6,35 @@ import java.util.Date;
 
 public class PlatformDept implements Serializable {
     /**
-     * Ö÷¼ü
+     * ä¸»é”®
      *
      * @mbg.generated
      */
     private Long id;
 
     /**
-     * ²¿ÃÅ±àÂë
+     * éƒ¨é—¨ç¼–ç 
      *
      * @mbg.generated
      */
     private String deptCode;
 
     /**
-     * ²¿ÃÅÃû³Æ
+     * éƒ¨é—¨åç§°
      *
      * @mbg.generated
      */
     private String deptName;
 
     /**
-     * ÃèÊö
+     * æè¿°
      *
      * @mbg.generated
      */
     private String description;
 
     /**
-     * ×´Ì¬   0ÎŞĞ§  1ÓĞĞ§
+     * çŠ¶æ€   0æ— æ•ˆ  1æœ‰æ•ˆ
      *
      * @mbg.generated
      */
@@ -43,21 +43,21 @@ public class PlatformDept implements Serializable {
     private Date createTime;
 
     /**
-     * ´´½¨ÈË
+     * åˆ›å»ºäºº
      *
      * @mbg.generated
      */
     private String creator;
 
     /**
-     * ×îºóĞŞ¸ÄÊ±¼ä
+     * æœ€åä¿®æ”¹æ—¶é—´
      *
      * @mbg.generated
      */
     private Date lastModifyTime;
 
     /**
-     * ĞŞ¸ÄÈË
+     * ä¿®æ”¹äºº
      *
      * @mbg.generated
      */
@@ -66,10 +66,10 @@ public class PlatformDept implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Ö÷¼ü<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_dept.id
+     * ä¸»é”®<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_dept.id
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_dept.id
+     * @return è¿”å›å€¼å¯¹åº” platform_dept.id
      *
      * @mbg.generated
      */
@@ -78,10 +78,10 @@ public class PlatformDept implements Serializable {
     }
 
     /**
-     * Ö÷¼ü<br/>
+     * ä¸»é”®<br/>
      * platform_dept.id
      *
-     * @param id Öµ¶ÔÓ¦ platform_dept.id
+     * @param id å€¼å¯¹åº” platform_dept.id
      *
      * @mbg.generated
      */
@@ -90,10 +90,10 @@ public class PlatformDept implements Serializable {
     }
 
     /**
-     * ²¿ÃÅ±àÂë<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_dept.dept_code
+     * éƒ¨é—¨ç¼–ç <br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_dept.dept_code
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_dept.dept_code
+     * @return è¿”å›å€¼å¯¹åº” platform_dept.dept_code
      *
      * @mbg.generated
      */
@@ -102,10 +102,10 @@ public class PlatformDept implements Serializable {
     }
 
     /**
-     * ²¿ÃÅ±àÂë<br/>
+     * éƒ¨é—¨ç¼–ç <br/>
      * platform_dept.dept_code
      *
-     * @param deptCode Öµ¶ÔÓ¦ platform_dept.dept_code
+     * @param deptCode å€¼å¯¹åº” platform_dept.dept_code
      *
      * @mbg.generated
      */
@@ -114,10 +114,10 @@ public class PlatformDept implements Serializable {
     }
 
     /**
-     * ²¿ÃÅÃû³Æ<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_dept.dept_name
+     * éƒ¨é—¨åç§°<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_dept.dept_name
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_dept.dept_name
+     * @return è¿”å›å€¼å¯¹åº” platform_dept.dept_name
      *
      * @mbg.generated
      */
@@ -126,10 +126,10 @@ public class PlatformDept implements Serializable {
     }
 
     /**
-     * ²¿ÃÅÃû³Æ<br/>
+     * éƒ¨é—¨åç§°<br/>
      * platform_dept.dept_name
      *
-     * @param deptName Öµ¶ÔÓ¦ platform_dept.dept_name
+     * @param deptName å€¼å¯¹åº” platform_dept.dept_name
      *
      * @mbg.generated
      */
@@ -138,10 +138,10 @@ public class PlatformDept implements Serializable {
     }
 
     /**
-     * ÃèÊö<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_dept.description
+     * æè¿°<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_dept.description
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_dept.description
+     * @return è¿”å›å€¼å¯¹åº” platform_dept.description
      *
      * @mbg.generated
      */
@@ -150,10 +150,10 @@ public class PlatformDept implements Serializable {
     }
 
     /**
-     * ÃèÊö<br/>
+     * æè¿°<br/>
      * platform_dept.description
      *
-     * @param description Öµ¶ÔÓ¦ platform_dept.description
+     * @param description å€¼å¯¹åº” platform_dept.description
      *
      * @mbg.generated
      */
@@ -162,10 +162,10 @@ public class PlatformDept implements Serializable {
     }
 
     /**
-     * ×´Ì¬   0ÎŞĞ§  1ÓĞĞ§<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_dept.status
+     * çŠ¶æ€   0æ— æ•ˆ  1æœ‰æ•ˆ<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_dept.status
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_dept.status
+     * @return è¿”å›å€¼å¯¹åº” platform_dept.status
      *
      * @mbg.generated
      */
@@ -174,10 +174,10 @@ public class PlatformDept implements Serializable {
     }
 
     /**
-     * ×´Ì¬   0ÎŞĞ§  1ÓĞĞ§<br/>
+     * çŠ¶æ€   0æ— æ•ˆ  1æœ‰æ•ˆ<br/>
      * platform_dept.status
      *
-     * @param status Öµ¶ÔÓ¦ platform_dept.status
+     * @param status å€¼å¯¹åº” platform_dept.status
      *
      * @mbg.generated
      */
@@ -187,9 +187,9 @@ public class PlatformDept implements Serializable {
 
     /**
      * <br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_dept.create_time
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_dept.create_time
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_dept.create_time
+     * @return è¿”å›å€¼å¯¹åº” platform_dept.create_time
      *
      * @mbg.generated
      */
@@ -201,7 +201,7 @@ public class PlatformDept implements Serializable {
      * <br/>
      * platform_dept.create_time
      *
-     * @param createTime Öµ¶ÔÓ¦ platform_dept.create_time
+     * @param createTime å€¼å¯¹åº” platform_dept.create_time
      *
      * @mbg.generated
      */
@@ -210,10 +210,10 @@ public class PlatformDept implements Serializable {
     }
 
     /**
-     * ´´½¨ÈË<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_dept.creator
+     * åˆ›å»ºäºº<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_dept.creator
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_dept.creator
+     * @return è¿”å›å€¼å¯¹åº” platform_dept.creator
      *
      * @mbg.generated
      */
@@ -222,10 +222,10 @@ public class PlatformDept implements Serializable {
     }
 
     /**
-     * ´´½¨ÈË<br/>
+     * åˆ›å»ºäºº<br/>
      * platform_dept.creator
      *
-     * @param creator Öµ¶ÔÓ¦ platform_dept.creator
+     * @param creator å€¼å¯¹åº” platform_dept.creator
      *
      * @mbg.generated
      */
@@ -234,10 +234,10 @@ public class PlatformDept implements Serializable {
     }
 
     /**
-     * ×îºóĞŞ¸ÄÊ±¼ä<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_dept.last_modify_time
+     * æœ€åä¿®æ”¹æ—¶é—´<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_dept.last_modify_time
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_dept.last_modify_time
+     * @return è¿”å›å€¼å¯¹åº” platform_dept.last_modify_time
      *
      * @mbg.generated
      */
@@ -246,10 +246,10 @@ public class PlatformDept implements Serializable {
     }
 
     /**
-     * ×îºóĞŞ¸ÄÊ±¼ä<br/>
+     * æœ€åä¿®æ”¹æ—¶é—´<br/>
      * platform_dept.last_modify_time
      *
-     * @param lastModifyTime Öµ¶ÔÓ¦ platform_dept.last_modify_time
+     * @param lastModifyTime å€¼å¯¹åº” platform_dept.last_modify_time
      *
      * @mbg.generated
      */
@@ -258,10 +258,10 @@ public class PlatformDept implements Serializable {
     }
 
     /**
-     * ĞŞ¸ÄÈË<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_dept.modifier
+     * ä¿®æ”¹äºº<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_dept.modifier
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_dept.modifier
+     * @return è¿”å›å€¼å¯¹åº” platform_dept.modifier
      *
      * @mbg.generated
      */
@@ -270,10 +270,10 @@ public class PlatformDept implements Serializable {
     }
 
     /**
-     * ĞŞ¸ÄÈË<br/>
+     * ä¿®æ”¹äºº<br/>
      * platform_dept.modifier
      *
-     * @param modifier Öµ¶ÔÓ¦ platform_dept.modifier
+     * @param modifier å€¼å¯¹åº” platform_dept.modifier
      *
      * @mbg.generated
      */

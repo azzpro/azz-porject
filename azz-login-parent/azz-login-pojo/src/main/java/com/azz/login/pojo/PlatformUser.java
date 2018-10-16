@@ -5,133 +5,133 @@ import java.util.Date;
 
 public class PlatformUser implements Serializable {
     /**
-     * Ö÷¼üid
+     * ä¸»é”®id
      *
      * @mbg.generated
      */
     private Long id;
 
     /**
-     * ÓÃ»§id
+     * ç”¨æˆ·id
      *
      * @mbg.generated
      */
     private String userCode;
 
     /**
-     * ÓÃ»§ĞÕÃû
+     * ç”¨æˆ·å§“å
      *
      * @mbg.generated
      */
     private String userName;
 
     /**
-     * ÓÃ»§êÇ³Æ
+     * ç”¨æˆ·æ˜µç§°
      *
      * @mbg.generated
      */
     private String nickname;
 
     /**
-     * ÊÖ»úºÅÂë
+     * æ‰‹æœºå·ç 
      *
      * @mbg.generated
      */
     private Integer phoneNumber;
 
     /**
-     * ÃÜÂë
+     * å¯†ç 
      *
      * @mbg.generated
      */
     private String password;
 
     /**
-     * ÑÎ
+     * ç›
      *
      * @mbg.generated
      */
     private String salt;
 
     /**
-     * ÓÊÏä
+     * é‚®ç®±
      *
      * @mbg.generated
      */
     private String email;
 
     /**
-     * ĞÔ±ğ(0£ºÄĞ 1£ºÅ® 2£ºÎ´Öª)
+     * æ€§åˆ«(0ï¼šç”· 1ï¼šå¥³ 2ï¼šæœªçŸ¥)
      *
      * @mbg.generated
      */
     private Integer gender;
 
     /**
-     * ²¿ÃÅid
+     * éƒ¨é—¨id
      *
      * @mbg.generated
      */
     private Long deptId;
 
     /**
-     * ¸ÚÎ»Ãû³Æ
+     * å²—ä½åç§°
      *
      * @mbg.generated
      */
     private String postName;
 
     /**
-     * ×´Ì¬£¨1£ºÓĞĞ§ 0£º¶³½á 2£º×¢Ïú£©
+     * çŠ¶æ€ï¼ˆ1ï¼šæœ‰æ•ˆ 0ï¼šå†»ç»“ 2ï¼šæ³¨é”€ï¼‰
      *
      * @mbg.generated
      */
     private Integer status;
 
     /**
-     * µÇÂ¼´íÎó´ÎÊı
+     * ç™»å½•é”™è¯¯æ¬¡æ•°
      *
      * @mbg.generated
      */
     private Integer loginErrorsTimes;
 
     /**
-     * µÇÂ¼ipµØÖ·
+     * ç™»å½•ipåœ°å€
      *
      * @mbg.generated
      */
     private String loginIp;
 
     /**
-     * ´´½¨Ê±¼ä
+     * åˆ›å»ºæ—¶é—´
      *
      * @mbg.generated
      */
     private Date createTime;
 
     /**
-     * ´´½¨ÈË
+     * åˆ›å»ºäºº
      *
      * @mbg.generated
      */
     private String creator;
 
     /**
-     * ×îºóĞŞ¸ÄÊ±¼ä
+     * æœ€åä¿®æ”¹æ—¶é—´
      *
      * @mbg.generated
      */
     private Date lastModifyTime;
 
     /**
-     * ĞŞ¸ÄÈË
+     * ä¿®æ”¹äºº
      *
      * @mbg.generated
      */
     private String modifier;
 
     /**
-     * ±¸×¢
+     * å¤‡æ³¨
      *
      * @mbg.generated
      */
@@ -140,10 +140,10 @@ public class PlatformUser implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Ö÷¼üid<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user.id
+     * ä¸»é”®id<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user.id
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user.id
+     * @return è¿”å›å€¼å¯¹åº” platform_user.id
      *
      * @mbg.generated
      */
@@ -152,10 +152,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * Ö÷¼üid<br/>
+     * ä¸»é”®id<br/>
      * platform_user.id
      *
-     * @param id Öµ¶ÔÓ¦ platform_user.id
+     * @param id å€¼å¯¹åº” platform_user.id
      *
      * @mbg.generated
      */
@@ -164,10 +164,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ÓÃ»§id<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user.user_code
+     * ç”¨æˆ·id<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user.user_code
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user.user_code
+     * @return è¿”å›å€¼å¯¹åº” platform_user.user_code
      *
      * @mbg.generated
      */
@@ -176,10 +176,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ÓÃ»§id<br/>
+     * ç”¨æˆ·id<br/>
      * platform_user.user_code
      *
-     * @param userCode Öµ¶ÔÓ¦ platform_user.user_code
+     * @param userCode å€¼å¯¹åº” platform_user.user_code
      *
      * @mbg.generated
      */
@@ -188,10 +188,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ÓÃ»§ĞÕÃû<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user.user_name
+     * ç”¨æˆ·å§“å<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user.user_name
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user.user_name
+     * @return è¿”å›å€¼å¯¹åº” platform_user.user_name
      *
      * @mbg.generated
      */
@@ -200,10 +200,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ÓÃ»§ĞÕÃû<br/>
+     * ç”¨æˆ·å§“å<br/>
      * platform_user.user_name
      *
-     * @param userName Öµ¶ÔÓ¦ platform_user.user_name
+     * @param userName å€¼å¯¹åº” platform_user.user_name
      *
      * @mbg.generated
      */
@@ -212,10 +212,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ÓÃ»§êÇ³Æ<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user.nickname
+     * ç”¨æˆ·æ˜µç§°<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user.nickname
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user.nickname
+     * @return è¿”å›å€¼å¯¹åº” platform_user.nickname
      *
      * @mbg.generated
      */
@@ -224,10 +224,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ÓÃ»§êÇ³Æ<br/>
+     * ç”¨æˆ·æ˜µç§°<br/>
      * platform_user.nickname
      *
-     * @param nickname Öµ¶ÔÓ¦ platform_user.nickname
+     * @param nickname å€¼å¯¹åº” platform_user.nickname
      *
      * @mbg.generated
      */
@@ -236,10 +236,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ÊÖ»úºÅÂë<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user.phone_number
+     * æ‰‹æœºå·ç <br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user.phone_number
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user.phone_number
+     * @return è¿”å›å€¼å¯¹åº” platform_user.phone_number
      *
      * @mbg.generated
      */
@@ -248,10 +248,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ÊÖ»úºÅÂë<br/>
+     * æ‰‹æœºå·ç <br/>
      * platform_user.phone_number
      *
-     * @param phoneNumber Öµ¶ÔÓ¦ platform_user.phone_number
+     * @param phoneNumber å€¼å¯¹åº” platform_user.phone_number
      *
      * @mbg.generated
      */
@@ -260,10 +260,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ÃÜÂë<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user.password
+     * å¯†ç <br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user.password
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user.password
+     * @return è¿”å›å€¼å¯¹åº” platform_user.password
      *
      * @mbg.generated
      */
@@ -272,10 +272,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ÃÜÂë<br/>
+     * å¯†ç <br/>
      * platform_user.password
      *
-     * @param password Öµ¶ÔÓ¦ platform_user.password
+     * @param password å€¼å¯¹åº” platform_user.password
      *
      * @mbg.generated
      */
@@ -284,10 +284,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ÑÎ<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user.salt
+     * ç›<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user.salt
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user.salt
+     * @return è¿”å›å€¼å¯¹åº” platform_user.salt
      *
      * @mbg.generated
      */
@@ -296,10 +296,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ÑÎ<br/>
+     * ç›<br/>
      * platform_user.salt
      *
-     * @param salt Öµ¶ÔÓ¦ platform_user.salt
+     * @param salt å€¼å¯¹åº” platform_user.salt
      *
      * @mbg.generated
      */
@@ -308,10 +308,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ÓÊÏä<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user.email
+     * é‚®ç®±<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user.email
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user.email
+     * @return è¿”å›å€¼å¯¹åº” platform_user.email
      *
      * @mbg.generated
      */
@@ -320,10 +320,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ÓÊÏä<br/>
+     * é‚®ç®±<br/>
      * platform_user.email
      *
-     * @param email Öµ¶ÔÓ¦ platform_user.email
+     * @param email å€¼å¯¹åº” platform_user.email
      *
      * @mbg.generated
      */
@@ -332,10 +332,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ĞÔ±ğ(0£ºÄĞ 1£ºÅ® 2£ºÎ´Öª)<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user.gender
+     * æ€§åˆ«(0ï¼šç”· 1ï¼šå¥³ 2ï¼šæœªçŸ¥)<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user.gender
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user.gender
+     * @return è¿”å›å€¼å¯¹åº” platform_user.gender
      *
      * @mbg.generated
      */
@@ -344,10 +344,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ĞÔ±ğ(0£ºÄĞ 1£ºÅ® 2£ºÎ´Öª)<br/>
+     * æ€§åˆ«(0ï¼šç”· 1ï¼šå¥³ 2ï¼šæœªçŸ¥)<br/>
      * platform_user.gender
      *
-     * @param gender Öµ¶ÔÓ¦ platform_user.gender
+     * @param gender å€¼å¯¹åº” platform_user.gender
      *
      * @mbg.generated
      */
@@ -356,10 +356,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ²¿ÃÅid<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user.dept_id
+     * éƒ¨é—¨id<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user.dept_id
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user.dept_id
+     * @return è¿”å›å€¼å¯¹åº” platform_user.dept_id
      *
      * @mbg.generated
      */
@@ -368,10 +368,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ²¿ÃÅid<br/>
+     * éƒ¨é—¨id<br/>
      * platform_user.dept_id
      *
-     * @param deptId Öµ¶ÔÓ¦ platform_user.dept_id
+     * @param deptId å€¼å¯¹åº” platform_user.dept_id
      *
      * @mbg.generated
      */
@@ -380,10 +380,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ¸ÚÎ»Ãû³Æ<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user.post_name
+     * å²—ä½åç§°<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user.post_name
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user.post_name
+     * @return è¿”å›å€¼å¯¹åº” platform_user.post_name
      *
      * @mbg.generated
      */
@@ -392,10 +392,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ¸ÚÎ»Ãû³Æ<br/>
+     * å²—ä½åç§°<br/>
      * platform_user.post_name
      *
-     * @param postName Öµ¶ÔÓ¦ platform_user.post_name
+     * @param postName å€¼å¯¹åº” platform_user.post_name
      *
      * @mbg.generated
      */
@@ -404,10 +404,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ×´Ì¬£¨1£ºÓĞĞ§ 0£º¶³½á 2£º×¢Ïú£©<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user.status
+     * çŠ¶æ€ï¼ˆ1ï¼šæœ‰æ•ˆ 0ï¼šå†»ç»“ 2ï¼šæ³¨é”€ï¼‰<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user.status
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user.status
+     * @return è¿”å›å€¼å¯¹åº” platform_user.status
      *
      * @mbg.generated
      */
@@ -416,10 +416,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ×´Ì¬£¨1£ºÓĞĞ§ 0£º¶³½á 2£º×¢Ïú£©<br/>
+     * çŠ¶æ€ï¼ˆ1ï¼šæœ‰æ•ˆ 0ï¼šå†»ç»“ 2ï¼šæ³¨é”€ï¼‰<br/>
      * platform_user.status
      *
-     * @param status Öµ¶ÔÓ¦ platform_user.status
+     * @param status å€¼å¯¹åº” platform_user.status
      *
      * @mbg.generated
      */
@@ -428,10 +428,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * µÇÂ¼´íÎó´ÎÊı<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user.login_errors_times
+     * ç™»å½•é”™è¯¯æ¬¡æ•°<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user.login_errors_times
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user.login_errors_times
+     * @return è¿”å›å€¼å¯¹åº” platform_user.login_errors_times
      *
      * @mbg.generated
      */
@@ -440,10 +440,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * µÇÂ¼´íÎó´ÎÊı<br/>
+     * ç™»å½•é”™è¯¯æ¬¡æ•°<br/>
      * platform_user.login_errors_times
      *
-     * @param loginErrorsTimes Öµ¶ÔÓ¦ platform_user.login_errors_times
+     * @param loginErrorsTimes å€¼å¯¹åº” platform_user.login_errors_times
      *
      * @mbg.generated
      */
@@ -452,10 +452,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * µÇÂ¼ipµØÖ·<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user.login_ip
+     * ç™»å½•ipåœ°å€<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user.login_ip
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user.login_ip
+     * @return è¿”å›å€¼å¯¹åº” platform_user.login_ip
      *
      * @mbg.generated
      */
@@ -464,10 +464,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * µÇÂ¼ipµØÖ·<br/>
+     * ç™»å½•ipåœ°å€<br/>
      * platform_user.login_ip
      *
-     * @param loginIp Öµ¶ÔÓ¦ platform_user.login_ip
+     * @param loginIp å€¼å¯¹åº” platform_user.login_ip
      *
      * @mbg.generated
      */
@@ -476,10 +476,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ´´½¨Ê±¼ä<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user.create_time
+     * åˆ›å»ºæ—¶é—´<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user.create_time
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user.create_time
+     * @return è¿”å›å€¼å¯¹åº” platform_user.create_time
      *
      * @mbg.generated
      */
@@ -488,10 +488,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ´´½¨Ê±¼ä<br/>
+     * åˆ›å»ºæ—¶é—´<br/>
      * platform_user.create_time
      *
-     * @param createTime Öµ¶ÔÓ¦ platform_user.create_time
+     * @param createTime å€¼å¯¹åº” platform_user.create_time
      *
      * @mbg.generated
      */
@@ -500,10 +500,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ´´½¨ÈË<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user.creator
+     * åˆ›å»ºäºº<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user.creator
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user.creator
+     * @return è¿”å›å€¼å¯¹åº” platform_user.creator
      *
      * @mbg.generated
      */
@@ -512,10 +512,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ´´½¨ÈË<br/>
+     * åˆ›å»ºäºº<br/>
      * platform_user.creator
      *
-     * @param creator Öµ¶ÔÓ¦ platform_user.creator
+     * @param creator å€¼å¯¹åº” platform_user.creator
      *
      * @mbg.generated
      */
@@ -524,10 +524,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ×îºóĞŞ¸ÄÊ±¼ä<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user.last_modify_time
+     * æœ€åä¿®æ”¹æ—¶é—´<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user.last_modify_time
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user.last_modify_time
+     * @return è¿”å›å€¼å¯¹åº” platform_user.last_modify_time
      *
      * @mbg.generated
      */
@@ -536,10 +536,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ×îºóĞŞ¸ÄÊ±¼ä<br/>
+     * æœ€åä¿®æ”¹æ—¶é—´<br/>
      * platform_user.last_modify_time
      *
-     * @param lastModifyTime Öµ¶ÔÓ¦ platform_user.last_modify_time
+     * @param lastModifyTime å€¼å¯¹åº” platform_user.last_modify_time
      *
      * @mbg.generated
      */
@@ -548,10 +548,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ĞŞ¸ÄÈË<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user.modifier
+     * ä¿®æ”¹äºº<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user.modifier
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user.modifier
+     * @return è¿”å›å€¼å¯¹åº” platform_user.modifier
      *
      * @mbg.generated
      */
@@ -560,10 +560,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ĞŞ¸ÄÈË<br/>
+     * ä¿®æ”¹äºº<br/>
      * platform_user.modifier
      *
-     * @param modifier Öµ¶ÔÓ¦ platform_user.modifier
+     * @param modifier å€¼å¯¹åº” platform_user.modifier
      *
      * @mbg.generated
      */
@@ -572,10 +572,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ±¸×¢<br/>
-     * ·µ»ØÖµ¶ÔÓ¦µÄ±íÁĞÃû platform_user.remark
+     * å¤‡æ³¨<br/>
+     * è¿”å›å€¼å¯¹åº”çš„è¡¨åˆ—å platform_user.remark
      *
-     * @return ·µ»ØÖµ¶ÔÓ¦ platform_user.remark
+     * @return è¿”å›å€¼å¯¹åº” platform_user.remark
      *
      * @mbg.generated
      */
@@ -584,10 +584,10 @@ public class PlatformUser implements Serializable {
     }
 
     /**
-     * ±¸×¢<br/>
+     * å¤‡æ³¨<br/>
      * platform_user.remark
      *
-     * @param remark Öµ¶ÔÓ¦ platform_user.remark
+     * @param remark å€¼å¯¹åº” platform_user.remark
      *
      * @mbg.generated
      */

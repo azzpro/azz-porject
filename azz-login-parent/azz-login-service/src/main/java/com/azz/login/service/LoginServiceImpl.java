@@ -8,12 +8,15 @@
 package com.azz.login.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.azz.core.common.JsonResult;
 import com.azz.login.api.LoginService;
 import com.azz.login.mapper.LoginMapper;
 import com.azz.login.pojo.Login;
+import com.azz.login.pojo.PlatformUser;
+import com.azz.login.pojo.bo.LoginParam;
+import com.azz.util.JSR303ValidateUtils;
 
 /**
  * <P>TODO</P>
@@ -33,6 +36,13 @@ public class LoginServiceImpl implements LoginService{
 	@Override
 	public Login getLogin(String name,String password) {
 		return loginMapper.getLogin(name, password);
+	}
+
+	@Override
+	public JsonResult<PlatformUser> login(LoginParam param) {
+	    JSR303ValidateUtils.validate(param);
+	    
+	    return null;
 	}
 	
 	

@@ -14,4 +14,6 @@ public interface PlatformUserMapper {
     int updateByPrimaryKeySelective(PlatformUser record);
 
     int updateByPrimaryKey(PlatformUser record);
+    
+    PlatformUser getUserByPhoneNumber(String phoneNumber);
 }

@@ -1,17 +1,17 @@
 package com.azz.login.mapper;
 
-import com.azz.login.pojo.latformDept;
+import com.azz.login.pojo.PlatformDept;
 
-public interface latformDeptMapper {
+public interface PlatformDeptMapper {
     int deleteByPrimaryKey(Long id);
 
-    int insert(latformDept record);
+    int insert(PlatformDept record);
 
-    int insertSelective(latformDept record);
+    int insertSelective(PlatformDept record);
 
-    latformDept selectByPrimaryKey(Long id);
+    PlatformDept selectByPrimaryKey(Long id);
 
-    int updateByPrimaryKeySelective(latformDept record);
+    int updateByPrimaryKeySelective(PlatformDept record);
 
-    int updateByPrimaryKey(latformDept record);
+    int updateByPrimaryKey(PlatformDept record);
 }

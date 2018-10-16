@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.azz.login.mapper.latformDeptMapper">
-  <resultMap id="BaseResultMap" type="com.azz.login.pojo.latformDept">
+<mapper namespace="com.azz.login.mapper.PlatformDeptMapper">
+  <resultMap id="BaseResultMap" type="com.azz.login.pojo.PlatformDept">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="dept_code" jdbcType="VARCHAR" property="deptCode" />
     <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
@@ -26,7 +26,7 @@
     delete from platform_dept
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.azz.login.pojo.latformDept">
+  <insert id="insert" parameterType="com.azz.login.pojo.PlatformDept">
     insert into platform_dept (id, dept_code, dept_name, 
       description, status, create_time, 
       creator, last_modify_time, modifier
@@ -36,7 +36,7 @@
       #{creator,jdbcType=VARCHAR}, #{lastModifyTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.azz.login.pojo.latformDept">
+  <insert id="insertSelective" parameterType="com.azz.login.pojo.PlatformDept">
     insert into platform_dept
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -97,7 +97,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.azz.login.pojo.latformDept">
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.login.pojo.PlatformDept">
     update platform_dept
     <set>
       <if test="deptCode != null">
@@ -127,7 +127,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.azz.login.pojo.latformDept">
+  <update id="updateByPrimaryKey" parameterType="com.azz.login.pojo.PlatformDept">
     update platform_dept
     set dept_code = #{deptCode,jdbcType=VARCHAR},
       dept_name = #{deptName,jdbcType=VARCHAR},

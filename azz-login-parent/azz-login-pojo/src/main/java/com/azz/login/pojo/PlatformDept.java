@@ -4,7 +4,7 @@ package com.azz.login.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
-public class latformDept implements Serializable {
+public class PlatformDept implements Serializable {
     /**
      * Ö÷¼ü
      *
@@ -292,7 +292,7 @@ public class latformDept implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        latformDept other = (latformDept) that;
+        PlatformDept other = (PlatformDept) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getDeptCode() == null ? other.getDeptCode() == null : this.getDeptCode().equals(other.getDeptCode()))
             && (this.getDeptName() == null ? other.getDeptName() == null : this.getDeptName().equals(other.getDeptName()))

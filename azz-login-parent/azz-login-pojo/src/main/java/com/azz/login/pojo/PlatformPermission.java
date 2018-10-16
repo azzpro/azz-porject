@@ -3,7 +3,7 @@ package com.azz.login.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
-public class latformPermission implements Serializable {
+public class PlatformPermission implements Serializable {
     /**
      * Ö÷¼ü
      *
@@ -415,7 +415,7 @@ public class latformPermission implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        latformPermission other = (latformPermission) that;
+        PlatformPermission other = (PlatformPermission) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getPermissionCode() == null ? other.getPermissionCode() == null : this.getPermissionCode().equals(other.getPermissionCode()))
             && (this.getPermissionName() == null ? other.getPermissionName() == null : this.getPermissionName().equals(other.getPermissionName()))

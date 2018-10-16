@@ -1,17 +1,17 @@
 package com.azz.login.mapper;
 
-import com.azz.login.pojo.latformPermission;
+import com.azz.login.pojo.PlatformPermission;
 
-public interface latformPermissionMapper {
+public interface PlatformPermissionMapper {
     int deleteByPrimaryKey(Long id);
 
-    int insert(latformPermission record);
+    int insert(PlatformPermission record);
 
-    int insertSelective(latformPermission record);
+    int insertSelective(PlatformPermission record);
 
-    latformPermission selectByPrimaryKey(Long id);
+    PlatformPermission selectByPrimaryKey(Long id);
 
-    int updateByPrimaryKeySelective(latformPermission record);
+    int updateByPrimaryKeySelective(PlatformPermission record);
 
-    int updateByPrimaryKey(latformPermission record);
+    int updateByPrimaryKey(PlatformPermission record);
 }

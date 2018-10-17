@@ -1,7 +1,10 @@
 package com.azz.platform.user.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.azz.platform.user.pojo.PlatformUserRole;
 
+@Mapper
 public interface PlatformUserRoleMapper {
     int deleteByPrimaryKey(Long id);
 

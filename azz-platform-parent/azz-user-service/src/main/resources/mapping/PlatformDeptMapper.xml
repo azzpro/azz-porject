@@ -140,10 +140,33 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
-   <select id="selectByDeptName" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByDeptName" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from platform_dept
-    where dept_name = #{deptName,jdbcType=VARCHAR}
+    where dept_name = #{deptName,jdbcType=VARCHAR} and status = 1
   </select>
+  
+  <select id="selectDeptList" parameterType="com.azz.platform.user.pojo.bo.DeptSearchParam" resultType="com.azz.platform.user.pojo.vo.Dept">
+  	SELECT
+		id as id,
+		dept_code as deptCode,
+		dept_name as deptName,
+		description as description,
+		status as status,
+		create_time as createTime,
+		creator as creator,
+		last_modify_time as lastModifyTime,
+		modifier as modifier
+	FROM
+		platform_dept
+	<where>
+		<if test="deptName != null"> AND dept_name LIKE CONCAT('%',#{deptName},'%')</if>
+		<if test="description != null"> AND description LIKE CONCAT('%',#{description},'%')</if>
+		<if test="status != null"> AND status = #{status}</if>
+	</where>
+	ORDER BY create_time DESC
+  </select>
+  
+  
 </mapper>

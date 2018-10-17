@@ -8,8 +8,8 @@ package com.azz.platform.user.service;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
@@ -34,6 +34,7 @@ import com.github.pagehelper.PageHelper;
  * @version 1.0
  * @author 彭斌 2018年10月17日 上午9:17:00
  */
+@RestController
 public class DeptServiceImpl implements DeptService {
 
     @Autowired
@@ -102,12 +103,11 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public JsonResult<String> delDeptInfo(String id) {
-        if (ObjectUtils.isNull(id) || NumberUtils.isNumber(id)) {
+    public JsonResult<String> delDeptInfo(Long id) {
+        if (ObjectUtils.isNull(id) ) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
         }
-        Long deptId = Long.parseLong(id);
-        PlatformDept dept = deptMapper.selectByPrimaryKey(deptId);
+        PlatformDept dept = deptMapper.selectByPrimaryKey(id);
         if (ObjectUtils.isNull(dept)) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
         }
@@ -122,11 +122,11 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public JsonResult<PlatformDept> getDeptInfo(String id) {
-        if (ObjectUtils.isNull(id) || NumberUtils.isNumber(id)) {
+    public JsonResult<PlatformDept> getDeptInfo(Long id) {
+        if (ObjectUtils.isNull(id)) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
         }
-        PlatformDept dept = deptMapper.selectByPrimaryKey(Long.parseLong(id));
+        PlatformDept dept = deptMapper.selectByPrimaryKey(id);
         return JsonResult.successJsonResult(dept);
     }
 

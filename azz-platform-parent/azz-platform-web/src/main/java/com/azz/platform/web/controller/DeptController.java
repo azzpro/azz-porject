@@ -10,11 +10,14 @@ package com.azz.platform.web.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.platform.user.api.DeptService;
+import com.azz.platform.user.pojo.PlatformDept;
 import com.azz.platform.user.pojo.bo.AddDeptParam;
 
 /**
@@ -43,4 +46,9 @@ public class DeptController {
 		return deptService.addDeptInfo(param);
 	}
 
+	@RequestMapping("/getDeptInfo")
+	public JsonResult<PlatformDept> getDeptInfo(@RequestParam(value = "id",defaultValue="0") Long deptId){
+	    LOG.info("###########获取部门信息###########");
+	    return deptService.getDeptInfo(deptId);
+	}
 }

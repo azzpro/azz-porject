@@ -63,7 +63,7 @@ public interface DeptService {
      * @author 彭斌  2018年10月17日 下午2:50:31
      */
     @GetMapping("delDeptInfo")
-    JsonResult<String> delDeptInfo(@RequestParam("id") String id);
+    JsonResult<String> delDeptInfo(@RequestParam("id") Long id);
     
     /**
      * <p>获取部门详情信息</p>
@@ -72,6 +72,6 @@ public interface DeptService {
      * @author 彭斌  2018年10月17日 下午2:50:34
      */
     @GetMapping("getDeptInfo")
-    JsonResult<PlatformDept> getDeptInfo(@RequestParam("id") String id);
+    JsonResult<PlatformDept> getDeptInfo(@RequestParam("id") Long id);
 }
 

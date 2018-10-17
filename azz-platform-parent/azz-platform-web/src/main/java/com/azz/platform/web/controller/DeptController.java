@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
-import com.azz.login.api.DeptService;
-import com.azz.login.pojo.bo.AddDeptParam;
+import com.azz.platform.user.api.DeptService;
+import com.azz.platform.user.pojo.bo.AddDeptParam;
 
 /**
  * <P>部门管理</P>
@@ -33,10 +33,9 @@ public class DeptController {
 	
 	/**
 	 * <p>新增部门信息</p>
-	 * @param name
-	 * @param password
+	 * @param param
 	 * @return
-	 * @author 彭斌  2018年10月17日 下午3:06:20
+	 * @author 彭斌  2018年10月17日 下午3:17:05
 	 */
 	@RequestMapping("addDeptInfo")
 	public JsonResult<String> addDeptInfo(AddDeptParam param) {

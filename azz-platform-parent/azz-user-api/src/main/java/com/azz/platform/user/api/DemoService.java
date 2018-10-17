@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
-import com.azz.platform.goods.pojo.Demo;
-import com.azz.platform.goods.pojo.bo.DemoSearchParam;
-import com.azz.platform.goods.pojo.vo.DemoInfo;
+import com.azz.platform.user.pojo.Demo;
+import com.azz.platform.user.pojo.DemoInfo;
+import com.azz.platform.user.pojo.bo.DemoSearchParam;
 
 /**
  * <P>

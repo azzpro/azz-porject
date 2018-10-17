@@ -17,7 +17,9 @@ public class PlatformUserErrorCode extends BaseErrorCode{
 
     public static final PlatformUserErrorCode PLATFORM_USER_ERROR_NO_PERMISSION = new PlatformUserErrorCode(20002, "权限不足");
     
-    public static final PlatformUserErrorCode PLATFORM_USER_ERROR_WRONG_ACCOUNT_OR_PASSWORD = new PlatformUserErrorCode(20003, "用户名或密码错误");
+    public static final PlatformUserErrorCode PLATFORM_USER_ERROR_INVALID_USER = new PlatformUserErrorCode(20003, "无效用户");
+    
+    public static final PlatformUserErrorCode PLATFORM_USER_ERROR_WRONG_PHONE_OR_PASSWORD = new PlatformUserErrorCode(20004, "手机号或密码错误");
 
     public PlatformUserErrorCode(int code, String message) {
 	super(code, message);

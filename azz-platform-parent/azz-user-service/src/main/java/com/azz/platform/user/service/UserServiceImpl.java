@@ -43,7 +43,6 @@ public class UserServiceImpl implements UserService{
         	throw new BaseException(PlatformUserErrorCode.PLATFORM_USER_ERROR_WRONG_PHONE_OR_PASSWORD);
             }
             return JsonResult.successJsonResult(platformUser);
-            
 	}
 
 }

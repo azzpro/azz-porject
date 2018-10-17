@@ -21,6 +21,11 @@ public class PlatformUserErrorCode extends BaseErrorCode{
     
     public static final PlatformUserErrorCode PLATFORM_USER_ERROR_WRONG_PHONE_OR_PASSWORD = new PlatformUserErrorCode(20004, "手机号或密码错误");
 
+    // 关于部门错误码
+    public static final PlatformUserErrorCode PLATFORM_DEPT_ERROR_EXIST = new PlatformUserErrorCode(30000, "部门已存在");
+    
+    public static final PlatformUserErrorCode PLATFORM_DEPT_ERROR_NO_EXIST = new PlatformUserErrorCode(30001, "部门不存在");
+    
     public PlatformUserErrorCode(int code, String message) {
 	super(code, message);
     }

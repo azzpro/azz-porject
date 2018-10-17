@@ -18,7 +18,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.azz</groupId>
-			<artifactId>azz-goods-pojo</artifactId>
+			<artifactId>azz-user-pojo</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>

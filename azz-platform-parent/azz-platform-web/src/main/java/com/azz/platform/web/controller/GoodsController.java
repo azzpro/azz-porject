@@ -23,7 +23,7 @@ import com.azz.platform.goods.pojo.vo.DemoInfo;
  * @author 刘建麟  2018年10月14日 下午2:40:47
  */
 @RestController
-@RequestMapping("goods")
+@RequestMapping("/goods")
 public class GoodsController {
 
 	

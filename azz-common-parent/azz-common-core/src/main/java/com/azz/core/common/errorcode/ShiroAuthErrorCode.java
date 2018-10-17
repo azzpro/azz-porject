@@ -11,19 +11,21 @@ package com.azz.core.common.errorcode;
  * @version 1.0
  * @author 黄智聪  2018年10月16日 下午6:57:17
  */
-public class PlatformUserErrorCode extends BaseErrorCode{
+public class ShiroAuthErrorCode extends BaseErrorCode{
     
-    public static final PlatformUserErrorCode PLATFORM_USER_ERROR_INVALID_USER = new PlatformUserErrorCode(20001, "无效用户");
+    public static final ShiroAuthErrorCode SHIRO_AUTH_ERROR_NO_LOGIN = new ShiroAuthErrorCode(40001, "用户未登录");
     
-    public static final PlatformUserErrorCode PLATFORM_USER_ERROR_WRONG_PHONE_OR_PASSWORD = new PlatformUserErrorCode(20002, "手机号或密码错误");
+    public static final ShiroAuthErrorCode SHIRO_AUTH_ERROR_LOGIN_ERROR = new ShiroAuthErrorCode(40002, "登录认证出错");
 
-    public PlatformUserErrorCode(int code, String message) {
+    public static final ShiroAuthErrorCode SHIRO_AUTH_ERROR_NO_PERMISSION = new ShiroAuthErrorCode(40003, "用户权限不足");
+
+    public ShiroAuthErrorCode(int code, String message) {
 	super(code, message);
     }
-
+    
     @Override
     public String getErrorType() {
-	return "平台用户异常";
+	return "权限认证异常";
     }
 
 }

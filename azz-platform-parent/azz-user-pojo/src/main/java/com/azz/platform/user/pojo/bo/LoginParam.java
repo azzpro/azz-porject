@@ -9,7 +9,9 @@ package com.azz.platform.user.pojo.bo;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * <P>TODO</P>
@@ -17,6 +19,8 @@ import lombok.Data;
  * @author 黄智聪  2018年10月16日 下午7:57:53
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class LoginParam {
     
     @NotBlank(message = "手机号不允许为空")

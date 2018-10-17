@@ -32,6 +32,10 @@
             <groupId>com.github.pagehelper</groupId>
 			<artifactId>pagehelper</artifactId>
         </dependency>
+        <dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-spring</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>azz-common-core</finalName>

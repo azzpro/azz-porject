@@ -7,12 +7,10 @@
  
 package com.azz.core.common.config;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.BaseErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.exception.BaseException;
@@ -38,10 +36,11 @@ public class ExceptionHandlerConfig {
      * @param e
      * @return
      * @author 黄智聪（13510946256）  2018年8月31日 下午1:56:18
+     * @throws Exception 
      */
     @ExceptionHandler(Exception.class)
-    public Map<String, Object> handleException(Exception e) {
-        Map<String, Object> errorResult = new HashMap<>();
+    public JsonResult<String> handleException(Exception e) throws Exception {
+	JsonResult<String> errorResult = new JsonResult<>();
         int code = 0;
         String detailMessage = null;
         if (e instanceof BaseException) {
@@ -56,8 +55,8 @@ public class ExceptionHandlerConfig {
             detailMessage = errorCode.getErrorType() + ":" + errorCode.toString();
             log.error(detailMessage, e);
         }
-        errorResult.put("code", code);
-        errorResult.put("msg", detailMessage);
+        errorResult.setCode(code);
+        errorResult.setMsg(detailMessage);
         return errorResult;
     }
     

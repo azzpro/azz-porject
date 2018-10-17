@@ -17,6 +17,9 @@
 		<module>azz-order-pojo</module>
 		<module>azz-order-service</module>
 		<module>azz-order-api</module>
+		<module>azz-user-pojo</module>
+		<module>azz-user-service</module>
+		<module>azz-user-api</module>
 		<module>azz-platform-web</module>
 	</modules>
 	

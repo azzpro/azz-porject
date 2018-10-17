@@ -14,4 +14,6 @@ public interface PlatformDeptMapper {
     int updateByPrimaryKeySelective(PlatformDept record);
 
     int updateByPrimaryKey(PlatformDept record);
+    
+    PlatformDept selectByDeptName(String deptName);
 }

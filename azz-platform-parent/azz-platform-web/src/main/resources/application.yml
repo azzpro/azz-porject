@@ -2,7 +2,9 @@ server:
   port: 8080
 spring:
   application:
-    name: azz-platform-web 
+    name: azz-platform-web
+  aop:
+    proxy-target-class: true
 eureka:
   client:
     serviceUrl:

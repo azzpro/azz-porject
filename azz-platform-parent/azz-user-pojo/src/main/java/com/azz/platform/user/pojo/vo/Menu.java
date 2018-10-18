@@ -9,7 +9,9 @@ package com.azz.platform.user.pojo.vo;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * <P>TODO</P>
@@ -17,7 +19,9 @@ import lombok.Data;
  * @author 黄智聪  2018年10月17日 下午6:05:17
  */
 @Data
-public class MenuTree {
+@AllArgsConstructor
+@NoArgsConstructor
+public class Menu {
     
     private String menuName;
     
@@ -25,7 +29,7 @@ public class MenuTree {
     
     private String icon;
     
-    private List<MenuTree> children; 
+    private List<Menu> children; 
 
 }
 

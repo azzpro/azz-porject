@@ -29,8 +29,8 @@ import com.azz.platform.user.pojo.vo.Dept;
  * @version 1.0
  * @author 彭斌  2018年10月17日 下午3:04:47
  */
-@RestController
-@RequestMapping("/azz/api/dept")
+//@RestController
+//@RequestMapping("/azz/api/dept")
 public class DeptController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(DeptController.class);

@@ -3,6 +3,7 @@
 <mapper namespace="com.azz.platform.user.mapper.PlatformRoleMapper">
   <resultMap id="BaseResultMap" type="com.azz.platform.user.pojo.PlatformRole">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="role_code" jdbcType="VARCHAR" property="roleCode" />
     <result column="role_name" jdbcType="VARCHAR" property="roleName" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="status" jdbcType="INTEGER" property="status" />
@@ -12,7 +13,7 @@
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, role_name, remark, status, create_time, creator, last_modify_time, modifier
+    id, role_code, role_name, remark, status, create_time, creator, last_modify_time, modifier
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -25,10 +26,10 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.azz.platform.user.pojo.PlatformRole">
-    insert into platform_role (id, role_name, remark, 
+    insert into platform_role (id, role_code, role_name, remark, 
       status, create_time, creator, 
       last_modify_time, modifier)
-    values (#{id,jdbcType=BIGINT}, #{roleName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{roleCode,jdbcType=VARCHAR},#{roleName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
       #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
       #{lastModifyTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR})
   </insert>
@@ -37,6 +38,9 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="roleCode != null">
+        role_code,
       </if>
       <if test="roleName != null">
         role_name,
@@ -64,6 +68,9 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
+      <if test="roleCode != null">
+        #{roleCode,jdbcType=VARCHAR},
+      </if>
       <if test="roleName != null">
         #{roleName,jdbcType=VARCHAR},
       </if>
@@ -90,6 +97,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.azz.platform.user.pojo.PlatformRole">
     update platform_role
     <set>
+      <if test="roleCode != null">
+        role_code = #{roleCode,jdbcType=VARCHAR},
+      </if>
       <if test="roleName != null">
         role_name = #{roleName,jdbcType=VARCHAR},
       </if>
@@ -116,7 +126,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.azz.platform.user.pojo.PlatformRole">
     update platform_role
-    set role_name = #{roleName,jdbcType=VARCHAR},
+    set role_code = #{roleCode,jdbcType=VARCHAR},
+      role_name = #{roleName,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},

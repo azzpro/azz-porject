@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.azz.WebUtils;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.ShiroAuthErrorCode;
 import com.azz.core.exception.ShiroAuthException;
@@ -106,12 +107,14 @@ public class UserController {
 	    jr.setMsg(msg);
 	    return jr;
 	}
-        return userService.getLoginUserInfoByPhoneNumber(param.getPhoneNumber());
+        JsonResult<LoginUserInfo> jr = userService.getLoginUserInfoByPhoneNumber(param.getPhoneNumber());
+        WebUtils.setShiroSessionAttr("loginUser", jr.getData());
+        return jr;
     }
     
     @RequestMapping(value = "/getMessage")
-    public String getNomalUserMessage() {
-        return "这是普通用户权限";
+    public LoginUserInfo getNomalUserMessage() {
+        return WebUtils.getLoginUser();
     }
 
 }

@@ -7,6 +7,7 @@
 
 package com.azz.platform.user.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ import com.azz.platform.user.mapper.PlatformUserMapper;
 import com.azz.platform.user.pojo.PlatformUser;
 import com.azz.platform.user.pojo.bo.LoginParam;
 import com.azz.platform.user.pojo.vo.LoginUserInfo;
-import com.azz.platform.user.pojo.vo.MenuTree;
+import com.azz.platform.user.pojo.vo.Menu;
 import com.azz.platform.user.pojo.vo.UserInfo;
 import com.azz.platform.user.pojo.vo.UserPermission;
 import com.azz.util.PasswordHelper;
@@ -40,15 +41,15 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @Slf4j
 public class UserServiceImpl implements UserService {
-    
+
     public static final long SESSION_TIME_OUT_MILLS = 30 * 60 * 1000;
 
     @Autowired
     private PlatformUserMapper platformUserMapper;
-    
+
     @Autowired
     private PlatformPermissionMapper platformPermissionMapper;
-    
+
     @Override
     public JsonResult<String> loginAuth(@RequestBody LoginParam param) {
 	log.debug("————身份认证方法————");
@@ -72,17 +73,36 @@ public class UserServiceImpl implements UserService {
 	List<UserPermission> userPermissions = platformPermissionMapper.getUserPermissionInfoByPhoneNumber(phoneNumber);
 	info.setUserInfo(userInfo);
 	info.setUserPermissions(userPermissions);
-	info.setMenuTree(generateMenuTree(phoneNumber));
+	info.setMenus(this.generateMenuTree(phoneNumber));
 	return JsonResult.successJsonResult(info);
     }
-    
-    private MenuTree generateMenuTree(String phoneNumber) {
+
+    private List<Menu> generateMenuTree(String phoneNumber) {
 	// 根据手机号查询所有一级菜单权限
-	List<UserPermission> oneMenuPermission = platformPermissionMapper.getUserPermissionByPhoneNumberAndLevel(phoneNumber, 1);
-	// 根据手机号查询所有一级菜单权限
-	List<UserPermission> twoMenuPermission = platformPermissionMapper.getUserPermissionByPhoneNumberAndLevel(phoneNumber, 2);
-		
-	return null;
+	List<UserPermission> oneMenuPermissions = platformPermissionMapper
+		.getUserPermissionByPhoneNumberAndLevel(phoneNumber, 1);
+	// 根据手机号查询所有二级菜单权限
+	List<UserPermission> twoMenuPermissions = platformPermissionMapper
+		.getUserPermissionByPhoneNumberAndLevel(phoneNumber, 2);
+	List<Menu> oneLevelMenus = new ArrayList<>();
+	for (UserPermission oneMenuPermission : oneMenuPermissions) {
+	    // 一级菜单的权限编码
+	    String oneLevelPermissionCode = oneMenuPermission.getPermissionCode();
+	    List<Menu> twoLevelMenus = new ArrayList<>();
+	    for (UserPermission twoMenuPermission : twoMenuPermissions) {
+		// 二级菜单的父级权限编码
+		String twoLevelPermissionCode = twoMenuPermission.getParentPermissionCode();
+		if (twoLevelPermissionCode.equals(oneLevelPermissionCode)) {// 一二级菜单进行分类
+		    Menu twoLevelMenu = new Menu(twoMenuPermission.getPermissionName(), twoMenuPermission.getPageUrl(),
+			    twoMenuPermission.getIcon(), null);
+		    twoLevelMenus.add(twoLevelMenu);
+		}
+	    }
+	    Menu oneLevelMenu = new Menu(oneMenuPermission.getPermissionName(), oneMenuPermission.getPageUrl(),
+		    oneMenuPermission.getIcon(), twoLevelMenus);
+	    oneLevelMenus.add(oneLevelMenu);
+	}
+	return oneLevelMenus;
     }
 
 }

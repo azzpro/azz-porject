@@ -1,27 +1,29 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2018年10月17日 下午5:59:05
+ * Create on 2018年10月18日 下午3:12:50
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
-package com.azz.platform.user.api;
+package com.azz.platform.user.pojo.bo;
 
-import org.springframework.cloud.netflix.feign.FeignClient;
+import java.util.List;
 
-import com.azz.core.common.JsonResult;
+import lombok.Data;
 
 /**
- * <P>权限服务相关接口</P>
+ * <P>TODO</P>
  * @version 1.0
- * @author 黄智聪  2018年10月17日 下午5:59:05
+ * @author 黄智聪  2018年10月18日 下午3:12:50
  */
-//@FeignClient("azz-user-service")
-public class PermissionService {
+@Data
+public class AddRoleParam {
     
-    //JsonResult<String> addRole();
+    private String roleName;
     
+    private String remark;
     
+    private List<String> permissionCode;
 
 }
 

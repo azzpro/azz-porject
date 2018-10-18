@@ -30,7 +30,7 @@ public class LoginUserInfo implements Serializable{
     
     private List<UserPermission> userPermissions;
 
-    private MenuTree menuTree;
+    private List<Menu> menus;
     
 }
 

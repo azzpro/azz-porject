@@ -10,6 +10,11 @@ public class PlatformRole implements Serializable {
      * @mbg.generated
      */
     private Long id;
+    
+    /**
+     * 角色编码
+     */
+    private String roleCode;
 
     /**
      * 角色名称
@@ -248,6 +253,14 @@ public class PlatformRole implements Serializable {
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
     }
+    
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
 
     @Override
     public boolean equals(Object that) {
@@ -276,6 +289,7 @@ public class PlatformRole implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getRoleCode() == null) ? 0 : getRoleCode().hashCode());
         result = prime * result + ((getRoleName() == null) ? 0 : getRoleName().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
@@ -293,6 +307,7 @@ public class PlatformRole implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", roleCode=").append(roleCode);
         sb.append(", roleName=").append(roleName);
         sb.append(", remark=").append(remark);
         sb.append(", status=").append(status);

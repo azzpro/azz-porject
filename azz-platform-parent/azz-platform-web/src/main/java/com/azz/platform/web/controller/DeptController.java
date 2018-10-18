@@ -36,7 +36,7 @@ public class DeptController {
 	private static final Logger LOG = LoggerFactory.getLogger(DeptController.class);
 
 	@Autowired
-	private DeptService deptService;
+	DeptService deptService;
 	
 	/**
 	 * <p>新增部门信息</p>
@@ -44,7 +44,7 @@ public class DeptController {
 	 * @return
 	 * @author 彭斌  2018年10月17日 下午3:17:05
 	 */
-	@RequestMapping("addDeptInfo")
+	@RequestMapping("/addDeptInfo")
 	public JsonResult<String> addDeptInfo(AddDeptParam param) {
 		LOG.info("###########开始新增部门信息###########");
 		return deptService.addDeptInfo(param);

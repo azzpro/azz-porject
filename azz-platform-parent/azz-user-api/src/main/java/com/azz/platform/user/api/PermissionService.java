@@ -16,8 +16,8 @@ import com.azz.core.common.JsonResult;
  * @version 1.0
  * @author 黄智聪  2018年10月17日 下午5:59:05
  */
-//@FeignClient("azz-user-service")
-public class PermissionService {
+@FeignClient("azz-user-service")
+public interface PermissionService {
     
     //JsonResult<String> addRole();
     

@@ -26,7 +26,7 @@ import com.azz.platform.user.pojo.vo.Dept;
  * @version 1.0
  * @author 彭斌  2018年10月16日 下午7:33:31
  */
-//@FeignClient("azz-user-service")
+@FeignClient("azz-user-service")
 public interface DeptService {
     
     /**

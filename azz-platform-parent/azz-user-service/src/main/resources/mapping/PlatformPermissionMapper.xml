@@ -240,4 +240,11 @@
 		AND  u.phone_number = #{phoneNumber}
   </select>
   
+  <select id="getPermissionByPermissionCode" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from platform_permission
+    where permission_code = #{permissionCode}
+  </select>
+  
 </mapper>

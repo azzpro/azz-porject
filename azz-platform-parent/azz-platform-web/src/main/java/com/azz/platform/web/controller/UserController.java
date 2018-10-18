@@ -14,49 +14,65 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.azz.WebUtils;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.ShiroAuthErrorCode;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.core.exception.SuppressedException;
+import com.azz.platform.user.api.PermissionService;
 import com.azz.platform.user.api.UserService;
+import com.azz.platform.user.pojo.bo.AddRoleParam;
 import com.azz.platform.user.pojo.bo.EditPasswordParam;
 import com.azz.platform.user.pojo.bo.LoginParam;
 import com.azz.platform.user.pojo.vo.LoginUserInfo;
 import com.azz.util.JSR303ValidateUtils;
+import com.azz.utils.WebUtils;
 
 /**
  * 
- * <P>登录控制器</P>
+ * <P>
+ * 登录控制器
+ * </P>
+ * 
  * @version 1.0
- * @author 黄智聪  2018年10月17日 下午1:42:55
+ * @author 黄智聪 2018年10月17日 下午1:42:55
  */
 @RestController
 @RequestMapping("/azz/api/user")
 public class UserController {
-    
-    public static final long SESSION_TIME_OUT_MILLS = 30 * 60 * 1000;
-    
+
+    @Value("${shiro.session.timeout}")
+    private Long sessionTimeout;
+
     @Autowired
     UserService userService;
-    
+
+    @Autowired
+    PermissionService permissionService;
+
     /**
      * 
-     * <p>未登录</p>
-     * @author 黄智聪  2018年10月17日 下午5:50:41
+     * <p>
+     * 未登录
+     * </p>
+     * 
+     * @author 黄智聪 2018年10月17日 下午5:50:41
      */
     @RequestMapping(value = "/noLogin")
     public void notLogin() {
-        throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_NO_LOGIN);
+	throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_NO_LOGIN);
     }
 
     /**
      * 
-     * <p>无权限</p>
-     * @author 黄智聪  2018年10月17日 下午5:50:51
+     * <p>
+     * 无权限
+     * </p>
+     * 
+     * @author 黄智聪 2018年10月17日 下午5:50:51
      */
     @RequestMapping(value = "/noPermission")
     public void notRole() {
@@ -65,24 +81,35 @@ public class UserController {
 
     /**
      * 
-     * <p>登出</p>
+     * <p>
+     * 登出
+     * </p>
+     * 
      * @return
-     * @author 黄智聪  2018年10月17日 下午5:51:01
+     * @author 黄智聪 2018年10月17日 下午5:51:01
      */
     @RequestMapping(value = "/logout")
-    public JsonResult<String> logout() {
-        Subject subject = SecurityUtils.getSubject();
-        subject.logout();
-        return JsonResult.successJsonResult();
+    public JsonResult<String> logout(HttpServletResponse response) {
+	// TODO
+	response.setHeader("Access-Control-Allow-Origin", "*");
+	response.setHeader("Access-Control-Allow-Method", "POST,GET");
+	Subject subject = SecurityUtils.getSubject();
+	subject.logout();
+	return JsonResult.successJsonResult();
     }
 
     /**
      * 
-     * <p>登录</p>
-     * @param phoneNumber 手机号
-     * @param password 密码
+     * <p>
+     * 登录
+     * </p>
+     * 
+     * @param phoneNumber
+     *            手机号
+     * @param password
+     *            密码
      * @return
-     * @author 黄智聪  2018年10月17日 下午5:50:02
+     * @author 黄智聪 2018年10月17日 下午5:50:02
      */
     @RequestMapping(value = "/login")
     public JsonResult<LoginUserInfo> login(LoginParam param, HttpServletResponse response) {
@@ -90,15 +117,15 @@ public class UserController {
 	response.setHeader("Access-Control-Allow-Origin", "*");
 	response.setHeader("Access-Control-Allow-Method", "POST,GET");
 	JSR303ValidateUtils.validate(param);
-        // 从SecurityUtils里边创建一个 subject
-        Subject subject = SecurityUtils.getSubject();
-        // 在认证提交前准备 token（令牌）
-        UsernamePasswordToken token = new UsernamePasswordToken(param.getPhoneNumber(), param.getPassword());
-        try {
-            // 执行认证登陆
-            subject.login(token);
-            // 设置登录超时时间
-            subject.getSession().setTimeout(SESSION_TIME_OUT_MILLS);
+	// 从SecurityUtils里边创建一个 subject
+	Subject subject = SecurityUtils.getSubject();
+	// 在认证提交前准备 token（令牌）
+	UsernamePasswordToken token = new UsernamePasswordToken(param.getPhoneNumber(), param.getPassword());
+	try {
+	    // 执行认证登陆
+	    subject.login(token);
+	    // 设置登录超时时间
+	    subject.getSession().setTimeout(sessionTimeout);
 	} catch (AuthenticationException e) {
 	    Throwable[] throwables = e.getSuppressed();
 	    int code = ((SuppressedException) throwables[0]).getCode();
@@ -108,25 +135,37 @@ public class UserController {
 	    jr.setMsg(msg);
 	    return jr;
 	}
-        JsonResult<LoginUserInfo> jr = userService.getLoginUserInfoByPhoneNumber(param.getPhoneNumber());
-        WebUtils.setShiroSessionAttr("loginUser", jr.getData());
-        return jr;
+	JsonResult<LoginUserInfo> jr = userService.getLoginUserInfoByPhoneNumber(param.getPhoneNumber());
+	WebUtils.setShiroSessionAttr("loginUser", jr.getData());
+	return jr;
     }
-    
+
     @RequestMapping(value = "/getMessage")
     public LoginUserInfo getNomalUserMessage() {
-        return WebUtils.getLoginUser();
+	return WebUtils.getLoginUser();
     }
 
     /**
-     * <p>修改密码</p>
+     * <p>
+     * 修改密码
+     * </p>
+     * 
      * @param param
      * @return
-     * @author 彭斌  2018年10月18日 下午3:02:23
+     * @author 彭斌 2018年10月18日 下午3:02:23
      */
     @RequestMapping(value = "/editPassword")
     public JsonResult<String> editPassword(EditPasswordParam param, HttpServletResponse response){
         param.setUserInfo(WebUtils.getLoginUser().getUserInfo());
         return userService.editPassword(param);
     }
+
+    @RequestMapping(value = "/addRolePermission")
+    public JsonResult<String> addRolePermission(AddRoleParam param, HttpServletResponse response) {
+	// TODO
+	response.setHeader("Access-Control-Allow-Origin", "*");
+	response.setHeader("Access-Control-Allow-Method", "POST,GET");
+	return permissionService.addRolePermission(param);
+    }
+
 }

@@ -26,4 +26,6 @@ public interface PlatformPermissionMapper {
     
     List<UserPermission> getUserPermissionByPhoneNumberAndLevel(@Param("phoneNumber")String phoneNumber, @Param("level")Integer level);
     
+    PlatformPermission getPermissionByPermissionCode(String permissionCode);
+    
 }

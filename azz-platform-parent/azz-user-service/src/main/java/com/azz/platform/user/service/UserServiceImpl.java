@@ -47,8 +47,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
-    public static final long SESSION_TIME_OUT_MILLS = 30 * 60 * 1000;
-
     @Autowired
     private PlatformUserMapper platformUserMapper;
 

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
+import com.azz.platform.user.pojo.bo.EditPasswordParam;
 import com.azz.platform.user.pojo.bo.LoginParam;
 import com.azz.platform.user.pojo.vo.LoginUserInfo;
 
@@ -50,4 +51,14 @@ public interface UserService {
      */
     @GetMapping("getLoginUserInfoByPhoneNumber")
     JsonResult<LoginUserInfo> getLoginUserInfoByPhoneNumber(@RequestParam("phoneNumber") String phoneNumber);
+    
+    /**
+     * <p>修改用户密码</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年10月18日 下午2:30:58
+     */
+    @GetMapping("editPassword")
+    JsonResult<String> editPassword(@RequestBody EditPasswordParam param);
+    
 }

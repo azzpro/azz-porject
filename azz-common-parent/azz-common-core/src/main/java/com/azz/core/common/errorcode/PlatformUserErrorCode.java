@@ -17,6 +17,8 @@ public class PlatformUserErrorCode extends BaseErrorCode{
     
     public static final PlatformUserErrorCode PLATFORM_USER_ERROR_WRONG_PHONE_OR_PASSWORD = new PlatformUserErrorCode(20002, "手机号或密码错误");
 
+    public static final PlatformUserErrorCode PLATFORM_USER_ERROR_INCONSISTENT_PASSWORD = new PlatformUserErrorCode(20003, "两次密码不一致");
+    
     // 关于部门错误码
     public static final PlatformUserErrorCode PLATFORM_DEPT_ERROR_EXIST = new PlatformUserErrorCode(30000, "部门已存在");
     

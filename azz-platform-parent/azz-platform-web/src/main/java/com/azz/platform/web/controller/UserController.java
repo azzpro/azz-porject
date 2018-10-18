@@ -14,6 +14,7 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +23,7 @@ import com.azz.core.common.errorcode.ShiroAuthErrorCode;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.core.exception.SuppressedException;
 import com.azz.platform.user.api.UserService;
+import com.azz.platform.user.pojo.bo.EditPasswordParam;
 import com.azz.platform.user.pojo.bo.LoginParam;
 import com.azz.platform.user.pojo.vo.LoginUserInfo;
 import com.azz.util.JSR303ValidateUtils;
@@ -114,4 +116,14 @@ public class UserController {
         return "这是普通用户权限";
     }
 
+    /**
+     * <p>修改密码</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年10月18日 下午3:02:23
+     */
+    @RequestMapping(value = "/editPassword")
+    public JsonResult<String> editPassword(@RequestBody EditPasswordParam param){
+        return userService.editPassword(param);
+    }
 }

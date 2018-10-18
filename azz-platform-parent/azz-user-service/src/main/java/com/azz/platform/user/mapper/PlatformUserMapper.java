@@ -36,4 +36,12 @@ public interface PlatformUserMapper {
      * @author 黄智聪  2018年10月17日 下午7:14:20
      */
     UserInfo getUserInfoByPhoneNumber(String phoneNumber);
+    
+    /**
+     * <p>根据用户编码查询</p>
+     * @param userCode
+     * @return
+     * @author 彭斌  2018年10月18日 下午5:14:23
+     */
+    PlatformUser getUserByUserCode(String userCode);
 }

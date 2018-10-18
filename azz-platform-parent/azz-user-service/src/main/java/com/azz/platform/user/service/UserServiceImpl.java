@@ -123,27 +123,17 @@ public class UserServiceImpl implements UserService {
                     PlatformUserErrorCode.PLATFORM_USER_ERROR_INCONSISTENT_PASSWORD);
         }
 
-        // 根据用户手机号码获取用户信息
-        PlatformUser platformUser = platformUserMapper.getUserByPhoneNumber(param.getPhoneNumber());
+        // 根据用户编码获取用户信息
+        PlatformUser platformUser = platformUserMapper.getUserByUserCode(param.getUserCode());
         if (platformUser == null) {// 无效用户
             throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "无效用户");
-        }
-        
-        // 校验原始密码
-        String oldPwd = param.getOldPassword();
-        boolean isRight = PasswordHelper.checkPassword(oldPwd, platformUser.getSalt(),
-                platformUser.getPassword());
-
-        if (!isRight) {// 与盐值加密的密码不匹配
-            throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR,
-                    "原始密码错误");
         }
         
         // 用户设置的新密码信息
         Password pwd = PasswordHelper.encryptPasswordByModel(param.getSecondPassword());
         platformUser.setPassword(pwd.getPassword());
         platformUser.setSalt(pwd.getSalt());
-        platformUser.setModifier(platformUser.getUserCode());
+        platformUser.setModifier(param.getUserInfo().getUserCode());
         platformUser.setLastModifyTime(new Date());
         
         platformUserMapper.updateByPrimaryKeySelective(platformUser);

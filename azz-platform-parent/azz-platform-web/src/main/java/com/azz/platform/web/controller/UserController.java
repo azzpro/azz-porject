@@ -125,8 +125,10 @@ public class UserController {
      * @author 彭斌  2018年10月18日 下午3:02:23
      */
     @RequestMapping(value = "/editPassword")
-    public JsonResult<String> editPassword(EditPasswordParam param){
-        param.setPhoneNumber(WebUtils.getLoginUser().getUserInfo().getPhoneNumber());
+    public JsonResult<String> editPassword(EditPasswordParam param, HttpServletResponse response){
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Method", "POST,GET");
+        param.setUserInfo(WebUtils.getLoginUser().getUserInfo());
         return userService.editPassword(param);
     }
 }

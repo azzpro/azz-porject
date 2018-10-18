@@ -15,7 +15,6 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -156,8 +155,11 @@ public class UserController {
      * @author 彭斌 2018年10月18日 下午3:02:23
      */
     @RequestMapping(value = "/editPassword")
-    public JsonResult<String> editPassword(@RequestBody EditPasswordParam param) {
-	return userService.editPassword(param);
+    public JsonResult<String> editPassword(EditPasswordParam param, HttpServletResponse response){
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Method", "POST,GET");
+        param.setUserInfo(WebUtils.getLoginUser().getUserInfo());
+        return userService.editPassword(param);
     }
 
     @RequestMapping(value = "/addRolePermission")

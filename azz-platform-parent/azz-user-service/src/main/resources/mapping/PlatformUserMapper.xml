@@ -298,4 +298,11 @@
 		WHERE u.phone_number = #{phoneNumber}
   </select>
   
+  <select id="getUserByUserCode" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from platform_user
+    where user_code = #{userCode}
+    and status = 1
+  </select>
 </mapper>

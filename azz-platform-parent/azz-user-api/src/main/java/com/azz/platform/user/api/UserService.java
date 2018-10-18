@@ -58,7 +58,7 @@ public interface UserService {
      * @return
      * @author 彭斌  2018年10月18日 下午2:30:58
      */
-    @GetMapping("editPassword")
+    @PostMapping("editPassword")
     JsonResult<String> editPassword(@RequestBody EditPasswordParam param);
     
 }

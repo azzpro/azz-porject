@@ -9,6 +9,8 @@ package com.azz.platform.user.pojo.bo;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.azz.platform.user.pojo.vo.UserInfo;
+
 import lombok.Data;
 
 /**
@@ -19,13 +21,15 @@ import lombok.Data;
 @Data
 public class EditPasswordParam {
     
-    @NotBlank(message = "原始密码不允许为空")
-    private String oldPassword;
+    @NotBlank(message = "用户编码不允许为空")
+    private String userCode;
     
     @NotBlank(message = "第一次密码不允许为空")
     private String firstPassword;
     
     @NotBlank(message = "第二次密码不允许为空")
     private String secondPassword;
+    
+    private UserInfo userInfo;
 }
 

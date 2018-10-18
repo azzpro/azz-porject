@@ -16,9 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.page.Pagination;
 import com.azz.platform.user.api.DeptService;
 import com.azz.platform.user.pojo.PlatformDept;
 import com.azz.platform.user.pojo.bo.AddDeptParam;
+import com.azz.platform.user.pojo.bo.DeptSearchParam;
+import com.azz.platform.user.pojo.bo.EditDeptParam;
+import com.azz.platform.user.pojo.vo.Dept;
 
 /**
  * <P>部门管理</P>
@@ -46,9 +50,51 @@ public class DeptController {
 		return deptService.addDeptInfo(param);
 	}
 
+	/**
+	 * <p>获取部门详情</p>
+	 * @param deptId
+	 * @return
+	 * @author 彭斌  2018年10月18日 下午1:42:11
+	 */
 	@RequestMapping("/getDeptInfo")
 	public JsonResult<PlatformDept> getDeptInfo(@RequestParam(value = "id",defaultValue="0") Long deptId){
 	    LOG.info("###########获取部门信息###########");
 	    return deptService.getDeptInfo(deptId);
+	}
+	
+	/**
+	 * <p>获取部门列表</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年10月18日 下午1:45:17
+	 */
+	@RequestMapping("/getDeptList")
+	public JsonResult<Pagination<Dept>> getDeptList(@RequestBody DeptSearchParam param){
+	    LOG.info("###########获取部门列表信息###########");
+	    return deptService.getDeptList(param);
+	}
+	
+	/**
+	 * <p>修改部门信息</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年10月18日 下午1:47:23
+	 */
+	@RequestMapping("/editDeptInfo")
+	public JsonResult<String> editDeptInfo(@RequestBody EditDeptParam param){
+	    LOG.info("###########修改部门信息###########");
+	    return deptService.editDeptInfo(param);
+	}
+	
+	/**
+	 * <p>删除部门信息</p>
+	 * @param id
+	 * @return
+	 * @author 彭斌  2018年10月18日 下午1:49:02
+	 */
+	@RequestMapping("/delDeptInfo")
+	JsonResult<String> delDeptInfo(@RequestParam(value = "id",defaultValue="0") Long id){
+	    LOG.info("###########删除部门信息###########");
+	    return deptService.delDeptInfo(id);
 	}
 }

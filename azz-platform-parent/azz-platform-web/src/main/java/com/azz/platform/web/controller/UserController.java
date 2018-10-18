@@ -126,8 +126,6 @@ public class UserController {
      */
     @RequestMapping(value = "/editPassword")
     public JsonResult<String> editPassword(EditPasswordParam param, HttpServletResponse response){
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Method", "POST,GET");
         param.setUserInfo(WebUtils.getLoginUser().getUserInfo());
         return userService.editPassword(param);
     }

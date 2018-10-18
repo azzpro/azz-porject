@@ -10,11 +10,11 @@ package com.azz.shiro;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.apache.shiro.mgt.SecurityManager;
 
 /**
  * <P>TODO</P>
@@ -34,12 +34,6 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setUnauthorizedUrl("/azz/api/user/noPermission");
         // 设置拦截器
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-        //游客，开发权限
-        filterChainDefinitionMap.put("/azz/api/guest/**", "anon");
-        //用户，需要角色权限 “user”
-        filterChainDefinitionMap.put("/azz/api/user/**", "anon");
-        //管理员，需要角色权限 “admin”
-        filterChainDefinitionMap.put("/azz/api/admin/**", "anon");
         //开放登陆接口
         filterChainDefinitionMap.put("/azz/api/user/login", "anon");
         //其余接口一律拦截

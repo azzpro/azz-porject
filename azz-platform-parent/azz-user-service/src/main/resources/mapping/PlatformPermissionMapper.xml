@@ -9,6 +9,7 @@
     <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="level" jdbcType="INTEGER" property="level" />
     <result column="page_url" jdbcType="VARCHAR" property="pageUrl" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -17,7 +18,7 @@
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, permission_code, permission_name, parent_permission_code, sort, level, page_url, 
+    id, permission_code, permission_name, parent_permission_code, sort, level, page_url, icon,
     remark, status, create_time, creator, last_modify_time, modifier
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -33,12 +34,12 @@
   <insert id="insert" parameterType="com.azz.platform.user.pojo.PlatformPermission">
     insert into platform_permission (id, permission_code, permission_name, 
       parent_permission_code, sort, level, 
-      page_url, remark, status, 
+      page_url, icon, remark, status, 
       create_time, creator, last_modify_time, 
       modifier)
     values (#{id,jdbcType=BIGINT}, #{permissionCode,jdbcType=VARCHAR}, #{permissionName,jdbcType=VARCHAR}, 
       #{parentPermissionCode,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, #{level,jdbcType=INTEGER}, 
-      #{pageUrl,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{pageUrl,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
       #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{lastModifyTime,jdbcType=TIMESTAMP}, 
       #{modifier,jdbcType=VARCHAR})
   </insert>
@@ -65,6 +66,9 @@
       </if>
       <if test="pageUrl != null">
         page_url,
+      </if>
+      <if test="icon != null">
+        icon,
       </if>
       <if test="remark != null">
         remark,
@@ -107,6 +111,9 @@
       <if test="pageUrl != null">
         #{pageUrl,jdbcType=VARCHAR},
       </if>
+      <if test="icon != null">
+        #{icon,jdbcType=VARCHAR},
+      </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
@@ -148,6 +155,9 @@
       <if test="pageUrl != null">
         page_url = #{pageUrl,jdbcType=VARCHAR},
       </if>
+      <if test="icon != null">
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -177,6 +187,7 @@
       sort = #{sort,jdbcType=INTEGER},
       level = #{level,jdbcType=INTEGER},
       page_url = #{pageUrl,jdbcType=VARCHAR},
+      icon = #{icon,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -185,4 +196,48 @@
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="getUserPermissionInfoByPhoneNumber" parameterType="string" resultType="com.azz.platform.user.pojo.vo.UserPermission">
+	  SELECT
+			p.permission_code AS permissionCode,
+			p.permission_name AS permissionName,
+			p.page_url AS pageUrl,
+			p.parent_permission_code AS parentPermissionCode,
+			p.icon AS icon,
+			p.sort AS sort,
+			p. LEVEL AS level
+		FROM
+			platform_user u
+		LEFT JOIN platform_user_role ur ON ur.user_id = u.id
+		LEFT JOIN platform_role r ON ur.role_id = r.id
+		LEFT JOIN platform_role_permission rp ON rp.role_id = r.id
+		LEFT JOIN platform_permission p ON rp.permission_id = p.id
+		WHERE
+			p. STATUS = 1
+		AND r. STATUS = 1
+		AND  u.phone_number = #{phoneNumber}
+  </select>
+  
+  <select id="getUserPermissionByPhoneNumberAndLevel" resultType="com.azz.platform.user.pojo.vo.UserPermission">
+	  SELECT
+			p.permission_code AS permissionCode,
+			p.permission_name AS permissionName,
+			p.page_url AS pageUrl,
+			p.parent_permission_code AS parentPermissionCode,
+			p.icon AS icon,
+			p.sort AS sort,
+			p. LEVEL AS level
+		FROM
+			platform_user u
+		LEFT JOIN platform_user_role ur ON ur.user_id = u.id
+		LEFT JOIN platform_role r ON ur.role_id = r.id
+		LEFT JOIN platform_role_permission rp ON rp.role_id = r.id
+		LEFT JOIN platform_permission p ON rp.permission_id = p.id
+		WHERE
+			p. STATUS = 1
+		AND r. STATUS = 1
+		AND p.level = #{level}
+		AND  u.phone_number = #{phoneNumber}
+  </select>
+  
 </mapper>

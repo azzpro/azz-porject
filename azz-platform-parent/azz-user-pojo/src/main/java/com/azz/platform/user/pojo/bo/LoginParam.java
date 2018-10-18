@@ -7,11 +7,10 @@
  
 package com.azz.platform.user.pojo.bo;
 
+import org.apache.shiro.subject.Subject;
 import org.hibernate.validator.constraints.NotBlank;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * <P>TODO</P>
@@ -19,8 +18,6 @@ import lombok.NoArgsConstructor;
  * @author 黄智聪  2018年10月16日 下午7:57:53
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class LoginParam {
     
     @NotBlank(message = "手机号不允许为空")
@@ -28,6 +25,26 @@ public class LoginParam {
     
     @NotBlank(message = "密码不允许为空")
     private String password;
+    
+    private Subject subject;
+    
+    public LoginParam(String phoneNumber, String password, Subject subject) {
+	super();
+	this.phoneNumber = phoneNumber;
+	this.password = password;
+	this.subject = subject;
+    }
+
+    public LoginParam(String phoneNumber, String password) {
+	super();
+	this.phoneNumber = phoneNumber;
+	this.password = password;
+    }
+
+    public LoginParam() {
+    }
+    
+    
 
 }
 

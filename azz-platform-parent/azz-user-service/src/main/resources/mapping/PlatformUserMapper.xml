@@ -263,4 +263,39 @@
     where phone_number = #{phoneNumber}
     and status = 1
   </select>
+  
+  <select id="getUserInfoByPhoneNumber" parameterType="string" resultType="com.azz.platform.user.pojo.vo.UserInfo">
+	  SELECT
+		u.user_code AS userCode,
+		u.user_name AS userName,
+		u.nickname AS nickname,
+		u.phone_number AS phoneNumber,
+		u.email AS email,
+		CASE u.gender
+		WHEN 0 THEN
+			'男'
+		WHEN 1 THEN
+			'女'
+		WHEN 2 THEN
+			'未知'
+		END AS gender,
+		 d.dept_name AS deptName,
+		 u.post_name AS postName,
+		 CASE u. STATUS
+		WHEN 0 THEN
+			'冻结'
+		WHEN 1 THEN
+			'有效'
+		WHEN 2 THEN
+			'注销'
+		END AS STATUS,
+		 r.role_name AS roleName
+		FROM
+			platform_user u
+		LEFT JOIN platform_user_role ur ON ur.user_id = u.id
+		LEFT JOIN platform_role r ON ur.role_id = r.id
+		LEFT JOIN platform_dept d ON d.id = u.dept_id
+		WHERE u.phone_number = #{phoneNumber}
+  </select>
+  
 </mapper>

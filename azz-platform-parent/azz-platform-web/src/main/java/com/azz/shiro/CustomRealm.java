@@ -7,10 +7,6 @@
 
 package com.azz.shiro;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -22,7 +18,6 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.alibaba.fastjson.JSONObject;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.exception.SuppressedException;
@@ -52,7 +47,6 @@ public class CustomRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken)
 	    throws AuthenticationException {
-	System.out.println("————身份认证方法————");
 	UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
 	String phoneNumber = token.getUsername();
 	String password = new String((char[]) token.getCredentials());
@@ -63,8 +57,8 @@ public class CustomRealm extends AuthorizingRealm {
 	    authException.addSuppressed(new SuppressedException(jr.getCode(),jr.getMsg()));
 	    throw authException;
 	}
-	System.err.println(JSONObject.toJSONString(jr));
-	return new SimpleAuthenticationInfo(token.getPrincipal(), password, getName());
+	SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(token.getPrincipal(), password, getName());
+	return info;
     }
 
     /**
@@ -75,16 +69,16 @@ public class CustomRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-	System.out.println("————权限认证————");
-	String username = (String) SecurityUtils.getSubject().getPrincipal();
+	/*System.out.println("————权限认证————");
+	String username = (String) SecurityUtils.getSubject().getPrincipal();*/
 	SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-	// 获得该用户角色
+	/*// 获得该用户角色
 	String role = null;
 	Set<String> set = new HashSet<>();
 	// 需要将 role 封装到 Set 作为 info.setRoles() 的参数
 	set.add(role);
 	// 设置该用户拥有的角色
-	info.setRoles(set);
+	info.setRoles(set);*/
 	return info;
     }
 }

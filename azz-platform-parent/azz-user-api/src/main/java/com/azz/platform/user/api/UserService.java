@@ -8,11 +8,14 @@
 package com.azz.platform.user.api;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.platform.user.pojo.bo.LoginParam;
+import com.azz.platform.user.pojo.vo.LoginUserInfo;
 
 /**
  * <P>
@@ -24,17 +27,27 @@ import com.azz.platform.user.pojo.bo.LoginParam;
  */
 @FeignClient("azz-user-service")
 public interface UserService {
-
+    
     /**
      * 
      * <p>
-     * 登录认证
+     * shiro的登录认证
      * </p>
      * 
-     * @param param
+     * @param param 登录参数
      * @return
      * @author 黄智聪 2018年10月17日 下午3:06:35
      */
     @PostMapping("loginAuth")
     JsonResult<String> loginAuth(@RequestBody LoginParam param);
+    
+    /**
+     * 
+     * <p>TODO</p>
+     * @param phoneNumber
+     * @return
+     * @author 黄智聪  2018年10月18日 下午1:51:00
+     */
+    @GetMapping("getLoginUserInfoByPhoneNumber")
+    JsonResult<LoginUserInfo> getLoginUserInfoByPhoneNumber(@RequestParam("phoneNumber") String phoneNumber);
 }

@@ -52,6 +52,13 @@ public class PlatformPermission implements Serializable {
      * @mbg.generated
      */
     private String pageUrl;
+    
+    /**
+     * 图标
+     *
+     * @mbg.generated
+     */
+    private String icon;
 
     /**
      * 备注
@@ -344,6 +351,14 @@ public class PlatformPermission implements Serializable {
         return creator;
     }
 
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
     /**
      * 创建人<br/>
      * platform_permission.creator
@@ -442,6 +457,7 @@ public class PlatformPermission implements Serializable {
         result = prime * result + ((getSort() == null) ? 0 : getSort().hashCode());
         result = prime * result + ((getLevel() == null) ? 0 : getLevel().hashCode());
         result = prime * result + ((getPageUrl() == null) ? 0 : getPageUrl().hashCode());
+        result = prime * result + ((getIcon() == null) ? 0 : getIcon().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
@@ -464,6 +480,7 @@ public class PlatformPermission implements Serializable {
         sb.append(", sort=").append(sort);
         sb.append(", level=").append(level);
         sb.append(", pageUrl=").append(pageUrl);
+        sb.append(", icon=").append(icon);
         sb.append(", remark=").append(remark);
         sb.append(", status=").append(status);
         sb.append(", createTime=").append(createTime);

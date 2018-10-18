@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public JsonResult<String> editPassword(EditPasswordParam param) {
+    public JsonResult<String> editPassword(@RequestBody EditPasswordParam param) {
         JSR303ValidateUtils.validate(param);
 
         // 密码一致性校验

@@ -8,8 +8,11 @@
 package com.azz.platform.user.api;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.azz.core.common.JsonResult;
+import com.azz.platform.user.pojo.bo.AddRoleParam;
 
 /**
  * <P>权限服务相关接口</P>
@@ -19,9 +22,10 @@ import com.azz.core.common.JsonResult;
 @FeignClient("azz-user-service")
 public interface PermissionService {
     
-    //JsonResult<String> addRole();
+    //JsonResult<PlatformPermission>
     
+    @PostMapping("addRolePermissions")
+    JsonResult<String> addRolePermission(@RequestBody AddRoleParam param);
     
-
 }
 

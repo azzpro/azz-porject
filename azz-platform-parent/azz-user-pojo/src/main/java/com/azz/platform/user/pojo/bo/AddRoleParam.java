@@ -7,7 +7,11 @@
  
 package com.azz.platform.user.pojo.bo;
 
+import java.io.Serializable;
 import java.util.List;
+
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import lombok.Data;
 
@@ -17,13 +21,19 @@ import lombok.Data;
  * @author 黄智聪  2018年10月18日 下午3:12:50
  */
 @Data
-public class AddRoleParam {
+public class AddRoleParam implements Serializable{
     
+    private static final long serialVersionUID = 9015982174488427040L;
+
+    @NotBlank(message = "角色名称不能为空")
     private String roleName;
     
+    @NotEmpty(message = "请选择权限")
+    private List<String> permissionCodes;
+
     private String remark;
     
-    private List<String> permissionCode;
-
+    private String creator;
+    
 }
 

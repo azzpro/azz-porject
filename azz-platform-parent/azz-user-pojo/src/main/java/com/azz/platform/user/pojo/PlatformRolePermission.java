@@ -2,6 +2,13 @@ package com.azz.platform.user.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PlatformRolePermission implements Serializable {
     /**
      * 主键

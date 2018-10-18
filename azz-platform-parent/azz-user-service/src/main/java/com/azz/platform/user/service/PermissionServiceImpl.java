@@ -73,6 +73,7 @@ public class PermissionServiceImpl implements PermissionService {
     private void validateRoleParam(AddRoleParam param) {
 	// 参数校验
 	JSR303ValidateUtils.validate(param);
+	String roleName = param.getRoleName();
 	
     }
 

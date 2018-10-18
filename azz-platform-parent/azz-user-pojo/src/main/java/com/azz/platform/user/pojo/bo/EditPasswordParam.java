@@ -19,6 +19,9 @@ import lombok.Data;
 @Data
 public class EditPasswordParam {
     
+    @NotBlank(message = "手机号码不允许为空")
+    private String phoneNumber;
+    
     @NotBlank(message = "原始密码不允许为空")
     private String oldPassword;
     

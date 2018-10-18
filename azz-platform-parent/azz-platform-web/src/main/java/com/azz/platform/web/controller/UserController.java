@@ -127,6 +127,7 @@ public class UserController {
      */
     @RequestMapping(value = "/editPassword")
     public JsonResult<String> editPassword(@RequestBody EditPasswordParam param){
+        param.setPhoneNumber(WebUtils.getLoginUser().getUserInfo().getPhoneNumber());
         return userService.editPassword(param);
     }
 }

@@ -33,7 +33,6 @@ public class AddDeptParam {
      * @mbg.generated
      */
     private String description;
-
-
+    
 }
 

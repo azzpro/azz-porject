@@ -5,7 +5,6 @@
 
 package com.azz.platform.user.service;
 
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,14 +16,24 @@ import org.springframework.web.bind.annotation.RestController;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
 import com.azz.core.common.errorcode.ShiroAuthErrorCode;
+import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.exception.BaseException;
 import com.azz.core.exception.ShiroAuthException;
+import com.azz.exception.JSR303ValidationException;
 import com.azz.model.Password;
 import com.azz.platform.user.api.UserService;
+import com.azz.platform.user.mapper.PlatformDeptMapper;
 import com.azz.platform.user.mapper.PlatformPermissionMapper;
+import com.azz.platform.user.mapper.PlatformRoleMapper;
 import com.azz.platform.user.mapper.PlatformUserMapper;
+import com.azz.platform.user.mapper.PlatformUserRoleMapper;
+import com.azz.platform.user.pojo.PlatformDept;
+import com.azz.platform.user.pojo.PlatformRole;
 import com.azz.platform.user.pojo.PlatformUser;
+import com.azz.platform.user.pojo.PlatformUserRole;
+import com.azz.platform.user.pojo.bo.AddUserParam;
 import com.azz.platform.user.pojo.bo.EditPasswordParam;
+import com.azz.platform.user.pojo.bo.EditUserParam;
 import com.azz.platform.user.pojo.bo.LoginParam;
 import com.azz.platform.user.pojo.vo.LoginUserInfo;
 import com.azz.platform.user.pojo.vo.Menu;
@@ -53,42 +62,52 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PlatformPermissionMapper platformPermissionMapper;
 
+    @Autowired
+    private PlatformDeptMapper platformDeptMapper;
+
+    @Autowired
+    private PlatformRoleMapper platformRoleMapper;
+
+    @Autowired
+    private PlatformUserRoleMapper platformUserRoleMapper;
+
     @Override
     public JsonResult<String> loginAuth(@RequestBody LoginParam param) {
-        log.debug("————身份认证方法————");
-        String phoneNumber = param.getPhoneNumber();
-        String password = param.getPassword();
-        PlatformUser platformUser = platformUserMapper.getUserByPhoneNumber(phoneNumber);
-        if (platformUser == null) {// 无效用户
-            throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "无效用户");
-        }
-        boolean isRight = PasswordHelper.checkPassword(password, platformUser.getSalt(),
-                platformUser.getPassword());
-        if (!isRight) {// 与盐值加密的密码不匹配
-            throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR,
-                    "手机号或密码错误");
-        }
-        return JsonResult.successJsonResult();
+	log.debug("————身份认证方法————");
+	String phoneNumber = param.getPhoneNumber();
+	String password = param.getPassword();
+	PlatformUser platformUser = platformUserMapper.getUserByPhoneNumber(phoneNumber);
+	if (platformUser == null) {// 无效用户
+	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "无效用户");
+	}
+	boolean isRight = PasswordHelper.checkPassword(password, platformUser.getSalt(), platformUser.getPassword());
+	if (!isRight) {// 与盐值加密的密码不匹配
+	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "手机号或密码错误");
+	}
+	return JsonResult.successJsonResult();
     }
 
     @Override
     public JsonResult<LoginUserInfo> getLoginUserInfoByPhoneNumber(String phoneNumber) {
-        LoginUserInfo info = new LoginUserInfo();
-        UserInfo userInfo = platformUserMapper.getUserInfoByPhoneNumber(phoneNumber);
-        List<UserPermission> userPermissions =
-                platformPermissionMapper.getUserPermissionInfoByPhoneNumber(phoneNumber);
-        info.setUserInfo(userInfo);
-        info.setUserPermissions(userPermissions);
-        info.setMenus(generateMenuTree(phoneNumber));
-        return JsonResult.successJsonResult(info);
+	LoginUserInfo info = new LoginUserInfo();
+	UserInfo userInfo = platformUserMapper.getUserInfoByPhoneNumber(phoneNumber);
+	List<UserPermission> userPermissions = platformPermissionMapper.getUserPermissionInfoByPhoneNumber(phoneNumber);
+	info.setUserInfo(userInfo);
+	info.setUserPermissions(userPermissions);
+	info.setMenus(generateMenuTree(phoneNumber));
+	return JsonResult.successJsonResult(info);
     }
-    
+
     /**
      * 
-     * <p>根据手机号查询当前用户角色并生成菜单树</p>
-     * @param phoneNumber 手机号
+     * <p>
+     * 根据手机号查询当前用户角色并生成菜单树
+     * </p>
+     * 
+     * @param phoneNumber
+     *            手机号
      * @return
-     * @author 黄智聪  2018年10月19日 上午10:36:34
+     * @author 黄智聪 2018年10月19日 上午10:36:34
      */
     private List<Menu> generateMenuTree(String phoneNumber) {
 	// 根据手机号查询所有一级菜单权限
@@ -120,30 +139,122 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public JsonResult<String> editPassword(@RequestBody EditPasswordParam param) {
-        JSR303ValidateUtils.validate(param);
+	JSR303ValidateUtils.validate(param);
 
-        // 密码一致性校验
-        if (!param.getFirstPassword().equals(param.getSecondPassword())) {
-            throw new BaseException(
-                    PlatformUserErrorCode.PLATFORM_USER_ERROR_INCONSISTENT_PASSWORD);
-        }
+	// 密码一致性校验
+	if (!param.getFirstPassword().equals(param.getSecondPassword())) {
+	    throw new BaseException(PlatformUserErrorCode.PLATFORM_USER_ERROR_INCONSISTENT_PASSWORD);
+	}
 
-        // 根据用户编码获取用户信息
-        PlatformUser platformUser = platformUserMapper.getUserByUserCode(param.getUserCode());
-        if (platformUser == null) {// 无效用户
-            throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "无效用户");
-        }
-        
-        // 用户设置的新密码信息
-        Password pwd = PasswordHelper.encryptPasswordByModel(param.getSecondPassword());
-        platformUser.setPassword(pwd.getPassword());
-        platformUser.setSalt(pwd.getSalt());
-        platformUser.setModifier(param.getUserInfo().getUserCode());
-        platformUser.setLastModifyTime(new Date());
-        
-        platformUserMapper.updateByPrimaryKeySelective(platformUser);
-        
-        return JsonResult.successJsonResult();
+	// 根据用户编码获取用户信息
+	PlatformUser platformUser = platformUserMapper.getUserByUserCode(param.getUserCode());
+	if (platformUser == null) {// 无效用户
+	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "无效用户");
+	}
+
+	// 用户设置的新密码信息
+	Password pwd = PasswordHelper.encryptPasswordByModel(param.getSecondPassword());
+	platformUser.setPassword(pwd.getPassword());
+	platformUser.setSalt(pwd.getSalt());
+	platformUser.setModifier(param.getUserInfo().getUserCode());
+	platformUser.setLastModifyTime(new Date());
+
+	platformUserMapper.updateByPrimaryKeySelective(platformUser);
+
+	return JsonResult.successJsonResult();
+    }
+
+    @Override
+    public JsonResult<String> addUser(@RequestBody AddUserParam param) {
+	// 参数校验
+	JSR303ValidateUtils.validate(param);
+
+	String password = param.getPassword();
+	String confirmPassword = param.getConfirmPassword();
+	// 密码与确认密码一致性校验
+	if (!password.equals(confirmPassword)) {
+	    throw new JSR303ValidationException(SystemErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "密码与确认密码不一致");
+	}
+	PlatformDept dept = platformDeptMapper.selectByDeptCode(param.getDeptCode());
+	if (dept == null) {
+	    throw new JSR303ValidationException(SystemErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "部门不存在");
+	}
+	PlatformRole role = platformRoleMapper.selectByRoleCode(param.getRoleCode());
+	if (role == null) {
+	    throw new JSR303ValidationException(SystemErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色不存在");
+	}
+	// 生成盐值加密的密码
+	Password pwd = PasswordHelper.encryptPasswordByModel(password);
+	Date nowDate = new Date();
+	String creator = param.getCreator();
+	PlatformUser userRecord = PlatformUser.builder().createTime(nowDate).creator(creator).deptId(dept.getId())
+		.email(param.getEmail()).password(pwd.getPassword()).phoneNumber(param.getPhoneNumber())
+		.postName(param.getPostName()).userCode(System.currentTimeMillis() + "")// TODO
+		.userName(param.getUserName()).salt(pwd.getSalt()).build();
+	platformUserMapper.insertSelective(userRecord);
+	// 用户与角色绑定
+	PlatformUserRole userRoleRecord = PlatformUserRole.builder().createTime(nowDate).creator(creator)
+		.userId(userRecord.getId()).roleId(role.getId()).build();
+	platformUserRoleMapper.insertSelective(userRoleRecord);
+	return JsonResult.successJsonResult();
+    }
+
+    @Override
+    public JsonResult<String> editUser(@RequestBody EditUserParam param) {
+	// 参数校验
+	JSR303ValidateUtils.validate(param);
+
+	String password = param.getPassword();
+	String confirmPassword = param.getConfirmPassword();
+	// 密码与确认密码一致性校验
+	if (!password.equals(confirmPassword)) {
+	    throw new JSR303ValidationException(SystemErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "密码与确认密码不一致");
+	}
+	PlatformDept dept = platformDeptMapper.selectByDeptCode(param.getDeptCode());
+	if (dept == null) {
+	    throw new JSR303ValidationException(SystemErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "部门不存在");
+	}
+	PlatformRole role = platformRoleMapper.selectByRoleCode(param.getRoleCode());
+	if (role == null) {
+	    throw new JSR303ValidationException(SystemErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色不存在");
+	}
+	
+	String userCode = param.getUserCode();
+	PlatformUser user = platformUserMapper.getUserByUserCode(userCode);
+	if (user == null) {
+	    throw new JSR303ValidationException(SystemErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "用户不存在");
+	}
+	// 生成盐值加密的密码
+	Password pwd = PasswordHelper.encryptPasswordByModel(password);
+	Date nowDate = new Date();
+	String modifier = param.getModifier();
+	Long userId = user.getId();
+	PlatformUser userRecord = PlatformUser.builder()
+		.modifier(modifier)
+		.lastModifyTime(nowDate)
+		.deptId(dept.getId())
+		.email(param.getEmail())
+		.password(pwd.getPassword())
+		.phoneNumber(param.getPhoneNumber())
+		.postName(param.getPostName())
+		.userName(param.getUserName())
+		.salt(pwd.getSalt())
+		.id(userId)
+		.build();
+	platformUserMapper.updateByPrimaryKeySelective(userRecord);
+	
+	// 先删除原先的用户与角色的绑定
+	platformUserRoleMapper.deleteByUserId(userId);
+	
+	// 重新对用户与角色进行新的绑定
+	PlatformUserRole userRoleRecord = PlatformUserRole.builder()
+		.createTime(nowDate)
+		.creator(modifier)
+		.userId(userId)
+		.roleId(role.getId())
+		.build();
+	platformUserRoleMapper.insertSelective(userRoleRecord);
+	return JsonResult.successJsonResult();
     }
 
 }

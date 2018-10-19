@@ -7,6 +7,8 @@ import com.azz.platform.user.pojo.PlatformUserRole;
 @Mapper
 public interface PlatformUserRoleMapper {
     int deleteByPrimaryKey(Long id);
+    
+    int deleteByUserId(Long userId);
 
     int insert(PlatformUserRole record);
 

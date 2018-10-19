@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
+import com.azz.platform.user.pojo.bo.AddUserParam;
 import com.azz.platform.user.pojo.bo.EditPasswordParam;
+import com.azz.platform.user.pojo.bo.EditUserParam;
 import com.azz.platform.user.pojo.bo.LoginParam;
 import com.azz.platform.user.pojo.vo.LoginUserInfo;
 
@@ -60,5 +62,26 @@ public interface UserService {
      */
     @PostMapping("editPassword")
     JsonResult<String> editPassword(@RequestBody EditPasswordParam param);
+    
+    /**
+     * 
+     * <p>添加用户</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月19日 下午5:39:40
+     */
+    @PostMapping("addUser")
+    JsonResult<String> addUser(@RequestBody AddUserParam param);
+    
+    /**
+     * 
+     * <p>修改用户</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月19日 下午6:02:11
+     */
+    @PostMapping("editUser")
+    JsonResult<String> editUser(@RequestBody EditUserParam param);
+    
     
 }

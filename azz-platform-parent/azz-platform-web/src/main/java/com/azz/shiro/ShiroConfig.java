@@ -7,20 +7,17 @@
 
 package com.azz.shiro;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
@@ -85,9 +82,15 @@ public class ShiroConfig {
 	DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 	// 设置realm.
 	securityManager.setRealm(customRealm());
+	securityManager.setSessionManager(sessionManager());
 	return securityManager;
     }
-
+    
+    @Bean
+    public SessionManager sessionManager() {
+	return new ShiroSessionManager();
+    }
+    
     /**
      * 自定义身份认证 realm;
      * <p>

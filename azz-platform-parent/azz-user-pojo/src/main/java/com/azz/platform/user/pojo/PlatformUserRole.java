@@ -3,6 +3,13 @@ package com.azz.platform.user.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class PlatformUserRole implements Serializable {
     /**
      * 主键
@@ -28,21 +35,21 @@ public class PlatformUserRole implements Serializable {
     private Date createTime;
 
     /**
-     * 创建�?
+     * 创建�?
      *
      * @mbg.generated
      */
     private String creator;
 
     /**
-     * �?后修改时�?
+     * �?后修改时�?
      *
      * @mbg.generated
      */
     private Date lastModifyTime;
 
     /**
-     * 修改�?
+     * 修改�?
      *
      * @mbg.generated
      */
@@ -52,9 +59,9 @@ public class PlatformUserRole implements Serializable {
 
     /**
      * 主键<br/>
-     * 返回值对应的表列�? platform_user_role.id
+     * 返回值对应的表列�? platform_user_role.id
      *
-     * @return 返回值对�? platform_user_role.id
+     * @return 返回值对�? platform_user_role.id
      *
      * @mbg.generated
      */
@@ -66,7 +73,7 @@ public class PlatformUserRole implements Serializable {
      * 主键<br/>
      * platform_user_role.id
      *
-     * @param id 值对�? platform_user_role.id
+     * @param id 值对�? platform_user_role.id
      *
      * @mbg.generated
      */
@@ -76,9 +83,9 @@ public class PlatformUserRole implements Serializable {
 
     /**
      * 用户id<br/>
-     * 返回值对应的表列�? platform_user_role.user_id
+     * 返回值对应的表列�? platform_user_role.user_id
      *
-     * @return 返回值对�? platform_user_role.user_id
+     * @return 返回值对�? platform_user_role.user_id
      *
      * @mbg.generated
      */
@@ -90,7 +97,7 @@ public class PlatformUserRole implements Serializable {
      * 用户id<br/>
      * platform_user_role.user_id
      *
-     * @param userId 值对�? platform_user_role.user_id
+     * @param userId 值对�? platform_user_role.user_id
      *
      * @mbg.generated
      */
@@ -100,9 +107,9 @@ public class PlatformUserRole implements Serializable {
 
     /**
      * 角色id<br/>
-     * 返回值对应的表列�? platform_user_role.role_id
+     * 返回值对应的表列�? platform_user_role.role_id
      *
-     * @return 返回值对�? platform_user_role.role_id
+     * @return 返回值对�? platform_user_role.role_id
      *
      * @mbg.generated
      */
@@ -114,7 +121,7 @@ public class PlatformUserRole implements Serializable {
      * 角色id<br/>
      * platform_user_role.role_id
      *
-     * @param roleId 值对�? platform_user_role.role_id
+     * @param roleId 值对�? platform_user_role.role_id
      *
      * @mbg.generated
      */
@@ -124,9 +131,9 @@ public class PlatformUserRole implements Serializable {
 
     /**
      * <br/>
-     * 返回值对应的表列�? platform_user_role.create_time
+     * 返回值对应的表列�? platform_user_role.create_time
      *
-     * @return 返回值对�? platform_user_role.create_time
+     * @return 返回值对�? platform_user_role.create_time
      *
      * @mbg.generated
      */
@@ -138,7 +145,7 @@ public class PlatformUserRole implements Serializable {
      * <br/>
      * platform_user_role.create_time
      *
-     * @param createTime 值对�? platform_user_role.create_time
+     * @param createTime 值对�? platform_user_role.create_time
      *
      * @mbg.generated
      */
@@ -147,10 +154,10 @@ public class PlatformUserRole implements Serializable {
     }
 
     /**
-     * 创建�?<br/>
-     * 返回值对应的表列�? platform_user_role.creator
+     * 创建�?<br/>
+     * 返回值对应的表列�? platform_user_role.creator
      *
-     * @return 返回值对�? platform_user_role.creator
+     * @return 返回值对�? platform_user_role.creator
      *
      * @mbg.generated
      */
@@ -159,10 +166,10 @@ public class PlatformUserRole implements Serializable {
     }
 
     /**
-     * 创建�?<br/>
+     * 创建�?<br/>
      * platform_user_role.creator
      *
-     * @param creator 值对�? platform_user_role.creator
+     * @param creator 值对�? platform_user_role.creator
      *
      * @mbg.generated
      */
@@ -171,10 +178,10 @@ public class PlatformUserRole implements Serializable {
     }
 
     /**
-     * �?后修改时�?<br/>
-     * 返回值对应的表列�? platform_user_role.last_modify_time
+     * �?后修改时�?<br/>
+     * 返回值对应的表列�? platform_user_role.last_modify_time
      *
-     * @return 返回值对�? platform_user_role.last_modify_time
+     * @return 返回值对�? platform_user_role.last_modify_time
      *
      * @mbg.generated
      */
@@ -183,10 +190,10 @@ public class PlatformUserRole implements Serializable {
     }
 
     /**
-     * �?后修改时�?<br/>
+     * �?后修改时�?<br/>
      * platform_user_role.last_modify_time
      *
-     * @param lastModifyTime 值对�? platform_user_role.last_modify_time
+     * @param lastModifyTime 值对�? platform_user_role.last_modify_time
      *
      * @mbg.generated
      */
@@ -195,10 +202,10 @@ public class PlatformUserRole implements Serializable {
     }
 
     /**
-     * 修改�?<br/>
-     * 返回值对应的表列�? platform_user_role.modifier
+     * 修改�?<br/>
+     * 返回值对应的表列�? platform_user_role.modifier
      *
-     * @return 返回值对�? platform_user_role.modifier
+     * @return 返回值对�? platform_user_role.modifier
      *
      * @mbg.generated
      */
@@ -207,10 +214,10 @@ public class PlatformUserRole implements Serializable {
     }
 
     /**
-     * 修改�?<br/>
+     * 修改�?<br/>
      * platform_user_role.modifier
      *
-     * @param modifier 值对�? platform_user_role.modifier
+     * @param modifier 值对�? platform_user_role.modifier
      *
      * @mbg.generated
      */

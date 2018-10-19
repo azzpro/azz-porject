@@ -24,7 +24,7 @@ import com.azz.platform.user.pojo.vo.RoleInfo;
 import com.azz.utils.WebUtils;
 
 /**
- * <P>TODO</P>
+ * <P>权限控制器</P>
  * @version 1.0
  * @author 黄智聪  2018年10月19日 下午4:17:40
  */

@@ -30,18 +30,52 @@ import com.azz.platform.user.pojo.vo.RoleInfo;
 @FeignClient("azz-user-service")
 public interface PermissionService {
     
+    /**
+     * 
+     * <p>查询所有权限</p>
+     * @return
+     * @author 黄智聪  2018年10月19日 下午6:00:40
+     */
     @GetMapping("getPermissions")
     JsonResult<List<Permission>> getPermissions();
     
+    /**
+     * 
+     * <p>新增角色权限</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月19日 下午6:00:58
+     */
     @PostMapping("addRolePermissions")
     JsonResult<String> addRolePermission(@RequestBody AddRoleParam param);
     
+    /**
+     * 
+     * <p>修改角色权限</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月19日 下午6:01:10
+     */
     @PostMapping("editRolePermission")
     JsonResult<String> editRolePermission(@RequestBody EditRoleParam param);
     
+    /**
+     * 
+     * <p>删除角色</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月19日 下午6:01:22
+     */
     @PostMapping("delRole")
     JsonResult<String> delRole(@RequestBody DelRoleParam param);
     
+    /**
+     * 
+     * <p>查询角色列表</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月19日 下午6:01:30
+     */
     @PostMapping("getRoleList")
     JsonResult<List<RoleInfo>> getRoleList(@RequestBody SearchRoleParam param);
     

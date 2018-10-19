@@ -23,6 +23,12 @@
     delete from platform_user_role
     where id = #{id,jdbcType=BIGINT}
   </delete>
+  
+  <delete id="deleteByUserId" parameterType="java.lang.Long">
+    delete from platform_user_role
+    where user_id = #{userId}
+  </delete>
+  
   <insert id="insert" parameterType="com.azz.platform.user.pojo.PlatformUserRole">
     insert into platform_user_role (id, user_id, role_id, 
       create_time, creator, last_modify_time, 

@@ -17,4 +17,6 @@ public interface PlatformRolePermissionMapper {
     int updateByPrimaryKeySelective(PlatformRolePermission record);
 
     int updateByPrimaryKey(PlatformRolePermission record);
+    
+    int deleteByRoleId(Long roleId);
 }

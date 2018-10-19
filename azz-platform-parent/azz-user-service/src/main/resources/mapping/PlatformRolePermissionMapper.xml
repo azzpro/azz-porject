@@ -114,4 +114,9 @@
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <delete id="deleteByRoleId" parameterType="java.lang.Long">
+    delete from platform_role_permission
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </delete>
 </mapper>

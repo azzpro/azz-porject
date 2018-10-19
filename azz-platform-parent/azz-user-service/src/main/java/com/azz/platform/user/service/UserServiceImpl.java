@@ -82,7 +82,14 @@ public class UserServiceImpl implements UserService {
         info.setMenus(generateMenuTree(phoneNumber));
         return JsonResult.successJsonResult(info);
     }
-
+    
+    /**
+     * 
+     * <p>根据手机号查询当前用户角色并生成菜单树</p>
+     * @param phoneNumber 手机号
+     * @return
+     * @author 黄智聪  2018年10月19日 上午10:36:34
+     */
     private List<Menu> generateMenuTree(String phoneNumber) {
 	// 根据手机号查询所有一级菜单权限
 	List<UserPermission> oneMenuPermissions = platformPermissionMapper

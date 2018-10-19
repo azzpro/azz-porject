@@ -28,4 +28,6 @@ public interface PlatformPermissionMapper {
     
     PlatformPermission getPermissionByPermissionCode(String permissionCode);
     
+    List<PlatformPermission> getPermissionByParentPermissionCode(String parentPermissionCode);
+    
 }

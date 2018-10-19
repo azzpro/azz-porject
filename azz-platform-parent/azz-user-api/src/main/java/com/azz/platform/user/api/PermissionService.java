@@ -7,12 +7,20 @@
  
 package com.azz.platform.user.api;
 
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.azz.core.common.JsonResult;
 import com.azz.platform.user.pojo.bo.AddRoleParam;
+import com.azz.platform.user.pojo.bo.DelRoleParam;
+import com.azz.platform.user.pojo.bo.EditRoleParam;
+import com.azz.platform.user.pojo.bo.SearchRoleParam;
+import com.azz.platform.user.pojo.vo.Permission;
+import com.azz.platform.user.pojo.vo.RoleInfo;
 
 /**
  * <P>权限服务相关接口</P>
@@ -22,10 +30,20 @@ import com.azz.platform.user.pojo.bo.AddRoleParam;
 @FeignClient("azz-user-service")
 public interface PermissionService {
     
-    //JsonResult<PlatformPermission>
+    @GetMapping("getPermissions")
+    JsonResult<List<Permission>> getPermissions();
     
     @PostMapping("addRolePermissions")
     JsonResult<String> addRolePermission(@RequestBody AddRoleParam param);
+    
+    @PostMapping("editRolePermission")
+    JsonResult<String> editRolePermission(@RequestBody EditRoleParam param);
+    
+    @PostMapping("delRole")
+    JsonResult<String> delRole(@RequestBody DelRoleParam param);
+    
+    @PostMapping("getRoleList")
+    JsonResult<List<RoleInfo>> getRoleList(@RequestBody SearchRoleParam param);
     
 }
 

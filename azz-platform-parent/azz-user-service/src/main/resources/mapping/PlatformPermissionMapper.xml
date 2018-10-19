@@ -240,11 +240,21 @@
 		AND  u.phone_number = #{phoneNumber}
   </select>
   
+  <select id="getPermissionByParentPermissionCode" parameterType="string" resultMap="BaseResultMap">
+	  SELECT 
+	    <include refid="Base_Column_List" />
+	    FROM platform_permission p
+		WHERE
+			p. STATUS = 1
+		AND p.parent_permission_code = #{parentPermissionCode}
+  </select>
+  
   <select id="getPermissionByPermissionCode" parameterType="string" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from platform_permission
     where permission_code = #{permissionCode}
+    and status = 1
   </select>
   
 </mapper>

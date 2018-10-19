@@ -21,6 +21,13 @@
     from platform_role
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="selectByRoleCode" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from platform_role
+    where role_code = #{roleCode}
+    and status = 1
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from platform_role
     where id = #{id,jdbcType=BIGINT}
@@ -137,9 +144,59 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
-  <select id="isExistRoleName" parameterType="string" resultMap="BaseResultMap" >
+  <update id="updateByRoleCode" parameterType="com.azz.platform.user.pojo.PlatformRole">
+    update platform_role
+    <set>
+      <if test="roleName != null">
+        role_name = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifyTime != null">
+        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where role_code = #{roleCode}
+  </update>
+  
+  <select id="hasRoleName" resultMap="BaseResultMap" >
     select  <include refid="Base_Column_List" />
     from platform_role
     where role_name = #{roleName}
+    and status = 1
+    <if test="roleCode != null">
+        and role_code &lt;&gt; #{roleCode}
+    </if>
   </select>
+  
+  <select id="getRoleInfoBySearchParam" parameterType="com.azz.platform.user.pojo.bo.SearchRoleParam" resultType="com.azz.platform.user.pojo.vo.RoleInfo" >
+    SELECT
+		r.role_code AS roleCode,
+		r.role_name AS roleName,
+		r.remark AS remark,
+		u.user_name AS creator,
+		r.create_time AS createTime
+	FROM
+		platform_role r
+	JOIN platform_user u ON u.user_code = r.creator
+	<if test="searchInput != null">
+		WHERE
+			r.role_code = #{searchInput}
+		OR r.role_name = #{searchInput}
+    </if>
+  </select>
+  
 </mapper>

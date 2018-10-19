@@ -190,5 +190,25 @@
 		ORDER BY create_time DESC
   </select>
   
-  
+  <select id="selectDeptParentList" parameterType="java.lang.String" resultType="com.azz.platform.user.pojo.vo.Dept">
+  		SELECT
+			dept.dept_name AS deptName,
+			dept.dept_code AS deptCode,
+			COUNT(u.dept_id) as numberMembers,
+		CASE dept.`status`
+				WHEN 0 THEN
+					'禁用'
+				WHEN 1 THEN
+					'启用'
+				END AS status,
+			dept.creator AS creator,
+			dept.create_time 
+		FROM
+			platform_dept dept
+		LEFT JOIN platform_user u ON dept.id = u.dept_id
+		WHERE
+			dept.parent_code = #{deptParentCode}
+		GROUP BY dept.id
+		ORDER BY dept.create_time DESC
+  </select>
 </mapper>

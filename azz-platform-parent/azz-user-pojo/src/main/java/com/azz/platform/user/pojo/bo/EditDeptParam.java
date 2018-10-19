@@ -38,6 +38,11 @@ public class EditDeptParam {
     private String deptCode;
     
     /**
+     * 上级部门编码
+     */
+    private String parentCode;
+    
+    /**
      * 状态   0无效  1有效
      *
      * @mbg.generated

@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
-import com.azz.platform.user.pojo.PlatformDept;
 import com.azz.platform.user.pojo.bo.AddDeptParam;
-import com.azz.platform.user.pojo.bo.SearchDeptParam;
 import com.azz.platform.user.pojo.bo.EditDeptParam;
+import com.azz.platform.user.pojo.bo.SearchDeptParam;
 import com.azz.platform.user.pojo.vo.Dept;
 
 /**
@@ -64,15 +63,15 @@ public interface DeptService {
      * @author 彭斌  2018年10月17日 下午2:50:31
      */
     @GetMapping("delDeptInfo")
-    JsonResult<String> delDeptInfo(@RequestParam("id") Long id, @RequestParam("modifier") String modifier);
+    JsonResult<String> delDeptInfo(@RequestParam("deptCode") String deptCode, @RequestParam("modifier") String modifier);
     
     /**
-     * <p>获取部门详情信息</p>
+     * <p>获取该父级下的部门信息</p>
      * @param id
      * @return
      * @author 彭斌  2018年10月17日 下午2:50:34
      */
     @GetMapping("getDeptInfo")
-    JsonResult<PlatformDept> getDeptInfo(@RequestParam("id") Long id);
+    JsonResult<List<Dept>> getDeptInfo(@RequestParam("deptCode") String deptCode);
 }
 

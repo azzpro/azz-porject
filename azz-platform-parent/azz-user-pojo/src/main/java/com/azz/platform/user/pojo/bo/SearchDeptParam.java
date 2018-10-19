@@ -7,8 +7,6 @@
  
 package com.azz.platform.user.pojo.bo;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 import lombok.Data;
 
 /**

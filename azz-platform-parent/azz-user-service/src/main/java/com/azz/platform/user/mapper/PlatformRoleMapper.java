@@ -17,4 +17,6 @@ public interface PlatformRoleMapper {
     int updateByPrimaryKeySelective(PlatformRole record);
 
     int updateByPrimaryKey(PlatformRole record);
+    
+    PlatformRole hasRoleName(String roleName);
 }

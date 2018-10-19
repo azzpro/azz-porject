@@ -58,8 +58,8 @@ public class DeptController {
 	 * @return
 	 * @author 彭斌  2018年10月18日 下午1:42:11
 	 */
-	@RequestMapping("/getDeptInfo")
-	public JsonResult<List<Dept>> getDeptInfo(@RequestParam("parentCode") String parentCode){
+	@RequestMapping("/getDeptParentList")
+	public JsonResult<List<Dept>> getDeptParentList(@RequestParam("parentCode") String parentCode){
 	    LOG.info("###########获取部门信息###########");
 	    return deptService.getDeptInfo(parentCode);
 	}

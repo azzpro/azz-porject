@@ -62,7 +62,7 @@ public class DeptServiceImpl implements DeptService {
             dept.setParentCode(deptParentCode);
         } else {
             // 系统自动生成部门编码
-            dept.setDeptCode(""); // TODO 部门编码生成
+            dept.setDeptCode("D"+System.currentTimeMillis()); // TODO 部门编码生成
             dept.setParentCode("0");
         }
         

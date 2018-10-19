@@ -136,4 +136,10 @@
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="isExistRoleName" parameterType="string" resultMap="BaseResultMap" >
+    select  <include refid="Base_Column_List" />
+    from platform_role
+    where role_name = #{roleName}
+  </select>
 </mapper>

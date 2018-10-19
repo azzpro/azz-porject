@@ -7,13 +7,14 @@ package com.azz.platform.user.service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.JSR303ErrorCode;
+import com.azz.exception.JSR303ValidationException;
 import com.azz.platform.user.api.PermissionService;
 import com.azz.platform.user.mapper.PlatformPermissionMapper;
 import com.azz.platform.user.mapper.PlatformRoleMapper;
@@ -66,15 +67,19 @@ public class PermissionServiceImpl implements PermissionService {
 
     /**
      * 
-     * <p>校验</p>
+     * <p>校验新增参数</p>
      * @param param
      * @author 黄智聪  2018年10月18日 下午5:30:23
      */
     private void validateRoleParam(AddRoleParam param) {
 	// 参数校验
 	JSR303ValidateUtils.validate(param);
+	// 校验角色名称是否已经存在
 	String roleName = param.getRoleName();
-	
+	PlatformRole role = platformRoleMapper.hasRoleName(roleName);
+	if(role != null) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色名称已存在");
+	}
     }
 
 }

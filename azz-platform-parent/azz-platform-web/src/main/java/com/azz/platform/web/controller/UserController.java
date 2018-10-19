@@ -89,10 +89,7 @@ public class UserController {
      * @author 黄智聪 2018年10月17日 下午5:51:01
      */
     @RequestMapping(value = "/logout")
-    public JsonResult<String> logout(HttpServletResponse response) {
-	// TODO
-	response.setHeader("Access-Control-Allow-Origin", "*");
-	response.setHeader("Access-Control-Allow-Method", "POST,GET");
+    public JsonResult<String> logout() {
 	Subject subject = SecurityUtils.getSubject();
 	subject.logout();
 	return JsonResult.successJsonResult();
@@ -112,10 +109,7 @@ public class UserController {
      * @author 黄智聪 2018年10月17日 下午5:50:02
      */
     @RequestMapping(value = "/login")
-    public JsonResult<LoginUserInfo> login(LoginParam param, HttpServletResponse response) {
-	// TODO
-	response.setHeader("Access-Control-Allow-Origin", "*");
-	response.setHeader("Access-Control-Allow-Method", "POST,GET");
+    public JsonResult<LoginUserInfo> login(LoginParam param) {
 	JSR303ValidateUtils.validate(param);
 	// 从SecurityUtils里边创建一个 subject
 	Subject subject = SecurityUtils.getSubject();
@@ -142,11 +136,6 @@ public class UserController {
 	return jr;
     }
 
-    @RequestMapping(value = "/getMessage")
-    public LoginUserInfo getNomalUserMessage() {
-	return WebUtils.getLoginUser();
-    }
-
     /**
      * <p>
      * 修改密码
@@ -157,17 +146,32 @@ public class UserController {
      * @author 彭斌 2018年10月18日 下午3:02:23
      */
     @RequestMapping(value = "/editPassword")
-    public JsonResult<String> editPassword(EditPasswordParam param, HttpServletResponse response){
-        param.setUserInfo(WebUtils.getLoginUser().getUserInfo());
-        return userService.editPassword(param);
+    public JsonResult<String> editPassword(EditPasswordParam param) {
+	param.setUserInfo(WebUtils.getLoginUser().getUserInfo());
+	return userService.editPassword(param);
     }
 
+    /**
+     * 
+     * <p>新增角色权限</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月19日 上午9:26:26
+     */
     @RequestMapping(value = "/addRolePermission")
     public JsonResult<String> addRolePermission(AddRoleParam param, HttpServletResponse response) {
-	// TODO
-	response.setHeader("Access-Control-Allow-Origin", "*");
-	response.setHeader("Access-Control-Allow-Method", "POST,GET");
 	return permissionService.addRolePermission(param);
     }
-
+    
+    /**
+     * 
+     * <p>供前端调用，测试是否已经登录失效</p>
+     * @return
+     * @author 黄智聪  2018年10月19日 上午9:22:49
+     */
+    @RequestMapping(value = "/check")
+    public JsonResult<String> check() {
+	return JsonResult.successJsonResult();
+    }
+    
 }

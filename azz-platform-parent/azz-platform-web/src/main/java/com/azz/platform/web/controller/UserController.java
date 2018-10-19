@@ -123,7 +123,9 @@ public class UserController {
 	    return jr;
 	}
 	JsonResult<LoginUserInfo> jr = userService.getLoginUserInfoByPhoneNumber(param.getPhoneNumber());
-	WebUtils.setShiroSessionAttr("loginUser", jr.getData());
+	LoginUserInfo loginUser = jr.getData();
+	loginUser.setSessionId(subject.getSession().getId());
+	WebUtils.setShiroSessionAttr("loginUser", loginUser);
 	return jr;
     }
     

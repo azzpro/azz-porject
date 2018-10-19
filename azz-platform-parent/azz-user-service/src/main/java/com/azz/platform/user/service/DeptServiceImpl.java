@@ -18,8 +18,8 @@ import com.azz.platform.user.api.DeptService;
 import com.azz.platform.user.mapper.PlatformDeptMapper;
 import com.azz.platform.user.pojo.PlatformDept;
 import com.azz.platform.user.pojo.bo.AddDeptParam;
-import com.azz.platform.user.pojo.bo.SearchDeptParam;
 import com.azz.platform.user.pojo.bo.EditDeptParam;
+import com.azz.platform.user.pojo.bo.SearchDeptParam;
 import com.azz.platform.user.pojo.vo.Dept;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
@@ -62,7 +62,7 @@ public class DeptServiceImpl implements DeptService {
             dept.setParentCode(deptParentCode);
         } else {
             // 系统自动生成部门编码
-            dept.setDeptCode(""); // TODO 部门编码生成
+            dept.setDeptCode("D"+System.currentTimeMillis()); // TODO 部门编码生成
             dept.setParentCode("0");
         }
         
@@ -90,7 +90,7 @@ public class DeptServiceImpl implements DeptService {
                 throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_EXIST);
             }
         }
-        
+        dept.setParentCode(param.getParentCode());
         dept.setDeptName(param.getDeptName());
         dept.setLastModifyTime(new Date());
         dept.setModifier(param.getModifier());
@@ -107,11 +107,11 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public JsonResult<String> delDeptInfo(Long id, String modifier) {
-        if (ObjectUtils.isNull(id) ) {
+    public JsonResult<String> delDeptInfo(String deptCode, String modifier) {
+        if (ObjectUtils.isNull(deptCode) ) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
         }
-        PlatformDept dept = deptMapper.selectByPrimaryKey(id);
+        PlatformDept dept = deptMapper.selectByDeptCode(deptCode);
         if (ObjectUtils.isNull(dept)) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
         }
@@ -125,11 +125,11 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public JsonResult<PlatformDept> getDeptInfo(Long id) {
-        if (ObjectUtils.isNull(id)) {
+    public JsonResult<List<Dept>> getDeptInfo(String deptCode) {
+        if (ObjectUtils.isNull(deptCode)) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
         }
-        PlatformDept dept = deptMapper.selectByPrimaryKey(id);
+        List<Dept> dept = deptMapper.selectDeptParentList(deptCode);
         return JsonResult.successJsonResult(dept);
     }
 

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.platform.user.api.DeptService;
-import com.azz.platform.user.pojo.PlatformDept;
 import com.azz.platform.user.pojo.bo.AddDeptParam;
 import com.azz.platform.user.pojo.bo.EditDeptParam;
 import com.azz.platform.user.pojo.bo.SearchDeptParam;
@@ -54,15 +53,15 @@ public class DeptController {
 	}
 
 	/**
-	 * <p>获取部门详情</p>
+	 * <p>获取父级部门下的信息</p>
 	 * @param deptId
 	 * @return
 	 * @author 彭斌  2018年10月18日 下午1:42:11
 	 */
-	@RequestMapping("/getDeptInfo")
-	public JsonResult<PlatformDept> getDeptInfo(@RequestParam(value = "id",defaultValue="0") Long deptId){
+	@RequestMapping("/getDeptParentList")
+	public JsonResult<List<Dept>> getDeptParentList(@RequestParam("parentCode") String parentCode){
 	    LOG.info("###########获取部门信息###########");
-	    return deptService.getDeptInfo(deptId);
+	    return deptService.getDeptInfo(parentCode);
 	}
 	
 	/**
@@ -97,9 +96,9 @@ public class DeptController {
 	 * @author 彭斌  2018年10月18日 下午1:49:02
 	 */
 	@RequestMapping("/delDeptInfo")
-	JsonResult<String> delDeptInfo(@RequestParam(value = "id",defaultValue="0") Long id){
+	JsonResult<String> delDeptInfo(@RequestParam("deptCode") String deptCode){
 	    LOG.info("###########删除部门信息###########");
 	    String modifier = WebUtils.getLoginUser().getUserInfo().getUserCode();
-	    return deptService.delDeptInfo(id,modifier);
+	    return deptService.delDeptInfo(deptCode,modifier);
 	}
 }

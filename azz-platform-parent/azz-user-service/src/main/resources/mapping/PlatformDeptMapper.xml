@@ -5,6 +5,7 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="dept_code" jdbcType="VARCHAR" property="deptCode" />
     <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="parent_code" jdbcType="VARCHAR" property="parentCode" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -13,7 +14,7 @@
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, dept_code, dept_name, description, status, create_time, creator, last_modify_time, 
+    id, dept_code, dept_name, parent_code, description, status, create_time, creator, last_modify_time, 
     modifier
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -27,11 +28,11 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.azz.platform.user.pojo.PlatformDept">
-    insert into platform_dept (id, dept_code, dept_name, 
+    insert into platform_dept (id, dept_code, dept_name, parent_code 
       description, status, create_time, 
       creator, last_modify_time, modifier
       )
-    values (#{id,jdbcType=BIGINT}, #{deptCode,jdbcType=VARCHAR}, #{deptName,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{deptCode,jdbcType=VARCHAR}, #{deptName,jdbcType=VARCHAR}, #{parentCode,jdbcType=VARCHAR}, 
       #{description,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{creator,jdbcType=VARCHAR}, #{lastModifyTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}
       )
@@ -47,6 +48,9 @@
       </if>
       <if test="deptName != null">
         dept_name,
+      </if>
+      <if test="parentCode != null">
+        parent_code,
       </if>
       <if test="description != null">
         description,
@@ -77,6 +81,9 @@
       <if test="deptName != null">
         #{deptName,jdbcType=VARCHAR},
       </if>
+       <if test="parentCode != null">
+        #{parentCode,jdbcType=VARCHAR},
+      </if>
       <if test="description != null">
         #{description,jdbcType=VARCHAR},
       </if>
@@ -106,6 +113,9 @@
       <if test="deptName != null">
         dept_name = #{deptName,jdbcType=VARCHAR},
       </if>
+      <if test="parentCode != null">
+        parent_code = #{parentCode,jdbcType=VARCHAR},
+      </if>
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
       </if>
@@ -131,6 +141,7 @@
     update platform_dept
     set dept_code = #{deptCode,jdbcType=VARCHAR},
       dept_name = #{deptName,jdbcType=VARCHAR},
+      parent_code = #{parentCode,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -147,25 +158,36 @@
     where dept_name = #{deptName,jdbcType=VARCHAR} and status = 1
   </select>
   
-  <select id="selectDeptList" parameterType="com.azz.platform.user.pojo.bo.DeptSearchParam" resultType="com.azz.platform.user.pojo.vo.Dept">
-  	SELECT
-		id as id,
-		dept_code as deptCode,
-		dept_name as deptName,
-		description as description,
-		status as status,
-		create_time as createTime,
-		creator as creator,
-		last_modify_time as lastModifyTime,
-		modifier as modifier
-	FROM
-		platform_dept
-	<where>
-		<if test="deptName != null"> AND dept_name LIKE CONCAT('%',#{deptName},'%')</if>
-		<if test="description != null"> AND description LIKE CONCAT('%',#{description},'%')</if>
-		<if test="status != null"> AND status = #{status}</if>
-	</where>
-	ORDER BY create_time DESC
+  <select id="selectByDeptCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from platform_dept
+    where parent_code = #{deptCode,jdbcType=VARCHAR} and status = 1
+  </select>
+  
+  <select id="selectDeptList" parameterType="com.azz.platform.user.pojo.bo.SearchDeptParam" resultType="com.azz.platform.user.pojo.vo.Dept">
+		SELECT
+			dept.dept_name AS deptName,
+			dept.dept_code AS deptCode,
+			COUNT(u.dept_id) as numberMembers,
+		CASE dept.`status`
+				WHEN 0 THEN
+					'禁用'
+				WHEN 1 THEN
+					'启用'
+				END AS status,
+			dept.creator AS creator,
+			dept.create_time AS createTime 
+		FROM
+			platform_dept dept
+		JOIN platform_user u ON dept.id = u.dept_id
+		WHERE
+			dept.parent_code = '0'
+		<if test="deptNameCode != null"> 
+			AND dept.dept_name LIKE CONCAT('%',#{deptNameCode},'%') OR dept.dept_code = #{deptNameCode}
+		</if>
+		GROUP BY dept.id
+		ORDER BY create_time DESC
   </select>
   
   

@@ -7,6 +7,8 @@
  
 package com.azz.platform.user.pojo.bo;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 import lombok.Data;
@@ -28,11 +30,21 @@ public class AddDeptParam {
     private String deptName;
 
     /**
-     * 描述
+     * 上级部门编码
      *
      * @mbg.generated
      */
-    private String description;
+    private String parentCode;
     
+    /**
+     * 部门状态
+     */
+    @NotNull(message = "部门状态不允许为空")
+    private Integer status;
+    
+    /**
+     * 创建人
+     */
+    private String creator;
 }
 

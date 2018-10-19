@@ -7,6 +7,8 @@
  
 package com.azz.platform.user.api;
 
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,10 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
-import com.azz.core.common.page.Pagination;
 import com.azz.platform.user.pojo.PlatformDept;
 import com.azz.platform.user.pojo.bo.AddDeptParam;
-import com.azz.platform.user.pojo.bo.DeptSearchParam;
+import com.azz.platform.user.pojo.bo.SearchDeptParam;
 import com.azz.platform.user.pojo.bo.EditDeptParam;
 import com.azz.platform.user.pojo.vo.Dept;
 
@@ -48,13 +49,13 @@ public interface DeptService {
     JsonResult<String> editDeptInfo(@RequestBody EditDeptParam param);
     
     /**
-     * <p>获取部门信息分页列表</p>
+     * <p>获取部门信息列表</p>
      * @param param
      * @return
      * @author 彭斌  2018年10月17日 下午2:50:28
      */
     @PostMapping("getDeptList")
-    JsonResult<Pagination<Dept>> getDeptList(@RequestBody DeptSearchParam param);
+    JsonResult<List<Dept>> getDeptList(@RequestBody SearchDeptParam param);
     
     /**
      * <p>逻辑删除部门信息</p>
@@ -63,7 +64,7 @@ public interface DeptService {
      * @author 彭斌  2018年10月17日 下午2:50:31
      */
     @GetMapping("delDeptInfo")
-    JsonResult<String> delDeptInfo(@RequestParam("id") Long id);
+    JsonResult<String> delDeptInfo(@RequestParam("id") Long id, @RequestParam("modifier") String modifier);
     
     /**
      * <p>获取部门详情信息</p>

@@ -8,12 +8,6 @@ import lombok.Data;
 
 @Data
 public class Dept implements Serializable {
-    /**
-     * 主键
-     *
-     * @mbg.generated
-     */
-    private Long id;
 
     /**
      * 部门编码
@@ -66,6 +60,11 @@ public class Dept implements Serializable {
      */
     private String modifier;
 
+    /**
+     * 成员数
+     */
+    private Integer numberMembers;
+    
     private static final long serialVersionUID = 1L;
 
 }

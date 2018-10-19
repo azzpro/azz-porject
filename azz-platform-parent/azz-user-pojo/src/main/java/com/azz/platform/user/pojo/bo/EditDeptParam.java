@@ -7,6 +7,8 @@
  
 package com.azz.platform.user.pojo.bo;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 import lombok.Data;
@@ -18,13 +20,6 @@ import lombok.Data;
  */
 @Data
 public class EditDeptParam {
-    /**
-     * 主键
-     *
-     * @mbg.generated
-     */
-    @NotBlank(message = "部门ID不允许为空")
-    private Long id;
 
     /**
      * 部门名称
@@ -35,20 +30,24 @@ public class EditDeptParam {
     private String deptName;
 
     /**
-     * 描述
+     * 部门编码
      *
      * @mbg.generated
      */
-    private String description;
-
+    @NotBlank(message = "部门编码不允许为空")
+    private String deptCode;
+    
     /**
      * 状态   0无效  1有效
      *
      * @mbg.generated
      */
-    @NotBlank(message = "状态不允许为空")
+    @NotNull(message = "状态不允许为空")
     private Integer status;
 
-
+    /**
+     * 修改人
+     */
+    private String modifier;
 }
 

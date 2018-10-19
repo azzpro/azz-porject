@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.platform.user.pojo.PlatformDept;
-import com.azz.platform.user.pojo.bo.DeptSearchParam;
+import com.azz.platform.user.pojo.bo.SearchDeptParam;
 import com.azz.platform.user.pojo.vo.Dept;
 
 @Mapper
@@ -24,5 +24,7 @@ public interface PlatformDeptMapper {
     
     PlatformDept selectByDeptName(String deptName);
     
-    List<Dept> selectDeptList(DeptSearchParam param);
+    List<Dept> selectDeptList(SearchDeptParam param);
+    
+    PlatformDept selectByDeptCode(String deptCode);
 }

@@ -20,6 +20,13 @@ public class PlatformDept implements Serializable {
     private String deptCode;
 
     /**
+     * 父级编码
+     *
+     * @mbg.generated
+     */
+    private String parentCode;
+    
+    /**
      * 部门名称
      *
      * @mbg.generated
@@ -64,6 +71,14 @@ public class PlatformDept implements Serializable {
     private String modifier;
 
     private static final long serialVersionUID = 1L;
+
+    public String getParentCode() {
+        return parentCode;
+    }
+
+    public void setParentCode(String parentCode) {
+        this.parentCode = parentCode;
+    }
 
     /**
      * 主键<br/>

@@ -13,18 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
-import com.azz.core.common.page.Pagination;
 import com.azz.core.exception.BaseException;
 import com.azz.platform.user.api.DeptService;
 import com.azz.platform.user.mapper.PlatformDeptMapper;
 import com.azz.platform.user.pojo.PlatformDept;
 import com.azz.platform.user.pojo.bo.AddDeptParam;
-import com.azz.platform.user.pojo.bo.DeptSearchParam;
+import com.azz.platform.user.pojo.bo.SearchDeptParam;
 import com.azz.platform.user.pojo.bo.EditDeptParam;
 import com.azz.platform.user.pojo.vo.Dept;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
-import com.github.pagehelper.PageHelper;
 
 /**
  * <P>
@@ -44,26 +42,34 @@ public class DeptServiceImpl implements DeptService {
     public JsonResult<String> addDeptInfo(AddDeptParam param) {
         // 部门信息非空校验
         JSR303ValidateUtils.validate(param);
-
-        // 部门名称校验
+        String deptParentCode = param.getParentCode();
+        
+        
+        // 部门名称/父级编码校验
         PlatformDept deptObj = deptMapper.selectByDeptName(param.getDeptName());
+        
         if (ObjectUtils.isNotNull(deptObj)) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_EXIST);
         }
-
-        // TODO 部门编码生成
-
-        // 添加新部门
+        
         PlatformDept dept = new PlatformDept();
-        dept.setDeptCode("");
-        dept.setDeptName(param.getDeptName());
-        dept.setStatus(1);
-        dept.setCreator("");
-        dept.setCreateTime(new Date());
-
-        if (ObjectUtils.isNotNull(param.getDescription())) {
-            dept.setDescription(param.getDescription());
+        
+        if(ObjectUtils.isNotNull(deptParentCode)) {
+            PlatformDept deptObjCode = deptMapper.selectByDeptCode(deptParentCode);
+            if(ObjectUtils.isNull(deptObjCode)) {
+                throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
+            }
+            dept.setParentCode(deptParentCode);
+        } else {
+            // 系统自动生成部门编码
+            dept.setDeptCode(""); // TODO 部门编码生成
+            dept.setParentCode("0");
         }
+        
+        dept.setDeptName(param.getDeptName());
+        dept.setStatus(param.getStatus());
+        dept.setCreator(param.getCreator());
+        dept.setCreateTime(new Date());
 
         deptMapper.insertSelective(dept);
         return JsonResult.successJsonResult();
@@ -73,22 +79,21 @@ public class DeptServiceImpl implements DeptService {
     public JsonResult<String> editDeptInfo(EditDeptParam param) {
         JSR303ValidateUtils.validate(param);
 
-        PlatformDept dept = deptMapper.selectByPrimaryKey(param.getId());
+        PlatformDept dept = deptMapper.selectByDeptCode(param.getDeptCode());
         if (ObjectUtils.isNull(dept)) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
         }
 
-        PlatformDept deptByName = deptMapper.selectByDeptName(param.getDeptName());
-        if (ObjectUtils.isNotNull(deptByName)) {
-            throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_EXIST);
+        if (!dept.getDeptName().equals(param.getDeptName().trim())) {
+            PlatformDept deptObj = deptMapper.selectByDeptName(param.getDeptName());
+            if(ObjectUtils.isNotNull(deptObj)) {
+                throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_EXIST);
+            }
         }
+        
         dept.setDeptName(param.getDeptName());
-        if (ObjectUtils.isNotNull(param.getDescription())) {
-            dept.setDescription(param.getDescription());
-        }
         dept.setLastModifyTime(new Date());
-        // TODO 操作人
-        dept.setModifier("");
+        dept.setModifier(param.getModifier());
         dept.setStatus(param.getStatus());
 
         deptMapper.updateByPrimaryKeySelective(dept);
@@ -96,14 +101,13 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public JsonResult<Pagination<Dept>> getDeptList(DeptSearchParam param) {
-        PageHelper.startPage(param.getPageNum(), param.getPageSize());
+    public JsonResult<List<Dept>> getDeptList(SearchDeptParam param) {
         List<Dept> infos = deptMapper.selectDeptList(param);
-        return JsonResult.successJsonResult(new Pagination<>(infos));
+        return JsonResult.successJsonResult(infos);
     }
 
     @Override
-    public JsonResult<String> delDeptInfo(Long id) {
+    public JsonResult<String> delDeptInfo(Long id, String modifier) {
         if (ObjectUtils.isNull(id) ) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
         }
@@ -113,8 +117,7 @@ public class DeptServiceImpl implements DeptService {
         }
 
         dept.setStatus(0);
-        // TODO 操作人
-        dept.setModifier("");
+        dept.setModifier(modifier);
         dept.setLastModifyTime(new Date());
         
         deptMapper.updateByPrimaryKeySelective(dept);

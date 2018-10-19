@@ -150,11 +150,6 @@ public class UserController {
 	return JsonResult.successJsonResult();
     }
 
-    @RequestMapping(value = "/getMessage")
-    public LoginUserInfo getNomalUserMessage() {
-	return WebUtils.getLoginUser();
-    }
-
     /**
      * <p>
      * 修改密码
@@ -170,6 +165,13 @@ public class UserController {
         return userService.editPassword(param);
     }
 
+    /**
+     * 
+     * <p>新增角色权限</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月19日 下午4:12:16
+     */
     @RequestMapping(value = "/addRolePermission")
     public JsonResult<String> addRolePermission(AddRoleParam param) {
 	param.setCreator(WebUtils.getLoginUser().getUserInfo().getUserCode());

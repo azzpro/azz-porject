@@ -26,13 +26,11 @@ public class LoginUserInfo implements Serializable{
     
     private static final long serialVersionUID = 2804715212693351455L;
 
-    private Serializable sessionId;
-    
     private UserInfo userInfo;
     
     private List<UserPermission> userPermissions;
 
     private List<Menu> menus;
-
+    
 }
 

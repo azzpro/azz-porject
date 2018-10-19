@@ -135,9 +135,7 @@ public class UserController {
 	    return jr;
 	}
 	JsonResult<LoginUserInfo> jr = userService.getLoginUserInfoByPhoneNumber(param.getPhoneNumber());
-	LoginUserInfo info = jr.getData();
-	info.setSessionId(subject.getSession().getId());
-	WebUtils.setShiroSessionAttr("loginUser", info);
+	WebUtils.setShiroSessionAttr("loginUser", jr.getData());
 	return jr;
     }
     
@@ -152,6 +150,11 @@ public class UserController {
 	return JsonResult.successJsonResult();
     }
 
+    @RequestMapping(value = "/getMessage")
+    public LoginUserInfo getNomalUserMessage() {
+	return WebUtils.getLoginUser();
+    }
+
     /**
      * <p>
      * 修改密码
@@ -162,18 +165,11 @@ public class UserController {
      * @author 彭斌 2018年10月18日 下午3:02:23
      */
     @RequestMapping(value = "/editPassword")
-    public JsonResult<String> editPassword(EditPasswordParam param) {
-	param.setUserInfo(WebUtils.getLoginUser().getUserInfo());
-	return userService.editPassword(param);
+    public JsonResult<String> editPassword(EditPasswordParam param){
+        param.setUserInfo(WebUtils.getLoginUser().getUserInfo());
+        return userService.editPassword(param);
     }
 
-    /**
-     * 
-     * <p>新增角色权限</p>
-     * @param param
-     * @return
-     * @author 黄智聪  2018年10月19日 上午9:26:26
-     */
     @RequestMapping(value = "/addRolePermission")
     public JsonResult<String> addRolePermission(AddRoleParam param) {
 	param.setCreator(WebUtils.getLoginUser().getUserInfo().getUserCode());

@@ -15,4 +15,9 @@ eureka:
 shiro:
   session:
     timeout: 1800000
+<<<<<<< HEAD
+=======
+    
+
+>>>>>>> branch 'master' of https://github.com/azzpro/azz-porject.git
 

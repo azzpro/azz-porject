@@ -318,7 +318,10 @@
     <include refid="Base_Column_List" />
     from platform_user
     where phone_number = #{phoneNumber}
-    and status = 1
+    and status != 0
+    <if test="userCode != null">
+	    and user_code &lt;&gt; #{userCode}
+	</if>
   </select>
   
   <select id="getUserInfoByPhoneNumber" parameterType="string" resultType="com.azz.platform.user.pojo.vo.UserInfo">
@@ -352,7 +355,8 @@
 		LEFT JOIN platform_user_role ur ON ur.user_id = u.id
 		LEFT JOIN platform_role r ON ur.role_id = r.id
 		LEFT JOIN platform_dept d ON d.id = u.dept_id
-		WHERE u.phone_number = #{phoneNumber}
+		WHERE u.status != 0
+		and u.phone_number = #{phoneNumber}
   </select>
   
   <select id="getUserInfoByUserCode" parameterType="string" resultType="com.azz.platform.user.pojo.vo.UserInfo">
@@ -386,7 +390,8 @@
 		LEFT JOIN platform_user_role ur ON ur.user_id = u.id
 		LEFT JOIN platform_role r ON ur.role_id = r.id
 		LEFT JOIN platform_dept d ON d.id = u.dept_id
-		WHERE u.phone_number = #{phoneNumber}
+		WHERE u.status != 0 
+		and u.user_code = #{userCode}
   </select>
   
   <select id="getUserByUserCode" parameterType="string" resultMap="BaseResultMap">
@@ -394,7 +399,7 @@
     <include refid="Base_Column_List" />
     from platform_user
     where user_code = #{userCode}
-    and status = 1
+    and status != 0
   </select>
   
   <select id="getUserInfoBySearchParam" parameterType="com.azz.platform.user.pojo.bo.SearchUserParam" resultType="com.azz.platform.user.pojo.vo.UserInfo">
@@ -430,7 +435,7 @@
 		LEFT JOIN platform_user_role ur ON ur.user_id = u.id
 		LEFT JOIN platform_role r ON ur.role_id = r.id
 		LEFT JOIN platform_dept d ON d.id = u.dept_id
-		WHERE u.status = 1
+		WHERE u.status != 0
 		<if test="searchInput != null and searchInput != ''">
 	        and (
 				u.user_name like CONCAT('%', #{searchInput}, '%')
@@ -440,6 +445,17 @@
 	  		)
       	</if>
 		
+  </select>
+  
+  <select id="getUserByEmail" resultMap="BaseResultMap">
+    select 
+    	<include refid="Base_Column_List" />
+    from platform_user
+    where status != 0
+    and email = #{email}
+    <if test="userCode != null">
+        and user_code &lt;&gt; #{userCode}
+    </if>
   </select>
   
   

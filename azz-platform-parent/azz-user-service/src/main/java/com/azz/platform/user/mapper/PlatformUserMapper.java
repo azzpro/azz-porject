@@ -3,6 +3,7 @@ package com.azz.platform.user.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.azz.platform.user.pojo.PlatformUser;
 import com.azz.platform.user.pojo.bo.SearchUserParam;
@@ -31,7 +32,7 @@ public interface PlatformUserMapper {
      * @return
      * @author 黄智聪  2018年10月17日 下午7:14:23
      */
-    PlatformUser getUserByPhoneNumber(String phoneNumber);
+    PlatformUser getUserByPhoneNumber(@Param("phoneNumber") String phoneNumber, @Param("userCode") String userCode);
     
     /**
      * 
@@ -67,4 +68,14 @@ public interface PlatformUserMapper {
      * @author 黄智聪  2018年10月20日 上午10:10:19
      */
     List<UserInfo> getUserInfoBySearchParam(SearchUserParam param);
+    
+    /**
+     * 
+     * <p>根据邮箱查询用户</p>
+     * @param email
+     * @param userCode
+     * @return
+     * @author 黄智聪  2018年10月20日 下午3:05:55
+     */
+    PlatformUser getUserByEmail(@Param("email") String email, @Param("userCode") String userCode);
 }

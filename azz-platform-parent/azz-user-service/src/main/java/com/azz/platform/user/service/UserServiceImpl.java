@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
 	log.debug("————身份认证方法————");
 	String phoneNumber = param.getPhoneNumber();
 	String password = param.getPassword();
-	PlatformUser platformUser = platformUserMapper.getUserByPhoneNumber(phoneNumber);
+	PlatformUser platformUser = platformUserMapper.getUserByPhoneNumber(phoneNumber, null);
 	if (platformUser == null) {// 无效用户
 	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "无效用户");
 	}
@@ -189,6 +189,18 @@ public class UserServiceImpl implements UserService {
 	if (role == null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色不存在");
 	}
+	String email = param.getEmail();
+	if (!StringUtils.isBlank(email)) {
+	    PlatformUser user = platformUserMapper.getUserByEmail(email, null);
+	    if (user != null) {
+		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "邮箱已存在");
+	    }
+	}
+	PlatformUser u = platformUserMapper.getUserByPhoneNumber(param.getPhoneNumber(), null);
+	if (u != null) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "手机号已存在");
+	}
+
 	// 生成盐值加密的密码
 	Password pwd = PasswordHelper.encryptPasswordByModel(password);
 	Date nowDate = new Date();
@@ -209,7 +221,6 @@ public class UserServiceImpl implements UserService {
     public JsonResult<String> editUser(@RequestBody EditUserParam param) {
 	// 参数校验
 	JSR303ValidateUtils.validate(param);
-
 	String password = param.getPassword();
 	String confirmPassword = param.getConfirmPassword();
 	// 密码与确认密码一致性校验
@@ -230,6 +241,20 @@ public class UserServiceImpl implements UserService {
 	if (user == null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "用户不存在");
 	}
+	String email = param.getEmail();
+	if (!StringUtils.isBlank(email)) {
+	    // 带上用户编码是为了排除当前用户以外是否存在邮箱了
+	    PlatformUser u = platformUserMapper.getUserByEmail(email, userCode);
+	    if (u != null) {
+		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "邮箱已存在");
+	    }
+	}
+	PlatformUser u = platformUserMapper.getUserByPhoneNumber(param.getPhoneNumber(), userCode);
+	if (u != null) {
+	    // 带上用户编码是为了排除当前用户以外是否存在手机了
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "手机号已存在");
+	}
+	
 	// 生成盐值加密的密码
 	Password pwd = PasswordHelper.encryptPasswordByModel(password);
 	Date nowDate = new Date();
@@ -275,6 +300,9 @@ public class UserServiceImpl implements UserService {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "用户编码不允许为空");
 	}
 	UserInfo userInfo = platformUserMapper.getUserInfoByUserCode(userCode);
+	if(userInfo == null) {
+	    throw new BaseException(PlatformUserErrorCode.PLATFORM_USER_ERROR_INVALID_USER); 
+	}
 	return JsonResult.successJsonResult(userInfo);
     }
 
@@ -289,13 +317,9 @@ public class UserServiceImpl implements UserService {
      * @author 黄智聪 2018年10月20日 上午11:29:37
      */
     public void checkStatusExist(int value) {
-	UserStatus[] values = UserStatus.values();
-	for (UserStatus userStatus : values) {
-	    if (userStatus.getValue() == value) {
-		return;
-	    }
+	if(!UserStatus.checkStatusExist(value)) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "用户状态不存在");
 	}
-	throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "用户状态不存在");
     }
 
 }

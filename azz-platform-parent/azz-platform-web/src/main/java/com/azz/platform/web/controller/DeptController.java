@@ -61,7 +61,7 @@ public class DeptController {
 	@RequestMapping("/getDeptParentList")
 	public JsonResult<List<Dept>> getDeptParentList(@RequestParam("parentCode") String parentCode){
 	    LOG.info("###########获取部门信息###########");
-	    return deptService.getDeptInfo(parentCode);
+	    return deptService.getDeptParentInfo(parentCode);
 	}
 	
 	/**
@@ -101,4 +101,18 @@ public class DeptController {
 	    String modifier = WebUtils.getLoginUser().getUserInfo().getUserCode();
 	    return deptService.delDeptInfo(deptCode,modifier);
 	}
+	
+	/**
+	 * <p>禁用部门信息</p>
+	 * @param deptCode
+	 * @return
+	 * @author 彭斌  2018年10月20日 下午5:01:35
+	 */
+    @RequestMapping("/disableDeptInfo")
+    JsonResult<String> disableDeptInfo(@RequestParam("deptCode") String deptCode){
+        LOG.info("###########禁用部门信息###########");
+        String modifier = WebUtils.getLoginUser().getUserInfo().getUserCode();
+        return deptService.disableDeptInfo(deptCode, modifier);
+    }
+    
 }

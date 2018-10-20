@@ -125,12 +125,30 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public JsonResult<List<Dept>> getDeptInfo(String deptCode) {
+    public JsonResult<List<Dept>> getDeptParentInfo(String deptCode) {
         if (ObjectUtils.isNull(deptCode)) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
         }
         List<Dept> dept = deptMapper.selectDeptParentList(deptCode);
         return JsonResult.successJsonResult(dept);
+    }
+    
+    @Override
+    public JsonResult<String> disableDeptInfo(String deptCode, String modifier) {
+        if (ObjectUtils.isNull(deptCode) ) {
+            throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
+        }
+        PlatformDept dept = deptMapper.selectByDeptCode(deptCode);
+        if (ObjectUtils.isNull(dept)) {
+            throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
+        }
+
+        dept.setStatus(2);
+        dept.setModifier(modifier);
+        dept.setLastModifyTime(new Date());
+        
+        deptMapper.updateByPrimaryKeySelective(dept);
+        return JsonResult.successJsonResult();
     }
 
 }

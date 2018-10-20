@@ -72,6 +72,16 @@ public interface DeptService {
      * @author 彭斌  2018年10月17日 下午2:50:34
      */
     @GetMapping("getDeptInfo")
-    JsonResult<List<Dept>> getDeptInfo(@RequestParam("deptCode") String deptCode);
+    JsonResult<List<Dept>> getDeptParentInfo(@RequestParam("deptCode") String deptCode);
+    
+    /**
+     * <p>禁用部门</p>
+     * @param deptCode
+     * @param modifier
+     * @return
+     * @author 彭斌  2018年10月20日 下午4:48:26
+     */
+    @GetMapping("disableDeptInfo")
+    JsonResult<String> disableDeptInfo(@RequestParam("deptCode") String deptCode, @RequestParam("modifier") String modifier);
 }
 

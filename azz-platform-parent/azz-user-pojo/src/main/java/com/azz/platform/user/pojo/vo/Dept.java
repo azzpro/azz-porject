@@ -65,6 +65,11 @@ public class Dept implements Serializable {
      */
     private Integer numberMembers;
     
+    /**
+     * 父级编码
+     */
+    private String parentCode;
+    
     private static final long serialVersionUID = 1L;
 
 }

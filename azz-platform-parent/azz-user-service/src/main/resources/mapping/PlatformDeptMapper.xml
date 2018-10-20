@@ -176,6 +176,7 @@
 		SELECT
 			dept.dept_name AS deptName,
 			dept.dept_code AS deptCode,
+			dept.parent_code AS parentCode,
 			COUNT(u.dept_id) as numberMembers,
 		    dept.`status` AS status,
 			dept.creator AS creator,
@@ -184,7 +185,7 @@
 			platform_dept dept
 		LEFT JOIN platform_user u ON dept.id = u.dept_id
 		WHERE
-			dept.parent_code = '0'
+			dept.parent_code = '0' AND (dept.status = 1 OR dept.status = 2)
 		<if test="deptNameCode != null and deptNameCode!='' "> 
 			AND dept.dept_name LIKE CONCAT('%',#{deptNameCode},'%') OR dept.dept_code = #{deptNameCode}
 		</if>
@@ -196,16 +197,24 @@
   		SELECT
 			dept.dept_name AS deptName,
 			dept.dept_code AS deptCode,
-			COUNT(u.dept_id) as numberMembers,
+			dept.parent_code AS parentCode,
+			COUNT(u.dept_id) AS numberMembers,
 		 	dept.`status` AS status,
 			dept.creator AS creator,
-			dept.create_time 
+			dept.create_time AS createTime 
 		FROM
 			platform_dept dept
 		LEFT JOIN platform_user u ON dept.id = u.dept_id
 		WHERE
-			dept.parent_code = #{deptParentCode}
+			dept.parent_code = #{deptParentCode}  AND (dept.status = 1 OR dept.status = 2)
 		GROUP BY dept.id
 		ORDER BY dept.create_time DESC
+  </select>
+  
+  <select id="selectDetailsByDeptCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from platform_dept
+    where dept_code = #{deptCode,jdbcType=VARCHAR}
   </select>
 </mapper>

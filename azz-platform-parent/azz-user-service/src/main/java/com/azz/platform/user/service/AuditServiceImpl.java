@@ -7,16 +7,22 @@
  
 package com.azz.platform.user.service;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.PlatformUserErrorCode;
+import com.azz.core.exception.BaseException;
 import com.azz.platform.user.api.AuditService;
+import com.azz.platform.user.common.constants.AuditConstants;
 import com.azz.platform.user.mapper.PlatformMerchantMapper;
 import com.azz.platform.user.pojo.PlatformMerchant;
 import com.azz.platform.user.pojo.bo.AuditParam;
 import com.azz.util.JSR303ValidateUtils;
+import com.azz.util.ObjectUtils;
 
 /**
  * <P>审核企业信息</P>
@@ -35,6 +41,27 @@ public class AuditServiceImpl implements AuditService{
         
         PlatformMerchant object = merchantMapper.selectMerchantByCode(param.getMerchantCode());
         
+        if(ObjectUtils.isNull(object)) {
+            // 商户不存在
+            throw new BaseException(PlatformUserErrorCode.PLATFORM_MERCHANT_ERROR_NO_EXIST);
+        }
+       
+        if(!AuditConstants.AuditStatus.checkStatusExist(param.getStatus())) {
+            // 审核状态不存在
+            throw new BaseException(PlatformUserErrorCode.PLATFORM_MERCHANT_AUDIT_STATUS_ERROR_NO_EXIST);
+        }
+        
+        if(!object.getStatus().equals(AuditConstants.AuditStatus.PENDING.getValue())) {
+            // 该公司信息不在待审核阶段
+            throw new BaseException(PlatformUserErrorCode.PLATFORM_MERCHANT_AUDIT_ERROR);
+            
+        }
+        
+        object.setStatus(param.getStatus());
+        object.setAuditor(param.getAuditor());
+        object.setAuditorTime(new Date());
+        
+        merchantMapper.updateByPrimaryKeySelective(object);
         return JsonResult.successJsonResult();
     }
 

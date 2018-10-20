@@ -7,6 +7,8 @@
  
 package com.azz.platform.user.pojo.bo;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 import lombok.Data;
@@ -23,6 +25,12 @@ public class AuditParam {
      */
     @NotBlank(message = "商户编码不允许为空")
     private String merchantCode;
+    
+    /**
+     * 审核结果信息
+     */
+    @NotNull(message = "审核结果不允许为空")
+    private Integer status;
     
     /**
      * 审核人

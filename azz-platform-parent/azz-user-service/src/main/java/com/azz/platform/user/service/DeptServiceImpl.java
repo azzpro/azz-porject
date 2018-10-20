@@ -56,17 +56,16 @@ public class DeptServiceImpl implements DeptService {
         PlatformDept dept = new PlatformDept();
         
         if(!"".equals(deptParentCode)) {
-            PlatformDept deptObjCode = deptMapper.selectByParentDeptCode(deptParentCode);
+            PlatformDept deptObjCode = deptMapper.selectByDeptCode(deptParentCode);
             if(ObjectUtils.isNull(deptObjCode)) {
                 throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
             }
             dept.setParentCode(deptParentCode);
         } else {
             // 系统自动生成部门编码
-            dept.setDeptCode("D"+System.currentTimeMillis()); // TODO 部门编码生成
             dept.setParentCode("0");
         }
-        
+        dept.setDeptCode("D"+System.currentTimeMillis()); // TODO 部门编码生成
         dept.setDeptName(param.getDeptName());
         dept.setStatus(param.getStatus());
         dept.setCreator(param.getCreator());

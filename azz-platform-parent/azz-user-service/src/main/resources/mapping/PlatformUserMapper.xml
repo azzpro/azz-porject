@@ -234,6 +234,63 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <update id="updateByUserCode" parameterType="com.azz.platform.user.pojo.PlatformUser">
+    update platform_user
+    <set>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null">
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="deptId != null">
+        dept_id = #{deptId,jdbcType=BIGINT},
+      </if>
+      <if test="postName != null">
+        post_name = #{postName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="loginErrorsTimes != null">
+        login_errors_times = #{loginErrorsTimes,jdbcType=INTEGER},
+      </if>
+      <if test="loginIp != null">
+        login_ip = #{loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifyTime != null">
+        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_code = #{userCode}
+  </update>
   <update id="updateByPrimaryKey" parameterType="com.azz.platform.user.pojo.PlatformUser">
     update platform_user
     set user_code = #{userCode,jdbcType=VARCHAR},
@@ -283,11 +340,45 @@
 		 u.post_name AS postName,
 		 CASE u. STATUS
 		WHEN 0 THEN
-			'冻结'
+			'注销'
 		WHEN 1 THEN
 			'有效'
 		WHEN 2 THEN
+			'禁用'
+		END AS STATUS,
+		 r.role_name AS roleName
+		FROM
+			platform_user u
+		LEFT JOIN platform_user_role ur ON ur.user_id = u.id
+		LEFT JOIN platform_role r ON ur.role_id = r.id
+		LEFT JOIN platform_dept d ON d.id = u.dept_id
+		WHERE u.phone_number = #{phoneNumber}
+  </select>
+  
+  <select id="getUserInfoByUserCode" parameterType="string" resultType="com.azz.platform.user.pojo.vo.UserInfo">
+	  SELECT
+		u.user_code AS userCode,
+		u.user_name AS userName,
+		u.nickname AS nickname,
+		u.phone_number AS phoneNumber,
+		u.email AS email,
+		CASE u.gender
+		WHEN 0 THEN
+			'男'
+		WHEN 1 THEN
+			'女'
+		WHEN 2 THEN
+			'未知'
+		END AS gender,
+		 d.dept_name AS deptName,
+		 u.post_name AS postName,
+		 CASE u. STATUS
+		WHEN 0 THEN
 			'注销'
+		WHEN 1 THEN
+			'有效'
+		WHEN 2 THEN
+			'禁用'
 		END AS STATUS,
 		 r.role_name AS roleName
 		FROM
@@ -305,4 +396,51 @@
     where user_code = #{userCode}
     and status = 1
   </select>
+  
+  <select id="getUserInfoBySearchParam" parameterType="com.azz.platform.user.pojo.bo.SearchUserParam" resultType="com.azz.platform.user.pojo.vo.UserInfo">
+    
+		SELECT
+			u.user_code AS userCode,
+			u.user_name AS userName,
+			u.nickname AS nickname,
+			u.phone_number AS phoneNumber,
+			u.email AS email,
+			CASE u.gender
+			WHEN 0 THEN
+				'男'
+			WHEN 1 THEN
+				'女'
+			WHEN 2 THEN
+				'未知'
+			END AS gender,
+			 d.dept_name AS deptName,
+			 u.post_name AS postName,
+			 CASE u. STATUS
+			WHEN 0 THEN
+				'注销'
+			WHEN 1 THEN
+				'有效'
+			WHEN 2 THEN
+				'禁用'
+			END AS STATUS,
+			 r.role_name AS roleName,
+				u.create_time as createTime
+		FROM
+			platform_user u
+		LEFT JOIN platform_user_role ur ON ur.user_id = u.id
+		LEFT JOIN platform_role r ON ur.role_id = r.id
+		LEFT JOIN platform_dept d ON d.id = u.dept_id
+		WHERE u.status = 1
+		<if test="searchInput != null and searchInput != ''">
+	        and (
+				u.user_name like CONCAT('%', #{searchInput}, '%')
+				or u.phone_number like CONCAT('%', #{searchInput}, '%')
+				or u.post_name like CONCAT('%', #{searchInput}, '%')
+				or d.dept_name like CONCAT('%', #{searchInput}, '%')
+	  		)
+      	</if>
+		
+  </select>
+  
+  
 </mapper>

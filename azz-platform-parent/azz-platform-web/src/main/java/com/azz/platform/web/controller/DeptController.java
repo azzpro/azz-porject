@@ -83,7 +83,7 @@ public class DeptController {
 	 * @author 彭斌  2018年10月18日 下午1:47:23
 	 */
 	@RequestMapping("/editDeptInfo")
-	public JsonResult<String> editDeptInfo(@RequestBody EditDeptParam param){
+	public JsonResult<String> editDeptInfo(EditDeptParam param){
 	    LOG.info("###########修改部门信息###########");
 	    param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
 	    return deptService.editDeptInfo(param);
@@ -115,4 +115,16 @@ public class DeptController {
         return deptService.disableDeptInfo(deptCode, modifier);
     }
     
+    /**
+     * <p>启用部门信息</p>
+     * @param deptCode
+     * @return
+     * @author 彭斌  2018年10月20日 下午5:01:35
+     */
+    @RequestMapping("/enableDeptInfo")
+    JsonResult<String> enableDeptInfo(@RequestParam("deptCode") String deptCode){
+        LOG.info("###########启用部门信息###########");
+        String modifier = WebUtils.getLoginUser().getUserInfo().getUserCode();
+        return deptService.enableDeptInfo(deptCode, modifier);
+    }
 }

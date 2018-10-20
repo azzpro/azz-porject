@@ -151,5 +151,23 @@ public class DeptServiceImpl implements DeptService {
         return JsonResult.successJsonResult();
     }
 
+    @Override
+    public JsonResult<String> enableDeptInfo(String deptCode, String modifier) {
+        if (ObjectUtils.isNull(deptCode) ) {
+            throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
+        }
+        PlatformDept dept = deptMapper.selectByDeptCode(deptCode);
+        if (ObjectUtils.isNull(dept)) {
+            throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
+        }
+
+        dept.setStatus(1);
+        dept.setModifier(modifier);
+        dept.setLastModifyTime(new Date());
+        
+        deptMapper.updateByPrimaryKeySelective(dept);
+        return JsonResult.successJsonResult();
+    }
+
 }
 

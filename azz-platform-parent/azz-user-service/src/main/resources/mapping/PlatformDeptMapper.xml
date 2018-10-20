@@ -155,21 +155,21 @@
     select 
     <include refid="Base_Column_List" />
     from platform_dept
-    where dept_name = #{deptName,jdbcType=VARCHAR} and status = 1
+    where dept_name = #{deptName,jdbcType=VARCHAR} and status != 0
   </select>
   
   <select id="selectByParentDeptCode" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from platform_dept
-    where parent_code = #{deptCode,jdbcType=VARCHAR} and status = 1
+    where parent_code = #{deptCode,jdbcType=VARCHAR} and status != 0
   </select>
   
   <select id="selectByDeptCode" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from platform_dept
-    where dept_code = #{deptCode,jdbcType=VARCHAR} and status = 1
+    where dept_code = #{deptCode,jdbcType=VARCHAR} and status != 0
   </select>
   
   <select id="selectDeptList" parameterType="com.azz.platform.user.pojo.bo.SearchDeptParam" resultType="com.azz.platform.user.pojo.vo.Dept">

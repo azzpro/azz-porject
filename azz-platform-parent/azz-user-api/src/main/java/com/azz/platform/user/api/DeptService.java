@@ -83,5 +83,15 @@ public interface DeptService {
      */
     @GetMapping("disableDeptInfo")
     JsonResult<String> disableDeptInfo(@RequestParam("deptCode") String deptCode, @RequestParam("modifier") String modifier);
+    
+    /**
+     * <p>启用部门</p>
+     * @param deptCode
+     * @param modifier
+     * @return
+     * @author 彭斌  2018年10月20日 下午5:47:24
+     */
+    @GetMapping("enableDeptInfo")
+    JsonResult<String> enableDeptInfo(@RequestParam("deptCode") String deptCode, @RequestParam("modifier") String modifier);
 }
 

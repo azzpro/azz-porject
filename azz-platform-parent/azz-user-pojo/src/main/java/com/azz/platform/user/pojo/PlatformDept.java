@@ -311,6 +311,7 @@ public class PlatformDept implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getDeptCode() == null ? other.getDeptCode() == null : this.getDeptCode().equals(other.getDeptCode()))
             && (this.getDeptName() == null ? other.getDeptName() == null : this.getDeptName().equals(other.getDeptName()))
+            && (this.getParentCode() == null ? other.getParentCode() == null : this.getParentCode().equals(other.getParentCode()))
             && (this.getDescription() == null ? other.getDescription() == null : this.getDescription().equals(other.getDescription()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
@@ -326,6 +327,7 @@ public class PlatformDept implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getDeptCode() == null) ? 0 : getDeptCode().hashCode());
         result = prime * result + ((getDeptName() == null) ? 0 : getDeptName().hashCode());
+        result = prime * result + ((getParentCode() == null) ? 0 : getParentCode().hashCode());
         result = prime * result + ((getDescription() == null) ? 0 : getDescription().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
@@ -344,6 +346,7 @@ public class PlatformDept implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", deptCode=").append(deptCode);
         sb.append(", deptName=").append(deptName);
+        sb.append(", parentCode=").append(parentCode);
         sb.append(", description=").append(description);
         sb.append(", status=").append(status);
         sb.append(", createTime=").append(createTime);

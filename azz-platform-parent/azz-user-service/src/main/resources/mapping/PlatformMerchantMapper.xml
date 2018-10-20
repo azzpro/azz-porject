@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.platform.user.mapper.PlatformMerchantMapper">
+  <resultMap id="BaseResultMap" type="com.azz.platform.user.pojo.PlatformMerchant">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
+    <result column="legal_person_name" jdbcType="VARCHAR" property="legalPersonName" />
+    <result column="legal_person_id" jdbcType="VARCHAR" property="legalPersonId" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="credit_code" jdbcType="VARCHAR" property="creditCode" />
+    <result column="company_tel" jdbcType="VARCHAR" property="companyTel" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="trading_certificate_first_file_name" jdbcType="VARCHAR" property="tradingCertificateFirstFileName" />
+    <result column="trading_certificate_first_file_url" jdbcType="VARCHAR" property="tradingCertificateFirstFileUrl" />
+    <result column="trading_certificate_second_file_name" jdbcType="VARCHAR" property="tradingCertificateSecondFileName" />
+    <result column="trading_certificate_second_file_url" jdbcType="VARCHAR" property="tradingCertificateSecondFileUrl" />
+    <result column="trading_certificate_third_file_name" jdbcType="VARCHAR" property="tradingCertificateThirdFileName" />
+    <result column="trading_certificate_third_file_url" jdbcType="VARCHAR" property="tradingCertificateThirdFileUrl" />
+    <result column="business_license_file_name" jdbcType="VARCHAR" property="businessLicenseFileName" />
+    <result column="business_license_file_url" jdbcType="VARCHAR" property="businessLicenseFileUrl" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="auditor" jdbcType="VARCHAR" property="auditor" />
+    <result column="auditor_time" jdbcType="TIMESTAMP" property="auditorTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, merchant_code, merchant_name, legal_person_name, legal_person_id, company_name, 
+    credit_code, company_tel, address, trading_certificate_first_file_name, trading_certificate_first_file_url, 
+    trading_certificate_second_file_name, trading_certificate_second_file_url, trading_certificate_third_file_name, 
+    trading_certificate_third_file_url, business_license_file_name, business_license_file_url, 
+    create_time, status, auditor, auditor_time, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from platform_merchant
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from platform_merchant
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.platform.user.pojo.PlatformMerchant">
+    insert into platform_merchant (id, merchant_code, merchant_name, 
+      legal_person_name, legal_person_id, company_name, 
+      credit_code, company_tel, address, 
+      trading_certificate_first_file_name, trading_certificate_first_file_url, 
+      trading_certificate_second_file_name, trading_certificate_second_file_url, 
+      trading_certificate_third_file_name, trading_certificate_third_file_url, 
+      business_license_file_name, business_license_file_url, 
+      create_time, status, auditor, 
+      auditor_time, remark)
+    values (#{id,jdbcType=BIGINT}, #{merchantCode,jdbcType=VARCHAR}, #{merchantName,jdbcType=VARCHAR}, 
+      #{legalPersonName,jdbcType=VARCHAR}, #{legalPersonId,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{creditCode,jdbcType=VARCHAR}, #{companyTel,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{tradingCertificateFirstFileName,jdbcType=VARCHAR}, #{tradingCertificateFirstFileUrl,jdbcType=VARCHAR}, 
+      #{tradingCertificateSecondFileName,jdbcType=VARCHAR}, #{tradingCertificateSecondFileUrl,jdbcType=VARCHAR}, 
+      #{tradingCertificateThirdFileName,jdbcType=VARCHAR}, #{tradingCertificateThirdFileUrl,jdbcType=VARCHAR}, 
+      #{businessLicenseFileName,jdbcType=VARCHAR}, #{businessLicenseFileUrl,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{auditor,jdbcType=VARCHAR}, 
+      #{auditorTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.platform.user.pojo.PlatformMerchant">
+    insert into platform_merchant
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="merchantCode != null">
+        merchant_code,
+      </if>
+      <if test="merchantName != null">
+        merchant_name,
+      </if>
+      <if test="legalPersonName != null">
+        legal_person_name,
+      </if>
+      <if test="legalPersonId != null">
+        legal_person_id,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+      <if test="creditCode != null">
+        credit_code,
+      </if>
+      <if test="companyTel != null">
+        company_tel,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="tradingCertificateFirstFileName != null">
+        trading_certificate_first_file_name,
+      </if>
+      <if test="tradingCertificateFirstFileUrl != null">
+        trading_certificate_first_file_url,
+      </if>
+      <if test="tradingCertificateSecondFileName != null">
+        trading_certificate_second_file_name,
+      </if>
+      <if test="tradingCertificateSecondFileUrl != null">
+        trading_certificate_second_file_url,
+      </if>
+      <if test="tradingCertificateThirdFileName != null">
+        trading_certificate_third_file_name,
+      </if>
+      <if test="tradingCertificateThirdFileUrl != null">
+        trading_certificate_third_file_url,
+      </if>
+      <if test="businessLicenseFileName != null">
+        business_license_file_name,
+      </if>
+      <if test="businessLicenseFileUrl != null">
+        business_license_file_url,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="auditor != null">
+        auditor,
+      </if>
+      <if test="auditorTime != null">
+        auditor_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="merchantCode != null">
+        #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null">
+        #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonName != null">
+        #{legalPersonName,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonId != null">
+        #{legalPersonId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="creditCode != null">
+        #{creditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyTel != null">
+        #{companyTel,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="tradingCertificateFirstFileName != null">
+        #{tradingCertificateFirstFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="tradingCertificateFirstFileUrl != null">
+        #{tradingCertificateFirstFileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="tradingCertificateSecondFileName != null">
+        #{tradingCertificateSecondFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="tradingCertificateSecondFileUrl != null">
+        #{tradingCertificateSecondFileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="tradingCertificateThirdFileName != null">
+        #{tradingCertificateThirdFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="tradingCertificateThirdFileUrl != null">
+        #{tradingCertificateThirdFileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseFileName != null">
+        #{businessLicenseFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseFileUrl != null">
+        #{businessLicenseFileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="auditor != null">
+        #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditorTime != null">
+        #{auditorTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.platform.user.pojo.PlatformMerchant">
+    update platform_merchant
+    <set>
+      <if test="merchantCode != null">
+        merchant_code = #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null">
+        merchant_name = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonName != null">
+        legal_person_name = #{legalPersonName,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonId != null">
+        legal_person_id = #{legalPersonId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="creditCode != null">
+        credit_code = #{creditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyTel != null">
+        company_tel = #{companyTel,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="tradingCertificateFirstFileName != null">
+        trading_certificate_first_file_name = #{tradingCertificateFirstFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="tradingCertificateFirstFileUrl != null">
+        trading_certificate_first_file_url = #{tradingCertificateFirstFileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="tradingCertificateSecondFileName != null">
+        trading_certificate_second_file_name = #{tradingCertificateSecondFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="tradingCertificateSecondFileUrl != null">
+        trading_certificate_second_file_url = #{tradingCertificateSecondFileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="tradingCertificateThirdFileName != null">
+        trading_certificate_third_file_name = #{tradingCertificateThirdFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="tradingCertificateThirdFileUrl != null">
+        trading_certificate_third_file_url = #{tradingCertificateThirdFileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseFileName != null">
+        business_license_file_name = #{businessLicenseFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseFileUrl != null">
+        business_license_file_url = #{businessLicenseFileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="auditor != null">
+        auditor = #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditorTime != null">
+        auditor_time = #{auditorTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.platform.user.pojo.PlatformMerchant">
+    update platform_merchant
+    set merchant_code = #{merchantCode,jdbcType=VARCHAR},
+      merchant_name = #{merchantName,jdbcType=VARCHAR},
+      legal_person_name = #{legalPersonName,jdbcType=VARCHAR},
+      legal_person_id = #{legalPersonId,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      credit_code = #{creditCode,jdbcType=VARCHAR},
+      company_tel = #{companyTel,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      trading_certificate_first_file_name = #{tradingCertificateFirstFileName,jdbcType=VARCHAR},
+      trading_certificate_first_file_url = #{tradingCertificateFirstFileUrl,jdbcType=VARCHAR},
+      trading_certificate_second_file_name = #{tradingCertificateSecondFileName,jdbcType=VARCHAR},
+      trading_certificate_second_file_url = #{tradingCertificateSecondFileUrl,jdbcType=VARCHAR},
+      trading_certificate_third_file_name = #{tradingCertificateThirdFileName,jdbcType=VARCHAR},
+      trading_certificate_third_file_url = #{tradingCertificateThirdFileUrl,jdbcType=VARCHAR},
+      business_license_file_name = #{businessLicenseFileName,jdbcType=VARCHAR},
+      business_license_file_url = #{businessLicenseFileUrl,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      auditor = #{auditor,jdbcType=VARCHAR},
+      auditor_time = #{auditorTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

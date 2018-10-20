@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
@@ -39,7 +40,7 @@ public class DeptServiceImpl implements DeptService {
     private PlatformDeptMapper deptMapper;
 
     @Override
-    public JsonResult<String> addDeptInfo(AddDeptParam param) {
+    public JsonResult<String> addDeptInfo(@RequestBody AddDeptParam param) {
         // 部门信息非空校验
         JSR303ValidateUtils.validate(param);
         String deptParentCode = param.getParentCode();
@@ -54,8 +55,8 @@ public class DeptServiceImpl implements DeptService {
         
         PlatformDept dept = new PlatformDept();
         
-        if(ObjectUtils.isNotNull(deptParentCode)) {
-            PlatformDept deptObjCode = deptMapper.selectByDeptCode(deptParentCode);
+        if(!"".equals(deptParentCode)) {
+            PlatformDept deptObjCode = deptMapper.selectByParentDeptCode(deptParentCode);
             if(ObjectUtils.isNull(deptObjCode)) {
                 throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
             }
@@ -76,7 +77,7 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public JsonResult<String> editDeptInfo(EditDeptParam param) {
+    public JsonResult<String> editDeptInfo(@RequestBody EditDeptParam param) {
         JSR303ValidateUtils.validate(param);
 
         PlatformDept dept = deptMapper.selectByDeptCode(param.getDeptCode());
@@ -101,7 +102,7 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public JsonResult<List<Dept>> getDeptList(SearchDeptParam param) {
+    public JsonResult<List<Dept>> getDeptList(@RequestBody SearchDeptParam param) {
         List<Dept> infos = deptMapper.selectDeptList(param);
         return JsonResult.successJsonResult(infos);
     }

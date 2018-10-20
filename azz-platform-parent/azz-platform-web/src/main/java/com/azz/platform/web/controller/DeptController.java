@@ -71,7 +71,7 @@ public class DeptController {
 	 * @author 彭斌  2018年10月18日 下午1:45:17
 	 */
 	@RequestMapping("/getDeptList")
-	public JsonResult<List<Dept>> getDeptList(@RequestBody SearchDeptParam param){
+	public JsonResult<List<Dept>> getDeptList(SearchDeptParam param){
 	    LOG.info("###########获取部门列表信息###########");
 	    return deptService.getDeptList(param);
 	}

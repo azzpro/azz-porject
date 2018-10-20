@@ -158,11 +158,18 @@
     where dept_name = #{deptName,jdbcType=VARCHAR} and status = 1
   </select>
   
-  <select id="selectByDeptCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByParentDeptCode" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from platform_dept
     where parent_code = #{deptCode,jdbcType=VARCHAR} and status = 1
+  </select>
+  
+  <select id="selectByDeptCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from platform_dept
+    where dept_code = #{deptCode,jdbcType=VARCHAR} and status = 1
   </select>
   
   <select id="selectDeptList" parameterType="com.azz.platform.user.pojo.bo.SearchDeptParam" resultType="com.azz.platform.user.pojo.vo.Dept">
@@ -170,24 +177,19 @@
 			dept.dept_name AS deptName,
 			dept.dept_code AS deptCode,
 			COUNT(u.dept_id) as numberMembers,
-		CASE dept.`status`
-				WHEN 0 THEN
-					'禁用'
-				WHEN 1 THEN
-					'启用'
-				END AS status,
+		    dept.`status` AS status,
 			dept.creator AS creator,
 			dept.create_time AS createTime 
 		FROM
 			platform_dept dept
-		JOIN platform_user u ON dept.id = u.dept_id
+		LEFT JOIN platform_user u ON dept.id = u.dept_id
 		WHERE
 			dept.parent_code = '0'
-		<if test="deptNameCode != null"> 
+		<if test="deptNameCode != null and deptNameCode!='' "> 
 			AND dept.dept_name LIKE CONCAT('%',#{deptNameCode},'%') OR dept.dept_code = #{deptNameCode}
 		</if>
 		GROUP BY dept.id
-		ORDER BY create_time DESC
+		ORDER BY dept.create_time DESC
   </select>
   
   <select id="selectDeptParentList" parameterType="java.lang.String" resultType="com.azz.platform.user.pojo.vo.Dept">
@@ -195,12 +197,7 @@
 			dept.dept_name AS deptName,
 			dept.dept_code AS deptCode,
 			COUNT(u.dept_id) as numberMembers,
-		CASE dept.`status`
-				WHEN 0 THEN
-					'禁用'
-				WHEN 1 THEN
-					'启用'
-				END AS status,
+		 	dept.`status` AS status,
 			dept.creator AS creator,
 			dept.create_time 
 		FROM

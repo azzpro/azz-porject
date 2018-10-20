@@ -14,11 +14,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.page.Pagination;
 import com.azz.platform.user.pojo.bo.AddUserParam;
 import com.azz.platform.user.pojo.bo.EditPasswordParam;
 import com.azz.platform.user.pojo.bo.EditUserParam;
+import com.azz.platform.user.pojo.bo.EnableOrDisableOrDelUserParam;
 import com.azz.platform.user.pojo.bo.LoginParam;
+import com.azz.platform.user.pojo.bo.SearchUserParam;
 import com.azz.platform.user.pojo.vo.LoginUserInfo;
+import com.azz.platform.user.pojo.vo.UserInfo;
 
 /**
  * <P>
@@ -82,6 +86,36 @@ public interface UserService {
      */
     @PostMapping("editUser")
     JsonResult<String> editUser(@RequestBody EditUserParam param);
+    
+    /**
+     * 
+     * <p>根据条件查询用户列表</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月20日 上午10:23:34
+     */
+    @PostMapping("getUserList")
+    JsonResult<Pagination<UserInfo>> getUserList(@RequestBody SearchUserParam param);
+    
+    /**
+     * 
+     * <p>启用、禁用或删除用户</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月20日 上午10:31:52
+     */
+    @PostMapping("enableOrDisableUser")
+    JsonResult<String> enableOrDisableOrDelUser(@RequestBody EnableOrDisableOrDelUserParam param);
+    
+    /**
+     * 
+     * <p>查询用户详情</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月20日 上午10:31:52
+     */
+    @GetMapping("getUserInfo")
+    JsonResult<UserInfo> getUserInfo(@RequestParam("userCode") String userCode);
     
     
 }

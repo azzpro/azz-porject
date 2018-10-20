@@ -7,6 +7,10 @@
  
 package com.azz.platform.user.pojo.vo;
 
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 /**
@@ -36,6 +40,9 @@ public class UserInfo {
     private String status;
     
     private String roleName;
+    
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")
+    private Date createTime;
 
 }
 

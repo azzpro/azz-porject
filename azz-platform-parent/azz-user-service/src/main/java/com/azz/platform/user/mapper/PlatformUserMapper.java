@@ -1,8 +1,11 @@
 package com.azz.platform.user.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.platform.user.pojo.PlatformUser;
+import com.azz.platform.user.pojo.bo.SearchUserParam;
 import com.azz.platform.user.pojo.vo.UserInfo;
 
 @Mapper
@@ -17,6 +20,8 @@ public interface PlatformUserMapper {
 
     int updateByPrimaryKeySelective(PlatformUser record);
 
+    int updateByUserCode(PlatformUser record);
+    
     int updateByPrimaryKey(PlatformUser record);
     
     /**
@@ -38,10 +43,28 @@ public interface PlatformUserMapper {
     UserInfo getUserInfoByPhoneNumber(String phoneNumber);
     
     /**
+     * 
+     * <p>根据用户编码查询用户信息</p>
+     * @param userCode
+     * @return
+     * @author 黄智聪  2018年10月20日 上午10:51:33
+     */
+    UserInfo getUserInfoByUserCode(String userCode);
+    
+    /**
      * <p>根据用户编码查询</p>
      * @param userCode
      * @return
      * @author 彭斌  2018年10月18日 下午5:14:23
      */
     PlatformUser getUserByUserCode(String userCode);
+
+    /**
+     * 
+     * <p>根据查询条件查询用户信息</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月20日 上午10:10:19
+     */
+    List<UserInfo> getUserInfoBySearchParam(SearchUserParam param);
 }

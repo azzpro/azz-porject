@@ -18,12 +18,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.ShiroAuthErrorCode;
+import com.azz.core.common.page.Pagination;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.core.exception.SuppressedException;
 import com.azz.platform.user.api.UserService;
+import com.azz.platform.user.pojo.bo.AddUserParam;
 import com.azz.platform.user.pojo.bo.EditPasswordParam;
+import com.azz.platform.user.pojo.bo.EditUserParam;
+import com.azz.platform.user.pojo.bo.EnableOrDisableOrDelUserParam;
 import com.azz.platform.user.pojo.bo.LoginParam;
+import com.azz.platform.user.pojo.bo.SearchUserParam;
 import com.azz.platform.user.pojo.vo.LoginUserInfo;
+import com.azz.platform.user.pojo.vo.UserInfo;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.utils.WebUtils;
 
@@ -154,5 +160,79 @@ public class UserController {
         param.setUserInfo(WebUtils.getLoginUser().getUserInfo());
         return userService.editPassword(param);
     }
+    
+    /**
+     * <p>
+     * 新增用户
+     * </p>
+     * 
+     * @param param
+     * @return
+     * @author 黄智聪 2018年10月18日 下午3:02:23
+     */
+    @RequestMapping(value = "/addUser")
+    public JsonResult<String> addUser(AddUserParam param){
+        param.setCreator(WebUtils.getLoginUser().getUserInfo().getUserCode());
+        return userService.addUser(param);
+    }
+    
+    /**
+     * <p>
+     * 修改用户
+     * </p>
+     * 
+     * @param param
+     * @return
+     * @author 黄智聪 2018年10月18日 下午3:02:23
+     */
+    @RequestMapping(value = "/editUser")
+    public JsonResult<String> editUser(EditUserParam param){
+        param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
+        return userService.editUser(param);
+    }
+    
+    /**
+     * <p>
+     * 根据条件查询用户列表
+     * </p>
+     * 
+     * @param param
+     * @return
+     * @author 黄智聪 2018年10月18日 下午3:02:23
+     */
+    @RequestMapping(value = "/getUserList")
+    public JsonResult<Pagination<UserInfo>> getUserList(SearchUserParam param){
+        return userService.getUserList(param);
+    }
+    
+    /**
+     * <p>
+     * 修改用户状态（禁用、启用、删除）
+     * </p>
+     * 
+     * @param param
+     * @return
+     * @author 黄智聪 2018年10月18日 下午3:02:23
+     */
+    @RequestMapping(value = "/editUserStatus")
+    public JsonResult<String> disableUser(EnableOrDisableOrDelUserParam param){
+	return userService.enableOrDisableOrDelUser(param);
+    }
+    
+    /**
+     * <p>
+     * 查询用户详情
+     * </p>
+     * 
+     * @param param
+     * @return
+     * @author 黄智聪 2018年10月18日 下午3:02:23
+     */
+    @RequestMapping(value = "/getUserInfo")
+    public JsonResult<UserInfo> getUserInfo(String userCode){
+	return userService.getUserInfo(userCode);
+    }
+    
+    
     
 }

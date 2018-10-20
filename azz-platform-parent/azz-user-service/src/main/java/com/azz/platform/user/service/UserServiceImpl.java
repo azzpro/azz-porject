@@ -14,14 +14,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
 import com.azz.core.common.errorcode.ShiroAuthErrorCode;
-import com.azz.core.common.errorcode.SystemErrorCode;
+import com.azz.core.common.page.Pagination;
 import com.azz.core.exception.BaseException;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.model.Password;
 import com.azz.platform.user.api.UserService;
+import com.azz.platform.user.common.constants.UserConstants.UserStatus;
 import com.azz.platform.user.mapper.PlatformDeptMapper;
 import com.azz.platform.user.mapper.PlatformPermissionMapper;
 import com.azz.platform.user.mapper.PlatformRoleMapper;
@@ -34,13 +36,17 @@ import com.azz.platform.user.pojo.PlatformUserRole;
 import com.azz.platform.user.pojo.bo.AddUserParam;
 import com.azz.platform.user.pojo.bo.EditPasswordParam;
 import com.azz.platform.user.pojo.bo.EditUserParam;
+import com.azz.platform.user.pojo.bo.EnableOrDisableOrDelUserParam;
 import com.azz.platform.user.pojo.bo.LoginParam;
+import com.azz.platform.user.pojo.bo.SearchUserParam;
 import com.azz.platform.user.pojo.vo.LoginUserInfo;
 import com.azz.platform.user.pojo.vo.Menu;
 import com.azz.platform.user.pojo.vo.UserInfo;
 import com.azz.platform.user.pojo.vo.UserPermission;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.PasswordHelper;
+import com.azz.util.StringUtils;
+import com.github.pagehelper.PageHelper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -173,15 +179,15 @@ public class UserServiceImpl implements UserService {
 	String confirmPassword = param.getConfirmPassword();
 	// 密码与确认密码一致性校验
 	if (!password.equals(confirmPassword)) {
-	    throw new JSR303ValidationException(SystemErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "密码与确认密码不一致");
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "密码与确认密码不一致");
 	}
 	PlatformDept dept = platformDeptMapper.selectByDeptCode(param.getDeptCode());
 	if (dept == null) {
-	    throw new JSR303ValidationException(SystemErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "部门不存在");
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "部门不存在");
 	}
 	PlatformRole role = platformRoleMapper.selectByRoleCode(param.getRoleCode());
 	if (role == null) {
-	    throw new JSR303ValidationException(SystemErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色不存在");
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色不存在");
 	}
 	// 生成盐值加密的密码
 	Password pwd = PasswordHelper.encryptPasswordByModel(password);
@@ -208,53 +214,88 @@ public class UserServiceImpl implements UserService {
 	String confirmPassword = param.getConfirmPassword();
 	// 密码与确认密码一致性校验
 	if (!password.equals(confirmPassword)) {
-	    throw new JSR303ValidationException(SystemErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "密码与确认密码不一致");
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "密码与确认密码不一致");
 	}
 	PlatformDept dept = platformDeptMapper.selectByDeptCode(param.getDeptCode());
 	if (dept == null) {
-	    throw new JSR303ValidationException(SystemErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "部门不存在");
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "部门不存在");
 	}
 	PlatformRole role = platformRoleMapper.selectByRoleCode(param.getRoleCode());
 	if (role == null) {
-	    throw new JSR303ValidationException(SystemErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色不存在");
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色不存在");
 	}
-	
+
 	String userCode = param.getUserCode();
 	PlatformUser user = platformUserMapper.getUserByUserCode(userCode);
 	if (user == null) {
-	    throw new JSR303ValidationException(SystemErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "用户不存在");
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "用户不存在");
 	}
 	// 生成盐值加密的密码
 	Password pwd = PasswordHelper.encryptPasswordByModel(password);
 	Date nowDate = new Date();
 	String modifier = param.getModifier();
 	Long userId = user.getId();
-	PlatformUser userRecord = PlatformUser.builder()
-		.modifier(modifier)
-		.lastModifyTime(nowDate)
-		.deptId(dept.getId())
-		.email(param.getEmail())
-		.password(pwd.getPassword())
-		.phoneNumber(param.getPhoneNumber())
-		.postName(param.getPostName())
-		.userName(param.getUserName())
-		.salt(pwd.getSalt())
-		.id(userId)
-		.build();
+	PlatformUser userRecord = PlatformUser.builder().modifier(modifier).lastModifyTime(nowDate).deptId(dept.getId())
+		.email(param.getEmail()).password(pwd.getPassword()).phoneNumber(param.getPhoneNumber())
+		.postName(param.getPostName()).userName(param.getUserName()).salt(pwd.getSalt()).id(userId).build();
 	platformUserMapper.updateByPrimaryKeySelective(userRecord);
-	
+
 	// 先删除原先的用户与角色的绑定
 	platformUserRoleMapper.deleteByUserId(userId);
-	
+
 	// 重新对用户与角色进行新的绑定
-	PlatformUserRole userRoleRecord = PlatformUserRole.builder()
-		.createTime(nowDate)
-		.creator(modifier)
-		.userId(userId)
-		.roleId(role.getId())
-		.build();
+	PlatformUserRole userRoleRecord = PlatformUserRole.builder().createTime(nowDate).creator(modifier)
+		.userId(userId).roleId(role.getId()).build();
 	platformUserRoleMapper.insertSelective(userRoleRecord);
 	return JsonResult.successJsonResult();
+    }
+
+    @Override
+    public JsonResult<Pagination<UserInfo>> getUserList(@RequestBody SearchUserParam param) {
+	PageHelper.startPage(param.getPageNum(), param.getPageSize());
+	List<UserInfo> users = platformUserMapper.getUserInfoBySearchParam(param);
+	return JsonResult.successJsonResult(new Pagination<>(users));
+    }
+
+    @Override
+    public JsonResult<String> enableOrDisableOrDelUser(@RequestBody EnableOrDisableOrDelUserParam param) {
+	// 参数校验
+	JSR303ValidateUtils.validate(param);
+	int status = param.getStatus();
+	this.checkStatusExist(status);
+	PlatformUser userRecord = PlatformUser.builder().userCode(param.getUserCode()).status(status)
+		.modifier(param.getModifier()).lastModifyTime(new Date()).build();
+	platformUserMapper.updateByUserCode(userRecord);
+	return JsonResult.successJsonResult();
+    }
+
+    @Override
+    public JsonResult<UserInfo> getUserInfo(String userCode) {
+	if (StringUtils.isBlank(userCode)) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "用户编码不允许为空");
+	}
+	UserInfo userInfo = platformUserMapper.getUserInfoByUserCode(userCode);
+	return JsonResult.successJsonResult(userInfo);
+    }
+
+    /**
+     * 
+     * <p>
+     * 校验是否存在该状态
+     * </p>
+     * 
+     * @param value
+     * @return
+     * @author 黄智聪 2018年10月20日 上午11:29:37
+     */
+    public void checkStatusExist(int value) {
+	UserStatus[] values = UserStatus.values();
+	for (UserStatus userStatus : values) {
+	    if (userStatus.getValue() == value) {
+		return;
+	    }
+	}
+	throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "用户状态不存在");
     }
 
 }

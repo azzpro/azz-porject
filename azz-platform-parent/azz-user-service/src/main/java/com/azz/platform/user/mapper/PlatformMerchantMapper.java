@@ -1,8 +1,11 @@
 package com.azz.platform.user.mapper;
 
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.azz.platform.user.pojo.PlatformMerchant;
 
+@Mapper
 public interface PlatformMerchantMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -15,4 +18,6 @@ public interface PlatformMerchantMapper {
     int updateByPrimaryKeySelective(PlatformMerchant record);
 
     int updateByPrimaryKey(PlatformMerchant record);
+    
+    PlatformMerchant selectMerchantByCode(String merchantCode);
 }

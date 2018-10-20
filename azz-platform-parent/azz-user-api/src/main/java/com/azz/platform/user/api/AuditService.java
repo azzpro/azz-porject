@@ -7,19 +7,12 @@
  
 package com.azz.platform.user.api;
 
-import java.util.List;
-
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
-import com.azz.platform.user.pojo.bo.AddDeptParam;
-import com.azz.platform.user.pojo.bo.EditDeptParam;
-import com.azz.platform.user.pojo.bo.SearchDeptParam;
-import com.azz.platform.user.pojo.vo.Dept;
+import com.azz.platform.user.pojo.bo.AuditParam;
 
 /**
  * <P>审核服务管理</P>
@@ -29,5 +22,13 @@ import com.azz.platform.user.pojo.vo.Dept;
 @FeignClient("azz-user-service")
 public interface AuditService {
     
+    /**
+     * <p>审核企业信息</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年10月20日 下午2:53:27
+     */
+    @PostMapping("auditEnterprise")
+    JsonResult<String> auditEnterprise(@RequestBody AuditParam param);
 }
 

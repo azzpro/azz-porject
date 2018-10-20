@@ -295,4 +295,12 @@
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="selectMerchantByCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from platform_merchant
+    where merchant_code = #{merchantCode,jdbcType=VARCHAR}
+  </select>
+  
 </mapper>

@@ -20,6 +20,9 @@
 		<module>azz-user-pojo</module>
 		<module>azz-user-service</module>
 		<module>azz-user-api</module>
+		<module>azz-merchant-management-pojo</module>
+		<module>azz-merchant-management-service</module>
+		<module>azz-merchant-management-api</module>
 		<module>azz-platform-web</module>
 	</modules>
 	

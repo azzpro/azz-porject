@@ -4,7 +4,7 @@ package com.azz.platform.user.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
-public class PlatformMerchant implements Serializable {
+public class Merchant implements Serializable {
     /**
      * 主键id
      *
@@ -38,7 +38,7 @@ public class PlatformMerchant implements Serializable {
      *
      * @mbg.generated
      */
-    private String legalPersonId;
+    private String legalPersonIdCard;
 
     /**
      * 企业名称
@@ -125,18 +125,18 @@ public class PlatformMerchant implements Serializable {
     private String businessLicenseFileUrl;
 
     /**
-     * 创建时间
+     * 法人身份证文件名称
      *
      * @mbg.generated
      */
-    private Date createTime;
+    private String legalPersonIdCardFileName;
 
     /**
-     * 状态（0：已拒绝 1：待审核 2：已通过）
+     * 法人身份证文件路径
      *
      * @mbg.generated
      */
-    private Integer status;
+    private String legalPersonIdCardFileUrl;
 
     /**
      * 审核人
@@ -146,26 +146,26 @@ public class PlatformMerchant implements Serializable {
     private String auditor;
 
     /**
-     * 审核时间(审核通过为入驻时间）
-     *
-     * @mbg.generated
-     */
-    private Date auditorTime;
-
-    /**
      * 备注
      *
      * @mbg.generated
      */
     private String remark;
 
+    /**
+     * 创建时间
+     *
+     * @mbg.generated
+     */
+    private Date createTime;
+
     private static final long serialVersionUID = 1L;
 
     /**
      * 主键id<br/>
-     * 返回值对应的表列名 platform_merchant.id
+     * 返回值对应的表列名 merchant.id
      *
-     * @return 返回值对应 platform_merchant.id
+     * @return 返回值对应 merchant.id
      *
      * @mbg.generated
      */
@@ -175,9 +175,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 主键id<br/>
-     * platform_merchant.id
+     * merchant.id
      *
-     * @param id 值对应 platform_merchant.id
+     * @param id 值对应 merchant.id
      *
      * @mbg.generated
      */
@@ -187,9 +187,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 商户编码<br/>
-     * 返回值对应的表列名 platform_merchant.merchant_code
+     * 返回值对应的表列名 merchant.merchant_code
      *
-     * @return 返回值对应 platform_merchant.merchant_code
+     * @return 返回值对应 merchant.merchant_code
      *
      * @mbg.generated
      */
@@ -199,9 +199,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 商户编码<br/>
-     * platform_merchant.merchant_code
+     * merchant.merchant_code
      *
-     * @param merchantCode 值对应 platform_merchant.merchant_code
+     * @param merchantCode 值对应 merchant.merchant_code
      *
      * @mbg.generated
      */
@@ -211,9 +211,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 商户名称<br/>
-     * 返回值对应的表列名 platform_merchant.merchant_name
+     * 返回值对应的表列名 merchant.merchant_name
      *
-     * @return 返回值对应 platform_merchant.merchant_name
+     * @return 返回值对应 merchant.merchant_name
      *
      * @mbg.generated
      */
@@ -223,9 +223,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 商户名称<br/>
-     * platform_merchant.merchant_name
+     * merchant.merchant_name
      *
-     * @param merchantName 值对应 platform_merchant.merchant_name
+     * @param merchantName 值对应 merchant.merchant_name
      *
      * @mbg.generated
      */
@@ -235,9 +235,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 法人姓名<br/>
-     * 返回值对应的表列名 platform_merchant.legal_person_name
+     * 返回值对应的表列名 merchant.legal_person_name
      *
-     * @return 返回值对应 platform_merchant.legal_person_name
+     * @return 返回值对应 merchant.legal_person_name
      *
      * @mbg.generated
      */
@@ -247,9 +247,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 法人姓名<br/>
-     * platform_merchant.legal_person_name
+     * merchant.legal_person_name
      *
-     * @param legalPersonName 值对应 platform_merchant.legal_person_name
+     * @param legalPersonName 值对应 merchant.legal_person_name
      *
      * @mbg.generated
      */
@@ -259,33 +259,33 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 法人身份证<br/>
-     * 返回值对应的表列名 platform_merchant.legal_person_id
+     * 返回值对应的表列名 merchant.legal_person_id_card
      *
-     * @return 返回值对应 platform_merchant.legal_person_id
+     * @return 返回值对应 merchant.legal_person_id_card
      *
      * @mbg.generated
      */
-    public String getLegalPersonId() {
-        return legalPersonId;
+    public String getLegalPersonIdCard() {
+        return legalPersonIdCard;
     }
 
     /**
      * 法人身份证<br/>
-     * platform_merchant.legal_person_id
+     * merchant.legal_person_id_card
      *
-     * @param legalPersonId 值对应 platform_merchant.legal_person_id
+     * @param legalPersonIdCard 值对应 merchant.legal_person_id_card
      *
      * @mbg.generated
      */
-    public void setLegalPersonId(String legalPersonId) {
-        this.legalPersonId = legalPersonId == null ? null : legalPersonId.trim();
+    public void setLegalPersonIdCard(String legalPersonIdCard) {
+        this.legalPersonIdCard = legalPersonIdCard == null ? null : legalPersonIdCard.trim();
     }
 
     /**
      * 企业名称<br/>
-     * 返回值对应的表列名 platform_merchant.company_name
+     * 返回值对应的表列名 merchant.company_name
      *
-     * @return 返回值对应 platform_merchant.company_name
+     * @return 返回值对应 merchant.company_name
      *
      * @mbg.generated
      */
@@ -295,9 +295,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 企业名称<br/>
-     * platform_merchant.company_name
+     * merchant.company_name
      *
-     * @param companyName 值对应 platform_merchant.company_name
+     * @param companyName 值对应 merchant.company_name
      *
      * @mbg.generated
      */
@@ -307,9 +307,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 信用代码<br/>
-     * 返回值对应的表列名 platform_merchant.credit_code
+     * 返回值对应的表列名 merchant.credit_code
      *
-     * @return 返回值对应 platform_merchant.credit_code
+     * @return 返回值对应 merchant.credit_code
      *
      * @mbg.generated
      */
@@ -319,9 +319,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 信用代码<br/>
-     * platform_merchant.credit_code
+     * merchant.credit_code
      *
-     * @param creditCode 值对应 platform_merchant.credit_code
+     * @param creditCode 值对应 merchant.credit_code
      *
      * @mbg.generated
      */
@@ -331,9 +331,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 公司电话<br/>
-     * 返回值对应的表列名 platform_merchant.company_tel
+     * 返回值对应的表列名 merchant.company_tel
      *
-     * @return 返回值对应 platform_merchant.company_tel
+     * @return 返回值对应 merchant.company_tel
      *
      * @mbg.generated
      */
@@ -343,9 +343,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 公司电话<br/>
-     * platform_merchant.company_tel
+     * merchant.company_tel
      *
-     * @param companyTel 值对应 platform_merchant.company_tel
+     * @param companyTel 值对应 merchant.company_tel
      *
      * @mbg.generated
      */
@@ -355,9 +355,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 详细地址<br/>
-     * 返回值对应的表列名 platform_merchant.address
+     * 返回值对应的表列名 merchant.address
      *
-     * @return 返回值对应 platform_merchant.address
+     * @return 返回值对应 merchant.address
      *
      * @mbg.generated
      */
@@ -367,9 +367,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 详细地址<br/>
-     * platform_merchant.address
+     * merchant.address
      *
-     * @param address 值对应 platform_merchant.address
+     * @param address 值对应 merchant.address
      *
      * @mbg.generated
      */
@@ -379,9 +379,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 第一张营业执照文件名称<br/>
-     * 返回值对应的表列名 platform_merchant.trading_certificate_first_file_name
+     * 返回值对应的表列名 merchant.trading_certificate_first_file_name
      *
-     * @return 返回值对应 platform_merchant.trading_certificate_first_file_name
+     * @return 返回值对应 merchant.trading_certificate_first_file_name
      *
      * @mbg.generated
      */
@@ -391,9 +391,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 第一张营业执照文件名称<br/>
-     * platform_merchant.trading_certificate_first_file_name
+     * merchant.trading_certificate_first_file_name
      *
-     * @param tradingCertificateFirstFileName 值对应 platform_merchant.trading_certificate_first_file_name
+     * @param tradingCertificateFirstFileName 值对应 merchant.trading_certificate_first_file_name
      *
      * @mbg.generated
      */
@@ -403,9 +403,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 第一张营业执照url<br/>
-     * 返回值对应的表列名 platform_merchant.trading_certificate_first_file_url
+     * 返回值对应的表列名 merchant.trading_certificate_first_file_url
      *
-     * @return 返回值对应 platform_merchant.trading_certificate_first_file_url
+     * @return 返回值对应 merchant.trading_certificate_first_file_url
      *
      * @mbg.generated
      */
@@ -415,9 +415,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 第一张营业执照url<br/>
-     * platform_merchant.trading_certificate_first_file_url
+     * merchant.trading_certificate_first_file_url
      *
-     * @param tradingCertificateFirstFileUrl 值对应 platform_merchant.trading_certificate_first_file_url
+     * @param tradingCertificateFirstFileUrl 值对应 merchant.trading_certificate_first_file_url
      *
      * @mbg.generated
      */
@@ -427,9 +427,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 第二张营业执照名称<br/>
-     * 返回值对应的表列名 platform_merchant.trading_certificate_second_file_name
+     * 返回值对应的表列名 merchant.trading_certificate_second_file_name
      *
-     * @return 返回值对应 platform_merchant.trading_certificate_second_file_name
+     * @return 返回值对应 merchant.trading_certificate_second_file_name
      *
      * @mbg.generated
      */
@@ -439,9 +439,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 第二张营业执照名称<br/>
-     * platform_merchant.trading_certificate_second_file_name
+     * merchant.trading_certificate_second_file_name
      *
-     * @param tradingCertificateSecondFileName 值对应 platform_merchant.trading_certificate_second_file_name
+     * @param tradingCertificateSecondFileName 值对应 merchant.trading_certificate_second_file_name
      *
      * @mbg.generated
      */
@@ -451,9 +451,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 第二张营业执照url<br/>
-     * 返回值对应的表列名 platform_merchant.trading_certificate_second_file_url
+     * 返回值对应的表列名 merchant.trading_certificate_second_file_url
      *
-     * @return 返回值对应 platform_merchant.trading_certificate_second_file_url
+     * @return 返回值对应 merchant.trading_certificate_second_file_url
      *
      * @mbg.generated
      */
@@ -463,9 +463,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 第二张营业执照url<br/>
-     * platform_merchant.trading_certificate_second_file_url
+     * merchant.trading_certificate_second_file_url
      *
-     * @param tradingCertificateSecondFileUrl 值对应 platform_merchant.trading_certificate_second_file_url
+     * @param tradingCertificateSecondFileUrl 值对应 merchant.trading_certificate_second_file_url
      *
      * @mbg.generated
      */
@@ -475,9 +475,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 第三张营业执照名称<br/>
-     * 返回值对应的表列名 platform_merchant.trading_certificate_third_file_name
+     * 返回值对应的表列名 merchant.trading_certificate_third_file_name
      *
-     * @return 返回值对应 platform_merchant.trading_certificate_third_file_name
+     * @return 返回值对应 merchant.trading_certificate_third_file_name
      *
      * @mbg.generated
      */
@@ -487,9 +487,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 第三张营业执照名称<br/>
-     * platform_merchant.trading_certificate_third_file_name
+     * merchant.trading_certificate_third_file_name
      *
-     * @param tradingCertificateThirdFileName 值对应 platform_merchant.trading_certificate_third_file_name
+     * @param tradingCertificateThirdFileName 值对应 merchant.trading_certificate_third_file_name
      *
      * @mbg.generated
      */
@@ -499,9 +499,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 第三张营业执照url<br/>
-     * 返回值对应的表列名 platform_merchant.trading_certificate_third_file_url
+     * 返回值对应的表列名 merchant.trading_certificate_third_file_url
      *
-     * @return 返回值对应 platform_merchant.trading_certificate_third_file_url
+     * @return 返回值对应 merchant.trading_certificate_third_file_url
      *
      * @mbg.generated
      */
@@ -511,9 +511,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 第三张营业执照url<br/>
-     * platform_merchant.trading_certificate_third_file_url
+     * merchant.trading_certificate_third_file_url
      *
-     * @param tradingCertificateThirdFileUrl 值对应 platform_merchant.trading_certificate_third_file_url
+     * @param tradingCertificateThirdFileUrl 值对应 merchant.trading_certificate_third_file_url
      *
      * @mbg.generated
      */
@@ -523,9 +523,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 公司经营执照名称<br/>
-     * 返回值对应的表列名 platform_merchant.business_license_file_name
+     * 返回值对应的表列名 merchant.business_license_file_name
      *
-     * @return 返回值对应 platform_merchant.business_license_file_name
+     * @return 返回值对应 merchant.business_license_file_name
      *
      * @mbg.generated
      */
@@ -535,9 +535,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 公司经营执照名称<br/>
-     * platform_merchant.business_license_file_name
+     * merchant.business_license_file_name
      *
-     * @param businessLicenseFileName 值对应 platform_merchant.business_license_file_name
+     * @param businessLicenseFileName 值对应 merchant.business_license_file_name
      *
      * @mbg.generated
      */
@@ -547,9 +547,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 公司经营执照url<br/>
-     * 返回值对应的表列名 platform_merchant.business_license_file_url
+     * 返回值对应的表列名 merchant.business_license_file_url
      *
-     * @return 返回值对应 platform_merchant.business_license_file_url
+     * @return 返回值对应 merchant.business_license_file_url
      *
      * @mbg.generated
      */
@@ -559,9 +559,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 公司经营执照url<br/>
-     * platform_merchant.business_license_file_url
+     * merchant.business_license_file_url
      *
-     * @param businessLicenseFileUrl 值对应 platform_merchant.business_license_file_url
+     * @param businessLicenseFileUrl 值对应 merchant.business_license_file_url
      *
      * @mbg.generated
      */
@@ -570,58 +570,58 @@ public class PlatformMerchant implements Serializable {
     }
 
     /**
-     * 创建时间<br/>
-     * 返回值对应的表列名 platform_merchant.create_time
+     * 法人身份证文件名称<br/>
+     * 返回值对应的表列名 merchant.legal_person_id_card_file_name
      *
-     * @return 返回值对应 platform_merchant.create_time
+     * @return 返回值对应 merchant.legal_person_id_card_file_name
      *
      * @mbg.generated
      */
-    public Date getCreateTime() {
-        return createTime;
+    public String getLegalPersonIdCardFileName() {
+        return legalPersonIdCardFileName;
     }
 
     /**
-     * 创建时间<br/>
-     * platform_merchant.create_time
+     * 法人身份证文件名称<br/>
+     * merchant.legal_person_id_card_file_name
      *
-     * @param createTime 值对应 platform_merchant.create_time
+     * @param legalPersonIdCardFileName 值对应 merchant.legal_person_id_card_file_name
      *
      * @mbg.generated
      */
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setLegalPersonIdCardFileName(String legalPersonIdCardFileName) {
+        this.legalPersonIdCardFileName = legalPersonIdCardFileName == null ? null : legalPersonIdCardFileName.trim();
     }
 
     /**
-     * 状态（0：已拒绝 1：待审核 2：已通过）<br/>
-     * 返回值对应的表列名 platform_merchant.status
+     * 法人身份证文件路径<br/>
+     * 返回值对应的表列名 merchant.legal_person_id_card_file_url
      *
-     * @return 返回值对应 platform_merchant.status
+     * @return 返回值对应 merchant.legal_person_id_card_file_url
      *
      * @mbg.generated
      */
-    public Integer getStatus() {
-        return status;
+    public String getLegalPersonIdCardFileUrl() {
+        return legalPersonIdCardFileUrl;
     }
 
     /**
-     * 状态（0：已拒绝 1：待审核 2：已通过）<br/>
-     * platform_merchant.status
+     * 法人身份证文件路径<br/>
+     * merchant.legal_person_id_card_file_url
      *
-     * @param status 值对应 platform_merchant.status
+     * @param legalPersonIdCardFileUrl 值对应 merchant.legal_person_id_card_file_url
      *
      * @mbg.generated
      */
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setLegalPersonIdCardFileUrl(String legalPersonIdCardFileUrl) {
+        this.legalPersonIdCardFileUrl = legalPersonIdCardFileUrl == null ? null : legalPersonIdCardFileUrl.trim();
     }
 
     /**
      * 审核人<br/>
-     * 返回值对应的表列名 platform_merchant.auditor
+     * 返回值对应的表列名 merchant.auditor
      *
-     * @return 返回值对应 platform_merchant.auditor
+     * @return 返回值对应 merchant.auditor
      *
      * @mbg.generated
      */
@@ -631,9 +631,9 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 审核人<br/>
-     * platform_merchant.auditor
+     * merchant.auditor
      *
-     * @param auditor 值对应 platform_merchant.auditor
+     * @param auditor 值对应 merchant.auditor
      *
      * @mbg.generated
      */
@@ -642,34 +642,10 @@ public class PlatformMerchant implements Serializable {
     }
 
     /**
-     * 审核时间(审核通过为入驻时间）<br/>
-     * 返回值对应的表列名 platform_merchant.auditor_time
-     *
-     * @return 返回值对应 platform_merchant.auditor_time
-     *
-     * @mbg.generated
-     */
-    public Date getAuditorTime() {
-        return auditorTime;
-    }
-
-    /**
-     * 审核时间(审核通过为入驻时间）<br/>
-     * platform_merchant.auditor_time
-     *
-     * @param auditorTime 值对应 platform_merchant.auditor_time
-     *
-     * @mbg.generated
-     */
-    public void setAuditorTime(Date auditorTime) {
-        this.auditorTime = auditorTime;
-    }
-
-    /**
      * 备注<br/>
-     * 返回值对应的表列名 platform_merchant.remark
+     * 返回值对应的表列名 merchant.remark
      *
-     * @return 返回值对应 platform_merchant.remark
+     * @return 返回值对应 merchant.remark
      *
      * @mbg.generated
      */
@@ -679,14 +655,38 @@ public class PlatformMerchant implements Serializable {
 
     /**
      * 备注<br/>
-     * platform_merchant.remark
+     * merchant.remark
      *
-     * @param remark 值对应 platform_merchant.remark
+     * @param remark 值对应 merchant.remark
      *
      * @mbg.generated
      */
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    /**
+     * 创建时间<br/>
+     * 返回值对应的表列名 merchant.create_time
+     *
+     * @return 返回值对应 merchant.create_time
+     *
+     * @mbg.generated
+     */
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    /**
+     * 创建时间<br/>
+     * merchant.create_time
+     *
+     * @param createTime 值对应 merchant.create_time
+     *
+     * @mbg.generated
+     */
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     @Override
@@ -700,12 +700,12 @@ public class PlatformMerchant implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        PlatformMerchant other = (PlatformMerchant) that;
+        Merchant other = (Merchant) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getMerchantCode() == null ? other.getMerchantCode() == null : this.getMerchantCode().equals(other.getMerchantCode()))
             && (this.getMerchantName() == null ? other.getMerchantName() == null : this.getMerchantName().equals(other.getMerchantName()))
             && (this.getLegalPersonName() == null ? other.getLegalPersonName() == null : this.getLegalPersonName().equals(other.getLegalPersonName()))
-            && (this.getLegalPersonId() == null ? other.getLegalPersonId() == null : this.getLegalPersonId().equals(other.getLegalPersonId()))
+            && (this.getLegalPersonIdCard() == null ? other.getLegalPersonIdCard() == null : this.getLegalPersonIdCard().equals(other.getLegalPersonIdCard()))
             && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
             && (this.getCreditCode() == null ? other.getCreditCode() == null : this.getCreditCode().equals(other.getCreditCode()))
             && (this.getCompanyTel() == null ? other.getCompanyTel() == null : this.getCompanyTel().equals(other.getCompanyTel()))
@@ -718,11 +718,11 @@ public class PlatformMerchant implements Serializable {
             && (this.getTradingCertificateThirdFileUrl() == null ? other.getTradingCertificateThirdFileUrl() == null : this.getTradingCertificateThirdFileUrl().equals(other.getTradingCertificateThirdFileUrl()))
             && (this.getBusinessLicenseFileName() == null ? other.getBusinessLicenseFileName() == null : this.getBusinessLicenseFileName().equals(other.getBusinessLicenseFileName()))
             && (this.getBusinessLicenseFileUrl() == null ? other.getBusinessLicenseFileUrl() == null : this.getBusinessLicenseFileUrl().equals(other.getBusinessLicenseFileUrl()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getLegalPersonIdCardFileName() == null ? other.getLegalPersonIdCardFileName() == null : this.getLegalPersonIdCardFileName().equals(other.getLegalPersonIdCardFileName()))
+            && (this.getLegalPersonIdCardFileUrl() == null ? other.getLegalPersonIdCardFileUrl() == null : this.getLegalPersonIdCardFileUrl().equals(other.getLegalPersonIdCardFileUrl()))
             && (this.getAuditor() == null ? other.getAuditor() == null : this.getAuditor().equals(other.getAuditor()))
-            && (this.getAuditorTime() == null ? other.getAuditorTime() == null : this.getAuditorTime().equals(other.getAuditorTime()))
-            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()));
+            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
+            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
     }
 
     @Override
@@ -733,7 +733,7 @@ public class PlatformMerchant implements Serializable {
         result = prime * result + ((getMerchantCode() == null) ? 0 : getMerchantCode().hashCode());
         result = prime * result + ((getMerchantName() == null) ? 0 : getMerchantName().hashCode());
         result = prime * result + ((getLegalPersonName() == null) ? 0 : getLegalPersonName().hashCode());
-        result = prime * result + ((getLegalPersonId() == null) ? 0 : getLegalPersonId().hashCode());
+        result = prime * result + ((getLegalPersonIdCard() == null) ? 0 : getLegalPersonIdCard().hashCode());
         result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         result = prime * result + ((getCreditCode() == null) ? 0 : getCreditCode().hashCode());
         result = prime * result + ((getCompanyTel() == null) ? 0 : getCompanyTel().hashCode());
@@ -746,11 +746,11 @@ public class PlatformMerchant implements Serializable {
         result = prime * result + ((getTradingCertificateThirdFileUrl() == null) ? 0 : getTradingCertificateThirdFileUrl().hashCode());
         result = prime * result + ((getBusinessLicenseFileName() == null) ? 0 : getBusinessLicenseFileName().hashCode());
         result = prime * result + ((getBusinessLicenseFileUrl() == null) ? 0 : getBusinessLicenseFileUrl().hashCode());
-        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getLegalPersonIdCardFileName() == null) ? 0 : getLegalPersonIdCardFileName().hashCode());
+        result = prime * result + ((getLegalPersonIdCardFileUrl() == null) ? 0 : getLegalPersonIdCardFileUrl().hashCode());
         result = prime * result + ((getAuditor() == null) ? 0 : getAuditor().hashCode());
-        result = prime * result + ((getAuditorTime() == null) ? 0 : getAuditorTime().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
+        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         return result;
     }
 
@@ -764,7 +764,7 @@ public class PlatformMerchant implements Serializable {
         sb.append(", merchantCode=").append(merchantCode);
         sb.append(", merchantName=").append(merchantName);
         sb.append(", legalPersonName=").append(legalPersonName);
-        sb.append(", legalPersonId=").append(legalPersonId);
+        sb.append(", legalPersonIdCard=").append(legalPersonIdCard);
         sb.append(", companyName=").append(companyName);
         sb.append(", creditCode=").append(creditCode);
         sb.append(", companyTel=").append(companyTel);
@@ -777,11 +777,11 @@ public class PlatformMerchant implements Serializable {
         sb.append(", tradingCertificateThirdFileUrl=").append(tradingCertificateThirdFileUrl);
         sb.append(", businessLicenseFileName=").append(businessLicenseFileName);
         sb.append(", businessLicenseFileUrl=").append(businessLicenseFileUrl);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", status=").append(status);
+        sb.append(", legalPersonIdCardFileName=").append(legalPersonIdCardFileName);
+        sb.append(", legalPersonIdCardFileUrl=").append(legalPersonIdCardFileUrl);
         sb.append(", auditor=").append(auditor);
-        sb.append(", auditorTime=").append(auditorTime);
         sb.append(", remark=").append(remark);
+        sb.append(", createTime=").append(createTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

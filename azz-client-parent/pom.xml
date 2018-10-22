@@ -1,0 +1,20 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>azz-client-parent</artifactId>
+	<packaging>pom</packaging>
+	<parent>
+		<groupId>com.azz</groupId>
+		<artifactId>azz-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	
+	<modules>
+		<module>azz-client-pojo</module>
+		<module>azz-client-service</module>
+		<module>azz-client-api</module>
+		<module>azz-client-web</module>
+	</modules>
+	
+</project>

@@ -18,8 +18,10 @@ import com.azz.core.common.errorcode.PlatformUserErrorCode;
 import com.azz.core.exception.BaseException;
 import com.azz.platform.user.api.AuditService;
 import com.azz.platform.user.common.constants.AuditConstants;
-import com.azz.platform.user.mapper.PlatformMerchantMapper;
-import com.azz.platform.user.pojo.PlatformMerchant;
+import com.azz.platform.user.mapper.MerchantApplyMapper;
+import com.azz.platform.user.mapper.MerchantMapper;
+import com.azz.platform.user.pojo.Merchant;
+import com.azz.platform.user.pojo.MerchantApply;
 import com.azz.platform.user.pojo.bo.AuditParam;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
@@ -33,16 +35,19 @@ import com.azz.util.ObjectUtils;
 public class AuditServiceImpl implements AuditService{
     
     @Autowired
-    PlatformMerchantMapper merchantMapper;
+    MerchantApplyMapper merchantApplyMapper;
+    
+    @Autowired
+    MerchantMapper merchantMapper;
     
     @Override
     public JsonResult<String> auditEnterprise(@RequestBody AuditParam param) {
         JSR303ValidateUtils.validate(param);
         
-        PlatformMerchant object = merchantMapper.selectMerchantByCode(param.getMerchantCode());
+        MerchantApply object = merchantApplyMapper.selectMerchantByCode(param.getMerchantCode());
         
         if(ObjectUtils.isNull(object)) {
-            // 商户不存在
+            // 商户不存在无法审核
             throw new BaseException(PlatformUserErrorCode.PLATFORM_MERCHANT_ERROR_NO_EXIST);
         }
        
@@ -60,8 +65,20 @@ public class AuditServiceImpl implements AuditService{
         object.setStatus(param.getStatus());
         object.setAuditor(param.getAuditor());
         object.setAuditorTime(new Date());
+        merchantApplyMapper.updateByPrimaryKeySelective(object);
         
-        merchantMapper.updateByPrimaryKeySelective(object);
+        
+        // 审核通过该企业信息注册到商户表中,拒绝的商户信息将不注册到商户表中依旧保留在申请表中状态为拒绝
+        if(object.getStatus().equals(AuditConstants.AuditStatus.PASSED.getValue())) {
+            Merchant record = new Merchant();
+            record.setMerchantCode(object.getMerchantCode());
+            //record.set
+            
+            
+            merchantMapper.insertSelective(record);
+        }
+        
+        
         return JsonResult.successJsonResult();
     }
 

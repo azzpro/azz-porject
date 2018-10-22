@@ -441,7 +441,6 @@
 				u.user_name like CONCAT('%', #{searchInput}, '%')
 				or u.phone_number like CONCAT('%', #{searchInput}, '%')
 				or u.post_name like CONCAT('%', #{searchInput}, '%')
-				or d.dept_name like CONCAT('%', #{searchInput}, '%')
 	  		)
       	</if>
 		

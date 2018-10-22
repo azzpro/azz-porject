@@ -1,0 +1,18 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: azz-platform-web
+  aop:
+    proxy-target-class: true
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+      
+      
+# shiro登录失效时间      
+shiro:
+  session:
+    timeout: 1800000
+

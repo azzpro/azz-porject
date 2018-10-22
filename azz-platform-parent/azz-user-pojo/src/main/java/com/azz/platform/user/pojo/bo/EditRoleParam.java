@@ -8,10 +8,8 @@
 package com.azz.platform.user.pojo.bo;
 
 import java.io.Serializable;
-import java.util.List;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import lombok.Data;
 

@@ -7,12 +7,14 @@
  
 package com.azz.merchant.service;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.page.Pagination;
-import com.azz.merchant.api.MerchantService;
+import com.azz.exception.JSR303ValidationException;
 import com.azz.merchant.pojo.bo.MerchantRegistParam;
 import com.azz.merchant.pojo.bo.SearchMerchantParam;
 import com.azz.merchant.pojo.vo.MerchantInfo;
@@ -23,25 +25,28 @@ import com.azz.util.JSR303ValidateUtils;
  * @version 1.0
  * @author 黄智聪  2018年10月22日 上午10:27:34
  */
-@RestController
-public class MerchantServiceImpl implements MerchantService{
+@Transactional
+@Service
+public class MerchantService{
    
-    @Override
     public JsonResult<Long> sendVerificationCode(String phoneNumber) {
 	return null;
     }
 
-    @Override
     public JsonResult<String> merchantRegist(@RequestBody MerchantRegistParam param) {
 	// 参数校验
 	JSR303ValidateUtils.validate(param);
 	// 根据短信id查询验证码
 	Long msgId = param.getMsgId();
+	if(msgId == null) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "缺少短信id");
+	}
+	
+	
 	
 	return null;
     }
 
-    @Override
     public JsonResult<Pagination<MerchantInfo>> getMerchantList(SearchMerchantParam param) {
 	
 	return null;

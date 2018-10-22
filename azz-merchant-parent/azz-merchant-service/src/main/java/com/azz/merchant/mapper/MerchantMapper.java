@@ -1,5 +1,6 @@
 package com.azz.merchant.mapper;
 
+
 import com.azz.merchant.pojo.Merchant;
 
 public interface MerchantMapper {

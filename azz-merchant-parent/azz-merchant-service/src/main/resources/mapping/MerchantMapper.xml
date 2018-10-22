@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.test.dao.MerchantMapper">
-  <resultMap id="BaseResultMap" type="com.test.pojo.Merchant">
+<mapper namespace="com.azz.merchant.mapper.MerchantMapper">
+  <resultMap id="BaseResultMap" type="com.azz.merchant.pojo.Merchant">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode" />
     <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
@@ -22,6 +22,12 @@
     <result column="legal_person_id_card_file_name" jdbcType="VARCHAR" property="legalPersonIdCardFileName" />
     <result column="legal_person_id_card_file_url" jdbcType="VARCHAR" property="legalPersonIdCardFileUrl" />
     <result column="auditor" jdbcType="VARCHAR" property="auditor" />
+    <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="salt" jdbcType="VARCHAR" property="salt" />
+    <result column="registered_person" jdbcType="VARCHAR" property="registeredPerson" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="qualification_apply_status" jdbcType="INTEGER" property="qualificationApplyStatus" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
@@ -30,7 +36,8 @@
     credit_code, company_tel, address, trading_certificate_first_file_name, trading_certificate_first_file_url, 
     trading_certificate_second_file_name, trading_certificate_second_file_url, trading_certificate_third_file_name, 
     trading_certificate_third_file_url, business_license_file_name, business_license_file_url, 
-    legal_person_id_card_file_name, legal_person_id_card_file_url, auditor, remark, create_time
+    legal_person_id_card_file_name, legal_person_id_card_file_url, auditor, contact_phone, 
+    password, salt, registered_person, status, qualification_apply_status, remark, create_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -42,7 +49,7 @@
     delete from merchant
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.test.pojo.Merchant">
+  <insert id="insert" parameterType="com.azz.merchant.pojo.Merchant">
     insert into merchant (id, merchant_code, merchant_name, 
       legal_person_name, legal_person_id_card, company_name, 
       credit_code, company_tel, address, 
@@ -51,7 +58,9 @@
       trading_certificate_third_file_name, trading_certificate_third_file_url, 
       business_license_file_name, business_license_file_url, 
       legal_person_id_card_file_name, legal_person_id_card_file_url, 
-      auditor, remark, create_time
+      auditor, contact_phone, password, 
+      salt, registered_person, status, 
+      qualification_apply_status, remark, create_time
       )
     values (#{id,jdbcType=BIGINT}, #{merchantCode,jdbcType=VARCHAR}, #{merchantName,jdbcType=VARCHAR}, 
       #{legalPersonName,jdbcType=VARCHAR}, #{legalPersonIdCard,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
@@ -61,10 +70,12 @@
       #{tradingCertificateThirdFileName,jdbcType=VARCHAR}, #{tradingCertificateThirdFileUrl,jdbcType=VARCHAR}, 
       #{businessLicenseFileName,jdbcType=VARCHAR}, #{businessLicenseFileUrl,jdbcType=VARCHAR}, 
       #{legalPersonIdCardFileName,jdbcType=VARCHAR}, #{legalPersonIdCardFileUrl,jdbcType=VARCHAR}, 
-      #{auditor,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      #{auditor,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{salt,jdbcType=VARCHAR}, #{registeredPerson,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{qualificationApplyStatus,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.test.pojo.Merchant">
+  <insert id="insertSelective" parameterType="com.azz.merchant.pojo.Merchant">
     insert into merchant
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -126,6 +137,24 @@
       </if>
       <if test="auditor != null">
         auditor,
+      </if>
+      <if test="contactPhone != null">
+        contact_phone,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="salt != null">
+        salt,
+      </if>
+      <if test="registeredPerson != null">
+        registered_person,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="qualificationApplyStatus != null">
+        qualification_apply_status,
       </if>
       <if test="remark != null">
         remark,
@@ -195,6 +224,24 @@
       <if test="auditor != null">
         #{auditor,jdbcType=VARCHAR},
       </if>
+      <if test="contactPhone != null">
+        #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null">
+        #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="registeredPerson != null">
+        #{registeredPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="qualificationApplyStatus != null">
+        #{qualificationApplyStatus,jdbcType=INTEGER},
+      </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
@@ -203,7 +250,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.test.pojo.Merchant">
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.merchant.pojo.Merchant">
     update merchant
     <set>
       <if test="merchantCode != null">
@@ -263,6 +310,24 @@
       <if test="auditor != null">
         auditor = #{auditor,jdbcType=VARCHAR},
       </if>
+      <if test="contactPhone != null">
+        contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null">
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="registeredPerson != null">
+        registered_person = #{registeredPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="qualificationApplyStatus != null">
+        qualification_apply_status = #{qualificationApplyStatus,jdbcType=INTEGER},
+      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -272,7 +337,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.test.pojo.Merchant">
+  <update id="updateByPrimaryKey" parameterType="com.azz.merchant.pojo.Merchant">
     update merchant
     set merchant_code = #{merchantCode,jdbcType=VARCHAR},
       merchant_name = #{merchantName,jdbcType=VARCHAR},
@@ -293,6 +358,12 @@
       legal_person_id_card_file_name = #{legalPersonIdCardFileName,jdbcType=VARCHAR},
       legal_person_id_card_file_url = #{legalPersonIdCardFileUrl,jdbcType=VARCHAR},
       auditor = #{auditor,jdbcType=VARCHAR},
+      contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      salt = #{salt,jdbcType=VARCHAR},
+      registered_person = #{registeredPerson,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      qualification_apply_status = #{qualificationApplyStatus,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

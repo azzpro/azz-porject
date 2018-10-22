@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.test.dao.MerchantApplyMapper">
-  <resultMap id="BaseResultMap" type="com.test.pojo.MerchantApply">
+<mapper namespace="com.azz.merchant.mapper.MerchantApplyMapper">
+  <resultMap id="BaseResultMap" type="com.azz.merchant.pojo.MerchantApply">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode" />
     <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
@@ -42,7 +42,7 @@
     delete from merchant_apply
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.test.pojo.MerchantApply">
+  <insert id="insert" parameterType="com.azz.merchant.pojo.MerchantApply">
     insert into merchant_apply (id, merchant_code, merchant_name, 
       legal_person_name, legal_person_id, company_name, 
       credit_code, company_tel, address, 
@@ -62,7 +62,7 @@
       #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{auditor,jdbcType=VARCHAR}, 
       #{auditorTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.test.pojo.MerchantApply">
+  <insert id="insertSelective" parameterType="com.azz.merchant.pojo.MerchantApply">
     insert into merchant_apply
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -201,7 +201,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.test.pojo.MerchantApply">
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.merchant.pojo.MerchantApply">
     update merchant_apply
     <set>
       <if test="merchantCode != null">
@@ -270,7 +270,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.test.pojo.MerchantApply">
+  <update id="updateByPrimaryKey" parameterType="com.azz.merchant.pojo.MerchantApply">
     update merchant_apply
     set merchant_code = #{merchantCode,jdbcType=VARCHAR},
       merchant_name = #{merchantName,jdbcType=VARCHAR},

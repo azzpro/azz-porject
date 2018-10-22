@@ -26,7 +26,6 @@ import com.azz.merchant.pojo.vo.MerchantInfo;
 @FeignClient("azz-merchant-service")
 public interface MerchantService {
     
-    
     /**
      * 
      * <p>根据手机号发送验证码，并返回短信id</p>
@@ -47,8 +46,6 @@ public interface MerchantService {
     @PostMapping("merchantRegist")
     JsonResult<String> merchantRegist(MerchantRegistParam param);
     
-    
-
     /**
      * 
      * <p>查询商户列表--此接口查询的都是审批通过的</p>

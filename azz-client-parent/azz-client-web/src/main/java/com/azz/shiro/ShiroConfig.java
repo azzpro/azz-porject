@@ -21,7 +21,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-/**
+/*
  * <P>
  * TODO
  * </P>
@@ -74,7 +74,7 @@ public class ShiroConfig {
 	return new FilterRegistrationBean(corsFilter);
     }
 
-    /**
+    /*
      * 注入 securityManager
      */
     @Bean
@@ -91,7 +91,7 @@ public class ShiroConfig {
 	return new ShiroSessionManager();
     }
     
-    /**
+    /*
      * 自定义身份认证 realm;
      * <p>
      * 必须写这个类，并加上 @Bean 注解，目的是注入 CustomRealm， 否则会影响 CustomRealm类 中其他类的依赖注入

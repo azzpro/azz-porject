@@ -29,6 +29,8 @@ public class AuditServiceImpl implements AuditService{
     public JsonResult<String> auditEnterprise(@RequestBody AuditParam param) {
         JSR303ValidateUtils.validate(param);
         
+        // 校验商户编码
+        
         
         
         return JsonResult.successJsonResult();

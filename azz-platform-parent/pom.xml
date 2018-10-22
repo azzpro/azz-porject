@@ -11,12 +11,6 @@
 	</parent>
 	
 	<modules>
-		<module>azz-goods-pojo</module>
-		<module>azz-goods-service</module>
-		<module>azz-goods-api</module>
-		<module>azz-order-pojo</module>
-		<module>azz-order-service</module>
-		<module>azz-order-api</module>
 		<module>azz-user-pojo</module>
 		<module>azz-user-service</module>
 		<module>azz-user-api</module>

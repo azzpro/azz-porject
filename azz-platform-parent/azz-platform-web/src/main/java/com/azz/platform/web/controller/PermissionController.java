@@ -19,6 +19,7 @@ import com.azz.platform.user.pojo.bo.AddRoleParam;
 import com.azz.platform.user.pojo.bo.DelRoleParam;
 import com.azz.platform.user.pojo.bo.EditRoleParam;
 import com.azz.platform.user.pojo.bo.SearchRoleParam;
+import com.azz.platform.user.pojo.bo.SetRolePermissionParam;
 import com.azz.platform.user.pojo.vo.Permission;
 import com.azz.platform.user.pojo.vo.RoleInfo;
 import com.azz.utils.WebUtils;
@@ -43,22 +44,22 @@ public class PermissionController {
      * @return
      * @author 黄智聪  2018年10月19日 下午4:12:16
      */
-    @RequestMapping(value = "/addRolePermission")
-    public JsonResult<String> addRolePermission(AddRoleParam param) {
+    @RequestMapping(value = "/addRole")
+    public JsonResult<String> addRole(AddRoleParam param) {
 	param.setCreator(WebUtils.getLoginUser().getUserInfo().getUserCode());
-	return permissionService.addRolePermission(param);
+	return permissionService.addRole(param);
     }
     
     /**
      * 
-     * <p>修改角色权限</p>
+     * <p>修改角色</p
      * @param param
      * @return
      * @author 黄智聪  2018年10月19日 上午9:26:26
      */
-    @RequestMapping(value = "/editRolePermission")
-    public JsonResult<String> editRolePermission(EditRoleParam param) {
-	return permissionService.editRolePermission(param);
+    @RequestMapping(value = "/editRole")
+    public JsonResult<String> editRole(EditRoleParam param) {
+	return permissionService.editRole(param);
     }
     
     /**
@@ -95,6 +96,28 @@ public class PermissionController {
     @RequestMapping(value = "/getPermissions")
     public JsonResult<List<Permission>> getPermissions() {
 	return permissionService.getPermissions();
+    }
+    
+    /**
+     * 
+     * <p>查询角色权限</p>
+     * @return
+     * @author 黄智聪  2018年10月19日 上午9:22:49
+     */
+    @RequestMapping(value = "/getRolePermissions")
+    public JsonResult<List<String>> getRolePermissions(String roleCode) {
+	return permissionService.getRolePermissions(roleCode);
+    }
+    
+    /**
+     * 
+     * <p>设置角色权限</p>
+     * @return
+     * @author 黄智聪  2018年10月19日 上午9:22:49
+     */
+    @RequestMapping(value = "/setRolePermissions")
+    public JsonResult<String> setRolePermissions(SetRolePermissionParam param) {
+	return permissionService.setRolePermissions(param);
     }
 
 }

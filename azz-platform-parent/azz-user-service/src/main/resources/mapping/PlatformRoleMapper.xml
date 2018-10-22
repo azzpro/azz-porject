@@ -194,7 +194,7 @@
 	JOIN platform_user u ON u.user_code = r.creator
 	WHERE u.status != 0 
 		and r.status != 0 
-	<if test="searchInput != null">
+	<if test="searchInput != null and searchInput != '' ">
 		and (
 			r.role_code = #{searchInput}
 			OR r.role_name = #{searchInput}

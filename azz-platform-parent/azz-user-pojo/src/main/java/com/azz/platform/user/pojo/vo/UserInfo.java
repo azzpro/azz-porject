@@ -34,10 +34,14 @@ public class UserInfo {
     private String gender;
 
     private String deptName;
+    
+    private String deptCode;
 
     private String postName;
 
     private String status;
+
+    private String roleCode;
     
     private String roleName;
     

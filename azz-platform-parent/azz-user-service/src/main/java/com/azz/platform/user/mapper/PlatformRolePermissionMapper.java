@@ -1,5 +1,7 @@
 package com.azz.platform.user.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.platform.user.pojo.PlatformRolePermission;
@@ -19,4 +21,6 @@ public interface PlatformRolePermissionMapper {
     int updateByPrimaryKey(PlatformRolePermission record);
     
     int deleteByRoleId(Long roleId);
+    
+    List<String> getPermissionCodesByRoleCode(String roleCode);
 }

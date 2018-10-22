@@ -30,4 +30,5 @@ public interface PlatformRoleMapper {
     PlatformRole hasRoleName(@Param("roleName")String roleName, @Param("roleCode") String roleCode);
     
     List<RoleInfo> getRoleInfoBySearchParam(SearchRoleParam param);
+    
 }

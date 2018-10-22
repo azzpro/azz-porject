@@ -374,6 +374,7 @@
 		WHEN 2 THEN
 			'未知'
 		END AS gender,
+		 d.dept_code AS deptCode,
 		 d.dept_name AS deptName,
 		 u.post_name AS postName,
 		 CASE u. STATUS
@@ -384,6 +385,7 @@
 		WHEN 2 THEN
 			'禁用'
 		END AS STATUS,
+		 r.role_code AS roleCode,
 		 r.role_name AS roleName
 		FROM
 			platform_user u

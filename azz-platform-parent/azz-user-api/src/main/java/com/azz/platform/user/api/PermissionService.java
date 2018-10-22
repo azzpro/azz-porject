@@ -13,12 +13,14 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.platform.user.pojo.bo.AddRoleParam;
 import com.azz.platform.user.pojo.bo.DelRoleParam;
 import com.azz.platform.user.pojo.bo.EditRoleParam;
 import com.azz.platform.user.pojo.bo.SearchRoleParam;
+import com.azz.platform.user.pojo.bo.SetRolePermissionParam;
 import com.azz.platform.user.pojo.vo.Permission;
 import com.azz.platform.user.pojo.vo.RoleInfo;
 
@@ -41,23 +43,23 @@ public interface PermissionService {
     
     /**
      * 
-     * <p>新增角色权限</p>
+     * <p>新增角色</p>
      * @param param
      * @return
      * @author 黄智聪  2018年10月19日 下午6:00:58
      */
-    @PostMapping("addRolePermissions")
-    JsonResult<String> addRolePermission(@RequestBody AddRoleParam param);
+    @PostMapping("addRole")
+    JsonResult<String> addRole(@RequestBody AddRoleParam param);
     
     /**
      * 
-     * <p>修改角色权限</p>
+     * <p>修改角色</p>
      * @param param
      * @return
      * @author 黄智聪  2018年10月19日 下午6:01:10
      */
-    @PostMapping("editRolePermission")
-    JsonResult<String> editRolePermission(@RequestBody EditRoleParam param);
+    @PostMapping("editRole")
+    JsonResult<String> editRole(@RequestBody EditRoleParam param);
     
     /**
      * 
@@ -78,6 +80,25 @@ public interface PermissionService {
      */
     @PostMapping("getRoleList")
     JsonResult<List<RoleInfo>> getRoleList(@RequestBody SearchRoleParam param);
+
+    /**
+     * 
+     * <p>查询角色权限</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月19日 下午6:01:30
+     */
+    @GetMapping("getRolePermissions")
+    JsonResult<List<String>> getRolePermissions(@RequestParam("roleCode") String roleCode);
     
+    /**
+     * 
+     * <p>设置角色权限</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月22日 下午4:30:56
+     */
+    @PostMapping("setRolePermissions")
+    JsonResult<String> setRolePermissions(@RequestBody SetRolePermissionParam param);
 }
 

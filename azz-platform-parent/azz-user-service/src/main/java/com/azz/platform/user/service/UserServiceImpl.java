@@ -223,9 +223,15 @@ public class UserServiceImpl implements UserService {
 	JSR303ValidateUtils.validate(param);
 	String password = param.getPassword();
 	String confirmPassword = param.getConfirmPassword();
-	// 密码与确认密码一致性校验
-	if (!password.equals(confirmPassword)) {
-	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "密码与确认密码不一致");
+
+	Password pwd = null;
+	if (!StringUtils.isBlank(password) || !StringUtils.isBlank(confirmPassword)) {
+	    // 密码与确认密码一致性校验
+	    if (!password.equals(confirmPassword)) {
+		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "密码与确认密码不一致");
+	    }
+	    // 生成盐值加密的密码
+	    pwd = PasswordHelper.encryptPasswordByModel(password);
 	}
 	PlatformDept dept = platformDeptMapper.selectByDeptCode(param.getDeptCode());
 	if (dept == null) {
@@ -254,15 +260,14 @@ public class UserServiceImpl implements UserService {
 	    // 带上用户编码是为了排除当前用户以外是否存在手机了
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "手机号已存在");
 	}
-	
-	// 生成盐值加密的密码
-	Password pwd = PasswordHelper.encryptPasswordByModel(password);
+
 	Date nowDate = new Date();
 	String modifier = param.getModifier();
 	Long userId = user.getId();
 	PlatformUser userRecord = PlatformUser.builder().modifier(modifier).lastModifyTime(nowDate).deptId(dept.getId())
-		.email(param.getEmail()).password(pwd.getPassword()).phoneNumber(param.getPhoneNumber())
-		.postName(param.getPostName()).userName(param.getUserName()).salt(pwd.getSalt()).id(userId).build();
+		.email(param.getEmail()).password(pwd == null ? null : pwd.getPassword())
+		.phoneNumber(param.getPhoneNumber()).postName(param.getPostName()).userName(param.getUserName())
+		.salt(pwd == null ? null : pwd.getSalt()).id(userId).build();
 	platformUserMapper.updateByPrimaryKeySelective(userRecord);
 
 	// 先删除原先的用户与角色的绑定
@@ -300,8 +305,8 @@ public class UserServiceImpl implements UserService {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "用户编码不允许为空");
 	}
 	UserInfo userInfo = platformUserMapper.getUserInfoByUserCode(userCode);
-	if(userInfo == null) {
-	    throw new BaseException(PlatformUserErrorCode.PLATFORM_USER_ERROR_INVALID_USER); 
+	if (userInfo == null) {
+	    throw new BaseException(PlatformUserErrorCode.PLATFORM_USER_ERROR_INVALID_USER);
 	}
 	return JsonResult.successJsonResult(userInfo);
     }
@@ -317,7 +322,7 @@ public class UserServiceImpl implements UserService {
      * @author 黄智聪 2018年10月20日 上午11:29:37
      */
     public void checkStatusExist(int value) {
-	if(!UserStatus.checkStatusExist(value)) {
+	if (!UserStatus.checkStatusExist(value)) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "用户状态不存在");
 	}
     }

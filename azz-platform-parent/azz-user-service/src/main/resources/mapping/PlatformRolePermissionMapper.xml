@@ -119,4 +119,17 @@
     delete from platform_role_permission
     where role_id = #{roleId,jdbcType=BIGINT}
   </delete>
+  
+  <select id="getPermissionCodesByRoleCode" parameterType="string" resultType="string">
+    SELECT
+		p.permission_code
+	FROM
+		platform_role r
+	JOIN platform_role_permission rp ON r.id = rp.role_id
+	JOIN platform_permission p ON p.id = rp.permission_id
+	WHERE
+		p. STATUS = 1
+	AND r.role_code = #{roleCode}
+  </select>
+  
 </mapper>

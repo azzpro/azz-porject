@@ -29,17 +29,17 @@ import com.azz.platform.user.pojo.bo.AddRoleParam;
 import com.azz.platform.user.pojo.bo.DelRoleParam;
 import com.azz.platform.user.pojo.bo.EditRoleParam;
 import com.azz.platform.user.pojo.bo.SearchRoleParam;
+import com.azz.platform.user.pojo.bo.SetRolePermissionParam;
 import com.azz.platform.user.pojo.vo.Permission;
 import com.azz.platform.user.pojo.vo.RoleInfo;
 import com.azz.util.JSR303ValidateUtils;
+import com.azz.util.StringUtils;
 
 /**
- * <P>
- * 权限服务相关接口实现类
- * </P>
  * 
+ * <P>权限服务相关接口实现类</P>
  * @version 1.0
- * @author 刘建麟 2018年10月14日 上午9:27:50
+ * @author 黄智聪  2018年10月22日 下午4:06:22
  */
 @RestController
 public class PermissionServiceImpl implements PermissionService {
@@ -61,7 +61,7 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public JsonResult<String> addRolePermission(@RequestBody AddRoleParam param) {
+    public JsonResult<String> addRole(@RequestBody AddRoleParam param) {
 	// 参数校验
 	this.validateAddRoleParam(param);
 	Date nowDate = new Date();
@@ -70,18 +70,11 @@ public class PermissionServiceImpl implements PermissionService {
 		.roleCode(System.currentTimeMillis() + "")// TODO
 		.roleName(param.getRoleName()).build();
 	platformRoleMapper.insertSelective(roleRecord);
-	List<String> permissionCodes = param.getPermissionCodes();
-	for (String permissionCode : permissionCodes) {
-	    PlatformPermission persmission = platformPermissionMapper.getPermissionByPermissionCode(permissionCode);
-	    PlatformRolePermission rolePermissionRecord = PlatformRolePermission.builder().createTime(nowDate)
-		    .creator(creator).permissionId(persmission.getId()).roleId(roleRecord.getId()).build();
-	    platformRolePermissionMapper.insertSelective(rolePermissionRecord);
-	}
 	return JsonResult.successJsonResult();
     }
 
     @Override
-    public JsonResult<String> editRolePermission(@RequestBody EditRoleParam param) {
+    public JsonResult<String> editRole(@RequestBody EditRoleParam param) {
 	// 参数教研
 	this.validateEditRoleParam(param);
 	Date nowDate = new Date();
@@ -91,19 +84,6 @@ public class PermissionServiceImpl implements PermissionService {
 		.remark(param.getRemark()).roleCode(roleCode)
 		.roleName(param.getRoleName()).build();
 	platformRoleMapper.updateByRoleCode(roleRecord);
-	// 根据角色编码查询当前角色信息
-	PlatformRole role = platformRoleMapper.selectByRoleCode(roleCode);
-	Long roleId = role.getId();
-	// 先将原来角色绑定的权限删除
-	platformRolePermissionMapper.deleteByRoleId(roleId);
-	// 再重新绑定新的权限信息
-	List<String> permissionCodes = param.getPermissionCodes();
-	for (String permissionCode : permissionCodes) {
-	    PlatformPermission persmission = platformPermissionMapper.getPermissionByPermissionCode(permissionCode);
-	    PlatformRolePermission rolePermissionRecord = PlatformRolePermission.builder().createTime(nowDate)
-		    .creator(modifier).permissionId(persmission.getId()).roleId(roleId).build();
-	    platformRolePermissionMapper.insertSelective(rolePermissionRecord);
-	}
 	return JsonResult.successJsonResult();
     }
     
@@ -124,6 +104,38 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public JsonResult<List<RoleInfo>> getRoleList(@RequestBody SearchRoleParam param) {
 	return JsonResult.successJsonResult(platformRoleMapper.getRoleInfoBySearchParam(param));
+    }
+    
+    @Override
+    public JsonResult<List<String>> getRolePermissions(String roleCode) {
+	if(StringUtils.isBlank(roleCode)) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色编码不允许为空");
+	}
+	List<String> permissionCodes = platformRolePermissionMapper.getPermissionCodesByRoleCode(roleCode);
+	return JsonResult.successJsonResult(permissionCodes);
+    }
+    
+    @Override
+    public JsonResult<String> setRolePermissions(@RequestBody SetRolePermissionParam param) {
+	// 参数校验
+	JSR303ValidateUtils.validate(param);
+	// 根据角色编码查询当前角色信息
+	PlatformRole role = platformRoleMapper.selectByRoleCode(param.getRoleCode());
+	if (role == null) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色不存在");
+	}
+	Long roleId = role.getId();
+	// 先将原来角色绑定的权限删除
+	platformRolePermissionMapper.deleteByRoleId(roleId);
+	// 再重新绑定新的权限信息
+	List<String> permissionCodes = param.getPermissionCodes();
+	for (String permissionCode : permissionCodes) {
+	    PlatformPermission persmission = platformPermissionMapper.getPermissionByPermissionCode(permissionCode);
+	    PlatformRolePermission rolePermissionRecord = PlatformRolePermission.builder().createTime(new Date())
+		    .creator(param.getCreator()).permissionId(persmission.getId()).roleId(roleId).build();
+	    platformRolePermissionMapper.insertSelective(rolePermissionRecord);
+	}
+	return JsonResult.successJsonResult();
     }
 
     /**

@@ -5,7 +5,7 @@
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
 
-package com.azz.shiro;
+package com.azz.merchant.shiro;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -21,8 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.exception.SuppressedException;
-import com.azz.platform.user.api.UserService;
-import com.azz.platform.user.pojo.bo.LoginParam;
+import com.azz.merchant.api.MerchantService;
+import com.azz.merchant.pojo.bo.LoginParam;
 
 /**
  * <P>
@@ -35,7 +35,7 @@ import com.azz.platform.user.pojo.bo.LoginParam;
 public class CustomRealm extends AuthorizingRealm {
 
     @Autowired
-    UserService userService;
+    MerchantService merchantService;
 
     /**
      * 获取身份验证信息 Shiro中，最终是通过 Realm 来获取应用程序中的用户、角色及权限信息的。
@@ -51,7 +51,7 @@ public class CustomRealm extends AuthorizingRealm {
 	String phoneNumber = token.getUsername();
 	String password = new String((char[]) token.getCredentials());
 	LoginParam param = new LoginParam(phoneNumber, password);
-	JsonResult<String> jr = userService.loginAuth(param);
+	JsonResult<String> jr = merchantService.loginAuth(param);
 	if(jr.getCode() != SystemErrorCode.SUCCESS.getCode()) {
 	    AuthenticationException authException = new AuthenticationException();
 	    authException.addSuppressed(new SuppressedException(jr.getCode(),jr.getMsg()));

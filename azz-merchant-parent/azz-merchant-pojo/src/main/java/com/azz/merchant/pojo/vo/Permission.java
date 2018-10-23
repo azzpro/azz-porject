@@ -1,36 +1,38 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2018年10月22日 上午11:18:29
+ * Create on 2018年10月22日 下午8:05:31
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
 package com.azz.merchant.pojo.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * <P>TODO</P>
  * @version 1.0
- * @author 黄智聪  2018年10月22日 上午11:18:29
+ * @author 黄智聪  2018年10月22日 下午8:05:31
  */
 @Data
-public class MerchantInfo {
+@NoArgsConstructor
+@AllArgsConstructor
+public class Permission {
     
-    private String merchantCode;
+    private String permissionCode;
     
-    private String companyName;
+    private String parentPermissionCode;
     
-    private String phoneNumber;
+    private String permissionName;
     
-    private String registeredPerson;
+    private Integer level;
     
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")
-    private String registeredTime;
-    
-    private String status;
-    
+    /**
+     *  是否选中  默认否
+     */
+    private int isSelected = 0;
+
 }
 

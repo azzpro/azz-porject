@@ -7,7 +7,9 @@
 
 package com.azz.merchant.service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,22 +22,30 @@ import com.azz.core.common.constants.MessageConstants.MessagePlatform;
 import com.azz.core.common.constants.MessageConstants.MessageSendStatus;
 import com.azz.core.common.constants.MessageConstants.MessageType;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
+import com.azz.core.common.errorcode.ShiroAuthErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.common.page.Pagination;
+import com.azz.core.constants.MerchantConstants.QualificationApplyStatus;
+import com.azz.core.exception.ShiroAuthException;
 import com.azz.exception.JSR303ValidationException;
-import com.azz.merchant.constants.MerchantConstants.QualificationApplyStatus;
 import com.azz.merchant.mapper.MerchantAddressMapper;
 import com.azz.merchant.mapper.MerchantMapper;
+import com.azz.merchant.mapper.MerchantPermissionMapper;
 import com.azz.merchant.mapper.MsgLogMapper;
 import com.azz.merchant.pojo.Merchant;
 import com.azz.merchant.pojo.MerchantAddress;
 import com.azz.merchant.pojo.MsgLog;
 import com.azz.merchant.pojo.bo.CompleteMerchantInfoParam;
+import com.azz.merchant.pojo.bo.LoginParam;
 import com.azz.merchant.pojo.bo.MerchantRegistParam;
 import com.azz.merchant.pojo.bo.SearchMerchantParam;
+import com.azz.merchant.pojo.vo.LoginMerchantInfo;
+import com.azz.merchant.pojo.vo.Menu;
 import com.azz.merchant.pojo.vo.MerchantInfo;
+import com.azz.merchant.pojo.vo.MerchantPermissionInfo;
 import com.azz.util.DateUtils;
 import com.azz.util.JSR303ValidateUtils;
+import com.azz.util.PasswordHelper;
 import com.azz.util.RandomStringUtils;
 import com.azz.util.StringUtils;
 
@@ -43,7 +53,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * <P>
- * TODO
+ * 商户服务类
  * </P>
  * 
  * @version 1.0
@@ -62,7 +72,48 @@ public class MerchantService {
     
     @Autowired
     private MerchantAddressMapper merchantAddressMapper;
-
+    
+    @Autowired
+    private MerchantPermissionMapper merchantPermissionMapper;
+    
+    /**
+     * 
+     * <p>商户登录认证</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月23日 下午3:49:33
+     */
+    public JsonResult<String> loginAuth(@RequestBody LoginParam param) {
+	String phoneNumber = param.getPhoneNumber();
+	String password = param.getPassword();
+	Merchant platformUser = merchantMapper.getMerchantByPhoneNumber(phoneNumber);
+	if (platformUser == null) {// 无效用户
+	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "无效用户");
+	}
+	boolean isRight = PasswordHelper.checkPassword(password, platformUser.getSalt(), platformUser.getPassword());
+	if (!isRight) {// 与盐值加密的密码不匹配
+	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "手机号或密码错误");
+	}
+	return JsonResult.successJsonResult();
+    }
+    
+    /**
+     * 
+     * <p>获取登录商户信息</p>
+     * @param phoneNumber
+     * @return
+     * @author 黄智聪  2018年10月23日 下午4:23:06
+     */
+    JsonResult<LoginMerchantInfo> getLoginMerchantInfoByPhoneNumber(String phoneNumber){
+	LoginMerchantInfo info = new LoginMerchantInfo();
+	MerchantInfo merchantInfo = merchantMapper.getMerchantInfoByPhoneNumber(phoneNumber);
+	List<MerchantPermissionInfo> merchantPermissions = merchantPermissionMapper.getMerchantPermissionInfoByPhoneNumber(phoneNumber);
+	info.setMerchantInfo(merchantInfo);
+	info.setMerchantPermissions(merchantPermissions);
+	info.setMenus(generateMenuTree(phoneNumber));
+	return JsonResult.successJsonResult(info);
+    }
+    
     /**
      * 
      * <p>
@@ -260,6 +311,45 @@ public class MerchantService {
      */
     private boolean sendPhoneMessage(String phoneNumber) {
 	return false;
+    }
+    
+    /**
+     * 
+     * <p>
+     * 根据手机号查询当前商户角色并生成菜单树
+     * </p>
+     * 
+     * @param phoneNumber
+     *            手机号
+     * @return
+     * @author 黄智聪 2018年10月19日 上午10:36:34
+     */
+    private List<Menu> generateMenuTree(String phoneNumber) {
+	// 根据手机号查询所有一级菜单权限
+	List<MerchantPermissionInfo> oneMenuPermissions = merchantPermissionMapper
+		.getMerchantPermissionInfoByPhoneNumberAndLevel(phoneNumber, 1);
+	// 根据手机号查询所有二级菜单权限
+	List<MerchantPermissionInfo> twoMenuPermissions = merchantPermissionMapper
+		.getMerchantPermissionInfoByPhoneNumberAndLevel(phoneNumber, 2);
+	List<Menu> oneLevelMenus = new ArrayList<>();
+	for (MerchantPermissionInfo oneMenuPermission : oneMenuPermissions) {
+	    // 一级菜单的权限编码
+	    String oneLevelPermissionCode = oneMenuPermission.getPermissionCode();
+	    List<Menu> twoLevelMenus = new ArrayList<>();
+	    for (MerchantPermissionInfo twoMenuPermission : twoMenuPermissions) {
+		// 二级菜单的父级权限编码
+		String twoLevelPermissionCode = twoMenuPermission.getParentPermissionCode();
+		if (twoLevelPermissionCode.equals(oneLevelPermissionCode)) {// 一二级菜单进行分类
+		    Menu twoLevelMenu = new Menu(twoMenuPermission.getPermissionName(), twoMenuPermission.getPageUrl(),
+			    twoMenuPermission.getIcon(), null);
+		    twoLevelMenus.add(twoLevelMenu);
+		}
+	    }
+	    Menu oneLevelMenu = new Menu(oneMenuPermission.getPermissionName(), oneMenuPermission.getPageUrl(),
+		    oneMenuPermission.getIcon(), twoLevelMenus);
+	    oneLevelMenus.add(oneLevelMenu);
+	}
+	return oneLevelMenus;
     }
 
 }

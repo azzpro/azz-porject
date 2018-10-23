@@ -11,11 +11,14 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
+import com.azz.merchant.pojo.bo.LoginParam;
 import com.azz.merchant.pojo.bo.MerchantRegistParam;
 import com.azz.merchant.pojo.bo.SearchMerchantParam;
+import com.azz.merchant.pojo.vo.LoginMerchantInfo;
 import com.azz.merchant.pojo.vo.MerchantInfo;
 
 /**
@@ -25,6 +28,26 @@ import com.azz.merchant.pojo.vo.MerchantInfo;
  */
 @FeignClient("azz-merchant-service")
 public interface MerchantService {
+    
+    /**
+     * 
+     * <p>商户登录认证</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月23日 下午3:49:33
+     */
+    @PostMapping("loginAuth")
+    JsonResult<String> loginAuth(@RequestBody LoginParam param);
+    
+    /**
+     * 
+     * <p>获取登录商户信息</p>
+     * @param phoneNumber
+     * @return
+     * @author 黄智聪  2018年10月23日 下午4:22:14
+     */
+    @GetMapping("getLoginMerchantInfoByPhoneNumber")
+    JsonResult<LoginMerchantInfo> getLoginMerchantInfoByPhoneNumber(@RequestParam("phoneNumber") String phoneNumber);
     
     /**
      * 

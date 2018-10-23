@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
-import com.azz.system.pojo.SystemMsgTemplate;
 import com.azz.system.service.SystemImageService;
 
 /**

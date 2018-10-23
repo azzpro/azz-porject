@@ -45,7 +45,19 @@
 		</javaClientGenerator>
 		
 		<!-- 要生成哪些表 -->
-		<table tableName="merchant_address" domainObjectName="MerchantAddress"
+		<table tableName="merchant_permission" domainObjectName="MerchantPermission"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false"></table>
+		<table tableName="merchant_role" domainObjectName="MerchantRole"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false"></table>
+		<table tableName="merchant_role_permission" domainObjectName="MerchantRolePermission"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false"></table>
+		<table tableName="merchant_role_ref" domainObjectName="MerchantRoleRef"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
 			selectByExampleQueryId="false"></table>

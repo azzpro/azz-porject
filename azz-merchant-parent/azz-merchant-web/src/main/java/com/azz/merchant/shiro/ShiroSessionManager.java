@@ -5,7 +5,7 @@
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
-package com.azz.shiro;
+package com.azz.merchant.shiro;
 
 import java.io.Serializable;
 

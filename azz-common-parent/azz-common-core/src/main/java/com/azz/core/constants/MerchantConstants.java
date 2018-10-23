@@ -18,6 +18,8 @@ import lombok.Getter;
  * @author 黄智聪 2018年10月19日 下午2:59:26
  */
 public abstract class MerchantConstants {
+    
+    public static final String LOGIN_MERCHANT = "loginMerchant";
 
     /**
      * 

@@ -5,7 +5,7 @@
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
 
-package com.azz.platform.web.controller;
+package com.azz.merchant.controller;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -18,21 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.ShiroAuthErrorCode;
-import com.azz.core.common.page.Pagination;
-import com.azz.core.constants.UserConstants;
+import com.azz.core.constants.MerchantConstants;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.core.exception.SuppressedException;
-import com.azz.platform.user.api.UserService;
-import com.azz.platform.user.pojo.bo.AddUserParam;
-import com.azz.platform.user.pojo.bo.EditPasswordParam;
-import com.azz.platform.user.pojo.bo.EditUserParam;
-import com.azz.platform.user.pojo.bo.EnableOrDisableOrDelUserParam;
-import com.azz.platform.user.pojo.bo.LoginParam;
-import com.azz.platform.user.pojo.bo.SearchUserParam;
-import com.azz.platform.user.pojo.vo.LoginUserInfo;
-import com.azz.platform.user.pojo.vo.UserInfo;
+import com.azz.merchant.api.MerchantService;
+import com.azz.merchant.pojo.bo.LoginParam;
+import com.azz.merchant.pojo.vo.LoginMerchantInfo;
+import com.azz.merchant.utils.WebUtils;
 import com.azz.util.JSR303ValidateUtils;
-import com.azz.utils.WebUtils;
 
 /**
  * 
@@ -44,14 +37,14 @@ import com.azz.utils.WebUtils;
  * @author 黄智聪 2018年10月17日 下午1:42:55
  */
 @RestController
-@RequestMapping("/azz/api/user")
-public class UserController {
+@RequestMapping("/azz/api/merchant")
+public class MerchantController {
 
     @Value("${shiro.session.timeout}")
     private Long sessionTimeout;
 
     @Autowired
-    UserService userService;
+    MerchantService merchantService;
 
     /**
      * 
@@ -109,7 +102,7 @@ public class UserController {
      * @author 黄智聪 2018年10月17日 下午5:50:02
      */
     @RequestMapping(value = "/login")
-    public JsonResult<LoginUserInfo> login(LoginParam param) {
+    public JsonResult<LoginMerchantInfo> login(LoginParam param) {
 	JSR303ValidateUtils.validate(param);
 	// 从SecurityUtils里边创建一个 subject
 	Subject subject = SecurityUtils.getSubject();
@@ -124,15 +117,15 @@ public class UserController {
 	    Throwable[] throwables = e.getSuppressed();
 	    int code = ((SuppressedException) throwables[0]).getCode();
 	    String msg = ((SuppressedException) throwables[0]).getMessage();
-	    JsonResult<LoginUserInfo> jr = new JsonResult<>();
+	    JsonResult<LoginMerchantInfo> jr = new JsonResult<>();
 	    jr.setCode(code);
 	    jr.setMsg(msg);
 	    return jr;
 	}
-	JsonResult<LoginUserInfo> jr = userService.getLoginUserInfoByPhoneNumber(param.getPhoneNumber());
-	LoginUserInfo loginUser = jr.getData();
-	loginUser.setSessionId(subject.getSession().getId());
-	WebUtils.setShiroSessionAttr(UserConstants.LOGIN_USER, loginUser);
+	JsonResult<LoginMerchantInfo> jr = merchantService.getLoginMerchantInfoByPhoneNumber(param.getPhoneNumber());
+	LoginMerchantInfo loginMerchant = jr.getData();
+	loginMerchant.setSessionId(subject.getSession().getId());
+	WebUtils.setShiroSessionAttr(MerchantConstants.LOGIN_MERCHANT, loginMerchant);
 	return jr;
     }
     
@@ -147,93 +140,4 @@ public class UserController {
 	return JsonResult.successJsonResult();
     }
 
-    /**
-     * <p>
-     * 修改密码
-     * </p>
-     * 
-     * @param param
-     * @return
-     * @author 彭斌 2018年10月18日 下午3:02:23
-     */
-    @RequestMapping(value = "/editPassword")
-    public JsonResult<String> editPassword(EditPasswordParam param){
-        param.setUserInfo(WebUtils.getLoginUser().getUserInfo());
-        return userService.editPassword(param);
-    }
-    
-    /**
-     * <p>
-     * 新增用户
-     * </p>
-     * 
-     * @param param
-     * @return
-     * @author 黄智聪 2018年10月18日 下午3:02:23
-     */
-    @RequestMapping(value = "/addUser")
-    public JsonResult<String> addUser(AddUserParam param){
-        param.setCreator(WebUtils.getLoginUser().getUserInfo().getUserCode());
-        return userService.addUser(param);
-    }
-    
-    /**
-     * <p>
-     * 修改用户
-     * </p>
-     * 
-     * @param param
-     * @return
-     * @author 黄智聪 2018年10月18日 下午3:02:23
-     */
-    @RequestMapping(value = "/editUser")
-    public JsonResult<String> editUser(EditUserParam param){
-        param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
-        return userService.editUser(param);
-    }
-    
-    /**
-     * <p>
-     * 根据条件查询用户列表
-     * </p>
-     * 
-     * @param param
-     * @return
-     * @author 黄智聪 2018年10月18日 下午3:02:23
-     */
-    @RequestMapping(value = "/getUserList")
-    public JsonResult<Pagination<UserInfo>> getUserList(SearchUserParam param){
-        return userService.getUserList(param);
-    }
-    
-    /**
-     * <p>
-     * 修改用户状态（禁用、启用、删除）
-     * </p>
-     * 
-     * @param param
-     * @return
-     * @author 黄智聪 2018年10月18日 下午3:02:23
-     */
-    @RequestMapping(value = "/editUserStatus")
-    public JsonResult<String> disableUser(EnableOrDisableOrDelUserParam param){
-	return userService.enableOrDisableOrDelUser(param);
-    }
-    
-    /**
-     * <p>
-     * 查询用户详情
-     * </p>
-     * 
-     * @param param
-     * @return
-     * @author 黄智聪 2018年10月18日 下午3:02:23
-     */
-    @RequestMapping(value = "/getUserInfo")
-    public JsonResult<UserInfo> getUserInfo(String userCode){
-	return userService.getUserInfo(userCode);
-    }
-    
-    
-    
 }

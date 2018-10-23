@@ -25,6 +25,8 @@ public abstract class AuditConstants {
     	
         PASSED(2, "已通过");
     	
+        
+        
     	@Getter
     	private int value;
     	

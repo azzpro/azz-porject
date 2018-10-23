@@ -296,7 +296,37 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
-  <select id="" parameterType="" resultType="">
-  	
+  <select id="selectByCodeAndStatus" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from merchant_apply
+    where merchant_code = #{merchantCode,jdbcType=VARCHAR} and status = 1
+  </select>
+  
+  <select id="selectMerchantInfoByCode" parameterType="java.lang.String" resultType="com.azz.platform.merchant.pojo.vo.MerchantInfo">
+  	SELECT
+		ma.merchant_code AS merchantCode,
+		ma.merchant_name AS merchantName,
+		ma.status AS status,
+		ma.create_time AS createTime,
+		ma.legal_person_id AS legalPersonIdCard,
+		ma.legal_person_name AS legalPersonName,
+		ma.company_name AS companyName,
+		ma.credit_code AS creditCode,
+		ma.company_tel AS companyTel,
+		ma.address AS address,
+	    ma.trading_certificate_first_file_name AS tradingCertificateFirstFileName,
+	    ma.trading_certificate_first_file_url AS tradingCertificateFirstFileUrl,
+	  	ma.trading_certificate_second_file_name AS tradingCertificateSecondFileName,
+	  	ma.trading_certificate_second_file_url AS tradingCertificateSecondFileUrl,
+	  	ma.trading_certificate_third_file_name AS tradingCertificateThirdFileName,
+	  	ma.trading_certificate_third_file_url AS tradingCertificateThirdFileUrl,
+	  	ma.business_license_file_name AS businessLicenseFileName,
+	  	ma.business_license_file_url AS businessLicenseFileUrl
+	FROM
+		merchant_apply ma
+	WHERE ma.merchant_code = #{merchantCode,jdbcType=VARCHAR} 
+	ORDER BY ma.create_time DESC
+	LIMIT 1
   </select>
 </mapper>

@@ -197,7 +197,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
-  <select id="getMerchantPermissionInfoByPhoneNumberAndLevel" parameterType="string" resultType="com.azz.merchant.pojo.vo.MerchantPermissionInfo">
+  <select id="getMerchantPermissionInfoByPhoneNumber" parameterType="string" resultType="com.azz.merchant.pojo.vo.MerchantPermissionInfo">
 	  SELECT
 			p.permission_code AS permissionCode,
 			p.permission_name AS permissionName,
@@ -218,7 +218,7 @@
 		AND  m.contact_phone = #{phoneNumber}
   </select>
   
-  <select id="getMerchantPermissionByPhoneNumberAndLevel" resultType="com.azz.merchant.pojo.vo.MerchantPermissionInfo">
+  <select id="getMerchantPermissionInfoByPhoneNumberAndLevel" resultType="com.azz.merchant.pojo.vo.MerchantPermissionInfo">
 	  SELECT
 			p.permission_code AS permissionCode,
 			p.permission_name AS permissionName,
@@ -237,11 +237,8 @@
 			p. STATUS = 1
 		AND r. STATUS = 1
 		AND p.level = #{level}
-		AND  u.phone_number = #{phoneNumber}
+		AND  m.contact_phone = #{phoneNumber}
   </select>
-  
-  
-  
   
   <select id="getPermissionByPermissionCode" parameterType="string" resultMap="BaseResultMap">
     select 

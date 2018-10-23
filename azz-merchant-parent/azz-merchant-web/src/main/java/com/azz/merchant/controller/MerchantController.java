@@ -13,6 +13,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +23,9 @@ import com.azz.core.constants.MerchantConstants;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.core.exception.SuppressedException;
 import com.azz.merchant.api.MerchantService;
+import com.azz.merchant.pojo.bo.CompleteMerchantInfoParam;
 import com.azz.merchant.pojo.bo.LoginParam;
+import com.azz.merchant.pojo.bo.MerchantRegistParam;
 import com.azz.merchant.pojo.vo.LoginMerchantInfo;
 import com.azz.merchant.utils.WebUtils;
 import com.azz.util.JSR303ValidateUtils;
@@ -70,6 +73,17 @@ public class MerchantController {
     @RequestMapping(value = "/noPermission")
     public void notRole() {
 	throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_NO_PERMISSION);
+    }
+    
+    /**
+     * 
+     * <p>供前端调用，测试是否已经登录失效</p>
+     * @return
+     * @author 黄智聪  2018年10月19日 上午9:22:49
+     */
+    @RequestMapping(value = "/check")
+    public JsonResult<String> check() {
+	return JsonResult.successJsonResult();
     }
 
     /**
@@ -128,16 +142,29 @@ public class MerchantController {
 	WebUtils.setShiroSessionAttr(MerchantConstants.LOGIN_MERCHANT, loginMerchant);
 	return jr;
     }
+
+    /**
+     * 
+     * <p>商户注册</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月23日 下午6:37:26
+     */
+    @RequestMapping(value = "/regist")
+    public JsonResult<String> merchantRegist(MerchantRegistParam param) {
+	return merchantService.merchantRegist(param);
+    }
     
     /**
      * 
-     * <p>供前端调用，测试是否已经登录失效</p>
+     * <p>完善商户信息</p>
+     * @param param
      * @return
-     * @author 黄智聪  2018年10月19日 上午9:22:49
+     * @author 黄智聪  2018年10月23日 下午8:04:27
      */
-    @RequestMapping(value = "/check")
-    public JsonResult<String> check() {
-	return JsonResult.successJsonResult();
+    @RequestMapping(value = "/completeMerchantInfo")
+    public JsonResult<String> completeMerchantInfo(CompleteMerchantInfoParam param) {
+	return merchantService.completeMerchantInfo(param);
     }
 
 }

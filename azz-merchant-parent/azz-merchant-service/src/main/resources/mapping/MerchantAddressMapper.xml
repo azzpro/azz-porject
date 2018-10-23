@@ -45,84 +45,84 @@
   <insert id="insertSelective" parameterType="com.azz.merchant.pojo.MerchantAddress">
     insert into merchant_address
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if azz.merchant="id != null">
+      <if test="id != null">
         id,
       </if>
-      <if azz.merchant="merchantCode != null">
+      <if test="merchantCode != null">
         merchant_code,
       </if>
-      <if azz.merchant="provinceCode != null">
+      <if test="provinceCode != null">
         province_code,
       </if>
-      <if azz.merchant="provinceName != null">
+      <if test="provinceName != null">
         province_name,
       </if>
-      <if azz.merchant="cityCode != null">
+      <if test="cityCode != null">
         city_code,
       </if>
-      <if azz.merchant="cityName != null">
+      <if test="cityName != null">
         city_name,
       </if>
-      <if azz.merchant="areaCode != null">
+      <if test="areaCode != null">
         area_code,
       </if>
-      <if azz.merchant="areaName != null">
+      <if test="areaName != null">
         area_name,
       </if>
-      <if azz.merchant="detailAddress != null">
+      <if test="detailAddress != null">
         detail_address,
       </if>
-      <if azz.merchant="createTime != null">
+      <if test="createTime != null">
         create_time,
       </if>
-      <if azz.merchant="creator != null">
+      <if test="creator != null">
         creator,
       </if>
-      <if azz.merchant="modifier != null">
+      <if test="modifier != null">
         modifier,
       </if>
-      <if azz.merchant="lastModifyTime != null">
+      <if test="lastModifyTime != null">
         last_modify_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if azz.merchant="id != null">
+      <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if azz.merchant="merchantCode != null">
+      <if test="merchantCode != null">
         #{merchantCode,jdbcType=VARCHAR},
       </if>
-      <if azz.merchant="provinceCode != null">
+      <if test="provinceCode != null">
         #{provinceCode,jdbcType=VARCHAR},
       </if>
-      <if azz.merchant="provinceName != null">
+      <if test="provinceName != null">
         #{provinceName,jdbcType=VARCHAR},
       </if>
-      <if azz.merchant="cityCode != null">
+      <if test="cityCode != null">
         #{cityCode,jdbcType=VARCHAR},
       </if>
-      <if azz.merchant="cityName != null">
+      <if test="cityName != null">
         #{cityName,jdbcType=VARCHAR},
       </if>
-      <if azz.merchant="areaCode != null">
+      <if test="areaCode != null">
         #{areaCode,jdbcType=VARCHAR},
       </if>
-      <if azz.merchant="areaName != null">
+      <if test="areaName != null">
         #{areaName,jdbcType=VARCHAR},
       </if>
-      <if azz.merchant="detailAddress != null">
+      <if test="detailAddress != null">
         #{detailAddress,jdbcType=VARCHAR},
       </if>
-      <if azz.merchant="createTime != null">
+      <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if azz.merchant="creator != null">
+      <if test="creator != null">
         #{creator,jdbcType=VARCHAR},
       </if>
-      <if azz.merchant="modifier != null">
+      <if test="modifier != null">
         #{modifier,jdbcType=VARCHAR},
       </if>
-      <if azz.merchant="lastModifyTime != null">
+      <if test="lastModifyTime != null">
         #{lastModifyTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
@@ -130,40 +130,40 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.azz.merchant.pojo.MerchantAddress">
     update merchant_address
     <set>
-      <if azz.merchant="merchantCode != null">
+      <if test="merchantCode != null">
         merchant_code = #{merchantCode,jdbcType=VARCHAR},
       </if>
-      <if azz.merchant="provinceCode != null">
+      <if test="provinceCode != null">
         province_code = #{provinceCode,jdbcType=VARCHAR},
       </if>
-      <if azz.merchant="provinceName != null">
+      <if test="provinceName != null">
         province_name = #{provinceName,jdbcType=VARCHAR},
       </if>
-      <if azz.merchant="cityCode != null">
+      <if test="cityCode != null">
         city_code = #{cityCode,jdbcType=VARCHAR},
       </if>
-      <if azz.merchant="cityName != null">
+      <if test="cityName != null">
         city_name = #{cityName,jdbcType=VARCHAR},
       </if>
-      <if azz.merchant="areaCode != null">
+      <if test="areaCode != null">
         area_code = #{areaCode,jdbcType=VARCHAR},
       </if>
-      <if azz.merchant="areaName != null">
+      <if test="areaName != null">
         area_name = #{areaName,jdbcType=VARCHAR},
       </if>
-      <if azz.merchant="detailAddress != null">
+      <if test="detailAddress != null">
         detail_address = #{detailAddress,jdbcType=VARCHAR},
       </if>
-      <if azz.merchant="createTime != null">
+      <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if azz.merchant="creator != null">
+      <if test="creator != null">
         creator = #{creator,jdbcType=VARCHAR},
       </if>
-      <if azz.merchant="modifier != null">
+      <if test="modifier != null">
         modifier = #{modifier,jdbcType=VARCHAR},
       </if>
-      <if azz.merchant="lastModifyTime != null">
+      <if test="lastModifyTime != null">
         last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
       </if>
     </set>

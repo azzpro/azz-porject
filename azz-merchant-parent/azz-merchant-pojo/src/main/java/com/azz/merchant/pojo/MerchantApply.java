@@ -4,6 +4,13 @@ package com.azz.merchant.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MerchantApply implements Serializable {
     /**
      * 主键id

@@ -14,12 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
-import com.azz.core.common.page.Pagination;
+import com.azz.merchant.pojo.bo.CompleteMerchantInfoParam;
 import com.azz.merchant.pojo.bo.LoginParam;
 import com.azz.merchant.pojo.bo.MerchantRegistParam;
-import com.azz.merchant.pojo.bo.SearchMerchantParam;
 import com.azz.merchant.pojo.vo.LoginMerchantInfo;
-import com.azz.merchant.pojo.vo.MerchantInfo;
 
 /**
  * <P>TODO</P>
@@ -36,7 +34,7 @@ public interface MerchantService {
      * @return
      * @author 黄智聪  2018年10月23日 下午3:49:33
      */
-    @PostMapping("loginAuth")
+    @PostMapping("/azz/api/merchant/loginAuth")
     JsonResult<String> loginAuth(@RequestBody LoginParam param);
     
     /**
@@ -46,7 +44,7 @@ public interface MerchantService {
      * @return
      * @author 黄智聪  2018年10月23日 下午4:22:14
      */
-    @GetMapping("getLoginMerchantInfoByPhoneNumber")
+    @GetMapping("/azz/api/merchant/getLoginMerchantInfoByPhoneNumber")
     JsonResult<LoginMerchantInfo> getLoginMerchantInfoByPhoneNumber(@RequestParam("phoneNumber") String phoneNumber);
     
     /**
@@ -56,7 +54,7 @@ public interface MerchantService {
      * @return
      * @author 黄智聪  2018年10月22日 下午3:25:21
      */
-    @GetMapping("sendVerificationCode")
+    @GetMapping("/azz/api/merchant/sendVerificationCode")
     JsonResult<Long> sendVerificationCode(String phoneNumber);
     
     /**
@@ -66,18 +64,18 @@ public interface MerchantService {
      * @return
      * @author 黄智聪  2018年10月22日 下午3:01:34
      */
-    @PostMapping("merchantRegist")
+    @PostMapping("/azz/api/merchant/merchantRegist")
     JsonResult<String> merchantRegist(MerchantRegistParam param);
     
     /**
      * 
-     * <p>查询商户列表--此接口查询的都是审批通过的</p>
+     * <p>完善商户信息</p>
      * @param param
      * @return
-     * @author 黄智聪  2018年10月22日 下午2:40:47
+     * @author 黄智聪  2018年10月23日 下午8:04:02
      */
-    @PostMapping("getMerchantList")
-    JsonResult<Pagination<MerchantInfo>> getMerchantList(@RequestBody SearchMerchantParam param);
+    @PostMapping("/azz/api/merchant/completeMerchantInfo")
+    JsonResult<String> completeMerchantInfo(@RequestBody CompleteMerchantInfoParam param);
     
 }
 

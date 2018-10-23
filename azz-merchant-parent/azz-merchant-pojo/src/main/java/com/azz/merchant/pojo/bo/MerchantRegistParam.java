@@ -34,7 +34,5 @@ public class MerchantRegistParam {
     @NotBlank(message = "确认密码不允许为空")    
     private String confirmPassword;
     
-    private Long msgId;
-    
 }
 

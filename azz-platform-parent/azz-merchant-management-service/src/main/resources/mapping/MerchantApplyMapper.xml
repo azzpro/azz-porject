@@ -325,7 +325,7 @@
 	  	ma.business_license_file_url AS businessLicenseFileUrl
 	FROM
 		merchant_apply ma
-	WHERE ma.merchant_code = #{merchantCode,jdbcType=VARCHAR} 
+	WHERE ma.merchant_code = #{merchantCode,jdbcType=VARCHAR}
 	ORDER BY ma.create_time DESC
 	LIMIT 1
   </select>

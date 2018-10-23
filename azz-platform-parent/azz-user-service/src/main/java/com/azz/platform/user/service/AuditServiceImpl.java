@@ -71,8 +71,14 @@ public class AuditServiceImpl implements AuditService{
         // 审核通过该企业信息注册到商户表中,拒绝的商户信息将不注册到商户表中依旧保留在申请表中状态为拒绝
         if(object.getStatus().equals(AuditConstants.AuditStatus.PASSED.getValue())) {
             Merchant record = new Merchant();
-            record.setMerchantCode(object.getMerchantCode());
-            //record.set
+           /* record.setMerchantCode(object.getMerchantCode());
+            record.setMerchantName(merchantName);
+            record.setLegalPersonName(legalPersonName);
+            record.setLegalPersonIdCard(legalPersonIdCard);
+            record.setCreditCode(creditCode);
+            record.setCompanyTel(companyTel);
+            record.setAddress(address);
+            record.settr*/
             
             
             merchantMapper.insertSelective(record);

@@ -3,6 +3,7 @@ package com.azz.platform.merchant.service;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,6 +28,7 @@ import com.azz.util.ObjectUtils;
  * @version 1.0
  * @author 彭斌 2018年10月20日 下午2:54:40
  */
+@Transactional(rollbackFor=Exception.class)
 @RestController
 public class AuditServiceImpl implements AuditService {
 

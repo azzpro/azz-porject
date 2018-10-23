@@ -36,7 +36,7 @@
       #{msgPlatform,jdbcType=INTEGER}, #{msgType,jdbcType=INTEGER}, #{msgError,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.azz.merchant.pojo.MsgLog">
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="msg_id" parameterType="com.azz.merchant.pojo.MsgLog">
     insert into msg_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="msgId != null">

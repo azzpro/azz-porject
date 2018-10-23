@@ -32,6 +32,7 @@ import com.azz.platform.user.pojo.bo.SearchRoleParam;
 import com.azz.platform.user.pojo.bo.SetRolePermissionParam;
 import com.azz.platform.user.pojo.vo.Permission;
 import com.azz.platform.user.pojo.vo.RoleInfo;
+import com.azz.platform.user.pojo.vo.TreePermission;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
 
@@ -54,9 +55,25 @@ public class PermissionServiceImpl implements PermissionService {
     PlatformPermissionMapper platformPermissionMapper;
 
     @Override
-    public JsonResult<List<Permission>> getPermissions() {
+    public JsonResult<List<TreePermission>> getTreePermissions() {
 	// 从父级编码为0，即一级权限，并以递归的方式查询所有子集权限
-	List<Permission> permissions = getPermissions(PermissionConstants.TOP_PARENT_PERMISSION_CODE);
+	List<TreePermission> permissions = this.getPermissions(PermissionConstants.TOP_PARENT_PERMISSION_CODE);
+	return JsonResult.successJsonResult(permissions);
+    }
+    
+    @Override
+    public JsonResult<List<Permission>> getPermissionList(String roleCode) {
+	List<Permission> permissions = platformPermissionMapper.getAllPermissions();
+	if(StringUtils.isBlank(roleCode)) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色编码不允许为空");
+	}
+	List<String> permissionCodes = platformRolePermissionMapper.getPermissionCodesByRoleCode(roleCode);
+	for (Permission permission : permissions) {
+	    String permissionCode = permission.getPermissionCode();
+	    if(permissionCodes.contains(permissionCode)) {
+		permission.setIsSelected(1);
+	    }
+	}
 	return JsonResult.successJsonResult(permissions);
     }
 
@@ -197,8 +214,8 @@ public class PermissionServiceImpl implements PermissionService {
      * @return
      * @author 黄智聪 2018年10月19日 上午11:20:12
      */
-    private List<Permission> getPermissions(String parentPermissionCode) {
-	List<Permission> allPermissions = new ArrayList<>();
+    private List<TreePermission> getPermissions(String parentPermissionCode) {
+	List<TreePermission> allPermissions = new ArrayList<>();
 	// 当前父级编码下的所有子集权限
 	List<PlatformPermission> childrenPermissions = platformPermissionMapper
 		.getPermissionByParentPermissionCode(parentPermissionCode);
@@ -206,7 +223,7 @@ public class PermissionServiceImpl implements PermissionService {
 	    String childrenPermissionCode = childrenPermission.getPermissionCode();
 	    String childrenPermissionName = childrenPermission.getPermissionName();
 	    int childrenLevel = childrenPermission.getLevel();
-	    allPermissions.add(new Permission(childrenPermissionCode, childrenPermissionName, childrenLevel,
+	    allPermissions.add(new TreePermission(childrenPermissionCode, childrenPermissionName, childrenLevel,
 		    this.getPermissions(childrenPermissionCode)));
 	}
 	return allPermissions;

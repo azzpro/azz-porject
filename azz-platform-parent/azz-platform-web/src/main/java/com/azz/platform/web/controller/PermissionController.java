@@ -20,6 +20,7 @@ import com.azz.platform.user.pojo.bo.DelRoleParam;
 import com.azz.platform.user.pojo.bo.EditRoleParam;
 import com.azz.platform.user.pojo.bo.SearchRoleParam;
 import com.azz.platform.user.pojo.bo.SetRolePermissionParam;
+import com.azz.platform.user.pojo.vo.TreePermission;
 import com.azz.platform.user.pojo.vo.Permission;
 import com.azz.platform.user.pojo.vo.RoleInfo;
 import com.azz.utils.WebUtils;
@@ -89,13 +90,24 @@ public class PermissionController {
     
     /**
      * 
+     * <p>查询所有权限--树状结构</p>
+     * @return
+     * @author 黄智聪  2018年10月19日 上午9:22:49
+     */
+    @RequestMapping(value = "/getTreePermissions")
+    public JsonResult<List<TreePermission>> getTreePermissions() {
+	return permissionService.getTreePermissions();
+    }
+    
+    /**
+     * 
      * <p>查询所有权限</p>
      * @return
      * @author 黄智聪  2018年10月19日 上午9:22:49
      */
-    @RequestMapping(value = "/getPermissions")
-    public JsonResult<List<Permission>> getPermissions() {
-	return permissionService.getPermissions();
+    @RequestMapping(value = "/getPermissionList")
+    public JsonResult<List<Permission>> getPermissionList(String roleCode) {
+	return permissionService.getPermissionList(roleCode);
     }
     
     /**

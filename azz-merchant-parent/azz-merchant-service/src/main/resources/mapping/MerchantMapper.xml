@@ -45,6 +45,14 @@
     from merchant
     where id = #{id,jdbcType=BIGINT}
   </select>
+  
+  <select id="selectByMerchantCode" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant
+    where merchant_code = #{merchantCode}
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from merchant
     where id = #{id,jdbcType=BIGINT}
@@ -368,4 +376,90 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <update id="updateByMerchantCode" parameterType="com.azz.merchant.pojo.Merchant">
+    update merchant
+    <set>
+      <if test="merchantName != null">
+        merchant_name = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonName != null">
+        legal_person_name = #{legalPersonName,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonIdCard != null">
+        legal_person_id_card = #{legalPersonIdCard,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="creditCode != null">
+        credit_code = #{creditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyTel != null">
+        company_tel = #{companyTel,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="tradingCertificateFirstFileName != null">
+        trading_certificate_first_file_name = #{tradingCertificateFirstFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="tradingCertificateFirstFileUrl != null">
+        trading_certificate_first_file_url = #{tradingCertificateFirstFileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="tradingCertificateSecondFileName != null">
+        trading_certificate_second_file_name = #{tradingCertificateSecondFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="tradingCertificateSecondFileUrl != null">
+        trading_certificate_second_file_url = #{tradingCertificateSecondFileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="tradingCertificateThirdFileName != null">
+        trading_certificate_third_file_name = #{tradingCertificateThirdFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="tradingCertificateThirdFileUrl != null">
+        trading_certificate_third_file_url = #{tradingCertificateThirdFileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseFileName != null">
+        business_license_file_name = #{businessLicenseFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseFileUrl != null">
+        business_license_file_url = #{businessLicenseFileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonIdCardFileName != null">
+        legal_person_id_card_file_name = #{legalPersonIdCardFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonIdCardFileUrl != null">
+        legal_person_id_card_file_url = #{legalPersonIdCardFileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="auditor != null">
+        auditor = #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null">
+        contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null">
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="registeredPerson != null">
+        registered_person = #{registeredPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="qualificationApplyStatus != null">
+        qualification_apply_status = #{qualificationApplyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where merchant_code = #{merchantCode,jdbcType=VARCHAR}
+  </update>
+  
 </mapper>

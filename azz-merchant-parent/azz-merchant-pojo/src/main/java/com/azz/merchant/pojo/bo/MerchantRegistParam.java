@@ -7,8 +7,6 @@
  
 package com.azz.merchant.pojo.bo;
 
-import javax.validation.constraints.NotNull;
-
 import org.hibernate.validator.constraints.NotBlank;
 
 import lombok.Data;

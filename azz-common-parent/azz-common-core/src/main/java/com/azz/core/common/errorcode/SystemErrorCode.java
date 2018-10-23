@@ -56,6 +56,8 @@ public class SystemErrorCode extends BaseErrorCode {
     
     public static final SystemErrorCode SYS_ERROR_ILLEGAL_IP = new SystemErrorCode(10020, "非法的IP地址");
     
+    public static final SystemErrorCode SYS_ERROR_MESSAGE_SERVICE_CALL_ERROR = new SystemErrorCode(10021, "短信服务调用出错");
+    
     public SystemErrorCode(int code, String message) {
         super(code, message);
     }

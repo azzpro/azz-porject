@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.merchant.mapper.MerchantAddressMapper">
+  <resultMap id="BaseResultMap" type="com.azz.merchant.pojo.MerchantAddress">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="province_code" jdbcType="VARCHAR" property="provinceCode" />
+    <result column="province_name" jdbcType="VARCHAR" property="provinceName" />
+    <result column="city_code" jdbcType="VARCHAR" property="cityCode" />
+    <result column="city_name" jdbcType="VARCHAR" property="cityName" />
+    <result column="area_code" jdbcType="VARCHAR" property="areaCode" />
+    <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+    <result column="detail_address" jdbcType="VARCHAR" property="detailAddress" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="last_modify_time" jdbcType="TIMESTAMP" property="lastModifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, merchant_code, province_code, province_name, city_code, city_name, area_code, 
+    area_name, detail_address, create_time, creator, modifier, last_modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_address
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from merchant_address
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.merchant.pojo.MerchantAddress">
+    insert into merchant_address (id, merchant_code, province_code, 
+      province_name, city_code, city_name, 
+      area_code, area_name, detail_address, 
+      create_time, creator, modifier, 
+      last_modify_time)
+    values (#{id,jdbcType=BIGINT}, #{merchantCode,jdbcType=VARCHAR}, #{provinceCode,jdbcType=VARCHAR}, 
+      #{provinceName,jdbcType=VARCHAR}, #{cityCode,jdbcType=VARCHAR}, #{cityName,jdbcType=VARCHAR}, 
+      #{areaCode,jdbcType=VARCHAR}, #{areaName,jdbcType=VARCHAR}, #{detailAddress,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
+      #{lastModifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.merchant.pojo.MerchantAddress">
+    insert into merchant_address
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if azz.merchant="id != null">
+        id,
+      </if>
+      <if azz.merchant="merchantCode != null">
+        merchant_code,
+      </if>
+      <if azz.merchant="provinceCode != null">
+        province_code,
+      </if>
+      <if azz.merchant="provinceName != null">
+        province_name,
+      </if>
+      <if azz.merchant="cityCode != null">
+        city_code,
+      </if>
+      <if azz.merchant="cityName != null">
+        city_name,
+      </if>
+      <if azz.merchant="areaCode != null">
+        area_code,
+      </if>
+      <if azz.merchant="areaName != null">
+        area_name,
+      </if>
+      <if azz.merchant="detailAddress != null">
+        detail_address,
+      </if>
+      <if azz.merchant="createTime != null">
+        create_time,
+      </if>
+      <if azz.merchant="creator != null">
+        creator,
+      </if>
+      <if azz.merchant="modifier != null">
+        modifier,
+      </if>
+      <if azz.merchant="lastModifyTime != null">
+        last_modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if azz.merchant="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if azz.merchant="merchantCode != null">
+        #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if azz.merchant="provinceCode != null">
+        #{provinceCode,jdbcType=VARCHAR},
+      </if>
+      <if azz.merchant="provinceName != null">
+        #{provinceName,jdbcType=VARCHAR},
+      </if>
+      <if azz.merchant="cityCode != null">
+        #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if azz.merchant="cityName != null">
+        #{cityName,jdbcType=VARCHAR},
+      </if>
+      <if azz.merchant="areaCode != null">
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if azz.merchant="areaName != null">
+        #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if azz.merchant="detailAddress != null">
+        #{detailAddress,jdbcType=VARCHAR},
+      </if>
+      <if azz.merchant="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if azz.merchant="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if azz.merchant="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if azz.merchant="lastModifyTime != null">
+        #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.merchant.pojo.MerchantAddress">
+    update merchant_address
+    <set>
+      <if azz.merchant="merchantCode != null">
+        merchant_code = #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if azz.merchant="provinceCode != null">
+        province_code = #{provinceCode,jdbcType=VARCHAR},
+      </if>
+      <if azz.merchant="provinceName != null">
+        province_name = #{provinceName,jdbcType=VARCHAR},
+      </if>
+      <if azz.merchant="cityCode != null">
+        city_code = #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if azz.merchant="cityName != null">
+        city_name = #{cityName,jdbcType=VARCHAR},
+      </if>
+      <if azz.merchant="areaCode != null">
+        area_code = #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if azz.merchant="areaName != null">
+        area_name = #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if azz.merchant="detailAddress != null">
+        detail_address = #{detailAddress,jdbcType=VARCHAR},
+      </if>
+      <if azz.merchant="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if azz.merchant="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if azz.merchant="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if azz.merchant="lastModifyTime != null">
+        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.merchant.pojo.MerchantAddress">
+    update merchant_address
+    set merchant_code = #{merchantCode,jdbcType=VARCHAR},
+      province_code = #{provinceCode,jdbcType=VARCHAR},
+      province_name = #{provinceName,jdbcType=VARCHAR},
+      city_code = #{cityCode,jdbcType=VARCHAR},
+      city_name = #{cityName,jdbcType=VARCHAR},
+      area_code = #{areaCode,jdbcType=VARCHAR},
+      area_name = #{areaName,jdbcType=VARCHAR},
+      detail_address = #{detailAddress,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

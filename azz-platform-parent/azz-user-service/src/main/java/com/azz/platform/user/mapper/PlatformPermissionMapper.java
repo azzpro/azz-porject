@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.azz.platform.user.pojo.PlatformPermission;
+import com.azz.platform.user.pojo.vo.Permission;
 import com.azz.platform.user.pojo.vo.UserPermission;
 
 @Mapper
@@ -29,5 +30,7 @@ public interface PlatformPermissionMapper {
     PlatformPermission getPermissionByPermissionCode(String permissionCode);
     
     List<PlatformPermission> getPermissionByParentPermissionCode(String parentPermissionCode);
+    
+    List<Permission> getAllPermissions();
     
 }

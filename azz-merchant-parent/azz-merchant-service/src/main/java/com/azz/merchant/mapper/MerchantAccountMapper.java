@@ -1,7 +1,10 @@
 package com.azz.merchant.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.azz.merchant.pojo.MerchantAccount;
 
+@Mapper
 public interface MerchantAccountMapper {
     int deleteByPrimaryKey(Long id);
 

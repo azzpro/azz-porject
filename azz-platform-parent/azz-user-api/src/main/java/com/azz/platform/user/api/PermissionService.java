@@ -23,6 +23,7 @@ import com.azz.platform.user.pojo.bo.SearchRoleParam;
 import com.azz.platform.user.pojo.bo.SetRolePermissionParam;
 import com.azz.platform.user.pojo.vo.Permission;
 import com.azz.platform.user.pojo.vo.RoleInfo;
+import com.azz.platform.user.pojo.vo.TreePermission;
 
 /**
  * <P>权限服务相关接口</P>
@@ -34,12 +35,21 @@ public interface PermissionService {
     
     /**
      * 
+     * <p>查询所有权限,树状结构</p>
+     * @return
+     * @author 黄智聪  2018年10月19日 下午6:00:40
+     */
+    @GetMapping("getTreePermissions")
+    JsonResult<List<TreePermission>> getTreePermissions();
+    
+    /**
+     * 
      * <p>查询所有权限</p>
      * @return
      * @author 黄智聪  2018年10月19日 下午6:00:40
      */
-    @GetMapping("getPermissions")
-    JsonResult<List<Permission>> getPermissions();
+    @GetMapping("getPermissionList")
+    JsonResult<List<Permission>> getPermissionList(@RequestParam("roleCode") String roleCode);
     
     /**
      * 

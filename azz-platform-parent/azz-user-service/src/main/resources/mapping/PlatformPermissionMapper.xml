@@ -249,6 +249,15 @@
 		AND p.parent_permission_code = #{parentPermissionCode}
   </select>
   
+  <select id="getAllPermissions"  resultType="com.azz.platform.user.pojo.vo.Permission">
+	  SELECT 
+	  		p.permission_code AS permissionCode,
+			p.parent_permission_code AS parentPermissionCode,
+			p.permission_name AS permissionName,
+			p. LEVEL AS level
+	    FROM platform_permission p
+  </select>
+  
   <select id="getPermissionByPermissionCode" parameterType="string" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

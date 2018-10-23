@@ -26,9 +26,9 @@ import com.azz.system.service.SystemImageService;
  */
 @RestController
 @RequestMapping("/azz/api")
-public class SystemMsgController {
+public class SystemUploadController {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(SystemMsgController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SystemUploadController.class);
 	
 	@Autowired
 	private SystemImageService imageService;

@@ -48,8 +48,14 @@ public class SystemImageService {
 	
 	public String uploadImage(String bucketname,String filename,String suffix,String filedata,Integer imageType,Integer plattype){
 		if(StringUtils.isBlank(bucketname)) {
-    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"存储空间不能为空");
+    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"存储空间名称不能为空");
     	}
+		if(!FileConstants.IMAGE_BUCKETNAME.equals(bucketname) || !FileConstants.FILE_BUCKETNAME.equals(bucketname)) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"存储空间名称错误");
+		}
+		if(!bucketNameExist(bucketname)) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"存储空间名称不存在");
+		}
 		if(StringUtils.isBlank(filename)) {
     		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"文件名不能为空");
     	}
@@ -126,7 +132,6 @@ public class SystemImageService {
 		
 		// 创建OSSClient实例。
 		OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
-
 		// 上传文件流。
 		ossClient.putObject(bucketname, finalName.toString(), is);
 		// 关闭OSSClient。

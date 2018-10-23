@@ -13,25 +13,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * <P>图片上传</P>
+ * <P>短信发送</P>
  * @version 1.0
  * @author 刘建麟  2018年10月23日 下午1:47:30
  */
 @FeignClient("azz-system-service")
-public interface SystemImageUploadService {
+public interface SystemSmsSendService {
 	
-	/**
-	 * <p>上传图片</p>
-	 * @param bucketname
-	 * @param filename
-	 * @param suffix
-	 * @param filedata
-	 * @param plattype
-	 * @param imagetype
-	 * @return
-	 * @author 刘建麟  2018年10月23日 下午4:31:52
-	 */
-	@RequestMapping(value="/azz/api/imageUpload",method=RequestMethod.POST)
-	String uploadImage(@RequestParam("bucketname") String bucketname,@RequestParam("filename")String filename,@RequestParam("suffix") String suffix,@RequestParam("filedata") String filedata,@RequestParam("plattype") Integer plattype,@RequestParam("imagetype") Integer imagetype);
+	
+	@RequestMapping(value="/azz/api/smsSend",method=RequestMethod.POST)
+	String smsSend(@RequestParam("phone") String phone,@RequestParam("nickname")String nickname,@RequestParam("template") String template);
 }
 

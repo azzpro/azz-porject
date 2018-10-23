@@ -63,7 +63,7 @@ public class SystemImageService {
     		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"文件后缀不能为空");
     	}
 		//生产环境放开
-		/*if(StringUtils.isBlank(filedata)) {
+		/*if(StringUtils.isBlank(filedata) || filedata.length <= 0) {
     		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"文件数据不能为空");
     	}*/
 		if(null == imageType) {

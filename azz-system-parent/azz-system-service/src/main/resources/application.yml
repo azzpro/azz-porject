@@ -31,3 +31,4 @@ aliyun:
   accessKeyId: LTAIjkAmKGFaL98Y
   accessKeySecret: XmhLjEphQ8IZrhRDptI9WvhxFuaxn0
   endpoint: http://oss-cn-shenzhen.aliyuncs.com
+  signName: 爱智造

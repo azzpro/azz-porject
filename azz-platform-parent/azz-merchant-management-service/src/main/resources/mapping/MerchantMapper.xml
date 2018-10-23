@@ -379,7 +379,7 @@
   <select id="selectMerchantList" parameterType="com.azz.platform.merchant.pojo.bo.SearchMerchantParam" resultType="com.azz.platform.merchant.pojo.vo.MerchantApproval">
   	select 
 		m.merchant_code as merchantCode,
-		m.company_name as companyName,
+		ma.company_name as companyName,
 		m.registered_person as registeredPerson,
 		m.contact_phone as contactPhone,
 		m.qualification_apply_status as status,

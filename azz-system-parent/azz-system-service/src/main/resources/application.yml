@@ -1,8 +1,8 @@
 server:
-  port: 7388
+  port: 7788
 spring:
   application:
-    name: azz-client-service
+    name: azz-system-service
   messages:
     basename: i18n/Messages
   datasource:
@@ -24,4 +24,10 @@ eureka:
 mybatis:
   config-location: classpath:mybatis/mybatis-config.xml
   mapper-locations: classpath:mapping/**/*.xml
-
+  
+aliyun:
+  product: Dysmsapi
+  domain: dysmsapi.aliyuncs.com
+  accessKeyId: LTAIjkAmKGFaL98Y
+  accessKeySecret: XmhLjEphQ8IZrhRDptI9WvhxFuaxn0
+  endpoint: http://oss-cn-shenzhen.aliyuncs.com

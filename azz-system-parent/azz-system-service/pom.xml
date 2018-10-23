@@ -3,11 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>azz-client-service</artifactId>
+	<artifactId>azz-system-service</artifactId>
 	<packaging>jar</packaging>
 	<parent>
 		<groupId>com.azz</groupId>
-		<artifactId>azz-client-parent</artifactId>
+		<artifactId>azz-system-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<dependencies>
@@ -35,7 +35,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.azz</groupId>
-			<artifactId>azz-client-api</artifactId>
+			<artifactId>azz-system-api</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
@@ -44,7 +44,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.azz</groupId>
-			<artifactId>azz-client-pojo</artifactId>
+			<artifactId>azz-system-pojo</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
@@ -56,8 +56,8 @@
 			<artifactId>spring-cloud-starter-eureka</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-config</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -73,8 +73,28 @@
 			<artifactId>azz-common-util</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.azz</groupId>
+			<artifactId>azz-common-core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+  			<groupId>com.aliyun</groupId>
+  			<artifactId>aliyun-java-sdk-core</artifactId>
+  			<version>4.0.6</version>
+		</dependency>
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+		<dependency>
+    		<groupId>com.aliyun.oss</groupId>
+    		<artifactId>aliyun-sdk-oss</artifactId>
+    		<version>2.8.3</version>
+		</dependency>
 	</dependencies>
 	<build>
-		<finalName>azz-client-service</finalName>
+		<finalName>azz-system-service</finalName>
 	</build>
 </project>

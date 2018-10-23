@@ -1,0 +1,21 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.system.mapper.SystemMsgTemplateMapper">
+  <resultMap id="BaseResultMap" type="com.azz.system.pojo.SystemMsgTemplate">
+    <id column="id" property="id" jdbcType="BIGINT" /> 
+  	<id column="msg_tempid" property="msgTempid" jdbcType="VARCHAR" /> 
+  	<result column="msg_title" property="msgTitle" jdbcType="VARCHAR" /> 
+  	<result column="msg_content" property="msgContent" jdbcType="VARCHAR" /> 
+  	<result column="msg_creater" property="msgCreater" jdbcType="VARCHAR" /> 
+  	<result column="msg_createtime" property="msgCreatetime" jdbcType="TIMESTAMP" /> 
+
+  </resultMap>
+   公共SQL 语句 
+  <sql id="common">id,msg_tempid,msg_title,msg_content,msg_creater,msg_createtime</sql> 
+  <select id="findByTemplateId" resultMap="BaseResultMap">
+   select 
+   <include refid="common" /> 
+   from system_msg_template where msg_tempid = #{templateId} 
+   </select>
+
+</mapper> -->

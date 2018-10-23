@@ -1,0 +1,11 @@
+spring: 
+  application:
+    name: azz-client-service
+  cloud:
+    config:
+      uri: http://localhost:2222
+      label: master
+      profile: dev
+      discovery:
+        enabled: true
+        service-id: azz-config-server

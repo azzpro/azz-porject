@@ -5,12 +5,24 @@ package com.azz.platform.client.service;
  ******************************************************************************/
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.PlatformUserErrorCode;
+import com.azz.core.common.page.Pagination;
+import com.azz.core.exception.BaseException;
 import com.azz.platform.client.api.ClientService;
 import com.azz.platform.client.mapper.ClientApplyMapper;
 import com.azz.platform.client.mapper.ClientMapper;
+import com.azz.platform.client.pojo.bo.SearchClientParam;
+import com.azz.platform.client.pojo.vo.ClientCertification;
+import com.azz.platform.client.pojo.vo.ClientInfo;
+import com.azz.util.StringUtils;
+import com.github.pagehelper.PageHelper;
 
 /**
  * <P>
@@ -28,6 +40,23 @@ public class ClientServiceImpl implements ClientService {
 
     @Autowired
     ClientApplyMapper clientApplyMapper;
+
+    @Override
+    public JsonResult<Pagination<ClientCertification>> searchClientList(@RequestBody SearchClientParam param) {
+        PageHelper.startPage(param.getPageNum(), param.getPageSize());
+        List<ClientCertification> ClientList = clientMapper.selectByClientCertificationList(param);
+        return JsonResult.successJsonResult(new Pagination<>(ClientList));
+    }
+
+    @Override
+    public JsonResult<ClientInfo> searchClientInfo(String clientCode) {
+        if (StringUtils.isBlank(clientCode)) {
+            throw new BaseException(PlatformUserErrorCode.PLATFORM_CLIENT_NO_EXIST);
+        }
+        ClientInfo ciObj = clientApplyMapper.selectClientApplyByClientCode(clientCode);
+        return JsonResult.successJsonResult(ciObj);
+        
+    }
 
    
 

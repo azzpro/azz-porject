@@ -27,7 +27,7 @@ public interface AuditService {
      * @return
      * @author 彭斌  2018年10月20日 下午2:53:27
      */
-    @PostMapping("auditEnterprise")
+    @PostMapping("/azz/api/merchant/auditEnterprise")
     JsonResult<String> auditEnterprise(@RequestBody AuditParam param);
 }
 

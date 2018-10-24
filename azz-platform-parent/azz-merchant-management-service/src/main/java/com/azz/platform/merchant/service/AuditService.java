@@ -3,14 +3,13 @@ package com.azz.platform.merchant.service;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
 import com.azz.core.exception.BaseException;
-import com.azz.platform.merchant.api.AuditService;
 import com.azz.platform.merchant.common.constants.AuditConstants;
 import com.azz.platform.merchant.mapper.MerchantApplyMapper;
 import com.azz.platform.merchant.mapper.MerchantMapper;
@@ -29,8 +28,8 @@ import com.azz.util.ObjectUtils;
  * @author 彭斌 2018年10月20日 下午2:54:40
  */
 @Transactional(rollbackFor=Exception.class)
-@RestController
-public class AuditServiceImpl implements AuditService {
+@Service
+public class AuditService{
 
     @Autowired
     MerchantApplyMapper merchantApplyMapper;
@@ -38,7 +37,6 @@ public class AuditServiceImpl implements AuditService {
     @Autowired
     MerchantMapper merchantMapper;
 
-    @Override
     public JsonResult<String> auditEnterprise(@RequestBody AuditParam param) {
         JSR303ValidateUtils.validate(param);
 

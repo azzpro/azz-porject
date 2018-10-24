@@ -33,7 +33,7 @@ public interface MerchantService {
      * @return
      * @author 彭斌  2018年10月22日 下午8:30:00
      */
-    @PostMapping("searchMerchantList")
+    @PostMapping("/azz/api/merchant/searchMerchantList")
     JsonResult<Pagination<MerchantApproval>> searchMerchantList(@RequestBody SearchMerchantParam param);
 
     /**
@@ -42,7 +42,7 @@ public interface MerchantService {
      * @return
      * @author 彭斌  2018年10月23日 上午10:10:06
      */
-    @GetMapping("searchMerchantInfo")
+    @GetMapping("/azz/api/merchant/searchMerchantInfo")
     JsonResult<MerchantInfo> searchMerchantInfo(@RequestParam("merchantCode") String merchantCode);
 }
 

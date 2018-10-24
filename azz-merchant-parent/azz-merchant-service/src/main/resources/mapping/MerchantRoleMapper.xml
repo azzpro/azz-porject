@@ -97,7 +97,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.azz.merchant.pojo.MerchantRole">
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.merchant.pojo.MerchantRole">
     update merchant_role
     <set>
       <if test="roleCode != null">
@@ -127,6 +127,27 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.merchant.pojo.MerchantRole">
+    update merchant_role
+    set role_code = #{roleCode,jdbcType=VARCHAR},
+      role_name = #{roleName,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectByRoleCode" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_role
+    where role_code = #{roleCode}
+    and status = 1
+  </select>
+  
   <update id="updateByRoleCode" parameterType="com.azz.merchant.pojo.MerchantRole">
     update merchant_role
     <set>
@@ -155,28 +176,6 @@
     where role_code = #{roleCode}
   </update>
   
-  
-  <update id="updateByPrimaryKey" parameterType="com.azz.merchant.pojo.MerchantRole">
-    update merchant_role
-    set role_code = #{roleCode,jdbcType=VARCHAR},
-      role_name = #{roleName,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR},
-      status = #{status,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      creator = #{creator,jdbcType=VARCHAR},
-      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
-      modifier = #{modifier,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  
-  <select id="selectByRoleCode" parameterType="string" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from merchant_role
-    where role_code = #{roleCode}
-    and status = 1
-  </select>
-  
   <select id="hasRoleName" resultMap="BaseResultMap" >
     select  <include refid="Base_Column_List" />
     from merchant_role
@@ -192,12 +191,12 @@
 		r.role_code AS roleCode,
 		r.role_name AS roleName,
 		r.remark AS remark,
-		m.merchant_name AS creator,
+		u.merchant_user_name AS creator,
 		r.create_time AS createTime
 	FROM
 		merchant_role r
-	JOIN merchant m ON m.merchant_code = r.creator
-	WHERE m.status != 0 
+	JOIN merchant_user u ON u.merchant_user_code = r.creator
+	WHERE u.status != 0 
 		and r.status != 0 
 	<if test="searchInput != null and searchInput != '' ">
 		and (
@@ -206,5 +205,4 @@
     	)
     </if>
   </select>
-  
 </mapper>

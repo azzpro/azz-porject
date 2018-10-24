@@ -18,7 +18,7 @@ import lombok.Data;
  * @author 黄智聪 2018年10月17日 下午6:03:20
  */
 @Data
-public class MerchantPermissionInfo {
+public class MerchantUserPermission {
     private String permissionCode;
     private String permissionName;
     private String pageUrl;

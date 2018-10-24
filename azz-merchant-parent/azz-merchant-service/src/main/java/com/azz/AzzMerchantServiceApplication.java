@@ -10,7 +10,8 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 @SpringBootApplication
 public class AzzMerchantServiceApplication {
 
-	public static void main(String[] args) {
-		 SpringApplication.run(AzzMerchantServiceApplication.class, args);
-	}
+    public static void main(String[] args) {
+	System.setProperty("spring.devtools.restart.enabled", "true");
+	SpringApplication.run(AzzMerchantServiceApplication.class, args);
+    }
 }

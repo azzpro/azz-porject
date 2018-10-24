@@ -19,7 +19,7 @@ import lombok.Getter;
  */
 public abstract class MerchantConstants {
     
-    public static final String LOGIN_MERCHANT = "loginMerchant";
+    public static final String LOGIN_MERCHANT_USER = "loginMerchantUser";
 
     /**
      * 

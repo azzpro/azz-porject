@@ -3,7 +3,14 @@ package com.azz.merchant.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
-public class MerchantRoleRef implements Serializable {
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class MerchantUserRole implements Serializable {
     /**
      * 主键
      *
@@ -16,7 +23,7 @@ public class MerchantRoleRef implements Serializable {
      *
      * @mbg.generated
      */
-    private Long merchantId;
+    private Long merchantUserId;
 
     /**
      * 角色id
@@ -52,9 +59,9 @@ public class MerchantRoleRef implements Serializable {
 
     /**
      * 主键<br/>
-     * 返回值对应的表列名 merchant_role_ref.id
+     * 返回值对应的表列名 merchant_user_role.id
      *
-     * @return 返回值对应 merchant_role_ref.id
+     * @return 返回值对应 merchant_user_role.id
      *
      * @mbg.generated
      */
@@ -64,9 +71,9 @@ public class MerchantRoleRef implements Serializable {
 
     /**
      * 主键<br/>
-     * merchant_role_ref.id
+     * merchant_user_role.id
      *
-     * @param id 值对应 merchant_role_ref.id
+     * @param id 值对应 merchant_user_role.id
      *
      * @mbg.generated
      */
@@ -76,33 +83,33 @@ public class MerchantRoleRef implements Serializable {
 
     /**
      * 用户id<br/>
-     * 返回值对应的表列名 merchant_role_ref.merchant_id
+     * 返回值对应的表列名 merchant_user_role.merchant_user_id
      *
-     * @return 返回值对应 merchant_role_ref.merchant_id
+     * @return 返回值对应 merchant_user_role.merchant_user_id
      *
      * @mbg.generated
      */
-    public Long getMerchantId() {
-        return merchantId;
+    public Long getMerchantUserId() {
+        return merchantUserId;
     }
 
     /**
      * 用户id<br/>
-     * merchant_role_ref.merchant_id
+     * merchant_user_role.merchant_user_id
      *
-     * @param merchantId 值对应 merchant_role_ref.merchant_id
+     * @param merchantUserId 值对应 merchant_user_role.merchant_user_id
      *
      * @mbg.generated
      */
-    public void setMerchantId(Long merchantId) {
-        this.merchantId = merchantId;
+    public void setMerchantUserId(Long merchantUserId) {
+        this.merchantUserId = merchantUserId;
     }
 
     /**
      * 角色id<br/>
-     * 返回值对应的表列名 merchant_role_ref.role_id
+     * 返回值对应的表列名 merchant_user_role.role_id
      *
-     * @return 返回值对应 merchant_role_ref.role_id
+     * @return 返回值对应 merchant_user_role.role_id
      *
      * @mbg.generated
      */
@@ -112,9 +119,9 @@ public class MerchantRoleRef implements Serializable {
 
     /**
      * 角色id<br/>
-     * merchant_role_ref.role_id
+     * merchant_user_role.role_id
      *
-     * @param roleId 值对应 merchant_role_ref.role_id
+     * @param roleId 值对应 merchant_user_role.role_id
      *
      * @mbg.generated
      */
@@ -124,9 +131,9 @@ public class MerchantRoleRef implements Serializable {
 
     /**
      * <br/>
-     * 返回值对应的表列名 merchant_role_ref.create_time
+     * 返回值对应的表列名 merchant_user_role.create_time
      *
-     * @return 返回值对应 merchant_role_ref.create_time
+     * @return 返回值对应 merchant_user_role.create_time
      *
      * @mbg.generated
      */
@@ -136,9 +143,9 @@ public class MerchantRoleRef implements Serializable {
 
     /**
      * <br/>
-     * merchant_role_ref.create_time
+     * merchant_user_role.create_time
      *
-     * @param createTime 值对应 merchant_role_ref.create_time
+     * @param createTime 值对应 merchant_user_role.create_time
      *
      * @mbg.generated
      */
@@ -148,9 +155,9 @@ public class MerchantRoleRef implements Serializable {
 
     /**
      * 创建人<br/>
-     * 返回值对应的表列名 merchant_role_ref.creator
+     * 返回值对应的表列名 merchant_user_role.creator
      *
-     * @return 返回值对应 merchant_role_ref.creator
+     * @return 返回值对应 merchant_user_role.creator
      *
      * @mbg.generated
      */
@@ -160,9 +167,9 @@ public class MerchantRoleRef implements Serializable {
 
     /**
      * 创建人<br/>
-     * merchant_role_ref.creator
+     * merchant_user_role.creator
      *
-     * @param creator 值对应 merchant_role_ref.creator
+     * @param creator 值对应 merchant_user_role.creator
      *
      * @mbg.generated
      */
@@ -172,9 +179,9 @@ public class MerchantRoleRef implements Serializable {
 
     /**
      * 最后修改时间<br/>
-     * 返回值对应的表列名 merchant_role_ref.last_modify_time
+     * 返回值对应的表列名 merchant_user_role.last_modify_time
      *
-     * @return 返回值对应 merchant_role_ref.last_modify_time
+     * @return 返回值对应 merchant_user_role.last_modify_time
      *
      * @mbg.generated
      */
@@ -184,9 +191,9 @@ public class MerchantRoleRef implements Serializable {
 
     /**
      * 最后修改时间<br/>
-     * merchant_role_ref.last_modify_time
+     * merchant_user_role.last_modify_time
      *
-     * @param lastModifyTime 值对应 merchant_role_ref.last_modify_time
+     * @param lastModifyTime 值对应 merchant_user_role.last_modify_time
      *
      * @mbg.generated
      */
@@ -196,9 +203,9 @@ public class MerchantRoleRef implements Serializable {
 
     /**
      * 修改人<br/>
-     * 返回值对应的表列名 merchant_role_ref.modifier
+     * 返回值对应的表列名 merchant_user_role.modifier
      *
-     * @return 返回值对应 merchant_role_ref.modifier
+     * @return 返回值对应 merchant_user_role.modifier
      *
      * @mbg.generated
      */
@@ -208,9 +215,9 @@ public class MerchantRoleRef implements Serializable {
 
     /**
      * 修改人<br/>
-     * merchant_role_ref.modifier
+     * merchant_user_role.modifier
      *
-     * @param modifier 值对应 merchant_role_ref.modifier
+     * @param modifier 值对应 merchant_user_role.modifier
      *
      * @mbg.generated
      */
@@ -229,9 +236,9 @@ public class MerchantRoleRef implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        MerchantRoleRef other = (MerchantRoleRef) that;
+        MerchantUserRole other = (MerchantUserRole) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getMerchantId() == null ? other.getMerchantId() == null : this.getMerchantId().equals(other.getMerchantId()))
+            && (this.getMerchantUserId() == null ? other.getMerchantUserId() == null : this.getMerchantUserId().equals(other.getMerchantUserId()))
             && (this.getRoleId() == null ? other.getRoleId() == null : this.getRoleId().equals(other.getRoleId()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
             && (this.getCreator() == null ? other.getCreator() == null : this.getCreator().equals(other.getCreator()))
@@ -244,7 +251,7 @@ public class MerchantRoleRef implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getMerchantId() == null) ? 0 : getMerchantId().hashCode());
+        result = prime * result + ((getMerchantUserId() == null) ? 0 : getMerchantUserId().hashCode());
         result = prime * result + ((getRoleId() == null) ? 0 : getRoleId().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getCreator() == null) ? 0 : getCreator().hashCode());
@@ -260,7 +267,7 @@ public class MerchantRoleRef implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", merchantId=").append(merchantId);
+        sb.append(", merchantUserId=").append(merchantUserId);
         sb.append(", roleId=").append(roleId);
         sb.append(", createTime=").append(createTime);
         sb.append(", creator=").append(creator);

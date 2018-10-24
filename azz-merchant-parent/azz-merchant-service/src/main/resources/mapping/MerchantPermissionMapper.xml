@@ -197,7 +197,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
-  <select id="getMerchantPermissionInfoByPhoneNumber" parameterType="string" resultType="com.azz.merchant.pojo.vo.MerchantPermissionInfo">
+  <select id="getMerchantUserPermissionInfoByPhoneNumber" parameterType="string" resultType="com.azz.merchant.pojo.vo.MerchantUserPermission">
 	  SELECT
 			p.permission_code AS permissionCode,
 			p.permission_name AS permissionName,
@@ -207,18 +207,18 @@
 			p.sort AS sort,
 			p. LEVEL AS level
 		FROM
-			merchant m
-		LEFT JOIN merchant_role_ref rr ON rr.merchant_id = m.id
-		LEFT JOIN merchant_role r ON rr.role_id = r.id
+			merchant_user u
+		LEFT JOIN merchant_user_role ur ON ur.merchant_user_id = u.id
+		LEFT JOIN merchant_role r ON ur.role_id = r.id
 		LEFT JOIN merchant_role_permission rp ON rp.role_id = r.id
 		LEFT JOIN merchant_permission p ON rp.permission_id = p.id
 		WHERE
 			p. STATUS = 1
 		AND r. STATUS = 1
-		AND  m.contact_phone = #{phoneNumber}
+		AND  u.phone_number = #{phoneNumber}
   </select>
   
-  <select id="getMerchantPermissionInfoByPhoneNumberAndLevel" resultType="com.azz.merchant.pojo.vo.MerchantPermissionInfo">
+  <select id="getMerchantUserPermissionByPhoneNumberAndLevel" resultType="com.azz.merchant.pojo.vo.MerchantUserPermission">
 	  SELECT
 			p.permission_code AS permissionCode,
 			p.permission_name AS permissionName,
@@ -228,27 +228,19 @@
 			p.sort AS sort,
 			p. LEVEL AS level
 		FROM
-			merchant m
-		LEFT JOIN merchant_role_ref rr ON rr.merchant_id = m.id
-		LEFT JOIN merchant_role r ON rr.role_id = r.id
+			merchant_user u
+		LEFT JOIN merchant_user_role ur ON ur.merchant_user_id = u.id
+		LEFT JOIN merchant_role r ON ur.role_id = r.id
 		LEFT JOIN merchant_role_permission rp ON rp.role_id = r.id
 		LEFT JOIN merchant_permission p ON rp.permission_id = p.id
 		WHERE
 			p. STATUS = 1
 		AND r. STATUS = 1
 		AND p.level = #{level}
-		AND  m.contact_phone = #{phoneNumber}
+		AND  u.phone_number = #{phoneNumber}
   </select>
   
-  <select id="getPermissionByPermissionCode" parameterType="string" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from merchant_permission
-    where permission_code = #{permissionCode}
-    and status = 1
-  </select>
-  
-  <select id="getPermissionByParentPermissionCode" parameterType="string" resultMap="BaseResultMap">
+  <select id="getMerchantPermissionByParentPermissionCode" parameterType="string" resultMap="BaseResultMap">
 	  SELECT 
 	    <include refid="Base_Column_List" />
 	    FROM merchant_permission p
@@ -264,6 +256,14 @@
 			p.permission_name AS permissionName,
 			p. LEVEL AS level
 	    FROM merchant_permission p
+  </select>
+  
+  <select id="getMerchantPermissionByPermissionCode" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_permission
+    where permission_code = #{permissionCode}
+    and status = 1
   </select>
   
 </mapper>

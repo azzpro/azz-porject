@@ -22,15 +22,15 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginMerchantInfo implements Serializable{
+public class LoginMerchantUserInfo implements Serializable{
     
     private static final long serialVersionUID = 2804715212693351455L;
     
     private Serializable sessionId;
 
-    private MerchantInfo merchantInfo;
+    private MerchantUserInfo merchantUserInfo;
     
-    private List<MerchantPermissionInfo> merchantPermissions;
+    private List<MerchantUserPermission> merchantUserPermissions;
 
     private List<Menu> menus;
     

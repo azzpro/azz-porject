@@ -48,18 +48,21 @@
 		<table tableName="merchant_permission" domainObjectName="MerchantPermission"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false"></table>
+			selectByExampleQueryId="false"></table>	
+		<!-- 要生成哪些表 -->
 		<table tableName="merchant_role" domainObjectName="MerchantRole"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false"></table>
+			selectByExampleQueryId="false"></table>	
+		<!-- 要生成哪些表 -->
 		<table tableName="merchant_role_permission" domainObjectName="MerchantRolePermission"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false"></table>
-		<table tableName="merchant_role_ref" domainObjectName="MerchantRoleRef"
+			selectByExampleQueryId="false"></table>	
+		<!-- 要生成哪些表 -->
+		<table tableName="merchant_user_role" domainObjectName="MerchantUserRole"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false"></table>
+			selectByExampleQueryId="false"></table>	
 	</context>
 </generatorConfiguration>

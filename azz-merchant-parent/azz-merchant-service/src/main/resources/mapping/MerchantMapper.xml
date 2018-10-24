@@ -462,41 +462,12 @@
     where merchant_code = #{merchantCode,jdbcType=VARCHAR}
   </update>
   
-  <select id="getMerchantByPhoneNumber" parameterType="string" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from merchant
-    where contact_phone = #{phoneNumber}
-    and status != 0
-  </select>
-  
   <select id="getMerchantByCreditCode" parameterType="string" resultMap="BaseResultMap">
     select 
     	<include refid="Base_Column_List" />
     from merchant
     where credit_code = #{creditCode}
     and status != 0
-  </select>
-  
-  <select id="getMerchantInfoByPhoneNumber" parameterType="string" resultType="com.azz.merchant.pojo.vo.MerchantInfo">
-	  SELECT
-		m.merchant_code as merchantCode,
-		m.company_name AS companyName,
-		m.contact_phone AS phoneNumber,
-		m.registered_person AS registeredPerson,
-		m.create_time AS registeredTime,
-		 CASE m. STATUS
-		WHEN 0 THEN
-			'删除'
-		WHEN 1 THEN
-			'有效'
-		WHEN 2 THEN
-			'禁用'
-		END AS status
-		FROM
-			merchant m
-		WHERE m.status != 0
-		and m.contact_phone = #{phoneNumber}
   </select>
   
 </mapper>

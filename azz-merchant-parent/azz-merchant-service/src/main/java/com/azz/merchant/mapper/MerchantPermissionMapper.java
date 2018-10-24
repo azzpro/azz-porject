@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.azz.merchant.pojo.MerchantPermission;
-import com.azz.merchant.pojo.vo.MerchantPermissionInfo;
+import com.azz.merchant.pojo.vo.MerchantUserPermission;
 import com.azz.merchant.pojo.vo.Permission;
 
 @Mapper
@@ -23,13 +23,14 @@ public interface MerchantPermissionMapper {
 
     int updateByPrimaryKey(MerchantPermission record);
     
-    List<MerchantPermissionInfo> getMerchantPermissionInfoByPhoneNumber(String phoneNumber);
+    List<MerchantUserPermission> getMerchantUserPermissionInfoByPhoneNumber(String phoneNumber);
     
-    List<MerchantPermissionInfo> getMerchantPermissionInfoByPhoneNumberAndLevel(@Param("phoneNumber")String phoneNumber, @Param("level")Integer level);
+    List<MerchantUserPermission> getMerchantUserPermissionByPhoneNumberAndLevel(@Param("phoneNumber")String phoneNumber, @Param("level")Integer level);
     
-    MerchantPermission getPermissionByPermissionCode(String permissionCode);
+    MerchantPermission getMerchantPermissionByPermissionCode(String permissionCode);
     
-    List<MerchantPermission> getPermissionByParentPermissionCode(String parentPermissionCode);
+    List<MerchantPermission> getMerchantPermissionByParentPermissionCode(String parentPermissionCode);
     
     List<Permission> getAllPermissions();
+    
 }

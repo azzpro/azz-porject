@@ -8,8 +8,8 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class MerchantRole implements Serializable {
     /**
      * 主键

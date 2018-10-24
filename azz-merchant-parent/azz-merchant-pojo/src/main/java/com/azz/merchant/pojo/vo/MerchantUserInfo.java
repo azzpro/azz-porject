@@ -17,7 +17,9 @@ import lombok.Data;
  * @author 黄智聪  2018年10月22日 上午11:18:29
  */
 @Data
-public class MerchantInfo {
+public class MerchantUserInfo {
+    
+    private String merchantUserCode;
     
     private String merchantCode;
     
@@ -25,10 +27,16 @@ public class MerchantInfo {
     
     private String phoneNumber;
     
-    private String registeredPerson;
+    private String postName;
+    
+    private String merchantUserName;
+    
+    private String deptName;
+    
+    private String roleName;
     
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")
-    private String registeredTime;
+    private String createTime;
     
     private String status;
     

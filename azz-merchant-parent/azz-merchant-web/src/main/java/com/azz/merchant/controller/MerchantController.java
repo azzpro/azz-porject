@@ -7,15 +7,17 @@
 
 package com.azz.merchant.controller;
 
+import java.io.IOException;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.ShiroAuthErrorCode;
@@ -26,8 +28,12 @@ import com.azz.merchant.api.MerchantService;
 import com.azz.merchant.pojo.bo.CompleteMerchantInfoParam;
 import com.azz.merchant.pojo.bo.LoginParam;
 import com.azz.merchant.pojo.bo.MerchantRegistParam;
-import com.azz.merchant.pojo.vo.LoginMerchantInfo;
+import com.azz.merchant.pojo.bo.UploadFile;
+import com.azz.merchant.pojo.bo.UploadTradingCertificateParam;
+import com.azz.merchant.pojo.vo.LoginMerchantUserInfo;
+import com.azz.merchant.pojo.vo.UploadFileInfo;
 import com.azz.merchant.utils.WebUtils;
+import com.azz.util.Base64;
 import com.azz.util.JSR303ValidateUtils;
 
 /**
@@ -116,7 +122,7 @@ public class MerchantController {
      * @author 黄智聪 2018年10月17日 下午5:50:02
      */
     @RequestMapping(value = "/login")
-    public JsonResult<LoginMerchantInfo> login(LoginParam param) {
+    public JsonResult<LoginMerchantUserInfo> login(LoginParam param) {
 	JSR303ValidateUtils.validate(param);
 	// 从SecurityUtils里边创建一个 subject
 	Subject subject = SecurityUtils.getSubject();
@@ -131,15 +137,15 @@ public class MerchantController {
 	    Throwable[] throwables = e.getSuppressed();
 	    int code = ((SuppressedException) throwables[0]).getCode();
 	    String msg = ((SuppressedException) throwables[0]).getMessage();
-	    JsonResult<LoginMerchantInfo> jr = new JsonResult<>();
+	    JsonResult<LoginMerchantUserInfo> jr = new JsonResult<>();
 	    jr.setCode(code);
 	    jr.setMsg(msg);
 	    return jr;
 	}
-	JsonResult<LoginMerchantInfo> jr = merchantService.getLoginMerchantInfoByPhoneNumber(param.getPhoneNumber());
-	LoginMerchantInfo loginMerchant = jr.getData();
-	loginMerchant.setSessionId(subject.getSession().getId());
-	WebUtils.setShiroSessionAttr(MerchantConstants.LOGIN_MERCHANT, loginMerchant);
+	JsonResult<LoginMerchantUserInfo> jr = merchantService.getLoginMerchantUserInfoByPhoneNumber(param.getPhoneNumber());
+	LoginMerchantUserInfo loginMerchantUser = jr.getData();
+	loginMerchantUser.setSessionId(subject.getSession().getId());
+	WebUtils.setShiroSessionAttr(MerchantConstants.LOGIN_MERCHANT_USER, loginMerchantUser);
 	return jr;
     }
 
@@ -165,6 +171,13 @@ public class MerchantController {
     @RequestMapping(value = "/completeMerchantInfo")
     public JsonResult<String> completeMerchantInfo(CompleteMerchantInfoParam param) {
 	return merchantService.completeMerchantInfo(param);
+    }
+    
+    @RequestMapping(value = "/uploadTradingCertificateFile")
+    public JsonResult<UploadFileInfo> uploadTradingCertificateFile(UploadFile uploadFile) throws IOException{
+	JSR303ValidateUtils.validate(uploadFile);
+	MultipartFile file = uploadFile.getFile();
+	return merchantService.uploadTradingCertificateFile(new UploadTradingCertificateParam(file.getOriginalFilename(), file.getSize(), uploadFile.getMerchantCode(), Base64.encode(file.getBytes())));
     }
 
 }

@@ -11,7 +11,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 
 import com.azz.core.constants.MerchantConstants;
-import com.azz.merchant.pojo.vo.LoginMerchantInfo;
+import com.azz.merchant.pojo.vo.LoginMerchantUserInfo;
 
 /**
  * <P>TODO</P>
@@ -24,8 +24,8 @@ public class WebUtils {
 	getShiroSession().setAttribute(key, value);
     }
     
-    public static LoginMerchantInfo getLoginMerchant() {
-	return (LoginMerchantInfo)getShiroSession().getAttribute(MerchantConstants.LOGIN_MERCHANT);
+    public static LoginMerchantUserInfo getLoginMerchant() {
+	return (LoginMerchantUserInfo)getShiroSession().getAttribute(MerchantConstants.LOGIN_MERCHANT_USER);
     }
     
     public static Session getShiroSession() {

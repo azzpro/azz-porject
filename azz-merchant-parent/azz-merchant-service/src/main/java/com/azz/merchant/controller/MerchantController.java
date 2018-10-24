@@ -13,10 +13,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.page.Pagination;
+import com.azz.merchant.pojo.bo.AddMerchantUserParam;
 import com.azz.merchant.pojo.bo.CompleteMerchantInfoParam;
+import com.azz.merchant.pojo.bo.EditMerchantUserParam;
+import com.azz.merchant.pojo.bo.EnableOrDisableOrDelMerchantUserParam;
 import com.azz.merchant.pojo.bo.LoginParam;
 import com.azz.merchant.pojo.bo.MerchantRegistParam;
-import com.azz.merchant.pojo.vo.LoginMerchantInfo;
+import com.azz.merchant.pojo.bo.SearchMerchantUserParam;
+import com.azz.merchant.pojo.bo.UploadTradingCertificateParam;
+import com.azz.merchant.pojo.vo.LoginMerchantUserInfo;
+import com.azz.merchant.pojo.vo.MerchantUserInfo;
+import com.azz.merchant.pojo.vo.UploadFileInfo;
 import com.azz.merchant.service.MerchantService;
 
 
@@ -32,15 +40,14 @@ public class MerchantController {
     @Autowired
     private MerchantService merchantService;
     
-    
     @RequestMapping("/loginAuth")
     public JsonResult<String> loginAuth(@RequestBody LoginParam param) {
 	return merchantService.loginAuth(param);
     }
     
-    @RequestMapping("/getLoginMerchantInfoByPhoneNumber")
-    public JsonResult<LoginMerchantInfo> getLoginMerchantInfoByPhoneNumber(String phoneNumber){
-	return merchantService.getLoginMerchantInfoByPhoneNumber(phoneNumber);
+    @RequestMapping("/getLoginMerchantUserInfoByPhoneNumber")
+    public JsonResult<LoginMerchantUserInfo> getLoginMerchantUserInfoByPhoneNumber(String phoneNumber){
+	return merchantService.getLoginMerchantUserInfoByPhoneNumber(phoneNumber);
     }
     
     @RequestMapping("/sendVerificationCode")
@@ -63,5 +70,34 @@ public class MerchantController {
 	return merchantService.completeMerchantInfo(param);
     }
     
+    @RequestMapping("/uploadTradingCertificateFile")
+    public JsonResult<UploadFileInfo> uploadTradingCertificateFile(@RequestBody UploadTradingCertificateParam param){
+	return merchantService.uploadTradingCertificateFile(param);
+    }
+    
+    @RequestMapping("/addMerchantUser")
+    public JsonResult<String> addMerchantUser(@RequestBody AddMerchantUserParam param){
+	return merchantService.addMerchantUser(param);
+    }
+    
+    @RequestMapping("/editMerchantUser")
+    public JsonResult<String> editMerchantUser(@RequestBody EditMerchantUserParam param) {
+	return merchantService.editMerchantUser(param);
+    }
+    
+    @RequestMapping("/getMerchantUserList")
+    public JsonResult<Pagination<MerchantUserInfo>> getUserList(@RequestBody SearchMerchantUserParam param) {
+	return merchantService.getMerchantUserList(param);
+    }
+    
+    @RequestMapping("/enableOrDisableOrDelMerchantUser")
+    public JsonResult<String> enableOrDisableOrDelMerchantUser(@RequestBody EnableOrDisableOrDelMerchantUserParam param) {
+	return merchantService.enableOrDisableOrDelMerchantUser(param);
+    }
+    
+    @RequestMapping("/getMerchantUserInfo")
+    public JsonResult<MerchantUserInfo> getMerchantUserInfo(String merchantUserCode) {
+	return merchantService.getMerchantUserInfo(merchantUserCode);
+    }
 }
 

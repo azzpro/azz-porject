@@ -1,5 +1,6 @@
 server:
   port: 7488
+  max-http-header-size: 20971520
 spring:
   application:
     name: azz-merchant-service

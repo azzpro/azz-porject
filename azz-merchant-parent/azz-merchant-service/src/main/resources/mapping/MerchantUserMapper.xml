@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.merchant.mapper.MerchantUserMapper">
+  <resultMap id="BaseResultMap" type="com.azz.merchant.pojo.MerchantUser">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="merchant_user_code" jdbcType="VARCHAR" property="merchantUserCode" />
+    <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="merchant_user_name" jdbcType="VARCHAR" property="merchantUserName" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="salt" jdbcType="VARCHAR" property="salt" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="dept_id" jdbcType="BIGINT" property="deptId" />
+    <result column="post_name" jdbcType="VARCHAR" property="postName" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="login_errors_times" jdbcType="INTEGER" property="loginErrorsTimes" />
+    <result column="login_ip" jdbcType="VARCHAR" property="loginIp" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="last_modify_time" jdbcType="TIMESTAMP" property="lastModifyTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, merchant_user_code, merchant_code, merchant_user_name, phone_number, password, 
+    salt, email, dept_id, post_name, status, login_errors_times, login_ip, create_time, 
+    creator, last_modify_time, modifier, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_user
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from merchant_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.merchant.pojo.MerchantUser">
+    insert into merchant_user (id, merchant_user_code, merchant_code, 
+      merchant_user_name, phone_number, password, 
+      salt, email, dept_id, 
+      post_name, status, login_errors_times, 
+      login_ip, create_time, creator, 
+      last_modify_time, modifier, remark
+      )
+    values (#{id,jdbcType=BIGINT}, #{merchantUserCode,jdbcType=VARCHAR}, #{merchantCode,jdbcType=VARCHAR}, 
+      #{merchantUserName,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{salt,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{deptId,jdbcType=BIGINT}, 
+      #{postName,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{loginErrorsTimes,jdbcType=INTEGER}, 
+      #{loginIp,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
+      #{lastModifyTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.merchant.pojo.MerchantUser">
+    insert into merchant_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="merchantUserCode != null">
+        merchant_user_code,
+      </if>
+      <if test="merchantCode != null">
+        merchant_code,
+      </if>
+      <if test="merchantUserName != null">
+        merchant_user_name,
+      </if>
+      <if test="phoneNumber != null">
+        phone_number,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="salt != null">
+        salt,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="deptId != null">
+        dept_id,
+      </if>
+      <if test="postName != null">
+        post_name,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="loginErrorsTimes != null">
+        login_errors_times,
+      </if>
+      <if test="loginIp != null">
+        login_ip,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="lastModifyTime != null">
+        last_modify_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="merchantUserCode != null">
+        #{merchantUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantCode != null">
+        #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantUserName != null">
+        #{merchantUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null">
+        #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="deptId != null">
+        #{deptId,jdbcType=BIGINT},
+      </if>
+      <if test="postName != null">
+        #{postName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="loginErrorsTimes != null">
+        #{loginErrorsTimes,jdbcType=INTEGER},
+      </if>
+      <if test="loginIp != null">
+        #{loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifyTime != null">
+        #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.merchant.pojo.MerchantUser">
+    update merchant_user
+    <set>
+      <if test="merchantUserCode != null">
+        merchant_user_code = #{merchantUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantCode != null">
+        merchant_code = #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantUserName != null">
+        merchant_user_name = #{merchantUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null">
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="deptId != null">
+        dept_id = #{deptId,jdbcType=BIGINT},
+      </if>
+      <if test="postName != null">
+        post_name = #{postName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="loginErrorsTimes != null">
+        login_errors_times = #{loginErrorsTimes,jdbcType=INTEGER},
+      </if>
+      <if test="loginIp != null">
+        login_ip = #{loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifyTime != null">
+        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateByMerchantUserCode" parameterType="com.azz.merchant.pojo.MerchantUser">
+    update merchant_user
+    <set>
+      <if test="merchantCode != null">
+        merchant_code = #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantUserName != null">
+        merchant_user_name = #{merchantUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null">
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="deptId != null">
+        dept_id = #{deptId,jdbcType=BIGINT},
+      </if>
+      <if test="postName != null">
+        post_name = #{postName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="loginErrorsTimes != null">
+        login_errors_times = #{loginErrorsTimes,jdbcType=INTEGER},
+      </if>
+      <if test="loginIp != null">
+        login_ip = #{loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifyTime != null">
+        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where merchant_user_code = #{merchantUserCode}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.azz.merchant.pojo.MerchantUser">
+    update merchant_user
+    set merchant_user_code = #{merchantUserCode,jdbcType=VARCHAR},
+      merchant_code = #{merchantCode,jdbcType=VARCHAR},
+      merchant_user_name = #{merchantUserName,jdbcType=VARCHAR},
+      phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      salt = #{salt,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      dept_id = #{deptId,jdbcType=BIGINT},
+      post_name = #{postName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      login_errors_times = #{loginErrorsTimes,jdbcType=INTEGER},
+      login_ip = #{loginIp,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getMerchantUserByPhoneNumber" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_user
+    where status != 0
+    and phone_number = #{phoneNumber}
+  </select>
+  
+  <select id="getMerchantUserByMerchantUserCode" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_user
+    where merchant_user_code = #{userCode}
+    and status != 0
+  </select>
+  
+  <select id="getMerchantUserByPhoneNumberAndMerchantUserCode" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_user
+    where phone_number = #{phoneNumber}
+    and status != 0
+    <if test="merchantUserCode != null">
+	    and merchant_user_code &lt;&gt; #{merchantUserCode}
+	</if>
+  </select>
+  
+  <select id="getMerchantUserInfoByPhoneNumber" parameterType="string" resultType="com.azz.merchant.pojo.vo.MerchantUserInfo">
+    SELECT
+    	mu.merchant_user_code as merchantUserCode,
+		mu.merchant_code AS merchantCode,
+		m.company_name AS companyName,
+		mu.phone_number AS phoneNumber,
+		mu.merchant_user_name AS userName,
+		mu.create_time AS createTime,
+		CASE m. STATUS
+	WHEN 0 THEN
+		'删除'
+	WHEN 1 THEN
+		'有效'
+	WHEN 2 THEN
+		'禁用'
+	END AS STATUS
+	FROM
+		merchant_user mu
+	JOIN merchant m ON m.merchant_code = mu.merchant_code
+	WHERE
+		mu. STATUS != 0
+	and mu.phone_number = #{phoneNumber}
+  </select>
+  
+  <select id="getMerchantUserByEmail" resultMap="BaseResultMap">
+    select 
+    	<include refid="Base_Column_List" />
+    from merchant_user
+    where status != 0
+    and email = #{email}
+    <if test="merchantUserCode != null">
+        and merchant_user_code &lt;&gt; #{merchantUserCode}
+    </if>
+  </select>
+  
+  <select id="getMerchantUserInfoBySearchParam" parameterType="com.azz.merchant.pojo.bo.SearchMerchantUserParam" resultType="com.azz.merchant.pojo.vo.MerchantUserInfo">
+    
+		SELECT
+	mu.merchant_code as merchantCode,
+			mu.merchant_user_code AS merchant_user_code,
+			mu.merchant_user_name AS merchantUserName,
+			mu.phone_number AS phoneNumber,
+			mu.email AS email,
+			 mu.post_name AS postName,
+			 CASE mu. STATUS
+			WHEN 0 THEN
+				'注销'
+			WHEN 1 THEN
+				'有效'
+			WHEN 2 THEN
+				'禁用'
+			END AS STATUS,
+			 r.role_name AS roleName,
+				mu.create_time as createTime
+		FROM
+			merchant_user mu
+		LEFT JOIN merchant_user_role ur ON ur.merchant_user_id = mu.id
+		LEFT JOIN merchant_role r ON ur.role_id = r.id
+		WHERE mu.status != 0
+		<if test="searchInput != null and searchInput != ''">
+	        and (
+				mu.merchant_user_name like CONCAT('%', #{searchInput}, '%')
+				or mu.phone_number like CONCAT('%', #{searchInput}, '%')
+				or mu.post_name like CONCAT('%', #{searchInput}, '%')
+	  		)
+      	</if>
+		
+  </select>
+  
+  <select id="getMerchantUserInfoByMerchantUserCode" parameterType="string" resultType="com.azz.merchant.pojo.vo.MerchantUserInfo">
+		  SELECT
+			mu.merchant_code as merchantCode,
+			mu.merchant_user_code AS merchant_user_code,
+			mu.merchant_user_name AS merchantUserName,
+			mu.phone_number AS phoneNumber,
+			mu.email AS email,
+			 mu.post_name AS postName,
+			 CASE mu. STATUS
+			WHEN 0 THEN
+				'注销'
+			WHEN 1 THEN
+				'有效'
+			WHEN 2 THEN
+				'禁用'
+			END AS STATUS,
+			 r.role_name AS roleName,
+				mu.create_time as createTime
+		FROM
+			merchant_user mu
+		LEFT JOIN merchant_user_role ur ON ur.merchant_user_id = mu.id
+		LEFT JOIN merchant_role r ON ur.role_id = r.id
+		WHERE mu.status != 0
+		and mu.merchant_user_code = #{merchantUserCode}
+		
+  </select>
+  
+</mapper>

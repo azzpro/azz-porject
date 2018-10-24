@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.azz.merchant.mapper.MerchantRoleRefMapper">
-  <resultMap id="BaseResultMap" type="com.azz.merchant.pojo.MerchantRoleRef">
+<mapper namespace="com.azz.merchant.mapper.MerchantUserRoleMapper">
+  <resultMap id="BaseResultMap" type="com.azz.merchant.pojo.MerchantUserRole">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="merchant_id" jdbcType="BIGINT" property="merchantId" />
+    <result column="merchant_user_id" jdbcType="BIGINT" property="merchantUserId" />
     <result column="role_id" jdbcType="BIGINT" property="roleId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
@@ -11,34 +11,34 @@
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, merchant_id, role_id, create_time, creator, last_modify_time, modifier
+    id, merchant_user_id, role_id, create_time, creator, last_modify_time, modifier
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from merchant_role_ref
+    from merchant_user_role
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from merchant_role_ref
+    delete from merchant_user_role
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.azz.merchant.pojo.MerchantRoleRef">
-    insert into merchant_role_ref (id, merchant_id, role_id, 
+  <insert id="insert" parameterType="com.azz.merchant.pojo.MerchantUserRole">
+    insert into merchant_user_role (id, merchant_user_id, role_id, 
       create_time, creator, last_modify_time, 
       modifier)
-    values (#{id,jdbcType=BIGINT}, #{merchantId,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT}, 
+    values (#{id,jdbcType=BIGINT}, #{merchantUserId,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT}, 
       #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{lastModifyTime,jdbcType=TIMESTAMP}, 
       #{modifier,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.azz.merchant.pojo.MerchantRoleRef">
-    insert into merchant_role_ref
+  <insert id="insertSelective" parameterType="com.azz.merchant.pojo.MerchantUserRole">
+    insert into merchant_user_role
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="merchantId != null">
-        merchant_id,
+      <if test="merchantUserId != null">
+        merchant_user_id,
       </if>
       <if test="roleId != null">
         role_id,
@@ -60,8 +60,8 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="merchantId != null">
-        #{merchantId,jdbcType=BIGINT},
+      <if test="merchantUserId != null">
+        #{merchantUserId,jdbcType=BIGINT},
       </if>
       <if test="roleId != null">
         #{roleId,jdbcType=BIGINT},
@@ -80,11 +80,11 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.azz.merchant.pojo.MerchantRoleRef">
-    update merchant_role_ref
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.merchant.pojo.MerchantUserRole">
+    update merchant_user_role
     <set>
-      <if test="merchantId != null">
-        merchant_id = #{merchantId,jdbcType=BIGINT},
+      <if test="merchantUserId != null">
+        merchant_user_id = #{merchantUserId,jdbcType=BIGINT},
       </if>
       <if test="roleId != null">
         role_id = #{roleId,jdbcType=BIGINT},
@@ -104,9 +104,9 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.azz.merchant.pojo.MerchantRoleRef">
-    update merchant_role_ref
-    set merchant_id = #{merchantId,jdbcType=BIGINT},
+  <update id="updateByPrimaryKey" parameterType="com.azz.merchant.pojo.MerchantUserRole">
+    update merchant_user_role
+    set merchant_user_id = #{merchantUserId,jdbcType=BIGINT},
       role_id = #{roleId,jdbcType=BIGINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
@@ -114,4 +114,9 @@
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <delete id="deleteByMerchantUserId" parameterType="java.lang.Long">
+    delete from merchant_user_role
+    where merchant_user_id = #{merchantUserId}
+  </delete>
 </mapper>

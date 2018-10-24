@@ -131,7 +131,7 @@ public class PermissionService {
 	// 再重新绑定新的权限信息
 	List<String> permissionCodes = param.getPermissionCodes();
 	for (String permissionCode : permissionCodes) {
-	    MerchantPermission persmission = merchantPermissionMapper.getPermissionByPermissionCode(permissionCode);
+	    MerchantPermission persmission = merchantPermissionMapper.getMerchantPermissionByPermissionCode(permissionCode);
 	    MerchantRolePermission rolePermissionRecord = MerchantRolePermission.builder().createTime(new Date())
 		    .creator(param.getCreator()).permissionId(persmission.getId()).roleId(roleId).build();
 	    merchantRolePermissionMapper.insertSelective(rolePermissionRecord);

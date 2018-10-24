@@ -8,6 +8,7 @@ package com.azz.platform.merchant.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
@@ -41,7 +42,7 @@ public class MerchantServiceImpl implements MerchantService {
     MerchantApplyMapper merchantApplyMapper;
 
     @Override
-    public JsonResult<Pagination<MerchantApproval>> searchMerchantList(SearchMerchantParam param) {
+    public JsonResult<Pagination<MerchantApproval>> searchMerchantList(@RequestBody SearchMerchantParam param) {
         PageHelper.startPage(param.getPageNum(), param.getPageSize());
         List<MerchantApproval> merchantList = merchantMapper.selectMerchantList(param);
         return JsonResult.successJsonResult(new Pagination<>(merchantList));

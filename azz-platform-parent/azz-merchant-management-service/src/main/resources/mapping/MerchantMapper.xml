@@ -378,12 +378,12 @@
   
   <select id="selectMerchantList" parameterType="com.azz.platform.merchant.pojo.bo.SearchMerchantParam" resultType="com.azz.platform.merchant.pojo.vo.MerchantApproval">
   	select 
-		ma.merchant_code,
-		ma.company_name,
-		m.registered_person,
-		m.contact_phone,
-		m.qualification_apply_status,
-		m.create_time 
+		m.merchant_code as merchantCode,
+		ma.company_name as companyName,
+		m.registered_person as registeredPerson,
+		m.contact_phone as contactPhone,
+		m.qualification_apply_status as status,
+		m.create_time as createTime
 	 from merchant m 
 	 left join (
 	 SELECT * FROM merchant_apply ma1 WHERE NOT EXISTS(
@@ -393,8 +393,8 @@
 	 	<if test="param != null and param != ''">
 	 		and (ma.company_name = #{param,jdbcType=VARCHAR} or ma.merchant_code = #{param,jdbcType=VARCHAR} or m.registered_person = #{param,jdbcType=VARCHAR})
 	 	</if>
-	 	<if test="status != null and status != ''">
-	 		and status = #{status,jdbcType=INTEGER}
+	 	<if test="status != null">
+	 		and m.qualification_apply_status = #{status,jdbcType=INTEGER}
 	 	</if>
 	 </where>
 	 ORDER BY m.create_time DESC

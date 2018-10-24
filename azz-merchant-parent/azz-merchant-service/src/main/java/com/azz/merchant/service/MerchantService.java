@@ -24,26 +24,26 @@ import com.azz.core.common.constants.MessageConstants.MessageType;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.ShiroAuthErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
-import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.MerchantConstants.QualificationApplyStatus;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.merchant.mapper.MerchantAddressMapper;
+import com.azz.merchant.mapper.MerchantApplyMapper;
 import com.azz.merchant.mapper.MerchantMapper;
 import com.azz.merchant.mapper.MerchantPermissionMapper;
 import com.azz.merchant.mapper.MsgLogMapper;
 import com.azz.merchant.pojo.Merchant;
 import com.azz.merchant.pojo.MerchantAddress;
+import com.azz.merchant.pojo.MerchantApply;
 import com.azz.merchant.pojo.MsgLog;
 import com.azz.merchant.pojo.bo.CompleteMerchantInfoParam;
 import com.azz.merchant.pojo.bo.LoginParam;
 import com.azz.merchant.pojo.bo.MerchantRegistParam;
-import com.azz.merchant.pojo.bo.SearchMerchantParam;
 import com.azz.merchant.pojo.vo.LoginMerchantInfo;
 import com.azz.merchant.pojo.vo.Menu;
 import com.azz.merchant.pojo.vo.MerchantInfo;
 import com.azz.merchant.pojo.vo.MerchantPermissionInfo;
-import com.azz.util.DateUtils;
+import com.azz.model.Password;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.PasswordHelper;
 import com.azz.util.RandomStringUtils;
@@ -76,6 +76,9 @@ public class MerchantService {
     @Autowired
     private MerchantPermissionMapper merchantPermissionMapper;
     
+    @Autowired
+    private MerchantApplyMapper merchantApplyMapper;
+    
     /**
      * 
      * <p>商户登录认证</p>
@@ -104,7 +107,7 @@ public class MerchantService {
      * @return
      * @author 黄智聪  2018年10月23日 下午4:23:06
      */
-    JsonResult<LoginMerchantInfo> getLoginMerchantInfoByPhoneNumber(String phoneNumber){
+    public JsonResult<LoginMerchantInfo> getLoginMerchantInfoByPhoneNumber(String phoneNumber){
 	LoginMerchantInfo info = new LoginMerchantInfo();
 	MerchantInfo merchantInfo = merchantMapper.getMerchantInfoByPhoneNumber(phoneNumber);
 	List<MerchantPermissionInfo> merchantPermissions = merchantPermissionMapper.getMerchantPermissionInfoByPhoneNumber(phoneNumber);
@@ -169,32 +172,23 @@ public class MerchantService {
     public JsonResult<String> merchantRegist(@RequestBody MerchantRegistParam param) {
 	// 参数校验
 	JSR303ValidateUtils.validate(param);
-	// 根据短信id查询验证码
-	Long msgId = param.getMsgId();
-	if (msgId == null) {
-	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "缺少短信id");
-	}
-	MsgLog msgLog = msgLogMapper.selectByPrimaryKey(msgId);
-	if (msgLog == null) {
-	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "短信验证码有误");
-	}
-	Date nowDate = new Date();
-	if (DateUtils.timeDiffMin(msgLog.getMsgTime(), nowDate) > 10) {
-	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "短信验证码已失效");
-	}
-	String verificationCode = msgLog.getMsgContent();
-	if (!param.getVerificationCode().equals(verificationCode)) {
-	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "短信验证码不正确");
-	}
 	String password = param.getPassword();
 	String confirmPassword = param.getConfirmPassword();
 	// 密码与确认密码一致性校验
 	if (!password.equals(confirmPassword)) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "密码与确认密码不一致");
 	}
+	String phoneNumber = param.getPhoneNumber();
+	Date nowDate = new Date();
+	MerchantInfo merchantInfo = merchantMapper.getMerchantInfoByPhoneNumber(phoneNumber);
+	if(merchantInfo != null) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "手机号已被注册");
+	}
+	// 生成盐值加密的密码
+	Password pwd = PasswordHelper.encryptPasswordByModel(password);
 	Merchant merchantRecord = Merchant.builder().merchantCode(System.currentTimeMillis() + "")// TODO
-		.password(param.getPassword()).contactPhone(param.getPhoneNumber()).createTime(nowDate)
-		.registeredPerson(param.getRegisterName()).build();
+		.password(pwd.getPassword()).salt(pwd.getSalt()).createTime(nowDate)
+		.contactPhone(phoneNumber).registeredPerson(param.getRegisterName()).build();
 	merchantMapper.insertSelective(merchantRecord);
 	return JsonResult.successJsonResult();
     }
@@ -229,28 +223,16 @@ public class MerchantService {
      */
     public JsonResult<String> completeMerchantInfo(@RequestBody CompleteMerchantInfoParam param) {
 	JSR303ValidateUtils.validate(param);
+	String creditCode = param.getCreditCode();
+	Merchant merchant = merchantMapper.getMerchantByCreditCode(creditCode);
+	if(merchant != null) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "信用代码已存在");
+	}
 	String merchantCode = param.getMerchantCode();
 	String provinceName = param.getProviceName();
 	String cityName = param.getCityName();
 	String areaName = param.getAreaName();
 	String detailAddress = param.getDetailAddress();
-	Merchant merchantRecord = Merchant.builder().address(provinceName + cityName + areaName + detailAddress)
-		.businessLicenseFileName(param.getBusinessLicenseFileName())
-		.businessLicenseFileUrl(param.getBusinessLicenseFileUrl())
-		.companyName(param.getCompanyName())
-		.companyTel(param.getCompanytel())
-		.creditCode(param.getCreditCode())
-		.merchantCode(merchantCode)
-		.qualificationApplyStatus(QualificationApplyStatus.PENDING.getValue())
-		.tradingCertificateFirstFileName(param.getTradingCertificateFirstFileName())
-		.tradingCertificateFirstFileUrl(param.getTradingCertificateFirstFileUrl())
-		.tradingCertificateSecondFileName(param.getTradingCertificateSecondFileName())
-		.tradingCertificateSecondFileUrl(param.getTradingCertificateSecondFileUrl())
-		.tradingCertificateThirdFileName(param.getTradingCertificateThirdFileName())
-		.tradingCertificateThirdFileUrl(param.getTradingCertificateThirdFileUrl())
-		.build();
-	merchantMapper.updateByMerchantCode(merchantRecord);
-	
 	MerchantAddress merchantAddressRecord = MerchantAddress.builder()
 		.merchantCode(merchantCode)
 		.areaCode(param.getAreaCode())
@@ -263,22 +245,27 @@ public class MerchantService {
 		.provinceName(provinceName)
 		.build();
 	merchantAddressMapper.insertSelective(merchantAddressRecord);
-	return null;
-    }
-
-    /**
-     * TODO 要挪到平台端
-     * <p>
-     * 商户列表查询
-     * </p>
-     * 
-     * @param param
-     * @return
-     * @author 黄智聪 2018年10月22日 下午6:51:22
-     */
-    public JsonResult<Pagination<MerchantInfo>> getMerchantList(@RequestBody SearchMerchantParam param) {
-
-	return null;
+	
+	// 完善资料后，需插入申请记录
+	MerchantApply merchantApplyRecord = MerchantApply.builder()
+		.businessLicenseFileName(param.getBusinessLicenseFileName())
+		.businessLicenseFileUrl(param.getBusinessLicenseFileUrl())
+		.companyName(param.getCompanyName())
+		.companyTel(param.getCompanyTel())
+		.creditCode(creditCode)
+		.merchantCode(merchantCode)
+		.merchantName(param.getMerchantName())
+		.status(QualificationApplyStatus.PENDING.getValue())
+		.tradingCertificateFirstFileName(param.getTradingCertificateFirstFileName())
+		.tradingCertificateFirstFileUrl(param.getTradingCertificateFirstFileUrl())
+		.tradingCertificateSecondFileName(param.getTradingCertificateSecondFileName())
+		.tradingCertificateSecondFileUrl(param.getTradingCertificateSecondFileUrl())
+		.tradingCertificateThirdFileName(param.getTradingCertificateThirdFileName())
+		.tradingCertificateThirdFileUrl(param.getTradingCertificateThirdFileUrl())
+		.build();
+	merchantApplyMapper.insertSelective(merchantApplyRecord);
+	
+	return JsonResult.successJsonResult();
     }
 
     /**

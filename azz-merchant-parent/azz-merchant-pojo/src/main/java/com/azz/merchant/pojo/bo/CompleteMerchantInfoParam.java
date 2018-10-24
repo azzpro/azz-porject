@@ -31,7 +31,7 @@ public class CompleteMerchantInfoParam {
     @NotBlank(message = "信用代码不允许为空")
     private String creditCode;
     @NotBlank(message = "公司电话不允许为空")
-    private String companytel;
+    private String companyTel;
     @NotBlank(message = "省代码不允许为空")
     private String proviceCode;
     @NotBlank(message = "请选择省份")

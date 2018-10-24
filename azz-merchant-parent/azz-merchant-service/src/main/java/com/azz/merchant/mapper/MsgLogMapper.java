@@ -18,4 +18,5 @@ public interface MsgLogMapper {
     int updateByPrimaryKeySelective(MsgLog record);
 
     int updateByPrimaryKey(MsgLog record);
+    
 }

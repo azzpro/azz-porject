@@ -187,7 +187,7 @@
     </if>
   </select>
   
-  <select id="getRoleInfoBySearchParam" parameterType="com.azz.platform.user.pojo.bo.SearchRoleParam" resultType="com.azz.platform.user.pojo.vo.RoleInfo" >
+  <select id="getRoleInfoBySearchParam" parameterType="com.azz.merchant.pojo.bo.SearchRoleParam" resultType="com.azz.merchant.pojo.vo.RoleInfo" >
     SELECT
 		r.role_code AS roleCode,
 		r.role_name AS roleName,

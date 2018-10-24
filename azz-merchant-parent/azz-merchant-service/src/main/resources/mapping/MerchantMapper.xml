@@ -470,6 +470,14 @@
     and status != 0
   </select>
   
+  <select id="getMerchantByCreditCode" parameterType="string" resultMap="BaseResultMap">
+    select 
+    	<include refid="Base_Column_List" />
+    from merchant
+    where credit_code = #{creditCode}
+    and status != 0
+  </select>
+  
   <select id="getMerchantInfoByPhoneNumber" parameterType="string" resultType="com.azz.merchant.pojo.vo.MerchantInfo">
 	  SELECT
 		m.merchant_code as merchantCode,

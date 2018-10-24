@@ -2,8 +2,11 @@ package com.azz.merchant.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.azz.merchant.pojo.MerchantRolePermission;
 
+@Mapper
 public interface MerchantRolePermissionMapper {
     int deleteByPrimaryKey(Long id);
 

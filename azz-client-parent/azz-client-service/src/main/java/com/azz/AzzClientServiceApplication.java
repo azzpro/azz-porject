@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableEurekaClient
 @EnableFeignClients
 @SpringBootApplication
-@RestController
 public class AzzClientServiceApplication {
 
 	public static void main(String[] args) {

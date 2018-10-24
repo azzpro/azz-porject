@@ -7,9 +7,7 @@
  
 package com.azz.system.service;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -26,6 +24,7 @@ import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.constants.FileConstants;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.util.AzzImageUtil;
+import com.azz.util.Base64;
 
 /**
  * <P>TODO</P>
@@ -50,9 +49,6 @@ public class SystemImageService {
 		if(StringUtils.isBlank(bucketname)) {
     		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"存储空间名称不能为空");
     	}
-		if(!FileConstants.IMAGE_BUCKETNAME.equals(bucketname) || !FileConstants.FILE_BUCKETNAME.equals(bucketname)) {
-			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"存储空间名称错误");
-		}
 		if(!bucketNameExist(bucketname)) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"存储空间名称不存在");
 		}
@@ -63,9 +59,9 @@ public class SystemImageService {
     		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"文件后缀不能为空");
     	}
 		//生产环境放开
-		/*if(StringUtils.isBlank(filedata) || filedata.length <= 0) {
+		if(StringUtils.isBlank(filedata) || filedata.length() <= 0) {
     		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"文件数据不能为空");
-    	}*/
+    	}
 		if(null == imageType) {
     		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"图片类型不能为空");
     	}
@@ -103,19 +99,19 @@ public class SystemImageService {
 		LOG.info("生成的图片名称------->["+finalName.toString()+"]");
 		//base64 
 		/**生产环境使用****/
-		/*byte[] decode = Base64.decode(filedata);
-		InputStream is = new ByteArrayInputStream(decode);*/
+		byte[] decode = Base64.decode(filedata);
+		InputStream is = new ByteArrayInputStream(decode);
 		
 		/**本地测试****/
-		InputStream is = null;
+		/*InputStream is = null;
 		try {
 			 is = new FileInputStream(new File("D:\\123.jpg"));
 		}catch (FileNotFoundException e) {
 			LOG.error("文件找不到");
-		}
+		}*/
 		//判断文件大小 不能超过20MB
 		try {
-			if(FileConstants.IMAGE_SIZE > is.available()/1024/1024) {
+			if(FileConstants.IMAGE_SIZE < is.available()/1024/1024) {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"图片超过20MB");
 			}
 		}catch (IOException e) {
@@ -168,6 +164,7 @@ public class SystemImageService {
 	public Boolean bucketNameExist(String bucketname) {
 		OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
 		boolean exist = ossClient.doesBucketExist(bucketname);
+		ossClient.shutdown();
 		return exist;
 	}
 	
@@ -178,6 +175,7 @@ public class SystemImageService {
 	public void deleteBucketName(String bucketname) {
 		OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
 		ossClient.deleteBucket(bucketname);
+		ossClient.shutdown();
 	}
 }
 

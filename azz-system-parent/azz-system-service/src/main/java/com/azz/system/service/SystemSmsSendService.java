@@ -43,7 +43,7 @@ private static final Logger LOG = LoggerFactory.getLogger(SystemSmsSendService.c
 	@Value("${aliyun.accessKeySecret}")
 	private String accessKeySecret;
 	
-	@Value("${signName}")
+	@Value("${aliyun.signName}")
 	private String signName;
 	
 	@Value("${aliyun.product}")

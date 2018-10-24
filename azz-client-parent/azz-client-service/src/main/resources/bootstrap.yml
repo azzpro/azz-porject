@@ -1,11 +1,29 @@
+server: 
+  port: 8888
+  max-http-header-size: 4048576
 spring: 
   application:
     name: azz-client-service
-  cloud:
-    config:
-      uri: http://localhost:2222
-      label: master
-      profile: dev
-      discovery:
-        enabled: true
-        service-id: azz-config-server
+  datasource:
+    username: root
+    password: azz2025
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://120.78.162.226:3306/azz_dev?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+    driver-class-name: com.mysql.jdbc.Driver
+    dbcp2:
+      min-idle: 5
+      initial-size: 5
+      max-total: 5
+      max-wait-millis: 200
+#  cloud:
+#    config:
+#      uri: http://localhost:2222
+#      label: master
+#      profile: dev
+#      discovery:
+#        enabled: true
+#        service-id: azz-config-server 
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

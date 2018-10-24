@@ -17,8 +17,8 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.platform.client.api.AuditService;
 import com.azz.platform.client.api.ClientService;
-import com.azz.platform.merchant.pojo.bo.SearchMerchantParam;
-import com.azz.platform.merchant.pojo.vo.MerchantApproval;
+import com.azz.platform.client.pojo.bo.SearchClientParam;
+import com.azz.platform.client.pojo.vo.ClientCertification;
 
 /**
  * <P>TODO</P>
@@ -27,7 +27,7 @@ import com.azz.platform.merchant.pojo.vo.MerchantApproval;
  */
 @RestController
 @RequestMapping("/azz/api/client")
-public class MerchantController {
+public class ClientController {
 	
 	@Autowired
 	private ClientService clientService;
@@ -36,7 +36,7 @@ public class MerchantController {
 	private AuditService auditService;
 	
 	@RequestMapping(value="searchClientList",method=RequestMethod.POST)
-	 public JsonResult<Pagination<MerchantApproval>> searchClientList(@RequestBody SearchMerchantParam param) {
+	 public JsonResult<Pagination<ClientCertification>> searchClientList(@RequestBody SearchClientParam param) {
 		return null;
 	}
 

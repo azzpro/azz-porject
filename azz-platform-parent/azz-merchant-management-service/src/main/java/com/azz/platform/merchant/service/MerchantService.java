@@ -22,10 +22,12 @@ import com.azz.platform.merchant.mapper.MerchantApplyMapper;
 import com.azz.platform.merchant.mapper.MerchantMapper;
 import com.azz.platform.merchant.pojo.bo.SearchMerchantListParam;
 import com.azz.platform.merchant.pojo.bo.SearchMerchantParam;
+import com.azz.platform.merchant.pojo.bo.SearchMerchantUserParam;
 import com.azz.platform.merchant.pojo.vo.MerchantApproval;
 import com.azz.platform.merchant.pojo.vo.MerchantInfo;
 import com.azz.platform.merchant.pojo.vo.MerchantInfoOpen;
 import com.azz.platform.merchant.pojo.vo.MerchantListInfo;
+import com.azz.platform.merchant.pojo.vo.MerchantUserInfo;
 import com.azz.util.StringUtils;
 import com.github.pagehelper.PageHelper;
 
@@ -80,12 +82,6 @@ public class MerchantService{
      */
     @Transactional(rollbackFor=Exception.class)
     public JsonResult<String> merchantStatusChange(String code,Integer status) {
-    	 if(org.apache.commons.lang3.StringUtils.isBlank(code)) {
-    		 throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"商户编码不能为空");
-    	 }
-    	 if( null == status) {
-    		 throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"商户状态不能为空");
-    	 }
     	 merchantMapper.merchantStatusChange(code,status);
     	 return JsonResult.successJsonResult();
     }
@@ -97,11 +93,20 @@ public class MerchantService{
      * @author 刘建麟  2018年10月24日 下午7:31:57
      */
     public JsonResult<MerchantInfoOpen> getMerchantInfo(String code) {
-    	 if(org.apache.commons.lang3.StringUtils.isBlank(code)) {
-    		 throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"商户编码不能为空");
-    	 }
     	 MerchantInfoOpen info = merchantMapper.getMerchantInfo(code);
     	 return JsonResult.successJsonResult(info);
+    }
+    
+    /**
+     * <p>商户管理列表 成员信息</p>
+     * @param param
+     * @return
+     * @author 刘建麟  2018年10月24日 下午7:31:57
+     */
+    public JsonResult<Pagination<MerchantUserInfo>> getMerchantUserInfo(@RequestBody SearchMerchantUserParam param) {
+    	 PageHelper.startPage(param.getPageNum(), param.getPageSize());
+    	 List<MerchantUserInfo> merchantInfoList = merchantMapper.getMerchantUserInfo(param);
+         return JsonResult.successJsonResult(new Pagination<>(merchantInfoList));
     }
 
 }

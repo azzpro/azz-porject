@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.azz.platform.merchant.pojo.Merchant;
 import com.azz.platform.merchant.pojo.bo.SearchMerchantListParam;
 import com.azz.platform.merchant.pojo.bo.SearchMerchantParam;
+import com.azz.platform.merchant.pojo.bo.SearchMerchantUserParam;
 import com.azz.platform.merchant.pojo.vo.MerchantApproval;
 import com.azz.platform.merchant.pojo.vo.MerchantInfoOpen;
 import com.azz.platform.merchant.pojo.vo.MerchantListInfo;
+import com.azz.platform.merchant.pojo.vo.MerchantUserInfo;
 
 @Mapper
 public interface MerchantMapper {
@@ -40,6 +42,14 @@ public interface MerchantMapper {
      * @author 刘建麟  2018年10月24日 下午7:19:52
      */
     List<MerchantListInfo> selectMerchantInfoList(SearchMerchantListParam smlp);
+    
+    /**
+     * <p>商户管理列表 成员信息</p>
+     * @param smlp
+     * @return
+     * @author 刘建麟  2018年10月24日 下午7:19:52
+     */
+    List<MerchantUserInfo> getMerchantUserInfo(SearchMerchantUserParam smlp);
     
     /**
      * <p>商户详情</p>

@@ -19,10 +19,12 @@ import com.azz.core.common.page.Pagination;
 import com.azz.platform.merchant.pojo.bo.AuditParam;
 import com.azz.platform.merchant.pojo.bo.SearchMerchantListParam;
 import com.azz.platform.merchant.pojo.bo.SearchMerchantParam;
+import com.azz.platform.merchant.pojo.bo.SearchMerchantUserParam;
 import com.azz.platform.merchant.pojo.vo.MerchantApproval;
 import com.azz.platform.merchant.pojo.vo.MerchantInfo;
 import com.azz.platform.merchant.pojo.vo.MerchantInfoOpen;
 import com.azz.platform.merchant.pojo.vo.MerchantListInfo;
+import com.azz.platform.merchant.pojo.vo.MerchantUserInfo;
 import com.azz.platform.merchant.service.AuditService;
 import com.azz.platform.merchant.service.MerchantService;
 
@@ -87,6 +89,17 @@ public class MerchantController {
 	@RequestMapping(value="getMerchantInfo",method=RequestMethod.POST)
 	 public JsonResult<MerchantInfoOpen> getMerchantInfo(String code) {
 		return merchantService.getMerchantInfo(code);
+	}
+	
+	/**
+	 * <p>商户管理成员信息</p>
+	 * @param param
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午7:35:48
+	 */
+	@RequestMapping(value="getMerchantUserInfo",method=RequestMethod.POST)
+	 public JsonResult<Pagination<MerchantUserInfo>> getMerchantUserInfo(@RequestBody SearchMerchantUserParam param) {
+		return merchantService.getMerchantUserInfo(param);
 	}
 }
 

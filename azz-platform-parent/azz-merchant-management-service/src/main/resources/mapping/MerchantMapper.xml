@@ -419,6 +419,23 @@
   		 ORDER BY create_time DESC
   </select>
   
+   <!-- 商户管理列表    部门查询没加-->
+  <select id="getMerchantUserInfo" parameterType="com.azz.platform.merchant.pojo.bo.SearchMerchantUserParam" resultType="com.azz.platform.merchant.pojo.vo.MerchantUserInfo">
+  		select
+  		  m.merchant_user_code merchantUserCode,
+  		  m.merchant_user_name merchantUserName,
+  		  m.phone_number phoneNumber,
+  		  m.post_name postName,
+  		  a.dept_name deptName,
+  		  m.status status,
+  		  m.create_time createTime
+  		from merchant_user m,platform_dept a where m.dept_id = a.id
+  		<if test="param != null and param != ''">
+  				and m.merchant_user_name = #{param} or m.phone_number = #{param} or m.post_name = #{param} or a.dept_name = #{param}
+  		</if>
+  		 ORDER BY m.create_time DESC
+  </select>
+  
   <!-- 商户管理列表  详情 -->
   <select id="getMerchantInfo" parameterType="java.lang.String" resultType="com.azz.platform.merchant.pojo.vo.MerchantInfoOpen">
   		select

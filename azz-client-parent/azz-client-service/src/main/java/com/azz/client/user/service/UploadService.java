@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.azz.core.constants.FileConstants;
 import com.azz.system.api.SystemImageUploadService;
 
 /**
@@ -25,7 +26,7 @@ public class UploadService {
 	private SystemImageUploadService sis;
 	
 	public String upload(String data,String name) {
-		return sis.uploadImage("azz-image", StringUtils.substringBefore(name, "."), StringUtils.substringAfter(name, "."), data, 1, 2);
+		return sis.uploadImage(FileConstants.IMAGE_BUCKETNAME, StringUtils.substringBefore(name, "."), StringUtils.substringAfter(name, "."), data, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_AVATAR_IMAGE_TYPE);
 	}
 }
 

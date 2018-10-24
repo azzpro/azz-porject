@@ -31,7 +31,10 @@ public class FileConstants {
 	//法人图片
 	public static final String AZZ_LEGAL_PERSON_PATH = "legal_person_pic";
 	
-	//营业执照
+	//营业执照图片
+	public static final String AZZ_TRADING_CERTIFICATE_PATH = "trading_certificate_pic";
+		
+	//经营执照图片
 	public static final String AZZ_BUSINESS_LICENSE_PATH = "business_license_pic";
 	
 	//图像
@@ -52,14 +55,17 @@ public class FileConstants {
 	//法人图片
 	public static final int AZZ_LEGAL_IMAGE_TYPE = 1;
 	
-	//营业执照
+	//经营执照
 	public static final int AZZ_BUSINESS_IMAGE_TYPE = 2;
 	
 	//图像
 	public static final int AZZ_AVATAR_IMAGE_TYPE = 3;
 	
+	//营业执照
+	public static final int AZZ_TRADING_CERTIFICATE_IMAGE_TYPE = 4;
+	
 	//其他图
-	public static final int AZZ_OTHER_IMAGE_TYPE = 4;
+	public static final int AZZ_OTHER_IMAGE_TYPE = 5;
 	
 	//支持的图片格式
 	public static final String AZZ_IMAGE_SUFFIX = "bmp|jpg|png|git|webp|tiff";

@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
+import com.azz.platform.merchant.pojo.bo.SearchMerchantListParam;
 import com.azz.platform.merchant.pojo.bo.SearchMerchantParam;
 import com.azz.platform.merchant.pojo.vo.MerchantApproval;
 import com.azz.platform.merchant.pojo.vo.MerchantInfo;
+import com.azz.platform.merchant.pojo.vo.MerchantInfoOpen;
+import com.azz.platform.merchant.pojo.vo.MerchantListInfo;
 
 /**
  * <P>TODO</P>
@@ -44,5 +47,32 @@ public interface MerchantService {
      */
     @GetMapping("/azz/api/merchant/searchMerchantInfo")
     JsonResult<MerchantInfo> searchMerchantInfo(@RequestParam("merchantCode") String merchantCode);
+    
+    /**
+     * <p>平台端的商户列表</p>
+     * @param merchantCode
+     * @return
+     * @author 彭斌  2018年10月23日 上午10:10:06
+     */
+    @PostMapping("/azz/api/merchant/searchMerchantListInfo")
+    JsonResult<Pagination<MerchantListInfo>> searchMerchantListInfo(@RequestBody SearchMerchantListParam param);
+    
+    /**
+     * <p>平台端的商户 启用 禁用</p>
+     * @param merchantCode
+     * @return
+     * @author 彭斌  2018年10月23日 上午10:10:06
+     */
+    @PostMapping("/azz/api/merchant/merchantStatusChange")
+    JsonResult<String> merchantStatusChange(@RequestParam("code") String code,@RequestParam("status") Integer status);
+    
+    /**
+     * <p>平台端的商户 详情</p>
+     * @param merchantCode
+     * @return
+     * @author 彭斌  2018年10月23日 上午10:10:06
+     */
+    @PostMapping("/azz/api/merchant/getMerchantInfo")
+    JsonResult<MerchantInfoOpen> getMerchantInfo(@RequestParam("code") String code);
 }
 

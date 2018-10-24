@@ -399,4 +399,76 @@
 	 </where>
 	 ORDER BY m.create_time DESC
   </select>
+  
+  <!-- 商户管理列表 -->
+  <select id="selectMerchantInfoList" parameterType="com.azz.platform.merchant.pojo.bo.SearchMerchantListParam" resultType="com.azz.platform.merchant.pojo.vo.MerchantListInfo">
+  		select
+  		  merchant_code merchantCode,
+  		  registered_person registeredPerson,
+  		  registered_person createName,
+  		  contact_phone contactPhone,
+  		  company_name companyName,
+  		  status status,
+  		  create_time createTime
+  		from merchant
+  		<where>
+  			<if test="param != null and param != ''">
+  				and merchant_code = #{param} or company_name = #{param} or registered_person = #{param}
+  			</if>
+  		</where>
+  		 ORDER BY create_time DESC
+  </select>
+  
+  <!-- 商户管理列表  详情 -->
+  <select id="getMerchantInfo" parameterType="java.lang.String" resultType="com.azz.platform.merchant.pojo.vo.MerchantInfoOpen">
+  		select
+  		  m.merchant_code merchantCode,
+  		  m.merchant_name merchantName,
+  		  m.legal_person_name legalPersonName,
+  		  m.legal_person_id_card legalPersonIdCard,
+  		  m.company_name companyName,
+  		  m.credit_code creditCode,
+  		  m.company_tel companyTel,
+  		  m.address address,
+  		  m.status status,
+  		  m.trading_certificate_first_file_name tradingCertificateFirstFileName,
+  		  m.trading_certificate_first_file_url tradingCertificateFirstFileUrl,
+  		  m.trading_certificate_second_file_name tradingCertificateSecondFileName,
+  		  m.trading_certificate_second_file_url tradingCertificateSecondFileUrl,
+  		  m.trading_certificate_third_file_name tradingCertificateThirdFileName,
+  		  m.trading_certificate_third_file_url tradingCertificateThirdFileUrl,
+  		  m.legal_person_id_card_file_name legalPersonIdCardFileName,
+  		  m.legal_person_id_card_file_url legalPersonIdCardFileUrl,
+  		  m.business_license_file_name businessLicenseFileName,
+  		  m.business_license_file_url businessLicenseFileUrl,
+  		  m.create_time createTime,
+  		  a.account_name accountName,
+  		  a.account_bank accountBank,
+  		  a.account_bank_card_number accountBankCardNumber,
+  		  a.account_sub_branch accountSubBranch
+  		  
+  		from merchant m , merchant_account a where m.id = a.merchant_id
+  		<if test="code != null and code != ''">
+  				and m.merchant_code = #{code}
+  		</if>
+  		 ORDER BY m.create_time DESC
+  </select>
+  
+  <!-- 商户管理 启用 禁用 -->
+  <update id="merchantStatusChange" parameterType="java.lang.String">
+  		update 
+  		  merchant
+  		<set>
+  			<if test="status != null ">
+  				status = #{status}
+  			</if>
+  		</set>
+  		  <where>
+  		  	<if test="code != null and code != ''">
+  		  		merchant_code = #{code}
+  		  	</if>
+  		  </where>
+  
+  
+  </update>
 </mapper>

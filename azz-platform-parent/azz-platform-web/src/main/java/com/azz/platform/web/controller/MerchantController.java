@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,9 +20,12 @@ import com.azz.core.common.page.Pagination;
 import com.azz.platform.merchant.api.AuditService;
 import com.azz.platform.merchant.api.MerchantService;
 import com.azz.platform.merchant.pojo.bo.AuditParam;
+import com.azz.platform.merchant.pojo.bo.SearchMerchantListParam;
 import com.azz.platform.merchant.pojo.bo.SearchMerchantParam;
 import com.azz.platform.merchant.pojo.vo.MerchantApproval;
 import com.azz.platform.merchant.pojo.vo.MerchantInfo;
+import com.azz.platform.merchant.pojo.vo.MerchantInfoOpen;
+import com.azz.platform.merchant.pojo.vo.MerchantListInfo;
 
 /**
  * <P>商户管理</P>
@@ -50,6 +54,17 @@ public class MerchantController {
 	public JsonResult<Pagination<MerchantApproval>> searchMerchantList(SearchMerchantParam param) {
 		return merchantService.searchMerchantList(param);
 	}
+	
+	/**
+	 * <p>商户管理列表</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年10月23日 下午2:02:33
+	 */
+	@RequestMapping("/searchMerchantListInfo")
+	public JsonResult<Pagination<MerchantListInfo>> searchMerchantListInfo(SearchMerchantListParam param) {
+		return merchantService.searchMerchantListInfo(param);
+	}
 
 	/**
 	 * <p>获取审批详情信息</p>
@@ -72,5 +87,27 @@ public class MerchantController {
     public JsonResult<String> auditEnterprise(AuditParam param) {
         return auditService.auditEnterprise(param);
     }
+    
+    /**
+	 * <p>商户管理 启用 禁用  1启用 0 禁用</p>
+	 * @param param
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午7:35:48
+	 */
+	@RequestMapping(value="merchantStatusChange",method=RequestMethod.POST)
+	 public JsonResult<String> merchantStatusChange(@RequestParam("code") String code,@RequestParam("status") Integer status) {
+		return merchantService.merchantStatusChange(code,status);
+	}
+	
+	/**
+	 * <p>商户管理 详情</p>
+	 * @param param
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午7:35:48
+	 */
+	@RequestMapping(value="getMerchantInfo",method=RequestMethod.POST)
+	 public JsonResult<MerchantInfoOpen> getMerchantInfo(@RequestParam("code") String code) {
+		return merchantService.getMerchantInfo(code);
+	}
 	
 }

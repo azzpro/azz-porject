@@ -9,17 +9,23 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.exception.BaseException;
+import com.azz.exception.JSR303ValidationException;
 import com.azz.platform.merchant.mapper.MerchantApplyMapper;
 import com.azz.platform.merchant.mapper.MerchantMapper;
+import com.azz.platform.merchant.pojo.bo.SearchMerchantListParam;
 import com.azz.platform.merchant.pojo.bo.SearchMerchantParam;
 import com.azz.platform.merchant.pojo.vo.MerchantApproval;
 import com.azz.platform.merchant.pojo.vo.MerchantInfo;
+import com.azz.platform.merchant.pojo.vo.MerchantInfoOpen;
+import com.azz.platform.merchant.pojo.vo.MerchantListInfo;
 import com.azz.util.StringUtils;
 import com.github.pagehelper.PageHelper;
 
@@ -52,6 +58,50 @@ public class MerchantService{
         }
         MerchantInfo merchantobj = merchantApplyMapper.selectMerchantInfoByCode(merchantCode);
         return JsonResult.successJsonResult(merchantobj);
+    }
+    
+    /**
+     * <p>商户管理列表</p>
+     * @param param
+     * @return
+     * @author 刘建麟  2018年10月24日 下午7:31:57
+     */
+    public JsonResult<Pagination<MerchantListInfo>> searchMerchantListInfo(@RequestBody SearchMerchantListParam param) {
+    	 PageHelper.startPage(param.getPageNum(), param.getPageSize());
+    	 List<MerchantListInfo> merchantInfoList = merchantMapper.selectMerchantInfoList(param);
+         return JsonResult.successJsonResult(new Pagination<>(merchantInfoList));
+    }
+    
+    /**
+     * <p>商户管理 启动 禁用</p>
+     * @param param
+     * @return
+     * @author 刘建麟  2018年10月24日 下午7:31:57
+     */
+    @Transactional(rollbackFor=Exception.class)
+    public JsonResult<String> merchantStatusChange(String code,Integer status) {
+    	 if(org.apache.commons.lang3.StringUtils.isBlank(code)) {
+    		 throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"商户编码不能为空");
+    	 }
+    	 if( null == status) {
+    		 throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"商户状态不能为空");
+    	 }
+    	 merchantMapper.merchantStatusChange(code,status);
+    	 return JsonResult.successJsonResult();
+    }
+    
+    /**
+     * <p>商户管理 详情</p>
+     * @param param
+     * @return
+     * @author 刘建麟  2018年10月24日 下午7:31:57
+     */
+    public JsonResult<MerchantInfoOpen> getMerchantInfo(String code) {
+    	 if(org.apache.commons.lang3.StringUtils.isBlank(code)) {
+    		 throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"商户编码不能为空");
+    	 }
+    	 MerchantInfoOpen info = merchantMapper.getMerchantInfo(code);
+    	 return JsonResult.successJsonResult(info);
     }
 
 }

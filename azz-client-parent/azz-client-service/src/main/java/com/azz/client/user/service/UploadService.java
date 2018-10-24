@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.azz.core.constants.FileConstants;
 import com.azz.system.api.SystemImageUploadService;
+import com.azz.system.sequence.api.DbSequenceService;
 
 /**
  * <P>TODO</P>
@@ -25,8 +26,15 @@ public class UploadService {
 	@Autowired
 	private SystemImageUploadService sis;
 	
+	@Autowired
+	private DbSequenceService dbSequenceService;
+	
 	public String upload(String data,String name) {
 		return sis.uploadImage(FileConstants.IMAGE_BUCKETNAME, StringUtils.substringBefore(name, "."), StringUtils.substringAfter(name, "."), data, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_AVATAR_IMAGE_TYPE);
+	}
+	
+	public String getsequence() {
+		return dbSequenceService.getMerchantDepartmentNumber();
 	}
 }
 

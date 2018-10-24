@@ -3,11 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>azz-client-service</artifactId>
+	<artifactId>azz-sequence-service</artifactId>
 	<packaging>jar</packaging>
 	<parent>
 		<groupId>com.azz</groupId>
-		<artifactId>azz-client-parent</artifactId>
+		<artifactId>azz-system-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<dependencies>
@@ -34,27 +34,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.azz</groupId>
-			<artifactId>azz-client-api</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.azz</groupId>
-			<artifactId>azz-sequence-api</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.azz</groupId>
-			<artifactId>azz-system-api</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.azz</groupId>
-			<artifactId>azz-client-pojo</artifactId>
+			<artifactId>azz-common-core</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
@@ -66,8 +51,8 @@
 			<artifactId>spring-cloud-starter-eureka</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-config</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -77,14 +62,14 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.azz</groupId>
-			<artifactId>azz-common-util</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+           	 <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+        </dependency>
 	</dependencies>
 	<build>
-		<finalName>azz-client-service</finalName>
+		<finalName>azz-sequence-service</finalName>
 	</build>
 </project>

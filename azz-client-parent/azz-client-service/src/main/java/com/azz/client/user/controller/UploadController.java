@@ -29,5 +29,10 @@ public class UploadController {
 	public String upload(String data,String name) {
 		return us.upload(data,name);
 	}
+	
+	@RequestMapping("getsequence")
+	public String getsequence() {
+		return us.getsequence();
+	}
 }
 

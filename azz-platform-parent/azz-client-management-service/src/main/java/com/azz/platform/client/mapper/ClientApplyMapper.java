@@ -3,6 +3,7 @@ package com.azz.platform.client.mapper;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.platform.client.pojo.ClientApply;
+import com.azz.platform.client.pojo.vo.ClientInfo;
 @Mapper
 public interface ClientApplyMapper {
     int deleteByPrimaryKey(Long id);
@@ -16,4 +17,6 @@ public interface ClientApplyMapper {
     int updateByPrimaryKeySelective(ClientApply record);
 
     int updateByPrimaryKey(ClientApply record);
+    
+    ClientInfo selectClientApplyByClientCode(String clientCode);
 }

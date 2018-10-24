@@ -248,4 +248,28 @@
       trading_certificate_third_file_url = #{tradingCertificateThirdFileUrl,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="selectClientApplyByClientCode" parameterType="java.lang.String" resultType="com.azz.platform.client.pojo.vo.ClientInfo">
+	SELECT
+		ca.client_code as clientCode,
+		ca.status as status,
+		ca.create_time as createTime,
+		ca.company_name as companyName,
+		ca.credit_code as creditCode,
+		ca.company_tel as companyTel,
+		ca.address as address,
+		ca.trading_certificate_first_file_name as tradingCertificateFirstFileName,
+		ca.trading_certificate_first_file_url as tradingCertificateFirstFileUrl,
+		ca.trading_certificate_second_file_name as tradingCertificateSecondFileName,
+		ca.trading_certificate_second_file_url as tradingCertificateSecondFileUrl,
+		ca.trading_certificate_third_file_name as tradingCertificateThirdFileName,
+		ca.trading_certificate_third_file_url as tradingCertificateThirdFileUrl
+	FROM
+		client_apply ca
+	WHERE
+		ca.client_code = #{clientCode,jdbcType=VARCHAR}
+	ORDER BY
+		ca.create_time DESC
+	LIMIT 1
+  </select>
 </mapper>

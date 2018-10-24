@@ -245,4 +245,28 @@
       credit_code = #{creditCode,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="selectByClientCertificationList" parameterType="com.azz.platform.client.pojo.bo.SearchClientParam" resultType="com.azz.platform.client.pojo.vo.ClientCertification">
+  	select 
+		c.client_code as clientCode,
+		ca.company_name as companyName,
+		ca.creator as creator,
+		c.phone_number as phoneNumber,
+		ca.status as status,
+		c.create_time as createTime
+	 from client c 
+	 left join (
+	 SELECT * FROM client_apply ca1 WHERE NOT EXISTS(
+	 SELECT 1 FROM client_apply ca2 WHERE ca2.client_code=ca1.client_code AND ca1.id &lt; ca2.id)
+	 ) ca on c.client_code=ca.client_code
+	 <where>
+	 	<if test="param != null and param !=''">
+	 		and (c.client_code = #{param,jdbcType=VARCHAR} or ca.company_name = #{param,jdbcType=VARCHAR} or ca.creator = #{param,jdbcType=VARCHAR})
+	 	</if>
+	 	<if test="status != null">
+	 		and c.status = #{status,jdbcType=INTEGER}
+	 	</if>
+	 </where>
+	 ORDER BY c.create_time DESC
+  </select>
 </mapper>

@@ -1,0 +1,2 @@
+com.azz.sequence.sequence.service.impl.RandomSequenceServiceImpl
+com.azz.sequence.sequence.service.impl.DbSequenceServiceImpl

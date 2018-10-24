@@ -8,14 +8,13 @@ package com.azz.platform.merchant.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.exception.BaseException;
-import com.azz.platform.merchant.api.MerchantService;
 import com.azz.platform.merchant.mapper.MerchantApplyMapper;
 import com.azz.platform.merchant.mapper.MerchantMapper;
 import com.azz.platform.merchant.pojo.bo.SearchMerchantParam;
@@ -32,8 +31,8 @@ import com.github.pagehelper.PageHelper;
  * @version 1.0
  * @author 彭斌 2018年10月22日 下午8:31:02
  */
-@RestController
-public class MerchantServiceImpl implements MerchantService {
+@Service
+public class MerchantService{
 
     @Autowired
     MerchantMapper merchantMapper;
@@ -41,14 +40,12 @@ public class MerchantServiceImpl implements MerchantService {
     @Autowired
     MerchantApplyMapper merchantApplyMapper;
 
-    @Override
     public JsonResult<Pagination<MerchantApproval>> searchMerchantList(@RequestBody SearchMerchantParam param) {
         PageHelper.startPage(param.getPageNum(), param.getPageSize());
         List<MerchantApproval> merchantList = merchantMapper.selectMerchantList(param);
         return JsonResult.successJsonResult(new Pagination<>(merchantList));
     }
 
-    @Override
     public JsonResult<MerchantInfo> searchMerchantInfo(String merchantCode) {
         if (StringUtils.isBlank(merchantCode)) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_MERCHANT_ERROR_NO_EXIST);

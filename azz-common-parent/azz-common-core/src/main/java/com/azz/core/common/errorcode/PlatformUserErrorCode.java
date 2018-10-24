@@ -31,6 +31,8 @@ public class PlatformUserErrorCode extends BaseErrorCode{
     
     public static final PlatformUserErrorCode PLATFORM_MERCHANT_AUDIT_ERROR = new PlatformUserErrorCode(40002, "信息不在审核范围内，可能通过或者拒绝状态");
     
+    //  客户审核错误码
+    public static final PlatformUserErrorCode PLATFORM_CLIENT_NO_EXIST = new PlatformUserErrorCode(50000, "客户不存在");
     public PlatformUserErrorCode(int code, String message) {
 	super(code, message);
     }

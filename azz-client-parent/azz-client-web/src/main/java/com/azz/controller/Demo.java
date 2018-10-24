@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.azz.client.user.api.SequenceApi;
 import com.azz.client.user.api.UploadApi;
 import com.azz.util.Base64;
 
@@ -30,11 +31,19 @@ public class Demo {
 	@Autowired
 	private UploadApi ua;
 	
+	@Autowired
+	private SequenceApi sa;
+	
 	@RequestMapping("upload")
 	public String get(@RequestParam("file") MultipartFile file) throws IOException {
 		String name = file.getOriginalFilename();
 		String url = ua.upload(Base64.encode(file.getBytes()), name);
 		return url;
+	}
+	
+	@RequestMapping("getsequence")
+	public String getsequence() {
+		return sa.getsequence();
 	}
 }
 

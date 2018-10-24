@@ -22,9 +22,9 @@ import lombok.Data;
 @Data
 public class AuditParam {
     /**
-     * 商户编码
+     * 客户编码
      */
-    @NotBlank(message = "商户编码不允许为空")
+    @NotBlank(message = "客户编码不允许为空")
     private String clientCode;
     
     /**

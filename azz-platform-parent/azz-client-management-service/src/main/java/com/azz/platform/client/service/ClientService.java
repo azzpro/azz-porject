@@ -52,7 +52,7 @@ public class ClientService {
      * @return
      * @author 彭斌  2018年10月25日 下午2:03:14
      */
-    public JsonResult<Pagination<ClientCertification>> searchMerchantList(@RequestBody SearchClientParam param) {
+    public JsonResult<Pagination<ClientCertification>> searchClientList(@RequestBody SearchClientParam param) {
         PageHelper.startPage(param.getPageNum(), param.getPageSize());
         List<ClientCertification> clientList = clientApplyMapper.selectByClientCertificationList(param);
         return JsonResult.successJsonResult(new Pagination<>(clientList));

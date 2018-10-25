@@ -14,12 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
+import com.azz.platform.client.api.AuditService;
 import com.azz.platform.client.api.ClientService;
 import com.azz.platform.client.pojo.ClientUser;
-import com.azz.platform.client.pojo.ClientUserCompany;
+import com.azz.platform.client.pojo.bo.AuditParam;
 import com.azz.platform.client.pojo.bo.SearchClientManagerParam;
 import com.azz.platform.client.pojo.bo.SearchClientMerchantManagerParam;
+import com.azz.platform.client.pojo.bo.SearchClientParam;
+import com.azz.platform.client.pojo.vo.ClientCertification;
+import com.azz.platform.client.pojo.vo.ClientInfo;
 import com.azz.platform.client.pojo.vo.ClientMerchantInfo;
+import com.azz.utils.WebUtils;
 
 /**
  * <P>TODO</P>
@@ -34,6 +39,8 @@ public class ClientController {
 	@Autowired
 	private ClientService clientService;
 	
+	@Autowired
+    private AuditService auditService;
 	/**
 	 * <p>平台 客户管理</p>
 	 * @param param
@@ -65,6 +72,40 @@ public class ClientController {
 	@RequestMapping("/updateClientUserStatus")
 	public JsonResult<String> updateClientUserStatus(@RequestParam("code") String code,@RequestParam("status") Integer status) {
 		return clientService.updateClientUserStatus(code, status);
+	}
+	
+	/**
+	 * <p>获取审批列表</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年10月25日 下午5:38:32
+	 */
+	@RequestMapping("/searchClientCertificationList")
+    public JsonResult<Pagination<ClientCertification>> searchClientList(SearchClientParam param) {
+        return clientService.searchClientList(param);
+    }
+	
+	/**
+	 * <p>获取客户详情</p>
+	 * @param clientUserCode
+	 * @return
+	 * @author 彭斌  2018年10月25日 下午5:38:48
+	 */
+	@RequestMapping("/searchClientInfo")
+    public JsonResult<ClientInfo> searchClientInfo(@RequestParam("clientUserCode") String clientUserCode){
+	    return clientService.searchClientInfo(clientUserCode);
+	}
+	
+	/**
+	 * <p>审批客户信息</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年10月25日 下午5:39:03
+	 */
+	@RequestMapping("/auditClient")
+    JsonResult<String> auditClient(AuditParam param){
+	    param.setAuditor(WebUtils.getLoginUser().getUserInfo().getUserCode());
+	    return auditService.auditClient(param);
 	}
 }
 

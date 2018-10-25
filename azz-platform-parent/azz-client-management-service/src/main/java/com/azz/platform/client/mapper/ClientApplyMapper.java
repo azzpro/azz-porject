@@ -1,8 +1,12 @@
 package com.azz.platform.client.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.platform.client.pojo.ClientApply;
+import com.azz.platform.client.pojo.bo.SearchClientParam;
+import com.azz.platform.client.pojo.vo.ClientCertification;
 
 @Mapper
 public interface ClientApplyMapper {
@@ -17,4 +21,6 @@ public interface ClientApplyMapper {
     int updateByPrimaryKeySelective(ClientApply record);
 
     int updateByPrimaryKey(ClientApply record);
+    
+    List<ClientCertification> selectByClientCertificationList(SearchClientParam param);
 }

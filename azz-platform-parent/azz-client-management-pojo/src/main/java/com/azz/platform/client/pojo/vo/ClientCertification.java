@@ -20,9 +20,9 @@ import lombok.Data;
  */
 @Data
 public class ClientCertification {
-    private String clientCode;
+    private String clientUserCode;
     private String companyName;
-    private String creator;
+    private String clientUserName;
     private String phoneNumber;
     private String status;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")

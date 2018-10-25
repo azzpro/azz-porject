@@ -10,6 +10,8 @@ package com.azz.platform.client.api;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.azz.core.common.JsonResult;
 import com.azz.platform.client.pojo.bo.AuditParam;
@@ -22,7 +24,7 @@ import com.azz.platform.client.pojo.bo.AuditParam;
 @FeignClient("azz-client-management-service")
 public interface AuditService {
     
-    @PostMapping("/azz/api/client/auditClient")
+    @RequestMapping(value = "/azz/api/client/auditClient",method=RequestMethod.POST)
     JsonResult<String> auditClient(@RequestBody AuditParam param);
 }
 

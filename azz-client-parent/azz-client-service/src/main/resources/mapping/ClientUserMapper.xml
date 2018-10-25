@@ -234,6 +234,65 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <update id="updateByClientUserCode" parameterType="com.azz.client.pojo.ClientUser">
+    update client_user
+    <set>
+      <if test="clientUserName != null">
+        client_user_name = #{clientUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="clientDeptId != null">
+        client_dept_id = #{clientDeptId,jdbcType=BIGINT},
+      </if>
+      <if test="postName != null">
+        post_name = #{postName,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null">
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="clientType != null">
+        client_type = #{clientType,jdbcType=INTEGER},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="clientAvatarUrl != null">
+        client_avatar_url = #{clientAvatarUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="loginErrorsTimes != null">
+        login_errors_times = #{loginErrorsTimes,jdbcType=INTEGER},
+      </if>
+      <if test="loginIp != null">
+        login_ip = #{loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifyTime != null">
+        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where client_user_code = #{clientUserCode},
+  </update>
+  
   <update id="updateByPrimaryKey" parameterType="com.azz.client.pojo.ClientUser">
     update client_user
     set client_user_code = #{clientUserCode,jdbcType=VARCHAR},
@@ -354,6 +413,38 @@
 					or u.post_name like CONCAT('%', #{searchInput}, '%')
 				)
 			</if>
+  </select>
+  
+  
+  <select id="getClientUserInfoByClientUserCode" parameterType="string" resultType="com.azz.client.pojo.vo.ClientUserInfo">
+		  SELECT
+				u.client_user_code AS clientUserCode,
+				u.client_user_name AS clientUserName,
+				u.phone_number AS phoneNumber,
+				u.email AS email,
+				u.post_name AS postName,
+				CASE u.client_type
+				WHEN 0 THEN
+					'个人'
+				WHEN 1 THEN
+					'企业'
+				END AS clientType,
+				 CASE u. STATUS
+				WHEN 0 THEN
+					'注销'
+				WHEN 1 THEN
+					'有效'
+				WHEN 2 THEN
+					'禁用'
+				END AS STATUS,
+				 r.role_name AS roleName,
+				 u.create_time AS createTime
+			FROM
+				client_user u
+			LEFT JOIN client_user_role ur ON ur.client_user_id = u.id
+			LEFT JOIN client_role r ON ur.role_id = r.id
+			WHERE u. STATUS != 0
+			u.client_user_code = #{clientUserCode}
   </select>
   
   

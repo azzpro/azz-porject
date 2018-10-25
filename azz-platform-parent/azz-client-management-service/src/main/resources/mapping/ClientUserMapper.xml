@@ -288,7 +288,7 @@
   </update>
   <select id="selectDetailsByClientUserCode" parameterType="java.lang.String" resultType="com.azz.platform.client.pojo.vo.ClientInfo">
   	SELECT
-		cu.client_user_code as clientUserCode,
+		cuc.company_code as companyCode,
 		cu.`status` as status,
 		cu.create_time as createTime,
 		cuc.company_name as companyName,

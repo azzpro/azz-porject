@@ -5,13 +5,13 @@
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
-package com.azz.merchant.utils;
+package com.azz.controller.utils;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 
-import com.azz.core.constants.MerchantConstants;
-import com.azz.merchant.pojo.vo.LoginMerchantUserInfo;
+import com.azz.client.pojo.vo.LoginClientUserInfo;
+import com.azz.core.constants.ClientConstants;
 
 /**
  * <P>TODO</P>
@@ -24,8 +24,8 @@ public class WebUtils {
 	getShiroSession().setAttribute(key, value);
     }
     
-    public static LoginMerchantUserInfo getLoginMerchanUser() {
-	return (LoginMerchantUserInfo)getShiroSession().getAttribute(MerchantConstants.LOGIN_MERCHANT_USER);
+    public static LoginClientUserInfo getLoginClientUser() {
+	return (LoginClientUserInfo)getShiroSession().getAttribute(ClientConstants.LOGIN_CLIENT_USER);
     }
     
     public static Session getShiroSession() {

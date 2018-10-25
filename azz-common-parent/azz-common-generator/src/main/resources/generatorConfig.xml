@@ -4,24 +4,27 @@
   "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
 	<classPathEntry
-            location="D:\development\repository\mysql\mysql-connector-java\5.1.32\mysql-connector-java-5.1.32.jar"/>
+		location="D:\development\repository\mysql\mysql-connector-java\5.1.32\mysql-connector-java-5.1.32.jar" />
 
 	<context id="test" targetRuntime="MyBatis3">
-		<plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>  
-        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin> 
-         <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin> 
-		<commentGenerator type="com.qc.mybatis_gene.my_comment_generator.MyCommentGenerator">
+		<plugin
+			type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+		<plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+		<commentGenerator
+			type="com.qc.mybatis_gene.my_comment_generator.MyCommentGenerator">
 			<!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
 			<!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
-			<property name="javaFileEncoding" value="UTF-8"/>
-            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
-            <property name="suppressAllComments" value="true" />
-            <property name="suppressDate" value="true" />
+			<property name="javaFileEncoding" value="UTF-8" />
+			<!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+			<property name="suppressAllComments" value="true" />
+			<property name="suppressDate" value="true" />
 		</commentGenerator>
 		<!--数据库链接URL，用户名、密码 -->
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-			connectionURL="jdbc:mysql://120.78.162.226:3306/azz_dev" userId="root" password="azz2025">
-			</jdbcConnection>
+			connectionURL="jdbc:mysql://120.78.162.226:3306/azz_dev"
+			userId="root" password="azz2025">
+		</jdbcConnection>
 		<javaTypeResolver>
 			<!-- This property is used to specify whether MyBatis Generator should 
 				force the use of java.math.BigDecimal for DECIMAL and NUMERIC fields, -->
@@ -40,29 +43,16 @@
 		</sqlMapGenerator>
 		<!-- 生成DAO的包名和位置 -->
 		<javaClientGenerator type="XMLMAPPER"
-			targetPackage="com.test.dao" implementationPackage="com.test.dao.impl"  targetProject="target">
+			targetPackage="com.test.dao"
+			implementationPackage="com.test.dao.impl" targetProject="target">
 			<property name="enableSubPackages" value="true" />
 		</javaClientGenerator>
-		
+
 		<!-- 要生成哪些表 -->
-		<table tableName="merchant_permission" domainObjectName="MerchantPermission"
-			enableCountByExample="false" enableUpdateByExample="false"
-			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false"></table>	
-		<!-- 要生成哪些表 -->
-		<table tableName="merchant_role" domainObjectName="MerchantRole"
-			enableCountByExample="false" enableUpdateByExample="false"
-			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false"></table>	
-		<!-- 要生成哪些表 -->
-		<table tableName="merchant_role_permission" domainObjectName="MerchantRolePermission"
-			enableCountByExample="false" enableUpdateByExample="false"
-			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false"></table>	
-		<!-- 要生成哪些表 -->
-		<table tableName="merchant_user_role" domainObjectName="MerchantUserRole"
-			enableCountByExample="false" enableUpdateByExample="false"
-			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false"></table>	
+		<table tableName="client_user_company"
+			domainObjectName="ClientUserCompany" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false"></table>
+
 	</context>
 </generatorConfiguration>

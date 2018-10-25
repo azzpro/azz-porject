@@ -1,32 +1,29 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2018年10月22日 下午2:38:07
+ * Create on 2018年10月25日 上午11:23:02
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
-
-package com.azz.merchant.pojo.bo;
+ 
+package com.azz.client.pojo.bo;
 
 import org.hibernate.validator.constraints.NotBlank;
 
 import lombok.Data;
 
 /**
- * <P>
- * TODO
- * </P>
- * 
+ * <P>TODO</P>
  * @version 1.0
- * @author 黄智聪 2018年10月22日 下午2:38:07
+ * @author 黄智聪  2018年10月25日 上午11:23:02
  */
 @Data
-public class CompleteMerchantInfoParam {
+public class EnterpriseAuthParam {
 
-    @NotBlank(message = "商户编码不允许为空")
-    private String merchantCode;
-    @NotBlank(message = "商户名称不允许为空")
-    private String merchantName;
-    @NotBlank(message = "企业名称不允许为空")
+    @NotBlank(message = "客户编码不允许为空")
+    private String clientUserCode;
+    @NotBlank(message = "本人姓名不允许为空")
+    private String clientUserName;
+    @NotBlank(message = "公司名称不允许为空")
     private String companyName;
     @NotBlank(message = "信用代码不允许为空")
     private String creditCode;
@@ -54,8 +51,6 @@ public class CompleteMerchantInfoParam {
     private String tradingCertificateSecondFileUrl;
     private String tradingCertificateThirdFileName;
     private String tradingCertificateThirdFileUrl;
-    @NotBlank(message = "请上传经营信息")
-    private String businessLicenseFileName;
-    private String businessLicenseFileUrl;
     
 }
+

@@ -11,14 +11,21 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.page.Pagination;
+import com.azz.merchant.pojo.bo.AddMerchantUserParam;
 import com.azz.merchant.pojo.bo.CompleteMerchantInfoParam;
+import com.azz.merchant.pojo.bo.EditMerchantUserParam;
+import com.azz.merchant.pojo.bo.EnableOrDisableOrDelMerchantUserParam;
 import com.azz.merchant.pojo.bo.LoginParam;
 import com.azz.merchant.pojo.bo.MerchantRegistParam;
+import com.azz.merchant.pojo.bo.SearchMerchantUserParam;
 import com.azz.merchant.pojo.bo.UploadTradingCertificateParam;
 import com.azz.merchant.pojo.vo.LoginMerchantUserInfo;
+import com.azz.merchant.pojo.vo.MerchantUserInfo;
 import com.azz.merchant.pojo.vo.UploadFileInfo;
 
 /**
@@ -67,7 +74,7 @@ public interface MerchantService {
      * @author 黄智聪  2018年10月22日 下午3:01:34
      */
     @PostMapping("/azz/api/merchant/merchantRegist")
-    JsonResult<String> merchantRegist(MerchantRegistParam param);
+    JsonResult<String> merchantRegist(@RequestBody MerchantRegistParam param);
     
     /**
      * 
@@ -88,6 +95,56 @@ public interface MerchantService {
      */
     @PostMapping("/azz/api/merchant/uploadTradingCertificateFile")
     JsonResult<UploadFileInfo> uploadTradingCertificateFile(@RequestBody UploadTradingCertificateParam param);
+    
+    /**
+     * 
+     * <p>新增商户成员</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月24日 下午7:30:27
+     */
+    @RequestMapping("/azz/api/merchant/addMerchantUser")
+    public JsonResult<String> addMerchantUser(@RequestBody AddMerchantUserParam param);
+    
+    /**
+     * 
+     * <p>编辑商户成员</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月24日 下午7:30:45
+     */
+    @RequestMapping("/azz/api/merchant/editMerchantUser")
+    public JsonResult<String> editMerchantUser(@RequestBody EditMerchantUserParam param);
+    
+    /**
+     * 
+     * <p>查询商户成员列表</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月24日 下午7:30:57
+     */
+    @RequestMapping("/azz/api/merchant/getMerchantUserList")
+    public JsonResult<Pagination<MerchantUserInfo>> getMerchantUserList(@RequestBody SearchMerchantUserParam param);
+    
+    /**
+     * 
+     * <p>启用、禁用或删除商户成员</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月24日 下午7:31:09
+     */
+    @RequestMapping("/azz/api/merchant/enableOrDisableOrDelMerchantUser")
+    public JsonResult<String> enableOrDisableOrDelMerchantUser(@RequestBody EnableOrDisableOrDelMerchantUserParam param);
+    
+    /**
+     * 
+     * <p>查询商户成员信息</p>
+     * @param merchantUserCode
+     * @return
+     * @author 黄智聪  2018年10月24日 下午7:31:29
+     */
+    @RequestMapping("/azz/api/merchant/getMerchantUserInfo")
+    public JsonResult<MerchantUserInfo> getMerchantUserInfo(@RequestParam("merchantUserCode") String merchantUserCode);
     
 }
 

@@ -292,22 +292,27 @@ public class MerchantService {
     public JsonResult<String> completeMerchantInfo(@RequestBody CompleteMerchantInfoParam param) {
 	JSR303ValidateUtils.validate(param);
 	String creditCode = param.getCreditCode();
-	Merchant merchant = merchantMapper.getMerchantByCreditCode(creditCode);
+	String merchantCode = param.getMerchantCode();
+	Merchant merchant = merchantMapper.getMerchantByMerchantCode(merchantCode);
+	if(merchant == null) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户不存在");
+	}
+	merchant = merchantMapper.getMerchantByCreditCode(creditCode);
 	if(merchant != null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "信用代码已存在");
 	}
-	String merchantCode = param.getMerchantCode();
 	String provinceName = param.getProviceName();
 	String cityName = param.getCityName();
 	String areaName = param.getAreaName();
 	String detailAddress = param.getDetailAddress();
+	Date nowDate = new Date();
 	MerchantAddress merchantAddressRecord = MerchantAddress.builder()
 		.merchantCode(merchantCode)
 		.areaCode(param.getAreaCode())
 		.areaName(areaName)
 		.cityCode(param.getCityCode())
 		.cityName(cityName)
-		.createTime(new Date())
+		.createTime(nowDate)
 		.detailAddress(detailAddress)
 		.provinceCode(param.getProviceCode())
 		.provinceName(provinceName)
@@ -321,7 +326,9 @@ public class MerchantService {
 		.companyName(param.getCompanyName())
 		.companyTel(param.getCompanyTel())
 		.creditCode(creditCode)
+		.createTime(nowDate)
 		.merchantCode(merchantCode)
+		.address(provinceName + cityName + areaName + detailAddress)
 		.merchantName(param.getMerchantName())
 		.status(QualificationApplyStatus.PENDING.getValue())
 		.tradingCertificateFirstFileName(param.getTradingCertificateFirstFileName())
@@ -332,7 +339,6 @@ public class MerchantService {
 		.tradingCertificateThirdFileUrl(param.getTradingCertificateThirdFileUrl())
 		.build();
 	merchantApplyMapper.insertSelective(merchantApplyRecord);
-	
 	return JsonResult.successJsonResult();
     }
     
@@ -365,7 +371,8 @@ public class MerchantService {
 		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "邮箱已存在");
 	    }
 	}
-	MerchantUser u = merchantUserMapper.getMerchantUserByPhoneNumberAndMerchantUserCode(param.getPhoneNumber(), null);
+	String phoneNumber = param.getPhoneNumber();
+	MerchantUser u = merchantUserMapper.getMerchantUserByPhoneNumberAndMerchantUserCode(phoneNumber, null);
 	if (u != null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "手机号已存在");
 	}
@@ -375,9 +382,9 @@ public class MerchantService {
 	Date nowDate = new Date();
 	String creator = param.getCreator();
 	MerchantUser userRecord = MerchantUser.builder().createTime(nowDate).creator(creator)
-		.email(param.getEmail()).password(pwd.getPassword()).phoneNumber(param.getPhoneNumber())
+		.email(param.getEmail()).password(pwd.getPassword()).phoneNumber(phoneNumber)
 		.postName(param.getPostName()).merchantUserCode(System.currentTimeMillis() + "")// TODO
-		.merchantUserName(param.getMerchantUserName()).salt(pwd.getSalt()).build();
+		.merchantUserName(param.getMerchantUserName()).merchantCode(param.getMerchantCode()).salt(pwd.getSalt()).build();
 	merchantUserMapper.insertSelective(userRecord);
 	// 用户与角色绑定
 	MerchantUserRole userRoleRecord = MerchantUserRole.builder().createTime(nowDate).creator(creator)

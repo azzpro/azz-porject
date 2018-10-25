@@ -15,12 +15,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.platform.client.mapper.ClientApplyMapper;
+import com.azz.platform.client.mapper.ClientUserCompanyMapper;
 import com.azz.platform.client.mapper.ClientUserMapper;
 import com.azz.platform.client.pojo.ClientUser;
 import com.azz.platform.client.pojo.bo.SearchClientManagerParam;
+import com.azz.platform.client.pojo.bo.SearchClientMerchantManagerParam;
 import com.azz.platform.client.pojo.bo.SearchClientParam;
 import com.azz.platform.client.pojo.vo.ClientCertification;
 import com.azz.platform.client.pojo.vo.ClientInfo;
+import com.azz.platform.client.pojo.vo.ClientMerchantInfo;
 import com.github.pagehelper.PageHelper;
 
 /**
@@ -39,6 +42,9 @@ public class ClientService {
     
     @Autowired
     ClientUserMapper clientUserMapper;
+    
+    @Autowired
+    private ClientUserCompanyMapper clientUserCompanyMapper;
     
     /**
      * <p>获取审批的客户列表</p>
@@ -61,6 +67,18 @@ public class ClientService {
 	public JsonResult<Pagination<ClientUser>> selectClientUserList(@RequestBody SearchClientManagerParam param) {
         PageHelper.startPage(param.getPageNum(), param.getPageSize());
         List<ClientUser> merchantList = clientUserMapper.selectClientUserList(param);
+        return JsonResult.successJsonResult(new Pagination<>(merchantList));
+    }
+	
+	/**
+	 * <p>平台 客户管理 企业用户</p>
+	 * @param param
+	 * @return
+	 * @author 刘建麟  2018年10月25日 下午3:18:38
+	 */
+	public JsonResult<Pagination<ClientMerchantInfo>> selectClientMerchantList(@RequestBody SearchClientMerchantManagerParam param) {
+        PageHelper.startPage(param.getPageNum(), param.getPageSize());
+        List<ClientMerchantInfo> merchantList = clientUserCompanyMapper.selectClientMerchantList(param);
         return JsonResult.successJsonResult(new Pagination<>(merchantList));
     }
    

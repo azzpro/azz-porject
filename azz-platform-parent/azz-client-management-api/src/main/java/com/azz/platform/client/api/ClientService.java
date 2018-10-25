@@ -7,6 +7,8 @@ package com.azz.platform.client.api;
  ******************************************************************************/
  
 
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,11 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.platform.client.pojo.ClientUser;
+import com.azz.platform.client.pojo.ClientUserCompany;
 import com.azz.platform.client.pojo.bo.AuditParam;
 import com.azz.platform.client.pojo.bo.SearchClientManagerParam;
+import com.azz.platform.client.pojo.bo.SearchClientMerchantManagerParam;
 import com.azz.platform.client.pojo.bo.SearchClientParam;
 import com.azz.platform.client.pojo.vo.ClientCertification;
 import com.azz.platform.client.pojo.vo.ClientInfo;
+import com.azz.platform.client.pojo.vo.ClientMerchantInfo;
+import com.github.pagehelper.PageHelper;
 
 /**
  * <P>TODO</P>
@@ -49,6 +55,15 @@ public interface ClientService {
      */
     @PostMapping("/azz/api/client/updateClientUserStatus")
     JsonResult<String> updateClientUserStatus(@RequestParam("code") String code,@RequestParam("status") Integer status);
+    
+    /**
+     * <p>客户 企业用户</p>
+     * @param param
+     * @return
+     * @author 刘建麟  2018年10月25日 下午5:39:50
+     */
+    @PostMapping("/azz/api/client/selectClientMerchantList")
+    JsonResult<Pagination<ClientMerchantInfo>> selectClientMerchantList(@RequestBody SearchClientMerchantManagerParam param);
     
     /**
      * <p>平台客户审批认证列表</p>

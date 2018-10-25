@@ -16,7 +16,10 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.platform.client.api.ClientService;
 import com.azz.platform.client.pojo.ClientUser;
+import com.azz.platform.client.pojo.ClientUserCompany;
 import com.azz.platform.client.pojo.bo.SearchClientManagerParam;
+import com.azz.platform.client.pojo.bo.SearchClientMerchantManagerParam;
+import com.azz.platform.client.pojo.vo.ClientMerchantInfo;
 
 /**
  * <P>TODO</P>
@@ -40,6 +43,17 @@ public class ClientController {
 	@RequestMapping("/selectClientUserList")
 	public JsonResult<Pagination<ClientUser>> selectClientUserList(SearchClientManagerParam param) {
 		return clientService.selectClientUserList(param);
+	}
+	
+	/**
+	 * <p>平台 客户管理 企业用户</p>
+	 * @param param
+	 * @return
+	 * @author 刘建麟  2018年10月23日 下午2:02:33
+	 */
+	@RequestMapping("/selectClientMerchantList")
+	public JsonResult<Pagination<ClientMerchantInfo>> selectClientMerchantList(SearchClientMerchantManagerParam param) {
+		return clientService.selectClientMerchantList(param);
 	}
 	
 	/**

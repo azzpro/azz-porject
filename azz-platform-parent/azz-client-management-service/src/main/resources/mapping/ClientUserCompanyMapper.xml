@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.test.dao.ClientUserCompanyMapper">
+<mapper namespace="com.azz.platform.client.mapper.ClientUserCompanyMapper">
   <resultMap id="BaseResultMap" type="com.azz.platform.client.pojo.ClientUserCompany">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="company_code" jdbcType="VARCHAR" property="companyCode" />
@@ -236,13 +236,20 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
-  <select id="selectClientMerchantList" resultMap="BaseResultMap" resultType="com.azz.platform.client.pojo.bo.SearchClientMerchantManagerParam">
-  	select <include refid="Base_Column_List"></include> from client_user_company
-  	<where>
+  <select id="selectClientMerchantList" resultType="com.azz.platform.client.pojo.vo.ClientMerchantInfo" parameterType="com.azz.platform.client.pojo.bo.SearchClientMerchantManagerParam">
+  	select 
+  		m.company_code companyCode,
+  		m.company_name companyName,
+  		a.client_user_name clientUserName,
+  		a.phone_number phoneNumber,
+  		a.status status,
+  		m.create_time authTime
+  	from client_user_company m ,client_user a
+    where
+  	m.client_user_code = a.client_user_code and a.client_type = 1 and a.status != 0
   		<if test="param !=null and param != ''">
-  			client_user_code = #{param} or 
+  			and (m.company_code = #{param} or m.company_name = #{param} or a.client_user_name = #{param})
   		</if>
-  	</where>
-  
+    order by m.create_time DESC
   </select>
 </mapper>

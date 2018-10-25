@@ -20,7 +20,7 @@ import lombok.Data;
  */
 @Data
 public class ClientCertification {
-    private String clientUserCode;
+    private String companyCode;
     private String companyName;
     private String clientUserName;
     private String phoneNumber;

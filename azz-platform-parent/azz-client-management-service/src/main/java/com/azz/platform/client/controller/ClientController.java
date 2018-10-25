@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.platform.client.pojo.ClientUser;
+import com.azz.platform.client.pojo.bo.AuditParam;
 import com.azz.platform.client.pojo.bo.SearchClientManagerParam;
 import com.azz.platform.client.pojo.bo.SearchClientParam;
 import com.azz.platform.client.pojo.vo.ClientCertification;
@@ -44,7 +45,7 @@ public class ClientController {
 	 * @return
 	 * @author 彭斌  2018年10月25日 下午2:10:45
 	 */
-	@RequestMapping(value="searchClientList",method=RequestMethod.POST)
+	@RequestMapping(value="searchClientCertificationList",method=RequestMethod.POST)
 	public JsonResult<Pagination<ClientCertification>> searchClientList(@RequestBody SearchClientParam param) {
 	    return clientService.searchMerchantList(param);
 	}
@@ -77,8 +78,20 @@ public class ClientController {
 	 * @return
 	 * @author 彭斌  2018年10月25日 下午2:10:48
 	 */
-	public JsonResult<ClientInfo> searchClientInfo(String clientUserCode){
+	@RequestMapping(value="searchClientInfo",method=RequestMethod.POST)
+	public JsonResult<ClientInfo> searchClientInfo(String clientUserCode) {
 	    return clientService.selectDetailsClientInfo(clientUserCode);
+	}
+	
+	/**
+	 * <p>审核客户信息</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年10月25日 下午4:32:43
+	 */
+	@RequestMapping(value="auditClient",method=RequestMethod.POST)
+	public JsonResult<String> auditClient(@RequestBody AuditParam param) {
+	    return auditService.auditClient(param);
 	}
 }
 

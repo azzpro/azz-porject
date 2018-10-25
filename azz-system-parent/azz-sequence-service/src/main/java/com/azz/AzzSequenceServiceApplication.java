@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 
-@EnableEurekaClient
+//@EnableEurekaClient
 @EnableFeignClients
 @SpringBootApplication
 public class AzzSequenceServiceApplication {

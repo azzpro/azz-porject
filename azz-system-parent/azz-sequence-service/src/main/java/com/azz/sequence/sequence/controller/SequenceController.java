@@ -12,7 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.azz.sequence.sequence.service.DbSequenceService;
+import com.azz.sequence.sequence.service.MerchantDeptSequenceService;
+import com.azz.sequence.sequence.service.MerchantEmployeeSequenceService;
+import com.azz.sequence.sequence.service.MerchantPowerSequenceService;
+import com.azz.sequence.sequence.service.MerchantTenantSequenceService;
+import com.azz.sequence.sequence.service.PlatDeptSequenceService;
+import com.azz.sequence.sequence.service.PlatEmployeeSequenceService;
+import com.azz.sequence.sequence.service.PlatPowerSequenceService;
 import com.azz.sequence.sequence.service.RandomSequenceService;
 
 /**
@@ -24,11 +30,30 @@ import com.azz.sequence.sequence.service.RandomSequenceService;
 @RequestMapping("/azz/api/sequence")
 public class SequenceController {
 
-	@Autowired
-	private DbSequenceService dbSequenceService;
 	
 	@Autowired
 	private RandomSequenceService randomSequenceService;
+	
+	@Autowired
+	private PlatDeptSequenceService platDeptSequenceService;
+	
+	@Autowired
+	private PlatPowerSequenceService platPowerSequenceService;
+	
+	@Autowired
+	private PlatEmployeeSequenceService platEmployeeSequenceService;
+	
+	@Autowired
+	private MerchantDeptSequenceService merchantDeptSequenceService;
+	
+	@Autowired
+	private MerchantPowerSequenceService merchantPowerSequenceService;
+	
+	@Autowired
+	private MerchantTenantSequenceService merchantTenantSequenceService;
+	
+	@Autowired
+	private MerchantEmployeeSequenceService merchantEmployeeSequenceService;
 	
 	
 	/**
@@ -88,7 +113,7 @@ public class SequenceController {
 	 */
 	@RequestMapping(value="getPlatEmployeeNumber",method=RequestMethod.GET)
 	public String getPlatEmployeeNumber() {
-		return "IA"+dbSequenceService.getSequence();
+		return platEmployeeSequenceService.getSequence();
 	}
 	
 	/**
@@ -98,7 +123,7 @@ public class SequenceController {
 	 */
 	@RequestMapping(value="getPlatDepartmentNumber",method=RequestMethod.GET)
 	public String getPlatDepartmentNumber() {
-		return "IB"+dbSequenceService.getSequence();
+		return platDeptSequenceService.getSequence();
 	}
 	
 	/**
@@ -108,7 +133,7 @@ public class SequenceController {
 	 */
 	@RequestMapping(value="getPlatPowerNumber",method=RequestMethod.GET)
 	public String getPlatPowerNumber() {
-		return "IH"+dbSequenceService.getSequence();
+		return platPowerSequenceService.getSequence();
 	}
 	
 	
@@ -119,7 +144,7 @@ public class SequenceController {
 	 */
 	@RequestMapping(value="getMerchantTenantNumber",method=RequestMethod.GET)
 	public String getMerchantTenantNumber() {
-		return "IC"+dbSequenceService.getSequence();
+		return merchantTenantSequenceService.getSequence();
 	}
 	
 	/**
@@ -129,7 +154,7 @@ public class SequenceController {
 	 */
 	@RequestMapping(value="getMerchantEmployeeNumber",method=RequestMethod.GET)
 	public String getMerchantEmployeeNumber() {
-		return "ID"+dbSequenceService.getSequence();
+		return merchantEmployeeSequenceService.getSequence();
 	}
 	
 	/**
@@ -139,7 +164,7 @@ public class SequenceController {
 	 */
 	@RequestMapping(value="getMerchantDepartmentNumber",method=RequestMethod.GET)
 	public String getMerchantDepartmentNumber() {
-		return "IE"+dbSequenceService.getSequence();
+		return merchantDeptSequenceService.getSequence();
 	}
 	
 	/**
@@ -149,7 +174,7 @@ public class SequenceController {
 	 */
 	@RequestMapping(value="getMerchantPowerNumber",method=RequestMethod.GET)
 	public String getMerchantPowerNumber() {
-		return "IL"+dbSequenceService.getSequence();
+		return merchantPowerSequenceService.getSequence();
 	}
 	
 	

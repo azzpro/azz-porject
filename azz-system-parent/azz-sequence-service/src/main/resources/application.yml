@@ -25,9 +25,33 @@ azz:
     available: true
     sequenceConfigs:
     -
-     id: dbSequence
-     type: dbNumberSequence
-     args: {id: 'A', maxSequenceValue: '99999999', length: '8', step: '5'}
+     id: PlatDeptSequence
+     type: PlatDeptCodeSequence
+     args: {id: 'IB', maxSequenceValue: '99999999', length: '8', step: '5'}
+    -
+     id: PlatEmployeeSequence
+     type: PlatEmployeeCodeSequence
+     args: {id: 'IA', maxSequenceValue: '99999999', length: '8', step: '5'}
+    -
+     id: PlatPowerSequence
+     type: PlatPowerCodeSequence
+     args: {id: 'IH', maxSequenceValue: '99999999', length: '8', step: '5'}
+    -
+     id: MerchantPowerSequence
+     type: MerchantPowerCodeSequence
+     args: {id: 'IL', maxSequenceValue: '99999999', length: '8', step: '5'}
+    -
+     id: MerchantDeptSequence
+     type: MerchantDeptCodeSequence
+     args: {id: 'IE', maxSequenceValue: '99999999', length: '8', step: '5'}
+    -
+     id: MerchantEmployeeSequence
+     type: MerchantEmployeeCodeSequence
+     args: {id: 'ID', maxSequenceValue: '99999999', length: '8', step: '5'}
+    -
+     id: MerchantTenantSequence
+     type: MerchantTenantCodeSequence
+     args: {id: 'IC', maxSequenceValue: '99999999', length: '8', step: '5'}
     -
      id: random
      type: randomSequence

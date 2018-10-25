@@ -1,2 +1,8 @@
 com.azz.sequence.sequence.service.impl.RandomSequenceServiceImpl
-com.azz.sequence.sequence.service.impl.DbSequenceServiceImpl
+com.azz.sequence.sequence.service.impl.PlatDeptSequenceServiceImpl
+com.azz.sequence.sequence.service.impl.PlatPowerSequenceServiceImpl
+com.azz.sequence.sequence.service.impl.MerchantEmployeeSequenceServiceImpl
+com.azz.sequence.sequence.service.impl.MerchantDeptSequenceServiceImpl
+com.azz.sequence.sequence.service.impl.MerchantPowerSequenceServiceImpl
+com.azz.sequence.sequence.service.impl.MerchantTenantSequenceServiceImpl
+com.azz.sequence.sequence.service.impl.PlatEmployeeSequenceServiceImpl

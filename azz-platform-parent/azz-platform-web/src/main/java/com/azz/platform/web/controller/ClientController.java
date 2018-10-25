@@ -68,7 +68,7 @@ public class ClientController {
 	 * @return
 	 * @author 彭斌  2018年10月25日 下午5:38:32
 	 */
-	@RequestMapping("searchClientCertificationList")
+	@RequestMapping("/searchClientCertificationList")
     public JsonResult<Pagination<ClientCertification>> searchClientList(@RequestBody SearchClientParam param) {
         return clientService.searchClientList(param);
     }
@@ -79,7 +79,7 @@ public class ClientController {
 	 * @return
 	 * @author 彭斌  2018年10月25日 下午5:38:48
 	 */
-	@RequestMapping("searchClientInfo")
+	@RequestMapping("/searchClientInfo")
     public JsonResult<ClientInfo> searchClientInfo(@RequestParam("clientUserCode") String clientUserCode){
 	    return clientService.searchClientInfo(clientUserCode);
 	}
@@ -90,7 +90,7 @@ public class ClientController {
 	 * @return
 	 * @author 彭斌  2018年10月25日 下午5:39:03
 	 */
-	@RequestMapping("auditClient")
+	@RequestMapping("/auditClient")
     JsonResult<String> auditClient(@RequestBody AuditParam param){
 	    param.setAuditor(WebUtils.getLoginUser().getUserInfo().getUserCode());
 	    return auditService.auditClient(param);

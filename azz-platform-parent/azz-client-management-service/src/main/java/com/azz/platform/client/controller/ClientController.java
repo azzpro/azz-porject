@@ -47,7 +47,7 @@ public class ClientController {
 	 */
 	@RequestMapping(value="searchClientCertificationList",method=RequestMethod.POST)
 	public JsonResult<Pagination<ClientCertification>> searchClientList(@RequestBody SearchClientParam param) {
-	    return clientService.searchMerchantList(param);
+	    return clientService.searchClientList(param);
 	}
 
 	/**

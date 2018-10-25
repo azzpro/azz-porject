@@ -20,7 +20,7 @@ import lombok.Data;
  */
 @Data
 public class ClientInfo {
-    private String clientCode;
+    private String clientUserCode;
     private String companyName;
     private Integer status;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")

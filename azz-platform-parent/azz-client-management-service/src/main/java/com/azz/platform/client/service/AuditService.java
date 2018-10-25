@@ -7,14 +7,11 @@
  
 package com.azz.platform.client.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.azz.core.common.JsonResult;
-import com.azz.platform.client.api.AuditService;
-import com.azz.platform.client.mapper.ClientApplyMapper;
-import com.azz.platform.client.mapper.ClientMapper;
 import com.azz.platform.client.pojo.bo.AuditParam;
 import com.azz.util.JSR303ValidateUtils;
 
@@ -24,17 +21,11 @@ import com.azz.util.JSR303ValidateUtils;
  * @author 彭斌  2018年10月24日 下午4:44:51
  */
 @Transactional(rollbackFor=Exception.class)
-@RestController
-public class AuditServiceImpl implements AuditService{
+@Service
+public class AuditService{
 
-    @Autowired
-    ClientMapper clientMapper;
-
-    @Autowired
-    ClientApplyMapper clientApplyMapper;
     
-    @Override
-    public JsonResult<String> auditClient(AuditParam param) {
+    public JsonResult<String> auditClient(@RequestBody AuditParam param) {
         JSR303ValidateUtils.validate(param);
         
         

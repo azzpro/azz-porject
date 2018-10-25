@@ -33,6 +33,10 @@ public class PlatformUserErrorCode extends BaseErrorCode{
     
     //  客户审核错误码
     public static final PlatformUserErrorCode PLATFORM_CLIENT_NO_EXIST = new PlatformUserErrorCode(50000, "客户不存在");
+    public static final PlatformUserErrorCode PLATFORM_CLIENT_ERROR_NO_EXIST = new PlatformUserErrorCode(50001, "客户不存在");
+    public static final PlatformUserErrorCode PLATFORM_CLIENT_AUDIT_STATUS_ERROR_NO_EXIST = new PlatformUserErrorCode(50002, "审核状态不存在");
+    
+    
     public PlatformUserErrorCode(int code, String message) {
 	super(code, message);
     }

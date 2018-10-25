@@ -22,7 +22,7 @@ import com.azz.platform.client.pojo.bo.AuditParam;
 @FeignClient("azz-client-management-service")
 public interface AuditService {
     
-    @PostMapping("auditClient")
+    @PostMapping("/azz/api/client/auditClient")
     JsonResult<String> auditClient(@RequestBody AuditParam param);
 }
 

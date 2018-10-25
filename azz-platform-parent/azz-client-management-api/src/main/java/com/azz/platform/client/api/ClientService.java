@@ -17,7 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.platform.client.pojo.ClientUser;
+import com.azz.platform.client.pojo.bo.AuditParam;
 import com.azz.platform.client.pojo.bo.SearchClientManagerParam;
+import com.azz.platform.client.pojo.bo.SearchClientParam;
+import com.azz.platform.client.pojo.vo.ClientCertification;
+import com.azz.platform.client.pojo.vo.ClientInfo;
 
 /**
  * <P>TODO</P>
@@ -45,5 +49,24 @@ public interface ClientService {
      */
     @PostMapping("/azz/api/client/updateClientUserStatus")
     JsonResult<String> updateClientUserStatus(@RequestParam("code") String code,@RequestParam("status") Integer status);
+    
+    /**
+     * <p>平台客户审批认证列表</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年10月25日 下午5:19:39
+     */
+    @RequestMapping(value="/azz/api/client/searchClientCertificationList",method=RequestMethod.POST)
+    public JsonResult<Pagination<ClientCertification>> searchClientList(@RequestBody SearchClientParam param);
+    
+    
+    /**
+     * <p>获取客户详情</p>
+     * @param clientUserCode
+     * @return
+     * @author 彭斌  2018年10月25日 下午5:29:46
+     */
+    @RequestMapping(value="/azz/api/client/searchClientInfo",method=RequestMethod.POST)
+    public JsonResult<ClientInfo> searchClientInfo(@RequestParam("clientUserCode") String clientUserCode);
 }
 

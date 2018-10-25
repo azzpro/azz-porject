@@ -12,6 +12,8 @@ public class ClientUserCompany implements Serializable {
      */
     private Long id;
 
+    private String companyCode;
+    
     /**
      * 客户编码
      *
@@ -118,6 +120,14 @@ public class ClientUserCompany implements Serializable {
     private static final long serialVersionUID = 1L;
 
     
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
     public String getCreditCode() {
         return creditCode;
     }

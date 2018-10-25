@@ -251,7 +251,7 @@
   
   <select id="selectByClientCertificationList" parameterType="com.azz.platform.client.pojo.bo.SearchClientParam" resultType="com.azz.platform.client.pojo.vo.ClientCertification">
   	select 
-		c.client_user_code as clientUserCode,
+		cuc.company_code as companyCode,
 		ca.company_name as companyName,
 		ca.client_user_name as clientUserName,
 		c.phone_number as phoneNumber,
@@ -262,6 +262,7 @@
 	 SELECT * FROM client_apply ca1 WHERE NOT EXISTS(
 	 SELECT 1 FROM client_apply ca2 WHERE ca2.client_user_id=ca1.client_user_id AND ca1.id &lt; ca2.id)
 	 ) ca on c.id=ca.client_user_id
+	 LEFT JOIN client_user_company cuc ON c.client_user_code = cuc.client_user_code
 	  <where>
 	 	<if test="param != null and param !=''">
 	 		and (c.client_user_code = #{param,jdbcType=VARCHAR} or ca.company_name = #{param,jdbcType=VARCHAR} or ca.client_user_name = #{param,jdbcType=VARCHAR})

@@ -24,7 +24,7 @@ public class ClientCertification {
     private String companyName;
     private String clientUserName;
     private String phoneNumber;
-    private String status;
+    private Integer status;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")
     private Date createTime;
 }

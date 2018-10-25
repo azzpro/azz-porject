@@ -224,4 +224,14 @@
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="selectClientMerchantList" resultMap="BaseResultMap" resultType="com.azz.platform.client.pojo.bo.SearchClientMerchantManagerParam">
+  	select <include refid="Base_Column_List"></include> from client_user_company
+  	<where>
+  		<if test="param !=null and param != ''">
+  			client_user_code = #{param} or 
+  		</if>
+  	</where>
+  
+  </select>
 </mapper>

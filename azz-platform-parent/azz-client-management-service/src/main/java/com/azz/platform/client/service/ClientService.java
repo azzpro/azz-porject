@@ -100,7 +100,7 @@ public class ClientService {
      * @author 彭斌  2018年10月25日 下午2:06:08
      */
     public JsonResult<ClientInfo> selectDetailsClientInfo(String code){
-        ClientInfo clientInfo = clientUserMapper.selectDetailsByClientUserCode(code);
+        ClientInfo clientInfo = clientUserMapper.selectDetailsByCompanyCode(code);
         return JsonResult.successJsonResult(clientInfo);
     }
 

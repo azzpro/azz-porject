@@ -40,7 +40,7 @@ public interface ClientUserMapper {
 	 * @author 刘建麟  2018年10月25日 下午4:01:38
 	 */
 	Integer updateClientUserStatus(@Param("code") String code,@Param("status") Integer status);
-    ClientInfo selectDetailsByClientUserCode(String clientUserCode);
+    ClientInfo selectDetailsByCompanyCode(String companyCode);
     
     int checkClientApplyInfo(String clientUserCode);
     

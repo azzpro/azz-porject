@@ -7,8 +7,6 @@ package com.azz.platform.client.api;
  ******************************************************************************/
  
 
-import java.util.List;
-
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,15 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.platform.client.pojo.ClientUser;
-import com.azz.platform.client.pojo.ClientUserCompany;
-import com.azz.platform.client.pojo.bo.AuditParam;
 import com.azz.platform.client.pojo.bo.SearchClientManagerParam;
 import com.azz.platform.client.pojo.bo.SearchClientMerchantManagerParam;
 import com.azz.platform.client.pojo.bo.SearchClientParam;
 import com.azz.platform.client.pojo.vo.ClientCertification;
 import com.azz.platform.client.pojo.vo.ClientInfo;
 import com.azz.platform.client.pojo.vo.ClientMerchantInfo;
-import com.github.pagehelper.PageHelper;
 
 /**
  * <P>TODO</P>
@@ -81,7 +76,7 @@ public interface ClientService {
      * @return
      * @author 彭斌  2018年10月25日 下午5:29:46
      */
-    @PostMapping("/azz/api/client/searchClientInfo")
-    public JsonResult<ClientInfo> searchClientInfo(@RequestParam("clientUserCode") String clientUserCode);
+    @RequestMapping("/azz/api/client/searchClientInfo")
+    public JsonResult<ClientInfo> searchClientInfo(@RequestParam("companyCode") String companyCode);
 }
 

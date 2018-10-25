@@ -286,7 +286,7 @@
   		  </where>
   
   </update>
-  <select id="selectDetailsByClientUserCode" parameterType="java.lang.String" resultType="com.azz.platform.client.pojo.vo.ClientInfo">
+  <select id="selectDetailsByCompanyCode" parameterType="java.lang.String" resultType="com.azz.platform.client.pojo.vo.ClientInfo">
   	SELECT
 		cuc.company_code as companyCode,
 		cu.`status` as status,
@@ -305,7 +305,7 @@
 		client_user cu
 	LEFT JOIN  client_user_company cuc ON cuc.client_user_code = cu.id
 	LEFT JOIN client_user_company_address cuca ON cuca.client_user_company_id = cuc.id
-	WHERE cu.client_user_code = #{clientUserCode,jdbcType=VARCHAR}
+	WHERE cuc.company_code = #{companyCode,jdbcType=VARCHAR}
   </select>
   
   <select id="checkClientApplyInfo" parameterType="java.lang.String">

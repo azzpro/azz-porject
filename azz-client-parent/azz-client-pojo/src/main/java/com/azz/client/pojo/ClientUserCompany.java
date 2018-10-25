@@ -10,6 +10,8 @@ public class ClientUserCompany implements Serializable {
      * @mbg.generated
      */
     private Long id;
+    
+    private String companyCode;
 
     /**
      * 客户编码
@@ -501,6 +503,14 @@ public class ClientUserCompany implements Serializable {
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
     }
+    
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
 
     @Override
     public boolean equals(Object that) {
@@ -515,6 +525,7 @@ public class ClientUserCompany implements Serializable {
         }
         ClientUserCompany other = (ClientUserCompany) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getCompanyCode() == null ? other.getCompanyCode() == null : this.getCompanyCode().equals(other.getCompanyCode()))
             && (this.getClientUserCode() == null ? other.getClientUserCode() == null : this.getClientUserCode().equals(other.getClientUserCode()))
             && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
             && (this.getCreditCode() == null ? other.getCreditCode() == null : this.getCreditCode().equals(other.getCreditCode()))
@@ -537,6 +548,7 @@ public class ClientUserCompany implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getCompanyCode() == null) ? 0 : getCompanyCode().hashCode());
         result = prime * result + ((getClientUserCode() == null) ? 0 : getClientUserCode().hashCode());
         result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         result = prime * result + ((getCreditCode() == null) ? 0 : getCreditCode().hashCode());
@@ -562,6 +574,7 @@ public class ClientUserCompany implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", companyCode=").append(companyCode);
         sb.append(", clientUserCode=").append(clientUserCode);
         sb.append(", companyName=").append(companyName);
         sb.append(", creditCode=").append(creditCode);

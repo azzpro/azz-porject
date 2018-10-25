@@ -2,12 +2,14 @@ package com.azz.client.mapper;
 
 import java.util.List;
 
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.azz.client.pojo.ClientUser;
 import com.azz.client.pojo.bo.SearchClientUserParam;
 import com.azz.client.pojo.vo.ClientUserInfo;
+
 @Mapper
 public interface ClientUserMapper {
     int deleteByPrimaryKey(Long id);
@@ -21,6 +23,8 @@ public interface ClientUserMapper {
     int updateByPrimaryKeySelective(ClientUser record);
 
     int updateByPrimaryKey(ClientUser record);
+    
+    int updateByClientUserCode(ClientUser record);
     
     ClientUser getClientUserByPhoneNumber(String phoneNumber);
     
@@ -55,4 +59,13 @@ public interface ClientUserMapper {
      * @author 黄智聪  2018年10月20日 上午10:10:19
      */
     List<ClientUserInfo> getClientUserInfoBySearchParam(SearchClientUserParam param);
+
+    /**
+     * 
+     * <p>根据用户编码查询用户信息</p>
+     * @param userCode
+     * @return
+     * @author 黄智聪  2018年10月20日 上午10:51:33
+     */
+    ClientUserInfo getClientUserInfoByClientUserCode(String clientUserCode);
 }

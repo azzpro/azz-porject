@@ -3,6 +3,7 @@
 <mapper namespace="com.azz.client.mapper.ClientUserCompanyMapper">
   <resultMap id="BaseResultMap" type="com.azz.client.pojo.ClientUserCompany">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="company_code" jdbcType="VARCHAR" property="companyCode" />
     <result column="client_user_code" jdbcType="VARCHAR" property="clientUserCode" />
     <result column="company_name" jdbcType="VARCHAR" property="companyName" />
     <result column="credit_code" jdbcType="VARCHAR" property="creditCode" />
@@ -20,7 +21,7 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, client_user_code, company_name, credit_code, company_tel, trading_certificate_first_file_name, 
+    id, company_code, client_user_code, company_name, credit_code, company_tel, trading_certificate_first_file_name, 
     trading_certificate_first_file_url, trading_certificate_second_file_name, trading_certificate_second_file_url, 
     trading_certificate_third_file_name, trading_certificate_third_file_url, create_time, 
     creator, last_modify_time, modifier, remark
@@ -36,14 +37,14 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.azz.client.pojo.ClientUserCompany">
-    insert into client_user_company (id, client_user_code, company_name, 
+    insert into client_user_company (id, company_code, client_user_code, company_name, 
       credit_code, company_tel, trading_certificate_first_file_name, 
       trading_certificate_first_file_url, trading_certificate_second_file_name, 
       trading_certificate_second_file_url, trading_certificate_third_file_name, 
       trading_certificate_third_file_url, create_time, 
       creator, last_modify_time, modifier, 
       remark)
-    values (#{id,jdbcType=BIGINT}, #{clientUserCode,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{companyCode,jdbcType=VARCHAR}, #{clientUserCode,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
       #{creditCode,jdbcType=VARCHAR}, #{companyTel,jdbcType=VARCHAR}, #{tradingCertificateFirstFileName,jdbcType=VARCHAR}, 
       #{tradingCertificateFirstFileUrl,jdbcType=VARCHAR}, #{tradingCertificateSecondFileName,jdbcType=VARCHAR}, 
       #{tradingCertificateSecondFileUrl,jdbcType=VARCHAR}, #{tradingCertificateThirdFileName,jdbcType=VARCHAR}, 
@@ -56,6 +57,9 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="companyCode != null">
+        company_code,
       </if>
       <if test="clientUserCode != null">
         client_user_code,
@@ -106,6 +110,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=BIGINT},
+      </if>
+      <if test="companyCode != null">
+        #{companyCode,jdbcType=VARCHAR},
       </if>
       <if test="clientUserCode != null">
         #{clientUserCode,jdbcType=VARCHAR},
@@ -160,6 +167,9 @@
       <if test="clientUserCode != null">
         client_user_code = #{clientUserCode,jdbcType=VARCHAR},
       </if>
+      <if test="companyCode != null">
+        company_code = #{companyCode,jdbcType=VARCHAR},
+      </if>
       <if test="companyName != null">
         company_name = #{companyName,jdbcType=VARCHAR},
       </if>
@@ -207,7 +217,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.azz.client.pojo.ClientUserCompany">
     update client_user_company
-    set client_user_code = #{clientUserCode,jdbcType=VARCHAR},
+    set company_code = #{companyCode,jdbcType=VARCHAR},
+      client_user_code = #{clientUserCode,jdbcType=VARCHAR},
       company_name = #{companyName,jdbcType=VARCHAR},
       credit_code = #{creditCode,jdbcType=VARCHAR},
       company_tel = #{companyTel,jdbcType=VARCHAR},

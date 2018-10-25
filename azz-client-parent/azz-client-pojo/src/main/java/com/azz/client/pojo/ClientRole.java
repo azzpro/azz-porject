@@ -3,6 +3,14 @@ package com.azz.client.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ClientRole implements Serializable {
     /**
      * 主键

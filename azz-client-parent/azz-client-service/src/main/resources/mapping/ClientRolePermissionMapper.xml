@@ -114,4 +114,21 @@
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <delete id="deleteByRoleId" parameterType="java.lang.Long">
+    delete from client_role_permission
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </delete>
+  
+  <select id="getPermissionCodesByRoleCode" parameterType="string" resultType="string">
+    SELECT
+		p.permission_code
+	FROM
+		client_role r
+	JOIN client_role_permission rp ON r.id = rp.role_id
+	JOIN client_permission p ON p.id = rp.permission_id
+	WHERE
+		p. STATUS = 1
+	AND r.role_code = #{roleCode}
+  </select>
 </mapper>

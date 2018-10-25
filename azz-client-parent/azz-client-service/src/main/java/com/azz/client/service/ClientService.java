@@ -33,6 +33,7 @@ import com.azz.client.pojo.ClientUserRole;
 import com.azz.client.pojo.bo.AddClientUserParam;
 import com.azz.client.pojo.bo.ClientRegistParam;
 import com.azz.client.pojo.bo.EditClientUserParam;
+import com.azz.client.pojo.bo.EnableOrDisableOrDelClientUserParam;
 import com.azz.client.pojo.bo.EnterpriseAuthParam;
 import com.azz.client.pojo.bo.LoginParam;
 import com.azz.client.pojo.bo.SearchClientUserParam;
@@ -44,7 +45,8 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.ShiroAuthErrorCode;
 import com.azz.core.common.page.Pagination;
-import com.azz.core.constants.MerchantConstants.QualificationApplyStatus;
+import com.azz.core.constants.ClientConstants.QualificationApplyStatus;
+import com.azz.core.constants.UserConstants.UserStatus;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.model.Password;
@@ -268,7 +270,7 @@ public class ClientService {
 	return JsonResult.successJsonResult();
     }
     
-    public JsonResult<String> editMerchantUser(@RequestBody EditClientUserParam param) {
+    public JsonResult<String> editClientUser(@RequestBody EditClientUserParam param) {
 	// 参数校验
 	JSR303ValidateUtils.validate(param);
 
@@ -321,10 +323,48 @@ public class ClientService {
 	return JsonResult.successJsonResult();
     }
     
-    public JsonResult<Pagination<ClientUserInfo>> getMerchantUserList(@RequestBody SearchClientUserParam param) {
+    public JsonResult<Pagination<ClientUserInfo>> getClientUserList(@RequestBody SearchClientUserParam param) {
 	PageHelper.startPage(param.getPageNum(), param.getPageSize());
 	List<ClientUserInfo> users = clientUserMapper.getClientUserInfoBySearchParam(param);
 	return JsonResult.successJsonResult(new Pagination<>(users));
+    }
+    
+    public JsonResult<String> enableOrDisableOrDelClientUser(@RequestBody EnableOrDisableOrDelClientUserParam param) {
+	// 参数校验
+	JSR303ValidateUtils.validate(param);
+	int status = param.getStatus();
+	this.checkStatusExist(status);
+	ClientUser clientUserRecord = ClientUser.builder().clientUserCode(param.getClientUserCode()).status(status)
+		.modifier(param.getModifier()).lastModifyTime(new Date()).build();
+	clientUserMapper.updateByClientUserCode(clientUserRecord);
+	return JsonResult.successJsonResult();
+    }
+    
+    public JsonResult<ClientUserInfo> getClientUserInfo(String clientUserCode) {
+	if (StringUtils.isBlank(clientUserCode)) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "用户编码不允许为空");
+	}
+	ClientUserInfo userInfo = clientUserMapper.getClientUserInfoByClientUserCode(clientUserCode);
+	if (userInfo == null) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "用户不存在");
+	}
+	return JsonResult.successJsonResult(userInfo);
+    }
+    
+    /**
+     * 
+     * <p>
+     * 校验是否存在该状态
+     * </p>
+     * 
+     * @param value
+     * @return
+     * @author 黄智聪 2018年10月20日 上午11:29:37
+     */
+    public void checkStatusExist(int value) {
+	if (!UserStatus.checkStatusExist(value)) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "用户状态不存在");
+	}
     }
     
     // 发送短信通知成员 TODO

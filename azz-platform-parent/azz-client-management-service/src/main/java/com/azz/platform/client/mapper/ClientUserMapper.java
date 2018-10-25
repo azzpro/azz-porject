@@ -4,6 +4,7 @@ package com.azz.platform.client.mapper;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.platform.client.pojo.ClientUser;
+import com.azz.platform.client.pojo.vo.ClientInfo;
 
 @Mapper
 public interface ClientUserMapper {
@@ -18,4 +19,10 @@ public interface ClientUserMapper {
     int updateByPrimaryKeySelective(ClientUser record);
 
     int updateByPrimaryKey(ClientUser record);
+    
+    ClientInfo selectDetailsByClientUserCode(String clientUserCode);
+    
+    int checkClientApplyInfo(String clientUserCode);
+    
+    ClientUser selectByClientUserCode(String clientUserCode);
 }

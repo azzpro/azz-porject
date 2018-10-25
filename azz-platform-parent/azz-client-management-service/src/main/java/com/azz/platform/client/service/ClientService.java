@@ -5,7 +5,20 @@ package com.azz.platform.client.service;
  ******************************************************************************/
 
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.azz.core.common.JsonResult;
+import com.azz.core.common.page.Pagination;
+import com.azz.platform.client.mapper.ClientApplyMapper;
+import com.azz.platform.client.mapper.ClientUserMapper;
+import com.azz.platform.client.pojo.bo.SearchClientParam;
+import com.azz.platform.client.pojo.vo.ClientCertification;
+import com.azz.platform.client.pojo.vo.ClientInfo;
+import com.github.pagehelper.PageHelper;
 
 /**
  * <P>
@@ -17,10 +30,35 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ClientService {
+    
+    @Autowired
+    ClientApplyMapper clientApplyMapper;
+    
+    @Autowired
+    ClientUserMapper clientUserMapper;
+    
+    /**
+     * <p>获取审批的客户列表</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年10月25日 下午2:03:14
+     */
+    public JsonResult<Pagination<ClientCertification>> searchMerchantList(@RequestBody SearchClientParam param) {
+        PageHelper.startPage(param.getPageNum(), param.getPageSize());
+        List<ClientCertification> clientList = clientApplyMapper.selectByClientCertificationList(param);
+        return JsonResult.successJsonResult(new Pagination<>(clientList));
+    }
 
-
-
-   
+    /**
+     * <p>根据客户编码获取审批详情</p>
+     * @param code
+     * @return
+     * @author 彭斌  2018年10月25日 下午2:06:08
+     */
+    public JsonResult<ClientInfo> selectDetailsClientInfo(String code){
+        ClientInfo clientInfo = clientUserMapper.selectDetailsByClientUserCode(code);
+        return JsonResult.successJsonResult(clientInfo);
+    }
 
 }
 

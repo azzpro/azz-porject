@@ -272,4 +272,11 @@
 	 </where>
 	 ORDER BY c.create_time DESC
   </select>
+  
+  <select id="selectByClientUserIdStatus" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	 select 
+    <include refid="Base_Column_List" />
+    from client_apply
+    where client_user_id = #{clientUserId,jdbcType=BIGINT} and status = 1
+  </select>
 </mapper>

@@ -419,7 +419,7 @@
   		 ORDER BY create_time DESC
   </select>
   
-   <!-- 商户管理列表    部门查询没加-->
+   <!-- 商户管理列表   -->
   <select id="getMerchantUserInfo" parameterType="com.azz.platform.merchant.pojo.bo.SearchMerchantUserParam" resultType="com.azz.platform.merchant.pojo.vo.MerchantUserInfo">
   		select
   		  m.merchant_user_code merchantUserCode,
@@ -429,7 +429,7 @@
   		  a.dept_name deptName,
   		  m.status status,
   		  m.create_time createTime
-  		from merchant_user m,platform_dept a where m.dept_id = a.id
+  		from merchant_user m,merchant_dept a where m.dept_id = a.id
   		<if test="param != null and param != ''">
   				and m.merchant_user_name = #{param} or m.phone_number = #{param} or m.post_name = #{param} or a.dept_name = #{param}
   		</if>

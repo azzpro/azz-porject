@@ -15,11 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
-import com.azz.platform.client.api.AuditService;
 import com.azz.platform.client.pojo.ClientUser;
 import com.azz.platform.client.pojo.bo.SearchClientManagerParam;
 import com.azz.platform.client.pojo.bo.SearchClientParam;
 import com.azz.platform.client.pojo.vo.ClientCertification;
+import com.azz.platform.client.pojo.vo.ClientInfo;
+import com.azz.platform.client.service.AuditService;
 import com.azz.platform.client.service.ClientService;
 
 /**
@@ -37,12 +38,17 @@ public class ClientController {
 	@Autowired
 	private AuditService auditService;
 	
+	/**
+	 * <p>获取客户审批列表</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年10月25日 下午2:10:45
+	 */
 	@RequestMapping(value="searchClientList",method=RequestMethod.POST)
-	 public JsonResult<Pagination<ClientCertification>> searchClientList(@RequestBody SearchClientParam param) {
-		return null;
+	public JsonResult<Pagination<ClientCertification>> searchClientList(@RequestBody SearchClientParam param) {
+	    return clientService.searchMerchantList(param);
 	}
 
-	
 	/**
 	 * <p>平台 客户管理</p>
 	 * @param param
@@ -65,5 +71,14 @@ public class ClientController {
 		return clientService.updateClientUserStatus(code,status);
 	}
 	
+	/**
+	 * <p>根据用户编码获取详情</p>
+	 * @param code
+	 * @return
+	 * @author 彭斌  2018年10月25日 下午2:10:48
+	 */
+	public JsonResult<ClientInfo> searchClientInfo(String clientUserCode){
+	    return clientService.selectDetailsClientInfo(clientUserCode);
+	}
 }
 

@@ -48,6 +48,7 @@ public class CompleteMerchantInfoParam {
     private String detailAddress;
     @NotBlank(message = "至少上传一张营业执照")
     private String tradingCertificateFirstFileName;
+    @NotBlank(message = "营业执照所在路径不允许为空")
     private String tradingCertificateFirstFileUrl;
     private String tradingCertificateSecondFileName;
     private String tradingCertificateSecondFileUrl;

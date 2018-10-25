@@ -25,7 +25,7 @@ public class AuditParam {
      * 客户编码
      */
     @NotBlank(message = "客户编码不允许为空")
-    private String clientCode;
+    private String clientUserCode;
     
     /**
      * 审核结果信息

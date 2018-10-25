@@ -27,6 +27,11 @@ public class ClientUserCompany implements Serializable {
     private String companyName;
 
     /**
+     * 信用代码
+     */
+    private String creditCode;
+    
+    /**
      * 公司电话
      *
      * @mbg.generated
@@ -111,6 +116,15 @@ public class ClientUserCompany implements Serializable {
     private String remark;
 
     private static final long serialVersionUID = 1L;
+
+    
+    public String getCreditCode() {
+        return creditCode;
+    }
+
+    public void setCreditCode(String creditCode) {
+        this.creditCode = creditCode;
+    }
 
     /**
      * id<br/>

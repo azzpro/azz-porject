@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.azz.platform.client.pojo.ClientUser;
 import com.azz.platform.client.pojo.bo.SearchClientManagerParam;
+import com.azz.platform.client.pojo.vo.ClientInfo;
 
 @Mapper
 public interface ClientUserMapper {
@@ -39,4 +40,9 @@ public interface ClientUserMapper {
 	 * @author 刘建麟  2018年10月25日 下午4:01:38
 	 */
 	Integer updateClientUserStatus(@Param("code") String code,@Param("status") Integer status);
+    ClientInfo selectDetailsByClientUserCode(String clientUserCode);
+    
+    int checkClientApplyInfo(String clientUserCode);
+    
+    ClientUser selectByClientUserCode(String clientUserCode);
 }

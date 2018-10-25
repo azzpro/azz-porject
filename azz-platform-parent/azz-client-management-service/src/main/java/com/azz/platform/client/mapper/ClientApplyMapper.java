@@ -23,4 +23,6 @@ public interface ClientApplyMapper {
     int updateByPrimaryKey(ClientApply record);
     
     List<ClientCertification> selectByClientCertificationList(SearchClientParam param);
+    
+    ClientApply selectByClientUserIdStatus(Long clientUserId);
 }

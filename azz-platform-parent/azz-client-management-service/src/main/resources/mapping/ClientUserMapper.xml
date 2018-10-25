@@ -286,4 +286,38 @@
   		  </where>
   
   </update>
+  <select id="selectDetailsByClientUserCode" parameterType="java.lang.String" resultType="com.azz.platform.client.pojo.vo.ClientInfo">
+  	SELECT
+		cu.client_user_code as clientUserCode,
+		cu.`status` as status,
+		cu.create_time as createTime,
+		cuc.company_name as companyName,
+		cuc.credit_code as creditCode,
+		cuc.company_tel as companyTel,
+		cuca.detail_address as address,
+		cuc.trading_certificate_first_file_name as tradingCertificateFirstFileName,
+		cuc.trading_certificate_first_file_url as tradingCertificateFirstFileUrl,
+		cuc.trading_certificate_second_file_name as tradingCertificateSecondFileName,
+		cuc.trading_certificate_second_file_url as tradingCertificateSecondFileUrl,
+		cuc.trading_certificate_third_file_name as tradingCertificateThirdFileName,
+		cuc.trading_certificate_third_file_url as tradingCertificateThirdFileUrl
+	FROM
+		client_user cu
+	LEFT JOIN  client_user_company cuc ON cuc.client_user_code = cu.id
+	LEFT JOIN client_user_company_address cuca ON cuca.client_user_company_id = cuc.id
+	WHERE cu.client_user_code = #{clientUserCode,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="checkClientApplyInfo" parameterType="java.lang.String">
+  	SELECT count(1) FROM client_apply ca 
+	JOIN client_user cu ON ca.client_user_id = cu.id
+	WHERE ca.`status`=1 AND cu.client_user_code = #{clientUserCode,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByClientUserCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	 select 
+    <include refid="Base_Column_List" />
+    from client_user
+    where client_user_code = #{clientUserCode,jdbcType=VARCHAR}
+  </select>
 </mapper>

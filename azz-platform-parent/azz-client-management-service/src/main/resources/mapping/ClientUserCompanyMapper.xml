@@ -5,6 +5,7 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="client_user_code" jdbcType="VARCHAR" property="clientUserCode" />
     <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="credit_code" jdbcType="VARCHAR" property="creditCode" />
     <result column="company_tel" jdbcType="VARCHAR" property="companyTel" />
     <result column="trading_certificate_first_file_name" jdbcType="VARCHAR" property="tradingCertificateFirstFileName" />
     <result column="trading_certificate_first_file_url" jdbcType="VARCHAR" property="tradingCertificateFirstFileUrl" />
@@ -19,7 +20,7 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, client_user_code, company_name, company_tel, trading_certificate_first_file_name, 
+    id, client_user_code, company_name, credit_code, company_tel, trading_certificate_first_file_name, 
     trading_certificate_first_file_url, trading_certificate_second_file_name, trading_certificate_second_file_url, 
     trading_certificate_third_file_name, trading_certificate_third_file_url, create_time, 
     creator, last_modify_time, modifier, remark
@@ -35,14 +36,14 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.azz.platform.client.pojo.ClientUserCompany">
-    insert into client_user_company (id, client_user_code, company_name, 
+    insert into client_user_company (id, client_user_code, company_name, credit_code,
       company_tel, trading_certificate_first_file_name, 
       trading_certificate_first_file_url, trading_certificate_second_file_name, 
       trading_certificate_second_file_url, trading_certificate_third_file_name, 
       trading_certificate_third_file_url, create_time, 
       creator, last_modify_time, modifier, 
       remark)
-    values (#{id,jdbcType=BIGINT}, #{clientUserCode,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{clientUserCode,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR},#{creditCode,jdbcType=VARCHAR}, 
       #{companyTel,jdbcType=VARCHAR}, #{tradingCertificateFirstFileName,jdbcType=VARCHAR}, 
       #{tradingCertificateFirstFileUrl,jdbcType=VARCHAR}, #{tradingCertificateSecondFileName,jdbcType=VARCHAR}, 
       #{tradingCertificateSecondFileUrl,jdbcType=VARCHAR}, #{tradingCertificateThirdFileName,jdbcType=VARCHAR}, 
@@ -61,6 +62,9 @@
       </if>
       <if test="companyName != null">
         company_name,
+      </if>
+       <if test="creditCode != null">
+        credit_code,
       </if>
       <if test="companyTel != null">
         company_tel,
@@ -109,6 +113,9 @@
       <if test="companyName != null">
         #{companyName,jdbcType=VARCHAR},
       </if>
+       <if test="creditCode != null">
+        #{creditCode,jdbcType=VARCHAR},
+      </if>
       <if test="companyTel != null">
         #{companyTel,jdbcType=VARCHAR},
       </if>
@@ -156,6 +163,9 @@
       <if test="companyName != null">
         company_name = #{companyName,jdbcType=VARCHAR},
       </if>
+      <if test="creditCode != null">
+        credit_code = #{creditCode,jdbcType=VARCHAR},
+      </if>
       <if test="companyTel != null">
         company_tel = #{companyTel,jdbcType=VARCHAR},
       </if>
@@ -199,6 +209,7 @@
     update client_user_company
     set client_user_code = #{clientUserCode,jdbcType=VARCHAR},
       company_name = #{companyName,jdbcType=VARCHAR},
+      credit_code = #{creditCode,jdbcType=VARCHAR},
       company_tel = #{companyTel,jdbcType=VARCHAR},
       trading_certificate_first_file_name = #{tradingCertificateFirstFileName,jdbcType=VARCHAR},
       trading_certificate_first_file_url = #{tradingCertificateFirstFileUrl,jdbcType=VARCHAR},

@@ -22,7 +22,7 @@ public interface MerchantMapper {
     int updateByPrimaryKey(Merchant record);
     
     int updateByMerchantCode(Merchant record);
-    
+
     /**
      * 
      * <p>根据信用代码查询商户信息</p>
@@ -31,5 +31,13 @@ public interface MerchantMapper {
      * @author 黄智聪  2018年10月23日 下午7:58:00
      */
     Merchant getMerchantByCreditCode(String creditCode);
+    /**
+     * 
+     * <p>根据商户编码查询商户信息</p>
+     * @param creditCode 商户代码
+     * @return
+     * @author 黄智聪  2018年10月23日 下午7:58:00
+     */
+    Merchant getMerchantByMerchantCode(String merchantCode);
     
 }

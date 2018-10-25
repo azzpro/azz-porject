@@ -21,16 +21,22 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.ShiroAuthErrorCode;
+import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.MerchantConstants;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.core.exception.SuppressedException;
 import com.azz.merchant.api.MerchantService;
+import com.azz.merchant.pojo.bo.AddMerchantUserParam;
 import com.azz.merchant.pojo.bo.CompleteMerchantInfoParam;
+import com.azz.merchant.pojo.bo.EditMerchantUserParam;
+import com.azz.merchant.pojo.bo.EnableOrDisableOrDelMerchantUserParam;
 import com.azz.merchant.pojo.bo.LoginParam;
 import com.azz.merchant.pojo.bo.MerchantRegistParam;
+import com.azz.merchant.pojo.bo.SearchMerchantUserParam;
 import com.azz.merchant.pojo.bo.UploadFile;
 import com.azz.merchant.pojo.bo.UploadTradingCertificateParam;
 import com.azz.merchant.pojo.vo.LoginMerchantUserInfo;
+import com.azz.merchant.pojo.vo.MerchantUserInfo;
 import com.azz.merchant.pojo.vo.UploadFileInfo;
 import com.azz.merchant.utils.WebUtils;
 import com.azz.util.Base64;
@@ -178,6 +184,34 @@ public class MerchantController {
 	JSR303ValidateUtils.validate(uploadFile);
 	MultipartFile file = uploadFile.getFile();
 	return merchantService.uploadTradingCertificateFile(new UploadTradingCertificateParam(file.getOriginalFilename(), file.getSize(), uploadFile.getMerchantCode(), Base64.encode(file.getBytes())));
+    }
+    
+    @RequestMapping("/addMerchantUser")
+    public JsonResult<String> addMerchantUser(AddMerchantUserParam param){
+	param.setMerchantCode(WebUtils.getLoginMerchanUsert().getMerchantUserInfo().getMerchantCode());
+	param.setCreator(WebUtils.getLoginMerchanUsert().getMerchantUserInfo().getMerchantUserCode());
+	return merchantService.addMerchantUser(param);
+    }
+    
+    @RequestMapping("/editMerchantUser")
+    public JsonResult<String> editMerchantUser(EditMerchantUserParam param) {
+	param.setModifier(WebUtils.getLoginMerchanUsert().getMerchantUserInfo().getMerchantUserCode());
+	return merchantService.editMerchantUser(param);
+    }
+    
+    @RequestMapping("/getMerchantUserList")
+    public JsonResult<Pagination<MerchantUserInfo>> getMerchantUserList(SearchMerchantUserParam param) {
+	return merchantService.getMerchantUserList(param);
+    }
+    
+    @RequestMapping("/editMerchantUserStatus")
+    public JsonResult<String> enableOrDisableOrDelMerchantUser(EnableOrDisableOrDelMerchantUserParam param) {
+	return merchantService.enableOrDisableOrDelMerchantUser(param);
+    }
+    
+    @RequestMapping("/getMerchantUserInfo")
+    public JsonResult<MerchantUserInfo> getMerchantUserInfo(String merchantUserCode) {
+	return merchantService.getMerchantUserInfo(merchantUserCode);
     }
 
 }

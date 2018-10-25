@@ -470,4 +470,12 @@
     and status != 0
   </select>
   
+  <select id="getMerchantByMerchantCode" parameterType="string" resultMap="BaseResultMap">
+    select 
+    	<include refid="Base_Column_List" />
+    from merchant
+    where merchant_code = #{merchantCode}
+    and status != 0
+  </select>
+  
 </mapper>

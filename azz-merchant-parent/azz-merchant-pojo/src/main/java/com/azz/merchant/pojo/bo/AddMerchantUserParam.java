@@ -41,6 +41,9 @@ public class AddMerchantUserParam {
     @NotBlank(message = "角色编码不允许为空")
     private String roleCode;
     
+    @NotBlank(message = "商户编码不允许为空")
+    private String merchantCode;
+    
     private String creator;
 }
 

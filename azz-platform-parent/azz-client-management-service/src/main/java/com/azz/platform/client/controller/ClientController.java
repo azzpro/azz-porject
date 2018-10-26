@@ -7,6 +7,8 @@
  
 package com.azz.platform.client.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,11 +25,13 @@ import com.azz.platform.client.pojo.bo.SearchClientMerchantManagerParam;
 import com.azz.platform.client.pojo.bo.SearchClientParam;
 import com.azz.platform.client.pojo.vo.ClientAccountInfo;
 import com.azz.platform.client.pojo.vo.ClientCertification;
+import com.azz.platform.client.pojo.vo.ClientCompanyEmployee;
 import com.azz.platform.client.pojo.vo.ClientCompanyInfo;
 import com.azz.platform.client.pojo.vo.ClientInfo;
 import com.azz.platform.client.pojo.vo.ClientMerchantInfo;
 import com.azz.platform.client.service.AuditService;
 import com.azz.platform.client.service.ClientService;
+import com.github.pagehelper.PageHelper;
 
 /**
  * <P>TODO</P>
@@ -91,6 +95,17 @@ public class ClientController {
 	}
 	
 	/**
+	 * <p>客户管理 企业管理启用 禁用  1启用 0 禁用</p>
+	 * @param param
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午7:35:48
+	 */
+	@RequestMapping(value="updateClientCompnayStatus",method=RequestMethod.POST)
+	 public JsonResult<String> updateClientCompnayStatus(String code,Integer status) {
+		return clientService.updateClientCompnayStatus(code,status);
+	}
+	
+	/**
 	 * <p>客户管理 账户详情</p>
 	 * @param param
 	 * @return
@@ -111,6 +126,17 @@ public class ClientController {
 	 public JsonResult<ClientCompanyInfo> selectClientCompanyDetail(String code) {
 		return clientService.selectClientCompanyDetail(code);
 	}
+	
+	/**
+	 * <p>平台 客户管理 企业 成员</p>
+	 * @param param
+	 * @return
+	 * @author 刘建麟  2018年10月25日 下午3:18:38
+	 */
+	@RequestMapping(value="selectClientCompanyEmployeeList",method=RequestMethod.POST)
+	public JsonResult<Pagination<ClientCompanyEmployee>> selectClientCompanyEmployeeList(@RequestBody SearchClientManagerParam param) {
+        return clientService.selectClientCompanyEmployeeList(param);
+    }
 	
 	/**
 	 * <p>根据用户编码获取详情</p>

@@ -23,6 +23,7 @@ import com.azz.platform.client.pojo.bo.SearchClientMerchantManagerParam;
 import com.azz.platform.client.pojo.bo.SearchClientParam;
 import com.azz.platform.client.pojo.vo.ClientAccountInfo;
 import com.azz.platform.client.pojo.vo.ClientCertification;
+import com.azz.platform.client.pojo.vo.ClientCompanyEmployee;
 import com.azz.platform.client.pojo.vo.ClientCompanyInfo;
 import com.azz.platform.client.pojo.vo.ClientInfo;
 import com.azz.platform.client.pojo.vo.ClientMerchantInfo;
@@ -76,6 +77,20 @@ public class ClientController {
 		return clientService.updateClientUserStatus(code, status);
 	}
 	
+	
+	/**
+	 * <p>平台 客户  企业管理 禁用 启用</p>
+	 * @param param
+	 * @return
+	 * @author 刘建麟  2018年10月23日 下午2:02:33
+	 */
+	@RequestMapping("/updateClientCompnayStatus")
+	public JsonResult<String> updateClientCompnayStatus(@RequestParam("code") String code,@RequestParam("status") Integer status) {
+		return clientService.updateClientCompnayStatus(code, status);
+	}
+	
+	
+	
 	/**
 	 * <p>平台 客户管理 用户详情</p>
 	 * @param param
@@ -97,6 +112,18 @@ public class ClientController {
 	public JsonResult<ClientCompanyInfo> selectClientCompanyDetail(@RequestParam("code") String code) {
 		return clientService.selectClientCompanyDetail(code);
 	}
+	
+	/**
+	 * <p>平台 客户管理 企业成员</p>
+	 * @param param
+	 * @return
+	 * @author 刘建麟  2018年10月23日 下午2:02:33
+	 */
+	@RequestMapping("/selectClientCompanyEmployeeList")
+	public JsonResult<Pagination<ClientCompanyEmployee>> selectClientCompanyEmployeeList(SearchClientManagerParam param) {
+		return clientService.selectClientCompanyEmployeeList(param);
+	}
+	
 	
 	/**
 	 * <p>获取审批列表</p>

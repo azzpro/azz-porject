@@ -22,6 +22,7 @@ import com.azz.platform.client.pojo.bo.SearchClientMerchantManagerParam;
 import com.azz.platform.client.pojo.bo.SearchClientParam;
 import com.azz.platform.client.pojo.vo.ClientAccountInfo;
 import com.azz.platform.client.pojo.vo.ClientCertification;
+import com.azz.platform.client.pojo.vo.ClientCompanyEmployee;
 import com.azz.platform.client.pojo.vo.ClientCompanyInfo;
 import com.azz.platform.client.pojo.vo.ClientInfo;
 import com.azz.platform.client.pojo.vo.ClientMerchantInfo;
@@ -55,6 +56,15 @@ public interface ClientService {
     
     
     /**
+     * <p>平台端的客户 企业管理 启用 禁用</p>
+     * @param merchantCode
+     * @return
+     * @author 刘建麟  2018年10月23日 上午10:10:06
+     */
+    @PostMapping("/azz/api/client/updateClientCompnayStatus")
+    JsonResult<String> updateClientCompnayStatus(@RequestParam("code") String code,@RequestParam("status") Integer status);
+    
+    /**
      * <p>平台端的客户 账户详情</p>
      * @param merchantCode
      * @return
@@ -71,6 +81,15 @@ public interface ClientService {
      */
     @PostMapping("/azz/api/client/selectClientCompanyDetail")
     JsonResult<ClientCompanyInfo> selectClientCompanyDetail(@RequestParam("code") String code);
+    
+    /**
+     * <p>TODO</p>
+     * @param 平台 客户 企业成员 param
+     * @return
+     * @author 刘建麟  2018年10月26日 下午2:05:01
+     */
+    @RequestMapping(value="/azz/api/client/selectClientCompanyEmployeeList",method=RequestMethod.POST)
+	JsonResult<Pagination<ClientCompanyEmployee>> selectClientCompanyEmployeeList(@RequestBody SearchClientManagerParam param);
     
     /**
      * <p>客户 企业用户</p>

@@ -341,4 +341,27 @@
 			left join client_role b on b.id = client_user_role.role_id
 	   where a.client_user_code = #{code}
   </select>
+  
+  <!-- 平台客户管理企业成员列表 -->
+  <select id="selectClientCompanyEmployeeList" parameterType="com.azz.platform.client.pojo.bo.SearchClientMerchantManagerParam" resultType="com.azz.platform.client.pojo.vo.ClientCompanyEmployee">
+  select 
+  	a.client_user_code employeeCode,
+  	a.client_user_name employeeName,
+  	a.phone_number phone,
+  	b.dept_name deptName,
+  	a.post_name postName,
+  	a.status status,
+    a.create_time createTime
+  from
+    client_user a
+    left join client_dept b
+    on a.client_dept_id=b.id
+    <where>
+    	<if test="param != null and param != ''">
+    		a.client_user_name = #{param} or a.phone_number = #{param} or a.post_name = #{param}
+    		or b.dept_name = #{param}
+    	</if>
+    </where>
+  and a.client_type = 1 and a.status != 0 order by a.create_time desc
+  </select>
 </mapper>

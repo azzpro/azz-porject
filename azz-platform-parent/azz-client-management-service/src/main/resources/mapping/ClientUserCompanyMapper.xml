@@ -276,4 +276,13 @@
   
   </select>
   
+  <update id="updateClientCompnayStatus">
+  	update 
+  		  client_user_company a left join client_user b on a.client_user_code = b.client_user_code
+  	set
+  		  b.status = #{status}
+  	where 
+  	     a.company_code = #{code}
+  </update>
+  
 </mapper>

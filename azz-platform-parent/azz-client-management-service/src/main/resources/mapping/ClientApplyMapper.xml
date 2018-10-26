@@ -265,7 +265,7 @@
 	 LEFT JOIN client_user_company cuc ON c.client_user_code = cuc.client_user_code
 	  <where>
 	 	<if test="param != null and param !=''">
-	 		and (c.client_user_code = #{param,jdbcType=VARCHAR} or ca.company_name = #{param,jdbcType=VARCHAR} or ca.client_user_name = #{param,jdbcType=VARCHAR})
+	 		and (cuc.company_code = #{param,jdbcType=VARCHAR} or ca.company_name = #{param,jdbcType=VARCHAR} or ca.client_user_name = #{param,jdbcType=VARCHAR})
 	 	</if>
 	 	<if test="status != null">
 	 		and ca.status = #{status,jdbcType=INTEGER}
@@ -274,7 +274,7 @@
 	 ORDER BY c.create_time DESC
   </select>
   
-  <select id="selectByClientUserIdStatus" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByClientUserIdStatus" parameterType="java.lang.Long" resultMap="BaseResultMap">
   	 select 
     <include refid="Base_Column_List" />
     from client_apply

@@ -48,4 +48,12 @@ public interface ClientUserCompanyMapper {
      * @author 刘建麟  2018年10月26日 上午11:06:16
      */
     ClientCompanyInfo selectClientCompanyDetail(String code);
+    
+    /**
+     * <p>根据企业编码获取企业信息</p>
+     * @param companyCode
+     * @return
+     * @author 彭斌  2018年10月26日 下午12:13:27
+     */
+    ClientUserCompany selectByCompanyCode(String companyCode);
 }

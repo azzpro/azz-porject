@@ -11,12 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.platform.client.pojo.ClientUser;
-import com.azz.platform.client.pojo.ClientUserCompany;
 import com.azz.platform.client.pojo.bo.AuditParam;
 import com.azz.platform.client.pojo.bo.SearchClientManagerParam;
 import com.azz.platform.client.pojo.bo.SearchClientMerchantManagerParam;
@@ -95,8 +95,8 @@ public class ClientController {
 	 * @author 彭斌  2018年10月25日 下午2:10:48
 	 */
 	@RequestMapping(value="searchClientInfo",method=RequestMethod.POST)
-	public JsonResult<ClientInfo> searchClientInfo(String clientUserCode) {
-	    return clientService.selectDetailsClientInfo(clientUserCode);
+	public JsonResult<ClientInfo> searchClientInfo(@RequestParam("companyCode") String companyCode) {
+	    return clientService.selectDetailsClientInfo(companyCode);
 	}
 	
 	/**

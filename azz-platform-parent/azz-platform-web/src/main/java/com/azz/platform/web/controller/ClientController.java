@@ -92,8 +92,8 @@ public class ClientController {
 	 * @author 彭斌  2018年10月25日 下午5:38:48
 	 */
 	@RequestMapping("/searchClientInfo")
-    public JsonResult<ClientInfo> searchClientInfo(String companyCode){
-	    return clientService.searchClientInfo(companyCode);
+    public JsonResult<ClientInfo> searchClientInfo(@RequestParam("companyCode") String companyCode){
+	    return clientService.selectDetailsClientInfo(companyCode);
 	}
 	
 	/**

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
@@ -99,8 +100,8 @@ public class ClientService {
      * @return
      * @author 彭斌  2018年10月25日 下午2:06:08
      */
-    public JsonResult<ClientInfo> selectDetailsClientInfo(String code){
-        ClientInfo clientInfo = clientUserMapper.selectDetailsByCompanyCode(code);
+    public JsonResult<ClientInfo> selectDetailsClientInfo(String companyCode){
+        ClientInfo clientInfo = clientUserMapper.selectDetailsByCompanyCode(companyCode);
         return JsonResult.successJsonResult(clientInfo);
     }
 

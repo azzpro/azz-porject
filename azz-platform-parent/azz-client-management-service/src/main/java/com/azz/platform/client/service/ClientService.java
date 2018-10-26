@@ -95,7 +95,7 @@ public class ClientService {
     	 return JsonResult.successJsonResult();
     }
     /**
-     * <p>根据客户编码获取审批详情</p>
+     * <p>根据企业编码获取审批详情</p>
      * @param code
      * @return
      * @author 彭斌  2018年10月25日 下午2:06:08

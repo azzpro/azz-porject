@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class AzzUserServiceApplication {
 
 	public static void main(String[] args) {
+		 System.setProperty("spring.devtools.restart.enabled", "true");
 		 SpringApplication.run(AzzUserServiceApplication.class, args);
 	}
 }

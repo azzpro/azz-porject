@@ -12,7 +12,7 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 
 @EnableEurekaClient
 @SpringBootApplication
-@EnableAutoConfiguration(exclude= {DataSourceAutoConfiguration.class})
+@EnableAutoConfiguration(exclude= {DataSourceAutoConfiguration.class,DataSourceTransactionManagerAutoConfiguration.class})
 @EnableFeignClients
 public class AzzPlatformWebApplication extends SpringBootServletInitializer {
 

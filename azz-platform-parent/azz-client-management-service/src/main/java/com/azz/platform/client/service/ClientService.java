@@ -21,7 +21,9 @@ import com.azz.platform.client.pojo.ClientUser;
 import com.azz.platform.client.pojo.bo.SearchClientManagerParam;
 import com.azz.platform.client.pojo.bo.SearchClientMerchantManagerParam;
 import com.azz.platform.client.pojo.bo.SearchClientParam;
+import com.azz.platform.client.pojo.vo.ClientAccountInfo;
 import com.azz.platform.client.pojo.vo.ClientCertification;
+import com.azz.platform.client.pojo.vo.ClientCompanyInfo;
 import com.azz.platform.client.pojo.vo.ClientInfo;
 import com.azz.platform.client.pojo.vo.ClientMerchantInfo;
 import com.github.pagehelper.PageHelper;
@@ -80,6 +82,28 @@ public class ClientService {
         PageHelper.startPage(param.getPageNum(), param.getPageSize());
         List<ClientMerchantInfo> merchantList = clientUserCompanyMapper.selectClientMerchantList(param);
         return JsonResult.successJsonResult(new Pagination<>(merchantList));
+    }
+	
+	/**
+	 * <p>平台 客户管理 用户详情</p>
+	 * @param param
+	 * @return
+	 * @author 刘建麟  2018年10月25日 下午3:18:38
+	 */
+	public JsonResult<ClientAccountInfo> selectClientUserInfo(String code) {
+        ClientAccountInfo userInfo = clientUserMapper.selectClientUserInfo(code);
+        return JsonResult.successJsonResult(userInfo);
+    }
+	
+	/**
+	 * <p>平台 客户管理 企业详情</p>
+	 * @param param
+	 * @return
+	 * @author 刘建麟  2018年10月25日 下午3:18:38
+	 */
+	public JsonResult<ClientCompanyInfo> selectClientCompanyDetail(String code) {
+		ClientCompanyInfo userInfo = clientUserCompanyMapper.selectClientCompanyDetail(code);
+        return JsonResult.successJsonResult(userInfo);
     }
    
 	/**

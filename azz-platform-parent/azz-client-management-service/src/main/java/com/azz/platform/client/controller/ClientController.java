@@ -21,7 +21,9 @@ import com.azz.platform.client.pojo.bo.AuditParam;
 import com.azz.platform.client.pojo.bo.SearchClientManagerParam;
 import com.azz.platform.client.pojo.bo.SearchClientMerchantManagerParam;
 import com.azz.platform.client.pojo.bo.SearchClientParam;
+import com.azz.platform.client.pojo.vo.ClientAccountInfo;
 import com.azz.platform.client.pojo.vo.ClientCertification;
+import com.azz.platform.client.pojo.vo.ClientCompanyInfo;
 import com.azz.platform.client.pojo.vo.ClientInfo;
 import com.azz.platform.client.pojo.vo.ClientMerchantInfo;
 import com.azz.platform.client.service.AuditService;
@@ -86,6 +88,28 @@ public class ClientController {
 	@RequestMapping(value="updateClientUserStatus",method=RequestMethod.POST)
 	 public JsonResult<String> updateClientUserStatus(String code,Integer status) {
 		return clientService.updateClientUserStatus(code,status);
+	}
+	
+	/**
+	 * <p>客户管理 账户详情</p>
+	 * @param param
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午7:35:48
+	 */
+	@RequestMapping(value="selectClientUserInfo",method=RequestMethod.POST)
+	 public JsonResult<ClientAccountInfo> selectClientUserInfo(String code) {
+		return clientService.selectClientUserInfo(code);
+	}
+	
+	/**
+	 * <p>客户管理 企业详情</p>
+	 * @param param
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午7:35:48
+	 */
+	@RequestMapping(value="selectClientCompanyDetail",method=RequestMethod.POST)
+	 public JsonResult<ClientCompanyInfo> selectClientCompanyDetail(String code) {
+		return clientService.selectClientCompanyDetail(code);
 	}
 	
 	/**

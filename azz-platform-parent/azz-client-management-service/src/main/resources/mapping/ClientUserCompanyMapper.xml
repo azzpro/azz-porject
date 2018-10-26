@@ -252,4 +252,28 @@
   		</if>
     order by m.create_time DESC
   </select>
+  
+  <!-- 客户企业详情 -->
+  <select id="selectClientCompanyDetail" parameterType="java.lang.String" resultType="com.azz.platform.client.pojo.vo.ClientCompanyInfo">
+  	select 
+  		a.company_code companyCode,
+  		b.status status,
+  		a.create_time authTime,
+  		a.company_name companyName,
+  		a.company_tel companyTel,
+  		a.credit_code creditCode,
+  		c.detail_address detailAddress,
+  		a.trading_certificate_first_file_name tradingCertificateFirstFileName,
+  		a.trading_certificate_first_file_url tradingCertificateFirstFileUrl,
+  		a.trading_certificate_second_file_name tradingCertificateSecondFileName,
+  		a.trading_certificate_second_file_url tradingCertificateSecondFileUrl,
+  		a.trading_certificate_third_file_name tradingCertificateThirdFileName,
+  		a.trading_certificate_third_file_url tradingCertificateThirdFileUrl
+  	from
+  		client_user_company a left join client_user b on a.client_user_code=b.client_user_code
+  		left join client_user_company_address c on a.id = c.client_user_company_id
+  	where a.company_code = #{code} and b.client_type = 1 and b.status != 0
+  
+  </select>
+  
 </mapper>

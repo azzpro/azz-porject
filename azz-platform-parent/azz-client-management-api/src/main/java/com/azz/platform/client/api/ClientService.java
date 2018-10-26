@@ -20,7 +20,9 @@ import com.azz.platform.client.pojo.ClientUser;
 import com.azz.platform.client.pojo.bo.SearchClientManagerParam;
 import com.azz.platform.client.pojo.bo.SearchClientMerchantManagerParam;
 import com.azz.platform.client.pojo.bo.SearchClientParam;
+import com.azz.platform.client.pojo.vo.ClientAccountInfo;
 import com.azz.platform.client.pojo.vo.ClientCertification;
+import com.azz.platform.client.pojo.vo.ClientCompanyInfo;
 import com.azz.platform.client.pojo.vo.ClientInfo;
 import com.azz.platform.client.pojo.vo.ClientMerchantInfo;
 
@@ -50,6 +52,25 @@ public interface ClientService {
      */
     @PostMapping("/azz/api/client/updateClientUserStatus")
     JsonResult<String> updateClientUserStatus(@RequestParam("code") String code,@RequestParam("status") Integer status);
+    
+    
+    /**
+     * <p>平台端的客户 账户详情</p>
+     * @param merchantCode
+     * @return
+     * @author 刘建麟  2018年10月23日 上午10:10:06
+     */
+    @PostMapping("/azz/api/client/selectClientUserInfo")
+    JsonResult<ClientAccountInfo> selectClientUserInfo(@RequestParam("code") String code);
+    
+    /**
+     * <p>平台端的客户 企业详情</p>
+     * @param merchantCode
+     * @return
+     * @author 刘建麟  2018年10月23日 上午10:10:06
+     */
+    @PostMapping("/azz/api/client/selectClientCompanyDetail")
+    JsonResult<ClientCompanyInfo> selectClientCompanyDetail(@RequestParam("code") String code);
     
     /**
      * <p>客户 企业用户</p>

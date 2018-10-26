@@ -320,4 +320,24 @@
     from client_user
     where client_user_code = #{clientUserCode,jdbcType=VARCHAR}
   </select>
+  
+  <!-- 平台客户管理 账户详情 -->
+  <select id="selectClientUserInfo" parameterType="java.lang.String" resultType="com.azz.platform.client.pojo.vo.ClientAccountInfo">
+  		select 
+  		a.client_user_name clientUserName,
+  		a.client_avatar_url avatarUrl,
+  		a.phone_number phoneNumber,
+  		a.email email,
+  		b.role_name companyPower,
+  		c.company_name companyName,
+  		a.client_user_name employeeName,
+  		d.dept_name deptmentName
+  		from 
+  		   client_user a 
+      left join client_user_company c on a.client_user_code = c.client_user_code
+			left JOIN client_dept d on a.client_dept_id = d.id
+			left join client_user_role  on a.id = client_user_role.client_user_id
+			left join client_role b on b.id = client_user_role.role_id
+	   where a.client_user_code = #{code}
+  </select>
 </mapper>

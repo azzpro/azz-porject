@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.platform.client.pojo.ClientUserCompany;
 import com.azz.platform.client.pojo.bo.SearchClientMerchantManagerParam;
+import com.azz.platform.client.pojo.vo.ClientCompanyInfo;
 import com.azz.platform.client.pojo.vo.ClientMerchantInfo;
 
 @Mapper
@@ -29,4 +30,12 @@ public interface ClientUserCompanyMapper {
      * @author 刘建麟  2018年10月25日 下午5:35:29
      */
     List<ClientMerchantInfo> selectClientMerchantList(SearchClientMerchantManagerParam param);
+    
+    /**
+     * <p>T企业详情</p>
+     * @param code
+     * @return
+     * @author 刘建麟  2018年10月26日 上午11:06:16
+     */
+    ClientCompanyInfo selectClientCompanyDetail(String code);
 }

@@ -24,6 +24,7 @@ import com.azz.platform.client.pojo.ClientApply;
 import com.azz.platform.client.pojo.ClientUser;
 import com.azz.platform.client.pojo.ClientUserCompany;
 import com.azz.platform.client.pojo.bo.AuditParam;
+import com.azz.util.DateUtils;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
 
@@ -55,6 +56,12 @@ public class AuditService {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_CLIENT_AUDIT_NO_EXIST);
         }
 
+        ClientUserCompany cucObj = clientUserCompanyMapper.selectByCompanyCode(param.getCompanyCode());
+        if(ObjectUtils.isNull(cucObj)) {
+            // 审核的企业不存在
+            throw new BaseException(PlatformUserErrorCode.PLATFORM_CLIENT_ENTERPRISE_NO_EXIST);
+        }
+        
         if (!AuditConstants.AuditStatus.checkStatusExist(param.getStatus())) {
             // 审核状态不存在
             throw new BaseException(
@@ -76,20 +83,18 @@ public class AuditService {
             clientUserMapper.updateByPrimaryKeySelective(clientUser);
             
             // 申请基本信息和资质信息新增到公司表
-            ClientUserCompany cuc = new ClientUserCompany();
-            cuc.setClientUserCode(clientUser.getClientUserCode());
-            cuc.setCompanyName(clientApplyObj.getCompanyName());
-            cuc.setCreditCode(clientApplyObj.getCreditCode());
-            cuc.setCompanyTel(clientApplyObj.getCompanyTel());
-            cuc.setTradingCertificateFirstFileName(clientApplyObj.getTradingCertificateFirstFileName());
-            cuc.setTradingCertificateFirstFileUrl(clientApplyObj.getTradingCertificateFirstFileUrl());
-            cuc.setTradingCertificateSecondFileName(clientApplyObj.getTradingCertificateSecondFileUrl());
-            cuc.setTradingCertificateSecondFileUrl(clientApplyObj.getTradingCertificateSecondFileUrl());
-            cuc.setTradingCertificateThirdFileName(clientApplyObj.getTradingCertificateThirdFileName());
-            cuc.setTradingCertificateThirdFileUrl(clientApplyObj.getTradingCertificateThirdFileUrl());
-            cuc.setCreateTime(new Date());
-            clientUserCompanyMapper.insertSelective(cuc);
-            
+            cucObj.setClientUserCode(clientUser.getClientUserCode());
+            cucObj.setCompanyName(clientApplyObj.getCompanyName());
+            cucObj.setCreditCode(clientApplyObj.getCreditCode());
+            cucObj.setCompanyTel(clientApplyObj.getCompanyTel());
+            cucObj.setTradingCertificateFirstFileName(clientApplyObj.getTradingCertificateFirstFileName());
+            cucObj.setTradingCertificateFirstFileUrl(clientApplyObj.getTradingCertificateFirstFileUrl());
+            cucObj.setTradingCertificateSecondFileName(clientApplyObj.getTradingCertificateSecondFileUrl());
+            cucObj.setTradingCertificateSecondFileUrl(clientApplyObj.getTradingCertificateSecondFileUrl());
+            cucObj.setTradingCertificateThirdFileName(clientApplyObj.getTradingCertificateThirdFileName());
+            cucObj.setTradingCertificateThirdFileUrl(clientApplyObj.getTradingCertificateThirdFileUrl());
+            cucObj.setLastModifyTime(new Date());
+            clientUserCompanyMapper.updateByPrimaryKeySelective(cucObj);
         } else if (param.getStatus().equals(AuditConstants.AuditStatus.REFUSED.getValue())) {
             // 审核拒绝
             clientApplyObj.setStatus(AuditConstants.AuditStatus.REFUSED.getValue());

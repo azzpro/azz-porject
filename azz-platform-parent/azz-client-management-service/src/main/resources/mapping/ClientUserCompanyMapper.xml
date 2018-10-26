@@ -276,4 +276,10 @@
   
   </select>
   
+  <select id="selectByCompanyCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	 select 
+    <include refid="Base_Column_List" />
+    from client_user_company
+    where company_code = #{companyCode,jdbcType=VARCHAR}
+  </select>
 </mapper>

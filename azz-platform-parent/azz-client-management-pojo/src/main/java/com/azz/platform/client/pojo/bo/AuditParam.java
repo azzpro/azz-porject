@@ -28,6 +28,12 @@ public class AuditParam {
     private String clientUserCode;
     
     /**
+     * 企业编码
+     */
+    @NotBlank(message = "企业编码不允许为空")
+    private String companyCode;
+    
+    /**
      * 审核结果信息
      */
     @NotNull(message = "审核结果不允许为空")

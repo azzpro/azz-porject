@@ -37,7 +37,7 @@ public interface ClientService {
     public JsonResult<String> loginAuth(@RequestBody LoginParam param);
     
     @RequestMapping("/azz/api/client/getLoginClientUserInfoByPhoneNumber")
-    public JsonResult<LoginClientUserInfo> getLoginClientUserInfoByPhoneNumber(String phoneNumber);
+    public JsonResult<LoginClientUserInfo> getLoginClientUserInfoByPhoneNumber(@RequestParam("phoneNumber")String phoneNumber);
     
     /*    
     @RequestMapping("/sendVerificationCode")

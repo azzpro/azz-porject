@@ -346,7 +346,7 @@
   <select id="getClientUserByPhoneNumberAndClientUserCode" parameterType="string" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from merchant_user
+    from client_user
     where phone_number = #{phoneNumber}
     and status != 0
     <if test="clientUserCode != null">

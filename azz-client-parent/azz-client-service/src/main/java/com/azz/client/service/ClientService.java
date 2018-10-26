@@ -28,6 +28,7 @@ import com.azz.client.pojo.ClientApply;
 import com.azz.client.pojo.ClientDept;
 import com.azz.client.pojo.ClientRole;
 import com.azz.client.pojo.ClientUser;
+import com.azz.client.pojo.ClientUserCompany;
 import com.azz.client.pojo.ClientUserCompanyAddress;
 import com.azz.client.pojo.ClientUserRole;
 import com.azz.client.pojo.bo.AddClientUserParam;
@@ -187,14 +188,34 @@ public class ClientService {
 	if(count > 0) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "信用代码已存在");
 	}
+	
+	Date nowDate = new Date();
+	ClientUserCompany clientUserCompanyRecord = ClientUserCompany.builder()
+		.clientUserCode(clientUserCode)
+		.companyCode(System.currentTimeMillis()+"") // TODO
+		.companyName(param.getCompanyName())
+		.companyTel(param.getCompanyTel())
+		.creditCode(param.getCreditCode())
+		.createTime(nowDate)
+		.creator(clientUserCode)
+		.tradingCertificateFirstFileName(param.getTradingCertificateFirstFileName())
+		.tradingCertificateFirstFileUrl(param.getTradingCertificateFirstFileUrl())
+		.tradingCertificateSecondFileName(param.getTradingCertificateSecondFileName())
+		.tradingCertificateSecondFileUrl(param.getTradingCertificateSecondFileUrl())
+		.tradingCertificateThirdFileName(param.getTradingCertificateThirdFileName())
+		.tradingCertificateThirdFileUrl(param.getTradingCertificateThirdFileUrl())
+		.build();
+	clientUserCompanyMapper.insertSelective(clientUserCompanyRecord);
+	
+	
 	String provinceName = param.getProviceName();
 	String cityName = param.getCityName();
 	String areaName = param.getAreaName();
 	String detailAddress = param.getDetailAddress();
-	Date nowDate = new Date();
 	ClientUserCompanyAddress clientUserCompanyAddressRecord = ClientUserCompanyAddress.builder()
 		.areaCode(param.getAreaCode())
 		.areaName(areaName)
+		.clientUserCompanyId(clientUserCompanyRecord.getId())
 		.cityCode(param.getCityCode())
 		.cityName(cityName)
 		.createTime(new Date())
@@ -256,7 +277,7 @@ public class ClientService {
 	Date nowDate = new Date();
 	String creator = param.getCreator();
 	ClientUser userRecord = ClientUser.builder().createTime(nowDate).creator(creator)
-		.email(param.getEmail()).password(pwd.getPassword()).phoneNumber(phoneNumber)
+		.clientDeptId(dept.getId()).email(param.getEmail()).password(pwd.getPassword()).phoneNumber(phoneNumber)
 		.postName(param.getPostName()).clientUserCode(System.currentTimeMillis() + "")// TODO
 		.clientUserName(param.getClientUserName()).salt(pwd.getSalt()).build();
 	clientUserMapper.insertSelective(userRecord);

@@ -45,7 +45,7 @@ public class ClientController {
     }
     
     @RequestMapping("/getLoginClientUserInfoByPhoneNumber")
-    public JsonResult<LoginClientUserInfo> getLoginClientUserInfoByPhoneNumber(String phoneNumber){
+    public JsonResult<LoginClientUserInfo> getLoginClientUserInfoByPhoneNumber(@RequestParam("phoneNumber") String phoneNumber){
 	return clientService.getLoginClientUserInfoByPhoneNumber(phoneNumber);
     }
     

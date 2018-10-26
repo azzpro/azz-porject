@@ -97,7 +97,7 @@ public interface ClientService {
      * @return
      * @author 彭斌  2018年10月25日 下午5:29:46
      */
-    @RequestMapping("/azz/api/client/searchClientInfo")
-    public JsonResult<ClientInfo> searchClientInfo(@RequestParam("companyCode") String companyCode);
+    @PostMapping("/azz/api/client/searchClientInfo")
+    public JsonResult<ClientInfo> selectDetailsClientInfo(@RequestParam("companyCode") String companyCode);
 }
 

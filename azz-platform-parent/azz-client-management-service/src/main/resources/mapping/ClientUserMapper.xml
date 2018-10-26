@@ -288,6 +288,7 @@
   </update>
   <select id="selectDetailsByCompanyCode" parameterType="java.lang.String" resultType="com.azz.platform.client.pojo.vo.ClientInfo">
   	SELECT
+  		cu.client_user_code as clientUserCode,
 		cuc.company_code as companyCode,
 		cu.`status` as status,
 		cu.create_time as createTime,
@@ -303,7 +304,7 @@
 		cuc.trading_certificate_third_file_url as tradingCertificateThirdFileUrl
 	FROM
 		client_user cu
-	LEFT JOIN  client_user_company cuc ON cuc.client_user_code = cu.id
+	LEFT JOIN  client_user_company cuc ON cuc.client_user_code = cu.client_user_code
 	LEFT JOIN client_user_company_address cuca ON cuca.client_user_company_id = cuc.id
 	WHERE cuc.company_code = #{companyCode,jdbcType=VARCHAR}
   </select>

@@ -309,7 +309,7 @@
 	WHERE cuc.company_code = #{companyCode,jdbcType=VARCHAR}
   </select>
   
-  <select id="checkClientApplyInfo" parameterType="java.lang.String">
+  <select id="checkClientApplyInfo" parameterType="java.lang.String" resultType="int">
   	SELECT count(1) FROM client_apply ca 
 	JOIN client_user cu ON ca.client_user_id = cu.id
 	WHERE ca.`status`=1 AND cu.client_user_code = #{clientUserCode,jdbcType=VARCHAR}

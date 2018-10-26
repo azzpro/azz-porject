@@ -274,7 +274,7 @@
 	 ORDER BY c.create_time DESC
   </select>
   
-  <select id="selectByClientUserIdStatus" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByClientUserIdStatus" parameterType="java.lang.Long" resultMap="BaseResultMap">
   	 select 
     <include refid="Base_Column_List" />
     from client_apply

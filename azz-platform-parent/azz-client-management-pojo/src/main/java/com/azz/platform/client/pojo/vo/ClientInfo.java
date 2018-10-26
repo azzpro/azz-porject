@@ -20,6 +20,7 @@ import lombok.Data;
  */
 @Data
 public class ClientInfo {
+    private String clientUserCode;
     private String companyCode;
     private String companyName;
     private Integer status;

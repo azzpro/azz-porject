@@ -24,7 +24,7 @@
     where id = #{id,jdbcType=BIGINT}
   </select>
   
-  <select id="selectByDeptCode" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByDeptCode" parameterType="string" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from client_dept

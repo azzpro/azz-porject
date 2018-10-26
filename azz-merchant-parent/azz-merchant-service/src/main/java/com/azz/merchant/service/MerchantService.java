@@ -382,6 +382,7 @@ public class MerchantService {
 	Date nowDate = new Date();
 	String creator = param.getCreator();
 	MerchantUser userRecord = MerchantUser.builder().createTime(nowDate).creator(creator)
+		//.deptId() TODO
 		.email(param.getEmail()).password(pwd.getPassword()).phoneNumber(phoneNumber)
 		.postName(param.getPostName()).merchantUserCode(System.currentTimeMillis() + "")// TODO
 		.merchantUserName(param.getMerchantUserName()).merchantCode(param.getMerchantCode()).salt(pwd.getSalt()).build();

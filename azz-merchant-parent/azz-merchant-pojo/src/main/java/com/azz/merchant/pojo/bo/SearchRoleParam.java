@@ -16,6 +16,8 @@ import lombok.Data;
  */
 @Data
 public class SearchRoleParam {
+
+    private String merchantCode;
     
     private String searchInput;
     

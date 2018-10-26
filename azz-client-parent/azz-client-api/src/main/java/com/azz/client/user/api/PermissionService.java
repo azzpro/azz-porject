@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.client.pojo.bo.AddRoleParam;
 import com.azz.client.pojo.bo.DelRoleParam;
@@ -31,25 +32,25 @@ import com.azz.core.common.JsonResult;
 @FeignClient("azz-client-service")
 public interface PermissionService {
 
-    @RequestMapping("/getPermissionList")
-    public JsonResult<List<Permission>> getPermissionList(String roleCode);
+    @RequestMapping("/azz/api/client/permission/getPermissionList")
+    public JsonResult<List<Permission>> getPermissionList(@RequestParam("clientUserCompanyId") Long clientUserCompanyId, @RequestParam("roleCode") String roleCode);
     
-    @RequestMapping("/addRole")
+    @RequestMapping("/azz/api/client/permission/addRole")
     public JsonResult<String> addRole(@RequestBody AddRoleParam param);
     
-    @RequestMapping("/editRole")
+    @RequestMapping("/azz/api/client/permission/editRole")
     public JsonResult<String> editRole(@RequestBody EditRoleParam param);
     
-    @RequestMapping("/delRole")
+    @RequestMapping("/azz/api/client/permission/delRole")
     public JsonResult<String> delRole(@RequestBody DelRoleParam param);
     
-    @RequestMapping("/getRoleList")
+    @RequestMapping("/azz/api/client/permission/getRoleList")
     public JsonResult<List<RoleInfo>> getRoleList(@RequestBody SearchRoleParam param);
     
-    @RequestMapping("/getRolePermissions")
-    public JsonResult<List<String>> getRolePermissions(String roleCode);
+    @RequestMapping("/azz/api/client/permission/getRolePermissions")
+    public JsonResult<List<String>> getRolePermissions(@RequestParam("clientUserCompanyId") Long clientUserCompanyId, @RequestParam("roleCode") String roleCode);
     
-    @RequestMapping("/setRolePermissions")
+    @RequestMapping("/azz/api/client/permission/setRolePermissions")
     public JsonResult<String> setRolePermissions(@RequestBody SetRolePermissionParam param);
 }
 

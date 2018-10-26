@@ -179,6 +179,11 @@ public class MerchantController {
 	return merchantService.completeMerchantInfo(param);
     }
     
+    @RequestMapping(value = "/getMerchantQualificationApplyStatus")
+    public JsonResult<Integer> getMerchantQualificationApplyStatus(String merchantCode) {
+	return merchantService.getMerchantQualificationApplyStatus(merchantCode);
+    }
+    
     @RequestMapping(value = "/uploadTradingCertificateFile")
     public JsonResult<UploadFileInfo> uploadTradingCertificateFile(UploadFile uploadFile) throws IOException{
 	JSR303ValidateUtils.validate(uploadFile);

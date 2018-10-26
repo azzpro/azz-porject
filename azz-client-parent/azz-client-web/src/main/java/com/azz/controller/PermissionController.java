@@ -21,6 +21,7 @@ import com.azz.client.pojo.bo.SetRolePermissionParam;
 import com.azz.client.pojo.vo.Permission;
 import com.azz.client.pojo.vo.RoleInfo;
 import com.azz.client.user.api.PermissionService;
+import com.azz.controller.utils.WebUtils;
 import com.azz.core.common.JsonResult;
 
 /**
@@ -41,36 +42,43 @@ public class PermissionController {
     
     @RequestMapping("/getPermissionList")
     public JsonResult<List<Permission>> getPermissionList(String roleCode) {
-	return permissionService.getPermissionList(roleCode);
+	return permissionService.getPermissionList(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCompanyId(), roleCode);
     }
     
     @RequestMapping("/addRole")
     public JsonResult<String> addRole(AddRoleParam param) {
+	param.setClientUserCompanyId(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCompanyId());
+	param.setCreator(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 	return permissionService.addRole(param);
     }
     
     @RequestMapping("/editRole")
     public JsonResult<String> editRole(EditRoleParam param) {
+	param.setClientUserCompanyId(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCompanyId());
+	param.setModifier(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 	return permissionService.editRole(param);
     }
     
     @RequestMapping("/delRole")
     public JsonResult<String> delRole(DelRoleParam param) {
+	param.setModifier(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 	return permissionService.delRole(param);
     }
     
     @RequestMapping("/getRoleList")
     public JsonResult<List<RoleInfo>> getRoleList(SearchRoleParam param) {
+	param.setClientUserCompanyId(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCompanyId());
 	return permissionService.getRoleList(param);
     }
     
     @RequestMapping("/getRolePermissions")
     public JsonResult<List<String>> getRolePermissions(String roleCode) {
-	return permissionService.getRolePermissions(roleCode);
+	return permissionService.getRolePermissions(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCompanyId(), roleCode);
     }
     
     @RequestMapping("/setRolePermissions")
     public JsonResult<String> setRolePermissions(SetRolePermissionParam param) {
+	param.setCreator(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 	return permissionService.setRolePermissions(param);
     }
 

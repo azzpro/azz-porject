@@ -3,6 +3,7 @@ package com.azz.merchant.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.azz.merchant.pojo.MerchantRolePermission;
 
@@ -22,5 +23,5 @@ public interface MerchantRolePermissionMapper {
     
     int deleteByRoleId(Long roleId);
     
-    List<String> getPermissionCodesByRoleCode(String roleCode);
+    List<String> getPermissionCodesByRoleCode(@Param("merchantId")Long merchantId, @Param("roleCode")String roleCode);
 }

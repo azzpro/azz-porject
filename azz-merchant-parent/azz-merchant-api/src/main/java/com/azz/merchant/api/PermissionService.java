@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.merchant.pojo.bo.AddRoleParam;
@@ -37,8 +38,8 @@ public interface PermissionService {
      * @return
      * @author 黄智聪  2018年10月25日 上午10:10:51
      */
-    @RequestMapping("/getPermissionList")
-    JsonResult<List<Permission>> getPermissionList(String roleCode);
+    @RequestMapping("/azz/api/merchant/permission/getPermissionList")
+    JsonResult<List<Permission>> getPermissionList(@RequestParam("merchantCode")String merchantCode, @RequestParam("roleCode")String roleCode);
     
     /**
      * 
@@ -47,7 +48,7 @@ public interface PermissionService {
      * @return
      * @author 黄智聪  2018年10月25日 上午10:10:57
      */
-    @RequestMapping("/addRole")
+    @RequestMapping("/azz/api/merchant/permission/addRole")
     JsonResult<String> addRole(@RequestBody AddRoleParam param);
     
     /**
@@ -57,7 +58,7 @@ public interface PermissionService {
      * @return
      * @author 黄智聪  2018年10月25日 上午10:11:03
      */
-    @RequestMapping("/editRole")
+    @RequestMapping("/azz/api/merchant/permission/editRole")
     JsonResult<String> editRole(@RequestBody EditRoleParam param);
     
     /**
@@ -67,7 +68,7 @@ public interface PermissionService {
      * @return
      * @author 黄智聪  2018年10月25日 上午10:11:05
      */
-    @RequestMapping("/delRole")
+    @RequestMapping("/azz/api/merchant/permission/delRole")
     JsonResult<String> delRole(@RequestBody DelRoleParam param);
     
     /**
@@ -77,7 +78,7 @@ public interface PermissionService {
      * @return
      * @author 黄智聪  2018年10月25日 上午10:11:09
      */
-    @RequestMapping("/getRoleList")
+    @RequestMapping("/azz/api/merchant/permission/getRoleList")
     JsonResult<List<RoleInfo>> getRoleList(@RequestBody SearchRoleParam param);
     
     /**
@@ -87,8 +88,8 @@ public interface PermissionService {
      * @return
      * @author 黄智聪  2018年10月25日 上午10:11:12
      */
-    @RequestMapping("/getRolePermissions")
-    JsonResult<List<String>> getRolePermissions(String roleCode);
+    @RequestMapping("/azz/api/merchant/permission/getRolePermissions")
+    JsonResult<List<String>> getRolePermissions(@RequestParam("merchantCode")String merchantCode, @RequestParam("roleCode")String roleCode);
     
     /**
      * 
@@ -97,7 +98,7 @@ public interface PermissionService {
      * @return
      * @author 黄智聪  2018年10月25日 上午10:11:16
      */
-    @RequestMapping("/setRolePermissions")
+    @RequestMapping("/azz/api/merchant/permission/setRolePermissions")
     JsonResult<String> setRolePermissions(@RequestBody SetRolePermissionParam param);
     
 }

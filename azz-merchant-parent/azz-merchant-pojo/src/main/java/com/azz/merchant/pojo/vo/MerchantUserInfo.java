@@ -40,5 +40,7 @@ public class MerchantUserInfo {
     
     private String status;
     
+    private int qualificationApplyStatus;
+    
 }
 

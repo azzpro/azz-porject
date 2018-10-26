@@ -17,7 +17,9 @@ public class MerchantRole implements Serializable {
      * @mbg.generated
      */
     private Long id;
-
+    
+    private Long merchantId;
+    
     /**
      * 角色编码
      *
@@ -301,6 +303,7 @@ public class MerchantRole implements Serializable {
         MerchantRole other = (MerchantRole) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getRoleCode() == null ? other.getRoleCode() == null : this.getRoleCode().equals(other.getRoleCode()))
+            && (this.getMerchantId() == null ? other.getMerchantId() == null : this.getMerchantId().equals(other.getMerchantId()))
             && (this.getRoleName() == null ? other.getRoleName() == null : this.getRoleName().equals(other.getRoleName()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
@@ -315,6 +318,7 @@ public class MerchantRole implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getMerchantId() == null) ? 0 : getMerchantId().hashCode());
         result = prime * result + ((getRoleCode() == null) ? 0 : getRoleCode().hashCode());
         result = prime * result + ((getRoleName() == null) ? 0 : getRoleName().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
@@ -332,6 +336,7 @@ public class MerchantRole implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
+        sb.append(", merchantId=").append(merchantId);
         sb.append(", id=").append(id);
         sb.append(", roleCode=").append(roleCode);
         sb.append(", roleName=").append(roleName);
@@ -344,5 +349,17 @@ public class MerchantRole implements Serializable {
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
+    }
+
+    public Long getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(Long merchantId) {
+        this.merchantId = merchantId;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.constants.MessageConstants;
@@ -138,13 +139,15 @@ public class MerchantService {
      * @return
      * @author 黄智聪  2018年10月23日 下午4:23:06
      */
-    public JsonResult<LoginMerchantUserInfo> getLoginMerchantUserInfoByPhoneNumber(String phoneNumber){
+    public JsonResult<LoginMerchantUserInfo> getLoginMerchantUserInfoByPhoneNumber(@RequestParam("phoneNumber")String phoneNumber){
 	LoginMerchantUserInfo info = new LoginMerchantUserInfo();
-	MerchantUserInfo merchantUserInfo = merchantUserMapper.getMerchantUserInfoByPhoneNumber(phoneNumber);;
-	List<MerchantUserPermission> merchantUserPermissions = merchantPermissionMapper.getMerchantUserPermissionInfoByPhoneNumber(phoneNumber);
+	MerchantUserInfo merchantUserInfo = merchantUserMapper.getMerchantUserInfoByPhoneNumber(phoneNumber);
+	String merchantCode = merchantUserInfo.getMerchantCode();
+	Merchant merchant = merchantMapper.getMerchantByMerchantCode(merchantCode);
+	List<MerchantUserPermission> merchantUserPermissions = merchantPermissionMapper.getMerchantUserPermissionInfoByPhoneNumber(merchant.getId(), phoneNumber);
 	info.setMerchantUserInfo(merchantUserInfo);
 	info.setMerchantUserPermissions(merchantUserPermissions);
-	info.setMenus(generateMenuTree(phoneNumber));
+	info.setMenus(generateMenuTree(merchantCode, phoneNumber));
 	return JsonResult.successJsonResult(info);
     }
     
@@ -223,20 +226,21 @@ public class MerchantService {
 		.registeredPerson(registerName).build();
 	merchantMapper.insertSelective(merchantRecord);
 	
+	String merchantUserCode = System.currentTimeMillis() + "";
 	// 生成盐值加密的密码
 	Password pwd = PasswordHelper.encryptPasswordByModel(password);
 	MerchantUser merchantUserRecord = MerchantUser.builder()
 		.createTime(nowDate)
 		.merchantCode(merchantCode)
 		.merchantUserName(registerName)
-		.merchantUserCode(System.currentTimeMillis() + "")// TODO
+		.merchantUserCode(merchantUserCode)// TODO
 		.password(pwd.getPassword())
 		.phoneNumber(phoneNumber)
 		.salt(pwd.getSalt())
 		.remark("来自商户注册")
 		.build();
 	merchantUserMapper.insertSelective(merchantUserRecord);
-	return JsonResult.successJsonResult();
+	return JsonResult.successJsonResult(merchantUserCode);
     }
     
     
@@ -546,13 +550,13 @@ public class MerchantService {
      * @return
      * @author 黄智聪 2018年10月19日 上午10:36:34
      */
-    private List<Menu> generateMenuTree(String phoneNumber) {
+    private List<Menu> generateMenuTree(String merchantCode, String phoneNumber) {
 	// 根据手机号查询所有一级菜单权限
 	List<MerchantUserPermission> oneMenuPermissions = merchantPermissionMapper
-		.getMerchantUserPermissionByPhoneNumberAndLevel(phoneNumber, 1);
+		.getMerchantUserPermissionByPhoneNumberAndLevel(merchantCode, phoneNumber, 1);
 	// 根据手机号查询所有二级菜单权限
 	List<MerchantUserPermission> twoMenuPermissions = merchantPermissionMapper
-		.getMerchantUserPermissionByPhoneNumberAndLevel(phoneNumber, 2);
+		.getMerchantUserPermissionByPhoneNumberAndLevel(merchantCode, phoneNumber, 2);
 	List<Menu> oneLevelMenus = new ArrayList<>();
 	for (MerchantUserPermission oneMenuPermission : oneMenuPermissions) {
 	    // 一级菜单的权限编码

@@ -35,6 +35,8 @@ public class AddClientUserParam {
     @NotBlank(message = "角色编码不允许为空")
     private String roleCode;
     
+    private Long clientUserCompanyId;
+
     private String creator;
 }
 

@@ -174,6 +174,7 @@ public class ClientController {
     
     @RequestMapping("/addClientUser")
     public JsonResult<String> addClientUser(AddClientUserParam param){
+	param.setClientUserCompanyId(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCompanyId());
 	param.setCreator(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 	return clientService.addClientUser(param);
     }

@@ -27,7 +27,7 @@ public interface MerchantRoleMapper {
     
     int updateByRoleCode(MerchantRole record);
     
-    MerchantRole hasRoleName(@Param("roleName")String roleName, @Param("roleCode") String roleCode);
+    MerchantRole hasRoleName(@Param("merchantId") Long merchantId, @Param("roleName")String roleName, @Param("roleCode") String roleCode);
     
     List<RoleInfo> getRoleInfoBySearchParam(SearchRoleParam param);
     

@@ -23,9 +23,9 @@ public interface MerchantPermissionMapper {
 
     int updateByPrimaryKey(MerchantPermission record);
     
-    List<MerchantUserPermission> getMerchantUserPermissionInfoByPhoneNumber(String phoneNumber);
+    List<MerchantUserPermission> getMerchantUserPermissionInfoByPhoneNumber(@Param("merchantId") Long merchantId, @Param("phoneNumber")String phoneNumber);
     
-    List<MerchantUserPermission> getMerchantUserPermissionByPhoneNumberAndLevel(@Param("phoneNumber")String phoneNumber, @Param("level")Integer level);
+    List<MerchantUserPermission> getMerchantUserPermissionByPhoneNumberAndLevel(@Param("merchantCode") String merchantCode, @Param("phoneNumber")String phoneNumber, @Param("level")Integer level);
     
     MerchantPermission getMerchantPermissionByPermissionCode(String permissionCode);
     

@@ -30,5 +30,7 @@ public class AddRoleParam implements Serializable{
     
     private String creator;
     
+    private String merchantCode;
+    
 }
 

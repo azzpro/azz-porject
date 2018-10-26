@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
@@ -38,8 +39,8 @@ public class PermissionController {
     private PermissionService permissionService;
     
     @RequestMapping("/getPermissionList")
-    public JsonResult<List<Permission>> getPermissionList(String roleCode) {
-	return permissionService.getPermissionList(roleCode);
+    public JsonResult<List<Permission>> getPermissionList(@RequestParam("merchantCode")String merchantCode, @RequestParam("roleCode")String roleCode) {
+	return permissionService.getPermissionList(merchantCode, roleCode);
     }
     
     @RequestMapping("/addRole")
@@ -63,8 +64,8 @@ public class PermissionController {
     }
     
     @RequestMapping("/getRolePermissions")
-    public JsonResult<List<String>> getRolePermissions(String roleCode) {
-	return permissionService.getRolePermissions(roleCode);
+    public JsonResult<List<String>> getRolePermissions(@RequestParam("merchantCode")String merchantCode, @RequestParam("roleCode")String roleCode) {
+	return permissionService.getRolePermissions(merchantCode, roleCode);
     }
     
     @RequestMapping("/setRolePermissions")

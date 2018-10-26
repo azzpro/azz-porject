@@ -47,7 +47,7 @@ public class MerchantController {
     }
     
     @RequestMapping("/getLoginMerchantUserInfoByPhoneNumber")
-    public JsonResult<LoginMerchantUserInfo> getLoginMerchantUserInfoByPhoneNumber(String phoneNumber){
+    public JsonResult<LoginMerchantUserInfo> getLoginMerchantUserInfoByPhoneNumber(@RequestParam("phoneNumber")String phoneNumber){
 	return merchantService.getLoginMerchantUserInfoByPhoneNumber(phoneNumber);
     }
     
@@ -62,7 +62,7 @@ public class MerchantController {
     }
     
     @RequestMapping("/getMerchantQualificationApplyStatus")
-    public JsonResult<Integer> getMerchantQualificationApplyStatus(String merchantCode) {
+    public JsonResult<Integer> getMerchantQualificationApplyStatus(@RequestParam("merchantCode")String merchantCode) {
 	return merchantService.getMerchantQualificationApplyStatus(merchantCode);
     }
     

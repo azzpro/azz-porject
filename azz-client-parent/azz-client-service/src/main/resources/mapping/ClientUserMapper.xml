@@ -290,7 +290,7 @@
         modifier = #{modifier,jdbcType=VARCHAR},
       </if>
     </set>
-    where client_user_code = #{clientUserCode},
+    where client_user_code = #{clientUserCode}
   </update>
   
   <update id="updateByPrimaryKey" parameterType="com.azz.client.pojo.ClientUser">
@@ -359,6 +359,7 @@
     	c.client_user_code as clientUserCode,
 		c.client_user_code AS clientUserCode,
 		uc.company_name AS companyName,
+		uc.id as clientUserCompanyId,
 		c.phone_number AS phoneNumber,
 		c.client_user_name AS userName,
 		c.create_time AS createTime,
@@ -444,7 +445,7 @@
 			LEFT JOIN client_user_role ur ON ur.client_user_id = u.id
 			LEFT JOIN client_role r ON ur.role_id = r.id
 			WHERE u. STATUS != 0
-			u.client_user_code = #{clientUserCode}
+			and u.client_user_code = #{clientUserCode}
   </select>
   
   

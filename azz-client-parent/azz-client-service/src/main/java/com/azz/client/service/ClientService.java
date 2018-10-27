@@ -121,11 +121,12 @@ public class ClientService {
      */
     public JsonResult<LoginClientUserInfo> getLoginClientUserInfoByPhoneNumber(String phoneNumber){
 	LoginClientUserInfo info = new LoginClientUserInfo();
-	ClientUserInfo clientUserInfo = clientUserMapper.getClientUserInfoByPhoneNumber(phoneNumber);;
-	List<ClientUserPermission> clientUserPermissions = clientPermissionMapper.getClientUserPermissionInfoByPhoneNumber(phoneNumber);
+	ClientUserInfo clientUserInfo = clientUserMapper.getClientUserInfoByPhoneNumber(phoneNumber);
+	Long clientUserCompanyId = clientUserInfo.getClientUserCompanyId();
+	List<ClientUserPermission> clientUserPermissions = clientPermissionMapper.getClientUserPermissionInfoByPhoneNumber(clientUserCompanyId, phoneNumber);
 	info.setClientUserInfo(clientUserInfo);
 	info.setClientUserPermissions(clientUserPermissions);
-	info.setMenus(generateMenuTree(phoneNumber));
+	info.setMenus(generateMenuTree(clientUserCompanyId, phoneNumber));
 	return JsonResult.successJsonResult(info);
     }
     
@@ -276,11 +277,27 @@ public class ClientService {
 	Password pwd = PasswordHelper.encryptPasswordByModel(password + "");
 	Date nowDate = new Date();
 	String creator = param.getCreator();
+	String clientUserCode = System.currentTimeMillis() + "";
 	ClientUser userRecord = ClientUser.builder().createTime(nowDate).creator(creator)
 		.clientDeptId(dept.getId()).email(param.getEmail()).password(pwd.getPassword()).phoneNumber(phoneNumber)
-		.postName(param.getPostName()).clientUserCode(System.currentTimeMillis() + "")// TODO
+		.postName(param.getPostName()).clientUserCode(clientUserCode)// TODO
 		.clientUserName(param.getClientUserName()).salt(pwd.getSalt()).build();
 	clientUserMapper.insertSelective(userRecord);
+	
+	// 为新增的成员绑定公司
+	Long clientUserCompanyId = param.getClientUserCompanyId();
+	ClientUserCompany company = clientUserCompanyMapper.selectByPrimaryKey(clientUserCompanyId);
+	ClientUserCompany clientUserCompanyRecord = ClientUserCompany.builder()
+		.createTime(nowDate)
+		.clientUserCode(clientUserCode)
+		.companyName(company.getCompanyName())
+		.companyCode(company.getCompanyCode())
+		.remark("手动新增成员")
+		.creator(param.getCreator())
+		.companyTel(company.getCompanyTel())
+		.build();
+	clientUserCompanyMapper.insertSelective(clientUserCompanyRecord);
+	
 	// 用户与角色绑定
 	ClientUserRole userRoleRecord = ClientUserRole.builder().createTime(nowDate).creator(creator)
 		.clientUserId(userRecord.getId()).roleId(role.getId()).build();
@@ -404,13 +421,13 @@ public class ClientService {
      * @return
      * @author 黄智聪 2018年10月19日 上午10:36:34
      */
-    private List<Menu> generateMenuTree(String phoneNumber) {
+    private List<Menu> generateMenuTree(Long clientUserCompanyId, String phoneNumber) {
 	// 根据手机号查询所有一级菜单权限
 	List<ClientUserPermission> oneMenuPermissions = clientPermissionMapper
-		.getClientUserPermissionByPhoneNumberAndLevel(phoneNumber, 1);
+		.getClientUserPermissionByPhoneNumberAndLevel(clientUserCompanyId, phoneNumber, 1);
 	// 根据手机号查询所有二级菜单权限
 	List<ClientUserPermission> twoMenuPermissions = clientPermissionMapper
-		.getClientUserPermissionByPhoneNumberAndLevel(phoneNumber, 2);
+		.getClientUserPermissionByPhoneNumberAndLevel(clientUserCompanyId, phoneNumber, 2);
 	List<Menu> oneLevelMenus = new ArrayList<>();
 	for (ClientUserPermission oneMenuPermission : oneMenuPermissions) {
 	    // 一级菜单的权限编码

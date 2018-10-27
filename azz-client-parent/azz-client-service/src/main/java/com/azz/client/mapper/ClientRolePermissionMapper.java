@@ -3,6 +3,7 @@ package com.azz.client.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.azz.client.pojo.ClientRolePermission;
 @Mapper
@@ -21,5 +22,5 @@ public interface ClientRolePermissionMapper {
     
     int deleteByRoleId(Long roleId);
     
-    List<String> getPermissionCodesByRoleCode(String roleCode);
+    List<String> getPermissionCodesByRoleCode(@Param("clientUserCompanyId")Long clientUserCompanyId,@Param("roleCode")String roleCode);
 }

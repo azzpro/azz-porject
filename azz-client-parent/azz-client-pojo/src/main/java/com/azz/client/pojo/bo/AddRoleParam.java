@@ -28,6 +28,8 @@ public class AddRoleParam implements Serializable{
     
     private String remark;
     
+    private Long clientUserCompanyId;
+    
     private String creator;
     
 }

@@ -22,9 +22,9 @@ public interface ClientPermissionMapper {
 
     int updateByPrimaryKey(ClientPermission record);
     
-    List<ClientUserPermission> getClientUserPermissionInfoByPhoneNumber(String phoneNumber);
+    List<ClientUserPermission> getClientUserPermissionInfoByPhoneNumber(@Param("clientUserCompanyId") Long clientUserCompanyId, @Param("phoneNumber")String phoneNumber);
     
-    List<ClientUserPermission> getClientUserPermissionByPhoneNumberAndLevel(@Param("phoneNumber")String phoneNumber, @Param("level")Integer level);
+    List<ClientUserPermission> getClientUserPermissionByPhoneNumberAndLevel(@Param("clientUserCompanyId") Long clientUserCompanyId, @Param("phoneNumber")String phoneNumber, @Param("level")Integer level);
     
     ClientPermission getClientPermissionByPermissionCode(String permissionCode);
     

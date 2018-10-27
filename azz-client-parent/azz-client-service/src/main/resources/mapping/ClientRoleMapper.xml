@@ -3,6 +3,7 @@
 <mapper namespace="com.azz.client.mapper.ClientRoleMapper">
   <resultMap id="BaseResultMap" type="com.azz.client.pojo.ClientRole">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="client_user_company_id" jdbcType="BIGINT" property="clientUserCompanyId" />
     <result column="role_code" jdbcType="VARCHAR" property="roleCode" />
     <result column="role_name" jdbcType="VARCHAR" property="roleName" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
@@ -13,7 +14,7 @@
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, role_code, role_name, remark, status, create_time, creator, last_modify_time, 
+    id, client_user_company_id, role_code, role_name, remark, status, create_time, creator, last_modify_time, 
     modifier
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -27,11 +28,11 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.azz.client.pojo.ClientRole">
-    insert into client_role (id, role_code, role_name, 
+    insert into client_role (id, client_user_company_id, role_code, role_name, 
       remark, status, create_time, 
       creator, last_modify_time, modifier
       )
-    values (#{id,jdbcType=BIGINT}, #{roleCode,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{clientUserCompanyId,jdbcType=BIGINT}, #{roleCode,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{creator,jdbcType=VARCHAR}, #{lastModifyTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}
       )
@@ -41,6 +42,9 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="clientUserCompanyId != null">
+        client_user_company_id,
       </if>
       <if test="roleCode != null">
         role_code,
@@ -71,6 +75,9 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
+      <if test="clientUserCompanyId != null">
+        #{clientUserCompanyId,jdbcType=BIGINT},
+      </if>
       <if test="roleCode != null">
         #{roleCode,jdbcType=VARCHAR},
       </if>
@@ -100,6 +107,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.azz.client.pojo.ClientRole">
     update client_role
     <set>
+      <if test="clientUserCompanyId != null">
+        client_user_company_id,
+      </if>
       <if test="roleCode != null">
         role_code = #{roleCode,jdbcType=VARCHAR},
       </if>
@@ -130,6 +140,7 @@
   <update id="updateByPrimaryKey" parameterType="com.azz.client.pojo.ClientRole">
     update client_role
     set role_code = #{roleCode,jdbcType=VARCHAR},
+      client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT},
       role_name = #{roleName,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
@@ -143,6 +154,9 @@
   <update id="updateByRoleCode" parameterType="com.azz.client.pojo.ClientRole">
     update client_role
     <set>
+      <if test="clientUserCompanyId != null">
+        client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT},
+      </if>
       <if test="roleName != null">
         role_name = #{roleName,jdbcType=VARCHAR},
       </if>
@@ -181,6 +195,7 @@
     from client_role
     where role_name = #{roleName}
     and status = 1
+    and client_user_company_id = #{clientUserCompanyId}
     <if test="roleCode != null">
         and role_code &lt;&gt; #{roleCode}
     </if>
@@ -198,6 +213,7 @@
 	JOIN client_user u ON u.client_user_code = r.creator
 	WHERE u.status != 0 
 		and r.status != 0 
+		and r.client_user_company_id = #{clientUserCompanyId}
 	<if test="searchInput != null and searchInput != '' ">
 		and (
 			r.role_code = #{searchInput}

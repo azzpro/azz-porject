@@ -15,6 +15,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -180,6 +181,7 @@ public class ClientController {
     public JsonResult<String> completeClientInfo(EnterpriseAuthWebParam webParam) throws IOException {
 	JSR303ValidateUtils.validate(webParam);
 	EnterpriseAuthParam param = new EnterpriseAuthParam();
+	BeanUtils.copyProperties(webParam, param);
 	List<TradingCertificate> tradingCertificates = new ArrayList<>();
 	for (MultipartFile tradingCertificateFile : webParam.getTradingCertificateFiles()) {
 	    TradingCertificate tradingCertificate = new TradingCertificate(tradingCertificateFile.getOriginalFilename(),

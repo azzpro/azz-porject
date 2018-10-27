@@ -202,7 +202,7 @@ public class ClientService {
 	if(count > 0) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "信用代码已存在");
 	}
-	List<UploadFileInfo> uploadTradingCertificateFileInfos = new ArrayList<>();
+	List<UploadFileInfo> uploadTradingCertificateFileInfos = new ArrayList<>(3);
 	// 营业执照最多3个
 	List<TradingCertificate> tradingCertificates = param.getTradingCertificates();
 	for (int i = 0 ; i < tradingCertificates.size(); i++) {
@@ -249,7 +249,6 @@ public class ClientService {
 		.build();
 	clientUserCompanyMapper.insertSelective(clientUserCompanyRecord);
 	
-	
 	String provinceName = param.getProviceName();
 	String cityName = param.getCityName();
 	String areaName = param.getAreaName();
@@ -278,12 +277,12 @@ public class ClientService {
 		.clientUserName(param.getClientUserName())
 		.createTime(nowDate)
 		.status(QualificationApplyStatus.PENDING.getValue())
-		.tradingCertificateFirstFileName(uploadTradingCertificateFileInfos.get(0) == null ? null : uploadTradingCertificateFileInfos.get(0).getOriginalFileName())
-		.tradingCertificateFirstFileUrl(uploadTradingCertificateFileInfos.get(0) == null ? null : uploadTradingCertificateFileInfos.get(0).getImgUrl())
-		.tradingCertificateSecondFileName(uploadTradingCertificateFileInfos.get(1) == null ? null : uploadTradingCertificateFileInfos.get(0).getOriginalFileName())
-		.tradingCertificateSecondFileUrl(uploadTradingCertificateFileInfos.get(1) == null ? null : uploadTradingCertificateFileInfos.get(0).getImgUrl())
-		.tradingCertificateThirdFileName(uploadTradingCertificateFileInfos.get(2) == null ? null : uploadTradingCertificateFileInfos.get(0).getOriginalFileName())
-		.tradingCertificateThirdFileUrl(uploadTradingCertificateFileInfos.get(2) == null ? null : uploadTradingCertificateFileInfos.get(0).getImgUrl())
+		.tradingCertificateFirstFileName(uploadTradingCertificateFileInfos.size() == 1 ? uploadTradingCertificateFileInfos.get(0).getOriginalFileName() : null)
+		.tradingCertificateFirstFileUrl(uploadTradingCertificateFileInfos.size() == 1 ? uploadTradingCertificateFileInfos.get(0).getImgUrl() : null)
+		.tradingCertificateSecondFileName(uploadTradingCertificateFileInfos.size() == 2  ? uploadTradingCertificateFileInfos.get(1).getOriginalFileName() : null)
+		.tradingCertificateSecondFileUrl(uploadTradingCertificateFileInfos.size() == 2 ? uploadTradingCertificateFileInfos.get(1).getImgUrl() : null)
+		.tradingCertificateThirdFileName(uploadTradingCertificateFileInfos.size() == 3 ? uploadTradingCertificateFileInfos.get(2).getOriginalFileName() : null)
+		.tradingCertificateThirdFileUrl(uploadTradingCertificateFileInfos.size() == 3  ? uploadTradingCertificateFileInfos.get(2).getImgUrl() : null)
 		.build();
 	clientApplyMapper.insertSelective(clientApplyRecord);
 	return JsonResult.successJsonResult();

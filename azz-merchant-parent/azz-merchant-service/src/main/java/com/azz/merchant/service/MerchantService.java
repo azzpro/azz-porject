@@ -313,8 +313,9 @@ public class MerchantService {
 		.build();
 	merchantAddressMapper.insertSelective(merchantAddressRecord);
 	
-	List<UploadFileInfo> uploadBusinessLicenseFileInfos = new ArrayList<>();
-	List<UploadFileInfo> uploadTradingCertificateFileInfos = new ArrayList<>();
+	List<UploadFileInfo> uploadBusinessLicenseFileInfos = new ArrayList<>(3);
+	List<UploadFileInfo> uploadTradingCertificateFileInfos = new ArrayList<>(3);
+	
 	
 	// 经营执照目前只有1个
 	List<BusinessLicense> businessLicenses = param.getBusinessLicenses();
@@ -371,8 +372,8 @@ public class MerchantService {
 	
 	// 完善资料后，需插入申请记录
 	MerchantApply merchantApplyRecord = MerchantApply.builder()
-		.businessLicenseFileName(uploadBusinessLicenseFileInfos.get(0) == null ? null : uploadBusinessLicenseFileInfos.get(0).getOriginalFileName())
-		.businessLicenseFileUrl(uploadBusinessLicenseFileInfos.get(0) == null ? null : uploadBusinessLicenseFileInfos.get(0).getImgUrl())
+		.businessLicenseFileName(uploadBusinessLicenseFileInfos.size() == 1 ? uploadBusinessLicenseFileInfos.get(0).getOriginalFileName() : null)
+		.businessLicenseFileUrl(uploadBusinessLicenseFileInfos.size() == 1 ? uploadBusinessLicenseFileInfos.get(0).getImgUrl() : null)
 		.companyName(param.getCompanyName())
 		.companyTel(param.getCompanyTel())
 		.creditCode(creditCode)
@@ -381,12 +382,12 @@ public class MerchantService {
 		.address(provinceName + cityName + areaName + detailAddress)
 		.merchantName(param.getMerchantName())
 		.status(QualificationApplyStatus.PENDING.getValue())
-		.tradingCertificateFirstFileName(uploadTradingCertificateFileInfos.get(0) == null ? null : uploadTradingCertificateFileInfos.get(0).getOriginalFileName())
-		.tradingCertificateFirstFileUrl(uploadTradingCertificateFileInfos.get(0) == null ? null : uploadTradingCertificateFileInfos.get(0).getImgUrl())
-		.tradingCertificateSecondFileName(uploadTradingCertificateFileInfos.get(1) == null ? null : uploadTradingCertificateFileInfos.get(0).getOriginalFileName())
-		.tradingCertificateSecondFileUrl(uploadTradingCertificateFileInfos.get(1) == null ? null : uploadTradingCertificateFileInfos.get(0).getImgUrl())
-		.tradingCertificateThirdFileName(uploadTradingCertificateFileInfos.get(2) == null ? null : uploadTradingCertificateFileInfos.get(0).getOriginalFileName())
-		.tradingCertificateThirdFileUrl(uploadTradingCertificateFileInfos.get(2) == null ? null : uploadTradingCertificateFileInfos.get(0).getImgUrl())
+		.tradingCertificateFirstFileName(uploadTradingCertificateFileInfos.size() == 1 ? uploadTradingCertificateFileInfos.get(0).getOriginalFileName() : null)
+		.tradingCertificateFirstFileUrl(uploadTradingCertificateFileInfos.size() == 1 ? uploadTradingCertificateFileInfos.get(0).getImgUrl() : null)
+		.tradingCertificateSecondFileName(uploadTradingCertificateFileInfos.size() == 2  ? uploadTradingCertificateFileInfos.get(1).getOriginalFileName() : null)
+		.tradingCertificateSecondFileUrl(uploadTradingCertificateFileInfos.size() == 2 ? uploadTradingCertificateFileInfos.get(1).getImgUrl() : null)
+		.tradingCertificateThirdFileName(uploadTradingCertificateFileInfos.size() == 3 ? uploadTradingCertificateFileInfos.get(2).getOriginalFileName() : null)
+		.tradingCertificateThirdFileUrl(uploadTradingCertificateFileInfos.size() == 3  ? uploadTradingCertificateFileInfos.get(2).getImgUrl() : null)
 		.build();
 	merchantApplyMapper.insertSelective(merchantApplyRecord);
 	return JsonResult.successJsonResult();

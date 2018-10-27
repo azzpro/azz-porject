@@ -7,6 +7,8 @@
  
 package com.azz.platform.merchant.pojo.bo;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.azz.core.common.QueryPage;
 
 import lombok.Data;
@@ -21,11 +23,13 @@ public class SearchMerchantParam extends QueryPage{
     /**
      * 商户列表参数
      */
+	@NotBlank(message="查询参数不能为空")
     private String param;
     
     /**
      * 审核结果信息
      */
+	@NotBlank(message="状态不能为空")
     private Integer status;
     
 }

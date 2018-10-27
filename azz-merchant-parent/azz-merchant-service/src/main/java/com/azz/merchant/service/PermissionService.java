@@ -16,9 +16,11 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.constants.PermissionConstants.PermissionStatus;
 import com.azz.exception.JSR303ValidationException;
+import com.azz.merchant.mapper.MerchantMapper;
 import com.azz.merchant.mapper.MerchantPermissionMapper;
 import com.azz.merchant.mapper.MerchantRoleMapper;
 import com.azz.merchant.mapper.MerchantRolePermissionMapper;
+import com.azz.merchant.pojo.Merchant;
 import com.azz.merchant.pojo.MerchantPermission;
 import com.azz.merchant.pojo.MerchantRole;
 import com.azz.merchant.pojo.MerchantRolePermission;
@@ -29,6 +31,7 @@ import com.azz.merchant.pojo.bo.SearchRoleParam;
 import com.azz.merchant.pojo.bo.SetRolePermissionParam;
 import com.azz.merchant.pojo.vo.Permission;
 import com.azz.merchant.pojo.vo.RoleInfo;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
 
@@ -49,13 +52,23 @@ public class PermissionService {
 
     @Autowired
     MerchantPermissionMapper merchantPermissionMapper;
+    
+    @Autowired
+    MerchantMapper merchantMapper;
+    
+    @Autowired
+    private DbSequenceService dbSequenceService;
 
-    public JsonResult<List<Permission>> getPermissionList(String roleCode) {
+    public JsonResult<List<Permission>> getPermissionList(String merchantCode, String roleCode) {
 	List<Permission> permissions = merchantPermissionMapper.getAllPermissions();
 	if(StringUtils.isBlank(roleCode)) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色编码不允许为空");
 	}
-	List<String> permissionCodes = merchantRolePermissionMapper.getPermissionCodesByRoleCode(roleCode);
+	Merchant merchant = merchantMapper.getMerchantByMerchantCode(merchantCode);
+	if(merchant == null) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户不存在");
+	}
+	List<String> permissionCodes = merchantRolePermissionMapper.getPermissionCodesByRoleCode(merchant.getId(), roleCode);
 	for (Permission permission : permissions) {
 	    String permissionCode = permission.getPermissionCode();
 	    if(permissionCodes.contains(permissionCode)) {
@@ -70,15 +83,18 @@ public class PermissionService {
 	this.validateAddRoleParam(param);
 	Date nowDate = new Date();
 	String creator = param.getCreator();
+	Merchant merchant = merchantMapper.getMerchantByMerchantCode(param.getMerchantCode());
 	MerchantRole roleRecord = MerchantRole.builder().createTime(nowDate).creator(creator).remark(param.getRemark())
-		.roleCode(System.currentTimeMillis() + "")// TODO
-		.roleName(param.getRoleName()).build();
+		.roleCode(dbSequenceService.getMerchantPowerNumber())
+		.roleName(param.getRoleName())
+		.merchantId(merchant.getId())
+		.build();
 	merchantRoleMapper.insertSelective(roleRecord);
 	return JsonResult.successJsonResult();
     }
 
     public JsonResult<String> editRole(@RequestBody EditRoleParam param) {
-	// 参数教研
+	// 参数校验
 	this.validateEditRoleParam(param);
 	Date nowDate = new Date();
 	String modifier = param.getModifier();
@@ -109,11 +125,15 @@ public class PermissionService {
     }
     
     
-    public JsonResult<List<String>> getRolePermissions(String roleCode) {
+    public JsonResult<List<String>> getRolePermissions(String merchantCode, String roleCode) {
 	if(StringUtils.isBlank(roleCode)) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色编码不允许为空");
 	}
-	List<String> permissionCodes = merchantRolePermissionMapper.getPermissionCodesByRoleCode(roleCode);
+	Merchant merchant = merchantMapper.getMerchantByMerchantCode(merchantCode);
+	if(merchant == null) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户不存在");
+	}
+	List<String> permissionCodes = merchantRolePermissionMapper.getPermissionCodesByRoleCode(merchant.getId(), roleCode);
 	return JsonResult.successJsonResult(permissionCodes);
     }
     
@@ -151,7 +171,11 @@ public class PermissionService {
     private void validateAddRoleParam(AddRoleParam param) {
 	// 参数校验
 	JSR303ValidateUtils.validate(param);
-	this.isExistRoleName(param.getRoleName(), null);
+	Merchant merchant = merchantMapper.getMerchantByMerchantCode(param.getMerchantCode());
+	if(merchant == null) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户不存在");
+	}
+	this.isExistRoleName(merchant.getId(), param.getRoleName(), null);
     }
 
     /**
@@ -166,7 +190,11 @@ public class PermissionService {
     private void validateEditRoleParam(EditRoleParam param) {
 	// 参数校验
 	JSR303ValidateUtils.validate(param);
-	this.isExistRoleName(param.getRoleName(), param.getRoleCode());
+	Merchant merchant = merchantMapper.getMerchantByMerchantCode(param.getMerchantCode());
+	if(merchant == null) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户不存在");
+	}
+	this.isExistRoleName(merchant.getId(), param.getRoleName(), param.getRoleCode());
     }
 
     /**
@@ -179,9 +207,9 @@ public class PermissionService {
      *            角色名称
      * @author 黄智聪 2018年10月19日 下午1:52:51
      */
-    private void isExistRoleName(String roleName, String roleCode) {
+    private void isExistRoleName(Long merchantId, String roleName, String roleCode) {
 	// 校验角色名称是否已经存在，若是修改则需要传roleCode，用于判断是否改的为当前编码的角色名称
-	MerchantRole role = merchantRoleMapper.hasRoleName(roleName, roleCode);
+	MerchantRole role = merchantRoleMapper.hasRoleName(merchantId, roleName, roleCode);
 	if (role != null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色名称已存在");
 	}

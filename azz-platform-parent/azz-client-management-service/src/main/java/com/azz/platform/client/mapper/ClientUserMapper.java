@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import com.azz.platform.client.pojo.ClientUser;
 import com.azz.platform.client.pojo.bo.SearchClientManagerParam;
 import com.azz.platform.client.pojo.vo.ClientAccountInfo;
+import com.azz.platform.client.pojo.vo.ClientCompanyEmployee;
 import com.azz.platform.client.pojo.vo.ClientInfo;
 
 @Mapper
@@ -42,6 +43,7 @@ public interface ClientUserMapper {
 	 */
 	Integer updateClientUserStatus(@Param("code") String code,@Param("status") Integer status);
    
+	
 	/**
 	 * <p>平台客户管理  用户详情</p>
 	 * @param code
@@ -49,6 +51,14 @@ public interface ClientUserMapper {
 	 * @author 刘建麟  2018年10月26日 上午10:27:28
 	 */
 	ClientAccountInfo selectClientUserInfo(@Param("code") String code);
+	
+	/**
+	 * <p>平台客户 企业成员</p>
+	 * @param param
+	 * @return
+	 * @author 刘建麟  2018年10月26日 下午2:02:15
+	 */
+	List<ClientCompanyEmployee> selectClientCompanyEmployeeList(SearchClientManagerParam param);
 	
 	ClientInfo selectDetailsByCompanyCode(String companyCode);
     

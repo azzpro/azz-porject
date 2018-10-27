@@ -197,7 +197,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
-  <select id="getClientUserPermissionInfoByPhoneNumber" parameterType="string" resultType="com.azz.client.pojo.vo.ClientUserPermission">
+  <select id="getClientUserPermissionInfoByPhoneNumber" resultType="com.azz.client.pojo.vo.ClientUserPermission">
 	  SELECT
 			p.permission_code AS permissionCode,
 			p.permission_name AS permissionName,
@@ -215,6 +215,7 @@
 		WHERE
 			p. STATUS = 1
 		AND r. STATUS = 1
+		AND r.client_user_company_id = #{clientUserCompanyId}
 		AND  u.phone_number = #{phoneNumber}
   </select>
   
@@ -236,6 +237,7 @@
 		WHERE
 			p. STATUS = 1
 		AND r. STATUS = 1
+		AND r.client_user_company_id = #{clientUserCompanyId}
 		AND p.level = #{level}
 		AND  u.phone_number = #{phoneNumber}
   </select>

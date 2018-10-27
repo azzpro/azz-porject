@@ -7,11 +7,6 @@
  
 package com.azz.merchant.pojo.bo;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotBlank;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,18 +19,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UploadTradingCertificateParam {
+public class TradingCertificate {
     
-    @NotNull(message = "营业执照文件名不允许为空")
     private String fileName;
     
-    @Max(value = 100000000L, message = "营业执照文件大小不能超过20M")
     private long fileSize;
     
-    @NotBlank(message = "商户编码不允许为空")
-    private String merchantCode;
-    
-    @NotBlank(message = "营业执照文件内容不能为空")
     private String fileBase64Str;
 
 }

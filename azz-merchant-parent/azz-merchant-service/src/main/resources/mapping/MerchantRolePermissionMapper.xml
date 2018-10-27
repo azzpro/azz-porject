@@ -120,7 +120,7 @@
     where role_id = #{roleId,jdbcType=BIGINT}
   </delete>
   
-  <select id="getPermissionCodesByRoleCode" parameterType="string" resultType="string">
+  <select id="getPermissionCodesByRoleCode" resultType="string">
     SELECT
 		p.permission_code
 	FROM
@@ -129,6 +129,7 @@
 	JOIN merchant_permission p ON p.id = rp.permission_id
 	WHERE
 		p. STATUS = 1
+	AND r.merchant_id = #{merchantId}
 	AND r.role_code = #{roleCode}
   </select>
   

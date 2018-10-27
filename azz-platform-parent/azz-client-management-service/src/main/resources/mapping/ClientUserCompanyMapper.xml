@@ -276,6 +276,15 @@
   
   </select>
   
+  <update id="updateClientCompnayStatus">
+  	update 
+  		  client_user_company a left join client_user b on a.client_user_code = b.client_user_code
+  	set
+  		  b.status = #{status}
+  	where 
+  	     a.company_code = #{code}
+  </update>
+  
   <select id="selectByCompanyCode" parameterType="java.lang.String" resultMap="BaseResultMap">
   	 select 
     <include refid="Base_Column_List" />

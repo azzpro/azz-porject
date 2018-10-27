@@ -9,13 +9,12 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
 import com.azz.core.exception.BaseException;
-import com.azz.platform.user.api.DeptService;
 import com.azz.platform.user.mapper.PlatformDeptMapper;
 import com.azz.platform.user.pojo.PlatformDept;
 import com.azz.platform.user.pojo.bo.AddDeptParam;
@@ -33,13 +32,12 @@ import com.azz.util.ObjectUtils;
  * @version 1.0
  * @author 彭斌 2018年10月17日 上午9:17:00
  */
-@RestController
-public class DeptServiceImpl implements DeptService {
+@Service
+public class DeptService{
 
     @Autowired
     private PlatformDeptMapper deptMapper;
 
-    @Override
     public JsonResult<String> addDeptInfo(@RequestBody AddDeptParam param) {
         // 部门信息非空校验
         JSR303ValidateUtils.validate(param);
@@ -75,7 +73,6 @@ public class DeptServiceImpl implements DeptService {
         return JsonResult.successJsonResult();
     }
 
-    @Override
     public JsonResult<String> editDeptInfo(@RequestBody EditDeptParam param) {
         JSR303ValidateUtils.validate(param);
 
@@ -100,13 +97,11 @@ public class DeptServiceImpl implements DeptService {
         return JsonResult.successJsonResult();
     }
 
-    @Override
     public JsonResult<List<Dept>> getDeptList(@RequestBody SearchDeptParam param) {
         List<Dept> infos = deptMapper.selectDeptList(param);
         return JsonResult.successJsonResult(infos);
     }
 
-    @Override
     public JsonResult<String> delDeptInfo(String deptCode, String modifier) {
         if (ObjectUtils.isNull(deptCode) ) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
@@ -124,7 +119,6 @@ public class DeptServiceImpl implements DeptService {
         return JsonResult.successJsonResult();
     }
 
-    @Override
     public JsonResult<List<Dept>> getDeptParentInfo(String deptCode) {
         if (ObjectUtils.isNull(deptCode)) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
@@ -133,7 +127,6 @@ public class DeptServiceImpl implements DeptService {
         return JsonResult.successJsonResult(dept);
     }
     
-    @Override
     public JsonResult<String> disableDeptInfo(String deptCode, String modifier) {
         if (ObjectUtils.isNull(deptCode) ) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
@@ -151,7 +144,6 @@ public class DeptServiceImpl implements DeptService {
         return JsonResult.successJsonResult();
     }
 
-    @Override
     public JsonResult<String> enableDeptInfo(String deptCode, String modifier) {
         if (ObjectUtils.isNull(deptCode) ) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);

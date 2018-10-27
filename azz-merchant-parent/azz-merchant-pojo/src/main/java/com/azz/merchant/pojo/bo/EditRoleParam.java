@@ -33,5 +33,7 @@ public class EditRoleParam implements Serializable{
     
     private String modifier;
     
+    private String merchantCode;
+    
 }
 

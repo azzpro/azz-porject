@@ -7,6 +7,7 @@ package com.azz.platform.client.service;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.page.Pagination;
+import com.azz.exception.JSR303ValidationException;
 import com.azz.platform.client.mapper.ClientApplyMapper;
 import com.azz.platform.client.mapper.ClientUserCompanyMapper;
 import com.azz.platform.client.mapper.ClientUserMapper;
@@ -24,6 +27,7 @@ import com.azz.platform.client.pojo.bo.SearchClientMerchantManagerParam;
 import com.azz.platform.client.pojo.bo.SearchClientParam;
 import com.azz.platform.client.pojo.vo.ClientAccountInfo;
 import com.azz.platform.client.pojo.vo.ClientCertification;
+import com.azz.platform.client.pojo.vo.ClientCompanyEmployee;
 import com.azz.platform.client.pojo.vo.ClientCompanyInfo;
 import com.azz.platform.client.pojo.vo.ClientInfo;
 import com.azz.platform.client.pojo.vo.ClientMerchantInfo;
@@ -86,6 +90,18 @@ public class ClientService {
     }
 	
 	/**
+	 * <p>平台 客户管理 企业 成员</p>
+	 * @param param
+	 * @return
+	 * @author 刘建麟  2018年10月25日 下午3:18:38
+	 */
+	public JsonResult<Pagination<ClientCompanyEmployee>> selectClientCompanyEmployeeList(@RequestBody SearchClientManagerParam param) {
+        PageHelper.startPage(param.getPageNum(), param.getPageSize());
+        List<ClientCompanyEmployee> merchantList = clientUserMapper.selectClientCompanyEmployeeList(param);
+        return JsonResult.successJsonResult(new Pagination<>(merchantList));
+    }
+	
+	/**
 	 * <p>平台 客户管理 用户详情</p>
 	 * @param param
 	 * @return
@@ -116,6 +132,24 @@ public class ClientService {
     @Transactional(rollbackFor=Exception.class)
     public JsonResult<String> updateClientUserStatus(String code,Integer status) {
     	 clientUserMapper.updateClientUserStatus(code,status);
+    	 return JsonResult.successJsonResult();
+    }
+    
+    /**
+     * <p>客户管理 企业管理 启动 禁用</p>
+     * @param param
+     * @return
+     * @author 刘建麟  2018年10月24日 下午7:31:57
+     */
+    @Transactional(rollbackFor=Exception.class)
+    public JsonResult<String> updateClientCompnayStatus(String code,Integer status) {
+    	if(StringUtils.isBlank(code)) {
+    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"企业编码不能为空");
+    	}
+    	if(null == status) {
+    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"状态不能为空");
+    	}
+    	clientUserCompanyMapper.updateClientCompnayStatus(code,status);
     	 return JsonResult.successJsonResult();
     }
     /**

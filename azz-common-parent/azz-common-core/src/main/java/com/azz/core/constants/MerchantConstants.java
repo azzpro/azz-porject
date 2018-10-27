@@ -18,8 +18,18 @@ import lombok.Getter;
  * @author 黄智聪 2018年10月19日 下午2:59:26
  */
 public abstract class MerchantConstants {
-    
+
     public static final String LOGIN_MERCHANT_USER = "loginMerchantUser";
+    
+    /**
+     * 营业执照文件大小限制
+     */
+    public static final long BUSINESS_LICENSE_FILE_SIZE_LIMIT = 20 * 1024 * 1024L;
+    
+    /**
+     * 经营执照文件大小限制
+     */
+    public static final long TRADING_CERTIFICATE_FILE_SIZE_LIMIT = 20 * 1024 * 1024L;
 
     /**
      * 

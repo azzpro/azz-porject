@@ -338,6 +338,7 @@
 		mu.phone_number AS phoneNumber,
 		mu.merchant_user_name AS userName,
 		mu.create_time AS createTime,
+		m.qualification_apply_status as qualificationApplyStatus,
 		CASE m. STATUS
 	WHEN 0 THEN
 		'删除'
@@ -369,11 +370,12 @@
     
 		SELECT
 	mu.merchant_code as merchantCode,
-			mu.merchant_user_code AS merchant_user_code,
+			mu.merchant_user_code AS merchantUserCode,
 			mu.merchant_user_name AS merchantUserName,
 			mu.phone_number AS phoneNumber,
 			mu.email AS email,
 			 mu.post_name AS postName,
+			 d.dept_name as deptName,
 			 CASE mu. STATUS
 			WHEN 0 THEN
 				'注销'
@@ -387,8 +389,10 @@
 		FROM
 			merchant_user mu
 		LEFT JOIN merchant_user_role ur ON ur.merchant_user_id = mu.id
+		LEFT JOIN merchant_dept d ON d.id = mu.dept_id
 		LEFT JOIN merchant_role r ON ur.role_id = r.id
 		WHERE mu.status != 0
+		and mu.merchant_code = #{merchantCode}
 		<if test="searchInput != null and searchInput != ''">
 	        and (
 				mu.merchant_user_name like CONCAT('%', #{searchInput}, '%')
@@ -402,7 +406,7 @@
   <select id="getMerchantUserInfoByMerchantUserCode" parameterType="string" resultType="com.azz.merchant.pojo.vo.MerchantUserInfo">
 		  SELECT
 			mu.merchant_code as merchantCode,
-			mu.merchant_user_code AS merchant_user_code,
+			mu.merchant_user_code AS merchantUserCode,
 			mu.merchant_user_name AS merchantUserName,
 			mu.phone_number AS phoneNumber,
 			mu.email AS email,
@@ -416,9 +420,13 @@
 				'禁用'
 			END AS STATUS,
 			 r.role_name AS roleName,
-				mu.create_time as createTime
+			 r.role_code as roleCode,
+			 d.dept_code as deptCode,
+			 d.dept_name as deptName,
+			 mu.create_time as createTime
 		FROM
 			merchant_user mu
+		LEFT JOIN merchant_dept d on d.id = mu.dept_id
 		LEFT JOIN merchant_user_role ur ON ur.merchant_user_id = mu.id
 		LEFT JOIN merchant_role r ON ur.role_id = r.id
 		WHERE mu.status != 0

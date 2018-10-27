@@ -18,6 +18,8 @@ public class ClientRole implements Serializable {
      * @mbg.generated
      */
     private Long id;
+    
+    private Long clientUserCompanyId;
 
     /**
      * 角色编码
@@ -346,4 +348,13 @@ public class ClientRole implements Serializable {
         sb.append("]");
         return sb.toString();
     }
+
+    public Long getClientUserCompanyId() {
+        return clientUserCompanyId;
+    }
+
+    public void setClientUserCompanyId(Long clientUserCompanyId) {
+        this.clientUserCompanyId = clientUserCompanyId;
+    }
+    
 }

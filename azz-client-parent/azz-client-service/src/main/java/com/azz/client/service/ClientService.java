@@ -38,19 +38,25 @@ import com.azz.client.pojo.bo.EnableOrDisableOrDelClientUserParam;
 import com.azz.client.pojo.bo.EnterpriseAuthParam;
 import com.azz.client.pojo.bo.LoginParam;
 import com.azz.client.pojo.bo.SearchClientUserParam;
+import com.azz.client.pojo.bo.TradingCertificate;
 import com.azz.client.pojo.vo.ClientUserInfo;
 import com.azz.client.pojo.vo.ClientUserPermission;
 import com.azz.client.pojo.vo.LoginClientUserInfo;
 import com.azz.client.pojo.vo.Menu;
+import com.azz.client.pojo.vo.UploadFileInfo;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.ShiroAuthErrorCode;
 import com.azz.core.common.page.Pagination;
+import com.azz.core.constants.ClientConstants;
 import com.azz.core.constants.ClientConstants.QualificationApplyStatus;
+import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.UserConstants.UserStatus;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.model.Password;
+import com.azz.system.api.SystemImageUploadService;
+import com.azz.system.sequence.api.RandomSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.PasswordHelper;
 import com.azz.util.RandomStringUtils;
@@ -87,9 +93,16 @@ public class ClientService {
     
     @Autowired
     private ClientRoleMapper clientRoleMapper;
-    
+
     @Autowired
     private ClientUserRoleMapper clientUserRoleMapper;
+    
+    @Autowired
+    private SystemImageUploadService systemImageUploadService;
+    
+    @Autowired
+    private RandomSequenceService randomSequenceService;
+    
     
     /**
      * 
@@ -121,11 +134,12 @@ public class ClientService {
      */
     public JsonResult<LoginClientUserInfo> getLoginClientUserInfoByPhoneNumber(String phoneNumber){
 	LoginClientUserInfo info = new LoginClientUserInfo();
-	ClientUserInfo clientUserInfo = clientUserMapper.getClientUserInfoByPhoneNumber(phoneNumber);;
-	List<ClientUserPermission> clientUserPermissions = clientPermissionMapper.getClientUserPermissionInfoByPhoneNumber(phoneNumber);
+	ClientUserInfo clientUserInfo = clientUserMapper.getClientUserInfoByPhoneNumber(phoneNumber);
+	Long clientUserCompanyId = clientUserInfo.getClientUserCompanyId();
+	List<ClientUserPermission> clientUserPermissions = clientPermissionMapper.getClientUserPermissionInfoByPhoneNumber(clientUserCompanyId, phoneNumber);
 	info.setClientUserInfo(clientUserInfo);
 	info.setClientUserPermissions(clientUserPermissions);
-	info.setMenus(generateMenuTree(phoneNumber));
+	info.setMenus(generateMenuTree(clientUserCompanyId, phoneNumber));
 	return JsonResult.successJsonResult(info);
     }
     
@@ -154,12 +168,12 @@ public class ClientService {
 	if(clientUser != null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "手机号已被注册");
 	}
-	String clientUserCode = System.currentTimeMillis() + "";// TODO
+	String clientUserCode = randomSequenceService.getClientNumber();
 	// 生成盐值加密的密码
 	Password pwd = PasswordHelper.encryptPasswordByModel(password);
 	ClientUser clientUserRecord = ClientUser.builder()
 		.createTime(nowDate)
-		.clientUserCode(clientUserCode)// TODO
+		.clientUserCode(clientUserCode)
 		.password(pwd.getPassword())
 		.phoneNumber(phoneNumber)
 		.salt(pwd.getSalt())
@@ -188,22 +202,50 @@ public class ClientService {
 	if(count > 0) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "信用代码已存在");
 	}
+	List<UploadFileInfo> uploadTradingCertificateFileInfos = new ArrayList<>();
+	// 营业执照最多3个
+	List<TradingCertificate> tradingCertificates = param.getTradingCertificates();
+	for (int i = 0 ; i < tradingCertificates.size(); i++) {
+	    TradingCertificate tradingCertificate = tradingCertificates.get(i);
+	    String originalFileName = tradingCertificate.getFileName();
+	    if(StringUtils.isBlank(originalFileName)) {
+		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + (i + 1) + "个营业执照文件名为空");
+	    }
+	    if(tradingCertificate.getFileSize() > ClientConstants.BUSINESS_LICENSE_FILE_SIZE_LIMIT) {
+		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + (i + 1) + "个营业执照文件大小不能超过20M");
+	    }
+	    String filedata = tradingCertificate.getFileBase64Str();
+	    if(StringUtils.isBlank(filedata)) {
+		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + (i + 1) + "个营业执照文件内容为空");
+	    }
+	    int dotIndex = originalFileName.lastIndexOf(".");
+	    String fileNameNoSufix = originalFileName.substring(0, dotIndex);
+	    String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
+	    // 新名称为文件名 + 客户编码 + 文件后缀
+	    String newFileName = fileNameNoSufix + "_" + clientUserCode + "." + sufix;
+	    // 图片url
+	    String imgUrl = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
+		    filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_BUSINESS_IMAGE_TYPE);
+	    UploadFileInfo file = new UploadFileInfo(imgUrl, originalFileName);
+	    uploadTradingCertificateFileInfos.add(file);
+	}
 	
 	Date nowDate = new Date();
 	ClientUserCompany clientUserCompanyRecord = ClientUserCompany.builder()
 		.clientUserCode(clientUserCode)
-		.companyCode(System.currentTimeMillis()+"") // TODO
+		.companyCode(randomSequenceService.getCompanyNumber())
 		.companyName(param.getCompanyName())
 		.companyTel(param.getCompanyTel())
 		.creditCode(param.getCreditCode())
 		.createTime(nowDate)
 		.creator(clientUserCode)
-		.tradingCertificateFirstFileName(param.getTradingCertificateFirstFileName())
-		.tradingCertificateFirstFileUrl(param.getTradingCertificateFirstFileUrl())
-		.tradingCertificateSecondFileName(param.getTradingCertificateSecondFileName())
-		.tradingCertificateSecondFileUrl(param.getTradingCertificateSecondFileUrl())
-		.tradingCertificateThirdFileName(param.getTradingCertificateThirdFileName())
-		.tradingCertificateThirdFileUrl(param.getTradingCertificateThirdFileUrl())
+		.tradingCertificateFirstFileName(uploadTradingCertificateFileInfos.get(0) == null ? null : uploadTradingCertificateFileInfos.get(0).getOriginalFileName())
+		.tradingCertificateFirstFileUrl(uploadTradingCertificateFileInfos.get(0) == null ? null : uploadTradingCertificateFileInfos.get(0).getImgUrl())
+		.tradingCertificateSecondFileName(uploadTradingCertificateFileInfos.get(1) == null ? null : uploadTradingCertificateFileInfos.get(0).getOriginalFileName())
+		.tradingCertificateSecondFileUrl(uploadTradingCertificateFileInfos.get(1) == null ? null : uploadTradingCertificateFileInfos.get(0).getImgUrl())
+		.tradingCertificateThirdFileName(uploadTradingCertificateFileInfos.get(2) == null ? null : uploadTradingCertificateFileInfos.get(0).getOriginalFileName())
+		.tradingCertificateThirdFileUrl(uploadTradingCertificateFileInfos.get(2) == null ? null : uploadTradingCertificateFileInfos.get(0).getImgUrl())
+		
 		.build();
 	clientUserCompanyMapper.insertSelective(clientUserCompanyRecord);
 	
@@ -236,12 +278,12 @@ public class ClientService {
 		.clientUserName(param.getClientUserName())
 		.createTime(nowDate)
 		.status(QualificationApplyStatus.PENDING.getValue())
-		.tradingCertificateFirstFileName(param.getTradingCertificateFirstFileName())
-		.tradingCertificateFirstFileUrl(param.getTradingCertificateFirstFileUrl())
-		.tradingCertificateSecondFileName(param.getTradingCertificateSecondFileName())
-		.tradingCertificateSecondFileUrl(param.getTradingCertificateSecondFileUrl())
-		.tradingCertificateThirdFileName(param.getTradingCertificateThirdFileName())
-		.tradingCertificateThirdFileUrl(param.getTradingCertificateThirdFileUrl())
+		.tradingCertificateFirstFileName(uploadTradingCertificateFileInfos.get(0) == null ? null : uploadTradingCertificateFileInfos.get(0).getOriginalFileName())
+		.tradingCertificateFirstFileUrl(uploadTradingCertificateFileInfos.get(0) == null ? null : uploadTradingCertificateFileInfos.get(0).getImgUrl())
+		.tradingCertificateSecondFileName(uploadTradingCertificateFileInfos.get(1) == null ? null : uploadTradingCertificateFileInfos.get(0).getOriginalFileName())
+		.tradingCertificateSecondFileUrl(uploadTradingCertificateFileInfos.get(1) == null ? null : uploadTradingCertificateFileInfos.get(0).getImgUrl())
+		.tradingCertificateThirdFileName(uploadTradingCertificateFileInfos.get(2) == null ? null : uploadTradingCertificateFileInfos.get(0).getOriginalFileName())
+		.tradingCertificateThirdFileUrl(uploadTradingCertificateFileInfos.get(2) == null ? null : uploadTradingCertificateFileInfos.get(0).getImgUrl())
 		.build();
 	clientApplyMapper.insertSelective(clientApplyRecord);
 	return JsonResult.successJsonResult();
@@ -276,18 +318,34 @@ public class ClientService {
 	Password pwd = PasswordHelper.encryptPasswordByModel(password + "");
 	Date nowDate = new Date();
 	String creator = param.getCreator();
+	String clientUserCode = randomSequenceService.getClientNumber();
 	ClientUser userRecord = ClientUser.builder().createTime(nowDate).creator(creator)
 		.clientDeptId(dept.getId()).email(param.getEmail()).password(pwd.getPassword()).phoneNumber(phoneNumber)
-		.postName(param.getPostName()).clientUserCode(System.currentTimeMillis() + "")// TODO
+		.postName(param.getPostName()).clientUserCode(clientUserCode)
 		.clientUserName(param.getClientUserName()).salt(pwd.getSalt()).build();
 	clientUserMapper.insertSelective(userRecord);
+	
+	// 为新增的成员绑定公司
+	Long clientUserCompanyId = param.getClientUserCompanyId();
+	ClientUserCompany company = clientUserCompanyMapper.selectByPrimaryKey(clientUserCompanyId);
+	ClientUserCompany clientUserCompanyRecord = ClientUserCompany.builder()
+		.createTime(nowDate)
+		.clientUserCode(clientUserCode)
+		.companyName(company.getCompanyName())
+		.companyCode(company.getCompanyCode())
+		.remark("手动新增成员")
+		.creator(param.getCreator())
+		.companyTel(company.getCompanyTel())
+		.build();
+	clientUserCompanyMapper.insertSelective(clientUserCompanyRecord);
+	
 	// 用户与角色绑定
 	ClientUserRole userRoleRecord = ClientUserRole.builder().createTime(nowDate).creator(creator)
 		.clientUserId(userRecord.getId()).roleId(role.getId()).build();
 	clientUserRoleMapper.insertSelective(userRoleRecord);
 	
 	// 发送短信通知成员 TODO
-	sendPasswordMsg(phoneNumber, password);
+	this.sendPasswordMsg(phoneNumber, password);
 	return JsonResult.successJsonResult();
     }
     
@@ -404,13 +462,13 @@ public class ClientService {
      * @return
      * @author 黄智聪 2018年10月19日 上午10:36:34
      */
-    private List<Menu> generateMenuTree(String phoneNumber) {
+    private List<Menu> generateMenuTree(Long clientUserCompanyId, String phoneNumber) {
 	// 根据手机号查询所有一级菜单权限
 	List<ClientUserPermission> oneMenuPermissions = clientPermissionMapper
-		.getClientUserPermissionByPhoneNumberAndLevel(phoneNumber, 1);
+		.getClientUserPermissionByPhoneNumberAndLevel(clientUserCompanyId, phoneNumber, 1);
 	// 根据手机号查询所有二级菜单权限
 	List<ClientUserPermission> twoMenuPermissions = clientPermissionMapper
-		.getClientUserPermissionByPhoneNumberAndLevel(phoneNumber, 2);
+		.getClientUserPermissionByPhoneNumberAndLevel(clientUserCompanyId, phoneNumber, 2);
 	List<Menu> oneLevelMenus = new ArrayList<>();
 	for (ClientUserPermission oneMenuPermission : oneMenuPermissions) {
 	    // 一级菜单的权限编码

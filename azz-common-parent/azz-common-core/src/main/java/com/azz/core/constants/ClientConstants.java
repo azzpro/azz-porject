@@ -20,6 +20,16 @@ import lombok.Getter;
 public abstract class ClientConstants {
     
     public static final String LOGIN_CLIENT_USER = "loginClientUser";
+    
+    /**
+     * 营业执照文件大小限制
+     */
+    public static final long BUSINESS_LICENSE_FILE_SIZE_LIMIT = 20 * 1024 * 1024L;
+    
+    /**
+     * 经营执照文件大小限制
+     */
+    public static final long TRADING_CERTIFICATE_FILE_SIZE_LIMIT = 20 * 1024 * 1024L;
 
     /**
      * 

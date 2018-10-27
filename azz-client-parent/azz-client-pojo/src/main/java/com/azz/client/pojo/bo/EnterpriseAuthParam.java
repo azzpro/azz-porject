@@ -7,7 +7,10 @@
  
 package com.azz.client.pojo.bo;
 
+import java.util.List;
+
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import lombok.Data;
 
@@ -43,14 +46,8 @@ public class EnterpriseAuthParam {
     private String areaName;
     @NotBlank(message = "详细地址不允许为空")
     private String detailAddress;
-    @NotBlank(message = "至少上传一张营业执照")
-    private String tradingCertificateFirstFileName;
-    @NotBlank(message = "营业执照所在路径不允许为空")
-    private String tradingCertificateFirstFileUrl;
-    private String tradingCertificateSecondFileName;
-    private String tradingCertificateSecondFileUrl;
-    private String tradingCertificateThirdFileName;
-    private String tradingCertificateThirdFileUrl;
+    @NotEmpty(message = "请上传营业执照")
+    private List<TradingCertificate> tradingCertificates;
     
 }
 

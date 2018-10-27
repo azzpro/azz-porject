@@ -10,15 +10,14 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.constants.PermissionConstants;
 import com.azz.core.constants.PermissionConstants.PermissionStatus;
 import com.azz.exception.JSR303ValidationException;
-import com.azz.platform.user.api.PermissionService;
 import com.azz.platform.user.mapper.PlatformPermissionMapper;
 import com.azz.platform.user.mapper.PlatformRoleMapper;
 import com.azz.platform.user.mapper.PlatformRolePermissionMapper;
@@ -33,6 +32,7 @@ import com.azz.platform.user.pojo.bo.SetRolePermissionParam;
 import com.azz.platform.user.pojo.vo.Permission;
 import com.azz.platform.user.pojo.vo.RoleInfo;
 import com.azz.platform.user.pojo.vo.TreePermission;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
 
@@ -42,8 +42,8 @@ import com.azz.util.StringUtils;
  * @version 1.0
  * @author 黄智聪  2018年10月22日 下午4:06:22
  */
-@RestController
-public class PermissionServiceImpl implements PermissionService {
+@Service
+public class PermissionService{
 
     @Autowired
     PlatformRoleMapper platformRoleMapper;
@@ -53,15 +53,16 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Autowired
     PlatformPermissionMapper platformPermissionMapper;
+    
+    @Autowired
+    private DbSequenceService dbSequenceService;
 
-    @Override
     public JsonResult<List<TreePermission>> getTreePermissions() {
 	// 从父级编码为0，即一级权限，并以递归的方式查询所有子集权限
 	List<TreePermission> permissions = this.getPermissions(PermissionConstants.TOP_PARENT_PERMISSION_CODE);
 	return JsonResult.successJsonResult(permissions);
     }
     
-    @Override
     public JsonResult<List<Permission>> getPermissionList(String roleCode) {
 	List<Permission> permissions = platformPermissionMapper.getAllPermissions();
 	if(StringUtils.isBlank(roleCode)) {
@@ -77,20 +78,18 @@ public class PermissionServiceImpl implements PermissionService {
 	return JsonResult.successJsonResult(permissions);
     }
 
-    @Override
     public JsonResult<String> addRole(@RequestBody AddRoleParam param) {
 	// 参数校验
 	this.validateAddRoleParam(param);
 	Date nowDate = new Date();
 	String creator = param.getCreator();
 	PlatformRole roleRecord = PlatformRole.builder().createTime(nowDate).creator(creator).remark(param.getRemark())
-		.roleCode(System.currentTimeMillis() + "")// TODO
+		.roleCode(dbSequenceService.getPlatPowerNumber())
 		.roleName(param.getRoleName()).build();
 	platformRoleMapper.insertSelective(roleRecord);
 	return JsonResult.successJsonResult();
     }
 
-    @Override
     public JsonResult<String> editRole(@RequestBody EditRoleParam param) {
 	// 参数教研
 	this.validateEditRoleParam(param);
@@ -104,7 +103,6 @@ public class PermissionServiceImpl implements PermissionService {
 	return JsonResult.successJsonResult();
     }
     
-    @Override
     public JsonResult<String> delRole(@RequestBody DelRoleParam param) {
 	// 参数校验
 	JSR303ValidateUtils.validate(param);
@@ -118,12 +116,10 @@ public class PermissionServiceImpl implements PermissionService {
 	return JsonResult.successJsonResult();
     }
     
-    @Override
     public JsonResult<List<RoleInfo>> getRoleList(@RequestBody SearchRoleParam param) {
 	return JsonResult.successJsonResult(platformRoleMapper.getRoleInfoBySearchParam(param));
     }
     
-    @Override
     public JsonResult<List<String>> getRolePermissions(String roleCode) {
 	if(StringUtils.isBlank(roleCode)) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色编码不允许为空");
@@ -132,7 +128,6 @@ public class PermissionServiceImpl implements PermissionService {
 	return JsonResult.successJsonResult(permissionCodes);
     }
     
-    @Override
     public JsonResult<String> setRolePermissions(@RequestBody SetRolePermissionParam param) {
 	// 参数校验
 	JSR303ValidateUtils.validate(param);

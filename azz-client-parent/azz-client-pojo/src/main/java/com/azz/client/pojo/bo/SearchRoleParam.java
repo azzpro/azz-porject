@@ -19,5 +19,6 @@ public class SearchRoleParam {
     
     private String searchInput;
     
+    private Long clientUserCompanyId;
 }
 

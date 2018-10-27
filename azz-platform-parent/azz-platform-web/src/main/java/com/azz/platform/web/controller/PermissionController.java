@@ -129,6 +129,7 @@ public class PermissionController {
      */
     @RequestMapping(value = "/setRolePermissions")
     public JsonResult<String> setRolePermissions(SetRolePermissionParam param) {
+	param.setCreator(WebUtils.getLoginUser().getUserInfo().getUserCode());
 	return permissionService.setRolePermissions(param);
     }
 

@@ -7,6 +7,8 @@
  
 package com.azz.merchant.pojo.vo;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
@@ -29,6 +31,8 @@ public class MerchantUserInfo {
     
     private String postName;
     
+    private String email;
+    
     private String merchantUserName;
     
     private String deptName;
@@ -36,9 +40,15 @@ public class MerchantUserInfo {
     private String roleName;
     
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")
-    private String createTime;
+    private Date createTime;
+    
+    private String deptCode;
+    
+    private String roleCode;
     
     private String status;
+    
+    private int qualificationApplyStatus;
     
 }
 

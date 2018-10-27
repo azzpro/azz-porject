@@ -35,6 +35,8 @@ public class ClientUserInfo {
     
     private String clientType;
     
+    private Long clientUserCompanyId;
+    
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")
     private String createTime;
     

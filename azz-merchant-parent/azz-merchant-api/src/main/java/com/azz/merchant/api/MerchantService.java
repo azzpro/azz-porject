@@ -23,10 +23,8 @@ import com.azz.merchant.pojo.bo.EnableOrDisableOrDelMerchantUserParam;
 import com.azz.merchant.pojo.bo.LoginParam;
 import com.azz.merchant.pojo.bo.MerchantRegistParam;
 import com.azz.merchant.pojo.bo.SearchMerchantUserParam;
-import com.azz.merchant.pojo.bo.UploadTradingCertificateParam;
 import com.azz.merchant.pojo.vo.LoginMerchantUserInfo;
 import com.azz.merchant.pojo.vo.MerchantUserInfo;
-import com.azz.merchant.pojo.vo.UploadFileInfo;
 
 /**
  * <P>TODO</P>
@@ -54,7 +52,7 @@ public interface MerchantService {
      * @author 黄智聪  2018年10月23日 下午4:22:14
      */
     @GetMapping("/azz/api/merchant/getLoginMerchantUserInfoByPhoneNumber")
-    JsonResult<LoginMerchantUserInfo> getLoginMerchantUserInfoByPhoneNumber(@RequestParam("phoneNumber") String phoneNumber);
+    JsonResult<LoginMerchantUserInfo> getLoginMerchantUserInfoByPhoneNumber(@RequestParam("phoneNumber")String phoneNumber);
     
     /**
      * 
@@ -88,16 +86,6 @@ public interface MerchantService {
     
     /**
      * 
-     * <p>上传营业执照</p>
-     * @param uploadTradingCertificateParam
-     * @return
-     * @author 黄智聪  2018年10月24日 上午10:25:48
-     */
-    @PostMapping("/azz/api/merchant/uploadTradingCertificateFile")
-    JsonResult<UploadFileInfo> uploadTradingCertificateFile(@RequestBody UploadTradingCertificateParam param);
-    
-    /**
-     * 
      * <p>新增商户成员</p>
      * @param param
      * @return
@@ -115,6 +103,17 @@ public interface MerchantService {
      */
     @RequestMapping("/azz/api/merchant/editMerchantUser")
     public JsonResult<String> editMerchantUser(@RequestBody EditMerchantUserParam param);
+    
+    
+    /**
+     * 
+     * <p>查询商户资质状态</p>
+     * @param merchantCode
+     * @return
+     * @author 黄智聪  2018年10月26日 下午8:03:59
+     */
+    @RequestMapping("/azz/api/merchant/getMerchantQualificationApplyStatus")
+    public JsonResult<Integer> getMerchantQualificationApplyStatus(@RequestParam("merchantCode") String merchantCode);
     
     /**
      * 

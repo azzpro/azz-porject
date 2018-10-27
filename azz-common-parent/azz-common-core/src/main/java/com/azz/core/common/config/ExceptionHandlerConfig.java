@@ -47,12 +47,12 @@ public class ExceptionHandlerConfig {
             BaseException baseException = (BaseException) e;
             BaseErrorCode errorCode = baseException.getErrorCode();
             code = errorCode.getCode();
-            detailMessage = errorCode.getErrorType() + ":" + e.getMessage();
+            detailMessage = e.getMessage();
             log.error(detailMessage, e);
         } else {// 非BaseException的异常均视为系统未知错误
             BaseErrorCode errorCode = SystemErrorCode.SYS_ERROR_UNKNOWN;
             code = errorCode.getCode();
-            detailMessage = errorCode.getErrorType() + ":" + errorCode.toString();
+            detailMessage = errorCode.getMessage();
             log.error(detailMessage, e);
         }
         errorResult.setCode(code);

@@ -51,7 +51,7 @@ public class DeptService {
     private MerchantDeptMapper merchantDeptMapper;
     
     @Autowired
-     private DbSequenceService dbSequenceService;
+    private DbSequenceService dbSequenceService;
     
     JsonResult<String> addFirstLevelDept(@RequestBody AddMerchantDeptParam param){
         // 部门信息非空校验

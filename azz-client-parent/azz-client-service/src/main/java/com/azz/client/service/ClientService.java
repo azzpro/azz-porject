@@ -227,7 +227,7 @@ public class ClientService {
 	    String newFileName = fileNameNoSufix + "_" + clientUserCode + "." + sufix;
 	    // 图片url
 	    JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
-		    filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_BUSINESS_IMAGE_TYPE);
+		    filedata, FileConstants.AZZ_CLIENT, FileConstants.AZZ_TRADING_CERTIFICATE_IMAGE_TYPE);
 	    if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 		UploadFileInfo file = new UploadFileInfo(jr.getData(), originalFileName);
 		uploadTradingCertificateFileInfos.add(file);
@@ -245,14 +245,25 @@ public class ClientService {
 		.creditCode(param.getCreditCode())
 		.createTime(nowDate)
 		.creator(clientUserCode)
-		.tradingCertificateFirstFileName(uploadTradingCertificateFileInfos.get(0) == null ? null : uploadTradingCertificateFileInfos.get(0).getOriginalFileName())
-		.tradingCertificateFirstFileUrl(uploadTradingCertificateFileInfos.get(0) == null ? null : uploadTradingCertificateFileInfos.get(0).getImgUrl())
-		.tradingCertificateSecondFileName(uploadTradingCertificateFileInfos.get(1) == null ? null : uploadTradingCertificateFileInfos.get(0).getOriginalFileName())
-		.tradingCertificateSecondFileUrl(uploadTradingCertificateFileInfos.get(1) == null ? null : uploadTradingCertificateFileInfos.get(0).getImgUrl())
-		.tradingCertificateThirdFileName(uploadTradingCertificateFileInfos.get(2) == null ? null : uploadTradingCertificateFileInfos.get(0).getOriginalFileName())
-		.tradingCertificateThirdFileUrl(uploadTradingCertificateFileInfos.get(2) == null ? null : uploadTradingCertificateFileInfos.get(0).getImgUrl())
-		
 		.build();
+	if(uploadTradingCertificateFileInfos.size() == 1) {
+	    clientUserCompanyRecord.setTradingCertificateFirstFileName(uploadTradingCertificateFileInfos.get(0).getOriginalFileName());
+	    clientUserCompanyRecord.setTradingCertificateFirstFileUrl(uploadTradingCertificateFileInfos.get(0).getImgUrl());
+	}
+	if(uploadTradingCertificateFileInfos.size() == 2) {
+	    clientUserCompanyRecord.setTradingCertificateFirstFileName(uploadTradingCertificateFileInfos.get(0).getOriginalFileName());
+	    clientUserCompanyRecord.setTradingCertificateFirstFileUrl(uploadTradingCertificateFileInfos.get(0).getImgUrl());
+	    clientUserCompanyRecord.setTradingCertificateSecondFileName(uploadTradingCertificateFileInfos.get(1).getOriginalFileName());
+	    clientUserCompanyRecord.setTradingCertificateSecondFileUrl(uploadTradingCertificateFileInfos.get(1).getImgUrl());
+	}
+	if(uploadTradingCertificateFileInfos.size() == 3) {
+	    clientUserCompanyRecord.setTradingCertificateFirstFileName(uploadTradingCertificateFileInfos.get(0).getOriginalFileName());
+	    clientUserCompanyRecord.setTradingCertificateFirstFileUrl(uploadTradingCertificateFileInfos.get(0).getImgUrl());
+	    clientUserCompanyRecord.setTradingCertificateSecondFileName(uploadTradingCertificateFileInfos.get(1).getOriginalFileName());
+	    clientUserCompanyRecord.setTradingCertificateSecondFileUrl(uploadTradingCertificateFileInfos.get(1).getImgUrl());
+	    clientUserCompanyRecord.setTradingCertificateThirdFileName(uploadTradingCertificateFileInfos.get(2).getOriginalFileName());
+	    clientUserCompanyRecord.setTradingCertificateThirdFileUrl(uploadTradingCertificateFileInfos.get(2).getImgUrl());
+	}
 	clientUserCompanyMapper.insertSelective(clientUserCompanyRecord);
 	
 	String provinceName = param.getProviceName();

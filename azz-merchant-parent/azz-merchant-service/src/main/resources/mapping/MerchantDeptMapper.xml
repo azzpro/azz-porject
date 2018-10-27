@@ -162,23 +162,78 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
-  <select id="selectByDeptCode" resultMap="BaseResultMap">
-    SELECT
-		d.id as id, 
-		d.merchant_id as merchantId, 
-		d.dept_code as deptCode, 
-		d.parent_code as parentCode, 
-		d.dept_name as deptName, 
-		d.description as description, 
-		d.status as status, 
-		d.create_time as createTime, 
-    	d.creator as creator, 
-    	d.last_modify_time as lastModifyTime, 
-    	d.modifier as modifier
-	FROM
-		merchant_dept d
-	JOIN merchant m ON m.id = d.merchant_id
-	WHERE
-		d.dept_code = #{deptCode}
+  <select id="selectByMerchantIdAndName" parameterType="com.azz.merchant.pojo.bo.SearchMerchantDeptInfo" resultType="com.azz.merchant.pojo.vo.MerchantDeptInfo">
+  	SELECT 
+  		id as deptId,
+  		merchant_id as merchantId,
+  		dept_code as deptCode,
+  		parent_code as parentCode,
+  		dept_name as deptName,
+  		status as status
+  	FROM merchant_dept 
+  	WHERE merchant_id = #{merchantId,jdbcType=BIGINT} 
+  	AND dept_name = #{deptName,jdbcType=VARCHAR}
   </select>
+  
+  <select id="selectFirstLevelExist" parameterType="com.azz.merchant.pojo.bo.SearchMerchantDeptInfo" resultType="int">
+  	SELECT count(1) FROM 
+  	merchant_dept WHERE parent_code = 0 and dept_name = #{deptName,jdbcType=VARCHAR} 
+  	AND merchant_id = #{merchantId,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectByDeptAllInfo" parameterType="com.azz.merchant.pojo.bo.SearchMerchantDeptInfo" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_dept
+    where (status = 1 or status = 2) 
+    AND dept_name = #{deptName,jdbcType=VARCHAR} 
+  	AND merchant_id = #{merchantId,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectFirstDeptList" parameterType="com.azz.merchant.pojo.bo.SearchMerchantDeptListParam" resultType="com.azz.merchant.pojo.vo.MerchantDeptList">
+		SELECT
+			md.dept_name AS deptName,
+			md.dept_code AS deptCode,
+			md.parent_code AS parentCode,			
+		 	md.`status` AS status,
+			md.creator AS creator,
+			md.create_time AS createTime
+		FROM 
+		merchant m 
+		LEFT JOIN merchant_dept md ON md.merchant_id = m.id 
+		LEFT JOIN merchant_user mu ON m.merchant_code = mu.merchant_code 
+		WHERE
+			 mu.merchant_code = #{merchantCode} AND md.parent_code = '0' AND (md.status = 1 OR md.status = 2)  
+		<if test="deptNameCode != null and deptNameCode!='' "> 
+			AND md.dept_name LIKE CONCAT('%',#{deptNameCode},'%') OR md.dept_code = #{deptNameCode}
+		</if>
+		GROUP BY md.dept_code
+		ORDER BY md.create_time DESC
+  </select>
+  
+  <select id="selectChildDeptList" parameterType="com.azz.merchant.pojo.bo.SearchMerchantChildDeptParam" resultType="com.azz.merchant.pojo.vo.MerchantDeptList">
+  		SELECT
+			md.dept_name AS deptName,
+			md.dept_code AS deptCode,
+			md.parent_code AS parentCode,			
+		 	md.`status` AS status,
+			md.creator AS creator,
+			md.create_time AS createTime
+		FROM 
+		merchant m 
+		LEFT JOIN merchant_dept md ON md.merchant_id = m.id 
+		LEFT JOIN merchant_user mu ON m.merchant_code = mu.merchant_code 
+		WHERE
+			 mu.merchant_code = #{merchantCode} AND md.parent_code = #{parentCode,jdbcType=VARCHAR} AND (md.status = 1 OR md.status = 2)  
+		GROUP BY md.dept_code
+		ORDER BY md.create_time DESC
+  </select>
+  
+  <select id="selectByDeptCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_dept
+    where dept_code = #{deptCode,jdbcType=VARCHAR}
+  </select>
+  
 </mapper>

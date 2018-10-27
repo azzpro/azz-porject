@@ -48,8 +48,8 @@ public class SystemUploadController {
 	 */
 	@RequestMapping(value="imageUpload",method=RequestMethod.POST)
 	public JsonResult<String> imageUpload(String bucketname,String filename,String suffix,String filedata,Integer plattype,Integer imagetype) throws FileNotFoundException {
-		String url = imageService.uploadImage(bucketname,filename,suffix,filedata,plattype,imagetype);
-		return JsonResult.successJsonResult(url);
+		JsonResult<String> image = imageService.uploadImage(bucketname,filename,suffix,filedata,plattype,imagetype);
+		return image;
 	}
 	
 	/**

@@ -3,6 +3,7 @@
 <mapper namespace="com.azz.client.mapper.ClientDeptMapper">
   <resultMap id="BaseResultMap" type="com.azz.client.pojo.ClientDept">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="client_user_company_id" jdbcType="BIGINT" property="clientUserCompanyId" />
     <result column="dept_code" jdbcType="VARCHAR" property="deptCode" />
     <result column="parent_code" jdbcType="VARCHAR" property="parentCode" />
     <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
@@ -14,7 +15,7 @@
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, dept_code, parent_code, dept_name, description, status, create_time, creator, 
+    id,client_user_company_id, dept_code, parent_code, dept_name, description, status, create_time, creator, 
     last_modify_time, modifier
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -37,11 +38,11 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.azz.client.pojo.ClientDept">
-    insert into client_dept (id, dept_code, parent_code, 
+    insert into client_dept (id,client_user_company_id, dept_code, parent_code, 
       dept_name, description, status, 
       create_time, creator, last_modify_time, 
       modifier)
-    values (#{id,jdbcType=BIGINT}, #{deptCode,jdbcType=VARCHAR}, #{parentCode,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT},#{clientUserCompanyId,jdbcType=BIGINT}, #{deptCode,jdbcType=VARCHAR}, #{parentCode,jdbcType=VARCHAR}, 
       #{deptName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
       #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{lastModifyTime,jdbcType=TIMESTAMP}, 
       #{modifier,jdbcType=VARCHAR})
@@ -51,6 +52,9 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="clientUserCompanyId != null">
+      	client_user_company_id,
       </if>
       <if test="deptCode != null">
         dept_code,
@@ -84,6 +88,9 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
+      <if test="clientUserCompanyId != null">
+        #{clientUserCompanyId,jdbcType=BIGINT},
+      </if>
       <if test="deptCode != null">
         #{deptCode,jdbcType=VARCHAR},
       </if>
@@ -116,6 +123,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.azz.client.pojo.ClientDept">
     update client_dept
     <set>
+      <if test="clientUserCompanyId != null">
+        client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT},
+      </if>
       <if test="deptCode != null">
         dept_code = #{deptCode,jdbcType=VARCHAR},
       </if>
@@ -148,7 +158,9 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.azz.client.pojo.ClientDept">
     update client_dept
-    set dept_code = #{deptCode,jdbcType=VARCHAR},
+    set 
+    	client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT},
+    	dept_code = #{deptCode,jdbcType=VARCHAR},
       parent_code = #{parentCode,jdbcType=VARCHAR},
       dept_name = #{deptName,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},

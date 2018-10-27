@@ -50,11 +50,6 @@ public interface ClientService {
     @RequestMapping("/azz/api/client/enterpriseAuth")
     public JsonResult<String> enterpriseAuth(@RequestBody EnterpriseAuthParam param);
     
-    /*    
-    @RequestMapping("/uploadTradingCertificateFile")
-    public JsonResult<UploadFileInfo> uploadTradingCertificateFile(@RequestBody UploadTradingCertificateParam param);
-    */
-    
     @RequestMapping("/azz/api/client/addClientUser")
     public JsonResult<String> addClientUser(@RequestBody AddClientUserParam param);
     

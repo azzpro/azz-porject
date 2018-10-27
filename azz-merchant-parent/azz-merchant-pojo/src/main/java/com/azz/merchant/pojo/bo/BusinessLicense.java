@@ -1,31 +1,31 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2018年10月20日 上午9:59:43
+ * Create on 2018年10月23日 下午9:26:19
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
 package com.azz.merchant.pojo.bo;
 
-import com.azz.core.common.QueryPage;
-
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * <P>TODO</P>
  * @version 1.0
- * @author 黄智聪  2018年10月20日 上午9:59:43
+ * @author 黄智聪  2018年10月23日 下午9:26:19
  */
 @Data
-@EqualsAndHashCode(callSuper=false)
-public class SearchMerchantUserParam extends QueryPage{
+@AllArgsConstructor
+@NoArgsConstructor
+public class BusinessLicense {
+    
+    private String fileName;
+    
+    private long fileSize;
+    
+    private String fileBase64Str;
 
-    private static final long serialVersionUID = 939905148785144826L;
-    
-    private String searchInput;
-    
-    private String merchantCode;
-    
 }
 

@@ -8,6 +8,8 @@
 package com.azz.merchant.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -27,17 +29,17 @@ import com.azz.core.exception.ShiroAuthException;
 import com.azz.core.exception.SuppressedException;
 import com.azz.merchant.api.MerchantService;
 import com.azz.merchant.pojo.bo.AddMerchantUserParam;
+import com.azz.merchant.pojo.bo.BusinessLicense;
 import com.azz.merchant.pojo.bo.CompleteMerchantInfoParam;
+import com.azz.merchant.pojo.bo.CompleteMerchantInfoWebParam;
 import com.azz.merchant.pojo.bo.EditMerchantUserParam;
 import com.azz.merchant.pojo.bo.EnableOrDisableOrDelMerchantUserParam;
 import com.azz.merchant.pojo.bo.LoginParam;
 import com.azz.merchant.pojo.bo.MerchantRegistParam;
 import com.azz.merchant.pojo.bo.SearchMerchantUserParam;
-import com.azz.merchant.pojo.bo.UploadFile;
-import com.azz.merchant.pojo.bo.UploadTradingCertificateParam;
+import com.azz.merchant.pojo.bo.TradingCertificate;
 import com.azz.merchant.pojo.vo.LoginMerchantUserInfo;
 import com.azz.merchant.pojo.vo.MerchantUserInfo;
-import com.azz.merchant.pojo.vo.UploadFileInfo;
 import com.azz.merchant.utils.WebUtils;
 import com.azz.util.Base64;
 import com.azz.util.JSR303ValidateUtils;
@@ -173,22 +175,33 @@ public class MerchantController {
      * @param param
      * @return
      * @author 黄智聪  2018年10月23日 下午8:04:27
+     * @throws IOException 
      */
     @RequestMapping(value = "/completeMerchantInfo")
-    public JsonResult<String> completeMerchantInfo(CompleteMerchantInfoParam param) {
+    public JsonResult<String> completeMerchantInfo(CompleteMerchantInfoWebParam webParam) throws IOException {
+	JSR303ValidateUtils.validate(webParam);
+	CompleteMerchantInfoParam param = new CompleteMerchantInfoParam();
+	List<TradingCertificate> tradingCertificates = new ArrayList<>();
+	List<BusinessLicense> businessLicenses = new ArrayList<>();
+	for (MultipartFile tradingCertificateFile : webParam.getTradingCertificateFiles()) {
+	    TradingCertificate tradingCertificate = new TradingCertificate(tradingCertificateFile.getOriginalFilename(),
+		    tradingCertificateFile.getSize(), Base64.encode(tradingCertificateFile.getBytes()));
+	    tradingCertificates.add(tradingCertificate);
+	    
+	}
+	for (MultipartFile businessLicenseFile : webParam.getBusinessLicenseFiles()) {
+	    BusinessLicense businessLicense = new BusinessLicense(businessLicenseFile.getOriginalFilename(),
+		    businessLicenseFile.getSize(), Base64.encode(businessLicenseFile.getBytes()));
+	    businessLicenses.add(businessLicense);
+	}
+	param.setTradingCertificates(tradingCertificates);
+	param.setBusinessLicenses(businessLicenses);
 	return merchantService.completeMerchantInfo(param);
     }
     
     @RequestMapping(value = "/getMerchantQualificationApplyStatus")
     public JsonResult<Integer> getMerchantQualificationApplyStatus(String merchantCode) {
 	return merchantService.getMerchantQualificationApplyStatus(merchantCode);
-    }
-    
-    @RequestMapping(value = "/uploadTradingCertificateFile")
-    public JsonResult<UploadFileInfo> uploadTradingCertificateFile(UploadFile uploadFile) throws IOException{
-	JSR303ValidateUtils.validate(uploadFile);
-	MultipartFile file = uploadFile.getFile();
-	return merchantService.uploadTradingCertificateFile(new UploadTradingCertificateParam(file.getOriginalFilename(), file.getSize(), uploadFile.getMerchantCode(), Base64.encode(file.getBytes())));
     }
     
     @RequestMapping("/addMerchantUser")
@@ -200,12 +213,14 @@ public class MerchantController {
     
     @RequestMapping("/editMerchantUser")
     public JsonResult<String> editMerchantUser(EditMerchantUserParam param) {
+	param.setMerchantCode(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantCode());
 	param.setModifier(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
 	return merchantService.editMerchantUser(param);
     }
     
     @RequestMapping("/getMerchantUserList")
     public JsonResult<Pagination<MerchantUserInfo>> getMerchantUserList(SearchMerchantUserParam param) {
+	param.setMerchantCode(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantCode());
 	return merchantService.getMerchantUserList(param);
     }
     

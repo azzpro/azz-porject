@@ -7,10 +7,9 @@
  
 package com.azz.client.pojo.bo;
 
-import java.util.List;
-
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
 
@@ -20,7 +19,7 @@ import lombok.Data;
  * @author 黄智聪  2018年10月25日 上午11:23:02
  */
 @Data
-public class EnterpriseAuthParam {
+public class EnterpriseAuthWebParam {
 
     @NotBlank(message = "客户编码不允许为空")
     private String clientUserCode;
@@ -47,7 +46,7 @@ public class EnterpriseAuthParam {
     @NotBlank(message = "详细地址不允许为空")
     private String detailAddress;
     @NotEmpty(message = "请上传营业执照")
-    private List<TradingCertificate> tradingCertificates;
+    private MultipartFile[] tradingCertificateFiles;
     
 }
 

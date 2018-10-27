@@ -7,6 +7,10 @@
 
 package com.azz.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -15,14 +19,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.azz.client.pojo.bo.AddClientUserParam;
 import com.azz.client.pojo.bo.ClientRegistParam;
 import com.azz.client.pojo.bo.EditClientUserParam;
 import com.azz.client.pojo.bo.EnableOrDisableOrDelClientUserParam;
 import com.azz.client.pojo.bo.EnterpriseAuthParam;
+import com.azz.client.pojo.bo.EnterpriseAuthWebParam;
 import com.azz.client.pojo.bo.LoginParam;
 import com.azz.client.pojo.bo.SearchClientUserParam;
+import com.azz.client.pojo.bo.TradingCertificate;
 import com.azz.client.pojo.vo.ClientUserInfo;
 import com.azz.client.pojo.vo.LoginClientUserInfo;
 import com.azz.client.user.api.ClientService;
@@ -33,6 +40,7 @@ import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.ClientConstants;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.core.exception.SuppressedException;
+import com.azz.util.Base64;
 import com.azz.util.JSR303ValidateUtils;
 
 /**
@@ -166,9 +174,20 @@ public class ClientController {
      * @param param
      * @return
      * @author 黄智聪  2018年10月23日 下午8:04:27
+     * @throws IOException 
      */
     @RequestMapping(value = "/enterpriseAuth")
-    public JsonResult<String> completeClientInfo(EnterpriseAuthParam param) {
+    public JsonResult<String> completeClientInfo(EnterpriseAuthWebParam webParam) throws IOException {
+	JSR303ValidateUtils.validate(webParam);
+	EnterpriseAuthParam param = new EnterpriseAuthParam();
+	List<TradingCertificate> tradingCertificates = new ArrayList<>();
+	for (MultipartFile tradingCertificateFile : webParam.getTradingCertificateFiles()) {
+	    TradingCertificate tradingCertificate = new TradingCertificate(tradingCertificateFile.getOriginalFilename(),
+		    tradingCertificateFile.getSize(), Base64.encode(tradingCertificateFile.getBytes()));
+	    tradingCertificates.add(tradingCertificate);
+	    
+	}
+	param.setTradingCertificates(tradingCertificates);
 	return clientService.enterpriseAuth(param);
     }
     

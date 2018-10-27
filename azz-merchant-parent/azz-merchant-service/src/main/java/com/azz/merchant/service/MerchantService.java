@@ -28,6 +28,7 @@ import com.azz.core.common.errorcode.ShiroAuthErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.FileConstants;
+import com.azz.core.constants.MerchantConstants;
 import com.azz.core.constants.MerchantConstants.QualificationApplyStatus;
 import com.azz.core.constants.UserConstants.UserStatus;
 import com.azz.core.exception.BaseException;
@@ -35,6 +36,7 @@ import com.azz.core.exception.ShiroAuthException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.merchant.mapper.MerchantAddressMapper;
 import com.azz.merchant.mapper.MerchantApplyMapper;
+import com.azz.merchant.mapper.MerchantDeptMapper;
 import com.azz.merchant.mapper.MerchantMapper;
 import com.azz.merchant.mapper.MerchantPermissionMapper;
 import com.azz.merchant.mapper.MerchantRoleMapper;
@@ -44,18 +46,20 @@ import com.azz.merchant.mapper.MsgLogMapper;
 import com.azz.merchant.pojo.Merchant;
 import com.azz.merchant.pojo.MerchantAddress;
 import com.azz.merchant.pojo.MerchantApply;
+import com.azz.merchant.pojo.MerchantDept;
 import com.azz.merchant.pojo.MerchantRole;
 import com.azz.merchant.pojo.MerchantUser;
 import com.azz.merchant.pojo.MerchantUserRole;
 import com.azz.merchant.pojo.MsgLog;
 import com.azz.merchant.pojo.bo.AddMerchantUserParam;
+import com.azz.merchant.pojo.bo.BusinessLicense;
 import com.azz.merchant.pojo.bo.CompleteMerchantInfoParam;
 import com.azz.merchant.pojo.bo.EditMerchantUserParam;
 import com.azz.merchant.pojo.bo.EnableOrDisableOrDelMerchantUserParam;
 import com.azz.merchant.pojo.bo.LoginParam;
 import com.azz.merchant.pojo.bo.MerchantRegistParam;
 import com.azz.merchant.pojo.bo.SearchMerchantUserParam;
-import com.azz.merchant.pojo.bo.UploadTradingCertificateParam;
+import com.azz.merchant.pojo.bo.TradingCertificate;
 import com.azz.merchant.pojo.vo.LoginMerchantUserInfo;
 import com.azz.merchant.pojo.vo.Menu;
 import com.azz.merchant.pojo.vo.MerchantUserInfo;
@@ -63,6 +67,7 @@ import com.azz.merchant.pojo.vo.MerchantUserPermission;
 import com.azz.merchant.pojo.vo.UploadFileInfo;
 import com.azz.model.Password;
 import com.azz.system.api.SystemImageUploadService;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.PasswordHelper;
 import com.azz.util.RandomStringUtils;
@@ -104,12 +109,19 @@ public class MerchantService {
 
     @Autowired
     private MerchantRoleMapper merchantRoleMapper;
-    
+
     @Autowired
     private MerchantUserRoleMapper merchantUserRoleMapper;
     
     @Autowired
+    private MerchantDeptMapper mrchantDeptMapper;
+    
+    @Autowired
     private SystemImageUploadService systemImageUploadService;
+    
+    @Autowired
+    private DbSequenceService dbSequenceService;
+    
     
     /**
      * 
@@ -218,22 +230,22 @@ public class MerchantService {
 	if(merchantUser != null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "手机号已被注册");
 	}
-	String merchantCode = System.currentTimeMillis() + "";
+	String merchantCode = dbSequenceService.getMerchantTenantNumber();
 	String registerName = param.getRegisterName();
 	Merchant merchantRecord = Merchant.builder()
-		.merchantCode(merchantCode)// TODO
+		.merchantCode(merchantCode)
 		.createTime(nowDate).contactPhone(phoneNumber)
 		.registeredPerson(registerName).build();
 	merchantMapper.insertSelective(merchantRecord);
 	
-	String merchantUserCode = System.currentTimeMillis() + "";
+	String merchantUserCode = dbSequenceService.getMerchantEmployeeNumber();
 	// 生成盐值加密的密码
 	Password pwd = PasswordHelper.encryptPasswordByModel(password);
 	MerchantUser merchantUserRecord = MerchantUser.builder()
 		.createTime(nowDate)
 		.merchantCode(merchantCode)
 		.merchantUserName(registerName)
-		.merchantUserCode(merchantUserCode)// TODO
+		.merchantUserCode(merchantUserCode)
 		.password(pwd.getPassword())
 		.phoneNumber(phoneNumber)
 		.salt(pwd.getSalt())
@@ -241,28 +253,6 @@ public class MerchantService {
 		.build();
 	merchantUserMapper.insertSelective(merchantUserRecord);
 	return JsonResult.successJsonResult(merchantUserCode);
-    }
-    
-    
-    /**
-     * 
-     * <p>营业执照上传</p>
-     * @author 黄智聪  2018年10月23日 下午9:02:16
-     */
-    public JsonResult<UploadFileInfo> uploadTradingCertificateFile(@RequestBody UploadTradingCertificateParam param) {
-	JSR303ValidateUtils.validate(param);
-	String merchantCode = param.getMerchantCode();
-	String fileName = param.getFileName();
-	int dotIndex = fileName.lastIndexOf(".");
-	String fileNameNoSufix = fileName.substring(0,dotIndex);
-	String sufix = fileName.substring(dotIndex + 1, fileName.length());
-	// 新名称为文件名 + 商户编码 + 文件后缀
-	String newFileName = fileNameNoSufix + "_" + merchantCode + "." + sufix;
-	String filedata = param.getFileBase64Str();
-	// 图片url
-	String imgUrl = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
-		filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_TRADING_CERTIFICATE_IMAGE_TYPE);
-	return JsonResult.successJsonResult(new UploadFileInfo(fileName, imgUrl));  
     }
     
     /**
@@ -323,10 +313,66 @@ public class MerchantService {
 		.build();
 	merchantAddressMapper.insertSelective(merchantAddressRecord);
 	
+	List<UploadFileInfo> uploadBusinessLicenseFileInfos = new ArrayList<>();
+	List<UploadFileInfo> uploadTradingCertificateFileInfos = new ArrayList<>();
+	
+	// 经营执照目前只有1个
+	List<BusinessLicense> businessLicenses = param.getBusinessLicenses();
+	for (int i = 0 ; i < businessLicenses.size(); i++) {
+	    BusinessLicense businessLicense = businessLicenses.get(i);
+	    String originalFileName = businessLicense.getFileName();
+	    if(StringUtils.isBlank(originalFileName)) {
+		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + (i + 1) + "个经营执照文件名为空");
+	    }
+	    if(businessLicense.getFileSize() > MerchantConstants.BUSINESS_LICENSE_FILE_SIZE_LIMIT) {
+		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + (i + 1) + "个经营执照文件大小不能超过20M");
+	    }
+	    String filedata = businessLicense.getFileBase64Str();
+	    if(StringUtils.isBlank(filedata)) {
+		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + (i + 1) + "个经营执照文件内容为空");
+	    }
+	    int dotIndex = originalFileName.lastIndexOf(".");
+	    String fileNameNoSufix = originalFileName.substring(0, dotIndex);
+	    String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
+	    // 新名称为文件名 + 商户编码 + 文件后缀
+	    String newFileName = fileNameNoSufix + "_" + merchantCode + "." + sufix;
+	    // 图片url
+	    String imgUrl = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
+		    filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_TRADING_CERTIFICATE_IMAGE_TYPE);
+	    UploadFileInfo file = new UploadFileInfo(imgUrl, originalFileName);
+	    uploadBusinessLicenseFileInfos.add(file);
+	}
+	// 营业执照最多3个
+	List<TradingCertificate> tradingCertificates = param.getTradingCertificates();
+	for (int i = 0 ; i < tradingCertificates.size(); i++) {
+	    TradingCertificate tradingCertificate = tradingCertificates.get(i);
+	    String originalFileName = tradingCertificate.getFileName();
+	    if(StringUtils.isBlank(originalFileName)) {
+		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + (i + 1) + "个营业执照文件名为空");
+	    }
+	    if(tradingCertificate.getFileSize() > MerchantConstants.BUSINESS_LICENSE_FILE_SIZE_LIMIT) {
+		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + (i + 1) + "个营业执照文件大小不能超过20M");
+	    }
+	    String filedata = tradingCertificate.getFileBase64Str();
+	    if(StringUtils.isBlank(filedata)) {
+		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + (i + 1) + "个营业执照文件内容为空");
+	    }
+	    int dotIndex = originalFileName.lastIndexOf(".");
+	    String fileNameNoSufix = originalFileName.substring(0, dotIndex);
+	    String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
+	    // 新名称为文件名 + 商户编码 + 文件后缀
+	    String newFileName = fileNameNoSufix + "_" + merchantCode + "." + sufix;
+	    // 图片url
+	    String imgUrl = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
+		    filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_BUSINESS_IMAGE_TYPE);
+	    UploadFileInfo file = new UploadFileInfo(imgUrl, originalFileName);
+	    uploadTradingCertificateFileInfos.add(file);
+	}
+	
 	// 完善资料后，需插入申请记录
 	MerchantApply merchantApplyRecord = MerchantApply.builder()
-		.businessLicenseFileName(param.getBusinessLicenseFileName())
-		.businessLicenseFileUrl(param.getBusinessLicenseFileUrl())
+		.businessLicenseFileName(uploadBusinessLicenseFileInfos.get(0) == null ? null : uploadBusinessLicenseFileInfos.get(0).getOriginalFileName())
+		.businessLicenseFileUrl(uploadBusinessLicenseFileInfos.get(0) == null ? null : uploadBusinessLicenseFileInfos.get(0).getImgUrl())
 		.companyName(param.getCompanyName())
 		.companyTel(param.getCompanyTel())
 		.creditCode(creditCode)
@@ -335,12 +381,12 @@ public class MerchantService {
 		.address(provinceName + cityName + areaName + detailAddress)
 		.merchantName(param.getMerchantName())
 		.status(QualificationApplyStatus.PENDING.getValue())
-		.tradingCertificateFirstFileName(param.getTradingCertificateFirstFileName())
-		.tradingCertificateFirstFileUrl(param.getTradingCertificateFirstFileUrl())
-		.tradingCertificateSecondFileName(param.getTradingCertificateSecondFileName())
-		.tradingCertificateSecondFileUrl(param.getTradingCertificateSecondFileUrl())
-		.tradingCertificateThirdFileName(param.getTradingCertificateThirdFileName())
-		.tradingCertificateThirdFileUrl(param.getTradingCertificateThirdFileUrl())
+		.tradingCertificateFirstFileName(uploadTradingCertificateFileInfos.get(0) == null ? null : uploadTradingCertificateFileInfos.get(0).getOriginalFileName())
+		.tradingCertificateFirstFileUrl(uploadTradingCertificateFileInfos.get(0) == null ? null : uploadTradingCertificateFileInfos.get(0).getImgUrl())
+		.tradingCertificateSecondFileName(uploadTradingCertificateFileInfos.get(1) == null ? null : uploadTradingCertificateFileInfos.get(0).getOriginalFileName())
+		.tradingCertificateSecondFileUrl(uploadTradingCertificateFileInfos.get(1) == null ? null : uploadTradingCertificateFileInfos.get(0).getImgUrl())
+		.tradingCertificateThirdFileName(uploadTradingCertificateFileInfos.get(2) == null ? null : uploadTradingCertificateFileInfos.get(0).getOriginalFileName())
+		.tradingCertificateThirdFileUrl(uploadTradingCertificateFileInfos.get(2) == null ? null : uploadTradingCertificateFileInfos.get(0).getImgUrl())
 		.build();
 	merchantApplyMapper.insertSelective(merchantApplyRecord);
 	return JsonResult.successJsonResult();
@@ -356,18 +402,14 @@ public class MerchantService {
 	if (!password.equals(confirmPassword)) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "密码与确认密码不一致");
 	}
-	/* TODO 
-	PlatformDept dept = platformDeptMapper.selectByDeptCode(param.getDeptCode());
+	MerchantDept dept = mrchantDeptMapper.selectByDeptCode(param.getMerchantCode(), param.getDeptCode());
 	if (dept == null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "部门不存在");
 	}
-	*/
-	
 	MerchantRole role = merchantRoleMapper.selectByRoleCode(param.getRoleCode());
 	if (role == null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色不存在");
 	}
-	
 	String email = param.getEmail();
 	if (!StringUtils.isBlank(email)) {
 	    MerchantUser user = merchantUserMapper.getMerchantUserByEmail(email, null);
@@ -386,9 +428,9 @@ public class MerchantService {
 	Date nowDate = new Date();
 	String creator = param.getCreator();
 	MerchantUser userRecord = MerchantUser.builder().createTime(nowDate).creator(creator)
-		//.deptId() TODO
+		.deptId(dept.getId())
 		.email(param.getEmail()).password(pwd.getPassword()).phoneNumber(phoneNumber)
-		.postName(param.getPostName()).merchantUserCode(System.currentTimeMillis() + "")// TODO
+		.postName(param.getPostName()).merchantUserCode(dbSequenceService.getMerchantEmployeeNumber())
 		.merchantUserName(param.getMerchantUserName()).merchantCode(param.getMerchantCode()).salt(pwd.getSalt()).build();
 	merchantUserMapper.insertSelective(userRecord);
 	// 用户与角色绑定
@@ -413,12 +455,10 @@ public class MerchantService {
 	    // 生成盐值加密的密码
 	    pwd = PasswordHelper.encryptPasswordByModel(password);
 	}
-	/* TODO
-	PlatformDept dept = platformDeptMapper.selectByDeptCode(param.getDeptCode());
+	MerchantDept dept = mrchantDeptMapper.selectByDeptCode(param.getMerchantCode(), param.getDeptCode());
 	if (dept == null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "部门不存在");
 	}
-	*/
 	
 	MerchantRole role = merchantRoleMapper.selectByRoleCode(param.getRoleCode());
 	if (role == null) {
@@ -448,7 +488,7 @@ public class MerchantService {
 	String modifier = param.getModifier();
 	Long merchantUserId = user.getId();
 	MerchantUser merchantUserRecord = MerchantUser.builder().modifier(modifier).lastModifyTime(nowDate)
-		.email(param.getEmail()).password(pwd == null ? null : pwd.getPassword())
+		.deptId(dept.getId()).email(param.getEmail()).password(pwd == null ? null : pwd.getPassword())
 		.phoneNumber(param.getPhoneNumber()).postName(param.getPostName()).merchantUserName(param.getMerchantUserName())
 		.salt(pwd == null ? null : pwd.getSalt()).id(merchantUserId).build();
 	merchantUserMapper.updateByPrimaryKeySelective(merchantUserRecord);

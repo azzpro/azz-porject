@@ -27,13 +27,13 @@ public class EditMerchantDeptParam {
     
     private String parentCode;
     
-    @NotNull(message = "部门状态不允许为空")
+    @NotNull(message = "部门名称不允许为空")
     private String deptName;
     /**
      * 部门状态
      */
     @NotNull(message = "部门状态不允许为空")
-    private Integer status;
+    private Integer status ;
     
     private String modifier;
 }

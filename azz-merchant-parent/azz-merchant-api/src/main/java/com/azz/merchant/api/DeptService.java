@@ -12,16 +12,16 @@ import java.util.List;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
+import com.azz.merchant.pojo.MerchantDept;
 import com.azz.merchant.pojo.bo.AddMerchantDeptParam;
 import com.azz.merchant.pojo.bo.DelDeptParam;
 import com.azz.merchant.pojo.bo.EditDeptIsEnableParam;
 import com.azz.merchant.pojo.bo.EditMerchantDeptParam;
 import com.azz.merchant.pojo.bo.SearchMerchantChildDeptParam;
-import com.azz.merchant.pojo.bo.SearchMerchantDeptInfo;
 import com.azz.merchant.pojo.bo.SearchMerchantDeptListParam;
-import com.azz.merchant.pojo.vo.MerchantDeptInfo;
 import com.azz.merchant.pojo.vo.MerchantDeptList;
 
 /**
@@ -57,7 +57,7 @@ public interface DeptService {
      * @author 彭斌  2018年10月26日 下午7:00:50
      */
     @PostMapping("/azz/api/merchant/selectDeptInfo")
-    JsonResult<MerchantDeptInfo> getDeptInfo(@RequestBody SearchMerchantDeptInfo param);
+    JsonResult<MerchantDept> getDeptInfo(@RequestParam("deptCode") String deptCode);
     
     /**
      * <p>修改部门信息</p>

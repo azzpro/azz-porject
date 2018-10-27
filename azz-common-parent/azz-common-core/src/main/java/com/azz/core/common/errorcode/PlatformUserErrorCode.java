@@ -24,6 +24,8 @@ public class PlatformUserErrorCode extends BaseErrorCode{
     
     public static final PlatformUserErrorCode PLATFORM_DEPT_ERROR_NO_EXIST = new PlatformUserErrorCode(30001, "部门不存在");
     
+    public static final PlatformUserErrorCode PLATFORM_DEPT_STATUS_ERROR_NO_EXIST = new PlatformUserErrorCode(30002, "部门状态不存在");
+    
     // 商户审核错误码
     public static final PlatformUserErrorCode PLATFORM_MERCHANT_ERROR_NO_EXIST = new PlatformUserErrorCode(40000, "商户不存在");
     

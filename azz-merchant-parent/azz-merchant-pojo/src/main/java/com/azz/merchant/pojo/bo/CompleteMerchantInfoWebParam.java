@@ -1,32 +1,34 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2018年10月25日 上午11:23:02
+ * Create on 2018年10月22日 下午2:38:07
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
- 
-package com.azz.client.pojo.bo;
 
-import java.util.List;
+package com.azz.merchant.pojo.bo;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
 
 /**
- * <P>TODO</P>
+ * <P>
+ * web接受的参数
+ * </P>
+ * 
  * @version 1.0
- * @author 黄智聪  2018年10月25日 上午11:23:02
+ * @author 黄智聪 2018年10月22日 下午2:38:07
  */
 @Data
-public class EnterpriseAuthParam {
+public class CompleteMerchantInfoWebParam {
 
-    @NotBlank(message = "客户编码不允许为空")
-    private String clientUserCode;
-    @NotBlank(message = "本人姓名不允许为空")
-    private String clientUserName;
-    @NotBlank(message = "公司名称不允许为空")
+    @NotBlank(message = "商户编码不允许为空")
+    private String merchantCode;
+    @NotBlank(message = "商户名称不允许为空")
+    private String merchantName;
+    @NotBlank(message = "企业名称不允许为空")
     private String companyName;
     @NotBlank(message = "信用代码不允许为空")
     private String creditCode;
@@ -47,7 +49,8 @@ public class EnterpriseAuthParam {
     @NotBlank(message = "详细地址不允许为空")
     private String detailAddress;
     @NotEmpty(message = "请上传营业执照")
-    private List<TradingCertificate> tradingCertificates;
+    private MultipartFile[] tradingCertificateFiles;
+    @NotEmpty(message = "请上传经营执照")
+    private MultipartFile[] businessLicenseFiles;
     
 }
-

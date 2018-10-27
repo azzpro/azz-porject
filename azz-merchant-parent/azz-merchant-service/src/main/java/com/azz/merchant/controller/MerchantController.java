@@ -22,10 +22,8 @@ import com.azz.merchant.pojo.bo.EnableOrDisableOrDelMerchantUserParam;
 import com.azz.merchant.pojo.bo.LoginParam;
 import com.azz.merchant.pojo.bo.MerchantRegistParam;
 import com.azz.merchant.pojo.bo.SearchMerchantUserParam;
-import com.azz.merchant.pojo.bo.UploadTradingCertificateParam;
 import com.azz.merchant.pojo.vo.LoginMerchantUserInfo;
 import com.azz.merchant.pojo.vo.MerchantUserInfo;
-import com.azz.merchant.pojo.vo.UploadFileInfo;
 import com.azz.merchant.service.MerchantService;
 
 
@@ -69,11 +67,6 @@ public class MerchantController {
     @RequestMapping("/completeMerchantInfo")
     public JsonResult<String> completeMerchantInfo(@RequestBody CompleteMerchantInfoParam param) {
 	return merchantService.completeMerchantInfo(param);
-    }
-    
-    @RequestMapping("/uploadTradingCertificateFile")
-    public JsonResult<UploadFileInfo> uploadTradingCertificateFile(@RequestBody UploadTradingCertificateParam param){
-	return merchantService.uploadTradingCertificateFile(param);
     }
     
     @RequestMapping("/addMerchantUser")

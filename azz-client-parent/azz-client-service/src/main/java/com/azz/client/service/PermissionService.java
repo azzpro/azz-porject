@@ -29,6 +29,7 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.constants.PermissionConstants.PermissionStatus;
 import com.azz.exception.JSR303ValidationException;
+import com.azz.system.sequence.api.RandomSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
 
@@ -42,13 +43,17 @@ import com.azz.util.StringUtils;
 public class PermissionService {
 
     @Autowired
-    ClientRoleMapper clientRoleMapper;
+    private ClientRoleMapper clientRoleMapper;
 
     @Autowired
-    ClientRolePermissionMapper clientRolePermissionMapper;
+    private ClientRolePermissionMapper clientRolePermissionMapper;
 
     @Autowired
-    ClientPermissionMapper clientPermissionMapper;
+    private ClientPermissionMapper clientPermissionMapper;
+    
+    @Autowired
+    private RandomSequenceService randomSequenceService;
+    
 
     public JsonResult<List<Permission>> getPermissionList(Long clientUserCompanyId, String roleCode) {
 	List<Permission> permissions = clientPermissionMapper.getAllPermissions();
@@ -72,7 +77,7 @@ public class PermissionService {
 	String creator = param.getCreator();
 	ClientRole roleRecord = ClientRole.builder().createTime(nowDate)
 		.creator(creator).remark(param.getRemark())
-		.roleCode(System.currentTimeMillis() + "")// TODO
+		.roleCode(randomSequenceService.getPowermentNumber())
 		.clientUserCompanyId(param.getClientUserCompanyId())
 		.roleName(param.getRoleName()).build();
 	clientRoleMapper.insertSelective(roleRecord);

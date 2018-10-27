@@ -49,8 +49,8 @@
 		</javaClientGenerator>
 
 		<!-- 要生成哪些表 -->
-		<table tableName="client_user_company"
-			domainObjectName="ClientUserCompany" enableCountByExample="false"
+		<table tableName="merchant_dept"
+			domainObjectName="MerchantDept" enableCountByExample="false"
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false"></table>
 

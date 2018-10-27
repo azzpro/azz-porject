@@ -23,10 +23,8 @@ import com.azz.merchant.pojo.bo.EnableOrDisableOrDelMerchantUserParam;
 import com.azz.merchant.pojo.bo.LoginParam;
 import com.azz.merchant.pojo.bo.MerchantRegistParam;
 import com.azz.merchant.pojo.bo.SearchMerchantUserParam;
-import com.azz.merchant.pojo.bo.UploadTradingCertificateParam;
 import com.azz.merchant.pojo.vo.LoginMerchantUserInfo;
 import com.azz.merchant.pojo.vo.MerchantUserInfo;
-import com.azz.merchant.pojo.vo.UploadFileInfo;
 
 /**
  * <P>TODO</P>
@@ -85,16 +83,6 @@ public interface MerchantService {
      */
     @PostMapping("/azz/api/merchant/completeMerchantInfo")
     JsonResult<String> completeMerchantInfo(@RequestBody CompleteMerchantInfoParam param);
-    
-    /**
-     * 
-     * <p>上传营业执照</p>
-     * @param uploadTradingCertificateParam
-     * @return
-     * @author 黄智聪  2018年10月24日 上午10:25:48
-     */
-    @PostMapping("/azz/api/merchant/uploadTradingCertificateFile")
-    JsonResult<UploadFileInfo> uploadTradingCertificateFile(@RequestBody UploadTradingCertificateParam param);
     
     /**
      * 

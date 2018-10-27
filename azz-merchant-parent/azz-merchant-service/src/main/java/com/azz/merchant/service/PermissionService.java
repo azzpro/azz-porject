@@ -31,6 +31,7 @@ import com.azz.merchant.pojo.bo.SearchRoleParam;
 import com.azz.merchant.pojo.bo.SetRolePermissionParam;
 import com.azz.merchant.pojo.vo.Permission;
 import com.azz.merchant.pojo.vo.RoleInfo;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
 
@@ -54,6 +55,9 @@ public class PermissionService {
     
     @Autowired
     MerchantMapper merchantMapper;
+    
+    @Autowired
+    private DbSequenceService dbSequenceService;
 
     public JsonResult<List<Permission>> getPermissionList(String merchantCode, String roleCode) {
 	List<Permission> permissions = merchantPermissionMapper.getAllPermissions();
@@ -81,7 +85,7 @@ public class PermissionService {
 	String creator = param.getCreator();
 	Merchant merchant = merchantMapper.getMerchantByMerchantCode(param.getMerchantCode());
 	MerchantRole roleRecord = MerchantRole.builder().createTime(nowDate).creator(creator).remark(param.getRemark())
-		.roleCode(System.currentTimeMillis() + "")// TODO
+		.roleCode(dbSequenceService.getMerchantPowerNumber())
 		.roleName(param.getRoleName())
 		.merchantId(merchant.getId())
 		.build();

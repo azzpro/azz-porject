@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.Bucket;
 import com.aliyun.oss.model.ObjectMetadata;
+import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.constants.FileConstants;
 import com.azz.exception.JSR303ValidationException;
@@ -45,7 +46,7 @@ public class SystemImageService {
 	@Value("${aliyun.accessKeySecret}")
 	private String accessKeySecret;
 	
-	public String uploadImage(String bucketname,String filename,String suffix,String filedata,Integer imageType,Integer plattype){
+	public JsonResult<String> uploadImage(String bucketname,String filename,String suffix,String filedata,Integer plattype,Integer imageType){
 		if(StringUtils.isBlank(bucketname)) {
     		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"存储空间名称不能为空");
     	}
@@ -134,7 +135,7 @@ public class SystemImageService {
 		ossClient.shutdown();
 		imageurl.insert(7, bucketname+".");
 		imageurl.append("/").append(finalName.toString());
-		return imageurl.toString();
+		return JsonResult.successJsonResult(imageurl.toString());
 	}
 	
 	

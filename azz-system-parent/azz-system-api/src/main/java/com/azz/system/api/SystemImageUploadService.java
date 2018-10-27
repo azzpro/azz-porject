@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.azz.core.common.JsonResult;
+
 /**
  * <P>图片上传</P>
  * @version 1.0
@@ -32,6 +34,6 @@ public interface SystemImageUploadService {
 	 * @author 刘建麟  2018年10月23日 下午4:31:52
 	 */
 	@RequestMapping(value="/azz/api/imageUpload",method=RequestMethod.POST)
-	String uploadImage(@RequestParam("bucketname") String bucketname,@RequestParam("filename")String filename,@RequestParam("suffix") String suffix,@RequestParam("filedata") String filedata,@RequestParam("plattype") Integer plattype,@RequestParam("imagetype") Integer imagetype);
+	JsonResult<String> uploadImage(@RequestParam("bucketname") String bucketname,@RequestParam("filename")String filename,@RequestParam("suffix") String suffix,@RequestParam("filedata") String filedata,@RequestParam("plattype") Integer plattype,@RequestParam("imagetype") Integer imagetype);
 }
 

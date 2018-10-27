@@ -39,7 +39,7 @@ public interface PermissionService {
      * @return
      * @author 黄智聪  2018年10月19日 下午6:00:40
      */
-    @GetMapping("getTreePermissions")
+    @GetMapping("/azz/api/user/getTreePermissions")
     JsonResult<List<TreePermission>> getTreePermissions();
     
     /**
@@ -48,7 +48,7 @@ public interface PermissionService {
      * @return
      * @author 黄智聪  2018年10月19日 下午6:00:40
      */
-    @GetMapping("getPermissionList")
+    @GetMapping("/azz/api/user/getPermissionList")
     JsonResult<List<Permission>> getPermissionList(@RequestParam("roleCode") String roleCode);
     
     /**
@@ -58,7 +58,7 @@ public interface PermissionService {
      * @return
      * @author 黄智聪  2018年10月19日 下午6:00:58
      */
-    @PostMapping("addRole")
+    @PostMapping("/azz/api/user/addRole")
     JsonResult<String> addRole(@RequestBody AddRoleParam param);
     
     /**
@@ -68,7 +68,7 @@ public interface PermissionService {
      * @return
      * @author 黄智聪  2018年10月19日 下午6:01:10
      */
-    @PostMapping("editRole")
+    @PostMapping("/azz/api/user/editRole")
     JsonResult<String> editRole(@RequestBody EditRoleParam param);
     
     /**
@@ -78,7 +78,7 @@ public interface PermissionService {
      * @return
      * @author 黄智聪  2018年10月19日 下午6:01:22
      */
-    @PostMapping("delRole")
+    @PostMapping("/azz/api/user/delRole")
     JsonResult<String> delRole(@RequestBody DelRoleParam param);
     
     /**
@@ -88,7 +88,7 @@ public interface PermissionService {
      * @return
      * @author 黄智聪  2018年10月19日 下午6:01:30
      */
-    @PostMapping("getRoleList")
+    @PostMapping("/azz/api/user/getRoleList")
     JsonResult<List<RoleInfo>> getRoleList(@RequestBody SearchRoleParam param);
 
     /**
@@ -98,7 +98,7 @@ public interface PermissionService {
      * @return
      * @author 黄智聪  2018年10月19日 下午6:01:30
      */
-    @GetMapping("getRolePermissions")
+    @GetMapping("/azz/api/user/getRolePermissions")
     JsonResult<List<String>> getRolePermissions(@RequestParam("roleCode") String roleCode);
     
     /**
@@ -108,7 +108,7 @@ public interface PermissionService {
      * @return
      * @author 黄智聪  2018年10月22日 下午4:30:56
      */
-    @PostMapping("setRolePermissions")
+    @PostMapping("/azz/api/user/setRolePermissions")
     JsonResult<String> setRolePermissions(@RequestBody SetRolePermissionParam param);
 }
 

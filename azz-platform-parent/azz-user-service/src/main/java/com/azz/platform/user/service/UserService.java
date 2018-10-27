@@ -10,8 +10,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
@@ -23,7 +23,6 @@ import com.azz.core.exception.BaseException;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.model.Password;
-import com.azz.platform.user.api.UserService;
 import com.azz.platform.user.mapper.PlatformDeptMapper;
 import com.azz.platform.user.mapper.PlatformPermissionMapper;
 import com.azz.platform.user.mapper.PlatformRoleMapper;
@@ -59,9 +58,9 @@ import lombok.extern.slf4j.Slf4j;
  * @version 1.0
  * @author 刘建麟 2018年10月14日 上午9:27:50
  */
-@RestController
+@Service
 @Slf4j
-public class UserServiceImpl implements UserService {
+public class UserService{
 
     @Autowired
     private PlatformUserMapper platformUserMapper;
@@ -81,7 +80,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private DbSequenceService dbSequenceService;
 
-    @Override
     public JsonResult<String> loginAuth(@RequestBody LoginParam param) {
 	log.debug("————身份认证方法————");
 	String phoneNumber = param.getPhoneNumber();
@@ -97,7 +95,6 @@ public class UserServiceImpl implements UserService {
 	return JsonResult.successJsonResult();
     }
 
-    @Override
     public JsonResult<LoginUserInfo> getLoginUserInfoByPhoneNumber(String phoneNumber) {
 	LoginUserInfo info = new LoginUserInfo();
 	UserInfo userInfo = platformUserMapper.getUserInfoByPhoneNumber(phoneNumber);
@@ -147,7 +144,6 @@ public class UserServiceImpl implements UserService {
 	return oneLevelMenus;
     }
 
-    @Override
     public JsonResult<String> editPassword(@RequestBody EditPasswordParam param) {
 	JSR303ValidateUtils.validate(param);
 
@@ -174,7 +170,6 @@ public class UserServiceImpl implements UserService {
 	return JsonResult.successJsonResult();
     }
 
-    @Override
     public JsonResult<String> addUser(@RequestBody AddUserParam param) {
 	// 参数校验
 	JSR303ValidateUtils.validate(param);
@@ -221,7 +216,6 @@ public class UserServiceImpl implements UserService {
 	return JsonResult.successJsonResult();
     }
 
-    @Override
     public JsonResult<String> editUser(@RequestBody EditUserParam param) {
 	// 参数校验
 	JSR303ValidateUtils.validate(param);
@@ -284,14 +278,12 @@ public class UserServiceImpl implements UserService {
 	return JsonResult.successJsonResult();
     }
 
-    @Override
     public JsonResult<Pagination<UserInfo>> getUserList(@RequestBody SearchUserParam param) {
 	PageHelper.startPage(param.getPageNum(), param.getPageSize());
 	List<UserInfo> users = platformUserMapper.getUserInfoBySearchParam(param);
 	return JsonResult.successJsonResult(new Pagination<>(users));
     }
 
-    @Override
     public JsonResult<String> enableOrDisableOrDelUser(@RequestBody EnableOrDisableOrDelUserParam param) {
 	// 参数校验
 	JSR303ValidateUtils.validate(param);
@@ -303,7 +295,6 @@ public class UserServiceImpl implements UserService {
 	return JsonResult.successJsonResult();
     }
 
-    @Override
     public JsonResult<UserInfo> getUserInfo(String userCode) {
 	if (StringUtils.isBlank(userCode)) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "用户编码不允许为空");

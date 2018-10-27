@@ -35,7 +35,7 @@ public interface DeptService {
      * @return
      * @author 彭斌  2018年10月17日 下午2:50:20
      */
-    @PostMapping("addDeptInfo")
+    @PostMapping("/azz/api/user/addDeptInfo")
     JsonResult<String> addDeptInfo(@RequestBody AddDeptParam param);
     
     /**
@@ -44,7 +44,7 @@ public interface DeptService {
      * @return
      * @author 彭斌  2018年10月17日 下午2:50:24
      */
-    @PostMapping("editDeptInfo")
+    @PostMapping("/azz/api/user/editDeptInfo")
     JsonResult<String> editDeptInfo(@RequestBody EditDeptParam param);
     
     /**
@@ -53,7 +53,7 @@ public interface DeptService {
      * @return
      * @author 彭斌  2018年10月17日 下午2:50:28
      */
-    @PostMapping("getDeptList")
+    @PostMapping("/azz/api/user/getDeptList")
     JsonResult<List<Dept>> getDeptList(@RequestBody SearchDeptParam param);
     
     /**
@@ -62,7 +62,7 @@ public interface DeptService {
      * @return
      * @author 彭斌  2018年10月17日 下午2:50:31
      */
-    @GetMapping("delDeptInfo")
+    @GetMapping("/azz/api/user/delDeptInfo")
     JsonResult<String> delDeptInfo(@RequestParam("deptCode") String deptCode, @RequestParam("modifier") String modifier);
     
     /**
@@ -71,7 +71,7 @@ public interface DeptService {
      * @return
      * @author 彭斌  2018年10月17日 下午2:50:34
      */
-    @GetMapping("getDeptInfo")
+    @GetMapping("/azz/api/user/getDeptInfo")
     JsonResult<List<Dept>> getDeptParentInfo(@RequestParam("deptCode") String deptCode);
     
     /**
@@ -81,7 +81,7 @@ public interface DeptService {
      * @return
      * @author 彭斌  2018年10月20日 下午4:48:26
      */
-    @GetMapping("disableDeptInfo")
+    @GetMapping("/azz/api/user/disableDeptInfo")
     JsonResult<String> disableDeptInfo(@RequestParam("deptCode") String deptCode, @RequestParam("modifier") String modifier);
     
     /**
@@ -91,7 +91,7 @@ public interface DeptService {
      * @return
      * @author 彭斌  2018年10月20日 下午5:47:24
      */
-    @GetMapping("enableDeptInfo")
+    @GetMapping("/azz/api/user/enableDeptInfo")
     JsonResult<String> enableDeptInfo(@RequestParam("deptCode") String deptCode, @RequestParam("modifier") String modifier);
 }
 

@@ -45,7 +45,7 @@ public interface UserService {
      * @return
      * @author 黄智聪 2018年10月17日 下午3:06:35
      */
-    @PostMapping("loginAuth")
+    @PostMapping("/azz/api/user/loginAuth")
     JsonResult<String> loginAuth(@RequestBody LoginParam param);
     
     /**
@@ -55,7 +55,7 @@ public interface UserService {
      * @return
      * @author 黄智聪  2018年10月18日 下午1:51:00
      */
-    @GetMapping("getLoginUserInfoByPhoneNumber")
+    @GetMapping("/azz/api/user/getLoginUserInfoByPhoneNumber")
     JsonResult<LoginUserInfo> getLoginUserInfoByPhoneNumber(@RequestParam("phoneNumber") String phoneNumber);
     
     /**
@@ -64,7 +64,7 @@ public interface UserService {
      * @return
      * @author 彭斌  2018年10月18日 下午2:30:58
      */
-    @PostMapping("editPassword")
+    @PostMapping("/azz/api/user/editPassword")
     JsonResult<String> editPassword(@RequestBody EditPasswordParam param);
     
     /**
@@ -74,7 +74,7 @@ public interface UserService {
      * @return
      * @author 黄智聪  2018年10月19日 下午5:39:40
      */
-    @PostMapping("addUser")
+    @PostMapping("/azz/api/user/addUser")
     JsonResult<String> addUser(@RequestBody AddUserParam param);
     
     /**
@@ -84,7 +84,7 @@ public interface UserService {
      * @return
      * @author 黄智聪  2018年10月19日 下午6:02:11
      */
-    @PostMapping("editUser")
+    @PostMapping("/azz/api/user/editUser")
     JsonResult<String> editUser(@RequestBody EditUserParam param);
     
     /**
@@ -94,7 +94,7 @@ public interface UserService {
      * @return
      * @author 黄智聪  2018年10月20日 上午10:23:34
      */
-    @PostMapping("getUserList")
+    @PostMapping("/azz/api/user/getUserList")
     JsonResult<Pagination<UserInfo>> getUserList(@RequestBody SearchUserParam param);
     
     /**
@@ -104,7 +104,7 @@ public interface UserService {
      * @return
      * @author 黄智聪  2018年10月20日 上午10:31:52
      */
-    @PostMapping("enableOrDisableUser")
+    @PostMapping("/azz/api/user/enableOrDisableUser")
     JsonResult<String> enableOrDisableOrDelUser(@RequestBody EnableOrDisableOrDelUserParam param);
     
     /**
@@ -114,7 +114,7 @@ public interface UserService {
      * @return
      * @author 黄智聪  2018年10月20日 上午10:31:52
      */
-    @GetMapping("getUserInfo")
+    @GetMapping("/azz/api/user/getUserInfo")
     JsonResult<UserInfo> getUserInfo(@RequestParam("userCode") String userCode);
     
     

@@ -47,11 +47,13 @@ import com.azz.client.pojo.vo.UploadFileInfo;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.ShiroAuthErrorCode;
+import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.ClientConstants;
 import com.azz.core.constants.ClientConstants.QualificationApplyStatus;
 import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.UserConstants.UserStatus;
+import com.azz.core.exception.BaseException;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.model.Password;
@@ -224,10 +226,14 @@ public class ClientService {
 	    // 新名称为文件名 + 客户编码 + 文件后缀
 	    String newFileName = fileNameNoSufix + "_" + clientUserCode + "." + sufix;
 	    // 图片url
-	    String imgUrl = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
+	    JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
 		    filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_BUSINESS_IMAGE_TYPE);
-	    UploadFileInfo file = new UploadFileInfo(imgUrl, originalFileName);
-	    uploadTradingCertificateFileInfos.add(file);
+	    if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
+		UploadFileInfo file = new UploadFileInfo(jr.getData(), originalFileName);
+		uploadTradingCertificateFileInfos.add(file);
+	    }else {
+		throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE,"营业执照上传失败，请重试");
+	    }
 	}
 	
 	Date nowDate = new Date();

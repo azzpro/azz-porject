@@ -338,10 +338,14 @@ public class MerchantService {
 	    // 新名称为文件名 + 商户编码 + 文件后缀
 	    String newFileName = fileNameNoSufix + "_" + merchantCode + "." + sufix;
 	    // 图片url
-	    String imgUrl = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
+	    JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
 		    filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_TRADING_CERTIFICATE_IMAGE_TYPE);
-	    UploadFileInfo file = new UploadFileInfo(imgUrl, originalFileName);
-	    uploadBusinessLicenseFileInfos.add(file);
+	    if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
+		UploadFileInfo file = new UploadFileInfo(jr.getData(), originalFileName);
+		uploadBusinessLicenseFileInfos.add(file);
+	    }else {
+		throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE,"经营执照上传失败，请重试");
+	    }
 	}
 	// 营业执照最多3个
 	List<TradingCertificate> tradingCertificates = param.getTradingCertificates();
@@ -364,10 +368,14 @@ public class MerchantService {
 	    // 新名称为文件名 + 商户编码 + 文件后缀
 	    String newFileName = fileNameNoSufix + "_" + merchantCode + "." + sufix;
 	    // 图片url
-	    String imgUrl = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
+	    JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
 		    filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_BUSINESS_IMAGE_TYPE);
-	    UploadFileInfo file = new UploadFileInfo(imgUrl, originalFileName);
-	    uploadTradingCertificateFileInfos.add(file);
+	    if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
+		UploadFileInfo file = new UploadFileInfo(jr.getData(), originalFileName);
+		uploadBusinessLicenseFileInfos.add(file);
+	    }else {
+		throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE,"营业执照上传失败，请重试");
+	    }
 	}
 	
 	// 完善资料后，需插入申请记录

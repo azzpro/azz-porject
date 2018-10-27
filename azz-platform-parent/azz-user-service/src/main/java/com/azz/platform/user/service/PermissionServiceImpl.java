@@ -33,6 +33,7 @@ import com.azz.platform.user.pojo.bo.SetRolePermissionParam;
 import com.azz.platform.user.pojo.vo.Permission;
 import com.azz.platform.user.pojo.vo.RoleInfo;
 import com.azz.platform.user.pojo.vo.TreePermission;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
 
@@ -53,6 +54,9 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Autowired
     PlatformPermissionMapper platformPermissionMapper;
+    
+    @Autowired
+    private DbSequenceService dbSequenceService;
 
     @Override
     public JsonResult<List<TreePermission>> getTreePermissions() {
@@ -84,7 +88,7 @@ public class PermissionServiceImpl implements PermissionService {
 	Date nowDate = new Date();
 	String creator = param.getCreator();
 	PlatformRole roleRecord = PlatformRole.builder().createTime(nowDate).creator(creator).remark(param.getRemark())
-		.roleCode(System.currentTimeMillis() + "")// TODO
+		.roleCode(dbSequenceService.getPlatPowerNumber())
 		.roleName(param.getRoleName()).build();
 	platformRoleMapper.insertSelective(roleRecord);
 	return JsonResult.successJsonResult();

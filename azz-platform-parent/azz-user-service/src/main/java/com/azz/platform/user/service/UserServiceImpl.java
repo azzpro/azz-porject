@@ -43,6 +43,7 @@ import com.azz.platform.user.pojo.vo.LoginUserInfo;
 import com.azz.platform.user.pojo.vo.Menu;
 import com.azz.platform.user.pojo.vo.UserInfo;
 import com.azz.platform.user.pojo.vo.UserPermission;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.PasswordHelper;
 import com.azz.util.StringUtils;
@@ -76,6 +77,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PlatformUserRoleMapper platformUserRoleMapper;
+    
+    @Autowired
+    private DbSequenceService dbSequenceService;
 
     @Override
     public JsonResult<String> loginAuth(@RequestBody LoginParam param) {
@@ -207,7 +211,7 @@ public class UserServiceImpl implements UserService {
 	String creator = param.getCreator();
 	PlatformUser userRecord = PlatformUser.builder().createTime(nowDate).creator(creator).deptId(dept.getId())
 		.email(param.getEmail()).password(pwd.getPassword()).phoneNumber(param.getPhoneNumber())
-		.postName(param.getPostName()).userCode(System.currentTimeMillis() + "")// TODO
+		.postName(param.getPostName()).userCode(dbSequenceService.getPlatEmployeeNumber())
 		.userName(param.getUserName()).salt(pwd.getSalt()).build();
 	platformUserMapper.insertSelective(userRecord);
 	// 用户与角色绑定

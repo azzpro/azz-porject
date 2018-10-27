@@ -402,7 +402,7 @@ public class MerchantService {
 	if (!password.equals(confirmPassword)) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "密码与确认密码不一致");
 	}
-	MerchantDept dept = mrchantDeptMapper.selectByDeptCode(param.getMerchantCode(), param.getDeptCode());
+	MerchantDept dept = mrchantDeptMapper.selectByDeptCode(param.getDeptCode());
 	if (dept == null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "部门不存在");
 	}
@@ -455,7 +455,7 @@ public class MerchantService {
 	    // 生成盐值加密的密码
 	    pwd = PasswordHelper.encryptPasswordByModel(password);
 	}
-	MerchantDept dept = mrchantDeptMapper.selectByDeptCode(param.getMerchantCode(), param.getDeptCode());
+	MerchantDept dept = mrchantDeptMapper.selectByDeptCode(param.getDeptCode());
 	if (dept == null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "部门不存在");
 	}

@@ -110,11 +110,12 @@ public class DeptService {
         
         SearchMerchantDeptInfo smd = new SearchMerchantDeptInfo();
         smd.setMerchantId(param.getMerchantId());
-        smd.setDeptName(param.getDeptName());
+        smd.setDeptName(param.getDeptName().trim());
+        smd.setDeptCode(param.getDeptCode());
         MerchantDeptInfo mdi = merchantDeptMapper.selectByMerchantIdAndName(smd);
         
-        if(!mdi.getDeptName().equals(param.getDeptName())) {
-            if(ObjectUtils.isNotNull(mdi)) {
+        if(ObjectUtils.isNotNull(mdi)) {
+            if(!param.getDeptName().trim().equals(mdi.getDeptName())) {
                 throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_EXIST);
             }
         }

@@ -20,5 +20,7 @@ public class SearchMerchantDeptInfo {
     private Long merchantId;
     
     private String deptName;
+    
+    private String deptCode;
 }
 

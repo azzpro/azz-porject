@@ -81,14 +81,14 @@ public class MerchantDeptController {
     }
     
     @RequestMapping("/isEnableDept")
-    public JsonResult<String> isEnableDept(@RequestBody EditDeptIsEnableParam param){
+    public JsonResult<String> isEnableDept(EditDeptIsEnableParam param){
         param.setMerchantId(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantId());
         param.setModifier(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
         return deptService.isEnableDept(param);
     }
     
     @RequestMapping("/delDept")
-    public JsonResult<String> delDept(@RequestBody DelDeptParam param){
+    public JsonResult<String> delDept(DelDeptParam param){
         param.setMerchantId(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantId());
         param.setModifier(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
         return deptService.delDept(param);

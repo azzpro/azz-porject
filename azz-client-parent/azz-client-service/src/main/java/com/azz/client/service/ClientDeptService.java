@@ -1,0 +1,222 @@
+/*******************************************************************************
+ * Project Key : CPPII
+ * Create on 2018年10月24日 下午1:24:28
+ * Copyright (c) 2018. 爱智造.
+ * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
+ ******************************************************************************/
+ 
+package com.azz.client.service;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.azz.client.mapper.ClientApplyMapper;
+import com.azz.client.mapper.ClientDeptMapper;
+import com.azz.client.mapper.ClientPermissionMapper;
+import com.azz.client.mapper.ClientRoleMapper;
+import com.azz.client.mapper.ClientUserCompanyAddressMapper;
+import com.azz.client.mapper.ClientUserCompanyMapper;
+import com.azz.client.mapper.ClientUserMapper;
+import com.azz.client.mapper.ClientUserRoleMapper;
+import com.azz.client.pojo.ClientApply;
+import com.azz.client.pojo.ClientDept;
+import com.azz.client.pojo.ClientRole;
+import com.azz.client.pojo.ClientUser;
+import com.azz.client.pojo.ClientUserCompany;
+import com.azz.client.pojo.ClientUserCompanyAddress;
+import com.azz.client.pojo.ClientUserRole;
+import com.azz.client.pojo.bo.AddClientDeptParam;
+import com.azz.client.pojo.bo.AddClientUserParam;
+import com.azz.client.pojo.bo.Avatar;
+import com.azz.client.pojo.bo.ChangeAvatarParam;
+import com.azz.client.pojo.bo.ClientRegistParam;
+import com.azz.client.pojo.bo.DelDeptParam;
+import com.azz.client.pojo.bo.EditClientDeptParam;
+import com.azz.client.pojo.bo.EditClientUserParam;
+import com.azz.client.pojo.bo.EditDeptIsEnableParam;
+import com.azz.client.pojo.bo.EnterpriseAuthParam;
+import com.azz.client.pojo.bo.LoginParam;
+import com.azz.client.pojo.bo.RemoveClientUserParam;
+import com.azz.client.pojo.bo.SearchClientChildDeptParam;
+import com.azz.client.pojo.bo.SearchClientDeptInfoByCodeParam;
+import com.azz.client.pojo.bo.SearchClientDeptInfoParam;
+import com.azz.client.pojo.bo.SearchClientDeptIsExistParam;
+import com.azz.client.pojo.bo.SearchClientDeptParam;
+import com.azz.client.pojo.bo.SearchClientUserParam;
+import com.azz.client.pojo.bo.TradingCertificate;
+import com.azz.client.pojo.vo.ClientDeptList;
+import com.azz.client.pojo.vo.ClientUserInfo;
+import com.azz.client.pojo.vo.ClientUserPermission;
+import com.azz.client.pojo.vo.LoginClientUserInfo;
+import com.azz.client.pojo.vo.Menu;
+import com.azz.client.pojo.vo.UploadFileInfo;
+import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.ClientErrorCode;
+import com.azz.core.common.errorcode.JSR303ErrorCode;
+import com.azz.core.common.errorcode.PlatformUserErrorCode;
+import com.azz.core.common.errorcode.ShiroAuthErrorCode;
+import com.azz.core.common.errorcode.SystemErrorCode;
+import com.azz.core.common.page.Pagination;
+import com.azz.core.constants.ClientConstants;
+import com.azz.core.constants.ClientConstants.IsEnterpriseAuthenticator;
+import com.azz.core.constants.ClientConstants.QualificationApplyStatus;
+import com.azz.core.constants.FileConstants;
+import com.azz.core.constants.UserConstants.ClientType;
+import com.azz.core.exception.BaseException;
+import com.azz.core.exception.ShiroAuthException;
+import com.azz.exception.JSR303ValidationException;
+import com.azz.model.Password;
+import com.azz.system.api.SystemImageUploadService;
+import com.azz.system.sequence.api.RandomSequenceService;
+import com.azz.util.JSR303ValidateUtils;
+import com.azz.util.ObjectUtils;
+import com.azz.util.PasswordHelper;
+import com.azz.util.RandomStringUtils;
+import com.azz.util.StringUtils;
+import com.github.pagehelper.PageHelper;
+
+
+/**
+ * <P>TODO</P>
+ * @version 1.0
+ * @author 彭斌  2018年10月29日 上午11:29:39
+ */
+@Transactional(rollbackFor = Exception.class)
+@Service
+public class ClientDeptService {
+
+    
+    @Autowired
+    private ClientDeptMapper clientDeptMapper;
+    
+    @Autowired
+    private RandomSequenceService randomSequenceService;
+    
+    public JsonResult<List<ClientDeptList>> searchClientDeptList(@RequestBody SearchClientDeptParam param){
+        JSR303ValidateUtils.validate(param);
+        List<ClientDeptList> clientDeptList = clientDeptMapper.selectFirstLevelList(param);
+        return JsonResult.successJsonResult(clientDeptList);
+    }
+    
+    public JsonResult<List<ClientDeptList>> searchChildClientDeptList(@RequestBody SearchClientChildDeptParam param){
+        JSR303ValidateUtils.validate(param);
+        List<ClientDeptList> clientDeptList = clientDeptMapper.selectChildlList(param);
+        return JsonResult.successJsonResult(clientDeptList);
+    }
+    
+    public JsonResult<String> editDept(@RequestBody EditClientDeptParam param){
+        JSR303ValidateUtils.validate(param);
+        
+        ClientDept cdObj = clientDeptMapper.selectByDeptCode(param.getDeptCode());
+        if(ObjectUtils.isNull(cdObj)) {
+            throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_NO_EXIST);
+        }
+        ClientDept cdParentObj = clientDeptMapper.selectByDeptCode(param.getParentCode());
+        
+        if(ObjectUtils.isNull(cdParentObj)) {
+            throw new BaseException(ClientErrorCode.CLIENT_DEPT_PARENT_CODE_ERROR_NO_EXIST);
+        }
+        
+        cdObj.setDeptName(param.getDeptName());
+        cdObj.setLastModifyTime(new Date());
+        cdObj.setParentCode(param.getParentCode());
+        cdObj.setStatus(param.getStatus());
+        cdObj.setModifier(param.getModifier());
+        clientDeptMapper.updateByPrimaryKeySelective(cdObj);
+        return JsonResult.successJsonResult();
+    }
+    
+    public JsonResult<String> isEnableDept(@RequestBody EditDeptIsEnableParam param){
+        JSR303ValidateUtils.validate(param);
+        
+        ClientDept cdObj = clientDeptMapper.selectByDeptCode(param.getDeptCode());
+        if(ObjectUtils.isNull(cdObj)) {
+            throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_NO_EXIST);
+         }
+        if(param.getStatus().equals(ClientConstants.DeptStatus.DISABLE.getValue())) {
+            // 禁用
+            cdObj.setStatus(ClientConstants.DeptStatus.DISABLE.getValue());
+        } else if(param.getStatus().equals(ClientConstants.DeptStatus.ENABLE.getValue())) {
+            // 启用
+            cdObj.setStatus(ClientConstants.DeptStatus.ENABLE.getValue());
+        } else {
+            // TODO 异常信息 状态不存在
+        }
+        clientDeptMapper.updateByPrimaryKeySelective(cdObj);
+        return JsonResult.successJsonResult();
+    }
+    
+    public JsonResult<String> delDept(@RequestBody DelDeptParam param){
+        JSR303ValidateUtils.validate(param);
+        ClientDept cdObj = clientDeptMapper.selectByDeptCode(param.getDeptCode());
+        if(ObjectUtils.isNull(cdObj)) {
+            throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_NO_EXIST);
+         }
+        cdObj.setStatus(ClientConstants.DeptStatus.INVALID.getValue());
+        cdObj.setLastModifyTime(new Date());
+        cdObj.setModifier(param.getModifier());
+        clientDeptMapper.updateByPrimaryKeySelective(cdObj);
+        return JsonResult.successJsonResult();
+    }
+    
+    public JsonResult<String> addFirstLevelDept(@RequestBody AddClientDeptParam param){
+        // 部门信息非空校验
+        JSR303ValidateUtils.validate(param);
+        SearchClientDeptIsExistParam record = new SearchClientDeptIsExistParam();
+        record.setClientUserCompanyId(param.getClientUserCompanyId());
+        record.setDeptName(param.getDeptName());
+        int isExist = clientDeptMapper.selectFirstLevelExist(record);
+        if(isExist>0) {
+            throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_EXIST);
+        }
+        ClientDept clientDept = new ClientDept();
+        clientDept.setDeptCode(randomSequenceService.getDepartmentNumber());
+        clientDept.setClientUserCompanyId(param.getClientUserCompanyId());
+        clientDept.setCreateTime(new Date());
+        clientDept.setDeptName(param.getDeptName());
+        clientDept.setParentCode("0");
+        clientDept.setStatus(param.getStatus());
+        clientDeptMapper.insertSelective(clientDept);
+        
+        return JsonResult.successJsonResult();
+    }
+    
+    public JsonResult<String> addChildDept(@RequestBody AddClientDeptParam param){
+        // 部门信息非空校验
+        JSR303ValidateUtils.validate(param);
+        SearchClientDeptInfoParam record = new SearchClientDeptInfoParam();
+        record.setClientUserCompanyId(param.getClientUserCompanyId());
+        record.setDeptName(param.getDeptName());
+        ClientDept cdObj = clientDeptMapper.selectClientDeptInfoByName(record);
+        if(ObjectUtils.isNotNull(cdObj)) {
+            throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_EXIST);
+        }
+        
+        SearchClientDeptInfoByCodeParam deptByCodeObj = new SearchClientDeptInfoByCodeParam();
+        deptByCodeObj.setClientUserCompanyId(param.getClientUserCompanyId());
+        deptByCodeObj.setDeptCode(param.getParentCode());
+        ClientDept dept = clientDeptMapper.selectClientDeptInfoByCode(deptByCodeObj);
+        
+        if(ObjectUtils.isNotNull(dept)) {
+            throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_EXIST);
+        }
+        
+        ClientDept clientDept = new ClientDept();
+        clientDept.setDeptCode(randomSequenceService.getDepartmentNumber());
+        clientDept.setClientUserCompanyId(param.getClientUserCompanyId());
+        clientDept.setCreateTime(new Date());
+        clientDept.setDeptName(param.getDeptName());
+        clientDept.setParentCode(param.getParentCode());
+        clientDept.setStatus(param.getStatus());
+        clientDeptMapper.insertSelective(clientDept);
+        return JsonResult.successJsonResult();
+    }
+    
+}
+

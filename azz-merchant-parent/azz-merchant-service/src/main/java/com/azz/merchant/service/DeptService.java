@@ -112,8 +112,11 @@ public class DeptService {
         smd.setMerchantId(param.getMerchantId());
         smd.setDeptName(param.getDeptName());
         MerchantDeptInfo mdi = merchantDeptMapper.selectByMerchantIdAndName(smd);
-        if(ObjectUtils.isNull(mdi)) {
-            throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_EXIST);
+        
+        if(!mdi.getDeptName().equals(param.getDeptName())) {
+            if(ObjectUtils.isNotNull(mdi)) {
+                throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_EXIST);
+            }
         }
         
         MerchantDept md = merchantDeptMapper.selectByDeptAllInfo(smd);

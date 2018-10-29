@@ -21,6 +21,7 @@ import com.azz.merchant.pojo.bo.DelDeptParam;
 import com.azz.merchant.pojo.bo.EditDeptIsEnableParam;
 import com.azz.merchant.pojo.bo.EditMerchantDeptParam;
 import com.azz.merchant.pojo.bo.SearchMerchantChildDeptParam;
+import com.azz.merchant.pojo.bo.SearchMerchantDeptInfoParam;
 import com.azz.merchant.pojo.bo.SearchMerchantDeptListParam;
 import com.azz.merchant.pojo.vo.MerchantDeptList;
 
@@ -51,13 +52,13 @@ public interface DeptService {
     JsonResult<String> addChildDept(@RequestBody AddMerchantDeptParam param);
     
     /**
-     * <p>根据商户编码和部门名称获取部门详情</p>
+     * <p>根据商户编码和部门编码获取部门详情</p>
      * @param param
      * @return
      * @author 彭斌  2018年10月26日 下午7:00:50
      */
     @PostMapping("/azz/api/merchant/selectDeptInfo")
-    JsonResult<MerchantDept> getDeptInfo(@RequestParam("deptCode") String deptCode);
+    JsonResult<MerchantDept> getDeptInfo(SearchMerchantDeptInfoParam param);
     
     /**
      * <p>修改部门信息</p>

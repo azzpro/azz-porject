@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
@@ -28,6 +27,7 @@ import com.azz.merchant.pojo.bo.EditDeptIsEnableParam;
 import com.azz.merchant.pojo.bo.EditMerchantDeptParam;
 import com.azz.merchant.pojo.bo.SearchMerchantChildDeptParam;
 import com.azz.merchant.pojo.bo.SearchMerchantDeptInfo;
+import com.azz.merchant.pojo.bo.SearchMerchantDeptInfoParam;
 import com.azz.merchant.pojo.bo.SearchMerchantDeptListParam;
 import com.azz.merchant.pojo.vo.MerchantDeptInfo;
 import com.azz.merchant.pojo.vo.MerchantDeptList;
@@ -101,8 +101,8 @@ public class DeptService {
         return JsonResult.successJsonResult();
     }
     
-    JsonResult<MerchantDept> getDeptInfo(@RequestParam("deptCode") String deptCode){
-        return JsonResult.successJsonResult(merchantDeptMapper.selectByDeptCode(deptCode));
+    JsonResult<MerchantDept> getDeptInfo(SearchMerchantDeptInfoParam param){
+        return JsonResult.successJsonResult(merchantDeptMapper.selectByDeptCode(param));
     }
     
     JsonResult<String> editDept(@RequestBody EditMerchantDeptParam param){
@@ -140,8 +140,10 @@ public class DeptService {
     
     JsonResult<String> isEnableDept(@RequestBody EditDeptIsEnableParam param){
         JSR303ValidateUtils.validate(param);
-        
-        MerchantDept record = merchantDeptMapper.selectByDeptCode(param.getDeptCode());
+        SearchMerchantDeptInfoParam deptParam = new SearchMerchantDeptInfoParam();
+        deptParam.setMerchantId(param.getMerchantId());
+        deptParam.setDeptCode(param.getDeptCode());
+        MerchantDept record = merchantDeptMapper.selectByDeptCode(deptParam);
         if(ObjectUtils.isNull(record)) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
         }
@@ -162,7 +164,11 @@ public class DeptService {
     
     JsonResult<String> delDept(@RequestBody DelDeptParam param){
         JSR303ValidateUtils.validate(param);
-        MerchantDept record = merchantDeptMapper.selectByDeptCode(param.getDeptCode());
+        SearchMerchantDeptInfoParam deptParam = new SearchMerchantDeptInfoParam();
+        deptParam.setMerchantId(param.getMerchantId());
+        deptParam.setDeptCode(param.getDeptCode());
+        
+        MerchantDept record = merchantDeptMapper.selectByDeptCode(deptParam);
         record.setStatus(MerchantConstants.DeptStatus.INVALID.getValue());
         merchantDeptMapper.updateByPrimaryKeySelective(record);
         return JsonResult.successJsonResult();

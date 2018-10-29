@@ -19,8 +19,8 @@ import lombok.Data;
 @Data
 public class EditDeptIsEnableParam {
     
-    @NotNull(message = "商户编码不允许为空")
-    private String merchantCode;
+    @NotNull(message = "商户id不允许为空")
+    private Long merchantId;
     
     @NotNull(message = "状态不允许为空")
     private Integer status;

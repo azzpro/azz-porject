@@ -3,11 +3,11 @@ package com.azz.merchant.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import com.azz.merchant.pojo.MerchantDept;
 import com.azz.merchant.pojo.bo.SearchMerchantChildDeptParam;
 import com.azz.merchant.pojo.bo.SearchMerchantDeptInfo;
+import com.azz.merchant.pojo.bo.SearchMerchantDeptInfoParam;
 import com.azz.merchant.pojo.bo.SearchMerchantDeptListParam;
 import com.azz.merchant.pojo.vo.MerchantDeptInfo;
 import com.azz.merchant.pojo.vo.MerchantDeptList;
@@ -35,7 +35,7 @@ public interface MerchantDeptMapper {
     
     List<MerchantDeptList> selectChildDeptList(SearchMerchantChildDeptParam param);
     
-    MerchantDept selectByDeptCode(String deptCode);
+    MerchantDept selectByDeptCode(SearchMerchantDeptInfoParam param);
     
     
 }

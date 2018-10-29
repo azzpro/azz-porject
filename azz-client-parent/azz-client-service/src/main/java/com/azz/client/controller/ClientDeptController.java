@@ -19,7 +19,9 @@ import com.azz.client.pojo.bo.DelDeptParam;
 import com.azz.client.pojo.bo.EditClientDeptParam;
 import com.azz.client.pojo.bo.EditDeptIsEnableParam;
 import com.azz.client.pojo.bo.SearchClientChildDeptParam;
+import com.azz.client.pojo.bo.SearchClientDeptInfoByCodeParam;
 import com.azz.client.pojo.bo.SearchClientDeptParam;
+import com.azz.client.pojo.vo.ClientDeptInfo;
 import com.azz.client.pojo.vo.ClientDeptList;
 import com.azz.client.service.ClientDeptService;
 import com.azz.core.common.JsonResult;
@@ -114,5 +116,15 @@ public class ClientDeptController {
         return clientDeptService.delDept(param);
     }
     
+    /**
+     * <p>获取部门详情</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年10月29日 下午4:19:00
+     */
+    @RequestMapping("/getDeptInfo")
+    public JsonResult<ClientDeptInfo> getDeptInfo(@RequestBody SearchClientDeptInfoByCodeParam param){
+        return clientDeptService.getDeptInfo(param);
+    }
 }
 

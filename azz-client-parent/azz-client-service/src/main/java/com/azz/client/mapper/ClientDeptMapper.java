@@ -10,6 +10,7 @@ import com.azz.client.pojo.bo.SearchClientDeptInfoByCodeParam;
 import com.azz.client.pojo.bo.SearchClientDeptInfoParam;
 import com.azz.client.pojo.bo.SearchClientDeptIsExistParam;
 import com.azz.client.pojo.bo.SearchClientDeptParam;
+import com.azz.client.pojo.vo.ClientDeptInfo;
 import com.azz.client.pojo.vo.ClientDeptList;
 @Mapper
 public interface ClientDeptMapper {
@@ -38,4 +39,6 @@ public interface ClientDeptMapper {
     ClientDept selectClientDeptInfoByCode(SearchClientDeptInfoByCodeParam param);
     
     int selectClientUserIsExistDept(String deptCode);
+    
+    ClientDeptInfo selectClientByCode(SearchClientDeptInfoByCodeParam param);
 }

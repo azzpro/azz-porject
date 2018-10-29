@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.azz.client.mapper.ClientDeptMapper;
 import com.azz.client.pojo.ClientDept;
@@ -26,6 +27,7 @@ import com.azz.client.pojo.bo.SearchClientDeptInfoByCodeParam;
 import com.azz.client.pojo.bo.SearchClientDeptInfoParam;
 import com.azz.client.pojo.bo.SearchClientDeptIsExistParam;
 import com.azz.client.pojo.bo.SearchClientDeptParam;
+import com.azz.client.pojo.vo.ClientDeptInfo;
 import com.azz.client.pojo.vo.ClientDeptList;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.ClientErrorCode;
@@ -177,5 +179,10 @@ public class ClientDeptService {
         return JsonResult.successJsonResult();
     }
     
+    @RequestMapping("/azz/api/client/dept/getDeptInfo")
+    public JsonResult<ClientDeptInfo> getDeptInfo(@RequestBody SearchClientDeptInfoByCodeParam param){
+        ClientDeptInfo cdObj = clientDeptMapper.selectClientByCode(param);
+        return JsonResult.successJsonResult(cdObj);
+    }
 }
 

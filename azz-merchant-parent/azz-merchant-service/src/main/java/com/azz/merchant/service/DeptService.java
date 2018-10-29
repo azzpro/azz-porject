@@ -53,7 +53,7 @@ public class DeptService {
     @Autowired
     private DbSequenceService dbSequenceService;
     
-    JsonResult<String> addFirstLevelDept(@RequestBody AddMerchantDeptParam param){
+    public JsonResult<String> addFirstLevelDept(@RequestBody AddMerchantDeptParam param){
         // 部门信息非空校验
         JSR303ValidateUtils.validate(param);
         SearchMerchantDeptInfo smd = new SearchMerchantDeptInfo();
@@ -78,7 +78,7 @@ public class DeptService {
     }
 
     
-    JsonResult<String> addChildDept(@RequestBody AddMerchantDeptParam param){
+    public JsonResult<String> addChildDept(@RequestBody AddMerchantDeptParam param){
         // 部门信息非空校验
         JSR303ValidateUtils.validate(param);
         
@@ -101,7 +101,7 @@ public class DeptService {
         return JsonResult.successJsonResult();
     }
     
-    JsonResult<MerchantDept> getDeptInfo(SearchMerchantDeptInfoParam param){
+    public JsonResult<MerchantDept> getDeptInfo(SearchMerchantDeptInfoParam param){
         return JsonResult.successJsonResult(merchantDeptMapper.selectByDeptCode(param));
     }
     
@@ -126,19 +126,19 @@ public class DeptService {
         return JsonResult.successJsonResult();
     }
     
-    JsonResult<List<MerchantDeptList>> searchDeptList(@RequestBody SearchMerchantDeptListParam param){
+    public JsonResult<List<MerchantDeptList>> searchDeptList(@RequestBody SearchMerchantDeptListParam param){
         JSR303ValidateUtils.validate(param);
         List<MerchantDeptList> merchantDept = merchantDeptMapper.selectFirstDeptList(param);
         return JsonResult.successJsonResult(merchantDept);
     }
     
-    JsonResult<List<MerchantDeptList>> searchChildDeptList(@RequestBody SearchMerchantChildDeptParam param){
+    public JsonResult<List<MerchantDeptList>> searchChildDeptList(@RequestBody SearchMerchantChildDeptParam param){
         JSR303ValidateUtils.validate(param);
         List<MerchantDeptList> merchantChildDept = merchantDeptMapper.selectChildDeptList(param);
         return JsonResult.successJsonResult(merchantChildDept);
     }
     
-    JsonResult<String> isEnableDept(@RequestBody EditDeptIsEnableParam param){
+    public JsonResult<String> isEnableDept(@RequestBody EditDeptIsEnableParam param){
         JSR303ValidateUtils.validate(param);
         SearchMerchantDeptInfoParam deptParam = new SearchMerchantDeptInfoParam();
         deptParam.setMerchantId(param.getMerchantId());
@@ -162,7 +162,7 @@ public class DeptService {
         return JsonResult.successJsonResult();
     }
     
-    JsonResult<String> delDept(@RequestBody DelDeptParam param){
+    public JsonResult<String> delDept(@RequestBody DelDeptParam param){
         JSR303ValidateUtils.validate(param);
         SearchMerchantDeptInfoParam deptParam = new SearchMerchantDeptInfoParam();
         deptParam.setMerchantId(param.getMerchantId());

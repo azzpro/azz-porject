@@ -18,7 +18,7 @@ import com.alibaba.druid.support.http.WebStatFilter;
  * @author 刘建麟  2018年10月13日 上午11:08:19
  */
 @Component
-@ConditionalOnProperty(name = "spring.datasource.monitorConfig.available", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(name = "azz.datasource.monitorConfig.available", havingValue = "true", matchIfMissing = false)
 public class DruidMonitorConfiguration {
 
     @Autowired

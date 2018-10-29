@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * @author 刘建麟  2018年10月13日 上午11:08:57
  */
 @Component
-@ConfigurationProperties(prefix = "spring.datasource.monitorConfig")
+@ConfigurationProperties(prefix = "azz.datasource.monitorConfig")
 public class MonitorConfig {
 	
     private String available;

@@ -55,6 +55,7 @@ import com.azz.client.pojo.vo.LoginClientUserInfo;
 import com.azz.client.pojo.vo.Menu;
 import com.azz.client.pojo.vo.UploadFileInfo;
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.ClientErrorCode;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
 import com.azz.core.common.errorcode.ShiroAuthErrorCode;
@@ -536,12 +537,12 @@ public class ClientService {
         
         ClientDept cdObj = clientDeptMapper.selectByDeptCode(param.getDeptCode());
         if(ObjectUtils.isNull(cdObj)) {
-           // TODO 异常信息
+            throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_NO_EXIST);
         }
         ClientDept cdParentObj = clientDeptMapper.selectByDeptCode(param.getParentCode());
         
         if(ObjectUtils.isNull(cdParentObj)) {
-         // TODO 异常信息 父级编码不存在
+            throw new BaseException(ClientErrorCode.CLIENT_DEPT_PARENT_CODE_ERROR_NO_EXIST);
         }
         
         cdObj.setDeptName(param.getDeptName());
@@ -558,7 +559,7 @@ public class ClientService {
         
         ClientDept cdObj = clientDeptMapper.selectByDeptCode(param.getDeptCode());
         if(ObjectUtils.isNull(cdObj)) {
-            // TODO 异常信息
+            throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_NO_EXIST);
          }
         if(param.getStatus().equals(ClientConstants.DeptStatus.DISABLE.getValue())) {
             // 禁用
@@ -577,7 +578,7 @@ public class ClientService {
         JSR303ValidateUtils.validate(param);
         ClientDept cdObj = clientDeptMapper.selectByDeptCode(param.getDeptCode());
         if(ObjectUtils.isNull(cdObj)) {
-            // TODO 异常信息
+            throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_NO_EXIST);
          }
         cdObj.setStatus(ClientConstants.DeptStatus.INVALID.getValue());
         cdObj.setLastModifyTime(new Date());
@@ -594,7 +595,7 @@ public class ClientService {
         record.setDeptName(param.getDeptName());
         int isExist = clientDeptMapper.selectFirstLevelExist(record);
         if(isExist>0) {
-            throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_EXIST);
+            throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_EXIST);
         }
         ClientDept clientDept = new ClientDept();
         clientDept.setDeptCode(randomSequenceService.getDepartmentNumber());
@@ -616,15 +617,16 @@ public class ClientService {
         record.setDeptName(param.getDeptName());
         ClientDept cdObj = clientDeptMapper.selectClientDeptInfoByName(record);
         if(ObjectUtils.isNotNull(cdObj)) {
-            throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_EXIST);
+            throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_EXIST);
         }
+        
         SearchClientDeptInfoByCodeParam deptByCodeObj = new SearchClientDeptInfoByCodeParam();
         deptByCodeObj.setClientUserCompanyId(param.getClientUserCompanyId());
         deptByCodeObj.setDeptCode(param.getParentCode());
-        clientDeptMapper.selectClientDeptInfoByCode(deptByCodeObj);
+        ClientDept dept = clientDeptMapper.selectClientDeptInfoByCode(deptByCodeObj);
         
-        if(ObjectUtils.isNotNull(deptByCodeObj)) {
-            throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_EXIST);
+        if(ObjectUtils.isNotNull(dept)) {
+            throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_EXIST);
         }
         
         ClientDept clientDept = new ClientDept();

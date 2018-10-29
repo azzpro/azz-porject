@@ -22,6 +22,11 @@ public abstract class ClientConstants {
     public static final String LOGIN_CLIENT_USER = "loginClientUser";
     
     /**
+     * 客户头像文件大小限制
+     */
+    public static final long AVATAR_FILE_SIZE_LIMIT = 2 * 1024 * 1024L;
+    
+    /**
      * 营业执照文件大小限制
      */
     public static final long BUSINESS_LICENSE_FILE_SIZE_LIMIT = 20 * 1024 * 1024L;
@@ -54,6 +59,30 @@ public abstract class ClientConstants {
 	private String desc;
 
 	QualificationApplyStatus(int value, String desc) {
+	    this.value = value;
+	    this.desc = desc;
+	}
+    }
+    
+    /**
+     * 
+     * <P>资质申请状态（0：未申请 1：待审批 2：已通过 3：已拒绝）</P>
+     * @version 1.0
+     * @author 黄智聪  2018年10月23日 上午11:57:37
+     */
+    public enum IsEnterpriseAuthenticator {
+
+	YES(0, "否"),
+
+	NO(1, "是");
+	
+	@Getter
+	private int value;
+
+	@Getter
+	private String desc;
+
+	IsEnterpriseAuthenticator(int value, String desc) {
 	    this.value = value;
 	    this.desc = desc;
 	}

@@ -60,5 +60,30 @@ public abstract class UserConstants {
 	    return false;
 	}
     }
+    
+    /**
+     * 
+     * <P>企业类型</P>
+     * @version 1.0
+     * @author 黄智聪  2018年10月29日 上午10:16:24
+     */
+    public enum ClientType {
+
+	PERSON(0, "个人"),
+
+	ENTERPRISE(1, "企业");
+
+	@Getter
+	private int value;
+
+	@Getter
+	private String desc;
+
+	ClientType(int value, String desc) {
+	    this.value = value;
+	    this.desc = desc;
+	}
+
+    }
 
 }

@@ -417,6 +417,13 @@ public class MerchantService {
 	    merchantApplyRecord.setTradingCertificateThirdFileUrl(uploadTradingCertificateFileInfos.get(2).getImgUrl());
 	}
 	merchantApplyMapper.insertSelective(merchantApplyRecord);
+	
+	Merchant record = Merchant.builder()
+		.merchantCode(merchantCode)
+		.qualificationApplyStatus(QualificationApplyStatus.PENDING.getValue())
+		.build();
+	merchantMapper.updateByMerchantCode(record);
+	
 	return JsonResult.successJsonResult();
     }
     

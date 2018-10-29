@@ -5,6 +5,7 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="client_user_code" jdbcType="VARCHAR" property="clientUserCode" />
     <result column="client_user_name" jdbcType="VARCHAR" property="clientUserName" />
+    <result column="is_enterprise_authenticator" jdbcType="INTEGER" property="isEnterpriseAuthenticator" />
     <result column="client_dept_id" jdbcType="BIGINT" property="clientDeptId" />
     <result column="post_name" jdbcType="VARCHAR" property="postName" />
     <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
@@ -23,7 +24,7 @@
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, client_user_code, client_user_name, client_dept_id, post_name, phone_number, 
+    id, client_user_code, is_enterprise_authenticator, client_user_name, client_dept_id, post_name, phone_number, 
     password, salt, client_type, email, status, remark, client_avatar_url, login_errors_times, 
     login_ip, creator, create_time, last_modify_time, modifier
   </sql>
@@ -38,14 +39,14 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.azz.client.pojo.ClientUser">
-    insert into client_user (id, client_user_code, client_user_name, 
+    insert into client_user (id, client_user_code, is_enterprise_authenticator, client_user_name, 
       client_dept_id, post_name, phone_number, 
       password, salt, client_type, 
       email, status, remark, 
       client_avatar_url, login_errors_times, login_ip, 
       creator, create_time, last_modify_time, 
       modifier)
-    values (#{id,jdbcType=BIGINT}, #{clientUserCode,jdbcType=VARCHAR}, #{clientUserName,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{clientUserCode,jdbcType=VARCHAR}, #{isEnterpriseAuthenticator,jdbcType=INTEGER}, #{clientUserName,jdbcType=VARCHAR}, 
       #{clientDeptId,jdbcType=BIGINT}, #{postName,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, 
       #{password,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{clientType,jdbcType=INTEGER}, 
       #{email,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
@@ -61,6 +62,9 @@
       </if>
       <if test="clientUserCode != null">
         client_user_code,
+      </if>
+      <if test="isEnterpriseAuthenticator != null">
+        is_enterprise_authenticator,
       </if>
       <if test="clientUserName != null">
         client_user_name,
@@ -121,6 +125,9 @@
       <if test="clientUserCode != null">
         #{clientUserCode,jdbcType=VARCHAR},
       </if>
+      <if test="isEnterpriseAuthenticator != null">
+        #{isEnterpriseAuthenticator,jdbcType=INTEGER},
+      </if>
       <if test="clientUserName != null">
         #{clientUserName,jdbcType=VARCHAR},
       </if>
@@ -180,6 +187,9 @@
       <if test="clientUserCode != null">
         client_user_code = #{clientUserCode,jdbcType=VARCHAR},
       </if>
+      <if test="isEnterpriseAuthenticator != null">
+        is_enterprise_authenticator = #{isEnterpriseAuthenticator,jdbcType=INTEGER},
+      </if>
       <if test="clientUserName != null">
         client_user_name = #{clientUserName,jdbcType=VARCHAR},
       </if>
@@ -238,6 +248,9 @@
   <update id="updateByClientUserCode" parameterType="com.azz.client.pojo.ClientUser">
     update client_user
     <set>
+    	<if test="isEnterpriseAuthenticator != null">
+        is_enterprise_authenticator = #{isEnterpriseAuthenticator,jdbcType=INTEGER},
+      </if>
       <if test="clientUserName != null">
         client_user_name = #{clientUserName,jdbcType=VARCHAR},
       </if>
@@ -296,6 +309,7 @@
   <update id="updateByPrimaryKey" parameterType="com.azz.client.pojo.ClientUser">
     update client_user
     set client_user_code = #{clientUserCode,jdbcType=VARCHAR},
+     is_enterprise_authenticator = #{isEnterpriseAuthenticator,jdbcType=INTEGER},
       client_user_name = #{clientUserName,jdbcType=VARCHAR},
       client_dept_id = #{clientDeptId,jdbcType=BIGINT},
       post_name = #{postName,jdbcType=VARCHAR},

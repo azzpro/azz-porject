@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2018年10月20日 上午10:25:17
+ * Create on 2018年10月29日 上午10:35:38
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
@@ -9,25 +9,24 @@ package com.azz.client.pojo.bo;
 
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.NotBlank;
-
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
- * <P>启用或禁用用户的参数</P>
+ * <P>TODO</P>
  * @version 1.0
- * @author 黄智聪  2018年10月20日 上午10:25:17
+ * @author 黄智聪  2018年10月29日 上午10:35:38
  */
 @Data
-public class EnableOrDisableOrDelClientUserParam {
-
-    @NotBlank(message = "用户编码不允许为空")
+@NoArgsConstructor
+@AllArgsConstructor
+public class ChangeAvatarParam {
+    
     private String clientUserCode;
-    
-    @NotNull(message = "用户状态不允许为空")
-    private Integer status;
-    
-    private String modifier;
+
+    @NotNull(message = "请上传头像")
+    private Avatar avatar;
     
 }
 

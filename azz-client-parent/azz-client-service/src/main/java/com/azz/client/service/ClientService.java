@@ -32,11 +32,13 @@ import com.azz.client.pojo.ClientUserCompany;
 import com.azz.client.pojo.ClientUserCompanyAddress;
 import com.azz.client.pojo.ClientUserRole;
 import com.azz.client.pojo.bo.AddClientUserParam;
+import com.azz.client.pojo.bo.Avatar;
+import com.azz.client.pojo.bo.ChangeAvatarParam;
 import com.azz.client.pojo.bo.ClientRegistParam;
 import com.azz.client.pojo.bo.EditClientUserParam;
-import com.azz.client.pojo.bo.EnableOrDisableOrDelClientUserParam;
 import com.azz.client.pojo.bo.EnterpriseAuthParam;
 import com.azz.client.pojo.bo.LoginParam;
+import com.azz.client.pojo.bo.RemoveClientUserParam;
 import com.azz.client.pojo.bo.SearchClientUserParam;
 import com.azz.client.pojo.bo.TradingCertificate;
 import com.azz.client.pojo.vo.ClientUserInfo;
@@ -50,9 +52,10 @@ import com.azz.core.common.errorcode.ShiroAuthErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.ClientConstants;
+import com.azz.core.constants.ClientConstants.IsEnterpriseAuthenticator;
 import com.azz.core.constants.ClientConstants.QualificationApplyStatus;
 import com.azz.core.constants.FileConstants;
-import com.azz.core.constants.UserConstants.UserStatus;
+import com.azz.core.constants.UserConstants.ClientType;
 import com.azz.core.exception.BaseException;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.exception.JSR303ValidationException;
@@ -179,6 +182,7 @@ public class ClientService {
 		.password(pwd.getPassword())
 		.phoneNumber(phoneNumber)
 		.salt(pwd.getSalt())
+		.isEnterpriseAuthenticator(IsEnterpriseAuthenticator.YES.getValue())
 		.remark("来自客户注册")
 		.build();
 	clientUserMapper.insertSelective(clientUserRecord);
@@ -242,7 +246,7 @@ public class ClientService {
 		.companyCode(randomSequenceService.getCompanyNumber())
 		.companyName(param.getCompanyName())
 		.companyTel(param.getCompanyTel())
-		.creditCode(param.getCreditCode())
+		.creditCode(creditCode)
 		.createTime(nowDate)
 		.creator(clientUserCode)
 		.build();
@@ -338,6 +342,7 @@ public class ClientService {
 	ClientUser userRecord = ClientUser.builder().createTime(nowDate).creator(creator)
 		.clientDeptId(dept.getId()).email(param.getEmail()).password(pwd.getPassword()).phoneNumber(phoneNumber)
 		.postName(param.getPostName()).clientUserCode(clientUserCode)
+		
 		.clientUserName(param.getClientUserName()).salt(pwd.getSalt()).build();
 	clientUserMapper.insertSelective(userRecord);
 	
@@ -424,14 +429,21 @@ public class ClientService {
 	return JsonResult.successJsonResult(new Pagination<>(users));
     }
     
-    public JsonResult<String> enableOrDisableOrDelClientUser(@RequestBody EnableOrDisableOrDelClientUserParam param) {
+    public JsonResult<String> removeClientUser(@RequestBody RemoveClientUserParam param) {
 	// 参数校验
 	JSR303ValidateUtils.validate(param);
-	int status = param.getStatus();
-	this.checkStatusExist(status);
-	ClientUser clientUserRecord = ClientUser.builder().clientUserCode(param.getClientUserCode()).status(status)
-		.modifier(param.getModifier()).lastModifyTime(new Date()).build();
+	String clientUserCode = param.getClientUserCode();
+	// 1.将客户类型改为个人
+	ClientUser clientUserRecord = ClientUser.builder().clientUserCode(clientUserCode)
+		.clientType(ClientType.PERSON.getValue()).modifier(param.getModifier())
+		.lastModifyTime(new Date()).build();
 	clientUserMapper.updateByClientUserCode(clientUserRecord);
+	
+	ClientUser clientUser = clientUserMapper.getClientUserByClientUserCode(clientUserCode);
+	
+	// 2.删除客户与公司的绑定
+	clientUserCompanyMapper.deleteByPrimaryKey(clientUser.getId());
+	
 	return JsonResult.successJsonResult();
     }
     
@@ -446,20 +458,43 @@ public class ClientService {
 	return JsonResult.successJsonResult(userInfo);
     }
     
-    /**
-     * 
-     * <p>
-     * 校验是否存在该状态
-     * </p>
-     * 
-     * @param value
-     * @return
-     * @author 黄智聪 2018年10月20日 上午11:29:37
-     */
-    public void checkStatusExist(int value) {
-	if (!UserStatus.checkStatusExist(value)) {
-	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "用户状态不存在");
+    public JsonResult<String> changeAvatar(@RequestBody ChangeAvatarParam param) {
+	// 参数校验
+	JSR303ValidateUtils.validate(param);
+	Avatar avatar = param.getAvatar();
+	String clientUserCode = param.getClientUserCode();
+	
+	String originalFileName = avatar.getFileName();
+	if(StringUtils.isBlank(originalFileName)) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "头像文件名为空");
 	}
+	if(avatar.getFileSize() > ClientConstants.AVATAR_FILE_SIZE_LIMIT) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "头像文件大小不能超过2M");
+	}
+	String filedata = avatar.getFileBase64Str();
+	if(StringUtils.isBlank(filedata)) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "头像文件内容为空");
+	}
+	int dotIndex = originalFileName.lastIndexOf(".");
+	String fileNameNoSufix = originalFileName.substring(0, dotIndex);
+	String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
+	// 新名称为文件名 + 客户编码 + 文件后缀
+	String newFileName = fileNameNoSufix + "_" + clientUserCode + "." + sufix;
+	
+	// 图片url
+	JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
+		filedata, FileConstants.AZZ_CLIENT, FileConstants.AZZ_AVATAR_IMAGE_TYPE);
+	if(jr.getCode() != SystemErrorCode.SUCCESS.getCode()) {
+	    throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE,"头像上传失败，请重试");
+	}
+	
+	ClientUser clientUserRecord = ClientUser.builder()
+		.clientUserCode(clientUserCode)
+		.clientAvatarUrl(jr.getData())
+		.lastModifyTime(new Date()).build();
+	clientUserMapper.updateByClientUserCode(clientUserRecord);
+	return JsonResult.successJsonResult();
+	
     }
     
     // 发送短信通知成员 TODO

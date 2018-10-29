@@ -23,12 +23,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.azz.client.pojo.bo.AddClientUserParam;
+import com.azz.client.pojo.bo.Avatar;
+import com.azz.client.pojo.bo.ChangeAvatarParam;
+import com.azz.client.pojo.bo.ChangeAvatarWebParam;
 import com.azz.client.pojo.bo.ClientRegistParam;
 import com.azz.client.pojo.bo.EditClientUserParam;
-import com.azz.client.pojo.bo.EnableOrDisableOrDelClientUserParam;
 import com.azz.client.pojo.bo.EnterpriseAuthParam;
 import com.azz.client.pojo.bo.EnterpriseAuthWebParam;
 import com.azz.client.pojo.bo.LoginParam;
+import com.azz.client.pojo.bo.RemoveClientUserParam;
 import com.azz.client.pojo.bo.SearchClientUserParam;
 import com.azz.client.pojo.bo.TradingCertificate;
 import com.azz.client.pojo.vo.ClientUserInfo;
@@ -171,14 +174,14 @@ public class ClientController {
     
     /**
      * 
-     * <p>完善商户信息</p>
+     * <p>企业认证</p>
      * @param param
      * @return
      * @author 黄智聪  2018年10月23日 下午8:04:27
      * @throws IOException 
      */
     @RequestMapping(value = "/enterpriseAuth")
-    public JsonResult<String> completeClientInfo(EnterpriseAuthWebParam webParam) throws IOException {
+    public JsonResult<String> enterpriseAuth(EnterpriseAuthWebParam webParam) throws IOException {
 	JSR303ValidateUtils.validate(webParam);
 	EnterpriseAuthParam param = new EnterpriseAuthParam();
 	BeanUtils.copyProperties(webParam, param);
@@ -193,6 +196,13 @@ public class ClientController {
 	return clientService.enterpriseAuth(param);
     }
     
+    /**
+     * 
+     * <p>新增客户成员</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月29日 上午11:02:35
+     */
     @RequestMapping("/addClientUser")
     public JsonResult<String> addClientUser(AddClientUserParam param){
 	param.setClientUserCompanyId(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCompanyId());
@@ -200,25 +210,69 @@ public class ClientController {
 	return clientService.addClientUser(param);
     }
     
+    /**
+     * 
+     * <p>编辑客户成员</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月29日 上午11:02:48
+     */
     @RequestMapping("/editClientUser")
     public JsonResult<String> editClientUser(EditClientUserParam param) {
 	param.setModifier(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 	return clientService.editClientUser(param);
     }
     
+    /**
+     * 
+     * <p>查询客户成员列表</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月29日 上午11:02:58
+     */
     @RequestMapping("/getClientUserList")
     public JsonResult<Pagination<ClientUserInfo>> getClientUserList(SearchClientUserParam param) {
 	return clientService.getClientUserList(param);
     }
     
-    @RequestMapping("/editClientUserStatus")
-    public JsonResult<String> enableOrDisableOrDelClientUser(EnableOrDisableOrDelClientUserParam param) {
-	return clientService.enableOrDisableOrDelClientUser(param);
+    /**
+     * 
+     * <p>移除客户成员</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月29日 上午11:05:36
+     */
+    @RequestMapping("/removeClientUser")
+    public JsonResult<String> removeClientUser(RemoveClientUserParam param) {
+	return clientService.removeClientUser(param);
     }
     
+    /**
+     * 
+     * <p>查询客户成员详情</p>
+     * @param clientUserCode
+     * @return
+     * @author 黄智聪  2018年10月29日 上午11:05:52
+     */
     @RequestMapping("/getClientUserInfo")
     public JsonResult<ClientUserInfo> getClientUserInfo(String clientUserCode) {
 	return clientService.getClientUserInfo(clientUserCode);
+    }
+    
+    /**
+     * 
+     * <p>更换客户头像</p>
+     * @param webParam
+     * @return
+     * @throws IOException
+     * @author 黄智聪  2018年10月29日 上午11:06:01
+     */
+    @RequestMapping("/changeAvatar")
+    public JsonResult<String> changeAvatar(ChangeAvatarWebParam webParam) throws IOException {
+	JSR303ValidateUtils.validate(webParam);
+	MultipartFile avatarFile = webParam.getAvatarFile();
+	Avatar avatar = new Avatar(avatarFile.getOriginalFilename(), avatarFile.getSize(), Base64.encode(avatarFile.getBytes()));
+	return clientService.changeAvatar(new ChangeAvatarParam(webParam.getClientUserCode(), avatar));
     }
 
 }

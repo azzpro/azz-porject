@@ -7,15 +7,18 @@
  
 package com.azz.client.user.api;
 
+import java.io.IOException;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.client.pojo.bo.AddClientUserParam;
+import com.azz.client.pojo.bo.ChangeAvatarParam;
 import com.azz.client.pojo.bo.ClientRegistParam;
 import com.azz.client.pojo.bo.EditClientUserParam;
-import com.azz.client.pojo.bo.EnableOrDisableOrDelClientUserParam;
+import com.azz.client.pojo.bo.RemoveClientUserParam;
 import com.azz.client.pojo.bo.EnterpriseAuthParam;
 import com.azz.client.pojo.bo.LoginParam;
 import com.azz.client.pojo.bo.SearchClientUserParam;
@@ -33,36 +36,111 @@ import com.azz.core.common.page.Pagination;
 @FeignClient("azz-client-service")
 public interface ClientService {
 
+    /**
+     * 
+     * <p>登录认证</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月29日 上午11:07:16
+     */
     @RequestMapping("/azz/api/client/loginAuth")
-    public JsonResult<String> loginAuth(@RequestBody LoginParam param);
+    JsonResult<String> loginAuth(@RequestBody LoginParam param);
     
+    /**
+     * 
+     * <p>查询登录客户信息</p>
+     * @param phoneNumber
+     * @return
+     * @author 黄智聪  2018年10月29日 上午11:07:27
+     */
     @RequestMapping("/azz/api/client/getLoginClientUserInfoByPhoneNumber")
-    public JsonResult<LoginClientUserInfo> getLoginClientUserInfoByPhoneNumber(@RequestParam("phoneNumber")String phoneNumber);
+    JsonResult<LoginClientUserInfo> getLoginClientUserInfoByPhoneNumber(@RequestParam("phoneNumber")String phoneNumber);
     
     /*    
     @RequestMapping("/sendVerificationCode")
-    public JsonResult<Long> sendVerificationCode(String phoneNumber);
+    JsonResult<Long> sendVerificationCode(String phoneNumber);
     */
     
+    /**
+     * 
+     * <p>客户注册</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月29日 上午11:07:38
+     */
     @RequestMapping("/azz/api/client/clientRegist")
-    public JsonResult<String> clientRegist(@RequestBody ClientRegistParam param);
+    JsonResult<String> clientRegist(@RequestBody ClientRegistParam param);
     
+    /**
+     * 
+     * <p>企业认证</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月23日 下午8:04:27
+     * @throws IOException 
+     */
     @RequestMapping("/azz/api/client/enterpriseAuth")
-    public JsonResult<String> enterpriseAuth(@RequestBody EnterpriseAuthParam param);
+    JsonResult<String> enterpriseAuth(@RequestBody EnterpriseAuthParam param);
     
+    /**
+     * 
+     * <p>新增客户成员</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月29日 上午11:02:35
+     */
     @RequestMapping("/azz/api/client/addClientUser")
-    public JsonResult<String> addClientUser(@RequestBody AddClientUserParam param);
+    JsonResult<String> addClientUser(@RequestBody AddClientUserParam param);
     
+    /**
+     * 
+     * <p>编辑客户成员</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月29日 上午11:02:48
+     */
     @RequestMapping("/azz/api/client/editClientUser")
-    public JsonResult<String> editClientUser(@RequestBody EditClientUserParam param);
+    JsonResult<String> editClientUser(@RequestBody EditClientUserParam param);
     
+    /**
+     * 
+     * <p>查询客户成员列表</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月29日 上午11:02:58
+     */
     @RequestMapping("/azz/api/client/getClientUserList")
-    public JsonResult<Pagination<ClientUserInfo>> getClientUserList(@RequestBody SearchClientUserParam param);
+    JsonResult<Pagination<ClientUserInfo>> getClientUserList(@RequestBody SearchClientUserParam param);
     
-    @RequestMapping("/azz/api/client/enableOrDisableOrDelClientUser")
-    public JsonResult<String> enableOrDisableOrDelClientUser(@RequestBody EnableOrDisableOrDelClientUserParam param);
+    /**
+     * 
+     * <p>移除客户成员</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月29日 上午11:05:36
+     */
+    @RequestMapping("/azz/api/client/removeClientUser")
+    JsonResult<String> removeClientUser(@RequestBody RemoveClientUserParam param);
     
+    /**
+     * 
+     * <p>查询客户成员详情</p>
+     * @param clientUserCode
+     * @return
+     * @author 黄智聪  2018年10月29日 上午11:05:52
+     */
     @RequestMapping("/azz/api/client/getClientUserInfo")
-    public JsonResult<ClientUserInfo> getClientUserInfo(@RequestParam("clientUserCode") String clientUserCode);
+    JsonResult<ClientUserInfo> getClientUserInfo(@RequestParam("clientUserCode") String clientUserCode);
+    
+    /**
+     * 
+     * <p>更换客户头像</p>
+     * @param webParam
+     * @return
+     * @throws IOException
+     * @author 黄智聪  2018年10月29日 上午11:06:01
+     */
+    @RequestMapping("/azz/api/client/changeAvatar")
+    JsonResult<String> changeAvatar(@RequestBody ChangeAvatarParam param);
 }
 

@@ -497,6 +497,10 @@ public class ClientService {
 	
     }
     
+    public JsonResult<String> get(String clientUserCode){
+	return null;
+    }
+    
     // 发送短信通知成员 TODO
     private void sendPasswordMsg(String phoneNumber, String password) {
 	//您的企业将您添加为企业成员，初始密码“123456”，请登陆平台后及时修改。

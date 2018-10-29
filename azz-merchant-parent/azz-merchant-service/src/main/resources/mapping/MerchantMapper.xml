@@ -481,7 +481,7 @@
   <select id="getMerchantInfoByMerchantCode" parameterType="string" resultType="com.azz.merchant.pojo.vo.MerchantInfo">
     SELECT
 		m.merchant_code AS merchantCode,
-		m.`status` AS merchantStatus,
+		m.qualification_apply_status AS qualificationApplyStatus,
 		m.create_time AS createTime,
 		m.merchant_name AS merchantName,
 		m.legal_person_name AS legalPersonName,

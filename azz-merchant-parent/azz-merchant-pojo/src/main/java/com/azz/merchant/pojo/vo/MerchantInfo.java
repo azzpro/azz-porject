@@ -23,7 +23,7 @@ public class MerchantInfo {
 
     private String merchantCode;
     
-    private Integer merchantStatus;
+    private Integer qualificationApplyStatus;
     
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")
     private Date createTime;

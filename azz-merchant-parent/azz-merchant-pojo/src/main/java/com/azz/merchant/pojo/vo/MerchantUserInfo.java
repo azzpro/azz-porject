@@ -23,6 +23,8 @@ public class MerchantUserInfo {
     
     private String merchantUserCode;
     
+    private Long merchantId;
+    
     private String merchantCode;
     
     private String companyName;

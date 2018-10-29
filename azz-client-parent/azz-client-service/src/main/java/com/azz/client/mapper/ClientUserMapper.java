@@ -2,12 +2,12 @@ package com.azz.client.mapper;
 
 import java.util.List;
 
-
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.azz.client.pojo.ClientUser;
 import com.azz.client.pojo.bo.SearchClientUserParam;
+import com.azz.client.pojo.vo.ClientPersonalInfo;
 import com.azz.client.pojo.vo.ClientUserInfo;
 
 @Mapper
@@ -68,4 +68,13 @@ public interface ClientUserMapper {
      * @author 黄智聪  2018年10月20日 上午10:51:33
      */
     ClientUserInfo getClientUserInfoByClientUserCode(String clientUserCode);
+    
+    /**
+     * 
+     * <p>根据用户编码查询客户个人资料</p>
+     * @param userCode
+     * @return
+     * @author 黄智聪  2018年10月20日 上午10:51:33
+     */
+    ClientPersonalInfo getClientPersonalInfoByClientUserCode(String clientUserCode);
 }

@@ -430,6 +430,26 @@
 			</if>
   </select>
   
+  <select id="getClientPersonalInfoByClientUserCode" parameterType="string" resultType="com.azz.client.pojo.vo.ClientPersonalInfo">
+	SELECT
+		u.client_user_code AS clientUserCode,
+		u.client_user_name AS clientUserName,
+		u.phone_number AS phoneNumber,
+		u.email AS email,
+		r.role_name AS roleName,
+		d.dept_name AS deptName,
+		uc.company_name as companyName,
+		u.client_avatar_url AS avatarUrl
+	FROM
+		client_user u
+	LEFT JOIN client_dept d ON u.client_dept_id = d.id
+	LEFT JOIN client_user_role ur ON ur.client_user_id = u.id
+	LEFT JOIN client_role r ON ur.role_id = r.id
+	LEFT JOIN client_user_company uc ON u.client_user_code = uc.client_user_code
+	WHERE
+		u. STATUS != 0
+	AND u.client_user_code = #{clientUserCode}
+  </select>
   
   <select id="getClientUserInfoByClientUserCode" parameterType="string" resultType="com.azz.client.pojo.vo.ClientUserInfo">
 		  SELECT

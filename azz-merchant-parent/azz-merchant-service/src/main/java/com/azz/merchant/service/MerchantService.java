@@ -441,8 +441,14 @@ public class MerchantService {
 	}
 	SearchMerchantDeptInfoParam deptObj = new SearchMerchantDeptInfoParam();
 	deptObj.setDeptCode(param.getDeptCode());
-	// TODO deptObj.setMerchantId(param.getMerchantId());
-	MerchantDept dept = mrchantDeptMapper.selectByDeptCode(deptObj);
+	Merchant merchant = merchantMapper.getMerchantByMerchantCode(param.getMerchantCode());
+	if(merchant == null) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户不存在");
+	}
+	SearchMerchantDeptInfoParam deptParm = new SearchMerchantDeptInfoParam();
+	deptParm.setDeptCode(param.getDeptCode());
+	deptParm.setMerchantId(merchant.getId());
+	MerchantDept dept = mrchantDeptMapper.selectByDeptCode(deptParm);
 	if (dept == null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "部门不存在");
 	}
@@ -495,8 +501,15 @@ public class MerchantService {
 	    // 生成盐值加密的密码
 	    pwd = PasswordHelper.encryptPasswordByModel(password);
 	}
-	 MerchantDept dept =null;
-	// TODO MerchantDept dept = mrchantDeptMapper.selectByDeptCode(param.getDeptCode());
+	
+	Merchant merchant = merchantMapper.getMerchantByMerchantCode(param.getMerchantCode());
+	if(merchant == null) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户不存在");
+	}
+	SearchMerchantDeptInfoParam deptParm = new SearchMerchantDeptInfoParam();
+	deptParm.setDeptCode(param.getDeptCode());
+	deptParm.setMerchantId(merchant.getId());
+	MerchantDept dept = mrchantDeptMapper.selectByDeptCode(deptParm);
 	if (dept == null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "部门不存在");
 	}

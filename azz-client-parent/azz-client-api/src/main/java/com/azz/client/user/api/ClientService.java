@@ -21,6 +21,7 @@ import com.azz.client.pojo.bo.EnterpriseAuthParam;
 import com.azz.client.pojo.bo.LoginParam;
 import com.azz.client.pojo.bo.RemoveClientUserParam;
 import com.azz.client.pojo.bo.SearchClientUserParam;
+import com.azz.client.pojo.vo.ClientPersonalInfo;
 import com.azz.client.pojo.vo.ClientUserInfo;
 import com.azz.client.pojo.vo.LoginClientUserInfo;
 import com.azz.core.common.JsonResult;
@@ -130,6 +131,16 @@ public interface ClientService {
      */
     @RequestMapping("/azz/api/client/getClientUserInfo")
     JsonResult<ClientUserInfo> getClientUserInfo(@RequestParam("clientUserCode") String clientUserCode);
+    
+    /**
+     * 
+     * <p>查询客户个人资料</p>
+     * @param clientUserCode
+     * @return
+     * @author 黄智聪  2018年10月29日 下午3:30:34
+     */
+    @RequestMapping("/azz/api/client/getClientPersonalInfo")
+    JsonResult<ClientPersonalInfo> getClientPersonalInfo(@RequestParam("clientUserCode") String clientUserCode);
     
     /**
      * 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.azz.merchant.mapper.MerchantUserMapper">
-  <resultMap id="BaseResultMap" type="com.azz.merchant.pojo.MerchantUser">
+<mapper namespace="com.azz.platform.merchant.mapper.MerchantUserMapper">
+  <resultMap id="BaseResultMap" type="com.azz.platform.merchant.pojo.MerchantUser">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="merchant_user_code" jdbcType="VARCHAR" property="merchantUserCode" />
     <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode" />
@@ -38,7 +38,7 @@
     delete from merchant_user
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.azz.merchant.pojo.MerchantUser">
+  <insert id="insert" parameterType="com.azz.platform.merchant.pojo.MerchantUser">
     insert into merchant_user (id, merchant_user_code, merchant_code, 
       merchant_user_name, phone_number, password, 
       salt, email, dept_id, 
@@ -54,7 +54,7 @@
       #{lastModifyTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{isMerchantRegister,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.azz.merchant.pojo.MerchantUser">
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.azz.platform.merchant.pojo.MerchantUser">
     insert into merchant_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -175,7 +175,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.azz.merchant.pojo.MerchantUser">
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.platform.merchant.pojo.MerchantUser">
     update merchant_user
     <set>
       <if test="merchantUserCode != null">
@@ -236,7 +236,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
-  <update id="updateByMerchantUserCode" parameterType="com.azz.merchant.pojo.MerchantUser">
+  <update id="updateByMerchantUserCode" parameterType="com.azz.platform.merchant.pojo.MerchantUser">
     update merchant_user
     <set>
       <if test="merchantCode != null">
@@ -294,7 +294,7 @@
     where merchant_user_code = #{merchantUserCode}
   </update>
   
-  <update id="updateByPrimaryKey" parameterType="com.azz.merchant.pojo.MerchantUser">
+  <update id="updateByPrimaryKey" parameterType="com.azz.platform.merchant.pojo.MerchantUser">
     update merchant_user
     set merchant_user_code = #{merchantUserCode,jdbcType=VARCHAR},
       merchant_code = #{merchantCode,jdbcType=VARCHAR},
@@ -344,7 +344,7 @@
 	</if>
   </select>
   
-  <select id="getMerchantUserInfoByPhoneNumber" parameterType="string" resultType="com.azz.merchant.pojo.vo.MerchantUserInfo">
+  <select id="getMerchantUserInfoByPhoneNumber" parameterType="string" resultType="com.azz.platform.merchant.pojo.vo.MerchantUserInfo">
     SELECT
     	mu.merchant_user_code as merchantUserCode,
 		mu.merchant_code AS merchantCode,
@@ -381,7 +381,7 @@
     </if>
   </select>
   
-  <select id="getMerchantUserInfoBySearchParam" parameterType="com.azz.merchant.pojo.bo.SearchMerchantUserParam" resultType="com.azz.merchant.pojo.vo.MerchantUserInfo">
+  <select id="getMerchantUserInfoBySearchParam" parameterType="com.azz.platform.merchant.pojo.bo.SearchMerchantUserParam" resultType="com.azz.platform.merchant.pojo.vo.MerchantUserInfo">
     
 		SELECT
 	mu.merchant_code as merchantCode,
@@ -418,7 +418,7 @@
 		
   </select>
   
-  <select id="getMerchantUserInfoByMerchantUserCode" parameterType="string" resultType="com.azz.merchant.pojo.vo.MerchantUserInfo">
+  <select id="getMerchantUserInfoByMerchantUserCode" parameterType="string" resultType="com.azz.platform.merchant.pojo.vo.MerchantUserInfo">
 		  SELECT
 			mu.merchant_code as merchantCode,
 			mu.merchant_user_code AS merchantUserCode,
@@ -447,6 +447,15 @@
 		WHERE mu.status != 0
 		and mu.merchant_user_code = #{merchantUserCode}
 		
+  </select>
+  
+  <select id="getRegistMerchantUserByMerchantCode" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_user
+    where merchant_code = #{merchantCode}
+    and is_merchant_register = 1
+    and status != 0
   </select>
   
 </mapper>

@@ -21,6 +21,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Permission {
     
+    private Long permissionId;
+    
     private String permissionCode;
     
     private String parentPermissionCode;

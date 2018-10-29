@@ -183,7 +183,7 @@ public class ClientService {
 		.password(pwd.getPassword())
 		.phoneNumber(phoneNumber)
 		.salt(pwd.getSalt())
-		.isEnterpriseAuthenticator(IsEnterpriseAuthenticator.YES.getValue())
+		//.isEnterpriseAuthenticator(IsEnterpriseAuthenticator.YES.getValue())
 		.remark("来自客户注册")
 		.build();
 	clientUserMapper.insertSelective(clientUserRecord);
@@ -203,6 +203,11 @@ public class ClientService {
 	ClientUser user = clientUserMapper.getClientUserByClientUserCode(clientUserCode);
 	if(user == null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户不存在");
+	}
+	// 校验是否已经存在待审核的申请记录
+	int applyCount = clientApplyMapper.selectClientUserId(user.getId());
+	if(applyCount > 0) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "请勿重复申请");
 	}
 	String creditCode = param.getCreditCode();
 	int count = clientUserCompanyMapper.getCountByCrditCode(creditCode);
@@ -288,6 +293,14 @@ public class ClientService {
 		.createTime(nowDate)
 		.build();
 	clientUserCompanyAddressMapper.insertSelective(clientUserCompanyAddressRecord);
+	
+	ClientUser clientUserRecord = ClientUser.builder()
+	        .clientUserCode(clientUserCode)
+	        .isEnterpriseAuthenticator(IsEnterpriseAuthenticator.YES.getValue())
+	        .lastModifyTime(nowDate)
+	        .build();
+	clientUserMapper.updateByClientUserCode(clientUserRecord);
+	
 	
 	// 完善资料后，需插入申请记录
 	ClientApply clientApplyRecord = ClientApply.builder()

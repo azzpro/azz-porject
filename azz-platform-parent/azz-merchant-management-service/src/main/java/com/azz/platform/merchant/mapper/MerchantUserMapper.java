@@ -76,4 +76,13 @@ public interface MerchantUserMapper {
      * @author 黄智聪  2018年10月20日 上午10:51:33
      */
     MerchantUserInfo getMerchantUserInfoByMerchantUserCode(String merchantUserCode);
+    
+    /**
+     * 
+     * <p>根据商户编码查询商户注册人信息</p>
+     * @param merchantCode
+     * @return
+     * @author 彭斌  2018年10月30日 上午1:26:09
+     */
+    MerchantUser getRegistMerchantUserByMerchantCode(String merchantCode);
 }

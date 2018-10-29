@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.platform.merchant.pojo.Merchant;
 import com.azz.platform.merchant.pojo.bo.SearchMerchantListParam;

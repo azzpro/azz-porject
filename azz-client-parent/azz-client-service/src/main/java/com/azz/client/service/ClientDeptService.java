@@ -113,7 +113,8 @@ public class ClientDeptService {
             // 启用
             cdObj.setStatus(ClientConstants.DeptStatus.ENABLE.getValue());
         } else {
-            // TODO 异常信息 状态不存在
+            // 异常信息 状态不存在
+            throw new BaseException(ClientErrorCode.CLIENT_DEPT_STATUS_ERROR_NO_EXIST);
         }
         clientDeptMapper.updateByPrimaryKeySelective(cdObj);
         return JsonResult.successJsonResult();
@@ -190,7 +191,6 @@ public class ClientDeptService {
         return JsonResult.successJsonResult();
     }
     
-    @RequestMapping("/azz/api/client/dept/getDeptInfo")
     public JsonResult<ClientDeptInfo> getDeptInfo(@RequestBody SearchClientDeptInfoByCodeParam param){
         ClientDeptInfo cdObj = clientDeptMapper.selectClientByCode(param);
         return JsonResult.successJsonResult(cdObj);

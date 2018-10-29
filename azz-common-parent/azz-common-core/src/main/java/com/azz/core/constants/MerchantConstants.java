@@ -78,4 +78,21 @@ public abstract class MerchantConstants {
             this.desc = desc;
         }
         }
+    
+    public enum IsMerchantRegister{
+        N(0, "否"),
+
+        Y(1, "是");
+
+        @Getter
+        private int value;
+
+        @Getter
+        private String desc;
+
+        IsMerchantRegister(int value, String desc) {
+            this.value = value;
+            this.desc = desc;
+        }
+    }
 }

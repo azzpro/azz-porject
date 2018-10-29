@@ -38,7 +38,9 @@ public class MerchantUser implements Serializable {
      * @mbg.generated
      */
     private String merchantUserName;
-
+    
+    private Integer isMerchantRegister;
+    
     /**
      * 手机号码
      *
@@ -655,5 +657,13 @@ public class MerchantUser implements Serializable {
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
+    }
+
+    public Integer getIsMerchantRegister() {
+        return isMerchantRegister;
+    }
+
+    public void setIsMerchantRegister(Integer isMerchantRegister) {
+        this.isMerchantRegister = isMerchantRegister;
     }
 }

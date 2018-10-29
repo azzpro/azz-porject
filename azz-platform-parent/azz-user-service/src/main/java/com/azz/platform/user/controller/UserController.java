@@ -78,7 +78,7 @@ public class UserController {
      * @author 彭斌  2018年10月20日 下午2:53:27
      */
 	@RequestMapping(value="auditEnterprise",method=RequestMethod.POST)
-	JsonResult<String> auditEnterprise(AuditParam param){
+	JsonResult<String> auditEnterprise(@RequestBody AuditParam param){
 		return auditService.auditEnterprise(param);
 	}
 	
@@ -89,7 +89,7 @@ public class UserController {
      * @author 彭斌  2018年10月17日 下午2:50:20
      */
     @RequestMapping(value="addDeptInfo",method=RequestMethod.POST)
-    JsonResult<String> addDeptInfo(AddDeptParam param){
+    JsonResult<String> addDeptInfo(@RequestBody AddDeptParam param){
     	return deptService.addDeptInfo(param);
     }
     
@@ -100,7 +100,7 @@ public class UserController {
      * @author 彭斌  2018年10月17日 下午2:50:24
      */
     @RequestMapping(value="editDeptInfo",method=RequestMethod.POST)
-    JsonResult<String> editDeptInfo(EditDeptParam param){
+    JsonResult<String> editDeptInfo(@RequestBody EditDeptParam param){
     	return deptService.editDeptInfo(param);
     }
     
@@ -111,7 +111,7 @@ public class UserController {
      * @author 彭斌  2018年10月17日 下午2:50:28
      */
     @RequestMapping(value="getDeptList",method=RequestMethod.POST)
-    JsonResult<List<Dept>> getDeptList(SearchDeptParam param){
+    JsonResult<List<Dept>> getDeptList(@RequestBody SearchDeptParam param){
     	return deptService.getDeptList(param);
     }
     
@@ -191,7 +191,7 @@ public class UserController {
      * @author 黄智聪  2018年10月19日 下午6:00:58
      */
     @RequestMapping(value="addRole",method=RequestMethod.POST)
-    JsonResult<String> addRole( AddRoleParam param){
+    JsonResult<String> addRole(@RequestBody AddRoleParam param){
     	return permissionService.addRole(param);
     }
     
@@ -215,7 +215,7 @@ public class UserController {
      * @author 黄智聪  2018年10月19日 下午6:01:22
      */
     @RequestMapping(value="delRole",method=RequestMethod.POST)
-    JsonResult<String> delRole( DelRoleParam param){
+    JsonResult<String> delRole(@RequestBody DelRoleParam param){
     	return permissionService.delRole(param);
     }
     
@@ -227,7 +227,7 @@ public class UserController {
      * @author 黄智聪  2018年10月19日 下午6:01:30
      */
     @RequestMapping(value="getRoleList",method=RequestMethod.POST)
-    JsonResult<List<RoleInfo>> getRoleList( SearchRoleParam param){
+    JsonResult<List<RoleInfo>> getRoleList(@RequestBody SearchRoleParam param){
     	return permissionService.getRoleList(param);
     }
 
@@ -251,7 +251,7 @@ public class UserController {
      * @author 黄智聪  2018年10月22日 下午4:30:56
      */
     @RequestMapping(value="setRolePermissions",method=RequestMethod.POST)
-    JsonResult<String> setRolePermissions( SetRolePermissionParam param){
+    JsonResult<String> setRolePermissions(@RequestBody SetRolePermissionParam param){
     	return permissionService.setRolePermissions(param);
     }
     
@@ -266,7 +266,7 @@ public class UserController {
      * @author 黄智聪 2018年10月17日 下午3:06:35
      */
     @RequestMapping(value="loginAuth",method=RequestMethod.POST)
-    JsonResult<String> loginAuth( LoginParam param){
+    JsonResult<String> loginAuth(@RequestBody LoginParam param){
     	return userService.loginAuth(param);
     }
     
@@ -289,7 +289,7 @@ public class UserController {
      * @author 彭斌  2018年10月18日 下午2:30:58
      */
     @RequestMapping(value="editPassword",method=RequestMethod.POST)
-    JsonResult<String> editPassword( EditPasswordParam param){
+    JsonResult<String> editPassword(@RequestBody EditPasswordParam param){
     	return userService.editPassword(param);
     }
     
@@ -301,7 +301,7 @@ public class UserController {
      * @author 黄智聪  2018年10月19日 下午5:39:40
      */
     @RequestMapping(value="addUser",method=RequestMethod.POST)
-    JsonResult<String> addUser( AddUserParam param){
+    JsonResult<String> addUser(@RequestBody AddUserParam param){
     	return userService.addUser(param);
     }
     
@@ -313,7 +313,7 @@ public class UserController {
      * @author 黄智聪  2018年10月19日 下午6:02:11
      */
     @RequestMapping(value="editUser",method=RequestMethod.POST)
-    JsonResult<String> editUser( EditUserParam param){
+    JsonResult<String> editUser(@RequestBody EditUserParam param){
     	return userService.editUser(param);
     }
     
@@ -325,7 +325,7 @@ public class UserController {
      * @author 黄智聪  2018年10月20日 上午10:23:34
      */
     @RequestMapping(value="getUserList",method=RequestMethod.POST)
-    JsonResult<Pagination<UserInfo>> getUserList( SearchUserParam param){
+    JsonResult<Pagination<UserInfo>> getUserList(@RequestBody SearchUserParam param){
     	return userService.getUserList(param);
     }
     
@@ -337,7 +337,7 @@ public class UserController {
      * @author 黄智聪  2018年10月20日 上午10:31:52
      */
     @RequestMapping(value="enableOrDisableUser",method=RequestMethod.POST)
-    JsonResult<String> enableOrDisableOrDelUser( EnableOrDisableOrDelUserParam param){
+    JsonResult<String> enableOrDisableOrDelUser(@RequestBody EnableOrDisableOrDelUserParam param){
     	return userService.enableOrDisableOrDelUser(param);
     }
     

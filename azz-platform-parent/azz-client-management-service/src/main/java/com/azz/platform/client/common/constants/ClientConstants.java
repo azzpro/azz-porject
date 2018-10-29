@@ -17,6 +17,9 @@ import lombok.Getter;
  * @author 彭斌  2018年10月20日 下午3:43:30
  */
 public abstract class ClientConstants {
+    
+    public static final Long CLIENT_ADMIN_ROLE_ID = 1L;
+    
     // 0：已拒绝 1：待审核 2：已通过
     public enum EnterpriseType {
 	

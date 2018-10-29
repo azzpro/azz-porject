@@ -13,18 +13,21 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
 import com.azz.core.exception.BaseException;
+import com.azz.exception.JSR303ValidationException;
 import com.azz.platform.client.common.constants.AuditConstants;
 import com.azz.platform.client.common.constants.ClientConstants;
 import com.azz.platform.client.mapper.ClientApplyMapper;
 import com.azz.platform.client.mapper.ClientUserCompanyMapper;
 import com.azz.platform.client.mapper.ClientUserMapper;
+import com.azz.platform.client.mapper.ClientUserRoleMapper;
 import com.azz.platform.client.pojo.ClientApply;
 import com.azz.platform.client.pojo.ClientUser;
 import com.azz.platform.client.pojo.ClientUserCompany;
+import com.azz.platform.client.pojo.ClientUserRole;
 import com.azz.platform.client.pojo.bo.AuditParam;
-import com.azz.util.DateUtils;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
 
@@ -48,6 +51,9 @@ public class AuditService {
 
     @Autowired
     ClientUserCompanyMapper clientUserCompanyMapper;
+    
+    @Autowired
+    ClientUserRoleMapper clientUserRoleMapper;
     
     public JsonResult<String> auditClient(@RequestBody AuditParam param) {
         JSR303ValidateUtils.validate(param);
@@ -79,7 +85,7 @@ public class AuditService {
             clientApplyObj.setStatus(AuditConstants.AuditStatus.PASSED.getValue());
             
             // 更新客户为企业用户
-            clientUser.setStatus(ClientConstants.EnterpriseType.ENTERPRISE.getValue());
+            clientUser.setClientType(ClientConstants.EnterpriseType.ENTERPRISE.getValue());
             clientUserMapper.updateByPrimaryKeySelective(clientUser);
             
             // 申请基本信息和资质信息新增到公司表
@@ -95,6 +101,17 @@ public class AuditService {
             cucObj.setTradingCertificateThirdFileUrl(clientApplyObj.getTradingCertificateThirdFileUrl());
             cucObj.setLastModifyTime(new Date());
             clientUserCompanyMapper.updateByPrimaryKeySelective(cucObj);
+            
+            // 绑定管理员角色
+            ClientUser user = clientUserMapper.selectByClientUserCode(param.getClientUserCode());
+            if(user == null) {
+                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户不存在");
+            }
+            
+            ClientUserRole record = ClientUserRole.builder().clientUserId(user.getId())
+                    .createTime(new Date()).creator(param.getAuditor())
+                    .roleId(ClientConstants.CLIENT_ADMIN_ROLE_ID).build();
+            clientUserRoleMapper.insertSelective(record);
         } else if (param.getStatus().equals(AuditConstants.AuditStatus.REFUSED.getValue())) {
             // 审核拒绝
             clientApplyObj.setStatus(AuditConstants.AuditStatus.REFUSED.getValue());

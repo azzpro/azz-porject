@@ -19,6 +19,8 @@ public class ClientUser implements Serializable {
     private Long id;
 
     private String clientUserCode;
+    
+    private Integer isEnterpriseAuthenticator;
 
     /**
      * 客户成员姓名
@@ -586,7 +588,7 @@ public class ClientUser implements Serializable {
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
     }
-
+    
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -674,5 +676,17 @@ public class ClientUser implements Serializable {
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
+    }
+
+    public Integer getIsEnterpriseAuthenticator() {
+        return isEnterpriseAuthenticator;
+    }
+
+    public void setIsEnterpriseAuthenticator(Integer isEnterpriseAuthenticator) {
+        this.isEnterpriseAuthenticator = isEnterpriseAuthenticator;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
     }
 }

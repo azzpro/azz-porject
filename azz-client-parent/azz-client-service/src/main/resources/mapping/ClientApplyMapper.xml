@@ -256,7 +256,7 @@
     where client_user_id = #{clientUserId}
     order by create_time desc 
     limit 1
-    
+   </select>
   <select id="selectClientUserId" parameterType="java.lang.Long" resultType="int">
     select 
     count(1)

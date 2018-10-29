@@ -7,7 +7,6 @@
  
 package com.azz.client.service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,70 +15,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.azz.client.mapper.ClientApplyMapper;
 import com.azz.client.mapper.ClientDeptMapper;
-import com.azz.client.mapper.ClientPermissionMapper;
-import com.azz.client.mapper.ClientRoleMapper;
-import com.azz.client.mapper.ClientUserCompanyAddressMapper;
-import com.azz.client.mapper.ClientUserCompanyMapper;
-import com.azz.client.mapper.ClientUserMapper;
-import com.azz.client.mapper.ClientUserRoleMapper;
-import com.azz.client.pojo.ClientApply;
 import com.azz.client.pojo.ClientDept;
-import com.azz.client.pojo.ClientRole;
-import com.azz.client.pojo.ClientUser;
-import com.azz.client.pojo.ClientUserCompany;
-import com.azz.client.pojo.ClientUserCompanyAddress;
-import com.azz.client.pojo.ClientUserRole;
 import com.azz.client.pojo.bo.AddClientDeptParam;
-import com.azz.client.pojo.bo.AddClientUserParam;
-import com.azz.client.pojo.bo.Avatar;
-import com.azz.client.pojo.bo.ChangeAvatarParam;
-import com.azz.client.pojo.bo.ClientRegistParam;
 import com.azz.client.pojo.bo.DelDeptParam;
 import com.azz.client.pojo.bo.EditClientDeptParam;
-import com.azz.client.pojo.bo.EditClientUserParam;
 import com.azz.client.pojo.bo.EditDeptIsEnableParam;
-import com.azz.client.pojo.bo.EnterpriseAuthParam;
-import com.azz.client.pojo.bo.LoginParam;
-import com.azz.client.pojo.bo.RemoveClientUserParam;
 import com.azz.client.pojo.bo.SearchClientChildDeptParam;
 import com.azz.client.pojo.bo.SearchClientDeptInfoByCodeParam;
 import com.azz.client.pojo.bo.SearchClientDeptInfoParam;
 import com.azz.client.pojo.bo.SearchClientDeptIsExistParam;
 import com.azz.client.pojo.bo.SearchClientDeptParam;
-import com.azz.client.pojo.bo.SearchClientUserParam;
-import com.azz.client.pojo.bo.TradingCertificate;
 import com.azz.client.pojo.vo.ClientDeptList;
-import com.azz.client.pojo.vo.ClientUserInfo;
-import com.azz.client.pojo.vo.ClientUserPermission;
-import com.azz.client.pojo.vo.LoginClientUserInfo;
-import com.azz.client.pojo.vo.Menu;
-import com.azz.client.pojo.vo.UploadFileInfo;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.ClientErrorCode;
-import com.azz.core.common.errorcode.JSR303ErrorCode;
-import com.azz.core.common.errorcode.PlatformUserErrorCode;
-import com.azz.core.common.errorcode.ShiroAuthErrorCode;
-import com.azz.core.common.errorcode.SystemErrorCode;
-import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.ClientConstants;
-import com.azz.core.constants.ClientConstants.IsEnterpriseAuthenticator;
-import com.azz.core.constants.ClientConstants.QualificationApplyStatus;
-import com.azz.core.constants.FileConstants;
-import com.azz.core.constants.UserConstants.ClientType;
 import com.azz.core.exception.BaseException;
-import com.azz.core.exception.ShiroAuthException;
-import com.azz.exception.JSR303ValidationException;
-import com.azz.model.Password;
-import com.azz.system.api.SystemImageUploadService;
 import com.azz.system.sequence.api.RandomSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
-import com.azz.util.PasswordHelper;
-import com.azz.util.RandomStringUtils;
-import com.azz.util.StringUtils;
-import com.github.pagehelper.PageHelper;
 
 
 /**
@@ -158,6 +112,11 @@ public class ClientDeptService {
         if(ObjectUtils.isNull(cdObj)) {
             throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_NO_EXIST);
          }
+        // 校验该部门是否还存在用户信息
+        int isExist = clientDeptMapper.selectClientUserIsExistDept(param.getDeptCode());
+        if(isExist > 0) {
+            throw new BaseException(ClientErrorCode.CLIENT_DEPT_CLIENT_ERROR_EXIST);
+        }
         cdObj.setStatus(ClientConstants.DeptStatus.INVALID.getValue());
         cdObj.setLastModifyTime(new Date());
         cdObj.setModifier(param.getModifier());

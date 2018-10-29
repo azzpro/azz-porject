@@ -36,4 +36,6 @@ public interface ClientDeptMapper {
     ClientDept selectClientDeptInfoByName(SearchClientDeptInfoParam param);
     
     ClientDept selectClientDeptInfoByCode(SearchClientDeptInfoByCodeParam param);
+    
+    int selectClientUserIsExistDept(String deptCode);
 }

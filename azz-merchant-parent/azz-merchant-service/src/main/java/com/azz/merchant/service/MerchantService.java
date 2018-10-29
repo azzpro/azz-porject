@@ -285,12 +285,17 @@ public class MerchantService {
      */
     public JsonResult<String> completeMerchantInfo(@RequestBody CompleteMerchantInfoParam param) {
 	JSR303ValidateUtils.validate(param);
-	String creditCode = param.getCreditCode();
 	String merchantCode = param.getMerchantCode();
 	Merchant merchant = merchantMapper.getMerchantByMerchantCode(merchantCode);
 	if(merchant == null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户不存在");
 	}
+	int qualificationApplyStatus = merchant.getQualificationApplyStatus();
+	if (qualificationApplyStatus == QualificationApplyStatus.PASSED.getValue()
+		|| qualificationApplyStatus == QualificationApplyStatus.PENDING.getValue()) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户资质申请状态有误");
+	}
+	String creditCode = param.getCreditCode();
 	merchant = merchantMapper.getMerchantByCreditCode(creditCode);
 	if(merchant != null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "信用代码已存在");
@@ -339,7 +344,7 @@ public class MerchantService {
 	    String newFileName = fileNameNoSufix + "_" + merchantCode + "." + sufix;
 	    // 图片url
 	    JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
-		    filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_TRADING_CERTIFICATE_IMAGE_TYPE);
+		    filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_BUSINESS_IMAGE_TYPE);
 	    if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 		UploadFileInfo file = new UploadFileInfo(jr.getData(), originalFileName);
 		uploadBusinessLicenseFileInfos.add(file);
@@ -369,10 +374,10 @@ public class MerchantService {
 	    String newFileName = fileNameNoSufix + "_" + merchantCode + "." + sufix;
 	    // 图片url
 	    JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
-		    filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_BUSINESS_IMAGE_TYPE);
+		    filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_TRADING_CERTIFICATE_IMAGE_TYPE);
 	    if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 		UploadFileInfo file = new UploadFileInfo(jr.getData(), originalFileName);
-		uploadBusinessLicenseFileInfos.add(file);
+		uploadTradingCertificateFileInfos.add(file);
 	    }else {
 		throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE,"营业执照上传失败，请重试");
 	    }
@@ -380,8 +385,6 @@ public class MerchantService {
 	
 	// 完善资料后，需插入申请记录
 	MerchantApply merchantApplyRecord = MerchantApply.builder()
-		.businessLicenseFileName(uploadBusinessLicenseFileInfos.size() == 1 ? uploadBusinessLicenseFileInfos.get(0).getOriginalFileName() : null)
-		.businessLicenseFileUrl(uploadBusinessLicenseFileInfos.size() == 1 ? uploadBusinessLicenseFileInfos.get(0).getImgUrl() : null)
 		.companyName(param.getCompanyName())
 		.companyTel(param.getCompanyTel())
 		.creditCode(creditCode)
@@ -390,13 +393,29 @@ public class MerchantService {
 		.address(provinceName + cityName + areaName + detailAddress)
 		.merchantName(param.getMerchantName())
 		.status(QualificationApplyStatus.PENDING.getValue())
-		.tradingCertificateFirstFileName(uploadTradingCertificateFileInfos.size() == 1 ? uploadTradingCertificateFileInfos.get(0).getOriginalFileName() : null)
-		.tradingCertificateFirstFileUrl(uploadTradingCertificateFileInfos.size() == 1 ? uploadTradingCertificateFileInfos.get(0).getImgUrl() : null)
-		.tradingCertificateSecondFileName(uploadTradingCertificateFileInfos.size() == 2  ? uploadTradingCertificateFileInfos.get(1).getOriginalFileName() : null)
-		.tradingCertificateSecondFileUrl(uploadTradingCertificateFileInfos.size() == 2 ? uploadTradingCertificateFileInfos.get(1).getImgUrl() : null)
-		.tradingCertificateThirdFileName(uploadTradingCertificateFileInfos.size() == 3 ? uploadTradingCertificateFileInfos.get(2).getOriginalFileName() : null)
-		.tradingCertificateThirdFileUrl(uploadTradingCertificateFileInfos.size() == 3  ? uploadTradingCertificateFileInfos.get(2).getImgUrl() : null)
 		.build();
+	if(uploadBusinessLicenseFileInfos.size() == 1) {
+	    merchantApplyRecord.setBusinessLicenseFileName(uploadBusinessLicenseFileInfos.get(0).getOriginalFileName());
+	    merchantApplyRecord.setBusinessLicenseFileUrl(uploadBusinessLicenseFileInfos.get(0).getImgUrl());
+	}
+	if(uploadTradingCertificateFileInfos.size() == 1) {
+	    merchantApplyRecord.setTradingCertificateFirstFileName(uploadTradingCertificateFileInfos.get(0).getOriginalFileName());
+	    merchantApplyRecord.setTradingCertificateFirstFileUrl(uploadTradingCertificateFileInfos.get(0).getImgUrl());
+	}
+	if(uploadTradingCertificateFileInfos.size() == 2) {
+	    merchantApplyRecord.setTradingCertificateFirstFileName(uploadTradingCertificateFileInfos.get(0).getOriginalFileName());
+	    merchantApplyRecord.setTradingCertificateFirstFileUrl(uploadTradingCertificateFileInfos.get(0).getImgUrl());
+	    merchantApplyRecord.setTradingCertificateSecondFileName(uploadTradingCertificateFileInfos.get(1).getOriginalFileName());
+	    merchantApplyRecord.setTradingCertificateSecondFileUrl(uploadTradingCertificateFileInfos.get(1).getImgUrl());
+	}
+	if(uploadTradingCertificateFileInfos.size() == 3) {
+	    merchantApplyRecord.setTradingCertificateFirstFileName(uploadTradingCertificateFileInfos.get(0).getOriginalFileName());
+	    merchantApplyRecord.setTradingCertificateFirstFileUrl(uploadTradingCertificateFileInfos.get(0).getImgUrl());
+	    merchantApplyRecord.setTradingCertificateSecondFileName(uploadTradingCertificateFileInfos.get(1).getOriginalFileName());
+	    merchantApplyRecord.setTradingCertificateSecondFileUrl(uploadTradingCertificateFileInfos.get(1).getImgUrl());
+	    merchantApplyRecord.setTradingCertificateThirdFileName(uploadTradingCertificateFileInfos.get(2).getOriginalFileName());
+	    merchantApplyRecord.setTradingCertificateThirdFileUrl(uploadTradingCertificateFileInfos.get(2).getImgUrl());
+	}
 	merchantApplyMapper.insertSelective(merchantApplyRecord);
 	return JsonResult.successJsonResult();
     }

@@ -105,7 +105,7 @@ public class DeptService {
         return JsonResult.successJsonResult(merchantDeptMapper.selectByDeptCode(param));
     }
     
-    JsonResult<String> editDept(@RequestBody EditMerchantDeptParam param){
+    public JsonResult<String> editDept(@RequestBody EditMerchantDeptParam param){
         JSR303ValidateUtils.validate(param);
         
         SearchMerchantDeptInfo smd = new SearchMerchantDeptInfo();

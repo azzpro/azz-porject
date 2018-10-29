@@ -171,4 +171,62 @@
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="selectFirstLevelList" parameterType="com.azz.client.pojo.bo.SearchClientDeptParam" resultType="com.azz.client.pojo.vo.ClientDeptList">
+  	SELECT
+			cd.dept_name AS deptName,
+			cd.dept_code AS deptCode,
+			cd.parent_code AS parentCode,			
+		 	cd.`status` AS status,
+			cd.creator AS creator,
+			cd.create_time AS createTime
+	FROM client_dept cd 
+	WHERE
+	 cd.client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT} AND cd.parent_code = '0' AND (cd.status = 1 OR cd.status = 2) 
+	  <if test="deptNameCode != null and deptNameCode!='' "> 
+			AND cd.dept_name LIKE CONCAT('%',#{deptNameCode},'%') OR cd.dept_code = #{deptNameCode}
+	  </if>
+	ORDER BY cd.create_time DESC
+  </select>
+  
+  <select id="selectChildlList" parameterType="com.azz.client.pojo.bo.SearchClientChildDeptParam" resultType="com.azz.client.pojo.vo.ClientDeptList">
+  	SELECT
+			cd.dept_name AS deptName,
+			cd.dept_code AS deptCode,
+			cd.parent_code AS parentCode,			
+		 	cd.`status` AS status,
+			cd.creator AS creator,
+			cd.create_time AS createTime
+	FROM client_dept cd 
+	WHERE
+	 cd.client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT} AND cd.parent_code = #{parentCode} AND (cd.status = 1 OR cd.status = 2) 
+	ORDER BY cd.create_time DESC
+  </select>
+  
+  <select id="selectFirstLevelExist" parameterType="com.azz.client.pojo.bo.SearchClientDeptIsExistParam" resultType="int">
+  	select 
+    count(1)
+    from client_dept
+    where client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT} 
+    and dept_name = #{deptName,jdbcType=VARCHAR}
+    and parent_code = 0
+  </select>
+  
+  <select id="selectClientDeptInfoByName" parameterType="com.azz.client.pojo.bo.SearchClientDeptInfoParam" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from client_dept
+    where client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT} 
+    and dept_name = #{deptName,jdbcType=VARCHAR} 
+    and (cd.status = 1 OR cd.status = 2)
+  </select>
+  
+  <select id="selectClientDeptInfoByCode" parameterType="com.azz.client.pojo.bo.SearchClientDeptInfoByCodeParam" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from client_dept
+    where client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT} 
+    and dept_code = #{deptCode,jdbcType=VARCHAR} 
+    and (cd.status = 1 OR cd.status = 2)
+  </select>
 </mapper>

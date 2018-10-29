@@ -6,8 +6,8 @@
  ******************************************************************************/
  
 package com.azz.client.user.api;
-
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,11 +17,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.azz.client.pojo.bo.AddClientUserParam;
 import com.azz.client.pojo.bo.ChangeAvatarParam;
 import com.azz.client.pojo.bo.ClientRegistParam;
+import com.azz.client.pojo.bo.DelDeptParam;
+import com.azz.client.pojo.bo.EditClientDeptParam;
 import com.azz.client.pojo.bo.EditClientUserParam;
-import com.azz.client.pojo.bo.RemoveClientUserParam;
+import com.azz.client.pojo.bo.EditDeptIsEnableParam;
 import com.azz.client.pojo.bo.EnterpriseAuthParam;
 import com.azz.client.pojo.bo.LoginParam;
+import com.azz.client.pojo.bo.RemoveClientUserParam;
+import com.azz.client.pojo.bo.SearchClientChildDeptParam;
+import com.azz.client.pojo.bo.SearchClientDeptParam;
 import com.azz.client.pojo.bo.SearchClientUserParam;
+import com.azz.client.pojo.vo.ClientDeptList;
 import com.azz.client.pojo.vo.ClientUserInfo;
 import com.azz.client.pojo.vo.LoginClientUserInfo;
 import com.azz.core.common.JsonResult;
@@ -142,5 +148,20 @@ public interface ClientService {
      */
     @RequestMapping("/azz/api/client/changeAvatar")
     JsonResult<String> changeAvatar(@RequestBody ChangeAvatarParam param);
+
+    @RequestMapping("/azz/api/client/searchClientDeptList")
+    public JsonResult<List<ClientDeptList>> searchClientDeptList(@RequestBody SearchClientDeptParam param);
+    
+    @RequestMapping("/azz/api/client/searchChildClientDeptList")
+    public JsonResult<List<ClientDeptList>> searchChildClientDeptList(@RequestBody SearchClientChildDeptParam param);
+    
+    @RequestMapping("/azz/api/client/editDept")
+    public JsonResult<String> editDept(@RequestBody EditClientDeptParam param);
+    
+    @RequestMapping("/azz/api/client/isEnableDept")
+    public JsonResult<String> isEnableDept(@RequestBody EditDeptIsEnableParam param);
+    
+    @RequestMapping("/azz/api/client/delDept")
+    public JsonResult<String> delDept(@RequestBody DelDeptParam param);
 }
 

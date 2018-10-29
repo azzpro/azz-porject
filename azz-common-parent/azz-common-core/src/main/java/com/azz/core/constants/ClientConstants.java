@@ -44,13 +44,13 @@ public abstract class ClientConstants {
      */
     public enum QualificationApplyStatus {
 
-	NOT_APPLY(0, "未申请"),
+	REFUSED(0, "已拒绝"),
 
 	PENDING(1, "待审批"),
 	
 	PASSED(2, "已通过"),
-
-	REFUSED(3, "已拒绝");
+	
+	NOT_APPLY(3, "已拒绝");
 
 	@Getter
 	private int value;
@@ -66,15 +66,15 @@ public abstract class ClientConstants {
     
     /**
      * 
-     * <P>资质申请状态（0：未申请 1：待审批 2：已通过 3：已拒绝）</P>
+     * <P>是否为企业认证者</P>
      * @version 1.0
-     * @author 黄智聪  2018年10月23日 上午11:57:37
+     * @author 黄智聪  2018年10月29日 下午10:11:19
      */
     public enum IsEnterpriseAuthenticator {
 
-	YES(0, "否"),
+	YES(1, "是"),
 
-	NO(1, "是");
+	NO(0, "否");
 	
 	@Getter
 	private int value;

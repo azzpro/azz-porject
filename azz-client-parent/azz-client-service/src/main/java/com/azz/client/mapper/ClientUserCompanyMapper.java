@@ -6,7 +6,9 @@ import com.azz.client.pojo.ClientUserCompany;
 @Mapper
 public interface ClientUserCompanyMapper {
     int deleteByPrimaryKey(Long id);
-
+    
+    int deleteByClientUserCode(String clientUserCode);
+    
     int insert(ClientUserCompany record);
 
     int insertSelective(ClientUserCompany record);

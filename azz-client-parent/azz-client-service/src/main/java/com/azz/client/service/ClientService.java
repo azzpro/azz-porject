@@ -41,6 +41,7 @@ import com.azz.client.pojo.bo.LoginParam;
 import com.azz.client.pojo.bo.RemoveClientUserParam;
 import com.azz.client.pojo.bo.SearchClientUserParam;
 import com.azz.client.pojo.bo.TradingCertificate;
+import com.azz.client.pojo.vo.ClientCompanyInfo;
 import com.azz.client.pojo.vo.ClientPersonalInfo;
 import com.azz.client.pojo.vo.ClientUserInfo;
 import com.azz.client.pojo.vo.ClientUserPermission;
@@ -109,7 +110,6 @@ public class ClientService {
     @Autowired
     private RandomSequenceService randomSequenceService;
     
-    
     /**
      * 
      * <p>客户登录认证</p>
@@ -141,6 +141,14 @@ public class ClientService {
     public JsonResult<LoginClientUserInfo> getLoginClientUserInfoByPhoneNumber(String phoneNumber){
 	LoginClientUserInfo info = new LoginClientUserInfo();
 	ClientUserInfo clientUserInfo = clientUserMapper.getClientUserInfoByPhoneNumber(phoneNumber);
+	ClientUser user = clientUserMapper.getClientUserByClientUserCode(clientUserInfo.getClientUserCode());
+	Long clientUserId = user.getId();
+	ClientApply applyRecord = clientApplyMapper.selectLastestApplyRecordByClientUserId(clientUserId);
+	if(applyRecord == null) {
+	    clientUserInfo.setQualificationApplyStatus(QualificationApplyStatus.NOT_APPLY.getValue()); 
+	}else {
+	    clientUserInfo.setQualificationApplyStatus(applyRecord.getStatus()); 
+	}
 	Long clientUserCompanyId = clientUserInfo.getClientUserCompanyId();
 	List<ClientUserPermission> clientUserPermissions = clientPermissionMapper.getClientUserPermissionInfoByPhoneNumber(clientUserCompanyId, phoneNumber);
 	info.setClientUserInfo(clientUserInfo);
@@ -185,6 +193,7 @@ public class ClientService {
 		.salt(pwd.getSalt())
 		.isEnterpriseAuthenticator(IsEnterpriseAuthenticator.YES.getValue())
 		.remark("来自客户注册")
+		.creator(clientUserCode)
 		.build();
 	clientUserMapper.insertSelective(clientUserRecord);
 	return JsonResult.successJsonResult();
@@ -440,10 +449,8 @@ public class ClientService {
 		.lastModifyTime(new Date()).build();
 	clientUserMapper.updateByClientUserCode(clientUserRecord);
 	
-	ClientUser clientUser = clientUserMapper.getClientUserByClientUserCode(clientUserCode);
-	
 	// 2.删除客户与公司的绑定
-	clientUserCompanyMapper.deleteByPrimaryKey(clientUser.getId());
+	clientUserCompanyMapper.deleteByClientUserCode(clientUserCode);
 	
 	return JsonResult.successJsonResult();
     }
@@ -502,6 +509,15 @@ public class ClientService {
 	ClientPersonalInfo info = clientUserMapper.getClientPersonalInfoByClientUserCode(clientUserCode);
 	if(info == null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户成员信息不存在");
+	}
+	return JsonResult.successJsonResult(info);
+    }
+    
+    
+    public JsonResult<ClientCompanyInfo> getClientCompanyInfo(String clientUserCode) {
+	ClientCompanyInfo info = clientUserMapper.getClientCompanyInfoByClientUserCode(clientUserCode);
+	if(info == null) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户企业信息不存在");
 	}
 	return JsonResult.successJsonResult(info);
     }

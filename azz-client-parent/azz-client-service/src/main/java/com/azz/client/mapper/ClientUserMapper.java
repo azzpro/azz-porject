@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.azz.client.pojo.ClientUser;
 import com.azz.client.pojo.bo.SearchClientUserParam;
+import com.azz.client.pojo.vo.ClientCompanyInfo;
 import com.azz.client.pojo.vo.ClientPersonalInfo;
 import com.azz.client.pojo.vo.ClientUserInfo;
 
@@ -63,7 +64,7 @@ public interface ClientUserMapper {
     /**
      * 
      * <p>根据用户编码查询用户信息</p>
-     * @param userCode
+     * @param clientUserCode
      * @return
      * @author 黄智聪  2018年10月20日 上午10:51:33
      */
@@ -72,9 +73,18 @@ public interface ClientUserMapper {
     /**
      * 
      * <p>根据用户编码查询客户个人资料</p>
-     * @param userCode
+     * @param clientUserCode
      * @return
      * @author 黄智聪  2018年10月20日 上午10:51:33
      */
     ClientPersonalInfo getClientPersonalInfoByClientUserCode(String clientUserCode);
+    
+    /**
+     * 
+     * <p>根据用户编码查询公司信息</p>
+     * @param clientUserCode
+     * @return
+     * @author 黄智聪  2018年10月30日 上午2:46:06
+     */
+    ClientCompanyInfo getClientCompanyInfoByClientUserCode(String clientUserCode);
 }

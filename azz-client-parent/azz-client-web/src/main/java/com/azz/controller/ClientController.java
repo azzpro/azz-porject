@@ -19,6 +19,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +35,7 @@ import com.azz.client.pojo.bo.LoginParam;
 import com.azz.client.pojo.bo.RemoveClientUserParam;
 import com.azz.client.pojo.bo.SearchClientUserParam;
 import com.azz.client.pojo.bo.TradingCertificate;
+import com.azz.client.pojo.vo.ClientCompanyInfo;
 import com.azz.client.pojo.vo.ClientPersonalInfo;
 import com.azz.client.pojo.vo.ClientUserInfo;
 import com.azz.client.pojo.vo.LoginClientUserInfo;
@@ -286,6 +288,18 @@ public class ClientController {
 	MultipartFile avatarFile = webParam.getAvatarFile();
 	Avatar avatar = new Avatar(avatarFile.getOriginalFilename(), avatarFile.getSize(), Base64.encode(avatarFile.getBytes()));
 	return clientService.changeAvatar(new ChangeAvatarParam(webParam.getClientUserCode(), avatar));
+    }
+    
+    /**
+     * 
+     * <p>查询公司资料信息</p>
+     * @param clientUserCode
+     * @return
+     * @author 黄智聪  2018年10月30日 上午2:43:19
+     */
+    @RequestMapping("/getClientCompanyInfo")
+    public JsonResult<ClientCompanyInfo> getClientCompanyInfo(@RequestParam("clientUserCode") String clientUserCode) {
+	return clientService.getClientCompanyInfo(clientUserCode);
     }
 
 }

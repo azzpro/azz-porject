@@ -36,6 +36,10 @@
     delete from client_user_company
     where id = #{id,jdbcType=BIGINT}
   </delete>
+  <delete id="deleteByClientUserCode" parameterType="java.lang.String">
+    delete from client_user_company
+    where client_user_code = #{clientUserCode}
+  </delete>
   <insert id="insert" parameterType="com.azz.client.pojo.ClientUserCompany">
     insert into client_user_company (id, company_code, client_user_code, company_name, 
       credit_code, company_tel, trading_certificate_first_file_name, 

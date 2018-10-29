@@ -19,19 +19,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @FeignClient("azz-sequence-service")
 public interface RandomSequenceService {
 
-	@RequestMapping(value="getClientCustomerNumber",method=RequestMethod.GET)
+	@RequestMapping(value="/azz/api/sequence/getClientCustomerNumber",method=RequestMethod.GET)
 	String getClientNumber();
 	
-	@RequestMapping(value="getClientCompanyNumber",method=RequestMethod.GET)
+	@RequestMapping(value="/azz/api/sequence/getClientCompanyNumber",method=RequestMethod.GET)
 	String getCompanyNumber();
 	
-	@RequestMapping(value="getClientEmployeeNumber",method=RequestMethod.GET)
+	@RequestMapping(value="/azz/api/sequence/getClientEmployeeNumber",method=RequestMethod.GET)
 	String getEmployeeNumber();
 	
-	@RequestMapping(value="getClientDepartmentNumber",method=RequestMethod.GET)
+	@RequestMapping(value="/azz/api/sequence/getClientDepartmentNumber",method=RequestMethod.GET)
 	String getDepartmentNumber();
 	
-	@RequestMapping(value="getClientPowerNumber",method=RequestMethod.GET)
+	@RequestMapping(value="/azz/api/sequence/getClientPowerNumber",method=RequestMethod.GET)
 	String getPowermentNumber();
 }
 

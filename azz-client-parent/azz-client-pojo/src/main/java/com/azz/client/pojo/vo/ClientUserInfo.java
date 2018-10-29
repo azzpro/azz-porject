@@ -29,13 +29,23 @@ public class ClientUserInfo {
     
     private String clientUserName;
     
+    private String email;
+    
+    private String deptCode;
+    
     private String deptName;
+    
+    private String roleCode;
     
     private String roleName;
     
-    private String clientType;
+    private Integer clientType;
     
     private Long clientUserCompanyId;
+    
+    private Integer isEnterpriseAuthenticator;
+    
+    private Integer qualificationApplyStatus;
     
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")
     private String createTime;

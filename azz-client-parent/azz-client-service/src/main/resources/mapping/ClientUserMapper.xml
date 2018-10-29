@@ -370,21 +370,22 @@
   
   <select id="getClientUserInfoByPhoneNumber" parameterType="string" resultType="com.azz.client.pojo.vo.ClientUserInfo">
     SELECT
-    	c.client_user_code as clientUserCode,
 		c.client_user_code AS clientUserCode,
 		uc.company_name AS companyName,
 		uc.id as clientUserCompanyId,
 		c.phone_number AS phoneNumber,
-		c.client_user_name AS userName,
+		c.client_user_name AS clientUserName,
 		c.create_time AS createTime,
+		c.client_type AS clientType,
+		c.is_enterprise_authenticator as isEnterpriseAuthenticator,
 		CASE c. STATUS
-	WHEN 0 THEN
-		'删除'
-	WHEN 1 THEN
-		'有效'
-	WHEN 2 THEN
-		'禁用'
-	END AS STATUS
+		WHEN 0 THEN
+			'删除'
+		WHEN 1 THEN
+			'有效'
+		WHEN 2 THEN
+			'禁用'
+		END AS STATUS
 	FROM
 		client_user c
 	LEFT JOIN client_user_company uc on uc.client_user_code = c.client_user_code
@@ -400,12 +401,7 @@
 				u.phone_number AS phoneNumber,
 				u.email AS email,
 				u.post_name AS postName,
-				CASE u.client_type
-				WHEN 0 THEN
-					'个人'
-				WHEN 1 THEN
-					'企业'
-				END AS clientType,
+				u.client_type AS clientType,
 				 CASE u. STATUS
 				WHEN 0 THEN
 					'注销'
@@ -415,9 +411,11 @@
 					'禁用'
 				END AS STATUS,
 				 r.role_name AS roleName,
+				 d.dept_name AS deptName,
 				 u.create_time AS createTime
 			FROM
 				client_user u
+			LEFT JOIN client_dept d ON u.client_dept_id = d.id
 			LEFT JOIN client_user_role ur ON ur.client_user_id = u.id
 			LEFT JOIN client_role r ON ur.role_id = r.id
 			WHERE u. STATUS != 0
@@ -453,33 +451,58 @@
   
   <select id="getClientUserInfoByClientUserCode" parameterType="string" resultType="com.azz.client.pojo.vo.ClientUserInfo">
 		  SELECT
-				u.client_user_code AS clientUserCode,
-				u.client_user_name AS clientUserName,
-				u.phone_number AS phoneNumber,
-				u.email AS email,
-				u.post_name AS postName,
-				CASE u.client_type
-				WHEN 0 THEN
-					'个人'
-				WHEN 1 THEN
-					'企业'
-				END AS clientType,
-				 CASE u. STATUS
-				WHEN 0 THEN
-					'注销'
-				WHEN 1 THEN
-					'有效'
-				WHEN 2 THEN
-					'禁用'
-				END AS STATUS,
-				 r.role_name AS roleName,
-				 u.create_time AS createTime
-			FROM
-				client_user u
-			LEFT JOIN client_user_role ur ON ur.client_user_id = u.id
-			LEFT JOIN client_role r ON ur.role_id = r.id
-			WHERE u. STATUS != 0
-			and u.client_user_code = #{clientUserCode}
+			u.client_user_code AS clientUserCode,
+			u.client_user_name AS clientUserName,
+			u.phone_number AS phoneNumber,
+			u.email AS email,
+			u.post_name AS postName,
+			u.client_type AS clientType,
+			CASE u. STATUS
+		WHEN 0 THEN
+			'注销'
+		WHEN 1 THEN
+			'有效'
+		WHEN 2 THEN
+			'禁用'
+		END AS STATUS,
+		 d.dept_code AS deptCode,
+		 d.dept_name AS deptName,
+		 r.role_code AS roleCode,
+		 r.role_name AS roleName,
+		 u.create_time AS createTime
+		FROM
+			client_user u
+		LEFT JOIN client_dept d ON d.id = u.client_dept_id
+		LEFT JOIN client_user_role ur ON ur.client_user_id = u.id
+		LEFT JOIN client_role r ON ur.role_id = r.id
+		WHERE u. STATUS != 0
+		and u.client_user_code = #{clientUserCode}
+  </select>
+  
+  <select id="getClientCompanyInfoByClientUserCode" parameterType="string" resultType="com.azz.client.pojo.vo.ClientCompanyInfo">
+	SELECT
+		u.client_user_code AS clientUserCode,
+		u.`status` AS STATUS,
+		u.create_time AS createTime,
+		uc.company_name AS companyName,
+		uc.company_tel AS companyTel,
+		CONCAT(
+			uca.province_name,
+			uca.city_name,
+			uca.area_name,
+			uca.detail_address
+		) AS address,
+		uc.trading_certificate_first_file_name AS tradingCertificateFirstFileName,
+		uc.trading_certificate_first_file_url AS tradingCertificateFirstFileUrl,
+		uc.trading_certificate_second_file_name AS tradingCertificateSecondFileName,
+		uc.trading_certificate_second_file_url AS tradingCertificateSecondFileUrl,
+		uc.trading_certificate_third_file_name AS tradingCertificateThirdFileName,
+		uc.trading_certificate_third_file_url AS tradingCertificateThirdFileUrl
+	FROM
+		client_user u
+	JOIN client_user_company uc ON uc.client_user_code = u.client_user_code
+	JOIN client_user_company_address uca ON uca.client_user_company_id = uc.id
+	WHERE u.client_user_code = #{clientUserCode}
   </select>
   
   

@@ -85,5 +85,33 @@ public abstract class UserConstants {
 	}
 
     }
+    
+    /**
+     * 
+     * <P>资质申请状态（0：未申请 1：待审批 2：已通过 3：已拒绝）</P>
+     * @version 1.0
+     * @author 黄智聪  2018年10月23日 上午11:57:37
+     */
+    public enum QualificationApplyStatus {
+
+	NOT_APPLY(0, "未申请"),
+
+	PENDING(1, "待审批"),
+	
+	PASSED(2, "已通过"),
+
+	REFUSED(3, "已拒绝");
+
+	@Getter
+	private int value;
+
+	@Getter
+	private String desc;
+
+	QualificationApplyStatus(int value, String desc) {
+	    this.value = value;
+	    this.desc = desc;
+	}
+    }
 
 }

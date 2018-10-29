@@ -58,5 +58,23 @@ public abstract class ClientConstants {
 	    this.desc = desc;
 	}
     }
+    public enum DeptStatus {
+        // 0无效  1有效 2禁用
+        INVALID(0, "无效"),
 
+        ENABLE(1, "启用"),
+        
+        DISABLE(2, "禁用");
+
+        @Getter
+        private int value;
+
+        @Getter
+        private String desc;
+
+        DeptStatus(int value, String desc) {
+            this.value = value;
+            this.desc = desc;
+        }
+    }
 }

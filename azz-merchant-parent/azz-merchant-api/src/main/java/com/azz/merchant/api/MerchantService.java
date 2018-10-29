@@ -24,6 +24,7 @@ import com.azz.merchant.pojo.bo.LoginParam;
 import com.azz.merchant.pojo.bo.MerchantRegistParam;
 import com.azz.merchant.pojo.bo.SearchMerchantUserParam;
 import com.azz.merchant.pojo.vo.LoginMerchantUserInfo;
+import com.azz.merchant.pojo.vo.MerchantInfo;
 import com.azz.merchant.pojo.vo.MerchantUserInfo;
 
 /**
@@ -144,6 +145,16 @@ public interface MerchantService {
      */
     @RequestMapping("/azz/api/merchant/getMerchantUserInfo")
     public JsonResult<MerchantUserInfo> getMerchantUserInfo(@RequestParam("merchantUserCode") String merchantUserCode);
+    
+    /**
+     * 
+     * <p>查询商户资料</p>
+     * @param merchantCode
+     * @return
+     * @author 黄智聪  2018年10月29日 下午1:40:26
+     */
+    @RequestMapping("/azz/api/merchant/getMerchantInfo")
+    public JsonResult<MerchantInfo> getMerchantInfo(@RequestParam("merchantCode") String merchantCode);
     
 }
 

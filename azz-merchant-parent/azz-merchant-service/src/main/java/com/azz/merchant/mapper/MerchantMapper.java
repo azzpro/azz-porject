@@ -4,6 +4,7 @@ package com.azz.merchant.mapper;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.merchant.pojo.Merchant;
+import com.azz.merchant.pojo.vo.MerchantInfo;
 
 @Mapper
 public interface MerchantMapper {
@@ -39,5 +40,14 @@ public interface MerchantMapper {
      * @author 黄智聪  2018年10月23日 下午7:58:00
      */
     Merchant getMerchantByMerchantCode(String merchantCode);
+    
+    /**
+     * 
+     * <p>查询商户资料</p>
+     * @param merchantCode
+     * @return
+     * @author 黄智聪  2018年10月29日 下午1:40:26
+     */
+    MerchantInfo getMerchantInfoByMerchantCode(String merchantCode);
     
 }

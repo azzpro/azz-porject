@@ -23,6 +23,7 @@ import com.azz.merchant.pojo.bo.LoginParam;
 import com.azz.merchant.pojo.bo.MerchantRegistParam;
 import com.azz.merchant.pojo.bo.SearchMerchantUserParam;
 import com.azz.merchant.pojo.vo.LoginMerchantUserInfo;
+import com.azz.merchant.pojo.vo.MerchantInfo;
 import com.azz.merchant.pojo.vo.MerchantUserInfo;
 import com.azz.merchant.service.MerchantService;
 
@@ -92,6 +93,11 @@ public class MerchantController {
     @RequestMapping("/getMerchantUserInfo")
     public JsonResult<MerchantUserInfo> getMerchantUserInfo(@RequestParam("merchantUserCode") String merchantUserCode) {
 	return merchantService.getMerchantUserInfo(merchantUserCode);
+    }
+    
+    @RequestMapping("/getMerchantInfo")
+    public JsonResult<MerchantInfo> getMerchantInfo(@RequestParam("merchantCode") String merchantCode) {
+	return merchantService.getMerchantInfo(merchantCode);
     }
 }
 

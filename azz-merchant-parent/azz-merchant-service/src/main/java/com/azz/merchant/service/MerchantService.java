@@ -62,6 +62,7 @@ import com.azz.merchant.pojo.bo.SearchMerchantUserParam;
 import com.azz.merchant.pojo.bo.TradingCertificate;
 import com.azz.merchant.pojo.vo.LoginMerchantUserInfo;
 import com.azz.merchant.pojo.vo.Menu;
+import com.azz.merchant.pojo.vo.MerchantInfo;
 import com.azz.merchant.pojo.vo.MerchantUserInfo;
 import com.azz.merchant.pojo.vo.MerchantUserPermission;
 import com.azz.merchant.pojo.vo.UploadFileInfo;
@@ -564,6 +565,21 @@ public class MerchantService {
 	    throw new BaseException(PlatformUserErrorCode.PLATFORM_USER_ERROR_INVALID_USER);
 	}
 	return JsonResult.successJsonResult(userInfo);
+    }
+    
+    /**
+     * 
+     * <p>查询商户资料</p>
+     * @param merchantCode
+     * @return
+     * @author 黄智聪  2018年10月29日 下午1:40:26
+     */
+    public JsonResult<MerchantInfo> getMerchantInfo(String merchantCode){
+	MerchantInfo info = merchantMapper.getMerchantInfoByMerchantCode(merchantCode);
+	if(info == null) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户不存在");
+	}
+	return JsonResult.successJsonResult(info);
     }
 
     /**

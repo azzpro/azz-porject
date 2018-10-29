@@ -17,7 +17,9 @@ import com.azz.client.pojo.bo.DelDeptParam;
 import com.azz.client.pojo.bo.EditClientDeptParam;
 import com.azz.client.pojo.bo.EditDeptIsEnableParam;
 import com.azz.client.pojo.bo.SearchClientChildDeptParam;
+import com.azz.client.pojo.bo.SearchClientDeptInfoByCodeParam;
 import com.azz.client.pojo.bo.SearchClientDeptParam;
+import com.azz.client.pojo.vo.ClientDeptInfo;
 import com.azz.client.pojo.vo.ClientDeptList;
 import com.azz.core.common.JsonResult;
 
@@ -50,5 +52,8 @@ public interface ClientDeptService {
     
     @RequestMapping("/azz/api/client/dept/addChildDept")
     public JsonResult<String> addChildDept(@RequestBody AddClientDeptParam param);
+    
+    @RequestMapping("/azz/api/client/dept/getDeptInfo")
+    public JsonResult<ClientDeptInfo> getDeptInfo(@RequestBody SearchClientDeptInfoByCodeParam param);
 }
 

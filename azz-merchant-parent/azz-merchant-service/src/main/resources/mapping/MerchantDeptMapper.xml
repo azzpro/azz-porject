@@ -187,7 +187,7 @@
     <include refid="Base_Column_List" />
     from merchant_dept
     where status != 0 
-    AND dept_name = #{deptName,jdbcType=VARCHAR} 
+    AND dept_code = #{deptCode,jdbcType=VARCHAR} 
   	AND merchant_id = #{merchantId,jdbcType=BIGINT}
   </select>
   

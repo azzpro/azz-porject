@@ -29,6 +29,7 @@ import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.MerchantConstants;
+import com.azz.core.constants.MerchantConstants.IsMerchantRegister;
 import com.azz.core.constants.MerchantConstants.QualificationApplyStatus;
 import com.azz.core.constants.UserConstants.UserStatus;
 import com.azz.core.exception.BaseException;
@@ -251,6 +252,7 @@ public class MerchantService {
 		.password(pwd.getPassword())
 		.phoneNumber(phoneNumber)
 		.salt(pwd.getSalt())
+		.isMerchantRegister(IsMerchantRegister.Y.getValue())
 		.remark("来自商户注册")
 		.build();
 	merchantUserMapper.insertSelective(merchantUserRecord);

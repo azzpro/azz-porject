@@ -23,5 +23,7 @@ public class DelDeptParam {
     private String deptCode;
     
     private Long merchantId;
+    
+    private String modifier;
 }
 

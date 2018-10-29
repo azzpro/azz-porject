@@ -19,4 +19,6 @@ public interface ClientApplyMapper {
     int updateByPrimaryKey(ClientApply record);
     
     ClientApply selectLastestApplyRecordByClientUserId(Long clientUserId);
+    
+    int selectClientUserId(Long clientUserId);
 }

@@ -6,6 +6,7 @@
 package com.azz.platform.client.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,18 +14,28 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
 import com.azz.core.exception.BaseException;
+import com.azz.exception.JSR303ValidationException;
 import com.azz.platform.client.common.constants.AuditConstants;
 import com.azz.platform.client.common.constants.ClientConstants;
 import com.azz.platform.client.mapper.ClientApplyMapper;
+import com.azz.platform.client.mapper.ClientPermissionMapper;
+import com.azz.platform.client.mapper.ClientRoleMapper;
+import com.azz.platform.client.mapper.ClientRolePermissionMapper;
 import com.azz.platform.client.mapper.ClientUserCompanyMapper;
 import com.azz.platform.client.mapper.ClientUserMapper;
+import com.azz.platform.client.mapper.ClientUserRoleMapper;
 import com.azz.platform.client.pojo.ClientApply;
+import com.azz.platform.client.pojo.ClientRole;
+import com.azz.platform.client.pojo.ClientRolePermission;
 import com.azz.platform.client.pojo.ClientUser;
 import com.azz.platform.client.pojo.ClientUserCompany;
+import com.azz.platform.client.pojo.ClientUserRole;
 import com.azz.platform.client.pojo.bo.AuditParam;
-import com.azz.util.DateUtils;
+import com.azz.platform.client.pojo.vo.Permission;
+import com.azz.system.sequence.api.RandomSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
 
@@ -48,6 +59,21 @@ public class AuditService {
 
     @Autowired
     ClientUserCompanyMapper clientUserCompanyMapper;
+    
+    @Autowired
+    ClientPermissionMapper clientPermissionMapper;
+    
+    @Autowired
+    ClientRoleMapper clientRoleMapper;
+    
+    @Autowired
+    ClientRolePermissionMapper clientRolePermissionMapper;
+    
+    @Autowired
+    ClientUserRoleMapper clientUserRoleMapper;
+    
+    @Autowired
+    private RandomSequenceService randomSequenceService;
     
     public JsonResult<String> auditClient(@RequestBody AuditParam param) {
         JSR303ValidateUtils.validate(param);
@@ -79,7 +105,7 @@ public class AuditService {
             clientApplyObj.setStatus(AuditConstants.AuditStatus.PASSED.getValue());
             
             // 更新客户为企业用户
-            clientUser.setStatus(ClientConstants.EnterpriseType.ENTERPRISE.getValue());
+            clientUser.setClientType(ClientConstants.EnterpriseType.ENTERPRISE.getValue());
             clientUserMapper.updateByPrimaryKeySelective(clientUser);
             
             // 申请基本信息和资质信息新增到公司表
@@ -95,6 +121,43 @@ public class AuditService {
             cucObj.setTradingCertificateThirdFileUrl(clientApplyObj.getTradingCertificateThirdFileUrl());
             cucObj.setLastModifyTime(new Date());
             clientUserCompanyMapper.updateByPrimaryKeySelective(cucObj);
+            
+            ClientUserCompany company = clientUserCompanyMapper.selectByCompanyCode(param.getCompanyCode());
+            
+            // 为客户新增管理员角色
+            ClientRole roleRecord = ClientRole.builder()
+                    .createTime(new Date())
+                    .creator(param.getAuditor())
+                    .clientUserCompanyId(company.getId()) 
+                    .remark("审核通过，新增客户的管理员角色")
+                    .roleName("管理员")
+                    .roleCode(randomSequenceService.getPowermentNumber())
+                    .build();
+            clientRoleMapper.insertSelective(roleRecord);
+            
+            // 为管理员角色新增权限
+            List<Permission> permissions = clientPermissionMapper.getAllPermissions();
+            for (Permission permission : permissions) {
+                ClientRolePermission rolePermissionRecord = ClientRolePermission
+                        .builder()
+                        .createTime(new Date())
+                        .creator(param.getAuditor())
+                        .permissionId(permission.getPermissionId())
+                        .roleId(roleRecord.getId())
+                        .build();
+                clientRolePermissionMapper.insertSelective(rolePermissionRecord);
+            }
+            
+            // 为客户成员绑定该角色
+            ClientUserRole userRoleRecord = ClientUserRole.builder()
+                    .createTime(new Date())
+                    .creator(param.getAuditor())
+                    .clientUserId(clientUser.getId())
+                    .roleId(roleRecord.getId())
+                    .build();
+            clientUserRoleMapper.insertSelective(userRoleRecord);
+            
+            
         } else if (param.getStatus().equals(AuditConstants.AuditStatus.REFUSED.getValue())) {
             // 审核拒绝
             clientApplyObj.setStatus(AuditConstants.AuditStatus.REFUSED.getValue());

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * @author 刘建麟  2018年10月13日 上午11:09:09
  */
 @Component
-@ConfigurationProperties(prefix = "spring.datasource")
+@ConfigurationProperties(prefix = "azz.datasource")
 public class DruidConfig {
 
     private String url;

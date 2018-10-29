@@ -39,7 +39,7 @@ public interface DeptService {
      * @return
      * @author 彭斌  2018年10月26日 下午5:54:55
      */
-    @PostMapping("/azz/api/merchant/addFirstLevelDept")
+    @PostMapping("/azz/api/merchant/dept/addFirstLevelDept")
     JsonResult<String> addFirstLevelDept(@RequestBody AddMerchantDeptParam param);
     
     /**
@@ -48,7 +48,7 @@ public interface DeptService {
      * @return
      * @author 彭斌  2018年10月26日 下午6:39:10
      */
-    @PostMapping("/azz/api/merchant/addChildDept")
+    @PostMapping("/azz/api/merchant/dept/addChildDept")
     JsonResult<String> addChildDept(@RequestBody AddMerchantDeptParam param);
     
     /**
@@ -57,7 +57,7 @@ public interface DeptService {
      * @return
      * @author 彭斌  2018年10月26日 下午7:00:50
      */
-    @PostMapping("/azz/api/merchant/selectDeptInfo")
+    @PostMapping("/azz/api/merchant/dept/getDeptInfo")
     JsonResult<MerchantDept> getDeptInfo(SearchMerchantDeptInfoParam param);
     
     /**
@@ -66,7 +66,7 @@ public interface DeptService {
      * @return
      * @author 彭斌  2018年10月26日 下午7:09:37
      */
-    @PostMapping("/azz/api/merchant/editDept")
+    @PostMapping("/azz/api/merchant/dept/editDept")
     JsonResult<String> editDept(@RequestBody EditMerchantDeptParam param);
     
     /**
@@ -75,7 +75,7 @@ public interface DeptService {
      * @return
      * @author 彭斌  2018年10月26日 下午8:28:21
      */
-    @PostMapping("/azz/api/merchant/searchDeptList")
+    @PostMapping("/azz/api/merchant/dept/searchDeptList")
     JsonResult<List<MerchantDeptList>> searchDeptList(@RequestBody SearchMerchantDeptListParam param);
     
     /**
@@ -84,7 +84,7 @@ public interface DeptService {
      * @return
      * @author 彭斌  2018年10月27日 下午2:20:42
      */
-    @PostMapping("/azz/api/merchant/searchChildDeptList")
+    @PostMapping("/azz/api/merchant/dept/searchChildDeptList")
     JsonResult<List<MerchantDeptList>> searchChildDeptList(@RequestBody SearchMerchantChildDeptParam param);
     
     /**
@@ -93,7 +93,7 @@ public interface DeptService {
      * @return
      * @author 彭斌  2018年10月27日 下午2:32:47
      */
-    @PostMapping("/azz/api/merchant/isEnableDept")
+    @PostMapping("/azz/api/merchant/dept/isEnableDept")
     JsonResult<String> isEnableDept(@RequestBody EditDeptIsEnableParam param);
     
     /**
@@ -102,7 +102,7 @@ public interface DeptService {
      * @return
      * @author 彭斌  2018年10月27日 下午2:33:11
      */
-    @PostMapping("/azz/api/merchant/delDept")
+    @PostMapping("/azz/api/merchant/dept/delDept")
     JsonResult<String> delDept(@RequestBody DelDeptParam param);
 }
 

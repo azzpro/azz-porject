@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.azz.client.mapper.ClientDeptMapper;
 import com.azz.client.pojo.ClientDept;
@@ -26,6 +27,7 @@ import com.azz.client.pojo.bo.SearchClientDeptInfoByCodeParam;
 import com.azz.client.pojo.bo.SearchClientDeptInfoParam;
 import com.azz.client.pojo.bo.SearchClientDeptIsExistParam;
 import com.azz.client.pojo.bo.SearchClientDeptParam;
+import com.azz.client.pojo.vo.ClientDeptInfo;
 import com.azz.client.pojo.vo.ClientDeptList;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.ClientErrorCode;
@@ -71,13 +73,24 @@ public class ClientDeptService {
         if(ObjectUtils.isNull(cdObj)) {
             throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_NO_EXIST);
         }
+        
+        if(!param.getDeptName().trim().equals(cdObj.getDeptName())) {
+            SearchClientDeptInfoParam scdObj = new SearchClientDeptInfoParam();
+            scdObj.setClientUserCompanyId(param.getClientUserCompanyId());
+            scdObj.setDeptName(param.getDeptName().trim());
+            ClientDept clientDept = clientDeptMapper.selectClientDeptInfoByName(scdObj);
+            if(ObjectUtils.isNotNull(clientDept)) {
+                throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_EXIST);
+            }
+        }
+        
         ClientDept cdParentObj = clientDeptMapper.selectByDeptCode(param.getParentCode());
         
         if(ObjectUtils.isNull(cdParentObj)) {
             throw new BaseException(ClientErrorCode.CLIENT_DEPT_PARENT_CODE_ERROR_NO_EXIST);
         }
         
-        cdObj.setDeptName(param.getDeptName());
+        cdObj.setDeptName(param.getDeptName().trim());
         cdObj.setLastModifyTime(new Date());
         cdObj.setParentCode(param.getParentCode());
         cdObj.setStatus(param.getStatus());
@@ -100,7 +113,8 @@ public class ClientDeptService {
             // 启用
             cdObj.setStatus(ClientConstants.DeptStatus.ENABLE.getValue());
         } else {
-            // TODO 异常信息 状态不存在
+            // 异常信息 状态不存在
+            throw new BaseException(ClientErrorCode.CLIENT_DEPT_STATUS_ERROR_NO_EXIST);
         }
         clientDeptMapper.updateByPrimaryKeySelective(cdObj);
         return JsonResult.successJsonResult();
@@ -177,5 +191,9 @@ public class ClientDeptService {
         return JsonResult.successJsonResult();
     }
     
+    public JsonResult<ClientDeptInfo> getDeptInfo(@RequestBody SearchClientDeptInfoByCodeParam param){
+        ClientDeptInfo cdObj = clientDeptMapper.selectClientByCode(param);
+        return JsonResult.successJsonResult(cdObj);
+    }
 }
 

@@ -249,7 +249,6 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
-  
   <select id="selectLastestApplyRecordByClientUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -258,5 +257,11 @@
     order by create_time desc 
     limit 1
     
+  <select id="selectClientUserId" parameterType="java.lang.Long" resultType="int">
+    select 
+    count(1)
+    from client_apply
+    where status != 0 
+    and client_user_id = #{clientUserId}
   </select>
 </mapper>

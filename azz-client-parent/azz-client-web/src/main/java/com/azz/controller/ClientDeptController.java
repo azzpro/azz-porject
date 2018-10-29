@@ -10,6 +10,7 @@ package com.azz.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,7 +19,9 @@ import com.azz.client.pojo.bo.DelDeptParam;
 import com.azz.client.pojo.bo.EditClientDeptParam;
 import com.azz.client.pojo.bo.EditDeptIsEnableParam;
 import com.azz.client.pojo.bo.SearchClientChildDeptParam;
+import com.azz.client.pojo.bo.SearchClientDeptInfoByCodeParam;
 import com.azz.client.pojo.bo.SearchClientDeptParam;
+import com.azz.client.pojo.vo.ClientDeptInfo;
 import com.azz.client.pojo.vo.ClientDeptList;
 import com.azz.client.user.api.ClientDeptService;
 import com.azz.controller.utils.WebUtils;
@@ -128,5 +131,17 @@ public class ClientDeptController {
     public JsonResult<String> delDept(DelDeptParam param){
         param.setModifier(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
         return clientDeptService.delDept(param);
+    }
+    
+    /**
+     * <p>获取部门详情</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年10月29日 下午4:20:54
+     */
+    @RequestMapping("/getDeptInfo")
+    public JsonResult<ClientDeptInfo> getDeptInfo(SearchClientDeptInfoByCodeParam param){
+        param.setClientUserCompanyId(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCompanyId());
+        return clientDeptService.getDeptInfo(param);
     }
 }

@@ -57,7 +57,7 @@ public interface DeptService {
      * @return
      * @author 彭斌  2018年10月26日 下午7:00:50
      */
-    @PostMapping("/azz/api/merchant/dept/selectDeptInfo")
+    @PostMapping("/azz/api/merchant/dept/getDeptInfo")
     JsonResult<MerchantDept> getDeptInfo(SearchMerchantDeptInfoParam param);
     
     /**

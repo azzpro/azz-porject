@@ -173,19 +173,20 @@
   	FROM merchant_dept 
   	WHERE merchant_id = #{merchantId,jdbcType=BIGINT} 
   	AND dept_name = #{deptName,jdbcType=VARCHAR}
+  	AND status != 0
   </select>
   
   <select id="selectFirstLevelExist" parameterType="com.azz.merchant.pojo.bo.SearchMerchantDeptInfo" resultType="int">
   	SELECT count(1) FROM 
   	merchant_dept WHERE parent_code = 0 and dept_name = #{deptName,jdbcType=VARCHAR} 
-  	AND merchant_id = #{merchantId,jdbcType=BIGINT}
+  	AND merchant_id = #{merchantId,jdbcType=BIGINT} AND status != 0
   </select>
   
   <select id="selectByDeptAllInfo" parameterType="com.azz.merchant.pojo.bo.SearchMerchantDeptInfo" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from merchant_dept
-    where (status = 1 or status = 2) 
+    where status != 0 
     AND dept_name = #{deptName,jdbcType=VARCHAR} 
   	AND merchant_id = #{merchantId,jdbcType=BIGINT}
   </select>
@@ -203,7 +204,7 @@
 		LEFT JOIN merchant_dept md ON md.merchant_id = m.id 
 		LEFT JOIN merchant_user mu ON m.merchant_code = mu.merchant_code 
 		WHERE
-			 mu.merchant_code = #{merchantCode} AND md.parent_code = '0' AND (md.status = 1 OR md.status = 2)  
+			 mu.merchant_code = #{merchantCode} AND md.parent_code = '0' AND md.status != 0  
 		<if test="deptNameCode != null and deptNameCode!='' "> 
 			AND md.dept_name LIKE CONCAT('%',#{deptNameCode},'%') OR md.dept_code = #{deptNameCode}
 		</if>
@@ -224,16 +225,16 @@
 		LEFT JOIN merchant_dept md ON md.merchant_id = m.id 
 		LEFT JOIN merchant_user mu ON m.merchant_code = mu.merchant_code 
 		WHERE
-			 mu.merchant_code = #{merchantCode} AND md.parent_code = #{parentCode,jdbcType=VARCHAR} AND (md.status = 1 OR md.status = 2)  
+			 mu.merchant_code = #{merchantCode} AND md.parent_code = #{parentCode,jdbcType=VARCHAR} AND md.status != 0
 		GROUP BY md.dept_code
 		ORDER BY md.create_time DESC
   </select>
   
-  <select id="selectByDeptCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByDeptCode" parameterType="com.azz.merchant.pojo.bo.SearchMerchantDeptInfoParam" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from merchant_dept
-    where dept_code = #{deptCode,jdbcType=VARCHAR}
+    where dept_code = #{deptCode,jdbcType=VARCHAR} and merchant_id = #{merchantId,jdbcType=BIGINT} and status != 0
   </select>
   
 </mapper>

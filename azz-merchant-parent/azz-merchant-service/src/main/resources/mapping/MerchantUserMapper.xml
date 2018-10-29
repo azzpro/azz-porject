@@ -334,6 +334,7 @@
     SELECT
     	mu.merchant_user_code as merchantUserCode,
 		mu.merchant_code AS merchantCode,
+		m.id as merchantId,
 		m.company_name AS companyName,
 		mu.phone_number AS phoneNumber,
 		mu.merchant_user_name AS userName,

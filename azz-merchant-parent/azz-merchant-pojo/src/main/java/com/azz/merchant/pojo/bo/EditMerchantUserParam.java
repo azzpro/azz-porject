@@ -45,5 +45,6 @@ public class EditMerchantUserParam {
     private String modifier;
     
     private String merchantCode;
+    
 }
 

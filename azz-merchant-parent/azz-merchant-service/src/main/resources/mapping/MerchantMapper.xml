@@ -478,4 +478,31 @@
     and status != 0
   </select>
   
+  <select id="getMerchantInfoByMerchantCode" parameterType="string" resultType="com.azz.merchant.pojo.vo.MerchantInfo">
+    SELECT
+		m.merchant_code AS merchantCode,
+		m.qualification_apply_status AS qualificationApplyStatus,
+		m.create_time AS createTime,
+		m.merchant_name AS merchantName,
+		m.legal_person_name AS legalPersonName,
+		m.legal_person_id_card AS legalPersonIdCard,
+		m.company_name AS companyName,
+		m.company_tel AS companyTel,
+		m.address AS address,
+		m.trading_certificate_first_file_name AS tradingCertificateFirstFileName,
+		m.trading_certificate_first_file_url AS tradingCertificateFirstFileUrl,
+		m.trading_certificate_second_file_name AS tradingCertificateSecondFileName,
+		m.trading_certificate_second_file_url AS tradingCertificateSecondFileUrl,
+		m.trading_certificate_third_file_name AS tradingCertificateThirdFileName,
+		m.trading_certificate_third_file_url AS tradingCertificateThirdFileUrl,
+		m.business_license_file_name AS businessLicenseFileName,
+		m.business_license_file_url AS businessLicenseFileUrl
+	FROM
+		merchant m
+    where merchant_code = #{merchantCode}
+    and status != 0
+  </select>
+  
+  
+  
 </mapper>

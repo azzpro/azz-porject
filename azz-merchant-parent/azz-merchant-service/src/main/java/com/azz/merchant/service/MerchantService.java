@@ -58,10 +58,12 @@ import com.azz.merchant.pojo.bo.EditMerchantUserParam;
 import com.azz.merchant.pojo.bo.EnableOrDisableOrDelMerchantUserParam;
 import com.azz.merchant.pojo.bo.LoginParam;
 import com.azz.merchant.pojo.bo.MerchantRegistParam;
+import com.azz.merchant.pojo.bo.SearchMerchantDeptInfoParam;
 import com.azz.merchant.pojo.bo.SearchMerchantUserParam;
 import com.azz.merchant.pojo.bo.TradingCertificate;
 import com.azz.merchant.pojo.vo.LoginMerchantUserInfo;
 import com.azz.merchant.pojo.vo.Menu;
+import com.azz.merchant.pojo.vo.MerchantInfo;
 import com.azz.merchant.pojo.vo.MerchantUserInfo;
 import com.azz.merchant.pojo.vo.MerchantUserPermission;
 import com.azz.merchant.pojo.vo.UploadFileInfo;
@@ -437,7 +439,16 @@ public class MerchantService {
 	if (!password.equals(confirmPassword)) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "密码与确认密码不一致");
 	}
-	MerchantDept dept = mrchantDeptMapper.selectByDeptCode(param.getDeptCode());
+	SearchMerchantDeptInfoParam deptObj = new SearchMerchantDeptInfoParam();
+	deptObj.setDeptCode(param.getDeptCode());
+	Merchant merchant = merchantMapper.getMerchantByMerchantCode(param.getMerchantCode());
+	if(merchant == null) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户不存在");
+	}
+	SearchMerchantDeptInfoParam deptParm = new SearchMerchantDeptInfoParam();
+	deptParm.setDeptCode(param.getDeptCode());
+	deptParm.setMerchantId(merchant.getId());
+	MerchantDept dept = mrchantDeptMapper.selectByDeptCode(deptParm);
 	if (dept == null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "部门不存在");
 	}
@@ -490,7 +501,15 @@ public class MerchantService {
 	    // 生成盐值加密的密码
 	    pwd = PasswordHelper.encryptPasswordByModel(password);
 	}
-	MerchantDept dept = mrchantDeptMapper.selectByDeptCode(param.getDeptCode());
+	
+	Merchant merchant = merchantMapper.getMerchantByMerchantCode(param.getMerchantCode());
+	if(merchant == null) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户不存在");
+	}
+	SearchMerchantDeptInfoParam deptParm = new SearchMerchantDeptInfoParam();
+	deptParm.setDeptCode(param.getDeptCode());
+	deptParm.setMerchantId(merchant.getId());
+	MerchantDept dept = mrchantDeptMapper.selectByDeptCode(deptParm);
 	if (dept == null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "部门不存在");
 	}
@@ -564,6 +583,21 @@ public class MerchantService {
 	    throw new BaseException(PlatformUserErrorCode.PLATFORM_USER_ERROR_INVALID_USER);
 	}
 	return JsonResult.successJsonResult(userInfo);
+    }
+    
+    /**
+     * 
+     * <p>查询商户资料</p>
+     * @param merchantCode
+     * @return
+     * @author 黄智聪  2018年10月29日 下午1:40:26
+     */
+    public JsonResult<MerchantInfo> getMerchantInfo(String merchantCode){
+	MerchantInfo info = merchantMapper.getMerchantInfoByMerchantCode(merchantCode);
+	if(info == null) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户不存在");
+	}
+	return JsonResult.successJsonResult(info);
     }
 
     /**

@@ -21,5 +21,9 @@ public class DelDeptParam {
     
     @NotNull(message = "部门编码不允许为空")
     private String deptCode;
+    
+    private Long merchantId;
+    
+    private String modifier;
 }
 

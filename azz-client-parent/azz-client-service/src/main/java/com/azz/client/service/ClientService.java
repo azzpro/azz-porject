@@ -41,6 +41,7 @@ import com.azz.client.pojo.bo.LoginParam;
 import com.azz.client.pojo.bo.RemoveClientUserParam;
 import com.azz.client.pojo.bo.SearchClientUserParam;
 import com.azz.client.pojo.bo.TradingCertificate;
+import com.azz.client.pojo.vo.ClientPersonalInfo;
 import com.azz.client.pojo.vo.ClientUserInfo;
 import com.azz.client.pojo.vo.ClientUserPermission;
 import com.azz.client.pojo.vo.LoginClientUserInfo;
@@ -485,7 +486,7 @@ public class ClientService {
 	JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
 		filedata, FileConstants.AZZ_CLIENT, FileConstants.AZZ_AVATAR_IMAGE_TYPE);
 	if(jr.getCode() != SystemErrorCode.SUCCESS.getCode()) {
-	    throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE,"头像上传失败，请重试");
+	    throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "头像上传失败，请重试");
 	}
 	
 	ClientUser clientUserRecord = ClientUser.builder()
@@ -495,6 +496,14 @@ public class ClientService {
 	clientUserMapper.updateByClientUserCode(clientUserRecord);
 	return JsonResult.successJsonResult();
 	
+    }
+    
+    public JsonResult<ClientPersonalInfo> getClientPersonalInfo(String clientUserCode){
+	ClientPersonalInfo info = clientUserMapper.getClientPersonalInfoByClientUserCode(clientUserCode);
+	if(info == null) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户成员信息不存在");
+	}
+	return JsonResult.successJsonResult(info);
     }
     
     // 发送短信通知成员 TODO

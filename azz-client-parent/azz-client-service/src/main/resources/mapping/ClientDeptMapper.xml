@@ -182,7 +182,7 @@
 			cd.create_time AS createTime
 	FROM client_dept cd 
 	WHERE
-	 cd.client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT} AND cd.parent_code = '0' AND (cd.status = 1 OR cd.status = 2) 
+	 cd.client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT} AND cd.parent_code = '0' AND cd.status != 0 
 	  <if test="deptNameCode != null and deptNameCode!='' "> 
 			AND cd.dept_name LIKE CONCAT('%',#{deptNameCode},'%') OR cd.dept_code = #{deptNameCode}
 	  </if>
@@ -218,7 +218,7 @@
     from client_dept
     where client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT} 
     and dept_name = #{deptName,jdbcType=VARCHAR} 
-    and (cd.status = 1 OR cd.status = 2)
+    and cd.status != 0
   </select>
   
   <select id="selectClientDeptInfoByCode" parameterType="com.azz.client.pojo.bo.SearchClientDeptInfoByCodeParam" resultMap="BaseResultMap">
@@ -227,6 +227,26 @@
     from client_dept
     where client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT} 
     and dept_code = #{deptCode,jdbcType=VARCHAR} 
-    and (cd.status = 1 OR cd.status = 2)
+    and cd.status != 0
+  </select>
+  
+  <select id="selectClientUserIsExistDept" parameterType="java.lang.String" resultType="int">
+  	SELECT count(1) FROM client_user cu
+	JOIN client_dept cd ON cu.client_dept_id = cd.id
+	WHERE cd.dept_code = #{deptCode,jdbcType=VARCHAR} and cd.status != 0
+  </select>
+  
+  <select id="selectClientByCode" parameterType="com.azz.client.pojo.bo.SearchClientDeptInfoByCodeParam" resultType="com.azz.client.pojo.vo.ClientDeptInfo">
+  	SELECT 
+  		id as deptId,
+  		merchant_id as merchantId,
+  		dept_code as deptCode,
+  		parent_code as parentCode,
+  		dept_name as deptName,
+  		status as status
+  	FROM client_dept 
+  	WHERE client_user_company_id = #{merchantId,jdbcType=BIGINT} 
+  	AND dept_code = #{deptCode,jdbcType=VARCHAR}
+  	AND status != 0
   </select>
 </mapper>

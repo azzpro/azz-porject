@@ -73,13 +73,24 @@ public class ClientDeptService {
         if(ObjectUtils.isNull(cdObj)) {
             throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_NO_EXIST);
         }
+        
+        if(!param.getDeptName().trim().equals(cdObj.getDeptName())) {
+            SearchClientDeptInfoParam scdObj = new SearchClientDeptInfoParam();
+            scdObj.setClientUserCompanyId(param.getClientUserCompanyId());
+            scdObj.setDeptName(param.getDeptName().trim());
+            ClientDept clientDept = clientDeptMapper.selectClientDeptInfoByName(scdObj);
+            if(ObjectUtils.isNotNull(clientDept)) {
+                throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_EXIST);
+            }
+        }
+        
         ClientDept cdParentObj = clientDeptMapper.selectByDeptCode(param.getParentCode());
         
         if(ObjectUtils.isNull(cdParentObj)) {
             throw new BaseException(ClientErrorCode.CLIENT_DEPT_PARENT_CODE_ERROR_NO_EXIST);
         }
         
-        cdObj.setDeptName(param.getDeptName());
+        cdObj.setDeptName(param.getDeptName().trim());
         cdObj.setLastModifyTime(new Date());
         cdObj.setParentCode(param.getParentCode());
         cdObj.setStatus(param.getStatus());

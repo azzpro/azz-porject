@@ -18,4 +18,6 @@ public interface ClientUserRoleMapper {
     int updateByPrimaryKey(ClientUserRole record);
     
     int deleteByClientUserId(Long clientUserId);
+    
+    int countBindingUserRole(Long roleId);
 }

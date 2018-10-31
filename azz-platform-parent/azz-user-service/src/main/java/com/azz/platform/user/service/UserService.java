@@ -87,11 +87,14 @@ public class UserService{
 	String password = param.getPassword();
 	PlatformUser platformUser = platformUserMapper.getUserByPhoneNumber(phoneNumber, null);
 	if (platformUser == null) {// 无效用户
-	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "无效用户");
+	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "请输入正确的账号或密码");
+	}
+	if(platformUser.getStatus() == UserStatus.INVALID.getValue()) {
+		throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "账号已被禁用，请联系管理员解除");
 	}
 	boolean isRight = PasswordHelper.checkPassword(password, platformUser.getSalt(), platformUser.getPassword());
 	if (!isRight) {// 与盐值加密的密码不匹配
-	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "手机号或密码错误");
+	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "请输入正确的账号或密码");
 	}
 	return JsonResult.successJsonResult();
     }

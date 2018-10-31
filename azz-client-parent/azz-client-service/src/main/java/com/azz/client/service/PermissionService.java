@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.azz.client.mapper.ClientPermissionMapper;
 import com.azz.client.mapper.ClientRoleMapper;
 import com.azz.client.mapper.ClientRolePermissionMapper;
+import com.azz.client.mapper.ClientUserRoleMapper;
 import com.azz.client.pojo.ClientPermission;
 import com.azz.client.pojo.ClientRole;
 import com.azz.client.pojo.ClientRolePermission;
@@ -27,8 +28,8 @@ import com.azz.client.pojo.vo.Permission;
 import com.azz.client.pojo.vo.RoleInfo;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
-import com.azz.core.constants.UserConstants;
 import com.azz.core.constants.PermissionConstants.PermissionStatus;
+import com.azz.core.constants.UserConstants;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.system.sequence.api.RandomSequenceService;
 import com.azz.util.JSR303ValidateUtils;
@@ -45,6 +46,9 @@ public class PermissionService {
 
     @Autowired
     private ClientRoleMapper clientRoleMapper;
+    
+    @Autowired
+    private ClientUserRoleMapper clientUserRoleMapper;
 
     @Autowired
     private ClientRolePermissionMapper clientRolePermissionMapper;
@@ -104,6 +108,18 @@ public class PermissionService {
     public JsonResult<String> delRole(@RequestBody DelRoleParam param) {
 	// 参数校验
 	JSR303ValidateUtils.validate(param);
+	
+	ClientRole role = clientRoleMapper.selectByRoleCode(param.getRoleCode());
+	if(role == null) {
+		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色不存在");
+	}
+	
+	// 校验是否存在绑定的成员
+	int count = clientUserRoleMapper.countBindingUserRole(role.getId());
+	if(count > 0) {
+		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "该角色已绑定成员，请处理后删除");
+	}
+	
 	ClientRole roleRecord = ClientRole.builder()
 		.lastModifyTime(new Date())
 		.modifier(param.getModifier())

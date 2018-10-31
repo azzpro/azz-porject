@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
-import com.azz.core.constants.UserConstants;
 import com.azz.core.constants.PermissionConstants.PermissionStatus;
+import com.azz.core.constants.UserConstants;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.merchant.mapper.MerchantMapper;
 import com.azz.merchant.mapper.MerchantPermissionMapper;
 import com.azz.merchant.mapper.MerchantRoleMapper;
 import com.azz.merchant.mapper.MerchantRolePermissionMapper;
+import com.azz.merchant.mapper.MerchantUserRoleMapper;
 import com.azz.merchant.pojo.Merchant;
 import com.azz.merchant.pojo.MerchantPermission;
 import com.azz.merchant.pojo.MerchantRole;
@@ -47,6 +48,9 @@ public class PermissionService {
 
     @Autowired
     MerchantRoleMapper merchantRoleMapper;
+    
+    @Autowired
+    MerchantUserRoleMapper merchantUserRoleMapper;
 
     @Autowired
     MerchantRolePermissionMapper merchantRolePermissionMapper;
@@ -113,6 +117,18 @@ public class PermissionService {
     public JsonResult<String> delRole(@RequestBody DelRoleParam param) {
 	// 参数校验
 	JSR303ValidateUtils.validate(param);
+	
+	MerchantRole role = merchantRoleMapper.selectByRoleCode(param.getRoleCode());
+	if(role == null) {
+		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色不存在");
+	}
+	
+	// 校验是否存在绑定的成员
+	int count = merchantUserRoleMapper.countBindingUserRole(role.getId());
+	if(count > 0) {
+		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "该角色已绑定成员，请处理后删除");
+	}
+	
 	MerchantRole roleRecord = MerchantRole.builder()
 		.lastModifyTime(new Date())
 		.modifier(param.getModifier())

@@ -31,7 +31,7 @@ import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.MerchantConstants;
 import com.azz.core.constants.MerchantConstants.IsMerchantRegister;
 import com.azz.core.constants.MerchantConstants.QualificationApplyStatus;
-import com.azz.core.constants.UserConstants.UserStatus;
+import com.azz.core.constants.MerchantConstants.UserStatus;
 import com.azz.core.exception.BaseException;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.exception.JSR303ValidationException;
@@ -138,11 +138,14 @@ public class MerchantService {
 	String password = param.getPassword();
 	MerchantUser merchantUser = merchantUserMapper.getMerchantUserByPhoneNumber(phoneNumber);
 	if (merchantUser == null) {// 无效用户
-	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "无效用户");
+	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "请输入正确的账号或密码");
+	}
+	if(merchantUser.getStatus() == UserStatus.INVALID.getValue()) {
+		throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "账号已被禁用，请联系管理员解除");
 	}
 	boolean isRight = PasswordHelper.checkPassword(password, merchantUser.getSalt(), merchantUser.getPassword());
 	if (!isRight) {// 与盐值加密的密码不匹配
-	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "手机号或密码错误");
+	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "请输入正确的账号或密码");
 	}
 	return JsonResult.successJsonResult();
     }

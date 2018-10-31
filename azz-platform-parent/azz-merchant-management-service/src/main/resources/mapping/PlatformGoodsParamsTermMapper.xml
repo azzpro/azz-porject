@@ -37,7 +37,7 @@
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
       #{modifyTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsParamsTerm">
+  <insert id="insertSelective" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsParamsTerm" useGeneratedKeys="true" keyProperty="id">
     insert into platform_goods_params_term
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

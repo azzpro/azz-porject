@@ -38,14 +38,14 @@ public class PlatformGoodsParamsTerm implements Serializable {
      *
      * @mbg.generated
      */
-    private Boolean paramsType;
+    private Byte paramsType;
 
     /**
      * 是否必选(1 必选 2非必选)
      *
      * @mbg.generated
      */
-    private Boolean paramsChoice;
+    private Byte paramsChoice;
 
     /**
      * 创建人
@@ -181,7 +181,7 @@ public class PlatformGoodsParamsTerm implements Serializable {
      *
      * @mbg.generated
      */
-    public Boolean getParamsType() {
+    public Byte getParamsType() {
         return paramsType;
     }
 
@@ -193,7 +193,7 @@ public class PlatformGoodsParamsTerm implements Serializable {
      *
      * @mbg.generated
      */
-    public void setParamsType(Boolean paramsType) {
+    public void setParamsType(Byte paramsType) {
         this.paramsType = paramsType;
     }
 
@@ -205,7 +205,7 @@ public class PlatformGoodsParamsTerm implements Serializable {
      *
      * @mbg.generated
      */
-    public Boolean getParamsChoice() {
+    public Byte getParamsChoice() {
         return paramsChoice;
     }
 
@@ -217,7 +217,7 @@ public class PlatformGoodsParamsTerm implements Serializable {
      *
      * @mbg.generated
      */
-    public void setParamsChoice(Boolean paramsChoice) {
+    public void setParamsChoice(Byte paramsChoice) {
         this.paramsChoice = paramsChoice;
     }
 

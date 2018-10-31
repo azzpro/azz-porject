@@ -22,7 +22,7 @@
     insert into platform_goods_params (id, params_code)
     values (#{id,jdbcType=BIGINT}, #{paramsCode,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsParams">
+  <insert id="insertSelective" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsParams" useGeneratedKeys="true" keyProperty="id">
     insert into platform_goods_params
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -31,6 +31,12 @@
       <if test="paramsCode != null">
         params_code,
       </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -38,6 +44,12 @@
       </if>
       <if test="paramsCode != null">
         #{paramsCode,jdbcType=VARCHAR},
+      </if>
+       <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+       <if test="createTime != null">
+        #{createTime}
       </if>
     </trim>
   </insert>
@@ -55,4 +67,18 @@
     set params_code = #{paramsCode,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="searchParamsList" resultType="com.azz.platform.merchant.pojo.vo.Params" parameterType="com.azz.platform.merchant.pojo.bo.SearchParams">
+  select a.params_code paramCode ,b.assortment_name assortmentName , c.productUseCount,d.paramsCount ,a.create_time createTime from platform_goods_params a
+	LEFT JOIN platform_goods_classification b on b.assortment_params_id = a.id
+	LEFT JOIN (select assortment_id ,count(1) as productUseCount from merchant_goods_product group by assortment_id) c on 
+	a.id = c.assortment_id
+	LEFT JOIN (select params_id ,count(1) as paramsCount from platform_goods_params_term group by params_id) d on
+	a.id = d.params_id
+	<where>
+		<if test="param != null and param != ''">
+			a.params_code LIKE CONCAT('%',#{param},'%') or b.assortment_name LIKE CONCAT('%',#{param},'%')
+		</if>
+	</where>
+  </select>
 </mapper>

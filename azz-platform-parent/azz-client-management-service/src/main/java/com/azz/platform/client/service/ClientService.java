@@ -72,8 +72,8 @@ public class ClientService {
 	 */
 	public JsonResult<Pagination<ClientUser>> selectClientUserList(@RequestBody SearchClientManagerParam param) {
         PageHelper.startPage(param.getPageNum(), param.getPageSize());
-        List<ClientUser> merchantList = clientUserMapper.selectClientUserList(param);
-        return JsonResult.successJsonResult(new Pagination<>(merchantList));
+        List<ClientUser> clientUserList = clientUserMapper.selectClientUserList(param);
+        return JsonResult.successJsonResult(new Pagination<>(clientUserList));
     }
 	
 	/**

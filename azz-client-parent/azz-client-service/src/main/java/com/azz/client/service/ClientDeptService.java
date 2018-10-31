@@ -83,10 +83,13 @@ public class ClientDeptService {
             }
         }
         
-        ClientDept cdParentObj = clientDeptMapper.selectByDeptCode(param.getParentCode());
-        
-        if(ObjectUtils.isNull(cdParentObj)) {
-            throw new BaseException(ClientErrorCode.CLIENT_DEPT_PARENT_CODE_ERROR_NO_EXIST);
+        String parentCode = param.getParentCode();
+        ClientDept cdParentObj = null;
+        if(!"0".equals(parentCode)) {
+            cdParentObj = clientDeptMapper.selectByDeptCode(parentCode);
+            if(ObjectUtils.isNull(cdParentObj)) {
+        	throw new BaseException(ClientErrorCode.CLIENT_DEPT_PARENT_CODE_ERROR_NO_EXIST);
+            }
         }
         
         cdObj.setDeptName(param.getDeptName().trim());
@@ -153,6 +156,7 @@ public class ClientDeptService {
         clientDept.setCreateTime(new Date());
         clientDept.setDeptName(param.getDeptName());
         clientDept.setParentCode("0");
+        clientDept.setCreator(param.getCreator());
         clientDept.setStatus(param.getStatus());
         clientDept.setCreator(param.getCreator());
         clientDeptMapper.insertSelective(clientDept);
@@ -176,8 +180,8 @@ public class ClientDeptService {
         deptByCodeObj.setDeptCode(param.getParentCode());
         ClientDept dept = clientDeptMapper.selectClientDeptInfoByCode(deptByCodeObj);
         
-        if(ObjectUtils.isNotNull(dept)) {
-            throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_EXIST);
+        if(ObjectUtils.isNull(dept)) {
+            throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_NO_EXIST);
         }
         
         ClientDept clientDept = new ClientDept();
@@ -186,6 +190,7 @@ public class ClientDeptService {
         clientDept.setCreateTime(new Date());
         clientDept.setDeptName(param.getDeptName());
         clientDept.setParentCode(param.getParentCode());
+        clientDept.setCreator(param.getCreator());
         clientDept.setStatus(param.getStatus());
         clientDeptMapper.insertSelective(clientDept);
         return JsonResult.successJsonResult();

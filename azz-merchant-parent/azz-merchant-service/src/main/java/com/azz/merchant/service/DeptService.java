@@ -35,8 +35,6 @@ import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * <P>部门服务类</P>
  * @version 1.0
@@ -44,7 +42,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Transactional(rollbackFor = Exception.class)
 @Service
-@Slf4j
 public class DeptService {
 
     @Autowired
@@ -70,6 +67,7 @@ public class DeptService {
         md.setCreateTime(new Date());
         md.setMerchantId(param.getMerchantId());
         md.setParentCode("0");
+        md.setCreator(param.getCreator());
         md.setStatus(param.getStatus());
         md.setDeptCode(dbSequenceService.getMerchantDepartmentNumber());
         merchantDeptMapper.insertSelective(md);
@@ -93,6 +91,7 @@ public class DeptService {
         MerchantDept md = new MerchantDept();
         md.setDeptName(param.getDeptName());
         md.setCreateTime(new Date());
+        md.setCreator(param.getCreator());
         md.setMerchantId(param.getMerchantId());
         md.setParentCode(param.getParentCode());
         md.setStatus(param.getStatus());

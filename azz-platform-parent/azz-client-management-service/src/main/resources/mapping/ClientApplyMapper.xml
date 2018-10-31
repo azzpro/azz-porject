@@ -264,6 +264,7 @@
 	 ) ca on c.id=ca.client_user_id
 	 LEFT JOIN client_user_company cuc ON c.client_user_code = cuc.client_user_code
 	  <where>
+	  	c.is_enterprise_authenticator = 1
 	 	<if test="param != null and param !=''">
 	 		and (cuc.company_code = #{param,jdbcType=VARCHAR} or ca.company_name = #{param,jdbcType=VARCHAR} or ca.client_user_name = #{param,jdbcType=VARCHAR})
 	 	</if>

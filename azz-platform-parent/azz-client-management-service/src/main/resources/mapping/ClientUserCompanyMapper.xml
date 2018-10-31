@@ -277,7 +277,7 @@
   	from
   		client_user_company a left join client_user b on a.client_user_code=b.client_user_code
   		left join client_user_company_address c on a.company_code = c.company_code
-  	where a.company_code = #{code} and b.client_type = 1 and b.status != 0
+  	where a.company_code = #{code} and b.client_type = 1 and b.status != 0 and b.is_enterprise_authenticator = 1
   
   </select>
   

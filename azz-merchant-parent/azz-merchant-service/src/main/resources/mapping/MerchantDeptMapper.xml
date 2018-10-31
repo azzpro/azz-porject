@@ -197,16 +197,16 @@
 			md.dept_code AS deptCode,
 			md.parent_code AS parentCode,			
 		 	md.`status` AS status,
-			md.creator AS creator,
+			mu.merchant_user_name AS creator,
 			md.create_time AS createTime
 		FROM 
 		merchant m 
 		LEFT JOIN merchant_dept md ON md.merchant_id = m.id 
-		LEFT JOIN merchant_user mu ON m.merchant_code = mu.merchant_code 
+		LEFT JOIN merchant_user mu ON md.creator = mu.merchant_user_code 
 		WHERE
-			 mu.merchant_code = #{merchantCode} AND md.parent_code = '0' AND md.status != 0  
+			 m.merchant_code = #{merchantCode} AND md.parent_code = '0' AND md.status != 0  
 		<if test="deptNameCode != null and deptNameCode!='' "> 
-			AND md.dept_name LIKE CONCAT('%',#{deptNameCode},'%') OR md.dept_code = #{deptNameCode}
+			AND (md.dept_name LIKE CONCAT('%',#{deptNameCode},'%') OR md.dept_code LIKE CONCAT('%',#{deptNameCode},'%'))
 		</if>
 		GROUP BY md.dept_code
 		ORDER BY md.create_time DESC
@@ -218,23 +218,29 @@
 			md.dept_code AS deptCode,
 			md.parent_code AS parentCode,			
 		 	md.`status` AS status,
-			md.creator AS creator,
+			mu.merchant_user_name AS creator,
 			md.create_time AS createTime
 		FROM 
 		merchant m 
 		LEFT JOIN merchant_dept md ON md.merchant_id = m.id 
-		LEFT JOIN merchant_user mu ON m.merchant_code = mu.merchant_code 
+		LEFT JOIN merchant_user mu ON md.creator = mu.merchant_user_code 
 		WHERE
-			 mu.merchant_code = #{merchantCode} AND md.parent_code = #{parentCode,jdbcType=VARCHAR} AND md.status != 0
+			 m.merchant_code = #{merchantCode} AND md.parent_code = #{parentCode,jdbcType=VARCHAR} AND md.status != 0
 		GROUP BY md.dept_code
 		ORDER BY md.create_time DESC
   </select>
   
   <select id="selectByDeptCode" parameterType="com.azz.merchant.pojo.bo.SearchMerchantDeptInfoParam" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from merchant_dept
-    where dept_code = #{deptCode,jdbcType=VARCHAR} and merchant_id = #{merchantId,jdbcType=BIGINT} and status != 0
+	 SELECT
+		d.id, d.merchant_id, d.dept_code, d.parent_code, d.dept_name, d.description, d.status,
+		 d.create_time, u.merchant_user_name as creator, d.last_modify_time, d.modifier
+	FROM
+		merchant_dept d
+	LEFT JOIN merchant m on m.id = d.merchant_id
+	LEFT JOIN merchant_user u on u.merchant_code = m.merchant_code and d.creator = u.merchant_user_code
+	WHERE
+		d.dept_code = #{deptCode} and d.merchant_id = #{merchantId} and d.status != 0
+ 
   </select>
   
 </mapper>

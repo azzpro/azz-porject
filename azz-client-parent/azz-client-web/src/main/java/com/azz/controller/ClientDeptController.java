@@ -63,7 +63,7 @@ public class ClientDeptController {
     public JsonResult<String> addChildDept(AddClientDeptParam param){
         param.setCompanyCode(WebUtils.getLoginClientUser().getClientUserInfo().getCompanyCode());
         param.setCreator(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
-        return clientDeptService.addFirstLevelDept(param);
+        return clientDeptService.addChildDept(param);
     }
     
     /**

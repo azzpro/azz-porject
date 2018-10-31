@@ -358,12 +358,15 @@
     client_user a
     left join client_dept b
     on a.client_dept_id=b.id
+    left join client_user_company c on c.client_user_code = a.client_user_code
     <where>
+	  c.company_code = #{companyCode}
+	  and a.client_type = 1 and a.status != 0 
     	<if test="param != null and param != ''">
-    		(a.client_user_name like CONCAT('%',#{param},'%') or a.phone_number like CONCAT('%',#{param},'%') or a.post_name like CONCAT('%',#{param},'%')
-    		or b.dept_name like CONCAT('%',#{param},'%') )
+    	and	(a.client_user_name like CONCAT('%',#{param},'%') or a.phone_number like CONCAT('%',#{param},'%') 
+    	or a.post_name like CONCAT('%',#{param},'%'))
     	</if>
     </where>
-  and a.client_type = 1 and a.status != 0 order by a.create_time desc
+    order by a.create_time desc
   </select>
 </mapper>

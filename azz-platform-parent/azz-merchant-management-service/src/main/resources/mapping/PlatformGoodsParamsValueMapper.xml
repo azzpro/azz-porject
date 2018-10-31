@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.platform.merchant.mapper.PlatformGoodsParamsValueMapper">
+  <resultMap id="BaseResultMap" type="com.azz.platform.merchant.pojo.PlatformGoodsParamsValue">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="params_parent_id" jdbcType="BIGINT" property="paramsParentId" />
+    <result column="params_value" jdbcType="BIGINT" property="paramsValue" />
+    <result column="params_unit" jdbcType="VARCHAR" property="paramsUnit" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, params_parent_id, params_value, params_unit
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from platform_goods_params_value
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from platform_goods_params_value
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsParamsValue">
+    insert into platform_goods_params_value (id, params_parent_id, params_value, 
+      params_unit)
+    values (#{id,jdbcType=BIGINT}, #{paramsParentId,jdbcType=BIGINT}, #{paramsValue,jdbcType=BIGINT}, 
+      #{paramsUnit,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsParamsValue">
+    insert into platform_goods_params_value
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="paramsParentId != null">
+        params_parent_id,
+      </if>
+      <if test="paramsValue != null">
+        params_value,
+      </if>
+      <if test="paramsUnit != null">
+        params_unit,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="paramsParentId != null">
+        #{paramsParentId,jdbcType=BIGINT},
+      </if>
+      <if test="paramsValue != null">
+        #{paramsValue,jdbcType=BIGINT},
+      </if>
+      <if test="paramsUnit != null">
+        #{paramsUnit,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsParamsValue">
+    update platform_goods_params_value
+    <set>
+      <if test="paramsParentId != null">
+        params_parent_id = #{paramsParentId,jdbcType=BIGINT},
+      </if>
+      <if test="paramsValue != null">
+        params_value = #{paramsValue,jdbcType=BIGINT},
+      </if>
+      <if test="paramsUnit != null">
+        params_unit = #{paramsUnit,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsParamsValue">
+    update platform_goods_params_value
+    set params_parent_id = #{paramsParentId,jdbcType=BIGINT},
+      params_value = #{paramsValue,jdbcType=BIGINT},
+      params_unit = #{paramsUnit,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

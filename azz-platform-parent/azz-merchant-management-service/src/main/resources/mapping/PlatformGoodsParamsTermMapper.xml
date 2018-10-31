@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.platform.merchant.mapper.PlatformGoodsParamsTermMapper">
+  <resultMap id="BaseResultMap" type="com.azz.platform.merchant.pojo.PlatformGoodsParamsTerm">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="params_code" jdbcType="VARCHAR" property="paramsCode" />
+    <result column="params_name" jdbcType="VARCHAR" property="paramsName" />
+    <result column="params_id" jdbcType="BIGINT" property="paramsId" />
+    <result column="params_type" jdbcType="BIT" property="paramsType" />
+    <result column="params_choice" jdbcType="BIT" property="paramsChoice" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, params_code, params_name, params_id, params_type, params_choice, creator, create_time, 
+    modifier, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from platform_goods_params_term
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from platform_goods_params_term
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsParamsTerm">
+    insert into platform_goods_params_term (id, params_code, params_name, 
+      params_id, params_type, params_choice, 
+      creator, create_time, modifier, 
+      modify_time)
+    values (#{id,jdbcType=BIGINT}, #{paramsCode,jdbcType=VARCHAR}, #{paramsName,jdbcType=VARCHAR}, 
+      #{paramsId,jdbcType=BIGINT}, #{paramsType,jdbcType=BIT}, #{paramsChoice,jdbcType=BIT}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsParamsTerm">
+    insert into platform_goods_params_term
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="paramsCode != null">
+        params_code,
+      </if>
+      <if test="paramsName != null">
+        params_name,
+      </if>
+      <if test="paramsId != null">
+        params_id,
+      </if>
+      <if test="paramsType != null">
+        params_type,
+      </if>
+      <if test="paramsChoice != null">
+        params_choice,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="paramsCode != null">
+        #{paramsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="paramsName != null">
+        #{paramsName,jdbcType=VARCHAR},
+      </if>
+      <if test="paramsId != null">
+        #{paramsId,jdbcType=BIGINT},
+      </if>
+      <if test="paramsType != null">
+        #{paramsType,jdbcType=BIT},
+      </if>
+      <if test="paramsChoice != null">
+        #{paramsChoice,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsParamsTerm">
+    update platform_goods_params_term
+    <set>
+      <if test="paramsCode != null">
+        params_code = #{paramsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="paramsName != null">
+        params_name = #{paramsName,jdbcType=VARCHAR},
+      </if>
+      <if test="paramsId != null">
+        params_id = #{paramsId,jdbcType=BIGINT},
+      </if>
+      <if test="paramsType != null">
+        params_type = #{paramsType,jdbcType=BIT},
+      </if>
+      <if test="paramsChoice != null">
+        params_choice = #{paramsChoice,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsParamsTerm">
+    update platform_goods_params_term
+    set params_code = #{paramsCode,jdbcType=VARCHAR},
+      params_name = #{paramsName,jdbcType=VARCHAR},
+      params_id = #{paramsId,jdbcType=BIGINT},
+      params_type = #{paramsType,jdbcType=BIT},
+      params_choice = #{paramsChoice,jdbcType=BIT},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

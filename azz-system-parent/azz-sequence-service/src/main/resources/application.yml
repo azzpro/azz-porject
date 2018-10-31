@@ -62,4 +62,9 @@ azz:
      id: random
      type: randomSequence
      args: {length: '6'}
+    -
+     id: ProductRandom
+     type: ProductRandomSequence
+     args: {length: '10'}
+    
   

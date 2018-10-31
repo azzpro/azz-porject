@@ -256,7 +256,7 @@ public class MerchantService {
 		.remark("来自商户注册")
 		.build();
 	merchantUserMapper.insertSelective(merchantUserRecord);
-	return JsonResult.successJsonResult(merchantUserCode);
+	return JsonResult.successJsonResult(merchantCode);
     }
     
     /**

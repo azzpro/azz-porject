@@ -178,13 +178,14 @@
 			cd.dept_code AS deptCode,
 			cd.parent_code AS parentCode,			
 		 	cd.`status` AS status,
-			cd.creator AS creator,
+			cu.client_user_name AS creator,
 			cd.create_time AS createTime
 	FROM client_dept cd 
+	LEFT JOIN client_user cu on cu.client_user_code = cd.creator
 	WHERE
 	 cd.company_code = #{companyCode,jdbcType=VARCHAR} AND cd.parent_code = '0' AND cd.status != 0 
 	  <if test="deptNameCode != null and deptNameCode!='' "> 
-			AND cd.dept_name LIKE CONCAT('%',#{deptNameCode},'%') OR cd.dept_code = #{deptNameCode}
+			AND ( cd.dept_name LIKE CONCAT('%',#{deptNameCode},'%') OR cd.dept_code LIKE CONCAT('%',#{deptNameCode},'%') )
 	  </if>
 	ORDER BY cd.create_time DESC
   </select>
@@ -195,9 +196,10 @@
 			cd.dept_code AS deptCode,
 			cd.parent_code AS parentCode,			
 		 	cd.`status` AS status,
-			cd.creator AS creator,
+			cu.client_user_name AS creator,
 			cd.create_time AS createTime
 	FROM client_dept cd 
+	LEFT JOIN client_user cu on cu.client_user_code = cd.creator
 	WHERE
 	 cd.company_code = #{companyCode,jdbcType=VARCHAR} AND cd.parent_code = #{parentCode} AND (cd.status = 1 OR cd.status = 2) 
 	ORDER BY cd.create_time DESC
@@ -218,7 +220,7 @@
     from client_dept
     where company_code = #{companyCode,jdbcType=VARCHAR} 
     and dept_name = #{deptName,jdbcType=VARCHAR} 
-    and cd.status != 0
+    and status != 0
   </select>
   
   <select id="selectClientDeptInfoByCode" parameterType="com.azz.client.pojo.bo.SearchClientDeptInfoByCodeParam" resultMap="BaseResultMap">
@@ -227,7 +229,7 @@
     from client_dept
     where company_code = #{companyCode} 
     and dept_code = #{deptCode,jdbcType=VARCHAR} 
-    and cd.status != 0
+    and status != 0
   </select>
   
   <select id="selectClientUserIsExistDept" parameterType="java.lang.String" resultType="int">

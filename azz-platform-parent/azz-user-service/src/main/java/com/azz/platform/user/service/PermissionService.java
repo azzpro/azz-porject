@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.constants.PermissionConstants;
+import com.azz.core.constants.UserConstants;
 import com.azz.core.constants.PermissionConstants.PermissionStatus;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.platform.user.mapper.PlatformPermissionMapper;
@@ -93,6 +94,9 @@ public class PermissionService{
     public JsonResult<String> editRole(@RequestBody EditRoleParam param) {
 	// 参数教研
 	this.validateEditRoleParam(param);
+	if(UserConstants.PLATFORM_ADMIN_ROLE_NAME.equals(param.getRoleName())) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "管理员角色不允许修改");
+	}
 	Date nowDate = new Date();
 	String modifier = param.getModifier();
 	String roleCode = param.getRoleCode();

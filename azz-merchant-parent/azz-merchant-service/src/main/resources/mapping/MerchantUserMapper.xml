@@ -351,7 +351,7 @@
 		m.id as merchantId,
 		m.company_name AS companyName,
 		mu.phone_number AS phoneNumber,
-		mu.merchant_user_name AS userName,
+		mu.merchant_user_name AS merchantUserName,
 		mu.create_time AS createTime,
 		m.qualification_apply_status as qualificationApplyStatus,
 		CASE m. STATUS

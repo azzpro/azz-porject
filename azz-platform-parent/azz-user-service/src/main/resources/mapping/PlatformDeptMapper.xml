@@ -187,7 +187,7 @@
 		WHERE
 			dept.parent_code = '0' AND (dept.status = 1 OR dept.status = 2)
 		<if test="deptNameCode != null and deptNameCode!='' "> 
-			AND dept.dept_name LIKE CONCAT('%',#{deptNameCode},'%') OR dept.dept_code = #{deptNameCode}
+			AND (dept.dept_name LIKE CONCAT('%',#{deptNameCode},'%') OR dept.dept_code LIKE CONCAT('%',#{deptNameCode},'%') )
 		</if>
 		GROUP BY dept.id
 		ORDER BY dept.create_time DESC

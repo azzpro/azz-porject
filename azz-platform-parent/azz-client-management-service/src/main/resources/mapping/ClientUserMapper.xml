@@ -262,9 +262,10 @@
   	select client_user_code,phone_number,client_type,email,status,create_time
   	from client_user
   	<where>
-  	1=1 and status != 0
+  		is_enterprise_authenticator = 1
+  	 and status != 0
   		<if test="param != null and param != ''">
-  			client_user_code = #{param} or phone_number = #{param} or email = #{param}
+  		and	( client_user_code like CONCAT('%',#{param},'%') or phone_number like CONCAT('%',#{param},'%') or email like CONCAT('%',#{param},'%') )
   		</if>
   	</where> 
   ORDER BY create_time DESC
@@ -359,8 +360,8 @@
     on a.client_dept_id=b.id
     <where>
     	<if test="param != null and param != ''">
-    		a.client_user_name = #{param} or a.phone_number = #{param} or a.post_name = #{param}
-    		or b.dept_name = #{param}
+    		(a.client_user_name like CONCAT('%',#{param},'%') or a.phone_number like CONCAT('%',#{param},'%') or a.post_name like CONCAT('%',#{param},'%')
+    		or b.dept_name like CONCAT('%',#{param},'%') )
     	</if>
     </where>
   and a.client_type = 1 and a.status != 0 order by a.create_time desc

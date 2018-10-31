@@ -3,6 +3,7 @@
 <mapper namespace="com.azz.platform.merchant.mapper.PlatformGoodsClassificationMapper">
   <resultMap id="BaseResultMap" type="com.azz.platform.merchant.pojo.PlatformGoodsClassification">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="assortment_code" jdbcType="VARCHAR" property="assortmentCode" />
     <result column="assortment_parent_code" jdbcType="VARCHAR" property="assortmentParentCode" />
     <result column="assortment_name" jdbcType="VARCHAR" property="assortmentName" />
     <result column="assortment_top" jdbcType="BIT" property="assortmentTop" />
@@ -16,7 +17,7 @@
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, assortment_parent_code, assortment_name, assortment_top, assortment_params_id, 
+    id,assortment_code, assortment_parent_code, assortment_name, assortment_top, assortment_params_id, 
     assortment_sort, assortment_pic_url, assortment_pic_name, creator, create_time, modifier, 
     modify_time
   </sql>
@@ -31,12 +32,12 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsClassification">
-    insert into platform_goods_classification (id, assortment_parent_code, assortment_name, 
+    insert into platform_goods_classification (id,assortment_code, assortment_parent_code, assortment_name, 
       assortment_top, assortment_params_id, assortment_sort, 
       assortment_pic_url, assortment_pic_name, creator, 
       create_time, modifier, modify_time
       )
-    values (#{id,jdbcType=BIGINT}, #{assortmentParentCode,jdbcType=VARCHAR}, #{assortmentName,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT},#{assortmentCode,jdbcType=VARCHAR}, #{assortmentParentCode,jdbcType=VARCHAR}, #{assortmentName,jdbcType=VARCHAR}, 
       #{assortmentTop,jdbcType=BIT}, #{assortmentParamsId,jdbcType=BIGINT}, #{assortmentSort,jdbcType=INTEGER}, 
       #{assortmentPicUrl,jdbcType=VARCHAR}, #{assortmentPicName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
@@ -47,6 +48,9 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="assortmentCode != null">
+      	assortment_code,
       </if>
       <if test="assortmentParentCode != null">
         assortment_parent_code,
@@ -86,6 +90,9 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
+      <if test="assortmentCode != null">
+      	#{assortmentCode,jdbcType=VARCHAR}
+      </if>
       <if test="assortmentParentCode != null">
         #{assortmentParentCode,jdbcType=VARCHAR},
       </if>
@@ -124,6 +131,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsClassification">
     update platform_goods_classification
     <set>
+      <if test="assortmentCode != null">
+      	assortment_code = #{assortmentCode,jdbcType=VARCHAR}
+      </if>
       <if test="assortmentParentCode != null">
         assortment_parent_code = #{assortmentParentCode,jdbcType=VARCHAR},
       </if>
@@ -162,7 +172,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsClassification">
     update platform_goods_classification
-    set assortment_parent_code = #{assortmentParentCode,jdbcType=VARCHAR},
+    set assortment_code = #{assortmentCode,jdbcType=VARCHAR},
+    	assortment_parent_code = #{assortmentParentCode,jdbcType=VARCHAR},
       assortment_name = #{assortmentName,jdbcType=VARCHAR},
       assortment_top = #{assortmentTop,jdbcType=BIT},
       assortment_params_id = #{assortmentParamsId,jdbcType=BIGINT},
@@ -175,4 +186,6 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  
 </mapper>

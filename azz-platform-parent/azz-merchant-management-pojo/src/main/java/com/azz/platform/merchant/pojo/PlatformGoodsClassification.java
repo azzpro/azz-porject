@@ -8,6 +8,11 @@ public class PlatformGoodsClassification implements Serializable {
     private Long id;
 
     /**
+     * 分类编码
+     */
+    private String assortmentCode;
+    
+    /**
      * 上级分类编号，可为空
      *
      * @mbg.generated
@@ -108,6 +113,15 @@ public class PlatformGoodsClassification implements Serializable {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+
+    
+    public String getAssortmentCode() {
+        return assortmentCode;
+    }
+
+    public void setAssortmentCode(String assortmentCode) {
+        this.assortmentCode = assortmentCode;
     }
 
     /**

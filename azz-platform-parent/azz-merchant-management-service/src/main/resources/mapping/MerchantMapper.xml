@@ -413,7 +413,7 @@
   		from merchant
   		<where>
   			<if test="param != null and param != ''">
-  				and merchant_code = #{param} or company_name = #{param} or registered_person = #{param}
+  				and merchant_code like CONCAT('%',#{param},'%') or company_name like CONCAT('%',#{param},'%') or registered_person like CONCAT('%',#{param},'%')
   			</if>
   		</where>
   		 ORDER BY create_time DESC
@@ -429,9 +429,12 @@
   		  a.dept_name deptName,
   		  m.status status,
   		  m.create_time createTime
-  		from merchant_user m,merchant_dept a where m.dept_id = a.id
+  		from merchant_user m
+  		left join merchant_dept a on m.dept_id = a.id
+  		where m.merchant_code = #{merchantCode}
+  		and m.status != 0
   		<if test="param != null and param != ''">
-  				and m.merchant_user_name = #{param} or m.phone_number = #{param} or m.post_name = #{param} or a.dept_name = #{param}
+  			and (m.merchant_user_name like CONCAT('%',#{param},'%') or m.phone_number like CONCAT('%',#{param},'%') or m.post_name like CONCAT('%',#{param},'%') )
   		</if>
   		 ORDER BY m.create_time DESC
   </select>
@@ -463,12 +466,16 @@
   		  a.account_bank accountBank,
   		  a.account_bank_card_number accountBankCardNumber,
   		  a.account_sub_branch accountSubBranch
-  		  
-  		from merchant m , merchant_account a where m.id = a.merchant_id
-  		<if test="code != null and code != ''">
-  				and m.merchant_code = #{code}
-  		</if>
-  		 ORDER BY m.create_time DESC
+  		FROM
+			merchant m
+		LEFT JOIN merchant_account a ON m.id = a.merchant_id
+		<where>
+			<if test="code != null and code != ''">
+  				m.merchant_code = #{code}
+  			</if>
+  		</where>
+		ORDER BY
+			m.create_time DESC  
   </select>
   
   <!-- 商户管理 启用 禁用 -->

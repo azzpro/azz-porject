@@ -238,19 +238,21 @@
   
   <select id="selectClientMerchantList" resultType="com.azz.platform.client.pojo.vo.ClientMerchantInfo" parameterType="com.azz.platform.client.pojo.bo.SearchClientMerchantManagerParam">
   	select 
-  		m.company_code companyCode,
-  		m.company_name companyName,
-  		a.client_user_name clientUserName,
-  		a.phone_number phoneNumber,
-  		a.status status,
-  		m.create_time authTime
-  	from client_user_company m ,client_user a
+  		c.company_code companyCode,
+  		c.company_name companyName,
+  		u.client_user_name clientUserName,
+  		u.phone_number phoneNumber,
+  		u.status status,
+  		c.create_time authTime
+  	from client_user_company c 
+  	left join client_user u on c.client_user_code = u.client_user_code
     where
-  	m.client_user_code = a.client_user_code and a.client_type = 1 and a.status != 0
+  	  u.is_enterprise_authenticator = 1
+  	  and u.client_type = 1 and u.status != 0
   		<if test="param !=null and param != ''">
-  			and (m.company_code = #{param} or m.company_name = #{param} or a.client_user_name = #{param})
+  			and (c.company_code like concat('%',#{param},'%') or c.company_name like concat('%',#{param},'%') or u.client_user_name like concat('%',#{param},'%'))
   		</if>
-    order by m.create_time DESC
+    order by c.create_time DESC
   </select>
   
   <!-- 客户企业详情 -->

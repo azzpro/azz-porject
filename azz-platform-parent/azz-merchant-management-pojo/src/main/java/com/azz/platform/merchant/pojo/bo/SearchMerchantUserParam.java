@@ -25,6 +25,8 @@ public class SearchMerchantUserParam extends QueryPage{
      */
 	@NotBlank(message="查询参数不能为空")
     private String param;
+	
+	private String merchantCode;
     
 }
 

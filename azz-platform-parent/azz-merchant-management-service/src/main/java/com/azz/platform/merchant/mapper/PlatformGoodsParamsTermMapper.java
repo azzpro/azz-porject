@@ -1,8 +1,11 @@
 package com.azz.platform.merchant.mapper;
 
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.azz.platform.merchant.pojo.PlatformGoodsParamsTerm;
 
+@Mapper
 public interface PlatformGoodsParamsTermMapper {
     int deleteByPrimaryKey(Long id);
 

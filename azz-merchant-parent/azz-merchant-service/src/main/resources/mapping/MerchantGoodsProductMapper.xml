@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.merchant.mapper.MerchantGoodsProductMapper">
+  <resultMap id="BaseResultMap" type="com.azz.merchant.pojo.MerchantGoodsProduct">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="assortment_id" jdbcType="BIGINT" property="assortmentId" />
+    <result column="product _code" jdbcType="VARCHAR" property="productCode" />
+    <result column="product_system_code" jdbcType="VARCHAR" property="productSystemCode" />
+    <result column="brand_id" jdbcType="BIGINT" property="brandId" />
+    <result column="product_status" jdbcType="BIT" property="productStatus" />
+    <result column="module_id" jdbcType="BIGINT" property="moduleId" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, assortment_id, "product _code", product_system_code, brand_id, product_status, 
+    module_id, creator, create_time, modifier, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_goods_product
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from merchant_goods_product
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.merchant.pojo.MerchantGoodsProduct">
+    insert into merchant_goods_product (id, assortment_id, "product _code", 
+      product_system_code, brand_id, product_status, 
+      module_id, creator, create_time, 
+      modifier, modify_time)
+    values (#{id,jdbcType=BIGINT}, #{assortmentId,jdbcType=BIGINT}, #{productCode,jdbcType=VARCHAR}, 
+      #{productSystemCode,jdbcType=VARCHAR}, #{brandId,jdbcType=BIGINT}, #{productStatus,jdbcType=BIT}, 
+      #{moduleId,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.merchant.pojo.MerchantGoodsProduct">
+    insert into merchant_goods_product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="assortmentId != null">
+        assortment_id,
+      </if>
+      <if test="productCode != null">
+        "product _code",
+      </if>
+      <if test="productSystemCode != null">
+        product_system_code,
+      </if>
+      <if test="brandId != null">
+        brand_id,
+      </if>
+      <if test="productStatus != null">
+        product_status,
+      </if>
+      <if test="moduleId != null">
+        module_id,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="assortmentId != null">
+        #{assortmentId,jdbcType=BIGINT},
+      </if>
+      <if test="productCode != null">
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productSystemCode != null">
+        #{productSystemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="brandId != null">
+        #{brandId,jdbcType=BIGINT},
+      </if>
+      <if test="productStatus != null">
+        #{productStatus,jdbcType=BIT},
+      </if>
+      <if test="moduleId != null">
+        #{moduleId,jdbcType=BIGINT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.merchant.pojo.MerchantGoodsProduct">
+    update merchant_goods_product
+    <set>
+      <if test="assortmentId != null">
+        assortment_id = #{assortmentId,jdbcType=BIGINT},
+      </if>
+      <if test="productCode != null">
+        "product _code" = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productSystemCode != null">
+        product_system_code = #{productSystemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="brandId != null">
+        brand_id = #{brandId,jdbcType=BIGINT},
+      </if>
+      <if test="productStatus != null">
+        product_status = #{productStatus,jdbcType=BIT},
+      </if>
+      <if test="moduleId != null">
+        module_id = #{moduleId,jdbcType=BIGINT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.merchant.pojo.MerchantGoodsProduct">
+    update merchant_goods_product
+    set assortment_id = #{assortmentId,jdbcType=BIGINT},
+      "product _code" = #{productCode,jdbcType=VARCHAR},
+      product_system_code = #{productSystemCode,jdbcType=VARCHAR},
+      brand_id = #{brandId,jdbcType=BIGINT},
+      product_status = #{productStatus,jdbcType=BIT},
+      module_id = #{moduleId,jdbcType=BIGINT},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

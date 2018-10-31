@@ -33,7 +33,7 @@ import com.azz.core.common.JsonResult;
 public interface PermissionService {
 
     @RequestMapping("/azz/api/client/permission/getPermissionList")
-    public JsonResult<List<Permission>> getPermissionList(@RequestParam("clientUserCompanyId") Long clientUserCompanyId, @RequestParam("roleCode") String roleCode);
+    public JsonResult<List<Permission>> getPermissionList(@RequestParam("companyCode") String companyCode, @RequestParam("roleCode") String roleCode);
     
     @RequestMapping("/azz/api/client/permission/addRole")
     public JsonResult<String> addRole(@RequestBody AddRoleParam param);
@@ -48,7 +48,7 @@ public interface PermissionService {
     public JsonResult<List<RoleInfo>> getRoleList(@RequestBody SearchRoleParam param);
     
     @RequestMapping("/azz/api/client/permission/getRolePermissions")
-    public JsonResult<List<String>> getRolePermissions(@RequestParam("clientUserCompanyId") Long clientUserCompanyId, @RequestParam("roleCode") String roleCode);
+    public JsonResult<List<String>> getRolePermissions(@RequestParam("companyCode") String companyCode, @RequestParam("roleCode") String roleCode);
     
     @RequestMapping("/azz/api/client/permission/setRolePermissions")
     public JsonResult<String> setRolePermissions(@RequestBody SetRolePermissionParam param);

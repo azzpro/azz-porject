@@ -19,7 +19,7 @@ public class ClientRole implements Serializable {
      */
     private Long id;
     
-    private Long clientUserCompanyId;
+    private String companyCode;
 
     /**
      * 角色编码
@@ -349,12 +349,12 @@ public class ClientRole implements Serializable {
         return sb.toString();
     }
 
-    public Long getClientUserCompanyId() {
-        return clientUserCompanyId;
+    public String getCompanyCode() {
+        return companyCode;
     }
 
-    public void setClientUserCompanyId(Long clientUserCompanyId) {
-        this.clientUserCompanyId = clientUserCompanyId;
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
     
 }

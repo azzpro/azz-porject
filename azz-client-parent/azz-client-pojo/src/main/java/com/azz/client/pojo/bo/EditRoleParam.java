@@ -31,7 +31,7 @@ public class EditRoleParam implements Serializable{
 
     private String remark;
     
-    private Long clientUserCompanyId;
+    private String companyCode;
     
     private String modifier;
     

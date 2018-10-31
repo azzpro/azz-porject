@@ -27,7 +27,7 @@ public interface ClientRoleMapper {
    
     ClientRole selectByRoleCode(String roleCode);
     
-    ClientRole hasRoleName(@Param("clientUserCompanyId")Long clientUserCompanyId, @Param("roleName")String roleName, @Param("roleCode") String roleCode);
+    ClientRole hasRoleName(@Param("companyCode")String companyCode, @Param("roleName")String roleName, @Param("roleCode") String roleCode);
     
     List<RoleInfo> getRoleInfoBySearchParam(SearchRoleParam param);
     

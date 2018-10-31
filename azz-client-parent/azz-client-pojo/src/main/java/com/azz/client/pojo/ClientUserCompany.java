@@ -19,6 +19,8 @@ public class ClientUserCompany implements Serializable {
     private Long id;
     
     private String companyCode;
+    
+    private Integer status;
 
     /**
      * 客户编码
@@ -150,7 +152,8 @@ public class ClientUserCompany implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
+    
+    
     /**
      * 客户编码<br/>
      * 返回值对应的表列名 client_user_company.client_user_code
@@ -600,5 +603,13 @@ public class ClientUserCompany implements Serializable {
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

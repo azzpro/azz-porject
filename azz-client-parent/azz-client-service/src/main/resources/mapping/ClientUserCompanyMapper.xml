@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.azz.client.pojo.ClientUserCompany">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="company_code" jdbcType="VARCHAR" property="companyCode" />
+    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="client_user_code" jdbcType="VARCHAR" property="clientUserCode" />
     <result column="company_name" jdbcType="VARCHAR" property="companyName" />
     <result column="credit_code" jdbcType="VARCHAR" property="creditCode" />
@@ -24,7 +25,7 @@
     id, company_code, client_user_code, company_name, credit_code, company_tel, trading_certificate_first_file_name, 
     trading_certificate_first_file_url, trading_certificate_second_file_name, trading_certificate_second_file_url, 
     trading_certificate_third_file_name, trading_certificate_third_file_url, create_time, 
-    creator, last_modify_time, modifier, remark
+    creator, last_modify_time, modifier, remark,status
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -47,14 +48,14 @@
       trading_certificate_second_file_url, trading_certificate_third_file_name, 
       trading_certificate_third_file_url, create_time, 
       creator, last_modify_time, modifier, 
-      remark)
+      remark,status)
     values (#{id,jdbcType=BIGINT}, #{companyCode,jdbcType=VARCHAR}, #{clientUserCode,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
       #{creditCode,jdbcType=VARCHAR}, #{companyTel,jdbcType=VARCHAR}, #{tradingCertificateFirstFileName,jdbcType=VARCHAR}, 
       #{tradingCertificateFirstFileUrl,jdbcType=VARCHAR}, #{tradingCertificateSecondFileName,jdbcType=VARCHAR}, 
       #{tradingCertificateSecondFileUrl,jdbcType=VARCHAR}, #{tradingCertificateThirdFileName,jdbcType=VARCHAR}, 
       #{tradingCertificateThirdFileUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{creator,jdbcType=VARCHAR}, #{lastModifyTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR})
+      #{remark,jdbcType=VARCHAR},#{status})
   </insert>
   <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.azz.client.pojo.ClientUserCompany">
     insert into client_user_company
@@ -110,6 +111,9 @@
       <if test="remark != null">
         remark,
       </if>
+      <if test="status != null">
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -162,6 +166,9 @@
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status},
       </if>
     </trim>
   </insert>
@@ -216,6 +223,9 @@
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="status != null">
+        status = #{status},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -236,11 +246,20 @@
       creator = #{creator,jdbcType=VARCHAR},
       last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
       modifier = #{modifier,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR}
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status}
     where id = #{id,jdbcType=BIGINT}
   </update>
   
-  <select id="getCountByCrditCode" parameterType="String" resultType="int">
+  <select id="getCountByCrditCode" parameterType="string" resultType="int">
   	select count(1) from client_user_company where credit_code = #{creditCode}
+  </select>
+  
+  <select id="selectByCompanyCode" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from client_user_company
+    where company_code = #{companyCode}
+    order by create_time asc limit 1
   </select>
 </mapper>

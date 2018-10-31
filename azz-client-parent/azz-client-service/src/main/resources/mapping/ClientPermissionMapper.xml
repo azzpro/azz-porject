@@ -215,7 +215,7 @@
 		WHERE
 			p. STATUS = 1
 		AND r. STATUS = 1
-		AND r.client_user_company_id = #{clientUserCompanyId}
+		AND r.company_code = #{companyCode}
 		AND  u.phone_number = #{phoneNumber}
   </select>
   
@@ -237,7 +237,7 @@
 		WHERE
 			p. STATUS = 1
 		AND r. STATUS = 1
-		AND r.client_user_company_id = #{clientUserCompanyId}
+		AND r.company_code = #{companyCode}
 		AND p.level = #{level}
 		AND  u.phone_number = #{phoneNumber}
   </select>

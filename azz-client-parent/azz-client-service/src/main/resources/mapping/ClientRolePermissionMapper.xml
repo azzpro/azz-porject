@@ -129,7 +129,7 @@
 	JOIN client_permission p ON p.id = rp.permission_id
 	WHERE
 		p. STATUS = 1
-	AND r.client_user_company_id = #{clientUserCompanyId}
+	AND r.company_code = #{companyCode}
 	AND r.role_code = #{roleCode}
   </select>
 </mapper>

@@ -18,12 +18,7 @@ public class ClientUserCompanyAddress implements Serializable {
      */
     private Long id;
 
-    /**
-     * 客户的成员公司id
-     *
-     * @mbg.generated
-     */
-    private Long clientUserCompanyId;
+    private String companyCode;
 
     /**
      * 省编码
@@ -128,29 +123,6 @@ public class ClientUserCompanyAddress implements Serializable {
         this.id = id;
     }
 
-    /**
-     * 客户的成员公司id<br/>
-     * 返回值对应的表列名 client_user_company_address.client_user_company_id
-     *
-     * @return 返回值对应 client_user_company_address.client_user_company_id
-     *
-     * @mbg.generated
-     */
-    public Long getClientUserCompanyId() {
-        return clientUserCompanyId;
-    }
-
-    /**
-     * 客户的成员公司id<br/>
-     * client_user_company_address.client_user_company_id
-     *
-     * @param clientUserCompanyId 值对应 client_user_company_address.client_user_company_id
-     *
-     * @mbg.generated
-     */
-    public void setClientUserCompanyId(Long clientUserCompanyId) {
-        this.clientUserCompanyId = clientUserCompanyId;
-    }
 
     /**
      * 省编码<br/>
@@ -429,7 +401,6 @@ public class ClientUserCompanyAddress implements Serializable {
         }
         ClientUserCompanyAddress other = (ClientUserCompanyAddress) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getClientUserCompanyId() == null ? other.getClientUserCompanyId() == null : this.getClientUserCompanyId().equals(other.getClientUserCompanyId()))
             && (this.getProvinceCode() == null ? other.getProvinceCode() == null : this.getProvinceCode().equals(other.getProvinceCode()))
             && (this.getProvinceName() == null ? other.getProvinceName() == null : this.getProvinceName().equals(other.getProvinceName()))
             && (this.getCityCode() == null ? other.getCityCode() == null : this.getCityCode().equals(other.getCityCode()))
@@ -448,7 +419,6 @@ public class ClientUserCompanyAddress implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getClientUserCompanyId() == null) ? 0 : getClientUserCompanyId().hashCode());
         result = prime * result + ((getProvinceCode() == null) ? 0 : getProvinceCode().hashCode());
         result = prime * result + ((getProvinceName() == null) ? 0 : getProvinceName().hashCode());
         result = prime * result + ((getCityCode() == null) ? 0 : getCityCode().hashCode());
@@ -470,7 +440,6 @@ public class ClientUserCompanyAddress implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", clientUserCompanyId=").append(clientUserCompanyId);
         sb.append(", provinceCode=").append(provinceCode);
         sb.append(", provinceName=").append(provinceName);
         sb.append(", cityCode=").append(cityCode);
@@ -485,5 +454,13 @@ public class ClientUserCompanyAddress implements Serializable {
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 }

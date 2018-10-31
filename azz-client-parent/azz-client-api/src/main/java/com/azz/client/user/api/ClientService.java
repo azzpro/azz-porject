@@ -81,7 +81,7 @@ public interface ClientService {
      * @throws IOException 
      */
     @RequestMapping("/azz/api/client/enterpriseAuth")
-    JsonResult<String> enterpriseAuth(@RequestBody EnterpriseAuthParam param);
+    JsonResult<LoginClientUserInfo> enterpriseAuth(@RequestBody EnterpriseAuthParam param);
     
     /**
      * 

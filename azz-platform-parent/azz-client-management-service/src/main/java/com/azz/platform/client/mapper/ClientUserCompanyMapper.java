@@ -50,7 +50,7 @@ public interface ClientUserCompanyMapper {
     ClientCompanyInfo selectClientCompanyDetail(String code);
     
     /**
-     * <p>根据企业编码获取企业信息</p>
+     * <p>根据企业编码获取企业信息，查最新一条，确保有公司信息</p>
      * @param companyCode
      * @return
      * @author 彭斌  2018年10月26日 下午12:13:27

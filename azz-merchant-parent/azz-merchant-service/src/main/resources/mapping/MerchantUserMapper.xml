@@ -388,6 +388,7 @@
 			mu.merchant_user_code AS merchantUserCode,
 			mu.merchant_user_name AS merchantUserName,
 			mu.phone_number AS phoneNumber,
+			mu.is_merchant_register as isMerchantRegister,
 			mu.email AS email,
 			 mu.post_name AS postName,
 			 d.dept_name as deptName,

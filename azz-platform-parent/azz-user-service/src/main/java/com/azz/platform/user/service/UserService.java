@@ -18,6 +18,7 @@ import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
 import com.azz.core.common.errorcode.ShiroAuthErrorCode;
 import com.azz.core.common.page.Pagination;
+import com.azz.core.constants.UserConstants;
 import com.azz.core.constants.UserConstants.UserStatus;
 import com.azz.core.exception.BaseException;
 import com.azz.core.exception.ShiroAuthException;
@@ -238,6 +239,9 @@ public class UserService{
 	PlatformRole role = platformRoleMapper.selectByRoleCode(param.getRoleCode());
 	if (role == null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色不存在");
+	}
+	if(UserConstants.PLATFORM_ADMIN_ROLE_NAME.equals(role.getRoleName())) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "该用户不允许修改");
 	}
 
 	String userCode = param.getUserCode();

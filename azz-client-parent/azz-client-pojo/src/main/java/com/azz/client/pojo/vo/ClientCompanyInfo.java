@@ -23,7 +23,7 @@ public class ClientCompanyInfo {
     
     private String clientUserCode;
     
-    private String companyStatus;
+    private Integer companyStatus;
     
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")
     private Date createTime;
@@ -31,6 +31,8 @@ public class ClientCompanyInfo {
     private String companyName;
     
     private String companyTel;
+    
+    private String creditCode;
     
     private String address;
     

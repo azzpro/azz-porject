@@ -262,7 +262,12 @@
   		a.company_name companyName,
   		a.company_tel companyTel,
   		a.credit_code creditCode,
-  		c.detail_address detailAddress,
+  		CONCAT(
+			c.province_name,
+			c.city_name,
+			c.area_name,
+			c.detail_address
+		) detailAddress ,
   		a.trading_certificate_first_file_name tradingCertificateFirstFileName,
   		a.trading_certificate_first_file_url tradingCertificateFirstFileUrl,
   		a.trading_certificate_second_file_name tradingCertificateSecondFileName,
@@ -271,7 +276,7 @@
   		a.trading_certificate_third_file_url tradingCertificateThirdFileUrl
   	from
   		client_user_company a left join client_user b on a.client_user_code=b.client_user_code
-  		left join client_user_company_address c on a.id = c.client_user_company_id
+  		left join client_user_company_address c on a.company_code = c.company_code
   	where a.company_code = #{code} and b.client_type = 1 and b.status != 0
   
   </select>
@@ -290,5 +295,6 @@
     <include refid="Base_Column_List" />
     from client_user_company
     where company_code = #{companyCode,jdbcType=VARCHAR}
+    order by create_time asc limit 1
   </select>
 </mapper>

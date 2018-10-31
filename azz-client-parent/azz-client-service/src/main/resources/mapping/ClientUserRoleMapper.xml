@@ -119,4 +119,6 @@
     delete from client_user_role
     where client_user_id = #{clientUserId}
   </delete>
+  
+  
 </mapper>

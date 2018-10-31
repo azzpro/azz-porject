@@ -14,10 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.azz.core.common.JsonResult;
-import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
 import com.azz.core.exception.BaseException;
-import com.azz.exception.JSR303ValidationException;
 import com.azz.platform.client.common.constants.AuditConstants;
 import com.azz.platform.client.common.constants.ClientConstants;
 import com.azz.platform.client.mapper.ClientApplyMapper;
@@ -122,13 +120,11 @@ public class AuditService {
             cucObj.setLastModifyTime(new Date());
             clientUserCompanyMapper.updateByPrimaryKeySelective(cucObj);
             
-            ClientUserCompany company = clientUserCompanyMapper.selectByCompanyCode(param.getCompanyCode());
-            
             // 为客户新增管理员角色
             ClientRole roleRecord = ClientRole.builder()
                     .createTime(new Date())
-                    .creator(param.getAuditor())
-                    .clientUserCompanyId(company.getId()) 
+                    .creator(param.getClientUserCode())
+                    .companyCode(param.getCompanyCode())
                     .remark("审核通过，新增客户的管理员角色")
                     .roleName("管理员")
                     .roleCode(randomSequenceService.getPowermentNumber())
@@ -151,7 +147,7 @@ public class AuditService {
             // 为客户成员绑定该角色
             ClientUserRole userRoleRecord = ClientUserRole.builder()
                     .createTime(new Date())
-                    .creator(param.getAuditor())
+                    .creator(param.getClientUserCode())
                     .clientUserId(clientUser.getId())
                     .roleId(roleRecord.getId())
                     .build();

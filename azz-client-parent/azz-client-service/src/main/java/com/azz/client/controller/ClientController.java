@@ -96,7 +96,7 @@ public class ClientController {
      * @author 黄智聪  2018年10月25日 下午1:40:03
      */
     @RequestMapping("/enterpriseAuth")
-    public JsonResult<String> enterpriseAuth(@RequestBody EnterpriseAuthParam param) {
+    public JsonResult<LoginClientUserInfo> enterpriseAuth(@RequestBody EnterpriseAuthParam param) {
 	return clientService.enterpriseAuth(param);
     }
     

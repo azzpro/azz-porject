@@ -526,6 +526,9 @@ public class MerchantService {
 	if (user == null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "用户不存在");
 	}
+	if(user.getIsMerchantRegister() == IsMerchantRegister.Y.getValue()) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "该成员不允许修改");
+	}
 	String email = param.getEmail();
 	if (!StringUtils.isBlank(email)) {
 	    // 带上用户编码是为了排除当前用户以外是否存在邮箱了

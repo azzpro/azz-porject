@@ -22,5 +22,5 @@ public interface ClientRolePermissionMapper {
     
     int deleteByRoleId(Long roleId);
     
-    List<String> getPermissionCodesByRoleCode(@Param("clientUserCompanyId")Long clientUserCompanyId,@Param("roleCode")String roleCode);
+    List<String> getPermissionCodesByRoleCode(@Param("companyCode")String companyCode,@Param("roleCode")String roleCode);
 }

@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.azz.client.mapper.ClientDeptMapper;
 import com.azz.client.pojo.ClientDept;
@@ -76,7 +75,7 @@ public class ClientDeptService {
         
         if(!param.getDeptName().trim().equals(cdObj.getDeptName())) {
             SearchClientDeptInfoParam scdObj = new SearchClientDeptInfoParam();
-            scdObj.setClientUserCompanyId(param.getClientUserCompanyId());
+            scdObj.setCompanyCode(param.getCompanyCode());
             scdObj.setDeptName(param.getDeptName().trim());
             ClientDept clientDept = clientDeptMapper.selectClientDeptInfoByName(scdObj);
             if(ObjectUtils.isNotNull(clientDept)) {
@@ -142,7 +141,7 @@ public class ClientDeptService {
         // 部门信息非空校验
         JSR303ValidateUtils.validate(param);
         SearchClientDeptIsExistParam record = new SearchClientDeptIsExistParam();
-        record.setClientUserCompanyId(param.getClientUserCompanyId());
+        record.setCompanyCode(param.getCompanyCode());
         record.setDeptName(param.getDeptName());
         int isExist = clientDeptMapper.selectFirstLevelExist(record);
         if(isExist>0) {
@@ -150,7 +149,7 @@ public class ClientDeptService {
         }
         ClientDept clientDept = new ClientDept();
         clientDept.setDeptCode(randomSequenceService.getDepartmentNumber());
-        clientDept.setClientUserCompanyId(param.getClientUserCompanyId());
+        clientDept.setCompanyCode(param.getCompanyCode());
         clientDept.setCreateTime(new Date());
         clientDept.setDeptName(param.getDeptName());
         clientDept.setParentCode("0");
@@ -164,7 +163,7 @@ public class ClientDeptService {
         // 部门信息非空校验
         JSR303ValidateUtils.validate(param);
         SearchClientDeptInfoParam record = new SearchClientDeptInfoParam();
-        record.setClientUserCompanyId(param.getClientUserCompanyId());
+        record.setCompanyCode(param.getCompanyCode());
         record.setDeptName(param.getDeptName());
         ClientDept cdObj = clientDeptMapper.selectClientDeptInfoByName(record);
         if(ObjectUtils.isNotNull(cdObj)) {
@@ -172,7 +171,7 @@ public class ClientDeptService {
         }
         
         SearchClientDeptInfoByCodeParam deptByCodeObj = new SearchClientDeptInfoByCodeParam();
-        deptByCodeObj.setClientUserCompanyId(param.getClientUserCompanyId());
+        deptByCodeObj.setCompanyCode(param.getCompanyCode());
         deptByCodeObj.setDeptCode(param.getParentCode());
         ClientDept dept = clientDeptMapper.selectClientDeptInfoByCode(deptByCodeObj);
         
@@ -182,7 +181,7 @@ public class ClientDeptService {
         
         ClientDept clientDept = new ClientDept();
         clientDept.setDeptCode(randomSequenceService.getDepartmentNumber());
-        clientDept.setClientUserCompanyId(param.getClientUserCompanyId());
+        clientDept.setCompanyCode(param.getCompanyCode());
         clientDept.setCreateTime(new Date());
         clientDept.setDeptName(param.getDeptName());
         clientDept.setParentCode(param.getParentCode());

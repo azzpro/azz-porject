@@ -7,6 +7,8 @@
  
 package com.azz.client.pojo.vo;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
@@ -41,14 +43,14 @@ public class ClientUserInfo {
     
     private Integer clientType;
     
-    private Long clientUserCompanyId;
+    private String companyCode;
     
     private Integer isEnterpriseAuthenticator;
     
     private Integer qualificationApplyStatus;
     
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")
-    private String createTime;
+    private Date createTime;
     
     private String status;
     

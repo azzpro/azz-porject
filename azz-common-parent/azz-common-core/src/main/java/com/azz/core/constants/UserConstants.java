@@ -20,6 +20,9 @@ import lombok.Getter;
 public abstract class UserConstants {
     
     public static final String LOGIN_USER = "loginUser"; 
+    
+    // 平台端管理员角色名称
+    public static final String PLATFORM_ADMIN_ROLE_NAME = "管理员"; 
 
     public enum UserStatus {
 

@@ -48,7 +48,7 @@ public class ClientDeptController {
      */
     @RequestMapping("/addFirstLevelDept")
     public JsonResult<String> addFirstLevelDept(AddClientDeptParam param){
-        param.setClientUserCompanyId(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCompanyId());
+        param.setCompanyCode(WebUtils.getLoginClientUser().getClientUserInfo().getCompanyCode());
         param.setCreator(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
         return clientDeptService.addFirstLevelDept(param);
     }
@@ -61,7 +61,7 @@ public class ClientDeptController {
      */
     @RequestMapping("/addChildDept")
     public JsonResult<String> addChildDept(AddClientDeptParam param){
-        param.setClientUserCompanyId(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCompanyId());
+        param.setCompanyCode(WebUtils.getLoginClientUser().getClientUserInfo().getCompanyCode());
         param.setCreator(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
         return clientDeptService.addFirstLevelDept(param);
     }
@@ -75,7 +75,7 @@ public class ClientDeptController {
      */
     @RequestMapping("/searchClientDeptList")
     public JsonResult<List<ClientDeptList>> searchClientDeptList(SearchClientDeptParam param){
-        param.setClientUserCompanyId(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCompanyId());
+        param.setCompanyCode(WebUtils.getLoginClientUser().getClientUserInfo().getCompanyCode());
         return clientDeptService.searchClientDeptList(param);
     }
     
@@ -88,7 +88,7 @@ public class ClientDeptController {
      */
     @RequestMapping("/searchChildClientDeptList")
     public JsonResult<List<ClientDeptList>> searchChildClientDeptList(SearchClientChildDeptParam param){
-        param.setClientUserCompanyId(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCompanyId());
+        param.setCompanyCode(WebUtils.getLoginClientUser().getClientUserInfo().getCompanyCode());
         return clientDeptService.searchChildClientDeptList(param);
     }
     
@@ -101,7 +101,7 @@ public class ClientDeptController {
      */
     @RequestMapping("/editDept")
     public JsonResult<String> editDept(EditClientDeptParam param){
-        param.setClientUserCompanyId(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCompanyId());
+        param.setCompanyCode(WebUtils.getLoginClientUser().getClientUserInfo().getCompanyCode());
         param.setModifier(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
         return clientDeptService.editDept(param);
     }
@@ -115,7 +115,7 @@ public class ClientDeptController {
      */
     @RequestMapping("/isEnableDept")
     public JsonResult<String> isEnableDept(EditDeptIsEnableParam param){
-        param.setClientUserCompanyId(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCompanyId());
+        param.setCompanyCode(WebUtils.getLoginClientUser().getClientUserInfo().getCompanyCode());
         param.setModifier(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
         return clientDeptService.isEnableDept(param);
     }
@@ -140,7 +140,7 @@ public class ClientDeptController {
      */
     @RequestMapping("/getDeptInfo")
     public JsonResult<ClientDeptInfo> getDeptInfo(SearchClientDeptInfoByCodeParam param){
-        param.setClientUserCompanyId(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCompanyId());
+        param.setCompanyCode(WebUtils.getLoginClientUser().getClientUserInfo().getCompanyCode());
         return clientDeptService.getDeptInfo(param);
     }
 }

@@ -25,5 +25,7 @@ public class SearchClientUserParam extends QueryPage{
     
     private String searchInput;
     
+    private String companyCode;
+    
 }
 

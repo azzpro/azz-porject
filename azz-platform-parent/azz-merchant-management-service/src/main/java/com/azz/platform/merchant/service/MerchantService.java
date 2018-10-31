@@ -13,11 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.azz.core.common.JsonResult;
-import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.exception.BaseException;
-import com.azz.exception.JSR303ValidationException;
 import com.azz.platform.merchant.mapper.MerchantApplyMapper;
 import com.azz.platform.merchant.mapper.MerchantMapper;
 import com.azz.platform.merchant.pojo.bo.SearchMerchantListParam;

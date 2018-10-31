@@ -20,7 +20,7 @@ import lombok.Data;
 public class SearchClientDeptInfoParam {
     
     @NotNull(message = "客户企业id不允许为空")
-    private Long clientUserCompanyId;
+    private String companyCode;
     
     private String deptName;
 }

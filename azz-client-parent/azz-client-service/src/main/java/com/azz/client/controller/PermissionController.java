@@ -39,8 +39,8 @@ public class PermissionController {
     private PermissionService permissionService;
     
     @RequestMapping("/getPermissionList")
-    public JsonResult<List<Permission>> getPermissionList(@RequestParam("clientUserCompanyId") Long clientUserCompanyId, @RequestParam("roleCode") String roleCode) {
-	return permissionService.getPermissionList(clientUserCompanyId, roleCode);
+    public JsonResult<List<Permission>> getPermissionList(@RequestParam("companyCode") String companyCode, @RequestParam("roleCode") String roleCode) {
+	return permissionService.getPermissionList(companyCode, roleCode);
     }
     
     @RequestMapping("/addRole")
@@ -64,8 +64,8 @@ public class PermissionController {
     }
     
     @RequestMapping("/getRolePermissions")
-    public JsonResult<List<String>> getRolePermissions(@RequestParam("clientUserCompanyId") Long clientUserCompanyId, @RequestParam("roleCode") String roleCode) {
-	return permissionService.getRolePermissions(clientUserCompanyId, roleCode);
+    public JsonResult<List<String>> getRolePermissions(@RequestParam("companyCode") String companyCode, @RequestParam("roleCode") String roleCode) {
+	return permissionService.getRolePermissions(companyCode, roleCode);
     }
     
     @RequestMapping("/setRolePermissions")

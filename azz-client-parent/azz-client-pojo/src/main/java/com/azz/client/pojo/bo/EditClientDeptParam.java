@@ -20,10 +20,10 @@ import lombok.Data;
 public class EditClientDeptParam {
     
     /**
-     * 客户企业id
+     * 客户企业编码
      */
-    @NotNull(message = "客户企业id不允许为空")
-    private Long clientUserCompanyId;
+    @NotNull(message = "客户企业编码不允许为空")
+    private String companyCode;
     
     @NotNull(message = "部门编码不允许为空")
     private String deptCode;

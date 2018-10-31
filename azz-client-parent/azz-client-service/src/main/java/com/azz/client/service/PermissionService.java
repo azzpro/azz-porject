@@ -55,12 +55,12 @@ public class PermissionService {
     private RandomSequenceService randomSequenceService;
     
 
-    public JsonResult<List<Permission>> getPermissionList(Long clientUserCompanyId, String roleCode) {
+    public JsonResult<List<Permission>> getPermissionList(String companyCode, String roleCode) {
 	List<Permission> permissions = clientPermissionMapper.getAllPermissions();
 	if(StringUtils.isBlank(roleCode)) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色编码不允许为空");
 	}
-	List<String> permissionCodes = clientRolePermissionMapper.getPermissionCodesByRoleCode(clientUserCompanyId, roleCode);
+	List<String> permissionCodes = clientRolePermissionMapper.getPermissionCodesByRoleCode(companyCode, roleCode);
 	for (Permission permission : permissions) {
 	    String permissionCode = permission.getPermissionCode();
 	    if(permissionCodes.contains(permissionCode)) {
@@ -78,7 +78,7 @@ public class PermissionService {
 	ClientRole roleRecord = ClientRole.builder().createTime(nowDate)
 		.creator(creator).remark(param.getRemark())
 		.roleCode(randomSequenceService.getPowermentNumber())
-		.clientUserCompanyId(param.getClientUserCompanyId())
+		.companyCode(param.getCompanyCode())
 		.roleName(param.getRoleName()).build();
 	clientRoleMapper.insertSelective(roleRecord);
 	return JsonResult.successJsonResult();
@@ -116,11 +116,11 @@ public class PermissionService {
     }
     
     
-    public JsonResult<List<String>> getRolePermissions(Long clientUserCompanyId, String roleCode) {
+    public JsonResult<List<String>> getRolePermissions(String companyCode, String roleCode) {
 	if(StringUtils.isBlank(roleCode)) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色编码不允许为空");
 	}
-	List<String> permissionCodes = clientRolePermissionMapper.getPermissionCodesByRoleCode(clientUserCompanyId, roleCode);
+	List<String> permissionCodes = clientRolePermissionMapper.getPermissionCodesByRoleCode(companyCode, roleCode);
 	return JsonResult.successJsonResult(permissionCodes);
     }
     
@@ -158,7 +158,7 @@ public class PermissionService {
     private void validateAddRoleParam(AddRoleParam param) {
 	// 参数校验
 	JSR303ValidateUtils.validate(param);
-	this.isExistRoleName(param.getClientUserCompanyId(), param.getRoleName(), null);
+	this.isExistRoleName(param.getCompanyCode(), param.getRoleName(), null);
     }
 
     /**
@@ -173,7 +173,7 @@ public class PermissionService {
     private void validateEditRoleParam(EditRoleParam param) {
 	// 参数校验
 	JSR303ValidateUtils.validate(param);
-	this.isExistRoleName(param.getClientUserCompanyId(), param.getRoleName(), param.getRoleCode());
+	this.isExistRoleName(param.getCompanyCode(), param.getRoleName(), param.getRoleCode());
     }
 
     /**
@@ -186,9 +186,9 @@ public class PermissionService {
      *            角色名称
      * @author 黄智聪 2018年10月19日 下午1:52:51
      */
-    private void isExistRoleName(Long clientUserCompanyId, String roleName, String roleCode) {
+    private void isExistRoleName(String companyCode, String roleName, String roleCode) {
 	// 校验角色名称是否已经存在，若是修改则需要传roleCode，用于判断是否改的为当前编码的角色名称
-	ClientRole role = clientRoleMapper.hasRoleName(clientUserCompanyId, roleName, roleCode);
+	ClientRole role = clientRoleMapper.hasRoleName(companyCode, roleName, roleCode);
 	if (role != null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色名称已存在");
 	}

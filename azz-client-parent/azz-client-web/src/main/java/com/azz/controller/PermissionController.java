@@ -42,19 +42,19 @@ public class PermissionController {
     
     @RequestMapping("/getPermissionList")
     public JsonResult<List<Permission>> getPermissionList(String roleCode) {
-	return permissionService.getPermissionList(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCompanyId(), roleCode);
+	return permissionService.getPermissionList(WebUtils.getLoginClientUser().getClientUserInfo().getCompanyCode(), roleCode);
     }
     
     @RequestMapping("/addRole")
     public JsonResult<String> addRole(AddRoleParam param) {
-	param.setClientUserCompanyId(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCompanyId());
+	param.setCompanyCode(WebUtils.getLoginClientUser().getClientUserInfo().getCompanyCode());
 	param.setCreator(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 	return permissionService.addRole(param);
     }
     
     @RequestMapping("/editRole")
     public JsonResult<String> editRole(EditRoleParam param) {
-	param.setClientUserCompanyId(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCompanyId());
+	param.setCompanyCode(WebUtils.getLoginClientUser().getClientUserInfo().getCompanyCode());
 	param.setModifier(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 	return permissionService.editRole(param);
     }
@@ -67,13 +67,13 @@ public class PermissionController {
     
     @RequestMapping("/getRoleList")
     public JsonResult<List<RoleInfo>> getRoleList(SearchRoleParam param) {
-	param.setClientUserCompanyId(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCompanyId());
+	param.setCompanyCode(WebUtils.getLoginClientUser().getClientUserInfo().getCompanyCode());
 	return permissionService.getRoleList(param);
     }
     
     @RequestMapping("/getRolePermissions")
     public JsonResult<List<String>> getRolePermissions(String roleCode) {
-	return permissionService.getRolePermissions(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCompanyId(), roleCode);
+	return permissionService.getRolePermissions(WebUtils.getLoginClientUser().getClientUserInfo().getCompanyCode(), roleCode);
     }
     
     @RequestMapping("/setRolePermissions")

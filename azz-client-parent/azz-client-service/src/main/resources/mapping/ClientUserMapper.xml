@@ -371,6 +371,7 @@
   <select id="getClientUserInfoByPhoneNumber" parameterType="string" resultType="com.azz.client.pojo.vo.ClientUserInfo">
     SELECT
 		c.client_user_code AS clientUserCode,
+		uc.company_code as companyCode,
 		uc.company_name AS companyName,
 		uc.id as clientUserCompanyId,
 		c.phone_number AS phoneNumber,
@@ -394,7 +395,7 @@
 	and c.phone_number = #{phoneNumber}
   </select>
   
-  <select id="getClientUserInfoBySearchParam" parameterType="string" resultType="com.azz.client.pojo.vo.ClientUserInfo">
+  <select id="getClientUserInfoBySearchParam" resultType="com.azz.client.pojo.vo.ClientUserInfo">
 		  SELECT
 				u.client_user_code AS clientUserCode,
 				u.client_user_name AS clientUserName,
@@ -402,6 +403,7 @@
 				u.email AS email,
 				u.post_name AS postName,
 				u.client_type AS clientType,
+				u.is_enterprise_authenticator as isEnterpriseAuthenticator,
 				 CASE u. STATUS
 				WHEN 0 THEN
 					'注销'
@@ -410,15 +412,18 @@
 				WHEN 2 THEN
 					'禁用'
 				END AS STATUS,
+				r.role_code as roleCode,
 				 r.role_name AS roleName,
 				 d.dept_name AS deptName,
 				 u.create_time AS createTime
 			FROM
 				client_user u
+			LEFT JOIN client_user_company uc on uc.client_user_code = u.client_user_code
 			LEFT JOIN client_dept d ON u.client_dept_id = d.id
 			LEFT JOIN client_user_role ur ON ur.client_user_id = u.id
 			LEFT JOIN client_role r ON ur.role_id = r.id
 			WHERE u. STATUS != 0
+			and uc.company_code = #{companyCode}
 			<if test="searchInput != null and searchInput != ''">
 				and (
 					u.client_user_name like CONCAT('%', #{searchInput}, '%')
@@ -482,10 +487,11 @@
   <select id="getClientCompanyInfoByClientUserCode" parameterType="string" resultType="com.azz.client.pojo.vo.ClientCompanyInfo">
 	SELECT
 		u.client_user_code AS clientUserCode,
-		u.`status` AS STATUS,
+		uc.status AS companyStatus,
 		u.create_time AS createTime,
 		uc.company_name AS companyName,
 		uc.company_tel AS companyTel,
+		uc.credit_code as creditCode,
 		CONCAT(
 			uca.province_name,
 			uca.city_name,
@@ -501,7 +507,7 @@
 	FROM
 		client_user u
 	JOIN client_user_company uc ON uc.client_user_code = u.client_user_code
-	JOIN client_user_company_address uca ON uca.client_user_company_id = uc.id
+	JOIN client_user_company_address uca ON uca.company_code = uc.company_code
 	WHERE u.client_user_code = #{clientUserCode}
   </select>
   

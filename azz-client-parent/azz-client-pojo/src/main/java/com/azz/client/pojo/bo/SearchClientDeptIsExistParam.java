@@ -16,7 +16,7 @@ import lombok.Data;
  */
 @Data
 public class SearchClientDeptIsExistParam {
-    private Long clientUserCompanyId;
+    private String companyCode;
     private String deptName;
 }
 

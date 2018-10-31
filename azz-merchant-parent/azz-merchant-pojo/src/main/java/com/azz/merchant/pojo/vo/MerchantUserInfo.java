@@ -50,6 +50,8 @@ public class MerchantUserInfo {
     
     private String status;
     
+    private Integer isMerchantRegister;
+    
     private int qualificationApplyStatus;
     
 }

@@ -3,7 +3,7 @@
 <mapper namespace="com.azz.platform.client.mapper.ClientUserCompanyAddressMapper">
   <resultMap id="BaseResultMap" type="com.azz.platform.client.pojo.ClientUserCompanyAddress">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="client_user_company_id" jdbcType="BIGINT" property="clientUserCompanyId" />
+    <result column="company_code" jdbcType="VARCHAR" property="companyCode" />
     <result column="province_code" jdbcType="VARCHAR" property="provinceCode" />
     <result column="province_name" jdbcType="VARCHAR" property="provinceName" />
     <result column="city_code" jdbcType="VARCHAR" property="cityCode" />
@@ -17,7 +17,7 @@
     <result column="last_modify_time" jdbcType="TIMESTAMP" property="lastModifyTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, client_user_company_id, province_code, province_name, city_code, city_name, area_code, 
+    id, company_code, province_code, province_name, city_code, city_name, area_code, 
     area_name, detail_address, create_time, creator, modifier, last_modify_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -31,12 +31,12 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.azz.platform.client.pojo.ClientUserCompanyAddress">
-    insert into client_user_company_address (id, client_user_company_id, province_code, 
+    insert into client_user_company_address (id, company_code, province_code, 
       province_name, city_code, city_name, 
       area_code, area_name, detail_address, 
       create_time, creator, modifier, 
       last_modify_time)
-    values (#{id,jdbcType=BIGINT}, #{clientUserCompanyId,jdbcType=BIGINT}, #{provinceCode,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{companyCode,jdbcType=VARCHAR}, #{provinceCode,jdbcType=VARCHAR}, 
       #{provinceName,jdbcType=VARCHAR}, #{cityCode,jdbcType=VARCHAR}, #{cityName,jdbcType=VARCHAR}, 
       #{areaCode,jdbcType=VARCHAR}, #{areaName,jdbcType=VARCHAR}, #{detailAddress,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
@@ -48,8 +48,8 @@
       <if test="id != null">
         id,
       </if>
-      <if test="clientUserCompanyId != null">
-        client_user_company_id,
+      <if test="companyCode != null">
+        company_code,
       </if>
       <if test="provinceCode != null">
         province_code,
@@ -89,8 +89,8 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="clientUserCompanyId != null">
-        #{clientUserCompanyId,jdbcType=BIGINT},
+      <if test="companyCode != null">
+        #{companyCode,jdbcType=VARCHAR},
       </if>
       <if test="provinceCode != null">
         #{provinceCode,jdbcType=VARCHAR},
@@ -130,8 +130,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.azz.platform.client.pojo.ClientUserCompanyAddress">
     update client_user_company_address
     <set>
-      <if test="clientUserCompanyId != null">
-        client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT},
+      <if test="companyCode != null">
+        company_code = #{companyCode,jdbcType=VARCHAR},
       </if>
       <if test="provinceCode != null">
         province_code = #{provinceCode,jdbcType=VARCHAR},
@@ -171,7 +171,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.azz.platform.client.pojo.ClientUserCompanyAddress">
     update client_user_company_address
-    set client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT},
+    set company_code = #{companyCode,jdbcType=VARCHAR},
       province_code = #{provinceCode,jdbcType=VARCHAR},
       province_name = #{provinceName,jdbcType=VARCHAR},
       city_code = #{cityCode,jdbcType=VARCHAR},

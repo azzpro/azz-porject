@@ -11,7 +11,7 @@ public class ClientDept implements Serializable {
      */
     private Long id;
 
-    private Long clientUserCompanyId;
+    private String companyCode;
     /**
      * 部门编码
      *
@@ -73,12 +73,12 @@ public class ClientDept implements Serializable {
     private static final long serialVersionUID = 1L;
 
     
-    public Long getClientUserCompanyId() {
-        return clientUserCompanyId;
+    public String getCompanyCode() {
+        return companyCode;
     }
 
-    public void setClientUserCompanyId(Long clientUserCompanyId) {
-        this.clientUserCompanyId = clientUserCompanyId;
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
     /**

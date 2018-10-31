@@ -7,8 +7,6 @@
  
 package com.azz.platform.client.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +29,6 @@ import com.azz.platform.client.pojo.vo.ClientInfo;
 import com.azz.platform.client.pojo.vo.ClientMerchantInfo;
 import com.azz.platform.client.service.AuditService;
 import com.azz.platform.client.service.ClientService;
-import com.github.pagehelper.PageHelper;
 
 /**
  * <P>TODO</P>

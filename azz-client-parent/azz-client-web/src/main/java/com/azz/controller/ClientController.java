@@ -184,7 +184,7 @@ public class ClientController {
      * @throws IOException 
      */
     @RequestMapping(value = "/enterpriseAuth")
-    public JsonResult<String> enterpriseAuth(EnterpriseAuthWebParam webParam) throws IOException {
+    public JsonResult<LoginClientUserInfo> enterpriseAuth(EnterpriseAuthWebParam webParam) throws IOException {
 	JSR303ValidateUtils.validate(webParam);
 	EnterpriseAuthParam param = new EnterpriseAuthParam();
 	BeanUtils.copyProperties(webParam, param);
@@ -208,7 +208,7 @@ public class ClientController {
      */
     @RequestMapping("/addClientUser")
     public JsonResult<String> addClientUser(AddClientUserParam param){
-	param.setClientUserCompanyId(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCompanyId());
+	param.setCompanyCode(WebUtils.getLoginClientUser().getClientUserInfo().getCompanyCode());
 	param.setCreator(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 	return clientService.addClientUser(param);
     }
@@ -235,6 +235,7 @@ public class ClientController {
      */
     @RequestMapping("/getClientUserList")
     public JsonResult<Pagination<ClientUserInfo>> getClientUserList(SearchClientUserParam param) {
+	param.setCompanyCode(WebUtils.getLoginClientUser().getClientUserInfo().getCompanyCode());
 	return clientService.getClientUserList(param);
     }
     

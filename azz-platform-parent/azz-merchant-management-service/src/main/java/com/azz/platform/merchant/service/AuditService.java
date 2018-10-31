@@ -123,10 +123,17 @@ public class AuditService{
         // 审批流程走完需要覆盖商户表数据作为最新的商户信息
         merchantMapper.updateByPrimaryKeySelective(merchant);
         
+        // 查询出该商户的注册人信息
+        MerchantUser merchantUser = merchantUserMapper.getRegistMerchantUserByMerchantCode(param.getMerchantCode());
+        if(merchantUser == null) {
+            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户注册人不存在");
+        }
+        
+        
         // 为商户新增管理员角色
         MerchantRole roleRecord = MerchantRole.builder()
                 .createTime(new Date())
-                .creator(param.getAuditor())
+                .creator(merchantUser.getMerchantUserCode())
                 .merchantId(merchant.getId())
                 .remark("审核通过，新增商户的管理员角色")
                 .roleName("管理员")
@@ -140,19 +147,13 @@ public class AuditService{
             MerchantRolePermission rolePermissionRecord = MerchantRolePermission
                     .builder()
                     .createTime(new Date())
-                    .creator(param.getAuditor())
+                    .creator(merchantUser.getMerchantUserCode())
                     .permissionId(permission.getPermissionId())
                     .roleId(roleRecord.getId())
                     .build();
             merchantRolePermissionMapper.insertSelective(rolePermissionRecord);
         }
         
-        // 查询出该商户的注册人信息
-        MerchantUser merchantUser = merchantUserMapper.getRegistMerchantUserByMerchantCode(param.getMerchantCode());
-        
-        if(merchantUser == null) {
-            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户注册人不存在");
-        }
         
         // 为商户成员绑定该角色
         MerchantUserRole userRoleRecord = MerchantUserRole.builder()

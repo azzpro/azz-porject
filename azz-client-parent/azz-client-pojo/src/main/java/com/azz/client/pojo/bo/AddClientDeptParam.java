@@ -48,8 +48,8 @@ public class AddClientDeptParam {
     private String creator;
     
     /**
-     * 客户企业id
+     * 客户企业编码
      */
-    private Long clientUserCompanyId;
+    private String companyCode;
 }
 

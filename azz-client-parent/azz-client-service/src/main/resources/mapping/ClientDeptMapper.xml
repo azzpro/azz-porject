@@ -3,7 +3,7 @@
 <mapper namespace="com.azz.client.mapper.ClientDeptMapper">
   <resultMap id="BaseResultMap" type="com.azz.client.pojo.ClientDept">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="client_user_company_id" jdbcType="BIGINT" property="clientUserCompanyId" />
+    <result column="company_code" jdbcType="VARCHAR" property="companyCode" />
     <result column="dept_code" jdbcType="VARCHAR" property="deptCode" />
     <result column="parent_code" jdbcType="VARCHAR" property="parentCode" />
     <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
@@ -15,7 +15,7 @@
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
   </resultMap>
   <sql id="Base_Column_List">
-    id,client_user_company_id, dept_code, parent_code, dept_name, description, status, create_time, creator, 
+    id,company_code, dept_code, parent_code, dept_name, description, status, create_time, creator, 
     last_modify_time, modifier
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -38,11 +38,11 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.azz.client.pojo.ClientDept">
-    insert into client_dept (id,client_user_company_id, dept_code, parent_code, 
+    insert into client_dept (id,company_code, dept_code, parent_code, 
       dept_name, description, status, 
       create_time, creator, last_modify_time, 
       modifier)
-    values (#{id,jdbcType=BIGINT},#{clientUserCompanyId,jdbcType=BIGINT}, #{deptCode,jdbcType=VARCHAR}, #{parentCode,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT},#{companyCode,jdbcType=VARCHAR}, #{deptCode,jdbcType=VARCHAR}, #{parentCode,jdbcType=VARCHAR}, 
       #{deptName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
       #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{lastModifyTime,jdbcType=TIMESTAMP}, 
       #{modifier,jdbcType=VARCHAR})
@@ -53,8 +53,8 @@
       <if test="id != null">
         id,
       </if>
-      <if test="clientUserCompanyId != null">
-      	client_user_company_id,
+      <if test="companyCode != null">
+      	company_code,
       </if>
       <if test="deptCode != null">
         dept_code,
@@ -88,8 +88,8 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="clientUserCompanyId != null">
-        #{clientUserCompanyId,jdbcType=BIGINT},
+      <if test="companyCode != null">
+        #{companyCode,jdbcType=VARCHAR},
       </if>
       <if test="deptCode != null">
         #{deptCode,jdbcType=VARCHAR},
@@ -123,8 +123,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.azz.client.pojo.ClientDept">
     update client_dept
     <set>
-      <if test="clientUserCompanyId != null">
-        client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT},
+      <if test="companyCode != null">
+        company_code = #{companyCode,jdbcType=VARCHAR},
       </if>
       <if test="deptCode != null">
         dept_code = #{deptCode,jdbcType=VARCHAR},
@@ -159,7 +159,7 @@
   <update id="updateByPrimaryKey" parameterType="com.azz.client.pojo.ClientDept">
     update client_dept
     set 
-    	client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT},
+    	company_code = #{companyCode,jdbcType=VARCHAR},
     	dept_code = #{deptCode,jdbcType=VARCHAR},
       parent_code = #{parentCode,jdbcType=VARCHAR},
       dept_name = #{deptName,jdbcType=VARCHAR},
@@ -182,7 +182,7 @@
 			cd.create_time AS createTime
 	FROM client_dept cd 
 	WHERE
-	 cd.client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT} AND cd.parent_code = '0' AND cd.status != 0 
+	 cd.company_code = #{companyCode,jdbcType=VARCHAR} AND cd.parent_code = '0' AND cd.status != 0 
 	  <if test="deptNameCode != null and deptNameCode!='' "> 
 			AND cd.dept_name LIKE CONCAT('%',#{deptNameCode},'%') OR cd.dept_code = #{deptNameCode}
 	  </if>
@@ -199,7 +199,7 @@
 			cd.create_time AS createTime
 	FROM client_dept cd 
 	WHERE
-	 cd.client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT} AND cd.parent_code = #{parentCode} AND (cd.status = 1 OR cd.status = 2) 
+	 cd.company_code = #{companyCode,jdbcType=VARCHAR} AND cd.parent_code = #{parentCode} AND (cd.status = 1 OR cd.status = 2) 
 	ORDER BY cd.create_time DESC
   </select>
   
@@ -207,7 +207,7 @@
   	select 
     count(1)
     from client_dept
-    where client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT} 
+    where company_code = #{companyCode,jdbcType=VARCHAR} 
     and dept_name = #{deptName,jdbcType=VARCHAR}
     and parent_code = 0
   </select>
@@ -216,7 +216,7 @@
   	select 
     <include refid="Base_Column_List" />
     from client_dept
-    where client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT} 
+    where company_code = #{companyCode,jdbcType=VARCHAR} 
     and dept_name = #{deptName,jdbcType=VARCHAR} 
     and cd.status != 0
   </select>
@@ -225,7 +225,7 @@
   	select 
     <include refid="Base_Column_List" />
     from client_dept
-    where client_user_company_id = #{clientUserCompanyId,jdbcType=BIGINT} 
+    where company_code = #{companyCode} 
     and dept_code = #{deptCode,jdbcType=VARCHAR} 
     and cd.status != 0
   </select>
@@ -245,7 +245,7 @@
   		dept_name as deptName,
   		status as status
   	FROM client_dept 
-  	WHERE client_user_company_id = #{merchantId,jdbcType=BIGINT} 
+  	WHERE company_code = #{companyCode} 
   	AND dept_code = #{deptCode,jdbcType=VARCHAR}
   	AND status != 0
   </select>

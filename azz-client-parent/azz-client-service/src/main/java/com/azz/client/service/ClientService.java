@@ -149,11 +149,11 @@ public class ClientService {
 	}else {
 	    clientUserInfo.setQualificationApplyStatus(applyRecord.getStatus()); 
 	}
-	Long clientUserCompanyId = clientUserInfo.getClientUserCompanyId();
-	List<ClientUserPermission> clientUserPermissions = clientPermissionMapper.getClientUserPermissionInfoByPhoneNumber(clientUserCompanyId, phoneNumber);
+	String companyCode = clientUserInfo.getCompanyCode();
+	List<ClientUserPermission> clientUserPermissions = clientPermissionMapper.getClientUserPermissionInfoByPhoneNumber(companyCode, phoneNumber);
 	info.setClientUserInfo(clientUserInfo);
 	info.setClientUserPermissions(clientUserPermissions);
-	info.setMenus(generateMenuTree(clientUserCompanyId, phoneNumber));
+	info.setMenus(generateMenuTree(companyCode, phoneNumber));
 	return JsonResult.successJsonResult(info);
     }
     
@@ -206,7 +206,7 @@ public class ClientService {
      * @return
      * @author 黄智聪  2018年10月25日 下午1:40:03
      */
-    public JsonResult<String> enterpriseAuth(@RequestBody EnterpriseAuthParam param){
+    public JsonResult<LoginClientUserInfo> enterpriseAuth(@RequestBody EnterpriseAuthParam param){
 	JSR303ValidateUtils.validate(param);
 	String clientUserCode = param.getClientUserCode();
 	ClientUser user = clientUserMapper.getClientUserByClientUserCode(clientUserCode);
@@ -255,10 +255,11 @@ public class ClientService {
 	    }
 	}
 	
+	String companyCode = randomSequenceService.getCompanyNumber();
 	Date nowDate = new Date();
 	ClientUserCompany clientUserCompanyRecord = ClientUserCompany.builder()
 		.clientUserCode(clientUserCode)
-		.companyCode(randomSequenceService.getCompanyNumber())
+		.companyCode(companyCode)
 		.companyName(param.getCompanyName())
 		.companyTel(param.getCompanyTel())
 		.creditCode(creditCode)
@@ -292,7 +293,7 @@ public class ClientService {
 	ClientUserCompanyAddress clientUserCompanyAddressRecord = ClientUserCompanyAddress.builder()
 		.areaCode(param.getAreaCode())
 		.areaName(areaName)
-		.clientUserCompanyId(clientUserCompanyRecord.getId())
+		.companyCode(companyCode)
 		.cityCode(param.getCityCode())
 		.cityName(cityName)
 		.createTime(new Date())
@@ -305,6 +306,7 @@ public class ClientService {
 	
 	ClientUser clientUserRecord = ClientUser.builder()
 	        .clientUserCode(clientUserCode)
+	        .clientUserName(param.getClientUserName())
 	        .isEnterpriseAuthenticator(IsEnterpriseAuthenticator.YES.getValue())
 	        .lastModifyTime(nowDate)
 	        .build();
@@ -329,7 +331,7 @@ public class ClientService {
 		.tradingCertificateThirdFileUrl(uploadTradingCertificateFileInfos.size() == 3  ? uploadTradingCertificateFileInfos.get(2).getImgUrl() : null)
 		.build();
 	clientApplyMapper.insertSelective(clientApplyRecord);
-	return JsonResult.successJsonResult();
+	return this.getLoginClientUserInfoByPhoneNumber(user.getPhoneNumber());
     }
     
     public JsonResult<String> addClientUser(@RequestBody AddClientUserParam param) {
@@ -344,52 +346,85 @@ public class ClientService {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "角色不存在");
 	}
 	String email = param.getEmail();
+	String phoneNumber = param.getPhoneNumber();
 	if (!StringUtils.isBlank(email)) {
 	    ClientUser user = clientUserMapper.getClientUserByEmail(email, null);
 	    if (user != null) {
-		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "邮箱已存在");
+		// 判断是否为同一个注册者，不是则认为该邮箱已被注册
+		if(!user.getPhoneNumber().equals(phoneNumber)) {
+		    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "邮箱已存在");
+		}
 	    }
 	}
-	String phoneNumber = param.getPhoneNumber();
 	ClientUser u = clientUserMapper.getClientUserByPhoneNumberAndClientUserCode(phoneNumber, null);
-	if (u != null) {
-	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "手机号已存在");
-	}
-	// 随机生成6位数密码
-	String password = RandomStringUtils.randomNumeric(6);
-	// 生成盐值加密的密码
-	Password pwd = PasswordHelper.encryptPasswordByModel(password + "");
-	Date nowDate = new Date();
-	String creator = param.getCreator();
-	String clientUserCode = randomSequenceService.getClientNumber();
-	ClientUser userRecord = ClientUser.builder().createTime(nowDate).creator(creator)
-		.clientDeptId(dept.getId()).email(param.getEmail()).password(pwd.getPassword()).phoneNumber(phoneNumber)
-		.postName(param.getPostName()).clientUserCode(clientUserCode)
+	if (u == null) {// 手机未被注册过
+	    // 随机生成6位数密码
+	    String password = RandomStringUtils.randomNumeric(6);
+	    // 生成盐值加密的密码
+	    Password pwd = PasswordHelper.encryptPasswordByModel(password + "");
+	    Date nowDate = new Date();
+	    String creator = param.getCreator();
+	    String clientUserCode = randomSequenceService.getClientNumber();
+	    ClientUser userRecord = ClientUser.builder().createTime(nowDate).creator(creator)
+		    .clientDeptId(dept.getId()).email(param.getEmail()).password(pwd.getPassword()).phoneNumber(phoneNumber)
+		    .postName(param.getPostName()).clientUserCode(clientUserCode)
+		    .clientUserName(param.getClientUserName()).salt(pwd.getSalt()).build();
+	    clientUserMapper.insertSelective(userRecord);
+	    
+	    String companyCode = param.getCompanyCode();
+	    ClientUserCompany company = clientUserCompanyMapper.selectByCompanyCode(companyCode);
+	    // 1.为新增的成员绑定公司
+	    ClientUserCompany clientUserCompanyRecord = ClientUserCompany.builder()
+		    .createTime(nowDate)
+		    .clientUserCode(clientUserCode)
+		    .companyName(company.getCompanyName())
+		    .companyCode(company.getCompanyCode())
+		    .remark("手动新增成员")
+		    .creator(param.getCreator())
+		    .companyTel(company.getCompanyTel())
+		    .build();
+	    clientUserCompanyMapper.insertSelective(clientUserCompanyRecord);
+	    
+	    // 2.用户与角色绑定
+	    ClientUserRole userRoleRecord = ClientUserRole.builder().createTime(nowDate).creator(creator)
+		    .clientUserId(userRecord.getId()).roleId(role.getId()).build();
+	    clientUserRoleMapper.insertSelective(userRoleRecord);
+	    
+	    // 发送短信通知成员 TODO
+	    this.sendPasswordMsg(phoneNumber, password);
+	}else {// 若能根据手机号查询到用户信息，判断是否为企业用户
+	    if(u.getClientType() == ClientType.ENTERPRISE.getValue()) { // 若为企业用户，则表示已被企业注册
+		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "手机号已存在");
+	    }else {// 若为个人用户，则将该个人用户绑定为这个客户的成员即可
+		Date nowDate = new Date();
+		String creator = param.getCreator();
+		// 1.将该成员改为企业用户
+		ClientUser userRecord = ClientUser.builder().lastModifyTime(nowDate).modifier(creator)
+			.clientDeptId(dept.getId()).email(param.getEmail()).clientType(ClientType.ENTERPRISE.getValue())
+			.postName(param.getPostName()).clientUserCode(u.getClientUserCode()).id(u.getId())
+			.clientUserName(param.getClientUserName()).remark("被企业绑定为客户成员").build();
+		clientUserMapper.updateByPrimaryKeySelective(userRecord);
 		
-		.clientUserName(param.getClientUserName()).salt(pwd.getSalt()).build();
-	clientUserMapper.insertSelective(userRecord);
-	
-	// 为新增的成员绑定公司
-	Long clientUserCompanyId = param.getClientUserCompanyId();
-	ClientUserCompany company = clientUserCompanyMapper.selectByPrimaryKey(clientUserCompanyId);
-	ClientUserCompany clientUserCompanyRecord = ClientUserCompany.builder()
-		.createTime(nowDate)
-		.clientUserCode(clientUserCode)
-		.companyName(company.getCompanyName())
-		.companyCode(company.getCompanyCode())
-		.remark("手动新增成员")
-		.creator(param.getCreator())
-		.companyTel(company.getCompanyTel())
-		.build();
-	clientUserCompanyMapper.insertSelective(clientUserCompanyRecord);
-	
-	// 用户与角色绑定
-	ClientUserRole userRoleRecord = ClientUserRole.builder().createTime(nowDate).creator(creator)
-		.clientUserId(userRecord.getId()).roleId(role.getId()).build();
-	clientUserRoleMapper.insertSelective(userRoleRecord);
-	
-	// 发送短信通知成员 TODO
-	this.sendPasswordMsg(phoneNumber, password);
+		String companyCode = param.getCompanyCode();
+		ClientUserCompany company = clientUserCompanyMapper.selectByCompanyCode(companyCode);
+		// 2.为成员重新绑定公司
+		ClientUserCompany clientUserCompanyRecord = ClientUserCompany.builder()
+			.createTime(nowDate)
+			.clientUserCode(u.getClientUserCode())
+			.companyName(company.getCompanyName())
+			.companyCode(company.getCompanyCode())
+			.remark("重新为成员绑定公司")
+			.creator(param.getCreator())
+			.companyTel(company.getCompanyTel())
+			.build();
+		clientUserCompanyMapper.insertSelective(clientUserCompanyRecord);
+		
+		// 3.用户与角色绑定
+		ClientUserRole userRoleRecord = ClientUserRole.builder().createTime(nowDate).creator(creator)
+			.clientUserId(u.getId()).roleId(role.getId()).build();
+		clientUserRoleMapper.insertSelective(userRoleRecord);
+	    }
+	}
 	return JsonResult.successJsonResult();
     }
     
@@ -412,6 +447,9 @@ public class ClientService {
 	if (user == null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "用户不存在");
 	}
+	if(user.getIsEnterpriseAuthenticator() == IsEnterpriseAuthenticator.YES.getValue()) {
+	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "该成员不允许修改");
+	}
 	String email = param.getEmail();
 	if (!StringUtils.isBlank(email)) {
 	    // 带上用户编码是为了排除当前用户以外是否存在邮箱了
@@ -433,6 +471,7 @@ public class ClientService {
 		.email(param.getEmail()).phoneNumber(param.getPhoneNumber())
 		.postName(param.getPostName())
 		.clientUserName(param.getClientUserName())
+		.clientDeptId(dept.getId())
 		.id(clientUserId).build();
 	clientUserMapper.updateByPrimaryKeySelective(merchantUserRecord);
 
@@ -458,12 +497,16 @@ public class ClientService {
 	String clientUserCode = param.getClientUserCode();
 	// 1.将客户类型改为个人
 	ClientUser clientUserRecord = ClientUser.builder().clientUserCode(clientUserCode)
-		.clientType(ClientType.PERSON.getValue()).modifier(param.getModifier())
-		.lastModifyTime(new Date()).build();
+		.clientDeptId(0L).clientType(ClientType.PERSON.getValue())
+		.modifier(param.getModifier()).lastModifyTime(new Date()).build();
 	clientUserMapper.updateByClientUserCode(clientUserRecord);
 	
 	// 2.删除客户与公司的绑定
 	clientUserCompanyMapper.deleteByClientUserCode(clientUserCode);
+	
+	ClientUser user = clientUserMapper.getClientUserByClientUserCode(clientUserCode);
+	// 3.删除用户与角色的绑定
+	clientUserRoleMapper.deleteByClientUserId(user.getId());
 	
 	return JsonResult.successJsonResult();
     }
@@ -551,13 +594,13 @@ public class ClientService {
      * @return
      * @author 黄智聪 2018年10月19日 上午10:36:34
      */
-    private List<Menu> generateMenuTree(Long clientUserCompanyId, String phoneNumber) {
+    private List<Menu> generateMenuTree(String companyCode, String phoneNumber) {
 	// 根据手机号查询所有一级菜单权限
 	List<ClientUserPermission> oneMenuPermissions = clientPermissionMapper
-		.getClientUserPermissionByPhoneNumberAndLevel(clientUserCompanyId, phoneNumber, 1);
+		.getClientUserPermissionByPhoneNumberAndLevel(companyCode, phoneNumber, 1);
 	// 根据手机号查询所有二级菜单权限
 	List<ClientUserPermission> twoMenuPermissions = clientPermissionMapper
-		.getClientUserPermissionByPhoneNumberAndLevel(clientUserCompanyId, phoneNumber, 2);
+		.getClientUserPermissionByPhoneNumberAndLevel(companyCode, phoneNumber, 2);
 	List<Menu> oneLevelMenus = new ArrayList<>();
 	for (ClientUserPermission oneMenuPermission : oneMenuPermissions) {
 	    // 一级菜单的权限编码

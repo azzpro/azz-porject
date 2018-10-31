@@ -305,8 +305,9 @@
 	FROM
 		client_user cu
 	LEFT JOIN  client_user_company cuc ON cuc.client_user_code = cu.client_user_code
-	LEFT JOIN client_user_company_address cuca ON cuca.client_user_company_id = cuc.id
-	WHERE cuc.company_code = #{companyCode,jdbcType=VARCHAR}
+	LEFT JOIN client_user_company_address cuca ON cuca.company_code = cuc.company_code
+	WHERE cu.is_enterprise_authenticator = 1 
+	and cuc.company_code = #{companyCode,jdbcType=VARCHAR}
   </select>
   
   <select id="checkClientApplyInfo" parameterType="java.lang.String" resultType="int">

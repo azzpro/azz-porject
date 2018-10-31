@@ -1,39 +1,43 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2018年10月31日 下午1:52:03
+ * Create on 2018年10月31日 下午5:19:40
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
-package com.azz.platform.merchant.pojo.bo;
+package com.azz.platform.merchant.pojo.vo;
 
-import javax.validation.constraints.NotNull;
+import java.util.Date;
+import java.util.List;
 
-import org.hibernate.validator.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 
 /**
  * <P>TODO</P>
  * @version 1.0
- * @author 彭斌  2018年10月31日 下午1:52:03
+ * @author 彭斌  2018年10月31日 下午5:19:40
  */
 @Data
-public class AddClassificationParam {
-    
+public class ClassificationList {
     /**
-     * 上级分类编号，可为空
+     * 分类图片url
      *
      * @mbg.generated
      */
-    private String assortmentParentCode;
-
+    private String assortmentPicUrl;
+    
+    /**
+     * 分类编码
+     */
+    private String assortmentCode;
+    
     /**
      * 分类名称
      *
      * @mbg.generated
      */
-    @NotBlank(message = "分类名称不允许为空")
     private String assortmentName;
     
     /**
@@ -43,17 +47,13 @@ public class AddClassificationParam {
      */
     private Integer assortmentSort;
     
-    /**
-     * 创建人
-     *
-     * @mbg.generated
-     */
-    private String creator;
+    
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")
+    private Date createTime;
     
     /**
-     * 分类主图
+     * 子级分类
      */
-    @NotNull(message = "分类主图")
-    private ClassificationPic classificationPic;
+    List<ClassificationList> classificationChildList;
 }
 

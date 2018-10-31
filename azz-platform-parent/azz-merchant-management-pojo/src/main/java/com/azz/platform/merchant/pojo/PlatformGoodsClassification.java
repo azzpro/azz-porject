@@ -31,7 +31,7 @@ public class PlatformGoodsClassification implements Serializable {
      *
      * @mbg.generated
      */
-    private Boolean assortmentTop;
+    private Byte assortmentTop;
 
     /**
      * 参数ID
@@ -88,6 +88,11 @@ public class PlatformGoodsClassification implements Serializable {
      * @mbg.generated
      */
     private Date modifyTime;
+    
+    /**
+     * 状态
+     */
+    private Integer status;
 
     private static final long serialVersionUID = 1L;
 
@@ -180,7 +185,7 @@ public class PlatformGoodsClassification implements Serializable {
      *
      * @mbg.generated
      */
-    public Boolean getAssortmentTop() {
+    public Byte getAssortmentTop() {
         return assortmentTop;
     }
 
@@ -192,7 +197,7 @@ public class PlatformGoodsClassification implements Serializable {
      *
      * @mbg.generated
      */
-    public void setAssortmentTop(Boolean assortmentTop) {
+    public void setAssortmentTop(Byte assortmentTop) {
         this.assortmentTop = assortmentTop;
     }
 
@@ -386,6 +391,15 @@ public class PlatformGoodsClassification implements Serializable {
      */
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
+    }
+
+    
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     @Override

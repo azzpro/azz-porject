@@ -19,7 +19,13 @@ import lombok.Data;
  * @author 彭斌  2018年10月31日 下午1:52:03
  */
 @Data
-public class AddClassificationParam {
+public class EditClassificationParam {
+    
+    /**
+     * 分类编码
+     */
+    @NotBlank(message = "分类编码不允许为空")
+    private String assortmentCode;
     
     /**
      * 上级分类编号，可为空
@@ -44,11 +50,11 @@ public class AddClassificationParam {
     private Integer assortmentSort;
     
     /**
-     * 创建人
+     * 修改人
      *
      * @mbg.generated
      */
-    private String creator;
+    private String modifier;
     
     /**
      * 分类主图

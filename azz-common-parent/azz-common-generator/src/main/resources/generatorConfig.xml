@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
 	<classPathEntry
-		location="D:\development\repository\mysql\mysql-connector-java\5.1.32\mysql-connector-java-5.1.32.jar" />
+		location="D:\repository\mysql\mysql-connector-java\5.1.32\mysql-connector-java-5.1.32.jar" />
 
 	<context id="test" targetRuntime="MyBatis3">
 		<plugin
@@ -49,10 +49,49 @@
 		</javaClientGenerator>
 
 		<!-- 要生成哪些表 -->
-		<table tableName="merchant_dept"
-			domainObjectName="MerchantDept" enableCountByExample="false"
+		<table tableName="platform_goods_brand"
+			domainObjectName="PlatformGoodsBrand" enableCountByExample="false"
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false"></table>
-
+		<!-- 要生成哪些表 -->
+		<table tableName="platform_goods_classification"
+			domainObjectName="PlatformGoodsClassification" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false"></table>
+			<!-- 要生成哪些表 -->
+		<table tableName="platform_goods_params"
+			domainObjectName="PlatformGoodsParams" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false"></table>
+			<!-- 要生成哪些表 -->
+		<table tableName="platform_goods_params_term"
+			domainObjectName="PlatformGoodsParamsTerm" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false"></table>
+			<!-- 要生成哪些表 -->
+		<table tableName="platform_goods_params_value"
+			domainObjectName="PlatformGoodsParamsValue" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false"></table>
+			<!-- 要生成哪些表 -->
+		<table tableName="merchant_goods_product"
+			domainObjectName="MerchantGoodsProduct" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false"></table>
+			<!-- 要生成哪些表 -->
+		<table tableName="merchant_goods_product_price"
+			domainObjectName="MerchantGoodsProductPrice" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false"></table>
+			<!-- 要生成哪些表 -->
+		<table tableName="merchant_goods_module"
+			domainObjectName="MerchantGoodsModule" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false"></table>
+			<!-- 要生成哪些表 -->
+		<table tableName="merchant_goods_product_params"
+			domainObjectName="MerchantGoodsProductParams" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false"></table>
 	</context>
 </generatorConfiguration>

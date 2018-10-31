@@ -40,6 +40,9 @@ public class PlatformUserErrorCode extends BaseErrorCode{
     public static final PlatformUserErrorCode PLATFORM_CLIENT_AUDIT_NO_EXIST = new PlatformUserErrorCode(50003, "客户可能未申请或者不在待审状态");
     public static final PlatformUserErrorCode PLATFORM_CLIENT_ENTERPRISE_NO_EXIST = new PlatformUserErrorCode(50004, "审核的企业不存在");
     
+    // 商品管理错误代码
+    public static final PlatformUserErrorCode PLATFORM_PRODUCT_CLASSIFICATION_NO_EXIST = new PlatformUserErrorCode(60000, "分类不存在");
+    
     
     public PlatformUserErrorCode(int code, String message) {
 	super(code, message);

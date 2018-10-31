@@ -12,6 +12,7 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
+import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.ClientConstants;
 import com.azz.core.constants.FileConstants;
 import com.azz.core.exception.BaseException;
@@ -23,6 +24,7 @@ import com.azz.platform.merchant.pojo.bo.ClassificationPic;
 import com.azz.platform.merchant.pojo.bo.DelClassificationParam;
 import com.azz.platform.merchant.pojo.bo.EditClassificationParam;
 import com.azz.platform.merchant.pojo.vo.Classification;
+import com.azz.platform.merchant.pojo.vo.ClassificationList;
 import com.azz.system.api.SystemImageUploadService;
 import com.azz.system.sequence.api.RandomSequenceService;
 import com.azz.util.JSR303ValidateUtils;
@@ -217,6 +219,9 @@ public class ClassificationService{
         return JsonResult.successJsonResult(classification);
     }
     
-    
+    public JsonResult<Pagination<ClassificationList>> getClassificationList(){
+        
+        return JsonResult.successJsonResult(null);
+    }
 }
 

@@ -6,7 +6,7 @@
     <result column="assortment_code" jdbcType="VARCHAR" property="assortmentCode" />
     <result column="assortment_parent_code" jdbcType="VARCHAR" property="assortmentParentCode" />
     <result column="assortment_name" jdbcType="VARCHAR" property="assortmentName" />
-    <result column="assortment_top" jdbcType="byte" property="assortmentTop" />
+    <result column="assortment_top" jdbcType="TINYINT" property="assortmentTop" />
     <result column="assortment_params_id" jdbcType="BIGINT" property="assortmentParamsId" />
     <result column="assortment_sort" jdbcType="INTEGER" property="assortmentSort" />
     <result column="assortment_pic_url" jdbcType="VARCHAR" property="assortmentPicUrl" />
@@ -39,7 +39,7 @@
       create_time, modifier, modify_time,status
       )
     values (#{id,jdbcType=BIGINT},#{assortmentCode,jdbcType=VARCHAR}, #{assortmentParentCode,jdbcType=VARCHAR}, #{assortmentName,jdbcType=VARCHAR}, 
-      #{assortmentTop,jdbcType=byte}, #{assortmentParamsId,jdbcType=BIGINT}, #{assortmentSort,jdbcType=INTEGER}, 
+      #{assortmentTop,jdbcType=TINYINT}, #{assortmentParamsId,jdbcType=BIGINT}, #{assortmentSort,jdbcType=INTEGER}, 
       #{assortmentPicUrl,jdbcType=VARCHAR}, #{assortmentPicName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP},#{status,jdbcType=INTEGER}
       )
@@ -104,7 +104,7 @@
         #{assortmentName,jdbcType=VARCHAR},
       </if>
       <if test="assortmentTop != null">
-        #{assortmentTop,jdbcType=byte},
+        #{assortmentTop,jdbcType=TINYINT},
       </if>
       <if test="assortmentParamsId != null">
         #{assortmentParamsId,jdbcType=BIGINT},
@@ -148,7 +148,7 @@
         assortment_name = #{assortmentName,jdbcType=VARCHAR},
       </if>
       <if test="assortmentTop != null">
-        assortment_top = #{assortmentTop,jdbcType=byte},
+        assortment_top = #{assortmentTop,jdbcType=TINYINT},
       </if>
       <if test="assortmentParamsId != null">
         assortment_params_id = #{assortmentParamsId,jdbcType=BIGINT},
@@ -185,7 +185,7 @@
     set assortment_code = #{assortmentCode,jdbcType=VARCHAR},
     	assortment_parent_code = #{assortmentParentCode,jdbcType=VARCHAR},
       assortment_name = #{assortmentName,jdbcType=VARCHAR},
-      assortment_top = #{assortmentTop,jdbcType=byte},
+      assortment_top = #{assortmentTop,jdbcType=TINYINT},
       assortment_params_id = #{assortmentParamsId,jdbcType=BIGINT},
       assortment_sort = #{assortmentSort,jdbcType=INTEGER},
       assortment_pic_url = #{assortmentPicUrl,jdbcType=VARCHAR},
@@ -219,5 +219,29 @@
 		assortment_code = #{assortmentCode,jdbcType=VARCHAR}
   </select>
   
+  <select id="selectParentByAssortmentCodeName" parameterType="java.lang.String" resultType="com.azz.platform.merchant.pojo.vo.ClassificationSet" >
+  	SELECT
+		assortment_code as assortmentCode,
+		assortment_name as assortmentName,
+		assortment_sort as assortmentSort,
+		create_time as createTime,
+		assortment_pic_url sa assortmentPicUrl,
+	FROM
+		platform_goods_classification
+	WHERE status = 1
+		and (assortment_parent_code = #{assortmentCodeName,jdbcType=VARCHAR} or assortment_name = #{assortmentCodeName,jdbcType=VARCHAR})
+  </select>
   
+  <select id="selectByAssortmentCodeName" parameterType="java.lang.String" resultType="com.azz.platform.merchant.pojo.vo.ClassificationSet" >
+  	SELECT
+		assortment_code as assortmentCode,
+		assortment_name as assortmentName,
+		assortment_sort as assortmentSort,
+		create_time as createTime,
+		assortment_pic_url sa assortmentPicUrl,
+	FROM
+		platform_goods_classification
+	WHERE status = 1
+		and (assortment_code = #{assortmentCodeName,jdbcType=VARCHAR} or assortment_name = #{assortmentCodeName,jdbcType=VARCHAR})
+  </select>
 </mapper>

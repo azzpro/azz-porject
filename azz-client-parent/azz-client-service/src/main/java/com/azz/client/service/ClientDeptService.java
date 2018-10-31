@@ -154,6 +154,7 @@ public class ClientDeptService {
         clientDept.setDeptName(param.getDeptName());
         clientDept.setParentCode("0");
         clientDept.setStatus(param.getStatus());
+        clientDept.setCreator(param.getCreator());
         clientDeptMapper.insertSelective(clientDept);
         
         return JsonResult.successJsonResult();

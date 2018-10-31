@@ -6,3 +6,4 @@ com.azz.sequence.sequence.service.impl.MerchantDeptSequenceServiceImpl
 com.azz.sequence.sequence.service.impl.MerchantPowerSequenceServiceImpl
 com.azz.sequence.sequence.service.impl.MerchantTenantSequenceServiceImpl
 com.azz.sequence.sequence.service.impl.PlatEmployeeSequenceServiceImpl
+com.azz.sequence.sequence.service.impl.TenRandomSequenceServiceImpl

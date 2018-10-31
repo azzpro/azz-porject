@@ -63,6 +63,9 @@ public class AzzImageUtil {
 		if(FileConstants.AZZ_TRADING_CERTIFICATE_IMAGE_TYPE == imagetype) {
 			return FileConstants.AZZ_TRADING_CERTIFICATE_PATH;
 		}
+		if(FileConstants.AZZ_CLASSIFICATION_IMAGE_TYPE == imagetype) {
+			return FileConstants.AZZ_CLASSIFICATION_PATH;
+		}
 		
 		return "";
 	}

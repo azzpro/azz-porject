@@ -37,6 +37,9 @@ public class FileConstants {
 	//经营执照图片
 	public static final String AZZ_BUSINESS_LICENSE_PATH = "business_license_pic";
 	
+	//分类图片
+	public static final String AZZ_CLASSIFICATION_PATH = "classification_pic";
+	
 	//图像
 	public static final String AZZ_AVATAR_PATH = "avatar_pic";
 	
@@ -57,6 +60,9 @@ public class FileConstants {
 	
 	//经营执照
 	public static final int AZZ_BUSINESS_IMAGE_TYPE = 2;
+	
+	//分类
+	public static final int AZZ_CLASSIFICATION_IMAGE_TYPE = 6;
 	
 	//图像
 	public static final int AZZ_AVATAR_IMAGE_TYPE = 3;

@@ -33,5 +33,8 @@ public interface RandomSequenceService {
 	
 	@RequestMapping(value="/azz/api/sequence/getClientPowerNumber",method=RequestMethod.GET)
 	String getPowermentNumber();
+	
+	@RequestMapping(value="/azz/api/sequence/getClassificationNumber",method=RequestMethod.GET)
+	String getClassificationNumber();
 }
 

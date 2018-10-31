@@ -158,6 +158,7 @@ public class ClientDeptService {
         clientDept.setParentCode("0");
         clientDept.setCreator(param.getCreator());
         clientDept.setStatus(param.getStatus());
+        clientDept.setCreator(param.getCreator());
         clientDeptMapper.insertSelective(clientDept);
         
         return JsonResult.successJsonResult();

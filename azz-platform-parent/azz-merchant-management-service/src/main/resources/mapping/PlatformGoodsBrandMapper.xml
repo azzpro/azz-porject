@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.platform.merchant.mapper.PlatformGoodsBrandMapper">
+  <resultMap id="BaseResultMap" type="com.azz.platform.merchant.pojo.PlatformGoodsBrand">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="brand_code" jdbcType="VARCHAR" property="brandCode" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
+    <result column="brand_english_name" jdbcType="VARCHAR" property="brandEnglishName" />
+    <result column="brand_pic_url" jdbcType="VARCHAR" property="brandPicUrl" />
+    <result column="brand_pic_name" jdbcType="VARCHAR" property="brandPicName" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.azz.platform.merchant.pojo.PlatformGoodsBrand">
+    <result column="brand_ introduction" jdbcType="LONGVARCHAR" property="brandIntroduction" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, brand_code, brand_name, brand_english_name, brand_pic_url, brand_pic_name, creator, 
+    create_time, modifier, modify_time
+  </sql>
+  <sql id="Blob_Column_List">
+    "brand_ introduction"
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from platform_goods_brand
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from platform_goods_brand
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsBrand">
+    insert into platform_goods_brand (id, brand_code, brand_name, 
+      brand_english_name, brand_pic_url, brand_pic_name, 
+      creator, create_time, modifier, 
+      modify_time, "brand_ introduction")
+    values (#{id,jdbcType=BIGINT}, #{brandCode,jdbcType=VARCHAR}, #{brandName,jdbcType=VARCHAR}, 
+      #{brandEnglishName,jdbcType=VARCHAR}, #{brandPicUrl,jdbcType=VARCHAR}, #{brandPicName,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{brandIntroduction,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsBrand">
+    insert into platform_goods_brand
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="brandCode != null">
+        brand_code,
+      </if>
+      <if test="brandName != null">
+        brand_name,
+      </if>
+      <if test="brandEnglishName != null">
+        brand_english_name,
+      </if>
+      <if test="brandPicUrl != null">
+        brand_pic_url,
+      </if>
+      <if test="brandPicName != null">
+        brand_pic_name,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="brandIntroduction != null">
+        "brand_ introduction",
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="brandCode != null">
+        #{brandCode,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null">
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandEnglishName != null">
+        #{brandEnglishName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandPicUrl != null">
+        #{brandPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="brandPicName != null">
+        #{brandPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="brandIntroduction != null">
+        #{brandIntroduction,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsBrand">
+    update platform_goods_brand
+    <set>
+      <if test="brandCode != null">
+        brand_code = #{brandCode,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null">
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandEnglishName != null">
+        brand_english_name = #{brandEnglishName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandPicUrl != null">
+        brand_pic_url = #{brandPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="brandPicName != null">
+        brand_pic_name = #{brandPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="brandIntroduction != null">
+        "brand_ introduction" = #{brandIntroduction,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsBrand">
+    update platform_goods_brand
+    set brand_code = #{brandCode,jdbcType=VARCHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      brand_english_name = #{brandEnglishName,jdbcType=VARCHAR},
+      brand_pic_url = #{brandPicUrl,jdbcType=VARCHAR},
+      brand_pic_name = #{brandPicName,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      "brand_ introduction" = #{brandIntroduction,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsBrand">
+    update platform_goods_brand
+    set brand_code = #{brandCode,jdbcType=VARCHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      brand_english_name = #{brandEnglishName,jdbcType=VARCHAR},
+      brand_pic_url = #{brandPicUrl,jdbcType=VARCHAR},
+      brand_pic_name = #{brandPicName,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

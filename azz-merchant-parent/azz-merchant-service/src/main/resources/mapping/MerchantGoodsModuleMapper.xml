@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.merchant.mapper.MerchantGoodsModuleMapper">
+  <resultMap id="BaseResultMap" type="com.azz.merchant.pojo.MerchantGoodsModule">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="classification_id" jdbcType="BIGINT" property="classificationId" />
+    <result column="module_name" jdbcType="VARCHAR" property="moduleName" />
+    <result column="module_status" jdbcType="BIT" property="moduleStatus" />
+    <result column="module_pic_url" jdbcType="VARCHAR" property="modulePicUrl" />
+    <result column="module_pic_name" jdbcType="VARCHAR" property="modulePicName" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.azz.merchant.pojo.MerchantGoodsModule">
+    <result column="module_info" jdbcType="LONGVARCHAR" property="moduleInfo" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, classification_id, module_name, module_status, module_pic_url, module_pic_name, 
+    creator, create_time, modifier, modify_time
+  </sql>
+  <sql id="Blob_Column_List">
+    module_info
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from merchant_goods_module
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from merchant_goods_module
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.merchant.pojo.MerchantGoodsModule">
+    insert into merchant_goods_module (id, classification_id, module_name, 
+      module_status, module_pic_url, module_pic_name, 
+      creator, create_time, modifier, 
+      modify_time, module_info)
+    values (#{id,jdbcType=BIGINT}, #{classificationId,jdbcType=BIGINT}, #{moduleName,jdbcType=VARCHAR}, 
+      #{moduleStatus,jdbcType=BIT}, #{modulePicUrl,jdbcType=VARCHAR}, #{modulePicName,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{moduleInfo,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.merchant.pojo.MerchantGoodsModule">
+    insert into merchant_goods_module
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="classificationId != null">
+        classification_id,
+      </if>
+      <if test="moduleName != null">
+        module_name,
+      </if>
+      <if test="moduleStatus != null">
+        module_status,
+      </if>
+      <if test="modulePicUrl != null">
+        module_pic_url,
+      </if>
+      <if test="modulePicName != null">
+        module_pic_name,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="moduleInfo != null">
+        module_info,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="classificationId != null">
+        #{classificationId,jdbcType=BIGINT},
+      </if>
+      <if test="moduleName != null">
+        #{moduleName,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleStatus != null">
+        #{moduleStatus,jdbcType=BIT},
+      </if>
+      <if test="modulePicUrl != null">
+        #{modulePicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="modulePicName != null">
+        #{modulePicName,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="moduleInfo != null">
+        #{moduleInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.merchant.pojo.MerchantGoodsModule">
+    update merchant_goods_module
+    <set>
+      <if test="classificationId != null">
+        classification_id = #{classificationId,jdbcType=BIGINT},
+      </if>
+      <if test="moduleName != null">
+        module_name = #{moduleName,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleStatus != null">
+        module_status = #{moduleStatus,jdbcType=BIT},
+      </if>
+      <if test="modulePicUrl != null">
+        module_pic_url = #{modulePicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="modulePicName != null">
+        module_pic_name = #{modulePicName,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="moduleInfo != null">
+        module_info = #{moduleInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.azz.merchant.pojo.MerchantGoodsModule">
+    update merchant_goods_module
+    set classification_id = #{classificationId,jdbcType=BIGINT},
+      module_name = #{moduleName,jdbcType=VARCHAR},
+      module_status = #{moduleStatus,jdbcType=BIT},
+      module_pic_url = #{modulePicUrl,jdbcType=VARCHAR},
+      module_pic_name = #{modulePicName,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      module_info = #{moduleInfo,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.merchant.pojo.MerchantGoodsModule">
+    update merchant_goods_module
+    set classification_id = #{classificationId,jdbcType=BIGINT},
+      module_name = #{moduleName,jdbcType=VARCHAR},
+      module_status = #{moduleStatus,jdbcType=BIT},
+      module_pic_url = #{modulePicUrl,jdbcType=VARCHAR},
+      module_pic_name = #{modulePicName,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

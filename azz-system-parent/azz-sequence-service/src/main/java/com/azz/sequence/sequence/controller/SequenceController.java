@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.azz.sequence.sequence.service.TenRandomSequenceService;
 import com.azz.sequence.sequence.service.MerchantDeptSequenceService;
 import com.azz.sequence.sequence.service.MerchantEmployeeSequenceService;
 import com.azz.sequence.sequence.service.MerchantPowerSequenceService;
@@ -55,6 +56,8 @@ public class SequenceController {
 	@Autowired
 	private MerchantEmployeeSequenceService merchantEmployeeSequenceService;
 	
+	@Autowired
+    private TenRandomSequenceService tenRandomSequenceService;
 	
 	/**
 	 * <p>客户端 客户编号</p>
@@ -177,6 +180,65 @@ public class SequenceController {
 		return merchantPowerSequenceService.getSequence();
 	}
 	
+	/**
+	 * <p>分类编码</p>
+	 * @return
+	 * @author 彭斌  2018年10月31日 上午11:26:01
+	 */
+	@RequestMapping(value="getClassificationNumber",method=RequestMethod.GET)
+    public String getClassificationNumber() {
+        return "IGA" + tenRandomSequenceService.getSequence();
+    }
 	
+	/**
+	 * <p>品牌编号</p>
+	 * @return
+	 * @author 彭斌  2018年10月31日 上午11:35:35
+	 */
+	@RequestMapping(value="getBrandCodeNumber",method=RequestMethod.GET)
+    public String getBrandCodeNumber() {
+        return "IGB" + tenRandomSequenceService.getSequence();
+    }
+	
+	/**
+	 * <p>参数项编号</p>
+	 * @return
+	 * @author 彭斌  2018年10月31日 上午11:35:56
+	 */
+	@RequestMapping(value="getParameterItemCodeNumber",method=RequestMethod.GET)
+    public String getParameterItemCodeNumber() {
+        return "IGC" + tenRandomSequenceService.getSequence();
+    }
+	
+    /**
+     * <p>产品参数编号</p>
+     * @return
+     * @author 彭斌  2018年10月31日 上午11:38:14
+     */
+    @RequestMapping(value="getProductParameterCodeNumber",method=RequestMethod.GET)
+    public String getProductParameterCodeNumber() {
+        return "IGD" + tenRandomSequenceService.getSequence();
+    }
+    
+    /**
+     * <p>产品编码</p>
+     * @return
+     * @author 彭斌  2018年10月31日 上午11:41:18
+     */
+    @RequestMapping(value="getProductCodeNumber",method=RequestMethod.GET)
+    public String getProductCodeNumber() {
+        return "IGF" + tenRandomSequenceService.getSequence();
+    }
+    
+    /**
+     * <p>模组编号</p>
+     * @return
+     * @author 彭斌  2018年10月31日 上午11:41:33
+     */
+    @RequestMapping(value="getModuleCodeNumber",method=RequestMethod.GET)
+    public String getModuleCodeNumber() {
+        return "IGG" + tenRandomSequenceService.getSequence();
+    }
+    
 }
 

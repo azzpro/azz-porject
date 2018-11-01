@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2018年10月31日 下午1:52:03
+ * Create on 2018年11月1日 上午9:39:14
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
@@ -10,27 +10,17 @@ package com.azz.platform.merchant.pojo.bo;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.web.multipart.MultipartFile;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * <P>TODO</P>
  * @version 1.0
- * @author 彭斌  2018年10月31日 下午1:52:03
+ * @author 彭斌  2018年11月1日 上午9:39:14
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class EditClassificationParam {
-    
-    /**
-     * 分类编码
-     */
-    @NotBlank(message = "分类编码不允许为空")
-    private String assortmentCode;
-    
+public class AddClassificationWebParam {
     /**
      * 上级分类编号，可为空
      *
@@ -54,16 +44,13 @@ public class EditClassificationParam {
     private Integer assortmentSort;
     
     /**
-     * 修改人
+     * 创建人
      *
      * @mbg.generated
      */
-    private String modifier;
+    private String creator;
     
-    /**
-     * 分类主图
-     */
-    @NotNull(message = "分类主图")
-    private ClassificationPic classificationPic;
+    @NotNull(message = "请上传主图")
+    private MultipartFile classificationFile;
 }
 

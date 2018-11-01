@@ -1,6 +1,8 @@
 package com.azz.platform.merchant.service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,13 +25,18 @@ import com.azz.platform.merchant.pojo.bo.AddClassificationParam;
 import com.azz.platform.merchant.pojo.bo.ClassificationPic;
 import com.azz.platform.merchant.pojo.bo.DelClassificationParam;
 import com.azz.platform.merchant.pojo.bo.EditClassificationParam;
+import com.azz.platform.merchant.pojo.bo.SearchClassificationListParam;
 import com.azz.platform.merchant.pojo.vo.Classification;
+import com.azz.platform.merchant.pojo.vo.ClassificationChildSet;
 import com.azz.platform.merchant.pojo.vo.ClassificationList;
+import com.azz.platform.merchant.pojo.vo.ClassificationParentChildSet;
+import com.azz.platform.merchant.pojo.vo.ClassificationSet;
 import com.azz.system.api.SystemImageUploadService;
 import com.azz.system.sequence.api.RandomSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
 import com.azz.util.StringUtils;
+import com.github.pagehelper.PageHelper;
 
 /**
  * <P>
@@ -219,9 +226,75 @@ public class ClassificationService{
         return JsonResult.successJsonResult(classification);
     }
     
-    public JsonResult<Pagination<ClassificationList>> getClassificationList(){
+    /**
+     * <p>获取分类列表</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月1日 上午11:12:52
+     */
+    public JsonResult<Pagination<ClassificationList>> getClassificationList(@RequestBody SearchClassificationListParam param){
+        PageHelper.startPage(param.getPageNum(), param.getPageSize());
+        // 父级
+        List<ClassificationList> parentList = null;
+        // 父级下的子级
+        List<ClassificationParentChildSet> parentChildList= null;
+        // 子级
+        List<ClassificationChildSet> ccsList = null;
         
-        return JsonResult.successJsonResult(null);
+        // 查询所有子级分类
+        List<ClassificationSet> childClassification = platformGoodsClassificationMapper.selectParentByAssortmentCodeName(param.getAssortmentCodeName());
+        
+        if(ObjectUtils.isNotNull(childClassification)) {
+            // 子级集合
+            for (ClassificationSet childObj : childClassification) {
+                // 第三级分类信息
+                ClassificationChildSet ccs = new ClassificationChildSet();
+                ccsList = new ArrayList<>();
+                
+                // 查询所有子级下的父级分类
+                List<ClassificationSet> parentOnChild = platformGoodsClassificationMapper.selectByAssortmentCodeName(childObj.getAssortmentParentCode());
+                
+                ccs.setAssortmentCode(childObj.getAssortmentCode());
+                ccs.setAssortmentName(childObj.getAssortmentName());
+                ccs.setAssortmentPicUrl(childObj.getAssortmentPicUrl());
+                ccs.setAssortmentSort(childObj.getAssortmentSort());
+                ccs.setCreateTime(childObj.getCreateTime());
+                ccsList.add(ccs);
+                
+                for (ClassificationSet childParentObj : parentOnChild) {
+                    // 子级上的父级集合
+                    ClassificationParentChildSet cpcs = new ClassificationParentChildSet();
+                    parentChildList = new ArrayList<>();
+                    
+                    cpcs.setAssortmentCode(childParentObj.getAssortmentCode());
+                    cpcs.setAssortmentName(childParentObj.getAssortmentName());
+                    cpcs.setAssortmentPicUrl(childParentObj.getAssortmentPicUrl());
+                    cpcs.setAssortmentSort(childParentObj.getAssortmentSort());
+                    cpcs.setCreateTime(childParentObj.getCreateTime());
+                    parentChildList.add(cpcs);
+                    cpcs.setClassificationChildSet(ccsList);
+                    // 查询所有父级分类
+                    List<ClassificationSet> parent = platformGoodsClassificationMapper.selectByAssortmentCodeName(childParentObj.getAssortmentParentCode());
+                    for (ClassificationSet parentObj : parent) {
+                        // 父级集合
+                        ClassificationList cl = new ClassificationList();
+                        parentList = new ArrayList<>();
+                        
+                        cl.setAssortmentCode(parentObj.getAssortmentCode());
+                        cl.setAssortmentName(parentObj.getAssortmentName());
+                        cl.setAssortmentPicUrl(parentObj.getAssortmentPicUrl());
+                        cl.setAssortmentSort(parentObj.getAssortmentSort());
+                        cl.setCreateTime(parentObj.getCreateTime());
+                        parentList.add(cl);
+                        cl.setClassificationParentChildSet(parentChildList);
+                    }
+                }
+            }
+        } else {
+            
+        }
+        
+        return JsonResult.successJsonResult(new Pagination<>(parentList));
     }
 }
 

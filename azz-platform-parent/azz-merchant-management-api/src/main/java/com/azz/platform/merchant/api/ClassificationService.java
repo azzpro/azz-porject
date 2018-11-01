@@ -8,6 +8,18 @@
 package com.azz.platform.merchant.api;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.azz.core.common.JsonResult;
+import com.azz.core.common.page.Pagination;
+import com.azz.platform.merchant.pojo.bo.AddClassificationParam;
+import com.azz.platform.merchant.pojo.bo.DelClassificationParam;
+import com.azz.platform.merchant.pojo.bo.EditClassificationParam;
+import com.azz.platform.merchant.pojo.bo.SearchClassificationListParam;
+import com.azz.platform.merchant.pojo.vo.Classification;
+import com.azz.platform.merchant.pojo.vo.ClassificationList;
 
 /**
  * <P>TODO</P>
@@ -17,7 +29,20 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 @FeignClient("azz-merchant-management-service")
 public interface ClassificationService {
     
+    @PostMapping("/azz/api/merchant/product/getClassificationList")
+    JsonResult<Pagination<ClassificationList>> getClassificationList(@RequestBody SearchClassificationListParam param);
     
+    @PostMapping("/azz/api/merchant/product/addClassification")
+    JsonResult<String> addClassification(@RequestBody AddClassificationParam param);
+    
+    @PostMapping("/azz/api/merchant/product/editClassification")
+    JsonResult<String> editClassification(@RequestBody EditClassificationParam param);
+
+    @PostMapping("/azz/api/merchant/product/delClassification")
+    JsonResult<String> delClassification(@RequestBody DelClassificationParam param);
+    
+    @PostMapping("/azz/api/merchant/product/getClassificationInfo")
+    JsonResult<Classification> getClassificationInfo(@RequestParam("assortmentCode") String assortmentCode);
     
     
 }

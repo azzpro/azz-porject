@@ -8,6 +8,7 @@
 package com.azz.platform.web.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.azz.core.common.JsonResult;
-import com.azz.core.common.page.Pagination;
 import com.azz.platform.merchant.api.ClassificationService;
 import com.azz.platform.merchant.pojo.bo.AddClassificationParam;
 import com.azz.platform.merchant.pojo.bo.AddClassificationWebParam;
@@ -47,7 +47,7 @@ public class ClassificationController {
 	ClassificationService  classificationService;
 	
 	@RequestMapping("/getClassificationList")
-	public JsonResult<Pagination<ClassificationList>> getClassificationList(SearchClassificationListParam param) {
+	public JsonResult<List<ClassificationList>> getClassificationList(SearchClassificationListParam param) {
 		return classificationService.getClassificationList(param);
 	}
 	

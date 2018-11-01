@@ -26,30 +26,34 @@ public class ClassificationChildSet {
      *
      * @mbg.generated
      */
-    private String assortmentPicUrl;
+    private String cAssortmentPicUrl;
     
     /**
      * 分类编码
      */
-    private String assortmentCode;
+    private String cAssortmentCode;
     
     /**
      * 分类名称
      *
      * @mbg.generated
      */
-    private String assortmentName;
+    private String cAssortmentName;
     
     /**
      * 分类排序(默认0)
      *
      * @mbg.generated
      */
-    private Integer assortmentSort;
+    private Integer cAssortmentSort;
     
+    /**
+     * 父级编码
+     */
+    private String cAssortmentParentCode;
     
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")
-    private Date createTime;
+    private Date cCreateTime;
     
 }
 

@@ -61,11 +61,6 @@ public class Dept implements Serializable {
     private String modifier;
 
     /**
-     * 成员数
-     */
-    private Integer numberMembers;
-    
-    /**
      * 父级编码
      */
     private String parentCode;

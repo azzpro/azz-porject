@@ -63,6 +63,7 @@ public class ClassificationService {
      * <p>
      * 新增分类
      * </p>
+     * 
      * @param param
      * @return
      * @author 彭斌 2018年10月31日 下午4:16:31
@@ -102,8 +103,12 @@ public class ClassificationService {
         }
 
         // 校验分类名称
-        
-        
+        List<ClassificationList> clList =
+                platformGoodsClassificationMapper.selectByParam(param.getAssortmentName());
+        if (clList.size() > 0) {
+            throw new BaseException(PlatformUserErrorCode.PLATFORM_PRODUCT_CLASSIFICATION_EXIST);
+        }
+
         PlatformGoodsClassification record = new PlatformGoodsClassification();
         if (null != param.getAssortmentParentCode()) {
             PlatformGoodsClassification pgc = platformGoodsClassificationMapper
@@ -121,7 +126,7 @@ public class ClassificationService {
         } else {
             record.setAssortmentTop((byte) 1);
         }
-        
+
         // 分类编码
         String classificationCode = randomSequenceService.getClassificationNumber();
         record.setAssortmentCode(classificationCode);
@@ -202,10 +207,21 @@ public class ClassificationService {
             pgcObj.setAssortmentTop((byte) 1);
         }
 
+        // 校验分类名称
+        if (pgcObj.getAssortmentName().equals(param.getAssortmentName().trim())) {
+            pgcObj.setAssortmentName(param.getAssortmentName());
+        } else {
+            List<ClassificationList> clList =
+                    platformGoodsClassificationMapper.selectByParam(param.getAssortmentName());
+            if (clList.size() > 0) {
+                throw new BaseException(
+                        PlatformUserErrorCode.PLATFORM_PRODUCT_CLASSIFICATION_EXIST);
+            }
+            pgcObj.setAssortmentName(param.getAssortmentName());
+        }
         // 分类编码
         pgcObj.setAssortmentParentCode(
                 null == param.getAssortmentParentCode() ? "0" : param.getAssortmentParentCode());
-        pgcObj.setAssortmentName(param.getAssortmentName());
         pgcObj.setAssortmentSort(param.getAssortmentSort());
         pgcObj.setAssortmentPicName(originalFileName);
         pgcObj.setAssortmentPicUrl(jr.getData());
@@ -300,10 +316,13 @@ public class ClassificationService {
     }
 
     /**
-     * <p>根据分类编码查询下级分类</p>
+     * <p>
+     * 根据分类编码查询下级分类
+     * </p>
+     * 
      * @param childCode
      * @return
-     * @author 彭斌  2018年11月1日 下午9:23:43
+     * @author 彭斌 2018年11月1日 下午9:23:43
      */
     @SuppressWarnings("unused")
     private List<ClassificationList> selectClassificationSubList(String childCode) {

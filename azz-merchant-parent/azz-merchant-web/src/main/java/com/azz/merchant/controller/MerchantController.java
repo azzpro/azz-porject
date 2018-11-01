@@ -185,20 +185,23 @@ public class MerchantController {
 	CompleteMerchantInfoParam param = new CompleteMerchantInfoParam();
 	BeanUtils.copyProperties(webParam, param);
 	List<TradingCertificate> tradingCertificates = new ArrayList<>();
-	List<BusinessLicense> businessLicenses = new ArrayList<>();
 	for (MultipartFile tradingCertificateFile : webParam.getTradingCertificateFiles()) {
 	    TradingCertificate tradingCertificate = new TradingCertificate(tradingCertificateFile.getOriginalFilename(),
 		    tradingCertificateFile.getSize(), Base64.encode(tradingCertificateFile.getBytes()));
 	    tradingCertificates.add(tradingCertificate);
 	    
 	}
-	for (MultipartFile businessLicenseFile : webParam.getBusinessLicenseFiles()) {
-	    BusinessLicense businessLicense = new BusinessLicense(businessLicenseFile.getOriginalFilename(),
-		    businessLicenseFile.getSize(), Base64.encode(businessLicenseFile.getBytes()));
-	    businessLicenses.add(businessLicense);
+	List<BusinessLicense> businessLicenses = new ArrayList<>();
+	MultipartFile files[] = webParam.getBusinessLicenseFiles();
+	if(files != null) {
+		for (MultipartFile businessLicenseFile : files) {
+			BusinessLicense businessLicense = new BusinessLicense(businessLicenseFile.getOriginalFilename(),
+					businessLicenseFile.getSize(), Base64.encode(businessLicenseFile.getBytes()));
+			businessLicenses.add(businessLicense);
+		}
 	}
-	param.setTradingCertificates(tradingCertificates);
 	param.setBusinessLicenses(businessLicenses);
+	param.setTradingCertificates(tradingCertificates);
 	return merchantService.completeMerchantInfo(param);
     }
     

@@ -161,4 +161,9 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <!-- 根据分类ID查询 -->
+  <select id="selectProductByAssortmentId" resultType="int" parameterType="long">
+  	select count(1) from merchant_goods_product where assortment_id = #{id}
+  </select>
 </mapper>

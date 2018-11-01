@@ -18,4 +18,12 @@ public interface MerchantGoodsProductMapper {
     int updateByPrimaryKeySelective(MerchantGoodsProduct record);
 
     int updateByPrimaryKey(MerchantGoodsProduct record);
+    
+    /**
+     * <p>根据分类ID 查询产品</p>
+     * @param id
+     * @return
+     * @author 刘建麟  2018年11月1日 下午2:03:56
+     */
+    int selectProductByAssortmentId(Long id);
 }

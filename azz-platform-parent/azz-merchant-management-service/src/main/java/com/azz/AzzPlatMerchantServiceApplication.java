@@ -10,10 +10,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableFeignClients
 @SpringBootApplication
 @EnableTransactionManagement
-public class AzzMerchantServiceApplication {
+public class AzzPlatMerchantServiceApplication {
 
 	public static void main(String[] args) {
 		 System.setProperty("spring.devtools.restart.enabled", "true");
-		 SpringApplication.run(AzzMerchantServiceApplication.class, args);
+		 SpringApplication.run(AzzPlatMerchantServiceApplication.class, args);
 	}
 }

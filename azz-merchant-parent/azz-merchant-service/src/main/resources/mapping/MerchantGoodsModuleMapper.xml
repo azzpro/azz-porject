@@ -3,11 +3,13 @@
 <mapper namespace="com.azz.merchant.mapper.MerchantGoodsModuleMapper">
   <resultMap id="BaseResultMap" type="com.azz.merchant.pojo.MerchantGoodsModule">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="classification_id" jdbcType="BIGINT" property="classificationId" />
+    <result column="module_code" jdbcType="VARCHAR" property="moduleCode" />
     <result column="module_name" jdbcType="VARCHAR" property="moduleName" />
     <result column="module_status" jdbcType="BIT" property="moduleStatus" />
     <result column="module_pic_url" jdbcType="VARCHAR" property="modulePicUrl" />
     <result column="module_pic_name" jdbcType="VARCHAR" property="modulePicName" />
+    <result column="merchant_id" jdbcType="BIGINT" property="merchantId" />
+    <result column="classification_id" jdbcType="BIGINT" property="classificationId" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
@@ -17,8 +19,8 @@
     <result column="module_info" jdbcType="LONGVARCHAR" property="moduleInfo" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, classification_id, module_name, module_status, module_pic_url, module_pic_name, 
-    creator, create_time, modifier, modify_time
+    id, module_code, module_name, module_status, module_pic_url, module_pic_name, merchant_id, 
+    classification_id, creator, create_time, modifier, modify_time
   </sql>
   <sql id="Blob_Column_List">
     module_info
@@ -36,14 +38,16 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.azz.merchant.pojo.MerchantGoodsModule">
-    insert into merchant_goods_module (id, classification_id, module_name, 
+    insert into merchant_goods_module (id, module_code, module_name, 
       module_status, module_pic_url, module_pic_name, 
-      creator, create_time, modifier, 
-      modify_time, module_info)
-    values (#{id,jdbcType=BIGINT}, #{classificationId,jdbcType=BIGINT}, #{moduleName,jdbcType=VARCHAR}, 
+      merchant_id, classification_id, creator, 
+      create_time, modifier, modify_time, 
+      module_info)
+    values (#{id,jdbcType=BIGINT}, #{moduleCode,jdbcType=VARCHAR}, #{moduleName,jdbcType=VARCHAR}, 
       #{moduleStatus,jdbcType=BIT}, #{modulePicUrl,jdbcType=VARCHAR}, #{modulePicName,jdbcType=VARCHAR}, 
-      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{moduleInfo,jdbcType=LONGVARCHAR})
+      #{merchantId,jdbcType=BIGINT}, #{classificationId,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{moduleInfo,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.azz.merchant.pojo.MerchantGoodsModule">
     insert into merchant_goods_module
@@ -51,8 +55,8 @@
       <if test="id != null">
         id,
       </if>
-      <if test="classificationId != null">
-        classification_id,
+      <if test="moduleCode != null">
+        module_code,
       </if>
       <if test="moduleName != null">
         module_name,
@@ -65,6 +69,12 @@
       </if>
       <if test="modulePicName != null">
         module_pic_name,
+      </if>
+      <if test="merchantId != null">
+        merchant_id,
+      </if>
+      <if test="classificationId != null">
+        classification_id,
       </if>
       <if test="creator != null">
         creator,
@@ -86,8 +96,8 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="classificationId != null">
-        #{classificationId,jdbcType=BIGINT},
+      <if test="moduleCode != null">
+        #{moduleCode,jdbcType=VARCHAR},
       </if>
       <if test="moduleName != null">
         #{moduleName,jdbcType=VARCHAR},
@@ -100,6 +110,12 @@
       </if>
       <if test="modulePicName != null">
         #{modulePicName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null">
+        #{merchantId,jdbcType=BIGINT},
+      </if>
+      <if test="classificationId != null">
+        #{classificationId,jdbcType=BIGINT},
       </if>
       <if test="creator != null">
         #{creator,jdbcType=VARCHAR},
@@ -121,8 +137,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.azz.merchant.pojo.MerchantGoodsModule">
     update merchant_goods_module
     <set>
-      <if test="classificationId != null">
-        classification_id = #{classificationId,jdbcType=BIGINT},
+      <if test="moduleCode != null">
+        module_code = #{moduleCode,jdbcType=VARCHAR},
       </if>
       <if test="moduleName != null">
         module_name = #{moduleName,jdbcType=VARCHAR},
@@ -135,6 +151,12 @@
       </if>
       <if test="modulePicName != null">
         module_pic_name = #{modulePicName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null">
+        merchant_id = #{merchantId,jdbcType=BIGINT},
+      </if>
+      <if test="classificationId != null">
+        classification_id = #{classificationId,jdbcType=BIGINT},
       </if>
       <if test="creator != null">
         creator = #{creator,jdbcType=VARCHAR},
@@ -156,11 +178,13 @@
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.azz.merchant.pojo.MerchantGoodsModule">
     update merchant_goods_module
-    set classification_id = #{classificationId,jdbcType=BIGINT},
+    set module_code = #{moduleCode,jdbcType=VARCHAR},
       module_name = #{moduleName,jdbcType=VARCHAR},
       module_status = #{moduleStatus,jdbcType=BIT},
       module_pic_url = #{modulePicUrl,jdbcType=VARCHAR},
       module_pic_name = #{modulePicName,jdbcType=VARCHAR},
+      merchant_id = #{merchantId,jdbcType=BIGINT},
+      classification_id = #{classificationId,jdbcType=BIGINT},
       creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modifier = #{modifier,jdbcType=VARCHAR},
@@ -170,11 +194,13 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.azz.merchant.pojo.MerchantGoodsModule">
     update merchant_goods_module
-    set classification_id = #{classificationId,jdbcType=BIGINT},
+    set module_code = #{moduleCode,jdbcType=VARCHAR},
       module_name = #{moduleName,jdbcType=VARCHAR},
       module_status = #{moduleStatus,jdbcType=BIT},
       module_pic_url = #{modulePicUrl,jdbcType=VARCHAR},
       module_pic_name = #{modulePicName,jdbcType=VARCHAR},
+      merchant_id = #{merchantId,jdbcType=BIGINT},
+      classification_id = #{classificationId,jdbcType=BIGINT},
       creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modifier = #{modifier,jdbcType=VARCHAR},

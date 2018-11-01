@@ -79,4 +79,31 @@
       params_unit = #{paramsUnit,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="selectValueById" resultMap="BaseResultMap" parameterType="long">
+  select <include refid="Base_Column_List"></include> from platform_goods_params_value where params_parent_id = #{id}
+  </select>
+  
+  <update id="updateByCode">
+    update platform_goods_params_value
+    <set>
+      <if test="value != null">
+        params_value = #{value,jdbcType=BIGINT},
+      </if>
+    </set>
+    where params_parent_id = #{pid,jdbcType=BIGINT}
+  </update>
+  
+  <delete id="deleteByParentId" parameterType="java.lang.Long">
+    delete from platform_goods_params_value
+    where params_parent_id = #{pid}
+  </delete>
+  
+  <delete id="deleteValue" parameterType="long[]">
+		delete from platform_goods_params_value where params_parent_id in
+		<foreach collection="array" item="arr" index="no" open="("
+			separator="," close=")">
+			#{arr}
+		</foreach>
+	</delete>
 </mapper>

@@ -150,4 +150,54 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <!-- 去到修改参数页面 -->
+  <select id="selectParamsTermByCode" resultMap="BaseResultMap" parameterType="long">
+  select <include refid="Base_Column_List"></include> from platform_goods_params_term where params_id=#{id}
+  </select>
+  
+  <!-- 去到修改参数页面 -->
+  <select id="selectIdTermByCode" resultMap="BaseResultMap" parameterType="string">
+  select id from platform_goods_params_term where params_code=#{code}
+  </select>
+  
+  <!-- 删除参数项 -->
+  <delete id="deleteByParamsId" parameterType="java.lang.Long">
+    delete from platform_goods_params_term
+    where params_id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <update id="updateBycode">
+    update platform_goods_params_term
+    <set>
+      <if test="paramsCode != null">
+        params_code = #{paramsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="paramsName != null">
+        params_name = #{paramsName,jdbcType=VARCHAR},
+      </if>
+      <if test="paramsId != null">
+        params_id = #{paramsId,jdbcType=BIGINT},
+      </if>
+      <if test="paramsType != null">
+        params_type = #{paramsType,jdbcType=BIT},
+      </if>
+      <if test="paramsChoice != null">
+        params_choice = #{paramsChoice,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where params_code = #{paramsCode,jdbcType=VARCHAR}
+  </update>
 </mapper>

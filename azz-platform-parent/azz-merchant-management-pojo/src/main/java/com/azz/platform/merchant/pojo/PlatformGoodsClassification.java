@@ -96,7 +96,33 @@ public class PlatformGoodsClassification implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
+    
+    public PlatformGoodsClassification(Long id, String assortmentCode, String assortmentParentCode,
+			String assortmentName, Byte assortmentTop, Long assortmentParamsId, Integer assortmentSort,
+			String assortmentPicUrl, String assortmentPicName, String creator, Date createTime, String modifier,
+			Date modifyTime, Integer status) {
+		super();
+		this.id = id;
+		this.assortmentCode = assortmentCode;
+		this.assortmentParentCode = assortmentParentCode;
+		this.assortmentName = assortmentName;
+		this.assortmentTop = assortmentTop;
+		this.assortmentParamsId = assortmentParamsId;
+		this.assortmentSort = assortmentSort;
+		this.assortmentPicUrl = assortmentPicUrl;
+		this.assortmentPicName = assortmentPicName;
+		this.creator = creator;
+		this.createTime = createTime;
+		this.modifier = modifier;
+		this.modifyTime = modifyTime;
+		this.status = status;
+	}
+
+	public PlatformGoodsClassification() {
+		super();
+	}
+
+	/**
      * <br/>
      * 返回值对应的表列名 platform_goods_classification.id
      *

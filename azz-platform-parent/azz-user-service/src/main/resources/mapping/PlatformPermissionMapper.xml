@@ -216,6 +216,7 @@
 			p. STATUS = 1
 		AND r. STATUS = 1
 		AND  u.phone_number = #{phoneNumber}
+		order by p.sort asc
   </select>
   
   <select id="getUserPermissionByPhoneNumberAndLevel" resultType="com.azz.platform.user.pojo.vo.UserPermission">
@@ -238,6 +239,7 @@
 		AND r. STATUS = 1
 		AND p.level = #{level}
 		AND  u.phone_number = #{phoneNumber}
+		order by p.sort asc
   </select>
   
   <select id="getPermissionByParentPermissionCode" parameterType="string" resultMap="BaseResultMap">

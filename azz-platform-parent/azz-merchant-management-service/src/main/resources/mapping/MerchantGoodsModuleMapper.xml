@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.azz.merchant.mapper.MerchantGoodsModuleMapper">
-  <resultMap id="BaseResultMap" type="com.azz.merchant.pojo.MerchantGoodsModule">
+<mapper namespace="com.azz.platform.merchant.mapper.MerchantGoodsModuleMapper">
+  <resultMap id="BaseResultMap" type="com.azz.platform.merchant.pojo.MerchantGoodsModule">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="module_code" jdbcType="VARCHAR" property="moduleCode" />
     <result column="module_name" jdbcType="VARCHAR" property="moduleName" />
@@ -15,7 +15,7 @@
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.azz.merchant.pojo.MerchantGoodsModule">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.azz.platform.merchant.pojo.MerchantGoodsModule">
     <result column="module_info" jdbcType="LONGVARCHAR" property="moduleInfo" />
   </resultMap>
   <sql id="Base_Column_List">
@@ -47,7 +47,7 @@
     delete from merchant_goods_module
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.azz.merchant.pojo.MerchantGoodsModule">
+  <insert id="insert" parameterType="com.azz.platform.merchant.pojo.MerchantGoodsModule">
     insert into merchant_goods_module (id, module_code, module_name, 
       module_status, module_pic_url, module_pic_name, 
       merchant_id, classification_id, creator, 
@@ -59,7 +59,7 @@
       #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, 
       #{moduleInfo,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.azz.merchant.pojo.MerchantGoodsModule">
+  <insert id="insertSelective" parameterType="com.azz.platform.merchant.pojo.MerchantGoodsModule">
     insert into merchant_goods_module
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -144,7 +144,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.azz.merchant.pojo.MerchantGoodsModule">
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.platform.merchant.pojo.MerchantGoodsModule">
     update merchant_goods_module
     <set>
       <if test="moduleCode != null">
@@ -186,7 +186,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.azz.merchant.pojo.MerchantGoodsModule">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.azz.platform.merchant.pojo.MerchantGoodsModule">
     update merchant_goods_module
     set module_code = #{moduleCode,jdbcType=VARCHAR},
       module_name = #{moduleName,jdbcType=VARCHAR},
@@ -202,7 +202,7 @@
       module_info = #{moduleInfo,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.azz.merchant.pojo.MerchantGoodsModule">
+  <update id="updateByPrimaryKey" parameterType="com.azz.platform.merchant.pojo.MerchantGoodsModule">
     update merchant_goods_module
     set module_code = #{moduleCode,jdbcType=VARCHAR},
       module_name = #{moduleName,jdbcType=VARCHAR},
@@ -218,7 +218,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
-  <update id="updateByModuleCode" parameterType="com.azz.merchant.pojo.MerchantGoodsModule">
+  <update id="updateByModuleCode" parameterType="com.azz.platform.merchant.pojo.MerchantGoodsModule">
     update merchant_goods_module
     <set>
       <if test="moduleName != null">
@@ -258,10 +258,11 @@
     where module_code = #{moduleCode,jdbcType=VARCHAR}
   </update>
   
-  <select id="getGoodsModuleInfoList" parameterType="com.azz.merchant.pojo.bo.SearchGoodsModuleParam"  resultType="com.azz.merchant.pojo.vo.GoodModuleInfo">
+  <select id="getGoodsModuleInfoList" parameterType="com.azz.platform.merchant.pojo.bo.SearchGoodsModuleParam"  resultType="com.azz.platform.merchant.pojo.vo.GoodModuleInfo">
 	  SELECT
 		mgd.module_name AS moduleName,
 		mgd.module_code AS moduleCode,
+		m.merchant_name as merchantName,
 		CONCAT(
 			pgc1.assortment_name,
 			'-',
@@ -276,6 +277,7 @@
 	FROM
 		merchant_goods_module mgd
 	LEFT JOIN merchant_user mu ON mu.merchant_user_code = mgd.creator
+	LEFT JOIN merchant m on m.id = mgd.merchant_id
 	LEFT JOIN platform_goods_classification pgc3 ON mgd.classification_id = pgc3.id
 	LEFT JOIN platform_goods_classification pgc2 ON pgc3.assortment_parent_code = pgc2.assortment_code
 	LEFT JOIN platform_goods_classification pgc1 ON pgc2.assortment_parent_code = pgc1.assortment_code
@@ -294,10 +296,11 @@
 	ORDER BY mgd.create_time DESC
   </select>
   
-  <select id="getGoodsModuleInfo" parameterType="string"  resultType="com.azz.merchant.pojo.vo.GoodModuleInfo">
+  <select id="getGoodsModuleInfo" parameterType="string"  resultType="com.azz.platform.merchant.pojo.vo.GoodModuleInfo">
 	  SELECT
 		mgd.module_name AS moduleName,
 		mgd.module_code AS moduleCode,
+		m.merchant_name as merchantName,
 		CONCAT(
 			pgc1.assortment_name,
 			'-',
@@ -307,12 +310,12 @@
 		) AS classificationName,
 		mgd.module_pic_url AS modulePicUrl,
 		mgd.module_status AS moduleStatus,
-		mgd.module_info as moduleInfo,
 		mgd.create_time AS createTime,
 		mu.merchant_user_name AS creator
 	FROM
 		merchant_goods_module mgd
 	LEFT JOIN merchant_user mu ON mu.merchant_user_code = mgd.creator
+	LEFT JOIN merchant m on m.id = mgd.merchant_id
 	LEFT JOIN platform_goods_classification pgc3 ON mgd.classification_id = pgc3.id
 	LEFT JOIN platform_goods_classification pgc2 ON pgc3.assortment_parent_code = pgc2.assortment_code
 	LEFT JOIN platform_goods_classification pgc1 ON pgc2.assortment_parent_code = pgc1.assortment_code

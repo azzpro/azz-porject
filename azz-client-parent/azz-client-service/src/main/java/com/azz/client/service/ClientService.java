@@ -247,7 +247,7 @@ public class ClientService {
 	    String fileNameNoSufix = originalFileName.substring(0, dotIndex);
 	    String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
 	    // 新名称为文件名 + 客户编码 + 文件后缀
-	    String newFileName = fileNameNoSufix + "_" + clientUserCode + "." + sufix;
+	    String newFileName = fileNameNoSufix + "_" + clientUserCode;
 	    // 图片url
 	    JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
 		    filedata, FileConstants.AZZ_CLIENT, FileConstants.AZZ_TRADING_CERTIFICATE_IMAGE_TYPE);
@@ -547,7 +547,7 @@ public class ClientService {
 	String fileNameNoSufix = originalFileName.substring(0, dotIndex);
 	String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
 	// 新名称为文件名 + 客户编码 + 文件后缀
-	String newFileName = fileNameNoSufix + "_" + clientUserCode + "." + sufix;
+	String newFileName = fileNameNoSufix + "_" + clientUserCode;
 	
 	// 图片url
 	JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,

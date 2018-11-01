@@ -30,6 +30,11 @@ public abstract class MerchantConstants {
 	 * 经营执照文件大小限制
 	 */
 	public static final long TRADING_CERTIFICATE_FILE_SIZE_LIMIT = 20 * 1024 * 1024L;
+	
+	/**
+	 * 模组主图文件大小限制
+	 */
+	public static final long GOODS_MODULE_FILE_SIZE_LIMIT = 2 * 1024 * 1024L;
 
 	/**
 	 * 
@@ -98,6 +103,29 @@ public abstract class MerchantConstants {
 			this.desc = desc;
 		}
 	}
+	
+	/**
+	 * 
+	 * <P>是否修改了模组图片</P>
+	 * @version 1.0
+	 * @author 黄智聪  2018年11月1日 下午5:29:36
+	 */
+	public enum IsChangeGoodsModulePic {
+		N(0, "否"),
+
+		Y(1, "是");
+
+		@Getter
+		private int value;
+
+		@Getter
+		private String desc;
+
+		IsChangeGoodsModulePic(int value, String desc) {
+			this.value = value;
+			this.desc = desc;
+		}
+	}
 
 	public enum UserStatus {
 
@@ -132,6 +160,46 @@ public abstract class MerchantConstants {
 			UserStatus[] values = UserStatus.values();
 			for (UserStatus userStatus : values) {
 				if (userStatus.getValue() == value) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+	
+	public enum GoodsModuleStatus {
+
+		DISABLE(0, "无效"),
+
+		PUT_ON(1, "上架"),
+
+		PUT_OFF(2, "下架");
+
+		@Getter
+		private int value;
+
+		@Getter
+		private String desc;
+
+		GoodsModuleStatus(int value, String desc) {
+			this.value = value;
+			this.desc = desc;
+		}
+
+		/**
+		 * 
+		 * <p>
+		 * 校验是否存在该状态
+		 * </p>
+		 * 
+		 * @param value
+		 * @return
+		 * @author 黄智聪 2018年10月20日 上午11:29:37
+		 */
+		public static boolean checkStatusExist(int value) {
+			GoodsModuleStatus[] values = GoodsModuleStatus.values();
+			for (GoodsModuleStatus status : values) {
+				if (status.getValue() == value) {
 					return true;
 				}
 			}

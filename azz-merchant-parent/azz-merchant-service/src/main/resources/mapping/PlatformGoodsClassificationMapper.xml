@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.merchant.mapper.PlatformGoodsClassificationMapper">
+  <resultMap id="BaseResultMap" type="com.azz.merchant.pojo.PlatformGoodsClassification">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="assortment_code" jdbcType="VARCHAR" property="assortmentCode" />
+    <result column="assortment_parent_code" jdbcType="VARCHAR" property="assortmentParentCode" />
+    <result column="assortment_name" jdbcType="VARCHAR" property="assortmentName" />
+    <result column="assortment_top" jdbcType="TINYINT" property="assortmentTop" />
+    <result column="assortment_params_id" jdbcType="BIGINT" property="assortmentParamsId" />
+    <result column="assortment_sort" jdbcType="INTEGER" property="assortmentSort" />
+    <result column="assortment_pic_url" jdbcType="VARCHAR" property="assortmentPicUrl" />
+    <result column="assortment_pic_name" jdbcType="VARCHAR" property="assortmentPicName" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id,assortment_code, assortment_parent_code, assortment_name, assortment_top, assortment_params_id, 
+    assortment_sort, assortment_pic_url, assortment_pic_name, creator, create_time, modifier, 
+    modify_time,status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from platform_goods_classification
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from platform_goods_classification
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.merchant.pojo.PlatformGoodsClassification">
+    insert into platform_goods_classification (id,assortment_code, assortment_parent_code, assortment_name, 
+      assortment_top, assortment_params_id, assortment_sort, 
+      assortment_pic_url, assortment_pic_name, creator, 
+      create_time, modifier, modify_time,status
+      )
+    values (#{id,jdbcType=BIGINT},#{assortmentCode,jdbcType=VARCHAR}, #{assortmentParentCode,jdbcType=VARCHAR}, #{assortmentName,jdbcType=VARCHAR}, 
+      #{assortmentTop,jdbcType=TINYINT}, #{assortmentParamsId,jdbcType=BIGINT}, #{assortmentSort,jdbcType=INTEGER}, 
+      #{assortmentPicUrl,jdbcType=VARCHAR}, #{assortmentPicName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP},#{status,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.merchant.pojo.PlatformGoodsClassification">
+    insert into platform_goods_classification
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="assortmentCode != null">
+      	assortment_code,
+      </if>
+      <if test="assortmentParentCode != null">
+        assortment_parent_code,
+      </if>
+      <if test="assortmentName != null">
+        assortment_name,
+      </if>
+      <if test="assortmentTop != null">
+        assortment_top,
+      </if>
+      <if test="assortmentParamsId != null">
+        assortment_params_id,
+      </if>
+      <if test="assortmentSort != null">
+        assortment_sort,
+      </if>
+      <if test="assortmentPicUrl != null">
+        assortment_pic_url,
+      </if>
+      <if test="assortmentPicName != null">
+        assortment_pic_name,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="assortmentCode != null">
+      	#{assortmentCode,jdbcType=VARCHAR}
+      </if>
+      <if test="assortmentParentCode != null">
+        #{assortmentParentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="assortmentName != null">
+        #{assortmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="assortmentTop != null">
+        #{assortmentTop,jdbcType=TINYINT},
+      </if>
+      <if test="assortmentParamsId != null">
+        #{assortmentParamsId,jdbcType=BIGINT},
+      </if>
+      <if test="assortmentSort != null">
+        #{assortmentSort,jdbcType=INTEGER},
+      </if>
+      <if test="assortmentPicUrl != null">
+        #{assortmentPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="assortmentPicName != null">
+        #{assortmentPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.merchant.pojo.PlatformGoodsClassification">
+    update platform_goods_classification
+    <set>
+      <if test="assortmentCode != null">
+      	assortment_code = #{assortmentCode,jdbcType=VARCHAR}
+      </if>
+      <if test="assortmentParentCode != null">
+        assortment_parent_code = #{assortmentParentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="assortmentName != null">
+        assortment_name = #{assortmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="assortmentTop != null">
+        assortment_top = #{assortmentTop,jdbcType=TINYINT},
+      </if>
+      <if test="assortmentParamsId != null">
+        assortment_params_id = #{assortmentParamsId,jdbcType=BIGINT},
+      </if>
+      <if test="assortmentSort != null">
+        assortment_sort = #{assortmentSort,jdbcType=INTEGER},
+      </if>
+      <if test="assortmentPicUrl != null">
+        assortment_pic_url = #{assortmentPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="assortmentPicName != null">
+        assortment_pic_name = #{assortmentPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.merchant.pojo.PlatformGoodsClassification">
+    update platform_goods_classification
+    set assortment_code = #{assortmentCode,jdbcType=VARCHAR},
+    	assortment_parent_code = #{assortmentParentCode,jdbcType=VARCHAR},
+      assortment_name = #{assortmentName,jdbcType=VARCHAR},
+      assortment_top = #{assortmentTop,jdbcType=TINYINT},
+      assortment_params_id = #{assortmentParamsId,jdbcType=BIGINT},
+      assortment_sort = #{assortmentSort,jdbcType=INTEGER},
+      assortment_pic_url = #{assortmentPicUrl,jdbcType=VARCHAR},
+      assortment_pic_name = #{assortmentPicName,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectByAssortmentCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+    	<include refid="Base_Column_List" />
+    from platform_goods_classification
+    where assortment_code = #{assortmentCode,jdbcType=VARCHAR}
+  </select>
+   
+</mapper>

@@ -18,6 +18,6 @@ import lombok.Data;
  */
 @Data
 public class SearchClassificationListParam extends QueryPage{
-    private String assortmentCodeName;
+    private String param;
 }
 

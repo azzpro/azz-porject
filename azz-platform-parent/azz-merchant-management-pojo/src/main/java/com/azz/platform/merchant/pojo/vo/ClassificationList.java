@@ -47,13 +47,22 @@ public class ClassificationList {
      */
     private Integer assortmentSort;
     
+    /**
+     * 父级编码
+     */
+    private String assortmentParentCode;
+    
+    /**
+     * 分类层级
+     *
+     * @mbg.generated
+     */
+    private Byte assortmentTop;
     
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")
     private Date createTime;
     
-    /**
-     * 二级子级分类
-     */
-    List<ClassificationParentChildSet> classificationParentChildSet;
+    List<ClassificationList> childList;
+    
 }
 

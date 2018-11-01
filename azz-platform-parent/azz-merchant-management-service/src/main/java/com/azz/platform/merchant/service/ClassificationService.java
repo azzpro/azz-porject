@@ -27,9 +27,7 @@ import com.azz.platform.merchant.pojo.bo.DelClassificationParam;
 import com.azz.platform.merchant.pojo.bo.EditClassificationParam;
 import com.azz.platform.merchant.pojo.bo.SearchClassificationListParam;
 import com.azz.platform.merchant.pojo.vo.Classification;
-import com.azz.platform.merchant.pojo.vo.ClassificationChildSet;
 import com.azz.platform.merchant.pojo.vo.ClassificationList;
-import com.azz.platform.merchant.pojo.vo.ClassificationParentChildSet;
 import com.azz.platform.merchant.pojo.vo.ClassificationSet;
 import com.azz.system.api.SystemImageUploadService;
 import com.azz.system.sequence.api.RandomSequenceService;
@@ -234,67 +232,37 @@ public class ClassificationService{
      */
     public JsonResult<Pagination<ClassificationList>> getClassificationList(@RequestBody SearchClassificationListParam param){
         PageHelper.startPage(param.getPageNum(), param.getPageSize());
-        // 父级
-        List<ClassificationList> parentList = null;
-        // 父级下的子级
-        List<ClassificationParentChildSet> parentChildList= null;
-        // 子级
-        List<ClassificationChildSet> ccsList = null;
+        List<ClassificationList> list = new ArrayList<>();
+        List<ClassificationList> classificationSetList = platformGoodsClassificationMapper.selectByParam(param.getParam());
         
-        // 查询所有子级分类
-        List<ClassificationSet> childClassification = platformGoodsClassificationMapper.selectParentByAssortmentCodeName(param.getAssortmentCodeName());
-        
-        if(ObjectUtils.isNotNull(childClassification)) {
-            // 子级集合
-            for (ClassificationSet childObj : childClassification) {
-                // 第三级分类信息
-                ClassificationChildSet ccs = new ClassificationChildSet();
-                ccsList = new ArrayList<>();
-                
-                // 查询所有子级下的父级分类
-                List<ClassificationSet> parentOnChild = platformGoodsClassificationMapper.selectByAssortmentCodeName(childObj.getAssortmentParentCode());
-                
-                ccs.setAssortmentCode(childObj.getAssortmentCode());
-                ccs.setAssortmentName(childObj.getAssortmentName());
-                ccs.setAssortmentPicUrl(childObj.getAssortmentPicUrl());
-                ccs.setAssortmentSort(childObj.getAssortmentSort());
-                ccs.setCreateTime(childObj.getCreateTime());
-                ccsList.add(ccs);
-                
-                for (ClassificationSet childParentObj : parentOnChild) {
-                    // 子级上的父级集合
-                    ClassificationParentChildSet cpcs = new ClassificationParentChildSet();
-                    parentChildList = new ArrayList<>();
-                    
-                    cpcs.setAssortmentCode(childParentObj.getAssortmentCode());
-                    cpcs.setAssortmentName(childParentObj.getAssortmentName());
-                    cpcs.setAssortmentPicUrl(childParentObj.getAssortmentPicUrl());
-                    cpcs.setAssortmentSort(childParentObj.getAssortmentSort());
-                    cpcs.setCreateTime(childParentObj.getCreateTime());
-                    parentChildList.add(cpcs);
-                    cpcs.setClassificationChildSet(ccsList);
-                    // 查询所有父级分类
-                    List<ClassificationSet> parent = platformGoodsClassificationMapper.selectByAssortmentCodeName(childParentObj.getAssortmentParentCode());
-                    for (ClassificationSet parentObj : parent) {
-                        // 父级集合
-                        ClassificationList cl = new ClassificationList();
-                        parentList = new ArrayList<>();
-                        
-                        cl.setAssortmentCode(parentObj.getAssortmentCode());
-                        cl.setAssortmentName(parentObj.getAssortmentName());
-                        cl.setAssortmentPicUrl(parentObj.getAssortmentPicUrl());
-                        cl.setAssortmentSort(parentObj.getAssortmentSort());
-                        cl.setCreateTime(parentObj.getCreateTime());
-                        parentList.add(cl);
-                        cl.setClassificationParentChildSet(parentChildList);
-                    }
+        if(null != classificationSetList && !classificationSetList.isEmpty()) {
+            for (ClassificationList classificationSet : classificationSetList) {
+                // 有效并且为父级分类
+                if (classificationSet.getAssortmentTop()==0)  {
+                    list.add(classificationSet);
                 }
             }
-        } else {
-            
         }
         
-        return JsonResult.successJsonResult(new Pagination<>(parentList));
+        // 递归填充二级三级分类
+        for (ClassificationList classificationList : list) {
+            // 根据分类编码查询下级分类信息
+            classificationList.setChildList(selectClassificationSubList(classificationList.getAssortmentCode()));
+        }
+        
+        return JsonResult.successJsonResult(new Pagination<>(list));
     }
+    
+    @SuppressWarnings("unused")
+    private List<ClassificationList> selectClassificationSubList(String childCode){
+        List<ClassificationList> result = new ArrayList<>();
+        List<ClassificationList> childList = platformGoodsClassificationMapper.selectParentByParam(childCode);
+        for (ClassificationList classificationList : childList) {
+            classificationList.setChildList(selectClassificationSubList(classificationList.getAssortmentCode()));
+            result.add(classificationList);
+        }
+        return result;
+    }
+    
 }
 

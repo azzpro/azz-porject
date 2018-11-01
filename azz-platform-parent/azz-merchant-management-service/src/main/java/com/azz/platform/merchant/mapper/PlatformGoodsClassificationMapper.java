@@ -4,10 +4,11 @@ package com.azz.platform.merchant.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.azz.platform.merchant.pojo.PlatformGoodsClassification;
 import com.azz.platform.merchant.pojo.vo.Classification;
-import com.azz.platform.merchant.pojo.vo.ClassificationSet;
+import com.azz.platform.merchant.pojo.vo.ClassificationList;
 
 @Mapper
 public interface PlatformGoodsClassificationMapper {
@@ -27,7 +28,8 @@ public interface PlatformGoodsClassificationMapper {
     
     Classification selectDetailByAssortmentCode(String assortmentCode);
     
-    List<ClassificationSet> selectParentByAssortmentCodeName(String assortmentCodeName);
+    List<ClassificationList> selectParentByParam(@Param("param") String param);
     
-    List<ClassificationSet> selectByAssortmentCodeName(String assortmentCodeName);
+    List<ClassificationList> selectByParam(@Param("param") String param);
+    
 }

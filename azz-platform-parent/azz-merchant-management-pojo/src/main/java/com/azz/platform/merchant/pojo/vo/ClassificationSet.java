@@ -47,6 +47,13 @@ public class ClassificationSet {
     private Integer assortmentSort;
     
     /**
+     * 分类层级
+     *
+     * @mbg.generated
+     */
+    private Byte assortmentTop;
+    
+    /**
      * 所属父级
      */
     private String assortmentParentCode;

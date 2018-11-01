@@ -15,14 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
+import com.azz.platform.merchant.pojo.bo.Param;
 import com.azz.platform.merchant.pojo.bo.ParamsData;
 import com.azz.platform.merchant.pojo.bo.SearchParams;
 import com.azz.platform.merchant.pojo.vo.Params;
+import com.azz.platform.merchant.pojo.vo.ParamsAll;
 import com.azz.platform.merchant.service.ParamsService;
 
 /**
@@ -50,9 +51,37 @@ public class ParamsController {
 		return paramsService.searchParamsList(param);
 	}
 	
+	/**
+	 * <p>新曾参数</p>
+	 * @param params
+	 * @return
+	 * @author 刘建麟  2018年10月31日 下午7:49:11
+	 */
 	@RequestMapping(value="addParams",method=RequestMethod.POST)
-	public JsonResult<String> addParams(@RequestBody List<ParamsData> params,@RequestParam("creator") String creator){
-		return paramsService.insertParams(params,creator);
+	public JsonResult<String> addParams(@RequestBody ParamsData params){
+		return paramsService.insertParams(params);
+	}
+	
+	/**
+	 * <p>更新参数</p>
+	 * @param params
+	 * @return
+	 * @author 刘建麟  2018年10月31日 下午7:49:11
+	 */
+	@RequestMapping(value="updateParams",method=RequestMethod.POST)
+	public JsonResult<String> updateParams(@RequestBody Param params){
+		return paramsService.updateParams(params);
+	}
+	
+	/**
+	 * <p>去更新参数页面</p>
+	 * @param code
+	 * @return
+	 * @author 刘建麟  2018年10月31日 下午7:51:21
+	 */
+	@RequestMapping(value="toUpdateParams",method=RequestMethod.POST)
+	public JsonResult<List<ParamsAll>> toUpdateParams(String code){
+		return paramsService.toUpdateParams(code);
 	}
 }
 

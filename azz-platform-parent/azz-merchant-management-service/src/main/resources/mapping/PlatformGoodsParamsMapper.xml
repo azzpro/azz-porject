@@ -4,6 +4,8 @@
   <resultMap id="BaseResultMap" type="com.azz.platform.merchant.pojo.PlatformGoodsParams">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="params_code" jdbcType="VARCHAR" property="paramsCode" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time"  property="createTime" />
   </resultMap>
   <sql id="Base_Column_List">
     id, params_code
@@ -80,5 +82,8 @@
 			a.params_code LIKE CONCAT('%',#{param},'%') or b.assortment_name LIKE CONCAT('%',#{param},'%')
 		</if>
 	</where>
+  </select>
+  <select id="selectParamsByCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+  select id from platform_goods_params where params_code=#{code}
   </select>
 </mapper>

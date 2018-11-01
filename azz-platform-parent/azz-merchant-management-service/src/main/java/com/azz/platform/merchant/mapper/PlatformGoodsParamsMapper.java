@@ -31,4 +31,12 @@ public interface PlatformGoodsParamsMapper {
      * @author 刘建麟  2018年10月31日 上午11:28:49
      */
     List<Params> searchParamsList(SearchParams param);
+    
+    /**
+     * <p>根据CODE 查询参数</p>
+     * @param code
+     * @return
+     * @author 刘建麟  2018年10月31日 下午7:57:10
+     */
+    PlatformGoodsParams selectParamsByCode(String code);
 }

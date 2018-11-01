@@ -13,8 +13,11 @@ package com.azz.core.common.errorcode;
  */
 public class PlatformGoodsErrorCode extends BaseErrorCode{
     
-    public static final PlatformGoodsErrorCode PLATFORM_GOODS_ERROR_INVALID_USER = new PlatformGoodsErrorCode(20001, "参数不存在");
+    public static final PlatformGoodsErrorCode PLATFORM_GOODS_ERROR_INVALID_NULL = new PlatformGoodsErrorCode(20001, "参数不存在");
     
+    public static final PlatformGoodsErrorCode PLATFORM_GOODS_ERROR_INVALID_PARAMS = new PlatformGoodsErrorCode(20002, "参数名相同");
+    
+    public static final PlatformGoodsErrorCode PLATFORM_GOODS_ERROR_UPDATE_ERROR = new PlatformGoodsErrorCode(20003, "更新失败");
     
     public PlatformGoodsErrorCode(int code, String message) {
 	super(code, message);

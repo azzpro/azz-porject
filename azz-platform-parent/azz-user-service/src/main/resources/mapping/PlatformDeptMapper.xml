@@ -177,13 +177,12 @@
 			dept.dept_name AS deptName,
 			dept.dept_code AS deptCode,
 			dept.parent_code AS parentCode,
-			COUNT(u.dept_id) as numberMembers,
 		    dept.`status` AS status,
-			dept.creator AS creator,
+			u.user_name AS creator,
 			dept.create_time AS createTime 
 		FROM
 			platform_dept dept
-		LEFT JOIN platform_user u ON dept.id = u.dept_id
+		LEFT JOIN platform_user u ON dept.creator = u.user_code
 		WHERE
 			dept.parent_code = '0' AND (dept.status = 1 OR dept.status = 2)
 		<if test="deptNameCode != null and deptNameCode!='' "> 

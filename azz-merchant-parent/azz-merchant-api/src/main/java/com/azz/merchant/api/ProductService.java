@@ -20,6 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface ProductService {
 
 	@GetMapping("/azz/api/merchant/product/selectProductByAssortmentId")
-	String selectProductByAssortmentId(@RequestParam("id") String id);
+	String selectProductByAssortmentId(@RequestParam("id") Long id);
 }
 

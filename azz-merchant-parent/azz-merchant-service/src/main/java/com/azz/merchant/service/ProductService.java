@@ -10,8 +10,6 @@ package com.azz.merchant.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.azz.core.common.errorcode.PlatformGoodsErrorCode;
-import com.azz.core.exception.BaseException;
 import com.azz.merchant.mapper.MerchantGoodsProductMapper;
 import com.azz.util.JSR303ValidateUtils;
 
@@ -33,20 +31,13 @@ public class ProductService {
 	 * @return
 	 * @author 刘建麟  2018年11月1日 下午2:05:44
 	 */
-	public String selectProductByAssortmentId(String id) {
+	public String selectProductByAssortmentId(Long id) {
 		JSR303ValidateUtils.validate(id);
-		
-		String[] split = id.split(",");
-		
-		if(null != split && split.length > 0) {
-			for (String string : split) {
-				int count = goodsProductMapper.selectProductByAssortmentId(Long.parseLong(string));
-				if(count > 0)
-					return "NO";
-			}
-			return "OK";
+		int count = goodsProductMapper.selectProductByAssortmentId(id);
+		if(count > 0) {
+			return "NO";
 		}else {
-			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_NULL);
+			return "OK";
 		}
 	} 
 }

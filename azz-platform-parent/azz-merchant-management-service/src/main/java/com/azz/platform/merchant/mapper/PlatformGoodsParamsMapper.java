@@ -4,6 +4,7 @@ package com.azz.platform.merchant.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.azz.platform.merchant.pojo.PlatformGoodsParams;
 import com.azz.platform.merchant.pojo.bo.SearchParams;
@@ -23,6 +24,8 @@ public interface PlatformGoodsParamsMapper {
 
     int updateByPrimaryKey(PlatformGoodsParams record);
     
+    
+    int updateAssormentIdById(@Param("aid") Long aid,@Param("id") Long id);
     
     /**
      * <p>根据编码删除</p>

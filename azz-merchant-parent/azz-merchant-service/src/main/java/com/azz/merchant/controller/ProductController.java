@@ -33,7 +33,7 @@ public class ProductController {
 	 * @author 刘建麟  2018年11月1日 下午2:09:43
 	 */
 	@RequestMapping("selectProductByAssortmentId")
-	public String selectProductByAssortmentId(String id) {
+	public String selectProductByAssortmentId(Long id) {
 		return productService.selectProductByAssortmentId(id);
 	}
 }

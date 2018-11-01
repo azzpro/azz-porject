@@ -33,12 +33,6 @@ public class PlatformGoodsClassification implements Serializable {
      */
     private Byte assortmentTop;
 
-    /**
-     * 参数ID
-     *
-     * @mbg.generated
-     */
-    private Long assortmentParamsId;
 
     /**
      * 分类排序(默认0)
@@ -98,7 +92,7 @@ public class PlatformGoodsClassification implements Serializable {
 
     
     public PlatformGoodsClassification(Long id, String assortmentCode, String assortmentParentCode,
-			String assortmentName, Byte assortmentTop, Long assortmentParamsId, Integer assortmentSort,
+			String assortmentName, Byte assortmentTop, Integer assortmentSort,
 			String assortmentPicUrl, String assortmentPicName, String creator, Date createTime, String modifier,
 			Date modifyTime, Integer status) {
 		super();
@@ -107,7 +101,6 @@ public class PlatformGoodsClassification implements Serializable {
 		this.assortmentParentCode = assortmentParentCode;
 		this.assortmentName = assortmentName;
 		this.assortmentTop = assortmentTop;
-		this.assortmentParamsId = assortmentParamsId;
 		this.assortmentSort = assortmentSort;
 		this.assortmentPicUrl = assortmentPicUrl;
 		this.assortmentPicName = assortmentPicName;
@@ -227,29 +220,6 @@ public class PlatformGoodsClassification implements Serializable {
         this.assortmentTop = assortmentTop;
     }
 
-    /**
-     * 参数ID<br/>
-     * 返回值对应的表列名 platform_goods_classification.assortment_params_id
-     *
-     * @return 返回值对应 platform_goods_classification.assortment_params_id
-     *
-     * @mbg.generated
-     */
-    public Long getAssortmentParamsId() {
-        return assortmentParamsId;
-    }
-
-    /**
-     * 参数ID<br/>
-     * platform_goods_classification.assortment_params_id
-     *
-     * @param assortmentParamsId 值对应 platform_goods_classification.assortment_params_id
-     *
-     * @mbg.generated
-     */
-    public void setAssortmentParamsId(Long assortmentParamsId) {
-        this.assortmentParamsId = assortmentParamsId;
-    }
 
     /**
      * 分类排序(默认0)<br/>
@@ -428,50 +398,6 @@ public class PlatformGoodsClassification implements Serializable {
         this.status = status;
     }
 
-    @Override
-    public boolean equals(Object that) {
-        if (this == that) {
-            return true;
-        }
-        if (that == null) {
-            return false;
-        }
-        if (getClass() != that.getClass()) {
-            return false;
-        }
-        PlatformGoodsClassification other = (PlatformGoodsClassification) that;
-        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getAssortmentParentCode() == null ? other.getAssortmentParentCode() == null : this.getAssortmentParentCode().equals(other.getAssortmentParentCode()))
-            && (this.getAssortmentName() == null ? other.getAssortmentName() == null : this.getAssortmentName().equals(other.getAssortmentName()))
-            && (this.getAssortmentTop() == null ? other.getAssortmentTop() == null : this.getAssortmentTop().equals(other.getAssortmentTop()))
-            && (this.getAssortmentParamsId() == null ? other.getAssortmentParamsId() == null : this.getAssortmentParamsId().equals(other.getAssortmentParamsId()))
-            && (this.getAssortmentSort() == null ? other.getAssortmentSort() == null : this.getAssortmentSort().equals(other.getAssortmentSort()))
-            && (this.getAssortmentPicUrl() == null ? other.getAssortmentPicUrl() == null : this.getAssortmentPicUrl().equals(other.getAssortmentPicUrl()))
-            && (this.getAssortmentPicName() == null ? other.getAssortmentPicName() == null : this.getAssortmentPicName().equals(other.getAssortmentPicName()))
-            && (this.getCreator() == null ? other.getCreator() == null : this.getCreator().equals(other.getCreator()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getModifier() == null ? other.getModifier() == null : this.getModifier().equals(other.getModifier()))
-            && (this.getModifyTime() == null ? other.getModifyTime() == null : this.getModifyTime().equals(other.getModifyTime()));
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getAssortmentParentCode() == null) ? 0 : getAssortmentParentCode().hashCode());
-        result = prime * result + ((getAssortmentName() == null) ? 0 : getAssortmentName().hashCode());
-        result = prime * result + ((getAssortmentTop() == null) ? 0 : getAssortmentTop().hashCode());
-        result = prime * result + ((getAssortmentParamsId() == null) ? 0 : getAssortmentParamsId().hashCode());
-        result = prime * result + ((getAssortmentSort() == null) ? 0 : getAssortmentSort().hashCode());
-        result = prime * result + ((getAssortmentPicUrl() == null) ? 0 : getAssortmentPicUrl().hashCode());
-        result = prime * result + ((getAssortmentPicName() == null) ? 0 : getAssortmentPicName().hashCode());
-        result = prime * result + ((getCreator() == null) ? 0 : getCreator().hashCode());
-        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
-        result = prime * result + ((getModifier() == null) ? 0 : getModifier().hashCode());
-        result = prime * result + ((getModifyTime() == null) ? 0 : getModifyTime().hashCode());
-        return result;
-    }
 
     @Override
     public String toString() {
@@ -483,7 +409,6 @@ public class PlatformGoodsClassification implements Serializable {
         sb.append(", assortmentParentCode=").append(assortmentParentCode);
         sb.append(", assortmentName=").append(assortmentName);
         sb.append(", assortmentTop=").append(assortmentTop);
-        sb.append(", assortmentParamsId=").append(assortmentParamsId);
         sb.append(", assortmentSort=").append(assortmentSort);
         sb.append(", assortmentPicUrl=").append(assortmentPicUrl);
         sb.append(", assortmentPicName=").append(assortmentPicName);

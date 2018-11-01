@@ -20,6 +20,7 @@ import lombok.Data;
 public class ParamsData {
 	
 	private List<Param> params;
+	private String assortmentCode;
 	private String creator;
 	
 }

@@ -110,16 +110,11 @@ public class ParamsService {
 		PlatformGoodsParams paramsByCode = goodsParamsMapper.selectParamsByCode(code);
 		if(null == paramsByCode)
 			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_CODE_NOTEXIST);
+		//查询分类名称
+		PlatformGoodsClassification key = goodsClassificationMapper.selectByPrimaryKey(paramsByCode.getAssortmentId());
+		if(null == key)
+			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_ASSORTMENT_EXIST);
 		Long id = paramsByCode.getId();
-		List<PlatformGoodsClassification> params = goodsClassificationMapper.selectCountByParams(id);
-		if(null != params && params.size() > 0) {
-			for (PlatformGoodsClassification platformGoodsClassification : params) {
-				sb1.append(platformGoodsClassification.getId());
-				if(platformGoodsClassification != params.get(params.size()-1)) {
-					sb1.append(",");
-				}
-			}
-		}
 		if(null != paramsByCode) {
 			List<PlatformGoodsParamsTerm> byCode = goodsParamsTermMapper.selectParamsTermByCode(paramsByCode.getId());
 			if(null != byCode && byCode.size() > 0) {
@@ -131,7 +126,7 @@ public class ParamsService {
 					pa.setParamsType(platformGoodsParamsTerm.getParamsType());
 					pa.setParamsCode(platformGoodsParamsTerm.getParamsCode());
 					List<PlatformGoodsParamsValue> valueById = goodsParamsValueMapper.selectValueById(platformGoodsParamsTerm.getId());
-					String b = productService.selectProductByAssortmentId(sb1.toString());
+					String b = productService.selectProductByAssortmentId(key.getId());
 					if(Objects.equals(b, "NO")) {
 						pa.setUpdatFlag((byte)1);
 					}else {
@@ -177,19 +172,20 @@ public class ParamsService {
 			if(null == paramsByCode)
 				throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_NULL);
 			Long id = paramsByCode.getId();
-			List<PlatformGoodsClassification> params = goodsClassificationMapper.selectCountByParams(id);
-			if(null != params && params.size() > 0) {
-				for (PlatformGoodsClassification platformGoodsClassification : params) {
-					sb.append(platformGoodsClassification.getId());
-					if(platformGoodsClassification != params.get(params.size()-1)) {
-						sb.append(",");
-					}
-				}
-			}
-			String b = productService.selectProductByAssortmentId(sb.toString());
+			if(StringUtils.isBlank(ppt.getAssortmentCode()))
+				throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_CODE_NOTEXIST);
+			PlatformGoodsClassification key = goodsClassificationMapper.selectByAssortmentCode(ppt.getAssortmentCode());
+			if(null == key)
+				throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_ASSORTMENT_EXIST);
+			
+			String b = productService.selectProductByAssortmentId(key.getId());
 			if(Objects.equals(b, "NO"))
 				throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_PRODUCT_EXIST);
-			//删除参数值
+			
+			int idById = goodsParamsMapper.updateAssormentIdById(key.getId(),id);
+			if(idById != 1) 
+				throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_UPDATE_ERROR);
+			//更新参数值
 			PlatformGoodsParamsTerm pt = new PlatformGoodsParamsTerm();
 			pt.setModifier(ppt.getModifier());
 			pt.setModifyTime(new Date());
@@ -246,10 +242,16 @@ public class ParamsService {
 				if(set.size() != list.size()) {
 					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_PARAMS);
 				}
+				//查询分类
+				PlatformGoodsClassification code = goodsClassificationMapper.selectByAssortmentCode(ppt.getAssortmentCode());
+				if(null == code)
+					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_CODE_NOTEXIST);
+					
 				PlatformGoodsParams goodsParams = new PlatformGoodsParams();
 				goodsParams.setParamsCode(randomSequenceService.getProductParameterCodeNumber());
 				goodsParams.setCreator(ppt.getCreator());
 				goodsParams.setCreateTime(new Date());
+				goodsParams.setAssortmentId(code.getId());
 				goodsParamsMapper.insertSelective(goodsParams);
 				Long id2 = goodsParams.getId();
 				for (Param paramsData : list) {
@@ -304,16 +306,10 @@ public class ParamsService {
 		
 		//删除参数值
 		Long id = byCode.getId();
-		List<PlatformGoodsClassification> params = goodsClassificationMapper.selectCountByParams(id);
-		if(null != params && params.size() > 0) {
-			for (PlatformGoodsClassification platformGoodsClassification : params) {
-				sb1.append(platformGoodsClassification.getId());
-				if(platformGoodsClassification != params.get(params.size()-1)) {
-					sb1.append(",");
-				}
-			}
-		}
-		String b = productService.selectProductByAssortmentId(sb1.toString());
+		PlatformGoodsClassification key = goodsClassificationMapper.selectByPrimaryKey(byCode.getAssortmentId());
+		if(null == key)
+			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_ASSORTMENT_EXIST);
+		String b = productService.selectProductByAssortmentId(key.getId());
 		if(Objects.equals(b, "NO"))
 			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_PRODUCT_EXIST);
 		

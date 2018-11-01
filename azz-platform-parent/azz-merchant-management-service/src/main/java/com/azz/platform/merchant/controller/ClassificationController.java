@@ -7,6 +7,8 @@
  
 package com.azz.platform.merchant.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
-import com.azz.core.common.page.Pagination;
 import com.azz.platform.merchant.pojo.bo.AddClassificationParam;
 import com.azz.platform.merchant.pojo.bo.DelClassificationParam;
 import com.azz.platform.merchant.pojo.bo.EditClassificationParam;
@@ -37,7 +38,7 @@ public class ClassificationController {
 	
 	
 	@RequestMapping(value="getClassificationList",method=RequestMethod.POST)
-	public JsonResult<Pagination<ClassificationList>> getClassificationList(@RequestBody SearchClassificationListParam param){
+	public JsonResult<List<ClassificationList>> getClassificationList(@RequestBody SearchClassificationListParam param){
 	    return classificationService.getClassificationList(param);
 	}
 	

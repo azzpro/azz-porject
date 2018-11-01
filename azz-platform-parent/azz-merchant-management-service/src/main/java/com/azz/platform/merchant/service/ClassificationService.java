@@ -28,7 +28,6 @@ import com.azz.platform.merchant.pojo.bo.EditClassificationParam;
 import com.azz.platform.merchant.pojo.bo.SearchClassificationListParam;
 import com.azz.platform.merchant.pojo.vo.Classification;
 import com.azz.platform.merchant.pojo.vo.ClassificationList;
-import com.azz.platform.merchant.pojo.vo.ClassificationSet;
 import com.azz.system.api.SystemImageUploadService;
 import com.azz.system.sequence.api.RandomSequenceService;
 import com.azz.util.JSR303ValidateUtils;
@@ -230,7 +229,7 @@ public class ClassificationService{
      * @return
      * @author 彭斌  2018年11月1日 上午11:12:52
      */
-    public JsonResult<Pagination<ClassificationList>> getClassificationList(@RequestBody SearchClassificationListParam param){
+    public JsonResult<List<ClassificationList>> getClassificationList(@RequestBody SearchClassificationListParam param){
         PageHelper.startPage(param.getPageNum(), param.getPageSize());
         List<ClassificationList> list = new ArrayList<>();
         List<ClassificationList> classificationSetList = platformGoodsClassificationMapper.selectByParam(param.getParam());
@@ -250,7 +249,7 @@ public class ClassificationService{
             classificationList.setChildList(selectClassificationSubList(classificationList.getAssortmentCode()));
         }
         
-        return JsonResult.successJsonResult(new Pagination<>(list));
+        return JsonResult.successJsonResult(list);
     }
     
     @SuppressWarnings("unused")

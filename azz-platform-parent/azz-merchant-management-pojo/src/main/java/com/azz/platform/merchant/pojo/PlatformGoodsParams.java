@@ -19,6 +19,8 @@ public class PlatformGoodsParams implements Serializable {
      */
     private String paramsCode;
     
+    private Long assortmentId;
+    
     private String creator;
     
     private Date createTime;
@@ -55,6 +57,14 @@ public class PlatformGoodsParams implements Serializable {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public Long getAssortmentId() {
+		return assortmentId;
+	}
+
+	public void setAssortmentId(Long assortmentId) {
+		this.assortmentId = assortmentId;
 	}
 
 	@Override

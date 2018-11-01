@@ -87,5 +87,16 @@ public class ParamsController {
 		return paramsService.updateParams(params);
 	}
 	
+	/**
+	 * <p>删除参数</p>
+	 * @param params
+	 * @return
+	 * @author 刘建麟  2018年10月31日 下午7:47:30
+	 */
+	@RequestMapping(value="deleteParams",method=RequestMethod.POST)
+	public JsonResult<String> deleteParams(@RequestParam("code") String code){
+		return paramsService.deleteParams(code);
+	}
+	
 }
 

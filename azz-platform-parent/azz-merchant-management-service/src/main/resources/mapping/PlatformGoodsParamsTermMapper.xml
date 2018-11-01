@@ -161,6 +161,12 @@
   select id from platform_goods_params_term where params_code=#{code}
   </select>
   
+  <!-- 删除参数项 -->
+  <delete id="deleteByParamsId" parameterType="java.lang.Long">
+    delete from platform_goods_params_term
+    where params_id = #{id,jdbcType=BIGINT}
+  </delete>
+  
   <update id="updateBycode">
     update platform_goods_params_term
     <set>

@@ -7,13 +7,14 @@
  
 package com.azz.platform.merchant.api;
 
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
-import com.azz.core.common.page.Pagination;
 import com.azz.platform.merchant.pojo.bo.AddClassificationParam;
 import com.azz.platform.merchant.pojo.bo.DelClassificationParam;
 import com.azz.platform.merchant.pojo.bo.EditClassificationParam;
@@ -30,7 +31,7 @@ import com.azz.platform.merchant.pojo.vo.ClassificationList;
 public interface ClassificationService {
     
     @PostMapping("/azz/api/merchant/product/getClassificationList")
-    JsonResult<Pagination<ClassificationList>> getClassificationList(@RequestBody SearchClassificationListParam param);
+    JsonResult<List<ClassificationList>> getClassificationList(@RequestBody SearchClassificationListParam param);
     
     @PostMapping("/azz/api/merchant/product/addClassification")
     JsonResult<String> addClassification(@RequestBody AddClassificationParam param);

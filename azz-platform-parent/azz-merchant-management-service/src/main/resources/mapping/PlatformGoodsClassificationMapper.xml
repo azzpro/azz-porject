@@ -7,7 +7,6 @@
     <result column="assortment_parent_code" jdbcType="VARCHAR" property="assortmentParentCode" />
     <result column="assortment_name" jdbcType="VARCHAR" property="assortmentName" />
     <result column="assortment_top" jdbcType="TINYINT" property="assortmentTop" />
-    <result column="assortment_params_id" jdbcType="BIGINT" property="assortmentParamsId" />
     <result column="assortment_sort" jdbcType="INTEGER" property="assortmentSort" />
     <result column="assortment_pic_url" jdbcType="VARCHAR" property="assortmentPicUrl" />
     <result column="assortment_pic_name" jdbcType="VARCHAR" property="assortmentPicName" />
@@ -17,8 +16,9 @@
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
     <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
+  
   <sql id="Base_Column_List">
-    id,assortment_code, assortment_parent_code, assortment_name, assortment_top, assortment_params_id, 
+    id,assortment_code, assortment_parent_code, assortment_name, assortment_top, 
     assortment_sort, assortment_pic_url, assortment_pic_name, creator, create_time, modifier, 
     modify_time,status
   </sql>
@@ -34,12 +34,12 @@
   </delete>
   <insert id="insert" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsClassification">
     insert into platform_goods_classification (id,assortment_code, assortment_parent_code, assortment_name, 
-      assortment_top, assortment_params_id, assortment_sort, 
+      assortment_top, assortment_sort, 
       assortment_pic_url, assortment_pic_name, creator, 
       create_time, modifier, modify_time,status
       )
     values (#{id,jdbcType=BIGINT},#{assortmentCode,jdbcType=VARCHAR}, #{assortmentParentCode,jdbcType=VARCHAR}, #{assortmentName,jdbcType=VARCHAR}, 
-      #{assortmentTop,jdbcType=TINYINT}, #{assortmentParamsId,jdbcType=BIGINT}, #{assortmentSort,jdbcType=INTEGER}, 
+      #{assortmentTop,jdbcType=TINYINT},  #{assortmentSort,jdbcType=INTEGER}, 
       #{assortmentPicUrl,jdbcType=VARCHAR}, #{assortmentPicName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP},#{status,jdbcType=INTEGER}
       )
@@ -61,9 +61,6 @@
       </if>
       <if test="assortmentTop != null">
         assortment_top,
-      </if>
-      <if test="assortmentParamsId != null">
-        assortment_params_id,
       </if>
       <if test="assortmentSort != null">
         assortment_sort,
@@ -106,9 +103,6 @@
       <if test="assortmentTop != null">
         #{assortmentTop,jdbcType=TINYINT},
       </if>
-      <if test="assortmentParamsId != null">
-        #{assortmentParamsId,jdbcType=BIGINT},
-      </if>
       <if test="assortmentSort != null">
         #{assortmentSort,jdbcType=INTEGER},
       </if>
@@ -150,9 +144,6 @@
       <if test="assortmentTop != null">
         assortment_top = #{assortmentTop,jdbcType=TINYINT},
       </if>
-      <if test="assortmentParamsId != null">
-        assortment_params_id = #{assortmentParamsId,jdbcType=BIGINT},
-      </if>
       <if test="assortmentSort != null">
         assortment_sort = #{assortmentSort,jdbcType=INTEGER},
       </if>
@@ -186,7 +177,6 @@
     	assortment_parent_code = #{assortmentParentCode,jdbcType=VARCHAR},
       assortment_name = #{assortmentName,jdbcType=VARCHAR},
       assortment_top = #{assortmentTop,jdbcType=TINYINT},
-      assortment_params_id = #{assortmentParamsId,jdbcType=BIGINT},
       assortment_sort = #{assortmentSort,jdbcType=INTEGER},
       assortment_pic_url = #{assortmentPicUrl,jdbcType=VARCHAR},
       assortment_pic_name = #{assortmentPicName,jdbcType=VARCHAR},
@@ -196,6 +186,12 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateParamIdByCode">
+   update platform_goods_classification
+   set assortment_params_id = #{id}
+   where assortment_code = #{code}
   </update>
   
   <select id="selectByAssortmentCode" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -211,7 +207,7 @@
 		assortment_parent_code as assortmentParentCode,
 		assortment_name as assortmentName,
 		assortment_sort as assortmentSort,
-		assortment_pic_url sa assortmentPicUrl,
+		assortment_pic_url as assortmentPicUrl,
 		assortment_pic_name as assortmentPicName
 	FROM
 		platform_goods_classification
@@ -219,35 +215,41 @@
 		assortment_code = #{assortmentCode,jdbcType=VARCHAR}
   </select>
   
-  <select id="selectParentByAssortmentCodeName" parameterType="java.lang.String" resultType="com.azz.platform.merchant.pojo.vo.ClassificationSet" >
+  <select id="selectParentByParam" parameterType="string" resultType="com.azz.platform.merchant.pojo.vo.ClassificationList" >
   	SELECT
 		assortment_code as assortmentCode,
 		assortment_name as assortmentName,
 		assortment_sort as assortmentSort,
 		create_time as createTime,
 		assortment_pic_url as assortmentPicUrl,
-		assortment_parent_code as assortmentParentCode
+		assortment_parent_code as assortmentParentCode,
+		assortment_top as assortmentTop
 	FROM
 		platform_goods_classification
 	WHERE status = 1
-	<if test="assortmentCodeName != null and assortmentCodeName != ''">
-		and (assortment_parent_code = #{assortmentCodeName} or assortment_name = #{assortmentCodeName})
+	<if test="param != null and param != ''">
+		and (assortment_parent_code = #{param} or assortment_name = #{param})
   	</if>
   </select>
   
-  <select id="selectByAssortmentCodeName" parameterType="java.lang.String" resultType="com.azz.platform.merchant.pojo.vo.ClassificationSet" >
+  <select id="selectByParam" parameterType="string" resultType="com.azz.platform.merchant.pojo.vo.ClassificationList" >
   	SELECT
 		assortment_code as assortmentCode,
 		assortment_name as assortmentName,
 		assortment_sort as assortmentSort,
 		create_time as createTime,
 		assortment_pic_url as assortmentPicUrl,
-		assortment_parent_code as assortmentParentCode
+		assortment_parent_code as assortmentParentCode,
+		assortment_top as assortmentTop
 	FROM
 		platform_goods_classification
 	WHERE status = 1
-	<if test="assortmentCodeName != null and assortmentCodeName != ''">
-		and (assortment_code = #{assortmentCodeName} or assortment_name = #{assortmentCodeName})
+	<if test="param != null and param != ''">
+		and (assortment_code = #{param} or assortment_name = #{param})
 	</if>
+  </select>
+  
+  <select id="selectCountById" parameterType="java.lang.Long" resultType="int">
+  	SELECT count(1) FROM merchant_goods_module WHERE classification_id = #{classificationId}
   </select>
 </mapper>

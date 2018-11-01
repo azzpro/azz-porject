@@ -3,12 +3,13 @@
 <mapper namespace="com.azz.platform.merchant.mapper.PlatformGoodsParamsMapper">
   <resultMap id="BaseResultMap" type="com.azz.platform.merchant.pojo.PlatformGoodsParams">
     <id column="id" jdbcType="BIGINT" property="id" />
+     <id column="assortment_id" jdbcType="BIGINT" property="assortmentId" />
     <result column="params_code" jdbcType="VARCHAR" property="paramsCode" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time"  property="createTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, params_code
+    id, params_code,assortment_id,creator,create_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -33,6 +34,9 @@
       <if test="paramsCode != null">
         params_code,
       </if>
+       <if test="assortmentId != null">
+        assortment_id,
+      </if>
       <if test="creator != null">
         creator,
       </if>
@@ -46,6 +50,9 @@
       </if>
       <if test="paramsCode != null">
         #{paramsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="assortmentId != null">
+        #{assortmentId,jdbcType=BIGINT},
       </if>
        <if test="creator != null">
         #{creator,jdbcType=VARCHAR},
@@ -70,9 +77,15 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
+  <update id="updateAssormentIdById">
+    update platform_goods_params
+    set assortment_id = #{aid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
   <select id="searchParamsList" resultType="com.azz.platform.merchant.pojo.vo.Params" parameterType="com.azz.platform.merchant.pojo.bo.SearchParams">
   select a.params_code paramCode ,b.assortment_name assortmentName , c.productUseCount,d.paramsCount ,a.create_time createTime from platform_goods_params a
-	LEFT JOIN platform_goods_classification b on b.assortment_params_id = a.id
+	LEFT JOIN platform_goods_classification b on b.id = a.assortment_id
 	LEFT JOIN (select assortment_id ,count(1) as productUseCount from merchant_goods_product group by assortment_id) c on 
 	a.id = c.assortment_id
 	LEFT JOIN (select params_id ,count(1) as paramsCount from platform_goods_params_term group by params_id) d on
@@ -84,6 +97,15 @@
 	</where>
   </select>
   <select id="selectParamsByCode" resultMap="BaseResultMap" parameterType="java.lang.String">
-  select id from platform_goods_params where params_code=#{code}
+  select id,assortment_id from platform_goods_params where params_code=#{code}
+  </select>
+  
+  <delete id="deleteByCode" parameterType="java.lang.String">
+    delete from platform_goods_params
+    where params_code = #{code,jdbcType=VARCHAR}
+  </delete>
+  
+   <select id="selectCountByParams" parameterType="java.lang.String" resultType="int">
+  	SELECT count(1) FROM platform_goods_params WHERE params_code = #{paramsCode,jdbcType=VARCHAR}
   </select>
 </mapper>

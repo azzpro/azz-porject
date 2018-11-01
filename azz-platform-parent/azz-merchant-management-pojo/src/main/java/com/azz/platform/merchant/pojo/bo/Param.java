@@ -20,5 +20,7 @@ public class Param {
 	private String param;
 	private String paramCode;
 	private String modifier;
+	private String parentCode;
+	private String assortmentCode;
 }
 

@@ -25,6 +25,14 @@ public interface PlatformGoodsParamsMapper {
     
     
     /**
+     * <p>根据编码删除</p>
+     * @param code
+     * @return
+     * @author 刘建麟  2018年11月1日 下午2:56:25
+     */
+    int deleteByCode(String code);
+    
+    /**
      * <p>参数列表</p>
      * @param param
      * @return

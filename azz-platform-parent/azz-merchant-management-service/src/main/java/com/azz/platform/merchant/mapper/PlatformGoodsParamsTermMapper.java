@@ -23,6 +23,14 @@ public interface PlatformGoodsParamsTermMapper {
     int updateByPrimaryKey(PlatformGoodsParamsTerm record);
     
     /**
+     * <p>删除参数项</p>
+     * @param id
+     * @return
+     * @author 刘建麟  2018年11月1日 下午2:54:31
+     */
+    int deleteByParamsId(Long id);
+    
+    /**
      * <p>根据父参数ID 查询参数项</p>
      * @param id
      * @return

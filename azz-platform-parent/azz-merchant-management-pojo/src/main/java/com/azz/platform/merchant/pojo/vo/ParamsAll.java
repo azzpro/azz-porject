@@ -22,5 +22,7 @@ public class ParamsAll {
 	private Byte paramsChoice;
 	private Byte paramsType;
 	private String values;
+	private Byte updatFlag;
+	private String parentCode;
 }
 

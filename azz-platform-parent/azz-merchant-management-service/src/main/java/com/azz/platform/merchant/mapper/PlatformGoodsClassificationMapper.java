@@ -30,4 +30,13 @@ public interface PlatformGoodsClassificationMapper {
     List<ClassificationSet> selectParentByAssortmentCodeName(String assortmentCodeName);
     
     List<ClassificationSet> selectByAssortmentCodeName(String assortmentCodeName);
+
+    /**
+     * <p>根据参数ID查询</p>
+     * @param id
+     * @return
+     * @author 刘建麟  2018年11月1日 下午3:10:44
+     */
+    List<PlatformGoodsClassification> selectCountByParams(Long id);
+
 }

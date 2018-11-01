@@ -86,4 +86,9 @@
   <select id="selectParamsByCode" resultMap="BaseResultMap" parameterType="java.lang.String">
   select id from platform_goods_params where params_code=#{code}
   </select>
+  
+  <delete id="deleteByCode" parameterType="java.lang.String">
+    delete from platform_goods_params
+    where params_code = #{code,jdbcType=VARCHAR}
+  </delete>
 </mapper>

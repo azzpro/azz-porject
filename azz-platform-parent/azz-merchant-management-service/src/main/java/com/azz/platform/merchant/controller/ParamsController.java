@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
@@ -82,6 +83,17 @@ public class ParamsController {
 	@RequestMapping(value="toUpdateParams",method=RequestMethod.POST)
 	public JsonResult<List<ParamsAll>> toUpdateParams(String code){
 		return paramsService.toUpdateParams(code);
+	}
+	
+	/**
+	 * <p>删除参数</p>
+	 * @param params
+	 * @return
+	 * @author 刘建麟  2018年10月31日 下午7:47:30
+	 */
+	@RequestMapping(value="deleteParams",method=RequestMethod.POST)
+	public JsonResult<String> deleteParams(String code){
+		return paramsService.deleteParams(code);
 	}
 }
 

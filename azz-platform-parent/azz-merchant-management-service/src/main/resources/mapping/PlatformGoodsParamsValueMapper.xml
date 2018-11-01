@@ -98,4 +98,12 @@
     delete from platform_goods_params_value
     where params_parent_id = #{pid}
   </delete>
+  
+  <delete id="deleteValue" parameterType="long[]">
+		delete from platform_goods_params_value where params_parent_id in
+		<foreach collection="array" item="arr" index="no" open="("
+			separator="," close=")">
+			#{arr}
+		</foreach>
+	</delete>
 </mapper>

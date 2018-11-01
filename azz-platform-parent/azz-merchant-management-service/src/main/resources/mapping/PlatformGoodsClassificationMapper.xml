@@ -250,4 +250,8 @@
 		and (assortment_code = #{assortmentCodeName} or assortment_name = #{assortmentCodeName})
 	</if>
   </select>
+  
+  <select id="selectCountByParams" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from platform_goods_classification where assortment_params_id = #{id}
+  </select>
 </mapper>

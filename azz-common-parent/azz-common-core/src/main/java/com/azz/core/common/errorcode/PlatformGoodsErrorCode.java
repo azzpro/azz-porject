@@ -17,7 +17,11 @@ public class PlatformGoodsErrorCode extends BaseErrorCode{
     
     public static final PlatformGoodsErrorCode PLATFORM_GOODS_ERROR_INVALID_PARAMS = new PlatformGoodsErrorCode(20002, "参数名相同");
     
+    public static final PlatformGoodsErrorCode PLATFORM_GOODS_ERROR_CODE_NOTEXIST = new PlatformGoodsErrorCode(20002, "CODE不存在");
+    
     public static final PlatformGoodsErrorCode PLATFORM_GOODS_ERROR_UPDATE_ERROR = new PlatformGoodsErrorCode(20003, "更新失败");
+    
+    public static final PlatformGoodsErrorCode PLATFORM_GOODS_ERROR_PRODUCT_EXIST = new PlatformGoodsErrorCode(20003, "关联分类存在产品");
     
     public PlatformGoodsErrorCode(int code, String message) {
 	super(code, message);

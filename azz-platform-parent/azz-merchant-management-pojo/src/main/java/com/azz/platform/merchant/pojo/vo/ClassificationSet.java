@@ -46,6 +46,10 @@ public class ClassificationSet {
      */
     private Integer assortmentSort;
     
+    /**
+     * 所属父级
+     */
+    private String assortmentParentCode;
     
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")
     private Date createTime;

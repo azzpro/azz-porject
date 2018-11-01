@@ -19,4 +19,6 @@ public interface PlatformUserRoleMapper {
     int updateByPrimaryKeySelective(PlatformUserRole record);
 
     int updateByPrimaryKey(PlatformUserRole record);
+    
+    int countBindingUserRole(Long roleId);
 }

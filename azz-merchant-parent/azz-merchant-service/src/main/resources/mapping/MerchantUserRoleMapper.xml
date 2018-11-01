@@ -119,4 +119,11 @@
     delete from merchant_user_role
     where merchant_user_id = #{merchantUserId}
   </delete>
+  
+  <select id="countBindingUserRole" parameterType="java.lang.Long" resultType="int">
+    select 
+    	count(1)
+    from merchant_user_role
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </select>
 </mapper>

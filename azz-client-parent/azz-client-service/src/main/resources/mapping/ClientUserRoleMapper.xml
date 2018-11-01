@@ -119,6 +119,11 @@
     delete from client_user_role
     where client_user_id = #{clientUserId}
   </delete>
-  
+  <select id="countBindingUserRole" parameterType="java.lang.Long" resultType="int">
+    select 
+    	count(1)
+    from client_user_role
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </select>
   
 </mapper>

@@ -56,6 +56,7 @@ import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.ClientConstants;
 import com.azz.core.constants.ClientConstants.IsEnterpriseAuthenticator;
 import com.azz.core.constants.ClientConstants.QualificationApplyStatus;
+import com.azz.core.constants.ClientConstants.UserStatus;
 import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.UserConstants.ClientType;
 import com.azz.core.exception.BaseException;
@@ -122,11 +123,14 @@ public class ClientService {
 	String password = param.getPassword();
 	ClientUser clientUser = clientUserMapper.getClientUserByPhoneNumber(phoneNumber);
 	if (clientUser == null) {// 无效用户
-	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "无效用户");
+	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "请输入正确的账号或密码");
+	}
+	if(clientUser.getStatus() == UserStatus.INVALID.getValue()) {
+		throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "账号已被禁用，请联系管理员解除");
 	}
 	boolean isRight = PasswordHelper.checkPassword(password, clientUser.getSalt(), clientUser.getPassword());
 	if (!isRight) {// 与盐值加密的密码不匹配
-	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "手机号或密码错误");
+	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "请输入正确的账号或密码");
 	}
 	return JsonResult.successJsonResult();
     }

@@ -11,7 +11,9 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * <P>TODO</P>
@@ -19,6 +21,8 @@ import lombok.Data;
  * @author 彭斌  2018年10月31日 下午1:52:03
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AddClassificationParam {
     
     /**

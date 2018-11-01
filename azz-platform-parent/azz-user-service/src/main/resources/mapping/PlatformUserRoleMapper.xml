@@ -120,4 +120,10 @@
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="countBindingUserRole" parameterType="java.lang.Long" resultType="int">
+    select 
+    	count(1)
+    from platform_user_role
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </select>
 </mapper>

@@ -10,10 +10,9 @@ package com.azz.platform.merchant.pojo.bo;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.web.multipart.MultipartFile;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * <P>TODO</P>
@@ -21,9 +20,7 @@ import lombok.NoArgsConstructor;
  * @author 彭斌  2018年10月31日 下午1:52:03
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class EditClassificationParam {
+public class EditClassificationWebParam {
     
     /**
      * 分类编码
@@ -63,7 +60,7 @@ public class EditClassificationParam {
     /**
      * 分类主图
      */
-    @NotNull(message = "分类主图")
-    private ClassificationPic classificationPic;
+    @NotNull(message = "请上传主图")
+    private MultipartFile classificationFile;
 }
 

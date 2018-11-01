@@ -19,4 +19,6 @@ public interface MerchantUserRoleMapper {
     int updateByPrimaryKey(MerchantUserRole record);
     
     int deleteByMerchantUserId(Long merchantUserId);
+    
+    int countBindingUserRole(Long roleId);
 }

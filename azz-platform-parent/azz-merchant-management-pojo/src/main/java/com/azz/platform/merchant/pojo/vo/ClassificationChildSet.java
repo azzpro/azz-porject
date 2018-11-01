@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2018年10月31日 下午5:19:40
+ * Create on 2018年10月31日 下午6:36:03
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
@@ -17,10 +17,10 @@ import lombok.Data;
 /**
  * <P>TODO</P>
  * @version 1.0
- * @author 彭斌  2018年10月31日 下午5:19:40
+ * @author 彭斌  2018年10月31日 下午6:36:03
  */
 @Data
-public class ClassificationList {
+public class ClassificationChildSet {
     /**
      * 分类图片url
      *
@@ -51,9 +51,5 @@ public class ClassificationList {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")
     private Date createTime;
     
-    /**
-     * 二级子级分类
-     */
-    List<ClassificationParentChildSet> classificationParentChildSet;
 }
 

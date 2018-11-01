@@ -107,4 +107,24 @@ public abstract class ClientConstants {
             this.desc = desc;
         }
     }
+    
+    public enum UserStatus {
+
+    	DISABLE(0, "注销"),
+
+    	VALID(1, "有效"),
+
+    	INVALID(2, "禁用");
+
+    	@Getter
+    	private int value;
+
+    	@Getter
+    	private String desc;
+
+    	UserStatus(int value, String desc) {
+    	    this.value = value;
+    	    this.desc = desc;
+    	}
+    }
 }

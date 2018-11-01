@@ -225,11 +225,14 @@
 		assortment_name as assortmentName,
 		assortment_sort as assortmentSort,
 		create_time as createTime,
-		assortment_pic_url sa assortmentPicUrl,
+		assortment_pic_url as assortmentPicUrl,
+		assortment_parent_code as assortmentParentCode
 	FROM
 		platform_goods_classification
 	WHERE status = 1
-		and (assortment_parent_code = #{assortmentCodeName,jdbcType=VARCHAR} or assortment_name = #{assortmentCodeName,jdbcType=VARCHAR})
+	<if test="assortmentCodeName != null and assortmentCodeName != ''">
+		and (assortment_parent_code = #{assortmentCodeName} or assortment_name = #{assortmentCodeName})
+  	</if>
   </select>
   
   <select id="selectByAssortmentCodeName" parameterType="java.lang.String" resultType="com.azz.platform.merchant.pojo.vo.ClassificationSet" >
@@ -238,10 +241,13 @@
 		assortment_name as assortmentName,
 		assortment_sort as assortmentSort,
 		create_time as createTime,
-		assortment_pic_url sa assortmentPicUrl,
+		assortment_pic_url as assortmentPicUrl,
+		assortment_parent_code as assortmentParentCode
 	FROM
 		platform_goods_classification
 	WHERE status = 1
-		and (assortment_code = #{assortmentCodeName,jdbcType=VARCHAR} or assortment_name = #{assortmentCodeName,jdbcType=VARCHAR})
+	<if test="assortmentCodeName != null and assortmentCodeName != ''">
+		and (assortment_code = #{assortmentCodeName} or assortment_name = #{assortmentCodeName})
+	</if>
   </select>
 </mapper>

@@ -50,7 +50,6 @@ public class CompleteMerchantInfoWebParam {
     private String detailAddress;
     @NotEmpty(message = "请上传营业执照")
     private MultipartFile[] tradingCertificateFiles;
-    @NotEmpty(message = "请上传经营执照")
     private MultipartFile[] businessLicenseFiles;
     
 }

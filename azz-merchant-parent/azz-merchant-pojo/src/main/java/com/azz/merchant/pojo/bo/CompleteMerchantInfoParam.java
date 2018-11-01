@@ -51,6 +51,5 @@ public class CompleteMerchantInfoParam {
     private String detailAddress;
     @NotEmpty(message = "请上传营业执照")
     private List<TradingCertificate> tradingCertificates;
-    @NotEmpty(message = "请上传经营执照")
     private List<BusinessLicense> businessLicenses;
 }

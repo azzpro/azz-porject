@@ -44,4 +44,11 @@ public interface PlatformGoodsClassificationMapper {
      */
     List<PlatformGoodsClassification> selectCountByParams(Long id);
 
+    /**
+     * <p>校验模型是否存在分类数据</p>
+     * @param classificationId
+     * @return
+     * @author 彭斌  2018年11月1日 下午9:17:18
+     */
+    int selectCountById(Long classificationId);
 }

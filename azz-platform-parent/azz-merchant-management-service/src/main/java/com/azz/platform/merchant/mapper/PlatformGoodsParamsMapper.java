@@ -50,4 +50,12 @@ public interface PlatformGoodsParamsMapper {
      * @author 刘建麟  2018年10月31日 下午7:57:10
      */
     PlatformGoodsParams selectParamsByCode(String code);
+    
+    /**
+     * <p>校验分类参数是否存在</p>
+     * @param paramsCode
+     * @return
+     * @author 彭斌  2018年11月1日 下午9:11:43
+     */
+    int selectCountByParams(String paramsCode);
 }

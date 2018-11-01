@@ -207,7 +207,7 @@
 		assortment_parent_code as assortmentParentCode,
 		assortment_name as assortmentName,
 		assortment_sort as assortmentSort,
-		assortment_pic_url sa assortmentPicUrl,
+		assortment_pic_url as assortmentPicUrl,
 		assortment_pic_name as assortmentPicName
 	FROM
 		platform_goods_classification
@@ -249,4 +249,7 @@
 	</if>
   </select>
   
+  <select id="selectCountById" parameterType="java.lang.Long" resultType="int">
+  	SELECT count(1) FROM merchant_goods_module WHERE classification_id = #{classificationId}
+  </select>
 </mapper>

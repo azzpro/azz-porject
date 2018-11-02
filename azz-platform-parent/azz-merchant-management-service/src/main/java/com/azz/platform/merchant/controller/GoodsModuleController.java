@@ -21,9 +21,10 @@ import com.azz.platform.merchant.pojo.vo.GoodModuleInfo;
 import com.azz.platform.merchant.service.GoodsModuleService;
 
 /**
+ * 
  * <P>TODO</P>
  * @version 1.0
- * @author 刘建麟  2018年10月24日 下午6:19:44
+ * @author 黄智聪  2018年11月2日 下午5:29:04
  */
 @RestController
 @RequestMapping("/azz/api/merchant/goodsModule")

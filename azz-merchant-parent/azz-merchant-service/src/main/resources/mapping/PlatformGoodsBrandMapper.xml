@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.azz.platform.merchant.mapper.PlatformGoodsBrandMapper">
-  <resultMap id="BaseResultMap" type="com.azz.platform.merchant.pojo.PlatformGoodsBrand">
+<mapper namespace="com.azz.merchant.mapper.PlatformGoodsBrandMapper">
+  <resultMap id="BaseResultMap" type="com.azz.merchant.pojo.PlatformGoodsBrand">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="brand_code" jdbcType="VARCHAR" property="brandCode" />
     <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
@@ -25,17 +25,11 @@
     from platform_goods_brand
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <select id="selectByBrandCode" parameterType="string" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from platform_goods_brand
-    where status !=0 and brand_code = #{brandCode}
-  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from platform_goods_brand
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsBrand">
+  <insert id="insert" parameterType="com.azz.merchant.pojo.PlatformGoodsBrand">
     insert into platform_goods_brand (id, brand_code, brand_name, 
       brand_english_name, brand_pic_url, brand_pic_name, 
       brand_description,status, creator, create_time, 
@@ -45,7 +39,7 @@
       #{brandDescription,jdbcType=VARCHAR},#{status,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsBrand">
+  <insert id="insertSelective" parameterType="com.azz.merchant.pojo.PlatformGoodsBrand">
     insert into platform_goods_brand
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -124,7 +118,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsBrand">
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.merchant.pojo.PlatformGoodsBrand">
     update platform_goods_brand
     <set>
       <if test="brandCode != null">
@@ -163,43 +157,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByBrandCode" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsBrand">
-    update platform_goods_brand
-    <set>
-      <if test="brandName != null">
-        brand_name = #{brandName,jdbcType=VARCHAR},
-      </if>
-      <if test="brandEnglishName != null">
-        brand_english_name = #{brandEnglishName,jdbcType=VARCHAR},
-      </if>
-      <if test="brandPicUrl != null">
-        brand_pic_url = #{brandPicUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="brandPicName != null">
-        brand_pic_name = #{brandPicName,jdbcType=VARCHAR},
-      </if>
-      <if test="brandDescription != null">
-        brand_description = #{brandDescription,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="creator != null">
-        creator = #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifier != null">
-        modifier = #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="modifyTime != null">
-        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where brand_code = #{brandCode,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsBrand">
+  <update id="updateByPrimaryKey" parameterType="com.azz.merchant.pojo.PlatformGoodsBrand">
     update platform_goods_brand
     set brand_code = #{brandCode,jdbcType=VARCHAR},
       brand_name = #{brandName,jdbcType=VARCHAR},
@@ -215,39 +173,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
-  <select id="countGoodsBrandByBrandName" resultType="int">
-  	SELECT
-		count(1)
-	FROM 
-		platform_goods_brand pgb
-	<where>
-		pgb.status != 0
-		<if test="brandName != null and brandName != ''">
-			AND pgb.brand_name = #{brandName}
-		</if>
-		<if test="brandCode != null and brandCode != ''">
-			AND pgb.brand_code != #{brandCode}
-		</if>
-	</where>
-  </select>
-  
-  <select id="countGoodsBrandByBrandEnglishName" resultType="int">
-  	SELECT
-		count(1)
-	FROM 
-		platform_goods_brand pgb
-	<where>
-		pgb.status != 0
-		<if test="brandEnglishName != null and brandEnglishName != ''">
-			AND pgb.brand_english_name = #{brandEnglishName}
-		</if>
-		<if test="brandCode != null and brandCode != ''">
-			AND pgb.brand_code != #{brandCode}
-		</if>
-	</where>
-  </select>
-  
-  <select id="getGoodsBrandInfoList" parameterType="com.azz.platform.merchant.pojo.bo.SearchGoodsBrandParam" resultType="com.azz.platform.merchant.pojo.vo.GoodsBrandInfo">
+  <select id="getGoodsBrandInfoList" parameterType="com.azz.merchant.pojo.bo.SearchGoodsBrandParam" resultType="com.azz.merchant.pojo.vo.GoodsBrandInfo">
     SELECT
 		pgb.brand_name AS brandName,
 		pgb.brand_pic_url AS brandPicUrl,
@@ -267,28 +193,6 @@
 	</where>	
 	ORDER BY
 		pgb.create_time DESC
-  </select>
-  
-  <select id="getGoodsBrandInfo" parameterType="string" resultType="com.azz.platform.merchant.pojo.vo.GoodsBrandInfo">
-    SELECT
-		pgb.brand_name AS brandName,
-		pgb.brand_pic_url AS brandPicUrl,
-		pgb.brand_code AS brandCode,
-		pgb.brand_english_name AS brandEnglishName,
-		pgb.brand_description AS brandDescription,
-		pgb.create_time AS createTime
-	FROM
-		platform_goods_brand pgb
-	WHERE pgb.brand_code = #{brandCode}
-  </select>
-  
-  <select id="countBindingProduct" parameterType="long" resultType="int">
-    SELECT
-		count(1)
-	FROM
-		merchant_goods_product
-	WHERE
-		brand_id = #{brandId}
   </select>
   
 </mapper>

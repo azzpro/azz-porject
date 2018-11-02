@@ -51,4 +51,6 @@ public interface PlatformGoodsClassificationMapper {
      * @author 彭斌  2018年11月1日 下午9:17:18
      */
     int selectCountById(Long classificationId);
+    
+    PlatformGoodsClassification selectByAssortmentParentCode(String assortmentParentCode);
 }

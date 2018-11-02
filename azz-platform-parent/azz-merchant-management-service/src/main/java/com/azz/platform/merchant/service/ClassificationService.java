@@ -124,7 +124,7 @@ public class ClassificationService {
                 record.setAssortmentTop((byte) 3);
             }
         } else {
-            record.setAssortmentTop((byte) 1);
+            record.setAssortmentTop((byte) 0);
         }
 
        
@@ -137,6 +137,7 @@ public class ClassificationService {
         record.setAssortmentPicUrl(jr.getData());
         record.setCreateTime(new Date());
         record.setCreator(param.getCreator());
+        record.setStatus(1);
         platformGoodsClassificationMapper.insertSelective(record);
 
         return JsonResult.successJsonResult();
@@ -209,7 +210,7 @@ public class ClassificationService {
                 pgcObj.setAssortmentTop((byte) 3);
             }
         } else {
-            pgcObj.setAssortmentTop((byte) 1);
+            pgcObj.setAssortmentTop((byte) 0);
         }
 
         // 校验分类名称
@@ -257,8 +258,16 @@ public class ClassificationService {
         if (countGoodsParam > 0 || countModuleParam > 0) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_PRODUCT_CLASSIFICATION_EXIST);
         }
-
-        platformGoodsClassificationMapper.deleteByPrimaryKey(pgcObj.getId());
+        //状态(0:无效 1：有效 2:禁用)
+        PlatformGoodsClassification pgc = platformGoodsClassificationMapper.selectByAssortmentParentCode(param.getAssortmentCode());
+        if(ObjectUtils.isNotNull(pgc)) {
+            throw new BaseException(PlatformUserErrorCode.PLATFORM_PRODUCT_CHILD_CLASSIFICATION_EXIST);
+        }
+        
+        pgcObj.setModifyTime(new Date());
+        pgcObj.setModifier(param.getModifier());
+        pgcObj.setStatus(0);
+        platformGoodsClassificationMapper.updateByPrimaryKeySelective(pgcObj);
         return JsonResult.successJsonResult();
     }
 

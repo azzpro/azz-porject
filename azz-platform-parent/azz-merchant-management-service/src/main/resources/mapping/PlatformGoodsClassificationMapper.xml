@@ -198,7 +198,7 @@
   	select 
     	<include refid="Base_Column_List" />
     from platform_goods_classification
-    where assortment_code = #{assortmentCode,jdbcType=VARCHAR}
+    where assortment_code = #{assortmentCode,jdbcType=VARCHAR} and status != 0
   </select>
   
   <select id="selectDetailByAssortmentCode" parameterType="java.lang.String" resultType="com.azz.platform.merchant.pojo.vo.Classification" >
@@ -212,7 +212,7 @@
 	FROM
 		platform_goods_classification
 	WHERE
-		assortment_code = #{assortmentCode,jdbcType=VARCHAR}
+		assortment_code = #{assortmentCode,jdbcType=VARCHAR} and status != 0
   </select>
   
   <select id="selectParentByParam" parameterType="string" resultType="com.azz.platform.merchant.pojo.vo.ClassificationList" >
@@ -250,6 +250,13 @@
   </select>
   
   <select id="selectCountById" parameterType="java.lang.Long" resultType="int">
-  	SELECT count(1) FROM merchant_goods_module WHERE classification_id = #{classificationId}
+  	SELECT count(1) FROM merchant_goods_module WHERE classification_id = #{classificationId} 
+  </select>
+  
+  <select id="selectByAssortmentParentCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+    	<include refid="Base_Column_List" />
+    from platform_goods_classification
+    where assortment_parent_code = #{assortmentParentCode,jdbcType=VARCHAR} and status != 0
   </select>
 </mapper>

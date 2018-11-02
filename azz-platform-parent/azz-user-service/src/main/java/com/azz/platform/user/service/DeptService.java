@@ -47,17 +47,9 @@ public class DeptService{
         JSR303ValidateUtils.validate(param);
         String deptParentCode = param.getParentCode();
         
-        
-        // 部门名称/父级编码校验
-        PlatformDept deptObj = deptMapper.selectByDeptName(param.getDeptName());
-        
-        if (ObjectUtils.isNotNull(deptObj)) {
-            throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_EXIST);
-        }
-        
         PlatformDept dept = new PlatformDept();
         
-        if(!"".equals(deptParentCode)) {
+        if(!"".equals(deptParentCode) && !"0".equals(deptParentCode)) {
             PlatformDept deptObjCode = deptMapper.selectByDeptCode(deptParentCode);
             if(ObjectUtils.isNull(deptObjCode)) {
                 throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
@@ -66,7 +58,14 @@ public class DeptService{
         } else {
             // 系统自动生成部门编码
             dept.setParentCode("0");
+            deptParentCode = "0";
         }
+        
+        int count = deptMapper.selectCountByParam(deptParentCode, param.getDeptName());
+        if(count>0) {
+            throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_EXIST);
+        }
+        
         dept.setDeptCode(dbSequenceService.getPlatDepartmentNumber());
         dept.setDeptName(param.getDeptName());
         dept.setStatus(param.getStatus());
@@ -84,14 +83,17 @@ public class DeptService{
         if (ObjectUtils.isNull(dept)) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
         }
-
+        String parentCode = param.getParentCode();
+        if("".equals(parentCode)) {
+            parentCode = "0";
+        }
         if (!dept.getDeptName().equals(param.getDeptName().trim())) {
-            PlatformDept deptObj = deptMapper.selectByDeptName(param.getDeptName());
-            if(ObjectUtils.isNotNull(deptObj)) {
+            int count = deptMapper.selectCountByParam(parentCode, param.getDeptName().trim());
+            if(count>0) {
                 throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_EXIST);
             }
         }
-        dept.setParentCode(param.getParentCode());
+        dept.setParentCode(parentCode);
         dept.setDeptName(param.getDeptName());
         dept.setLastModifyTime(new Date());
         dept.setModifier(param.getModifier());
@@ -115,6 +117,12 @@ public class DeptService{
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
         }
 
+        // 校验是否绑定成员信息
+        int count = deptMapper.selectCountDeptUser(deptCode);
+        if(count>0) {
+            throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_USER_EXIST);
+        }
+        
         dept.setStatus(0);
         dept.setModifier(modifier);
         dept.setLastModifyTime(new Date());
@@ -165,5 +173,21 @@ public class DeptService{
         return JsonResult.successJsonResult();
     }
 
+   /* public boolean parentCodeLevel(String parentCode) {
+        PlatformDept platformDept = deptMapper.selectByParentDeptCode(parentCode);
+        if(ObjectUtils.isNotNull(platformDept)) {
+            PlatformDept  platformDeptObj = deptMapper.selectByParentDeptCode(platformDept.getDeptCode());
+            if(ObjectUtils.isNotNull(platformDeptObj)) {
+                
+            }
+        } else {
+            PlatformDept pdByParentCode = deptMapper.selectByDeptCode(parentCode);
+            if(ObjectUtils.isNotNull(pdByParentCode) && !pdByParentCode.getParentCode().equals("0")) {
+                // 该部门编码为三级部门
+                return false;
+            }
+        }
+        return true;
+    }*/
 }
 

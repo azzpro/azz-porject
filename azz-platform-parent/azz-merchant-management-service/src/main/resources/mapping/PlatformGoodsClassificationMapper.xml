@@ -92,7 +92,7 @@
         #{id,jdbcType=BIGINT},
       </if>
       <if test="assortmentCode != null">
-      	#{assortmentCode,jdbcType=VARCHAR}
+      	#{assortmentCode,jdbcType=VARCHAR},
       </if>
       <if test="assortmentParentCode != null">
         #{assortmentParentCode,jdbcType=VARCHAR},
@@ -133,7 +133,7 @@
     update platform_goods_classification
     <set>
       <if test="assortmentCode != null">
-      	assortment_code = #{assortmentCode,jdbcType=VARCHAR}
+      	assortment_code = #{assortmentCode,jdbcType=VARCHAR},
       </if>
       <if test="assortmentParentCode != null">
         assortment_parent_code = #{assortmentParentCode,jdbcType=VARCHAR},

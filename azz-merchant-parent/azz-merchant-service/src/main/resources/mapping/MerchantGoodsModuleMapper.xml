@@ -47,7 +47,7 @@
     delete from merchant_goods_module
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.azz.merchant.pojo.MerchantGoodsModule">
+  <insert id="insert" parameterType="com.azz.merchant.pojo.MerchantGoodsModule" useGeneratedKeys="true" keyProperty="id">
     insert into merchant_goods_module (id, module_code, module_name, 
       module_status, module_pic_url, module_pic_name, 
       merchant_id, classification_id, creator, 
@@ -59,7 +59,7 @@
       #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, 
       #{moduleInfo,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.azz.merchant.pojo.MerchantGoodsModule">
+  <insert id="insertSelective" parameterType="com.azz.merchant.pojo.MerchantGoodsModule" useGeneratedKeys="true" keyProperty="id">
     insert into merchant_goods_module
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -338,6 +338,7 @@
 		</if>
 	</where>
   </select>
-  
-  
+  <select id="selectModuleByCode" resultMap="BaseResultMap" parameterType="string">
+  	select <include refid="Base_Column_List"></include> from merchant_goods_module where module_code #{code}
+  </select>
 </mapper>

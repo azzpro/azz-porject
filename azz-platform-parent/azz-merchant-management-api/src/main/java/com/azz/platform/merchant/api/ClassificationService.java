@@ -10,11 +10,13 @@ package com.azz.platform.merchant.api;
 import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
+import com.azz.platform.merchant.pojo.PlatformGoodsClassification;
 import com.azz.platform.merchant.pojo.bo.AddClassificationParam;
 import com.azz.platform.merchant.pojo.bo.DelClassificationParam;
 import com.azz.platform.merchant.pojo.bo.EditClassificationParam;
@@ -44,6 +46,9 @@ public interface ClassificationService {
     
     @PostMapping("/azz/api/merchant/product/getClassificationInfo")
     JsonResult<Classification> getClassificationInfo(@RequestParam("assortmentCode") String assortmentCode);
+    
+    @GetMapping("/azz/api/merchant/product/getClassification")
+    PlatformGoodsClassification getClassification(@RequestParam("assortmentCode") String assortmentCode);
     
     
 }

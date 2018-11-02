@@ -33,7 +33,6 @@ import com.azz.system.sequence.api.RandomSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
 import com.azz.util.StringUtils;
-import com.github.pagehelper.PageHelper;
 
 /**
  * <P>
@@ -291,7 +290,6 @@ public class ClassificationService {
      */
     public JsonResult<List<ClassificationList>> getClassificationList(
             @RequestBody SearchClassificationListParam param) {
-        PageHelper.startPage(param.getPageNum(), param.getPageSize());
         List<ClassificationList> list = new ArrayList<>();
         List<ClassificationList> classificationSetList =
                 platformGoodsClassificationMapper.selectByParam(param.getParam());

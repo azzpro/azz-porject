@@ -30,7 +30,6 @@ public class TenRandomSequenceServiceImpl implements TenRandomSequenceService{
      * 序列哈片段长度
      */
     private static int length = 10;
-	
     @Override
 	public void init(SequenceConfig sequenceConfig) throws Exception {
 		Map<String, Object> args = sequenceConfig.getArgs();

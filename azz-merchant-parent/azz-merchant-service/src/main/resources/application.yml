@@ -6,10 +6,6 @@ server:
 spring:
   application:
     name: azz-merchant-service
-  cloud: 
-    loadbalancer:
-      retry:
-        enabled: false #是否开起重试   此开关对ribbon 重试策略生效
   messages:
     basename: i18n/Messages
   datasource:
@@ -28,21 +24,22 @@ feign:
   httpclient: 
     enabled: true #feign原生是调用java.url 去发起HTTP请求，此配置是将请求客户端更换成apahce http
   hystrix: 
-    enabled: true
+    enabled: false
     
-hystrix: 
-  command: 
-    default: 
-      execution:  
-          isolation:  
-            thread:  
-              timeoutInMilliseconds: 5000  #熔断时间
-ribbon:  
-  ReadTimeout: 3000 
-  ConnectTimeout: 3000
-  OkToRetryOnAllOperations: false  #是否重试
-  MaxAutoRetriesNextServer: 0  #是否重试其他服务器
-  MaxAutoRetries: 0  #对同一台服务发起重试
+azz-sequence-service:  #序列服务
+  ribbon:
+    ConnectTimeout: 2000
+    ReadTimeout: 5000
+    OkToRetryOnAllOperations: false
+    MaxAutoRetriesNextServer: 0
+    MaxAutoRetries: 0
+azz-system-service:  #系统服务
+  ribbon:
+    ConnectTimeout: 2000
+    ReadTimeout: 5000
+    OkToRetryOnAllOperations: false
+    MaxAutoRetriesNextServer: 0
+    MaxAutoRetries: 0 
 eureka:
   client:
     service-url:

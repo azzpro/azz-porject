@@ -46,11 +46,24 @@ public class ClassificationController {
 	@Autowired
 	ClassificationService  classificationService;
 	
+	/**
+	 * <p>查询所有分类集合</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年11月2日 上午10:32:58
+	 */
 	@RequestMapping("/getClassificationList")
 	public JsonResult<List<ClassificationList>> getClassificationList(SearchClassificationListParam param) {
 		return classificationService.getClassificationList(param);
 	}
 	
+	/**
+	 * <p>新增分类信息</p>
+	 * @param param
+	 * @return
+	 * @throws IOException
+	 * @author 彭斌  2018年11月2日 上午10:33:13
+	 */
 	@RequestMapping("/addClassification")
 	public JsonResult<String> addClassification(AddClassificationWebParam param) throws IOException{
 	    MultipartFile classificationFile = param.getClassificationFile();
@@ -59,6 +72,13 @@ public class ClassificationController {
 	    return classificationService.addClassification(new AddClassificationParam(param.getAssortmentParentCode(),param.getAssortmentName(),param.getAssortmentSort(),param.getCreator(),cp));
 	}
 	
+	/**
+	 * <p>修改分类信息</p>
+	 * @param param
+	 * @return
+	 * @throws IOException
+	 * @author 彭斌  2018年11月2日 上午10:33:33
+	 */
 	@RequestMapping("/editClassification")
     public JsonResult<String> editClassification(EditClassificationWebParam param) throws IOException{
 	    MultipartFile classificationFile = param.getClassificationFile();
@@ -67,12 +87,24 @@ public class ClassificationController {
 	    return classificationService.editClassification(new EditClassificationParam(param.getAssortmentCode(),param.getAssortmentParentCode(),param.getAssortmentName(),param.getAssortmentSort(),param.getModifier(),cp));
 	}
 	
+	/**
+	 * <p>删除分类</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年11月2日 上午10:33:50
+	 */
 	@RequestMapping("/delClassification")
     public JsonResult<String> delClassification(DelClassificationParam param){
 	    param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
 	    return classificationService.delClassification(param);
 	}
 	
+	/**
+	 * <p>获取分类详情</p>
+	 * @param assortmentCode
+	 * @return
+	 * @author 彭斌  2018年11月2日 上午10:34:02
+	 */
 	@RequestMapping("/getClassificationInfo")
     public JsonResult<Classification> getClassificationInfo(@RequestParam("assortmentCode") String assortmentCode){
 	    return classificationService.getClassificationInfo(assortmentCode);

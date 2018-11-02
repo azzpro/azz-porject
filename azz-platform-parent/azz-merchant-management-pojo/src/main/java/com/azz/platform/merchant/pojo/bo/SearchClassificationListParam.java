@@ -7,8 +7,6 @@
  
 package com.azz.platform.merchant.pojo.bo;
 
-import com.azz.core.common.QueryPage;
-
 import lombok.Data;
 
 /**
@@ -17,7 +15,7 @@ import lombok.Data;
  * @author 彭斌  2018年10月20日 下午2:50:46
  */
 @Data
-public class SearchClassificationListParam extends QueryPage{
+public class SearchClassificationListParam{
     private String param;
 }
 

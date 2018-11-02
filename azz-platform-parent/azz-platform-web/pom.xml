@@ -55,6 +55,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.azz</groupId>
+			<artifactId>azz-sequence-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.azz</groupId>
 			<artifactId>azz-merchant-management-api</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

@@ -34,7 +34,7 @@ public interface ProductService {
 	@GetMapping("/azz/api/merchant/product/selectProductList")
 	JsonResult<Pagination<MerchantProductList>> selectProductList(@RequestBody MerchantProductParam param);
 	
-	@RequestMapping(value="addProduct",method=RequestMethod.POST)
-	public JsonResult<String> addProduct(ProductParams params);
+	@RequestMapping(value="/azz/api/merchant/product/addProduct",method=RequestMethod.POST)
+	public JsonResult<String> addProduct(@RequestBody ProductParams params);
 }
 

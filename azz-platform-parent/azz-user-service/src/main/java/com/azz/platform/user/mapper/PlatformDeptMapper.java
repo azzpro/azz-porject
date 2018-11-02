@@ -3,6 +3,7 @@ package com.azz.platform.user.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.azz.platform.user.pojo.PlatformDept;
 import com.azz.platform.user.pojo.bo.SearchDeptParam;
@@ -33,4 +34,8 @@ public interface PlatformDeptMapper {
     List<Dept> selectDeptParentList(String deptParentCode);
     
     PlatformDept selectDetailsByDeptCode(String deptCode);
+    
+    int selectCountByParam(@Param("deptParentCode") String deptParentCode,@Param("deptName") String deptName);
+    
+    int selectCountDeptUser(String deptCode);
 }

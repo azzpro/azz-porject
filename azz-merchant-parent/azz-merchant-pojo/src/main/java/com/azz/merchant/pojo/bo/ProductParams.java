@@ -27,5 +27,6 @@ public class ProductParams {
 	private String brandCode;
 	private Byte status;
 	private String moduleCode;
+	private String paramsCode;
 }
 

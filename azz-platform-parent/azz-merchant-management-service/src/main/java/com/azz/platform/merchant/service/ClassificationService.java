@@ -14,8 +14,8 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
-import com.azz.core.constants.ClientConstants;
 import com.azz.core.constants.FileConstants;
+import com.azz.core.constants.PlatformConstants;
 import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.platform.merchant.mapper.PlatformGoodsClassificationMapper;
@@ -73,11 +73,14 @@ public class ClassificationService {
         // 主图基础校验
         ClassificationPic cp = param.getClassificationPic();
         String originalFileName = cp.getFileName();
+        // 分类编码
+        String classificationCode = randomSequenceService.getClassificationNumber();
+        
         if (StringUtils.isBlank(originalFileName)) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
                     "主图文件名为空");
         }
-        if (cp.getFileSize() > ClientConstants.AVATAR_FILE_SIZE_LIMIT) {
+        if (cp.getFileSize() > PlatformConstants.CLASSIFICATION_FILE_SIZE_LIMIT) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
                     "主图文件大小不能超过2M");
         }
@@ -91,12 +94,10 @@ public class ClassificationService {
         String fileNameNoSufix = originalFileName.substring(0, dotIndex);
         String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
         // 新名称为文件名 + 文件后缀
-        String newFileName = fileNameNoSufix + "." + sufix;
+        String newFileName = fileNameNoSufix +"_"+ classificationCode;
 
         // 图片url
-        JsonResult<String> jr = systemImageUploadService.uploadImage(
-                FileConstants.AZZ_CLASSIFICATION_PATH, newFileName, sufix, filedata,
-                FileConstants.AZZ_CLIENT, FileConstants.AZZ_AVATAR_IMAGE_TYPE);
+        JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_CLASSIFICATION_IMAGE_TYPE);
         if (jr.getCode() != SystemErrorCode.SUCCESS.getCode()) {
             throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "主图上传失败，请重试");
         }
@@ -109,7 +110,7 @@ public class ClassificationService {
         }
 
         PlatformGoodsClassification record = new PlatformGoodsClassification();
-        if (null != param.getAssortmentParentCode()) {
+        if (null != param.getAssortmentParentCode() && !"0".equals(param.getAssortmentParentCode())) {
             PlatformGoodsClassification pgc = platformGoodsClassificationMapper
                     .selectByAssortmentCode(param.getAssortmentParentCode());
             if (ObjectUtils.isNull(pgc)) {
@@ -123,11 +124,10 @@ public class ClassificationService {
                 record.setAssortmentTop((byte) 3);
             }
         } else {
-            record.setAssortmentTop((byte) 1);
+            record.setAssortmentTop((byte) 0);
         }
 
-        // 分类编码
-        String classificationCode = randomSequenceService.getClassificationNumber();
+       
         record.setAssortmentCode(classificationCode);
         record.setAssortmentParentCode(
                 null == param.getAssortmentParentCode() ? "0" : param.getAssortmentParentCode());
@@ -137,6 +137,7 @@ public class ClassificationService {
         record.setAssortmentPicUrl(jr.getData());
         record.setCreateTime(new Date());
         record.setCreator(param.getCreator());
+        record.setStatus(1);
         platformGoodsClassificationMapper.insertSelective(record);
 
         return JsonResult.successJsonResult();
@@ -154,40 +155,46 @@ public class ClassificationService {
      */
     public JsonResult<String> editClassification(@RequestBody EditClassificationParam param) {
         JSR303ValidateUtils.validate(param);
-
-        // 主图基础校验
-        ClassificationPic cp = param.getClassificationPic();
-        String originalFileName = cp.getFileName();
-        if (StringUtils.isBlank(originalFileName)) {
-            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
-                    "主图文件名为空");
-        }
-        if (cp.getFileSize() > ClientConstants.AVATAR_FILE_SIZE_LIMIT) {
-            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
-                    "主图文件大小不能超过2M");
-        }
-        String filedata = cp.getFileBase64Str();
-        if (StringUtils.isBlank(filedata)) {
-            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
-                    "主图文件内容为空");
-        }
-
-        int dotIndex = originalFileName.lastIndexOf(".");
-        String fileNameNoSufix = originalFileName.substring(0, dotIndex);
-        String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
-        // 新名称为文件名 + 文件后缀
-        String newFileName = fileNameNoSufix + "." + sufix;
-
-        // 图片url
-        JsonResult<String> jr = systemImageUploadService.uploadImage(
-                FileConstants.AZZ_CLASSIFICATION_PATH, newFileName, sufix, filedata,
-                FileConstants.AZZ_CLIENT, FileConstants.AZZ_AVATAR_IMAGE_TYPE);
-        if (jr.getCode() != SystemErrorCode.SUCCESS.getCode()) {
-            throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "主图上传失败，请重试");
-        }
-
+        
         PlatformGoodsClassification pgcObj = platformGoodsClassificationMapper
                 .selectByAssortmentCode(param.getAssortmentParentCode());
+        
+        if(param.getIsEditPic() == 1) {
+            // 主图基础校验
+            ClassificationPic cp = param.getClassificationPic();
+            String originalFileName = cp.getFileName();
+            if (StringUtils.isBlank(originalFileName)) {
+                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
+                        "主图文件名为空");
+            }
+            if (cp.getFileSize() > PlatformConstants.CLASSIFICATION_FILE_SIZE_LIMIT) {
+                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
+                        "主图文件大小不能超过2M");
+            }
+            String filedata = cp.getFileBase64Str();
+            if (StringUtils.isBlank(filedata)) {
+                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
+                        "主图文件内容为空");
+            }
+            
+            int dotIndex = originalFileName.lastIndexOf(".");
+            String fileNameNoSufix = originalFileName.substring(0, dotIndex);
+            String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
+            // 新名称为文件名 + 文件后缀
+            String newFileName = fileNameNoSufix + "_" + param.getAssortmentCode();
+            
+            // 图片url
+            JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_CLASSIFICATION_IMAGE_TYPE);
+            
+            if (jr.getCode() != SystemErrorCode.SUCCESS.getCode()) {
+                throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "主图上传失败，请重试");
+            }
+            
+            pgcObj.setAssortmentPicName(originalFileName);
+            pgcObj.setAssortmentPicUrl(jr.getData());
+        }
+
+       
 
         if (null != param.getAssortmentParentCode()) {
             PlatformGoodsClassification pgc = platformGoodsClassificationMapper
@@ -203,7 +210,7 @@ public class ClassificationService {
                 pgcObj.setAssortmentTop((byte) 3);
             }
         } else {
-            pgcObj.setAssortmentTop((byte) 1);
+            pgcObj.setAssortmentTop((byte) 0);
         }
 
         // 校验分类名称
@@ -222,12 +229,9 @@ public class ClassificationService {
         pgcObj.setAssortmentParentCode(
                 null == param.getAssortmentParentCode() ? "0" : param.getAssortmentParentCode());
         pgcObj.setAssortmentSort(param.getAssortmentSort());
-        pgcObj.setAssortmentPicName(originalFileName);
-        pgcObj.setAssortmentPicUrl(jr.getData());
         pgcObj.setModifyTime(new Date());
         pgcObj.setModifier(param.getModifier());
         platformGoodsClassificationMapper.updateByPrimaryKeySelective(pgcObj);
-
         return JsonResult.successJsonResult();
     }
 
@@ -254,8 +258,16 @@ public class ClassificationService {
         if (countGoodsParam > 0 || countModuleParam > 0) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_PRODUCT_CLASSIFICATION_EXIST);
         }
-
-        platformGoodsClassificationMapper.deleteByPrimaryKey(pgcObj.getId());
+        //状态(0:无效 1：有效 2:禁用)
+        PlatformGoodsClassification pgc = platformGoodsClassificationMapper.selectByAssortmentParentCode(param.getAssortmentCode());
+        if(ObjectUtils.isNotNull(pgc)) {
+            throw new BaseException(PlatformUserErrorCode.PLATFORM_PRODUCT_CHILD_CLASSIFICATION_EXIST);
+        }
+        
+        pgcObj.setModifyTime(new Date());
+        pgcObj.setModifier(param.getModifier());
+        pgcObj.setStatus(0);
+        platformGoodsClassificationMapper.updateByPrimaryKeySelective(pgcObj);
         return JsonResult.successJsonResult();
     }
 

@@ -79,6 +79,11 @@ public class ParamsService {
 	
 	@Autowired
 	private PlatformGoodsClassificationMapper goodsClassificationMapper;
+	
+	public PlatformGoodsParams selectParamsByassortment(String code,Long id) {
+		return goodsParamsMapper.selectParamsByassortment(code,id);
+	}
+	
 	 /**
 	 * <p>参数列表</p>
 	 * @param param

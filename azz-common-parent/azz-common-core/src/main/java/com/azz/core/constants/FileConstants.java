@@ -46,6 +46,12 @@ public class FileConstants {
 	//其他图片
 	public static final String AZZ_OTHER_PATH = "other_pic";
 	
+	//品牌图片
+	public static final String AZZ_BRAND_PATH = "brand_pic";
+		
+	//模组图片
+	public static final String AZZ_MODULE_PATH = "module_pic";
+	
 	//平台端
 	public static final int AZZ_PLATFORM = 1;
 	
@@ -72,6 +78,12 @@ public class FileConstants {
 	
 	//其他图
 	public static final int AZZ_OTHER_IMAGE_TYPE = 5;
+	
+	//品牌图
+	public static final int AZZ_BRAND_IMAGE_TYPE = 7;
+		
+	//模组图
+	public static final int AZZ_MODULE_IMAGE_TYPE = 8;
 	
 	//支持的图片格式
 	public static final String AZZ_IMAGE_SUFFIX = "bmp|jpg|png|git|webp|tiff";

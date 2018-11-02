@@ -1,5 +1,7 @@
 package com.azz.merchant.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.merchant.pojo.MerchantGoodsProductParams;
@@ -17,4 +19,6 @@ public interface MerchantGoodsProductParamsMapper {
     int updateByPrimaryKeySelective(MerchantGoodsProductParams record);
 
     int updateByPrimaryKey(MerchantGoodsProductParams record);
+    
+    int insertBatchParams(List<MerchantGoodsProductParams> list);
 }

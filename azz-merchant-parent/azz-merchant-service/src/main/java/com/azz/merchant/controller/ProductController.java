@@ -62,7 +62,7 @@ public class ProductController {
 	 * @author 刘建麟  2018年10月31日 下午7:47:30
 	 */
 	@RequestMapping(value="addProduct",method=RequestMethod.POST)
-	public JsonResult<String> addProduct(ProductParams params){
+	public JsonResult<String> addProduct(@RequestBody ProductParams params){
 		return productService.addProduct(params);
 	}
 }

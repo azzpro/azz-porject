@@ -48,5 +48,8 @@ public interface RandomSequenceService {
 	
 	@RequestMapping(value="/azz/api/sequence/getProductCodeNumber",method=RequestMethod.GET)
 	String getProductCodeNumber();
+	
+	@RequestMapping(value="/azz/api/sequence/getBrandCodeNumber",method=RequestMethod.GET)
+	String getBrandCodeNumber();
 }
 

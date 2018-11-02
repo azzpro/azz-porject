@@ -81,10 +81,13 @@ public class ClassificationController {
 	 */
 	@RequestMapping("/editClassification")
     public JsonResult<String> editClassification(EditClassificationWebParam param) throws IOException{
-	    MultipartFile classificationFile = param.getClassificationFile();
-	    ClassificationPic cp = new ClassificationPic(classificationFile.getOriginalFilename(), classificationFile.getSize(), Base64.encode(classificationFile.getBytes()));
+	    ClassificationPic cp = new ClassificationPic();
+	    if(param.getIsEditPic() == 1) {
+	        MultipartFile classificationFile = param.getClassificationFile();
+	        cp = new ClassificationPic(classificationFile.getOriginalFilename(), classificationFile.getSize(), Base64.encode(classificationFile.getBytes()));
+	    }
         param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
-	    return classificationService.editClassification(new EditClassificationParam(param.getAssortmentCode(),param.getAssortmentParentCode(),param.getAssortmentName(),param.getAssortmentSort(),param.getModifier(),cp));
+	    return classificationService.editClassification(new EditClassificationParam(param.getAssortmentCode(),param.getAssortmentParentCode(),param.getAssortmentName(),param.getAssortmentSort(),param.getModifier(),cp,param.getIsEditPic()));
 	}
 	
 	/**

@@ -38,7 +38,7 @@
       #{moduleId,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.azz.merchant.pojo.MerchantGoodsProduct">
+  <insert id="insertSelective" parameterType="com.azz.merchant.pojo.MerchantGoodsProduct" useGeneratedKeys="true" keyProperty="id">
     insert into merchant_goods_product
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

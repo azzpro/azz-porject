@@ -17,6 +17,14 @@ public class MerchantProductErrorCode extends BaseErrorCode{
     
     public static final MerchantProductErrorCode MERCHANT_PRODUCT_SAVE_ERROR = new MerchantProductErrorCode(20002, "产品保存失败");
     
+    public static final MerchantProductErrorCode MERCHANT_PRODUCT_ASSORTMENT_IS_NULL = new MerchantProductErrorCode(20004, "分类参数不能为空");
+    
+    public static final MerchantProductErrorCode MERCHANT_PRODUCT_PRICE_SAVE_ERROR = new MerchantProductErrorCode(20005, "产品价格保存失败");
+   
+    public static final MerchantProductErrorCode MERCHANT_PRODUCT_PARAMS_SAVE_ERROR = new MerchantProductErrorCode(20008, "产品参数保存失败");
+    
+    public static final MerchantProductErrorCode MERCHANT_PRODUCT_PRICE_IS_NULL = new MerchantProductErrorCode(20006, "产品价格不能为空");
+    
     public MerchantProductErrorCode(int code, String message) {
 	super(code, message);
     }

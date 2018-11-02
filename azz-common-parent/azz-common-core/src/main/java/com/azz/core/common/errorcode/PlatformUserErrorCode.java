@@ -26,6 +26,8 @@ public class PlatformUserErrorCode extends BaseErrorCode{
     
     public static final PlatformUserErrorCode PLATFORM_DEPT_STATUS_ERROR_NO_EXIST = new PlatformUserErrorCode(30002, "部门状态不存在");
     
+    public static final PlatformUserErrorCode PLATFORM_DEPT_USER_EXIST = new PlatformUserErrorCode(30003, "部门下存在用户");
+    
     // 商户审核错误码
     public static final PlatformUserErrorCode PLATFORM_MERCHANT_ERROR_NO_EXIST = new PlatformUserErrorCode(40000, "商户不存在");
     
@@ -43,7 +45,7 @@ public class PlatformUserErrorCode extends BaseErrorCode{
     // 商品管理错误代码
     public static final PlatformUserErrorCode PLATFORM_PRODUCT_CLASSIFICATION_NO_EXIST = new PlatformUserErrorCode(60000, "分类不存在");
     public static final PlatformUserErrorCode PLATFORM_PRODUCT_CLASSIFICATION_EXIST = new PlatformUserErrorCode(60001, "分类存在");
-    
+    public static final PlatformUserErrorCode PLATFORM_PRODUCT_CHILD_CLASSIFICATION_EXIST = new PlatformUserErrorCode(60002, "分类子级存在");
     
     public PlatformUserErrorCode(int code, String message) {
 	super(code, message);

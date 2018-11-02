@@ -17,7 +17,7 @@ import lombok.Data;
 @Data
 public class ProductParam {
 	private String paramName;
-	private Integer type;
+	private Byte type;
 	private String values;
 }
 

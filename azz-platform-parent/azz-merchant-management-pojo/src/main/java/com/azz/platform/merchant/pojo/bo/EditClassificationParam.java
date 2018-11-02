@@ -65,5 +65,10 @@ public class EditClassificationParam {
      */
     @NotNull(message = "分类主图")
     private ClassificationPic classificationPic;
+    
+    /**
+     * 是否修改过主图 0 未修改 1修改过
+     */
+    private Integer isEditPic;
 }
 

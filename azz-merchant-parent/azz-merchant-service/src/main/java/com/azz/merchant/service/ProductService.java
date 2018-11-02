@@ -7,6 +7,7 @@
  
 package com.azz.merchant.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TreeSet;
@@ -28,13 +29,19 @@ import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.merchant.mapper.MerchantGoodsModuleMapper;
 import com.azz.merchant.mapper.MerchantGoodsProductMapper;
+import com.azz.merchant.mapper.MerchantGoodsProductParamsMapper;
+import com.azz.merchant.mapper.MerchantGoodsProductPriceMapper;
 import com.azz.merchant.pojo.MerchantGoodsModule;
 import com.azz.merchant.pojo.MerchantGoodsProduct;
+import com.azz.merchant.pojo.MerchantGoodsProductParams;
+import com.azz.merchant.pojo.MerchantGoodsProductPrice;
 import com.azz.merchant.pojo.bo.MerchantProductParam;
+import com.azz.merchant.pojo.bo.ProductParam;
 import com.azz.merchant.pojo.bo.ProductParams;
 import com.azz.merchant.pojo.bo.ProductPrice;
 import com.azz.merchant.pojo.vo.MerchantProductList;
 import com.azz.platform.merchant.api.ClassificationService;
+import com.azz.platform.merchant.api.ParamsService;
 import com.azz.platform.merchant.pojo.PlatformGoodsClassification;
 import com.azz.platform.merchant.pojo.PlatformGoodsParams;
 import com.azz.platform.merchant.pojo.PlatformGoodsParamsTerm;
@@ -61,10 +68,19 @@ public class ProductService {
 	private ClassificationService classificationService;
 	
 	@Autowired
+	private ParamsService paramsService;
+	
+	@Autowired
 	private MerchantGoodsModuleMapper goodsModuleMapper;
 	
 	@Autowired
 	private RandomSequenceService randomSequenceService;
+	
+	@Autowired
+	private MerchantGoodsProductPriceMapper goodsProductPriceMapper;
+	
+	@Autowired
+	private MerchantGoodsProductParamsMapper goodsProductParamsMapper;
 	
 	
 	/**
@@ -102,10 +118,14 @@ public class ProductService {
 	 * @return
 	 * @author 刘建麟  2018年10月31日 下午7:47:30
 	 */
+	@SuppressWarnings("unused")
 	@Transactional(rollbackFor=Exception.class)
-	public JsonResult<String> addProduct(ProductParams params){
+	public JsonResult<String> addProduct(@RequestBody ProductParams params){
 			if(null != params) {
 				//获取品牌CODE 然后判断 品牌是否存在，存在获取品牌ID
+				String brandCode = params.getBrandCode();
+				//获取参数CODE
+				String paramsCode = params.getParamsCode();
 				
 				//获取分类CODE 然后判断分类是否存在，存在获取分类ID
 				String code = params.getAssortmentCode();
@@ -114,7 +134,12 @@ public class ProductService {
 				PlatformGoodsClassification classification = classificationService.getClassification(code);
 				if(null == classification)
 					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_ASSORTMENT_EXIST);
-				
+				//判断参数是否存在 并且属于分类
+				if(StringUtils.isBlank(paramsCode))
+					throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"参数CODE不能为空");
+				PlatformGoodsParams byassortment = paramsService.selectParamsByassortment(paramsCode,classification.getId());
+				if(null == byassortment)
+					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_NULL);
 				//获取模组CODE
 				String moduleCode = params.getModuleCode();
 				if(StringUtils.isBlank(moduleCode))
@@ -135,6 +160,32 @@ public class ProductService {
 				int i = goodsProductMapper.insertSelective(mgp);
 				if(i != 1)
 					throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_SAVE_ERROR);
+				//插入价格
+				List<ProductPrice> prices = params.getPrices();
+				if(null == prices || prices.size() <= 0)
+					throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_PRICE_IS_NULL);
+				for (ProductPrice productPrice : prices) {
+					MerchantGoodsProductPrice mpp = new MerchantGoodsProductPrice();
+					mpp.setDeliveryDate(productPrice.getDeliveryDate());
+					mpp.setPrice(productPrice.getPrice());
+					mpp.setProductId(mgp.getId());
+					goodsProductPriceMapper.insertSelective(mpp);
+					mpp = null;
+				}
+				//插入产品参数
+				List<ProductParam> pp = params.getParams();
+				if(null == pp || pp.size() <= 0)
+					throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_ASSORTMENT_IS_NULL);
+				for (ProductParam productParam : pp) {
+					MerchantGoodsProductParams mpp = new MerchantGoodsProductParams();
+					mpp.setParamsId(byassortment.getId());
+					mpp.setParamsName(productParam.getParamName());
+					mpp.setParamsValue(productParam.getValues());
+					mpp.setProductId(mgp.getId());
+					mpp.setParamsType(productParam.getType());
+					goodsProductParamsMapper.insertSelective(mpp);
+					mpp = null;
+				}
 			}
 				
 		return JsonResult.successJsonResult();

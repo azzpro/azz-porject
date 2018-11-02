@@ -79,4 +79,5 @@
       product_id = #{productId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
 </mapper>

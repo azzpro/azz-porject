@@ -108,4 +108,12 @@
    <select id="selectCountByParams" parameterType="java.lang.String" resultType="int">
   	SELECT count(1) FROM platform_goods_params WHERE params_code = #{paramsCode,jdbcType=VARCHAR}
   </select>
+  
+  <select id="selectParamsByassortment" resultMap="BaseResultMap">
+  	select a.id,a.params_code,a.assortment_id from platform_goods_params a 
+  	left join 
+  	platform_goods_classification b
+  	on a.assortment_id = b.id
+  	where a.params_code = #{code} and a.assortment_id = #{id}
+  </select>
 </mapper>

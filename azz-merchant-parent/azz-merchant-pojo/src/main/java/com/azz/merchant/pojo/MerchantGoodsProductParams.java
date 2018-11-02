@@ -23,7 +23,7 @@ public class MerchantGoodsProductParams implements Serializable {
      *
      * @mbg.generated
      */
-    private Integer paramsId;
+    private Long paramsId;
 
     /**
      * 参数值
@@ -38,6 +38,8 @@ public class MerchantGoodsProductParams implements Serializable {
      * @mbg.generated
      */
     private Long productId;
+    
+    private Byte paramsType;
 
     private static final long serialVersionUID = 1L;
 
@@ -97,7 +99,7 @@ public class MerchantGoodsProductParams implements Serializable {
      *
      * @mbg.generated
      */
-    public Integer getParamsId() {
+    public Long getParamsId() {
         return paramsId;
     }
 
@@ -109,7 +111,7 @@ public class MerchantGoodsProductParams implements Serializable {
      *
      * @mbg.generated
      */
-    public void setParamsId(Integer paramsId) {
+    public void setParamsId(Long paramsId) {
         this.paramsId = paramsId;
     }
 
@@ -161,50 +163,14 @@ public class MerchantGoodsProductParams implements Serializable {
         this.productId = productId;
     }
 
-    @Override
-    public boolean equals(Object that) {
-        if (this == that) {
-            return true;
-        }
-        if (that == null) {
-            return false;
-        }
-        if (getClass() != that.getClass()) {
-            return false;
-        }
-        MerchantGoodsProductParams other = (MerchantGoodsProductParams) that;
-        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getParamsName() == null ? other.getParamsName() == null : this.getParamsName().equals(other.getParamsName()))
-            && (this.getParamsId() == null ? other.getParamsId() == null : this.getParamsId().equals(other.getParamsId()))
-            && (this.getParamsValue() == null ? other.getParamsValue() == null : this.getParamsValue().equals(other.getParamsValue()))
-            && (this.getProductId() == null ? other.getProductId() == null : this.getProductId().equals(other.getProductId()));
-    }
+	public Byte getParamsType() {
+		return paramsType;
+	}
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getParamsName() == null) ? 0 : getParamsName().hashCode());
-        result = prime * result + ((getParamsId() == null) ? 0 : getParamsId().hashCode());
-        result = prime * result + ((getParamsValue() == null) ? 0 : getParamsValue().hashCode());
-        result = prime * result + ((getProductId() == null) ? 0 : getProductId().hashCode());
-        return result;
-    }
+	public void setParamsType(Byte paramsType) {
+		this.paramsType = paramsType;
+	}
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", paramsName=").append(paramsName);
-        sb.append(", paramsId=").append(paramsId);
-        sb.append(", paramsValue=").append(paramsValue);
-        sb.append(", productId=").append(productId);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
-    }
+
+   
 }

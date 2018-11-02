@@ -60,7 +60,6 @@ public class EditClassificationWebParam {
     /**
      * 分类主图
      */
-    @NotNull(message = "请上传主图")
     private MultipartFile classificationFile;
     
     /**

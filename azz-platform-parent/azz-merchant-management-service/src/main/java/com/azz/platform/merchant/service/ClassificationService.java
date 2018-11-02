@@ -73,6 +73,9 @@ public class ClassificationService {
         // 主图基础校验
         ClassificationPic cp = param.getClassificationPic();
         String originalFileName = cp.getFileName();
+        // 分类编码
+        String classificationCode = randomSequenceService.getClassificationNumber();
+        
         if (StringUtils.isBlank(originalFileName)) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
                     "主图文件名为空");
@@ -91,12 +94,10 @@ public class ClassificationService {
         String fileNameNoSufix = originalFileName.substring(0, dotIndex);
         String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
         // 新名称为文件名 + 文件后缀
-        String newFileName = fileNameNoSufix + "." + sufix;
+        String newFileName = fileNameNoSufix +"_"+ classificationCode;
 
         // 图片url
-        JsonResult<String> jr = systemImageUploadService.uploadImage(
-                FileConstants.AZZ_CLASSIFICATION_PATH, newFileName, sufix, filedata,
-                FileConstants.AZZ_PLATFORM, FileConstants.AZZ_CLASSIFICATION_IMAGE_TYPE);
+        JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_CLASSIFICATION_IMAGE_TYPE);
         if (jr.getCode() != SystemErrorCode.SUCCESS.getCode()) {
             throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "主图上传失败，请重试");
         }
@@ -109,7 +110,7 @@ public class ClassificationService {
         }
 
         PlatformGoodsClassification record = new PlatformGoodsClassification();
-        if (null != param.getAssortmentParentCode()) {
+        if (null != param.getAssortmentParentCode() && !"0".equals(param.getAssortmentParentCode())) {
             PlatformGoodsClassification pgc = platformGoodsClassificationMapper
                     .selectByAssortmentCode(param.getAssortmentParentCode());
             if (ObjectUtils.isNull(pgc)) {
@@ -126,8 +127,7 @@ public class ClassificationService {
             record.setAssortmentTop((byte) 1);
         }
 
-        // 分类编码
-        String classificationCode = randomSequenceService.getClassificationNumber();
+       
         record.setAssortmentCode(classificationCode);
         record.setAssortmentParentCode(
                 null == param.getAssortmentParentCode() ? "0" : param.getAssortmentParentCode());
@@ -180,12 +180,11 @@ public class ClassificationService {
             String fileNameNoSufix = originalFileName.substring(0, dotIndex);
             String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
             // 新名称为文件名 + 文件后缀
-            String newFileName = fileNameNoSufix + "." + sufix;
+            String newFileName = fileNameNoSufix + "_" + param.getAssortmentCode();
             
             // 图片url
-            JsonResult<String> jr = systemImageUploadService.uploadImage(
-                    FileConstants.AZZ_CLASSIFICATION_PATH, newFileName, sufix, filedata,
-                    FileConstants.AZZ_PLATFORM, FileConstants.AZZ_CLASSIFICATION_IMAGE_TYPE);
+            JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_CLASSIFICATION_IMAGE_TYPE);
+            
             if (jr.getCode() != SystemErrorCode.SUCCESS.getCode()) {
                 throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "主图上传失败，请重试");
             }

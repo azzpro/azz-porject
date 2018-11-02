@@ -35,6 +35,11 @@ public abstract class MerchantConstants {
 	 * 模组主图文件大小限制
 	 */
 	public static final long GOODS_MODULE_FILE_SIZE_LIMIT = 2 * 1024 * 1024L;
+	
+	/**
+	 * 品牌主图文件大小限制
+	 */
+	public static final long GOODS_BRAND_FILE_SIZE_LIMIT = 2 * 1024 * 1024L;
 
 	/**
 	 * 
@@ -126,6 +131,29 @@ public abstract class MerchantConstants {
 			this.desc = desc;
 		}
 	}
+	
+	/**
+	 * 
+	 * <P>是否修改了品牌图片</P>
+	 * @version 1.0
+	 * @author 黄智聪  2018年11月1日 下午5:29:36
+	 */
+	public enum IsChangeGoodsBrandPic {
+		N(0, "否"),
+
+		Y(1, "是");
+
+		@Getter
+		private int value;
+
+		@Getter
+		private String desc;
+
+		IsChangeGoodsBrandPic(int value, String desc) {
+			this.value = value;
+			this.desc = desc;
+		}
+	}
 
 	public enum UserStatus {
 
@@ -199,6 +227,51 @@ public abstract class MerchantConstants {
 		public static boolean checkStatusExist(int value) {
 			GoodsModuleStatus[] values = GoodsModuleStatus.values();
 			for (GoodsModuleStatus status : values) {
+				if (status.getValue() == value) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+	
+	/**
+	 * 
+	 * <P>品牌状态</P>
+	 * @version 1.0
+	 * @author 黄智聪  2018年11月2日 下午4:39:19
+	 */
+	public enum GoodsBrandStatus {
+
+		INVALID(0, "无效"),
+
+		VALID(1, "有效");
+
+
+		@Getter
+		private int value;
+
+		@Getter
+		private String desc;
+
+		GoodsBrandStatus(int value, String desc) {
+			this.value = value;
+			this.desc = desc;
+		}
+
+		/**
+		 * 
+		 * <p>
+		 * 校验是否存在该状态
+		 * </p>
+		 * 
+		 * @param value
+		 * @return
+		 * @author 黄智聪 2018年10月20日 上午11:29:37
+		 */
+		public static boolean checkStatusExist(int value) {
+			GoodsBrandStatus[] values = GoodsBrandStatus.values();
+			for (GoodsBrandStatus status : values) {
 				if (status.getValue() == value) {
 					return true;
 				}

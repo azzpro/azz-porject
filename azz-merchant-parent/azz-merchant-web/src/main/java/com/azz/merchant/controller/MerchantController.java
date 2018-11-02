@@ -49,7 +49,7 @@ import com.azz.util.JSR303ValidateUtils;
 /**
  * 
  * <P>
- * 登录控制器
+ * 商户控制器
  * </P>
  * 
  * @version 1.0

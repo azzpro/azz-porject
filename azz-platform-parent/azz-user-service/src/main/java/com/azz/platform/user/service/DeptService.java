@@ -173,5 +173,21 @@ public class DeptService{
         return JsonResult.successJsonResult();
     }
 
+   /* public boolean parentCodeLevel(String parentCode) {
+        PlatformDept platformDept = deptMapper.selectByParentDeptCode(parentCode);
+        if(ObjectUtils.isNotNull(platformDept)) {
+            PlatformDept  platformDeptObj = deptMapper.selectByParentDeptCode(platformDept.getDeptCode());
+            if(ObjectUtils.isNotNull(platformDeptObj)) {
+                
+            }
+        } else {
+            PlatformDept pdByParentCode = deptMapper.selectByDeptCode(parentCode);
+            if(ObjectUtils.isNotNull(pdByParentCode) && !pdByParentCode.getParentCode().equals("0")) {
+                // 该部门编码为三级部门
+                return false;
+            }
+        }
+        return true;
+    }*/
 }
 

@@ -62,5 +62,10 @@ public class EditClassificationWebParam {
      */
     @NotNull(message = "请上传主图")
     private MultipartFile classificationFile;
+    
+    /**
+     * 是否修改过图片(0未 1修改过)
+     */
+    private Integer isEditPic;
 }
 

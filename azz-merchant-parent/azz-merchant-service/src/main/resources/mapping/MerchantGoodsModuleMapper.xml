@@ -262,6 +262,7 @@
 	  SELECT
 		mgd.module_name AS moduleName,
 		mgd.module_code AS moduleCode,
+		pgc3.assortment_code as assortmentCode,
 		CONCAT(
 			pgc1.assortment_name,
 			'-',
@@ -281,7 +282,7 @@
 	LEFT JOIN platform_goods_classification pgc1 ON pgc2.assortment_parent_code = pgc1.assortment_code
 	<where>
 		mgd.module_status != 0
-		<if test="status != null">
+		<if test="moduleStatus != null">
 			AND mgd.module_status = #{moduleStatus}
 		</if>
 		<if test="searchInput != null and searchInput != ''">
@@ -298,6 +299,7 @@
 	  SELECT
 		mgd.module_name AS moduleName,
 		mgd.module_code AS moduleCode,
+		pgc3.assortment_code as assortmentCode,
 		CONCAT(
 			pgc1.assortment_name,
 			'-',

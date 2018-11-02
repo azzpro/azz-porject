@@ -46,7 +46,7 @@ public interface GoodsModuleService {
 	 * @return
 	 * @author 黄智聪  2018年11月1日 下午8:45:15
 	 */
-	@RequestMapping("/azz/api/merchant/goodsModule/getGoodModuleInfoList")
+	@RequestMapping("/azz/api/merchant/goodsModule/getGoodModuleInfo")
 	public JsonResult<GoodModuleInfo> getGoodModuleInfo(@RequestParam("moduleCode")String moduleCode);
 	
 	/**
@@ -56,7 +56,7 @@ public interface GoodsModuleService {
 	 * @return
 	 * @author 黄智聪  2018年11月1日 下午4:08:42
 	 */
-	@RequestMapping("/azz/api/merchant/goodsModule/getGoodModuleInfoList")
+	@RequestMapping("/azz/api/merchant/goodsModule/addGoodsModule")
 	public JsonResult<String> addGoodsModule(@RequestBody AddGoodsModuleParam param);
 	
 	/**
@@ -66,7 +66,7 @@ public interface GoodsModuleService {
 	 * @return
 	 * @author 黄智聪  2018年11月1日 下午5:16:03
 	 */
-	@RequestMapping("/azz/api/merchant/goodsModule/getGoodModuleInfoList")
+	@RequestMapping("/azz/api/merchant/goodsModule/editGoodsModule")
 	public JsonResult<String> editGoodsModule(@RequestBody EditGoodsModuleParam param);
 	
 	/**
@@ -76,7 +76,7 @@ public interface GoodsModuleService {
 	 * @return
 	 * @author 黄智聪  2018年11月1日 下午8:02:16
 	 */
-	@RequestMapping("/azz/api/merchant/goodsModule/getGoodModuleInfoList")
+	@RequestMapping("/azz/api/merchant/goodsModule/putOnOrPutOffOrDelGoodsModule")
 	public JsonResult<String> putOnOrPutOffOrDelGoodsModule(@RequestBody PutOnOrPutOffOrDelGoodsModuleParam param);
 	
 }

@@ -42,6 +42,7 @@ public class PlatformUserErrorCode extends BaseErrorCode{
     
     // 商品管理错误代码
     public static final PlatformUserErrorCode PLATFORM_PRODUCT_CLASSIFICATION_NO_EXIST = new PlatformUserErrorCode(60000, "分类不存在");
+    public static final PlatformUserErrorCode PLATFORM_PRODUCT_CLASSIFICATION_EXIST = new PlatformUserErrorCode(60001, "分类存在");
     
     
     public PlatformUserErrorCode(int code, String message) {

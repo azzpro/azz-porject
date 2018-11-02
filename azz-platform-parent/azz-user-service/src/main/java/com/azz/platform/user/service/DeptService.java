@@ -21,6 +21,7 @@ import com.azz.platform.user.pojo.bo.AddDeptParam;
 import com.azz.platform.user.pojo.bo.EditDeptParam;
 import com.azz.platform.user.pojo.bo.SearchDeptParam;
 import com.azz.platform.user.pojo.vo.Dept;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
 
@@ -38,6 +39,9 @@ public class DeptService{
     @Autowired
     private PlatformDeptMapper deptMapper;
 
+    @Autowired
+    private DbSequenceService dbSequenceService;
+    
     public JsonResult<String> addDeptInfo(@RequestBody AddDeptParam param) {
         // 部门信息非空校验
         JSR303ValidateUtils.validate(param);
@@ -63,7 +67,7 @@ public class DeptService{
             // 系统自动生成部门编码
             dept.setParentCode("0");
         }
-        dept.setDeptCode("D"+System.currentTimeMillis()); // TODO 部门编码生成
+        dept.setDeptCode(dbSequenceService.getPlatDepartmentNumber());
         dept.setDeptName(param.getDeptName());
         dept.setStatus(param.getStatus());
         dept.setCreator(param.getCreator());

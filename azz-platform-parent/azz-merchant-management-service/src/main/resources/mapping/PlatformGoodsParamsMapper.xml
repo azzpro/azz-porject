@@ -104,4 +104,8 @@
     delete from platform_goods_params
     where params_code = #{code,jdbcType=VARCHAR}
   </delete>
+  
+   <select id="selectCountByParams" parameterType="java.lang.String" resultType="int">
+  	SELECT count(1) FROM platform_goods_params WHERE params_code = #{paramsCode,jdbcType=VARCHAR}
+  </select>
 </mapper>

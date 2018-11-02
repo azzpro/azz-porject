@@ -1,12 +1,12 @@
-package com.azz.merchant.mapper;
+package com.azz.platform.merchant.mapper;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.azz.merchant.pojo.MerchantGoodsModule;
-import com.azz.merchant.pojo.bo.SearchGoodsModuleParam;
-import com.azz.merchant.pojo.vo.GoodModuleInfo;
+import com.azz.platform.merchant.pojo.MerchantGoodsModule;
+import com.azz.platform.merchant.pojo.bo.SearchGoodsModuleParam;
+import com.azz.platform.merchant.pojo.vo.GoodModuleInfo;
 
 public interface MerchantGoodsModuleMapper {
     int deleteByPrimaryKey(Long id);

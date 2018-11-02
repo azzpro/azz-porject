@@ -9,6 +9,8 @@ package com.azz.merchant.pojo.vo;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 /**
@@ -25,6 +27,8 @@ public class GoodModuleInfo {
 	
 	private String modulePicUrl;
 	
+	private String assortmentCode;
+	
 	private String classificationName;
 	
 	private String moduleStatus;
@@ -33,6 +37,7 @@ public class GoodModuleInfo {
 	
 	private String creator;
 	
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")
 	private Date createTime;
 	
 }

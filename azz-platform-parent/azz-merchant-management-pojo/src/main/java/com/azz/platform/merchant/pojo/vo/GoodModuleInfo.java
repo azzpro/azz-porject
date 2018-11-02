@@ -24,6 +24,8 @@ public class GoodModuleInfo {
 	private String moduleName;
 	
 	private String modulePicUrl;
+
+	private String assortmentCode;
 	
 	private String classificationName;
 	

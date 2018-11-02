@@ -31,7 +31,7 @@ public class AddGoodsModuleWebParam {
 	@NotNull(message = "请选择模组状态")
 	private Byte moduleStatus;
 
-	@NotBlank(message = "请上传模组主图")
+	@NotNull(message = "请上传模组主图")
 	private MultipartFile goodsModulePicFile;
 
 	@NotBlank(message = "请编辑模组详情")

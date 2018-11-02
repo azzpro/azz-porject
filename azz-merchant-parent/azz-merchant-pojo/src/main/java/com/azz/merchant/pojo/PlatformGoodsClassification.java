@@ -34,13 +34,6 @@ public class PlatformGoodsClassification implements Serializable {
     private Byte assortmentTop;
 
     /**
-     * 参数ID
-     *
-     * @mbg.generated
-     */
-    private Long assortmentParamsId;
-
-    /**
      * 分类排序(默认0)
      *
      * @mbg.generated
@@ -107,7 +100,6 @@ public class PlatformGoodsClassification implements Serializable {
 		this.assortmentParentCode = assortmentParentCode;
 		this.assortmentName = assortmentName;
 		this.assortmentTop = assortmentTop;
-		this.assortmentParamsId = assortmentParamsId;
 		this.assortmentSort = assortmentSort;
 		this.assortmentPicUrl = assortmentPicUrl;
 		this.assortmentPicName = assortmentPicName;
@@ -227,29 +219,6 @@ public class PlatformGoodsClassification implements Serializable {
         this.assortmentTop = assortmentTop;
     }
 
-    /**
-     * 参数ID<br/>
-     * 返回值对应的表列名 platform_goods_classification.assortment_params_id
-     *
-     * @return 返回值对应 platform_goods_classification.assortment_params_id
-     *
-     * @mbg.generated
-     */
-    public Long getAssortmentParamsId() {
-        return assortmentParamsId;
-    }
-
-    /**
-     * 参数ID<br/>
-     * platform_goods_classification.assortment_params_id
-     *
-     * @param assortmentParamsId 值对应 platform_goods_classification.assortment_params_id
-     *
-     * @mbg.generated
-     */
-    public void setAssortmentParamsId(Long assortmentParamsId) {
-        this.assortmentParamsId = assortmentParamsId;
-    }
 
     /**
      * 分类排序(默认0)<br/>
@@ -444,7 +413,6 @@ public class PlatformGoodsClassification implements Serializable {
             && (this.getAssortmentParentCode() == null ? other.getAssortmentParentCode() == null : this.getAssortmentParentCode().equals(other.getAssortmentParentCode()))
             && (this.getAssortmentName() == null ? other.getAssortmentName() == null : this.getAssortmentName().equals(other.getAssortmentName()))
             && (this.getAssortmentTop() == null ? other.getAssortmentTop() == null : this.getAssortmentTop().equals(other.getAssortmentTop()))
-            && (this.getAssortmentParamsId() == null ? other.getAssortmentParamsId() == null : this.getAssortmentParamsId().equals(other.getAssortmentParamsId()))
             && (this.getAssortmentSort() == null ? other.getAssortmentSort() == null : this.getAssortmentSort().equals(other.getAssortmentSort()))
             && (this.getAssortmentPicUrl() == null ? other.getAssortmentPicUrl() == null : this.getAssortmentPicUrl().equals(other.getAssortmentPicUrl()))
             && (this.getAssortmentPicName() == null ? other.getAssortmentPicName() == null : this.getAssortmentPicName().equals(other.getAssortmentPicName()))
@@ -462,7 +430,6 @@ public class PlatformGoodsClassification implements Serializable {
         result = prime * result + ((getAssortmentParentCode() == null) ? 0 : getAssortmentParentCode().hashCode());
         result = prime * result + ((getAssortmentName() == null) ? 0 : getAssortmentName().hashCode());
         result = prime * result + ((getAssortmentTop() == null) ? 0 : getAssortmentTop().hashCode());
-        result = prime * result + ((getAssortmentParamsId() == null) ? 0 : getAssortmentParamsId().hashCode());
         result = prime * result + ((getAssortmentSort() == null) ? 0 : getAssortmentSort().hashCode());
         result = prime * result + ((getAssortmentPicUrl() == null) ? 0 : getAssortmentPicUrl().hashCode());
         result = prime * result + ((getAssortmentPicName() == null) ? 0 : getAssortmentPicName().hashCode());
@@ -483,7 +450,6 @@ public class PlatformGoodsClassification implements Serializable {
         sb.append(", assortmentParentCode=").append(assortmentParentCode);
         sb.append(", assortmentName=").append(assortmentName);
         sb.append(", assortmentTop=").append(assortmentTop);
-        sb.append(", assortmentParamsId=").append(assortmentParamsId);
         sb.append(", assortmentSort=").append(assortmentSort);
         sb.append(", assortmentPicUrl=").append(assortmentPicUrl);
         sb.append(", assortmentPicName=").append(assortmentPicName);

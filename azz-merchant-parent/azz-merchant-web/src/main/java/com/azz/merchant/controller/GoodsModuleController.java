@@ -27,6 +27,7 @@ import com.azz.merchant.pojo.bo.GoodsModulePic;
 import com.azz.merchant.pojo.bo.PutOnOrPutOffOrDelGoodsModuleParam;
 import com.azz.merchant.pojo.bo.SearchGoodsModuleParam;
 import com.azz.merchant.pojo.vo.GoodModuleInfo;
+import com.azz.merchant.utils.WebUtils;
 import com.azz.util.Base64;
 import com.azz.util.JSR303ValidateUtils;
 
@@ -65,7 +66,7 @@ public class GoodsModuleController {
 	 * @return
 	 * @author 黄智聪  2018年11月1日 下午8:45:15
 	 */
-	@RequestMapping("/getGoodModuleInfoList")
+	@RequestMapping("/getGoodModuleInfo")
 	public JsonResult<GoodModuleInfo> getGoodModuleInfo(String moduleCode){
 		return goodsModuleService.getGoodModuleInfo(moduleCode);
 	}
@@ -78,7 +79,7 @@ public class GoodsModuleController {
 	 * @author 黄智聪  2018年11月1日 下午4:08:42
 	 * @throws IOException 
 	 */
-	@RequestMapping("/getGoodModuleInfoList")
+	@RequestMapping("/addGoodsModule")
 	public JsonResult<String> addGoodsModule(AddGoodsModuleWebParam webParam) throws IOException{
 		JSR303ValidateUtils.validate(webParam);
 		AddGoodsModuleParam param = new AddGoodsModuleParam();
@@ -87,6 +88,7 @@ public class GoodsModuleController {
 		GoodsModulePic goodsModulePic = new GoodsModulePic(goodsModulePicFile.getOriginalFilename(),
 		    		goodsModulePicFile.getSize(), Base64.encode(goodsModulePicFile.getBytes()));
 		param.setGoodsModulePic(goodsModulePic);
+		param.setCreator(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
 		return goodsModuleService.addGoodsModule(param);
 	}
 	
@@ -98,7 +100,7 @@ public class GoodsModuleController {
 	 * @author 黄智聪  2018年11月1日 下午5:16:03
 	 * @throws IOException 
 	 */
-	@RequestMapping("/getGoodModuleInfoList")
+	@RequestMapping("/editGoodsModule")
 	public JsonResult<String> editGoodsModule(EditGoodsModuleWebParam webParam) throws IOException{
 		JSR303ValidateUtils.validate(webParam);
 		EditGoodsModuleParam param = new EditGoodsModuleParam();
@@ -109,6 +111,7 @@ public class GoodsModuleController {
 					goodsModulePicFile.getSize(), Base64.encode(goodsModulePicFile.getBytes()));
 			param.setGoodsModulePic(goodsModulePic);
 		}
+		param.setModifier(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
 		return goodsModuleService.editGoodsModule(param);
 	}
 	
@@ -119,8 +122,9 @@ public class GoodsModuleController {
 	 * @return
 	 * @author 黄智聪  2018年11月1日 下午8:02:16
 	 */
-	@RequestMapping("/getGoodModuleInfoList")
+	@RequestMapping("/putOnOrPutOffOrDelGoodsModule")
 	public JsonResult<String> putOnOrPutOffOrDelGoodsModule(PutOnOrPutOffOrDelGoodsModuleParam param){
+		param.setModifier(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
 		return goodsModuleService.putOnOrPutOffOrDelGoodsModule(param);
 	}
 	

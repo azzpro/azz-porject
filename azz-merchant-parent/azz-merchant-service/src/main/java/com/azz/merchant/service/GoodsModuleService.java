@@ -179,6 +179,7 @@ public class GoodsModuleService {
 				.moduleCode(moduleCode)
 				.moduleInfo(param.getModuleInfo())
 				.moduleName(param.getModuleName())
+				.classificationId(goodsClassification.getId())
 				.moduleStatus(param.getModuleStatus())
 				.build();
 		// 修改模组图片，则重新上传

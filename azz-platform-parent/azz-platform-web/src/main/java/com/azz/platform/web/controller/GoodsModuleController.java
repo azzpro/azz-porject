@@ -7,6 +7,7 @@
 
 package com.azz.platform.web.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +17,7 @@ import com.azz.platform.merchant.api.GoodsModuleService;
 import com.azz.platform.merchant.pojo.bo.PutOnOrPutOffGoodsModuleParam;
 import com.azz.platform.merchant.pojo.bo.SearchGoodsModuleParam;
 import com.azz.platform.merchant.pojo.vo.GoodModuleInfo;
+import com.azz.utils.WebUtils;
 
 /**
  * 
@@ -27,6 +29,7 @@ import com.azz.platform.merchant.pojo.vo.GoodModuleInfo;
 @RequestMapping("/azz/api/merchant/goodsModule")
 public class GoodsModuleController {
 	
+	@Autowired
 	GoodsModuleService goodsModuleService;
 	
 	/**
@@ -63,6 +66,7 @@ public class GoodsModuleController {
 	 */
 	@RequestMapping("/putOnOrPutOffGoodsModule")
 	JsonResult<String> putOnOrPutOffGoodsModule(PutOnOrPutOffGoodsModuleParam param) {
+		param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
 		return goodsModuleService.putOnOrPutOffGoodsModule(param);
 	}
 

@@ -55,16 +55,27 @@ public class DeptService{
                 throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
             }
             dept.setParentCode(deptParentCode);
+            
+            if(deptObjCode.getDescription().equals("0")) {
+                dept.setDescription("1");
+            } else if(deptObjCode.getDescription().equals("1")) {
+                dept.setDescription("2");
+            } else if(deptObjCode.getDescription().equals("2")) {
+                throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_LEVEL_ERROR);
+            }
         } else {
             // 系统自动生成部门编码
             dept.setParentCode("0");
             deptParentCode = "0";
+            // 部门等级 0 一级 1 二级 2 三级
+            dept.setDescription("0");
         }
         
         int count = deptMapper.selectCountByParam(deptParentCode, param.getDeptName());
         if(count>0) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_EXIST);
         }
+        
         
         dept.setDeptCode(dbSequenceService.getPlatDepartmentNumber());
         dept.setDeptName(param.getDeptName());
@@ -93,6 +104,14 @@ public class DeptService{
                 throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_EXIST);
             }
         }
+        
+        List<PlatformDept> pd = deptMapper.selectByParentDeptCode(parentCode);
+        if(pd.size()>0) {
+            if(pd.get(0).getDescription().equals("2")) {
+                throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_LEVEL_ERROR);
+            }
+        }
+        
         dept.setParentCode(parentCode);
         dept.setDeptName(param.getDeptName());
         dept.setLastModifyTime(new Date());

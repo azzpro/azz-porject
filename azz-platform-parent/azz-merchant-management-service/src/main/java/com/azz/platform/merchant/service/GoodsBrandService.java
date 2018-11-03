@@ -222,9 +222,9 @@ public class GoodsBrandService {
 	    String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
 	    // 新名称为文件名 + 品牌编码
 	    String newFileName = fileNameNoSufix + "_" + brandCode;
-	    // 图片url  TODO
+	    // 图片url
 	    JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
-		    filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_BUSINESS_IMAGE_TYPE);
+		    filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_BRAND_IMAGE_TYPE);
 	    UploadFileInfo file = new UploadFileInfo();
 	    if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 	    	file.setImgUrl(jr.getData());

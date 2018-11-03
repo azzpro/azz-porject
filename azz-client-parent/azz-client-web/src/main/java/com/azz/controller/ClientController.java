@@ -149,12 +149,15 @@ public class ClientController {
 	    subject.getSession().setTimeout(sessionTimeout);
 	} catch (AuthenticationException e) {
 	    Throwable[] throwables = e.getSuppressed();
-	    int code = ((SuppressedException) throwables[0]).getCode();
-	    String msg = ((SuppressedException) throwables[0]).getMessage();
-	    JsonResult<LoginClientUserInfo> jr = new JsonResult<>();
-	    jr.setCode(code);
-	    jr.setMsg(msg);
-	    return jr;
+	    if(throwables != null && throwables.length != 0) {
+	    	int code = ((SuppressedException) throwables[0]).getCode();
+		    String msg = ((SuppressedException) throwables[0]).getMessage();
+		    JsonResult<LoginClientUserInfo> jr = new JsonResult<>();
+		    jr.setCode(code);
+		    jr.setMsg(msg);
+		    return jr;
+	    }
+	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR,"登录失败，请重试");
 	}
 	JsonResult<LoginClientUserInfo> jr = clientService.getLoginClientUserInfoByPhoneNumber(param.getPhoneNumber());
 	LoginClientUserInfo loginClientUser = jr.getData();

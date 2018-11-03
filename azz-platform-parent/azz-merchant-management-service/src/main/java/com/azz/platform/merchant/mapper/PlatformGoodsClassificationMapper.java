@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.azz.platform.merchant.pojo.PlatformGoodsClassification;
+import com.azz.platform.merchant.pojo.bo.SearchSameLevelClassification;
 import com.azz.platform.merchant.pojo.vo.Classification;
 import com.azz.platform.merchant.pojo.vo.ClassificationList;
 import com.azz.platform.merchant.pojo.vo.ClassificationSet;
@@ -53,4 +54,6 @@ public interface PlatformGoodsClassificationMapper {
     int selectCountById(Long classificationId);
     
     PlatformGoodsClassification selectByAssortmentParentCode(String assortmentParentCode);
+    
+    int selectSameLevelClassification(SearchSameLevelClassification param);
 }

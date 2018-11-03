@@ -26,6 +26,7 @@ import com.azz.platform.merchant.pojo.bo.ClassificationPic;
 import com.azz.platform.merchant.pojo.bo.DelClassificationParam;
 import com.azz.platform.merchant.pojo.bo.EditClassificationParam;
 import com.azz.platform.merchant.pojo.bo.SearchClassificationListParam;
+import com.azz.platform.merchant.pojo.bo.SearchSameLevelClassification;
 import com.azz.platform.merchant.pojo.vo.Classification;
 import com.azz.platform.merchant.pojo.vo.ClassificationList;
 import com.azz.system.api.SystemImageUploadService;
@@ -102,13 +103,6 @@ public class ClassificationService {
             throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "主图上传失败，请重试");
         }
 
-        // 校验分类名称
-        List<ClassificationList> clList =
-                platformGoodsClassificationMapper.selectByParam(param.getAssortmentName());
-        if (clList.size() > 0) {
-            throw new BaseException(PlatformUserErrorCode.PLATFORM_PRODUCT_CLASSIFICATION_EXIST);
-        }
-
         PlatformGoodsClassification record = new PlatformGoodsClassification();
         if (null != param.getAssortmentParentCode() && !"0".equals(param.getAssortmentParentCode())) {
             PlatformGoodsClassification pgc = platformGoodsClassificationMapper
@@ -118,15 +112,30 @@ public class ClassificationService {
                         PlatformUserErrorCode.PLATFORM_PRODUCT_CLASSIFICATION_NO_EXIST);
             }
 
-            if (pgc.getAssortmentTop() == 1) {
+            if (pgc.getAssortmentTop() == 0) {
+                record.setAssortmentTop((byte) 1);
+            } else if (pgc.getAssortmentTop() == 1) {
                 record.setAssortmentTop((byte) 2);
-            } else if (pgc.getAssortmentTop() == 2) {
-                record.setAssortmentTop((byte) 3);
             }
         } else {
             record.setAssortmentTop((byte) 0);
         }
-
+        // 校验分类等级不允许超过三级分类
+        List<ClassificationList> clList = platformGoodsClassificationMapper.selectByParam(param.getAssortmentParentCode());
+        if(clList.size()>0) {
+            if(clList.get(0).getAssortmentTop() == 2) {
+                throw new BaseException(PlatformUserErrorCode.PLATFORM_PRODUCT_THIRD_LEVEL_CLASSIFICATION);
+            }
+        }
+        // 校验分类名称
+        SearchSameLevelClassification searchSameLevelClassification = new SearchSameLevelClassification();
+        searchSameLevelClassification.setAssortmentName(param.getAssortmentName());
+        searchSameLevelClassification.setAssortmentTop(record.getAssortmentTop());
+        int count = platformGoodsClassificationMapper.selectSameLevelClassification(searchSameLevelClassification);
+        
+        if (count > 0) {
+            throw new BaseException(PlatformUserErrorCode.PLATFORM_PRODUCT_CLASSIFICATION_EXIST);
+        }
        
         record.setAssortmentCode(classificationCode);
         record.setAssortmentParentCode(
@@ -157,7 +166,7 @@ public class ClassificationService {
         JSR303ValidateUtils.validate(param);
         
         PlatformGoodsClassification pgcObj = platformGoodsClassificationMapper
-                .selectByAssortmentCode(param.getAssortmentParentCode());
+                .selectByAssortmentCode(param.getAssortmentCode());
         
         if(param.getIsEditPic() == 1) {
             // 主图基础校验
@@ -196,32 +205,41 @@ public class ClassificationService {
 
        
 
-        if (null != param.getAssortmentParentCode()) {
+        if (null != param.getAssortmentParentCode() && !"0".equals(param.getAssortmentParentCode())) {
             PlatformGoodsClassification pgc = platformGoodsClassificationMapper
                     .selectByAssortmentCode(param.getAssortmentParentCode());
             if (ObjectUtils.isNull(pgc)) {
                 throw new BaseException(
                         PlatformUserErrorCode.PLATFORM_PRODUCT_CLASSIFICATION_NO_EXIST);
             }
-
-            if (pgc.getAssortmentTop() == 1) {
+            if(pgc.getAssortmentTop() == 0) {
+                pgcObj.setAssortmentTop((byte) 1);
+            }else if (pgc.getAssortmentTop() == 1) {
                 pgcObj.setAssortmentTop((byte) 2);
-            } else if (pgc.getAssortmentTop() == 2) {
-                pgcObj.setAssortmentTop((byte) 3);
             }
         } else {
             pgcObj.setAssortmentTop((byte) 0);
         }
 
+        // 校验分类等级不允许超过三级分类
+        List<ClassificationList> clList = platformGoodsClassificationMapper.selectByParam(param.getAssortmentParentCode());
+        if(clList.size()>0) {
+            if(clList.get(0).getAssortmentTop() == 2) {
+                throw new BaseException(PlatformUserErrorCode.PLATFORM_PRODUCT_THIRD_LEVEL_CLASSIFICATION);
+            }
+        }
+        
         // 校验分类名称
         if (pgcObj.getAssortmentName().equals(param.getAssortmentName().trim())) {
             pgcObj.setAssortmentName(param.getAssortmentName());
         } else {
-            List<ClassificationList> clList =
-                    platformGoodsClassificationMapper.selectByParam(param.getAssortmentName());
-            if (clList.size() > 0) {
-                throw new BaseException(
-                        PlatformUserErrorCode.PLATFORM_PRODUCT_CLASSIFICATION_EXIST);
+            SearchSameLevelClassification searchSameLevelClassification = new SearchSameLevelClassification();
+            searchSameLevelClassification.setAssortmentName(param.getAssortmentName());
+            searchSameLevelClassification.setAssortmentTop(pgcObj.getAssortmentTop());
+            int count = platformGoodsClassificationMapper.selectSameLevelClassification(searchSameLevelClassification);
+            
+            if (count > 0) {
+                throw new BaseException(PlatformUserErrorCode.PLATFORM_PRODUCT_CLASSIFICATION_EXIST);
             }
             pgcObj.setAssortmentName(param.getAssortmentName());
         }

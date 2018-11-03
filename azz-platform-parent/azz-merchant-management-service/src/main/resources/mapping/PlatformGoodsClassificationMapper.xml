@@ -253,4 +253,10 @@
     from platform_goods_classification
     where assortment_parent_code = #{assortmentParentCode,jdbcType=VARCHAR} and status != 0
   </select>
+  
+  <select id="selectSameLevelClassification" parameterType="com.azz.platform.merchant.pojo.bo.SearchSameLevelClassification" resultType="int">
+  	SELECT count(1) FROM platform_goods_classification pgc 
+  	WHERE pgc.assortment_name = #{assortmentName} 
+  	AND pgc.assortment_top = #{assortmentTop}
+  </select>
 </mapper>

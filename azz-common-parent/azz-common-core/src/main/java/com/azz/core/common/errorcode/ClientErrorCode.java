@@ -25,6 +25,10 @@ public class ClientErrorCode extends BaseErrorCode{
     
     public static final ClientErrorCode CLIENT_DEPT_CLIENT_ERROR_EXIST = new ClientErrorCode(10004, "部门下存在用户");
     
+    public static final ClientErrorCode CLIENT_DEPT_CLIENT_LEVEL_ERROR_EXIST = new ClientErrorCode(10005, "已是三级部门");
+    
+    public static final ClientErrorCode CLIENT_DEPT_CLIENT_PARENT_CODE_ERROR = new ClientErrorCode(10006, "部门父级编码重名");
+    
     public ClientErrorCode(int code, String message) {
 	super(code, message);
     }

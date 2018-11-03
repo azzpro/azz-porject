@@ -27,7 +27,7 @@ public interface PlatformDeptMapper {
     
     List<Dept> selectDeptList(SearchDeptParam param);
     
-    PlatformDept selectByParentDeptCode(String deptCode);
+    List<PlatformDept> selectByParentDeptCode(String deptCode);
     
     PlatformDept selectByDeptCode(String deptCode);
     

@@ -82,13 +82,31 @@ public class ClientDeptService {
                 throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_EXIST);
             }
         }
+        // 部门名称编码重名
+        if(param.getDeptCode().equals(param.getParentCode())) {
+            throw new BaseException(ClientErrorCode.CLIENT_DEPT_CLIENT_PARENT_CODE_ERROR);
+        }
         
         String parentCode = param.getParentCode();
         ClientDept cdParentObj = null;
         if(!"0".equals(parentCode)) {
             cdParentObj = clientDeptMapper.selectByDeptCode(parentCode);
             if(ObjectUtils.isNull(cdParentObj)) {
-        	throw new BaseException(ClientErrorCode.CLIENT_DEPT_PARENT_CODE_ERROR_NO_EXIST);
+                throw new BaseException(ClientErrorCode.CLIENT_DEPT_PARENT_CODE_ERROR_NO_EXIST);
+            }
+        }
+        
+        SearchClientDeptInfoByCodeParam scd = new SearchClientDeptInfoByCodeParam();
+        scd.setCompanyCode(param.getCompanyCode());
+        scd.setDeptCode(param.getParentCode());
+        ClientDept parentClientDept = clientDeptMapper.selectClientDeptInfoByCode(scd);
+        if(ObjectUtils.isNotNull(parentClientDept)) {
+            if(parentClientDept.getDescription().equals("0")) {
+                cdObj.setDescription("1");
+            } else if(parentClientDept.getDescription().equals("1")) {
+                cdObj.setDescription("2");
+            } else if(parentClientDept.getDescription().equals("2")) {
+                throw new BaseException(ClientErrorCode.CLIENT_DEPT_CLIENT_LEVEL_ERROR_EXIST);
             }
         }
         
@@ -146,6 +164,7 @@ public class ClientDeptService {
         SearchClientDeptIsExistParam record = new SearchClientDeptIsExistParam();
         record.setCompanyCode(param.getCompanyCode());
         record.setDeptName(param.getDeptName());
+        // 校验父级名称唯一
         int isExist = clientDeptMapper.selectFirstLevelExist(record);
         if(isExist>0) {
             throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_EXIST);
@@ -159,6 +178,8 @@ public class ClientDeptService {
         clientDept.setCreator(param.getCreator());
         clientDept.setStatus(param.getStatus());
         clientDept.setCreator(param.getCreator());
+        clientDept.setDescription("0");  // 部门等级0 一级 1 二级  2三级
+        
         clientDeptMapper.insertSelective(clientDept);
         
         return JsonResult.successJsonResult();
@@ -174,7 +195,7 @@ public class ClientDeptService {
         if(ObjectUtils.isNotNull(cdObj)) {
             throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_EXIST);
         }
-        
+       
         SearchClientDeptInfoByCodeParam deptByCodeObj = new SearchClientDeptInfoByCodeParam();
         deptByCodeObj.setCompanyCode(param.getCompanyCode());
         deptByCodeObj.setDeptCode(param.getParentCode());
@@ -185,6 +206,21 @@ public class ClientDeptService {
         }
         
         ClientDept clientDept = new ClientDept();
+        
+        SearchClientDeptInfoByCodeParam scd = new SearchClientDeptInfoByCodeParam();
+        scd.setCompanyCode(param.getCompanyCode());
+        scd.setDeptCode(param.getParentCode());
+        ClientDept parentClientDept = clientDeptMapper.selectClientDeptInfoByCode(scd);
+        if(ObjectUtils.isNotNull(parentClientDept)) {
+            if(parentClientDept.getDescription().equals("0")) {
+                clientDept.setDescription("1");
+            } else if(parentClientDept.getDescription().equals("1")) {
+                clientDept.setDescription("2");
+            } else if(parentClientDept.getDescription().equals("2")) {
+                throw new BaseException(ClientErrorCode.CLIENT_DEPT_CLIENT_LEVEL_ERROR_EXIST);
+            }
+        }
+        
         clientDept.setDeptCode(randomSequenceService.getDepartmentNumber());
         clientDept.setCompanyCode(param.getCompanyCode());
         clientDept.setCreateTime(new Date());

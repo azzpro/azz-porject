@@ -31,7 +31,7 @@ public class GoodModuleInfo {
 	
 	private String classificationName;
 	
-	private String moduleStatus;
+	private Integer moduleStatus;
 	
 	private String moduleInfo;
 	

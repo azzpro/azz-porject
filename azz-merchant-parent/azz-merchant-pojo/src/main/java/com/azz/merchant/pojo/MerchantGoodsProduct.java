@@ -44,7 +44,7 @@ public class MerchantGoodsProduct implements Serializable {
      *
      * @mbg.generated
      */
-    private Boolean productStatus;
+    private Byte productStatus;
 
     /**
      * 模组ID(某分类下的模组)
@@ -211,7 +211,7 @@ public class MerchantGoodsProduct implements Serializable {
      *
      * @mbg.generated
      */
-    public Boolean getProductStatus() {
+    public Byte getProductStatus() {
         return productStatus;
     }
 
@@ -223,7 +223,7 @@ public class MerchantGoodsProduct implements Serializable {
      *
      * @mbg.generated
      */
-    public void setProductStatus(Boolean productStatus) {
+    public void setProductStatus(Byte productStatus) {
         this.productStatus = productStatus;
     }
 

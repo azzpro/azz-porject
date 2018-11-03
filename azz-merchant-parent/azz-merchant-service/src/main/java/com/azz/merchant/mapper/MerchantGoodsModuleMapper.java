@@ -49,5 +49,13 @@ public interface MerchantGoodsModuleMapper {
      */
     GoodModuleInfo getGoodsModuleInfo(String moduleCode);
     
+    /**
+     * <p>根据CODE查询模组</p>
+     * @param code
+     * @return
+     * @author 刘建麟  2018年11月2日 下午3:45:15
+     */
+    MerchantGoodsModule selectModuleByCode(String code);
+    
     
 }

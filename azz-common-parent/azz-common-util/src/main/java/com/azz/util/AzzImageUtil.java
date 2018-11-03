@@ -66,6 +66,12 @@ public class AzzImageUtil {
 		if(FileConstants.AZZ_CLASSIFICATION_IMAGE_TYPE == imagetype) {
 			return FileConstants.AZZ_CLASSIFICATION_PATH;
 		}
+		if(FileConstants.AZZ_BRAND_IMAGE_TYPE == imagetype) {
+			return FileConstants.AZZ_BRAND_PATH;
+		}
+		if(FileConstants.AZZ_MODULE_IMAGE_TYPE == imagetype) {
+			return FileConstants.AZZ_MODULE_PATH;
+		}
 		
 		return "";
 	}

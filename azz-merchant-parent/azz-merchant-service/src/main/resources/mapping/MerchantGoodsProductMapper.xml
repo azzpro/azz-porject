@@ -9,14 +9,15 @@
     <result column="brand_id" jdbcType="BIGINT" property="brandId" />
     <result column="product_status" jdbcType="BIT" property="productStatus" />
     <result column="module_id" jdbcType="BIGINT" property="moduleId" />
+    <result column="merchant_id" jdbcType="BIGINT" property="merchantId" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, assortment_id, product_code", product_system_code, brand_id, product_status, 
-    module_id, creator, create_time, modifier, modify_time
+    id, assortment_id, product_code, product_system_code, brand_id, product_status, 
+    module_id, creator, create_time, modifier, modify_time,merchant_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -32,11 +33,11 @@
     insert into merchant_goods_product (id, assortment_id, product_code, 
       product_system_code, brand_id, product_status, 
       module_id, creator, create_time, 
-      modifier, modify_time)
+      modifier, modify_time,merchant_id)
     values (#{id,jdbcType=BIGINT}, #{assortmentId,jdbcType=BIGINT}, #{productCode,jdbcType=VARCHAR}, 
       #{productSystemCode,jdbcType=VARCHAR}, #{brandId,jdbcType=BIGINT}, #{productStatus,jdbcType=BIT}, 
       #{moduleId,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
+      #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP},#{merchantId})
   </insert>
   <insert id="insertSelective" parameterType="com.azz.merchant.pojo.MerchantGoodsProduct" useGeneratedKeys="true" keyProperty="id">
     insert into merchant_goods_product
@@ -74,6 +75,12 @@
       <if test="modifyTime != null">
         modify_time,
       </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="merchantId != null">
+        merchant_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -106,8 +113,8 @@
       <if test="modifier != null">
         #{modifier,jdbcType=VARCHAR},
       </if>
-      <if test="modifyTime != null">
-        #{modifyTime,jdbcType=TIMESTAMP},
+      <if test="merchantId != null">
+        #{merchantId,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -144,6 +151,9 @@
       <if test="modifyTime != null">
         modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="merchantId != null">
+        merchant_id = #{modifyTime,jdbcType=BIGINT},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -158,13 +168,19 @@
       creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modifier = #{modifier,jdbcType=VARCHAR},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      merchant_id = #{moduleId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
   
-  <!-- 产品列表 -->
+  <!-- 根据系统CODE 查询产品 -->
+  <select id="selectProductBySystemCode" resultMap="BaseResultMap" parameterType="string">
+  select <include refid="Base_Column_List"></include> from merchant_goods_product where product_system_code = #{code}
+  </select>
+  
+  <!-- 商户下产品列表 -->
   <select id="selectProductList" parameterType="com.azz.merchant.pojo.bo.MerchantProductParam" resultType="com.azz.merchant.pojo.vo.MerchantProductList">
-  	select a.product_code productCode,b.module_name moduleName,c.deliveryDate,c.price,a.product_status status,a.creator creator,a.create_time createTime from merchant_goods_product a
+  	select a.product_code productCode,a.product_system_code systemCode,b.module_name moduleName,c.deliveryDate,c.price,a.product_status status,a.creator creator,a.create_time createTime from merchant_goods_product a
 	LEFT JOIN merchant_goods_module b on a.module_id = b.id
 	LEFT JOIN (select min(delivery_date) as  deliveryDate,min(price) as price,product_id from merchant_goods_product_price GROUP BY product_id) c on c.product_id = a.id
   	<where>
@@ -173,6 +189,9 @@
   		</if>
   		<if test="status != null">
   			and a.product_status = #{status}
+  		</if>
+  		<if test="merchantId != null">
+  			and a.merchant_id = #{merchantId}
   		</if>
   	</where>
   	order by a.create_time DESC

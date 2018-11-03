@@ -47,9 +47,7 @@ public interface ClassificationService {
     @PostMapping("/azz/api/merchant/product/getClassificationInfo")
     JsonResult<Classification> getClassificationInfo(@RequestParam("assortmentCode") String assortmentCode);
     
-    @GetMapping("/azz/api/merchant/product/getClassification")
-    PlatformGoodsClassification getClassification(@RequestParam("assortmentCode") String assortmentCode);
-    
-    
+    @GetMapping("/azz/api/merchant/product/getPlatformGoodsClassificationById")
+    PlatformGoodsClassification getPlatformGoodsClassificationById(Long id);
 }
 

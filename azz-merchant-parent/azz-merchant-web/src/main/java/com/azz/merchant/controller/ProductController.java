@@ -7,9 +7,9 @@
  
 package com.azz.merchant.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,8 +18,13 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.merchant.api.ProductService;
 import com.azz.merchant.pojo.bo.MerchantProductParam;
+import com.azz.merchant.pojo.bo.ModulePrams;
 import com.azz.merchant.pojo.bo.ProductParams;
+import com.azz.merchant.pojo.bo.Products;
+import com.azz.merchant.pojo.vo.Brand;
 import com.azz.merchant.pojo.vo.MerchantProductList;
+import com.azz.merchant.pojo.vo.Module;
+import com.azz.merchant.pojo.vo.ProductParamsBrands;
 import com.azz.merchant.utils.WebUtils;
 
 /**
@@ -46,6 +51,29 @@ public class ProductController {
 	}
 	
 	/**
+	 * <p>去新增产品页面  加载模组列表</p>
+	 * @param param
+	 * @return
+	 * @author 刘建麟  2018年11月2日 下午3:01:02
+	 */
+	@RequestMapping(value="getModule",method=RequestMethod.POST)
+	public JsonResult<Pagination<Module>> getModule(ModulePrams mp){
+		return productService.getModule(mp);
+	}
+	
+	/**
+	 * <p>新增产品页面  加载品牌列表 参数列表</p>
+	 * @param param
+	 * @return
+	 * @author 刘建麟  2018年11月2日 下午3:01:02
+	 */
+	@RequestMapping(value="toAddProduct",method=RequestMethod.POST)
+	public JsonResult<ProductParamsBrands> toAddProduct(Long assortmentId){
+		JsonResult<ProductParamsBrands> product = productService.toAddProduct(assortmentId);
+		return product;
+	}
+	
+	/**
 	 * <p>新增产品</p>
 	 * @param param
 	 * @return
@@ -55,6 +83,17 @@ public class ProductController {
 	public JsonResult<String> addProduct(ProductParams param){
 		param.setCreator(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
 		return productService.addProduct(param);
+	}
+	
+	/**
+	 * <p>去到编辑产品页面</p>
+	 * @param param
+	 * @return
+	 * @author 刘建麟  2018年11月2日 下午3:01:02
+	 */
+	@RequestMapping(value="toUpdateProduct",method=RequestMethod.POST)
+	public JsonResult<Products> toUpdateProduct(String code){
+		return productService.toUpdateProduct(code);
 	}
 }
 

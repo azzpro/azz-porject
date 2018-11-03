@@ -7,6 +7,8 @@
  
 package com.azz.platform.merchant.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
+import com.azz.platform.merchant.pojo.PlatformGoodsBrand;
 import com.azz.platform.merchant.pojo.bo.AddGoodsBrandParam;
 import com.azz.platform.merchant.pojo.bo.DelGoodsBrandParam;
 import com.azz.platform.merchant.pojo.bo.EditGoodsBrandParam;
@@ -34,6 +37,19 @@ public class GoodsBrandController {
 	
 	@Autowired
 	private GoodsBrandService goodsBrandService;
+	
+	
+	
+	/**
+	 * <p>根据ID查询品牌</p>
+	 * @param code
+	 * @return
+	 * @author 刘建麟  2018年11月2日 下午7:37:03
+	 */
+	@RequestMapping("selectBrand")
+	public List<PlatformGoodsBrand> selectBrand() {
+		return goodsBrandService.selectBrand();
+	}
 	
 	/**
      * 

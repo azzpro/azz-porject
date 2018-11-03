@@ -15,7 +15,11 @@ public class MerchantProductErrorCode extends BaseErrorCode{
     
     public static final MerchantProductErrorCode MERCHANT_MODULE_ERROR_NOT_EXIST = new MerchantProductErrorCode(20001, "模组不存在");
     
+    public static final MerchantProductErrorCode MERCHANT_BRAND_ERROR_NOT_EXIST = new MerchantProductErrorCode(20010, "品牌不存在");
+    
     public static final MerchantProductErrorCode MERCHANT_PRODUCT_SAVE_ERROR = new MerchantProductErrorCode(20002, "产品保存失败");
+    
+    public static final MerchantProductErrorCode MERCHANT_PRODUCT_NOT_EXIST = new MerchantProductErrorCode(20009, "产品不存在");
     
     public static final MerchantProductErrorCode MERCHANT_PRODUCT_ASSORTMENT_IS_NULL = new MerchantProductErrorCode(20004, "分类参数不能为空");
     
@@ -25,6 +29,9 @@ public class MerchantProductErrorCode extends BaseErrorCode{
     
     public static final MerchantProductErrorCode MERCHANT_PRODUCT_PRICE_IS_NULL = new MerchantProductErrorCode(20006, "产品价格不能为空");
     
+    public static final MerchantProductErrorCode MERCHANT_ASSORTMENT_IS_NULL = new MerchantProductErrorCode(20011, "产品分类不能为空");
+    
+    public static final MerchantProductErrorCode MERCHANT_PRODUCT_VALUES_IS_NULL = new MerchantProductErrorCode(20011, "产品参数不能为空");
     public MerchantProductErrorCode(int code, String message) {
 	super(code, message);
     }

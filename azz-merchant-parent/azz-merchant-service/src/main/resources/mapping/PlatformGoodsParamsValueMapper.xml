@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.merchant.mapper.PlatformGoodsParamsValueMapper">
+  <resultMap id="BaseResultMap" type="com.azz.merchant.pojo.PlatformGoodsParamsValue">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="params_parent_id" jdbcType="BIGINT" property="paramsParentId" />
+    <result column="params_value" jdbcType="BIGINT" property="paramsValue" />
+    <result column="params_unit" jdbcType="VARCHAR" property="paramsUnit" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, params_parent_id, params_value, params_unit
+  </sql>
+  
+  <select id="selectValueByTermId" resultMap="BaseResultMap">
+  select <include refid="Base_Column_List"></include>
+  from platform_goods_params_value
+  where params_parent_id = #{id}
+  </select>
+</mapper>

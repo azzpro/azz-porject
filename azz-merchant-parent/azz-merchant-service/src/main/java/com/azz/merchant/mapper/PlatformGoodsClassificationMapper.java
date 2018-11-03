@@ -21,4 +21,6 @@ public interface PlatformGoodsClassificationMapper {
     
     PlatformGoodsClassification selectByAssortmentCode(String assortmentCode);
     
+    PlatformGoodsClassification selectAssortmentById(Long id);
+    
 }

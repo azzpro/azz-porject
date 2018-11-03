@@ -80,10 +80,21 @@ public class MerchantGoodsProduct implements Serializable {
      * @mbg.generated
      */
     private Date modifyTime;
+    
+    private Long merchantId;
 
     private static final long serialVersionUID = 1L;
 
-    /**
+    
+    public Long getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(Long merchantId) {
+		this.merchantId = merchantId;
+	}
+
+	/**
      * 主键<br/>
      * 返回值对应的表列名 merchant_goods_product.id
      *

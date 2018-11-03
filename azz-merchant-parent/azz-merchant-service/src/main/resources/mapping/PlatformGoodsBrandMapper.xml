@@ -25,6 +25,10 @@
     from platform_goods_brand
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="selectBrand" resultMap="BaseResultMap">
+  select <include refid="Base_Column_List"></include> from platform_goods_brand where status = 1
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from platform_goods_brand
     where id = #{id,jdbcType=BIGINT}
@@ -194,5 +198,7 @@
 	ORDER BY
 		pgb.create_time DESC
   </select>
-  
+   <select id="selectBrandById" resultMap="BaseResultMap">
+  select <include refid="Base_Column_List"></include> from platform_goods_brand where id = #{id} and status = 1
+  </select>
 </mapper>

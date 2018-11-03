@@ -80,4 +80,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
+  <select id="selectPriceByProductId" resultMap="BaseResultMap">
+  select <include refid="Base_Column_List"></include> from merchant_goods_product_price where product_id = #{id}
+  </select>
 </mapper>

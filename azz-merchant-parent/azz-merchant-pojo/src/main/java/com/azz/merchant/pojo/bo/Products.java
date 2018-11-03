@@ -9,6 +9,10 @@ package com.azz.merchant.pojo.bo;
 
 import java.util.List;
 
+import com.azz.merchant.pojo.MerchantGoodsProductParams;
+import com.azz.merchant.pojo.MerchantGoodsProductPrice;
+import com.azz.merchant.pojo.vo.GoodsBrandInfo;
+
 import lombok.Data;
 
 /**
@@ -17,16 +21,18 @@ import lombok.Data;
  * @author 刘建麟  2018年11月2日 下午2:38:14
  */
 @Data
-public class ProductParams {
+public class Products {
 
-	private List<ProductPrice> prices;
+	private List<MerchantGoodsProductPrice> prices;
 	private String creator;
-	private List<ProductParam> params;
-	private Long assortmentId;
+	private List<MerchantGoodsProductParams> params;
+	private String assortmentCode;
 	private String productCode;
-	private Long brandId;
+	private String brandCode;
 	private Byte status;
-	private Long moduleId;
-	private Long merchantId;
+	private String moduleCode;
+	private String paramsCode;
+	private String assormentName;
+	private List<GoodsBrandInfo> brands;
 }
 

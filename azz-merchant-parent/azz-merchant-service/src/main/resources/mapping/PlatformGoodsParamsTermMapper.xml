@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.merchant.mapper.PlatformGoodsParamsTermMapper">
+  <resultMap id="BaseResultMap" type="com.azz.merchant.pojo.PlatformGoodsParamsTerm">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="params_code" jdbcType="VARCHAR" property="paramsCode" />
+    <result column="params_name" jdbcType="VARCHAR" property="paramsName" />
+    <result column="params_id" jdbcType="BIGINT" property="paramsId" />
+    <result column="params_type" jdbcType="BIT" property="paramsType" />
+    <result column="params_choice" jdbcType="BIT" property="paramsChoice" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, params_code, params_name, params_id, params_type, params_choice, creator, create_time, 
+    modifier, modify_time
+  </sql>
+  
+  <select id="selectParamsByParamsId" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include>
+  	from platform_goods_params_term
+  	where params_id = #{id}
+  </select>
+</mapper>

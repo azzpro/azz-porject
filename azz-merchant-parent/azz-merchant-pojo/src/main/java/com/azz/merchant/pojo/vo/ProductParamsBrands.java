@@ -1,11 +1,11 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2018年11月2日 下午2:38:14
+ * Create on 2018年11月3日 下午1:44:32
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
-package com.azz.merchant.pojo.bo;
+package com.azz.merchant.pojo.vo;
 
 import java.util.List;
 
@@ -14,19 +14,13 @@ import lombok.Data;
 /**
  * <P>TODO</P>
  * @version 1.0
- * @author 刘建麟  2018年11月2日 下午2:38:14
+ * @author 刘建麟  2018年11月3日 下午1:44:32
  */
 @Data
-public class ProductParams {
-
-	private List<ProductPrice> prices;
-	private String creator;
-	private List<ProductParam> params;
-	private Long assortmentId;
-	private String productCode;
-	private Long brandId;
-	private Byte status;
-	private Long moduleId;
-	private Long merchantId;
+public class ProductParamsBrands {
+	
+	private List<Brand> brands;
+	
+	private List<ParamsValue> pvs;
 }
 

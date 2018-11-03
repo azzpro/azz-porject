@@ -44,10 +44,6 @@ public class ParamsController {
 	private ParamsService paramsService;
 	
 	
-	@RequestMapping("selectParamsByassortment")
-	public PlatformGoodsParams selectParamsByassortment(String code,Long id) {
-		return paramsService.selectParamsByassortment(code,id);
-	}
 	
 	/**
 	 * <p>参数管理列表</p>

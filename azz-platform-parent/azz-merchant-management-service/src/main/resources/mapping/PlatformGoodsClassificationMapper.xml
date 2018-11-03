@@ -194,12 +194,6 @@
    where assortment_code = #{code}
   </update>
   
-  <select id="selectByAssortmentCode" parameterType="java.lang.String" resultMap="BaseResultMap">
-  	select 
-    	<include refid="Base_Column_List" />
-    from platform_goods_classification
-    where assortment_code = #{assortmentCode,jdbcType=VARCHAR} and status != 0
-  </select>
   
   <select id="selectDetailByAssortmentCode" parameterType="java.lang.String" resultType="com.azz.platform.merchant.pojo.vo.Classification" >
   	SELECT

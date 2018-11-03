@@ -29,4 +29,9 @@
     where assortment_code = #{assortmentCode,jdbcType=VARCHAR}
   </select>
    
+   <select id="selectAssortmentById" resultMap="BaseResultMap">
+   select <include refid="Base_Column_List"></include>
+   from platform_goods_classification where id = #{id} and status != 0
+   </select>
+   
 </mapper>

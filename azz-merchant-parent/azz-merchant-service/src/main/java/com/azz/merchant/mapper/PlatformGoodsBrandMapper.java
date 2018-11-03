@@ -32,4 +32,8 @@ public interface PlatformGoodsBrandMapper {
      */
     List<GoodsBrandInfo> getGoodsBrandInfoList(SearchGoodsBrandParam param);
     
+    List<PlatformGoodsBrand> selectBrand();
+    
+    PlatformGoodsBrand selectBrandById(Long id);
+    
 }

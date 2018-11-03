@@ -19,6 +19,17 @@
     id, brand_code, brand_name, brand_english_name, brand_pic_url, brand_pic_name, brand_description, status
     creator, create_time, modifier, modify_time
   </sql>
+  <select id="selectBrand" resultMap="BaseResultMap">
+  select <include refid="Base_Column_List"></include> from platform_goods_brand where status != 0
+  </select>
+  
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from platform_goods_brand
+    where id = #{id,jdbcType=BIGINT} and status != 0
+  </select>
+  
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

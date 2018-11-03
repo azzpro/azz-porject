@@ -24,6 +24,14 @@ public interface MerchantGoodsProductMapper {
     int updateByPrimaryKey(MerchantGoodsProduct record);
     
     /**
+     * <p>根据系统CODE 查询产品</p>
+     * @param code
+     * @return
+     * @author 刘建麟  2018年11月2日 下午7:51:13
+     */
+    MerchantGoodsProduct selectProductBySystemCode(String code);
+    
+    /**
      * <p>根据分类ID 查询产品</p>
      * @param id
      * @return

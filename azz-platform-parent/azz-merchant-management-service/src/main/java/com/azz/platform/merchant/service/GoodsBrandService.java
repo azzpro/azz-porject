@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
@@ -233,5 +234,21 @@ public class GoodsBrandService {
 	    }
 	    return file;
 	}
+	
+	
+	/**
+	 * <p>根据ID查询品牌</p>
+	 * @param code
+	 * @return
+	 * @author 刘建麟  2018年11月2日 下午7:37:03
+	 */
+	public List<PlatformGoodsBrand> selectBrand() {
+		return platformGoodsBrandMapper.selectBrand();
+	}
+	
+	public PlatformGoodsBrand selectById(Long id) {
+		return platformGoodsBrandMapper.selectById(id);
+	}
+	
 }
 

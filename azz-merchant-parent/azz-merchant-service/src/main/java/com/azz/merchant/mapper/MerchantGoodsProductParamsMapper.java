@@ -20,5 +20,5 @@ public interface MerchantGoodsProductParamsMapper {
 
     int updateByPrimaryKey(MerchantGoodsProductParams record);
     
-    int insertBatchParams(List<MerchantGoodsProductParams> list);
+    List<MerchantGoodsProductParams> selectParamsByProductId(Long id);
 }

@@ -25,6 +25,22 @@
   <sql id="Blob_Column_List">
     module_info
   </sql>
+  <select id="selectModuleByAssorId" resultType="com.azz.merchant.pojo.vo.Module" parameterType="com.azz.merchant.pojo.bo.ModuleParams">
+  select id moduleId,module_code moduleCode, module_name moduleName,module_status moduleStatus from merchant_goods_module where 1=1
+  <if test="assortmentId != null">
+  and classification_id = #{assortmentId}
+  </if>
+  <if test="merchantId != null">
+  	and merchant_id = #{merchantId}
+  </if>
+  <if test="moduleCode != null and moduleCode != ''">
+  	and module_code = #{moduleCode}
+  </if>
+  <if test="moduleName != null and moduleName != ''">
+  	and module_name LIKE CONCAT('%', #{moduleName}, '%')
+  </if>
+  order by create_time desc
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
@@ -33,7 +49,6 @@
     from merchant_goods_module
     where id = #{id,jdbcType=BIGINT}
   </select>
-  
   <select id="selectByModuleCode" parameterType="string" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
@@ -340,7 +355,7 @@
 		</if>
 	</where>
   </select>
-  <select id="selectModuleByCode" resultMap="BaseResultMap" parameterType="string">
-  	select <include refid="Base_Column_List"></include> from merchant_goods_module where module_code #{code}
+  <select id="selectModuleById" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from merchant_goods_module where id = #{id}
   </select>
 </mapper>

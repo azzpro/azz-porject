@@ -26,5 +26,6 @@ public class MerchantProductList {
 	private String creator;
 	private Date createTime;
 	private Integer status;
+	private String systemCode;
 }
 

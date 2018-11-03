@@ -25,7 +25,6 @@ import com.azz.platform.merchant.pojo.bo.ParamsData;
 import com.azz.platform.merchant.pojo.bo.SearchParams;
 import com.azz.platform.merchant.pojo.vo.Params;
 import com.azz.platform.merchant.pojo.vo.ParamsAll;
-import com.github.pagehelper.PageHelper;
 
 /**
  * <P>TODO</P>
@@ -50,7 +49,5 @@ public interface ParamsService {
 	@RequestMapping(value="/azz/api/merchant/deleteParams",method=RequestMethod.POST)
 	public JsonResult<String> deleteParams(@RequestParam("code") String code);
 	
-	@GetMapping("/azz/api/merchant/selectParamsByassortment")
-	public PlatformGoodsParams selectParamsByassortment(@RequestParam("code") String code,@RequestParam("id") Long id);
 }
 

@@ -7,6 +7,8 @@
  
 package com.azz.platform.merchant.api;
 
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
+import com.azz.platform.merchant.pojo.PlatformGoodsBrand;
 import com.azz.platform.merchant.pojo.bo.AddGoodsBrandParam;
 import com.azz.platform.merchant.pojo.bo.DelGoodsBrandParam;
 import com.azz.platform.merchant.pojo.bo.EditGoodsBrandParam;
@@ -28,7 +31,11 @@ import com.azz.platform.merchant.pojo.vo.GoodsBrandInfo;
 @FeignClient("azz-merchant-management-service")
 public interface GoodsBrandService {
 	
-
+	@RequestMapping("/azz/api/merchant/goodsBrand/selectById")
+	PlatformGoodsBrand selectById(@RequestParam("id") Long id);
+	
+	@RequestMapping("/azz/api/merchant/goodsBrand/selectBrand")
+	List<PlatformGoodsBrand> selectBrand() ;
 	/**
      * 
      * <p>查询品牌列表</p>
@@ -78,6 +85,8 @@ public interface GoodsBrandService {
 	 */
 	@RequestMapping("/azz/api/merchant/goodsBrand/delGoodsBrand")
 	JsonResult<String> delGoodsBrand(@RequestBody DelGoodsBrandParam param);
+	
+	
 	
 }
 

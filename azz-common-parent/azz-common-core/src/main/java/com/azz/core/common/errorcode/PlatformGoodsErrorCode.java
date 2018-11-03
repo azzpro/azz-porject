@@ -21,6 +21,8 @@ public class PlatformGoodsErrorCode extends BaseErrorCode{
     
     public static final PlatformGoodsErrorCode PLATFORM_GOODS_ERROR_UPDATE_ERROR = new PlatformGoodsErrorCode(20005, "更新失败");
     
+    public static final PlatformGoodsErrorCode PLATFORM_GOODS_BRAND_NOT_EXIST = new PlatformGoodsErrorCode(20008, "品牌不存在");
+    
     public static final PlatformGoodsErrorCode PLATFORM_GOODS_ERROR_PRODUCT_EXIST = new PlatformGoodsErrorCode(20006, "关联分类存在产品");
     
     public static final PlatformGoodsErrorCode PLATFORM_GOODS_ERROR_ASSORTMENT_EXIST = new PlatformGoodsErrorCode(20007, "分类不存在");

@@ -102,4 +102,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
+  <select id="selectParamsByProductId" resultMap="BaseResultMap">
+  select <include refid="Base_Column_List"></include> from merchant_goods_product_params where product_id = #{id}
+  </select>
 </mapper>

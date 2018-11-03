@@ -6,8 +6,11 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.azz.merchant.pojo.MerchantGoodsModule;
+import com.azz.merchant.pojo.bo.ModuleParams;
+import com.azz.merchant.pojo.bo.ModulePrams;
 import com.azz.merchant.pojo.bo.SearchGoodsModuleParam;
 import com.azz.merchant.pojo.vo.GoodModuleInfo;
+import com.azz.merchant.pojo.vo.Module;
 
 @Mapper
 public interface MerchantGoodsModuleMapper {
@@ -30,6 +33,8 @@ public interface MerchantGoodsModuleMapper {
     int updateByModuleCode(MerchantGoodsModule record);
     
     int countGoodsModule(@Param("merchantId")Long merchantId, @Param("moduleName")String moduleName, @Param("moduleCode")String moduleCode);
+    
+    List<Module> selectModuleByAssorId(ModulePrams mp);
     
     /**
      * 
@@ -55,7 +60,7 @@ public interface MerchantGoodsModuleMapper {
      * @return
      * @author 刘建麟  2018年11月2日 下午3:45:15
      */
-    MerchantGoodsModule selectModuleByCode(String code);
+    MerchantGoodsModule selectModuleById(Long id);
     
     
 }

@@ -348,11 +348,9 @@ public class ClassificationService {
     }
 
     
-    public PlatformGoodsClassification getClassification(String code) {
-    	if(org.apache.commons.lang3.StringUtils.isBlank(code)) {
-    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"CODE不能为空");
-    	}
-    	return platformGoodsClassificationMapper.selectByAssortmentCode(code);
+    public PlatformGoodsClassification getPlatformGoodsClassificationById(Long id) {
+    	return platformGoodsClassificationMapper.selectByPrimaryKey(id);
     }
+    
 }
 

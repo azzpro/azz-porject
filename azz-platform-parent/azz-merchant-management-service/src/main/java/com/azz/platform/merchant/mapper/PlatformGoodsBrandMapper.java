@@ -32,6 +32,10 @@ public interface PlatformGoodsBrandMapper {
     
     int countGoodsBrandByBrandEnglishName(@Param("brandEnglishName")String brandEnglishName, @Param("brandCode")String brandCode);
     
+   
+    PlatformGoodsBrand selectById(Long id);
+    
+    List<PlatformGoodsBrand> selectBrand();
     /**
      * 
      * <p>查询品牌列表</p>

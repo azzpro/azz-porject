@@ -65,9 +65,9 @@ public class ClassificationController {
 	    return classificationService.getClassificationInfo(assortmentCode);
 	}
 	   
-	@RequestMapping("getClassification")
-    PlatformGoodsClassification getClassification(String assortmentCode) {
-		return classificationService.getClassification(assortmentCode);
+	@RequestMapping("getPlatformGoodsClassificationById")
+	 PlatformGoodsClassification getPlatformGoodsClassificationById(Long id) {
+		return classificationService.getPlatformGoodsClassificationById(id);
 	}
 }
 

@@ -70,6 +70,7 @@ public class DeptService {
         md.setCreator(param.getCreator());
         md.setStatus(param.getStatus());
         md.setDeptCode(dbSequenceService.getMerchantDepartmentNumber());
+        md.setDescription("0"); // 部门等级  0 一级为 1 二级  2三级
         merchantDeptMapper.insertSelective(md);
         
         return JsonResult.successJsonResult();
@@ -80,15 +81,30 @@ public class DeptService {
         // 部门信息非空校验
         JSR303ValidateUtils.validate(param);
         
+        SearchMerchantDeptInfoParam smdIp = new SearchMerchantDeptInfoParam();
+        smdIp.setDeptCode(param.getParentCode());
+        smdIp.setMerchantId(param.getMerchantId());
+        MerchantDept mdObj = merchantDeptMapper.selectByDeptCode(smdIp);
+        
         SearchMerchantDeptInfo smd = new SearchMerchantDeptInfo();
         smd.setMerchantId(param.getMerchantId());
         smd.setDeptName(param.getDeptName());
+        smd.setParentCode(param.getParentCode());
         MerchantDeptInfo mdi = merchantDeptMapper.selectByMerchantIdAndName(smd);
         if(ObjectUtils.isNotNull(mdi)) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_EXIST);
         }
         
         MerchantDept md = new MerchantDept();
+        
+        if(mdObj.getDescription().equals("0")) {
+            md.setDescription("1");
+        } else if(mdObj.getDescription().equals("1")) {
+            md.setDescription("2");
+        } else if(mdObj.getDescription().equals("2")) {
+            throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_LEVEL_ERROR);
+        }
+        
         md.setDeptName(param.getDeptName());
         md.setCreateTime(new Date());
         md.setCreator(param.getCreator());
@@ -107,17 +123,32 @@ public class DeptService {
     public JsonResult<String> editDept(@RequestBody EditMerchantDeptParam param){
         JSR303ValidateUtils.validate(param);
         
+        
+        
         SearchMerchantDeptInfo smd = new SearchMerchantDeptInfo();
         smd.setMerchantId(param.getMerchantId());
         smd.setDeptName(param.getDeptName().trim());
         smd.setDeptCode(param.getDeptCode());
-        MerchantDeptInfo mdi = merchantDeptMapper.selectByMerchantIdAndName(smd);
+        smd.setParentCode(param.getParentCode());
         
+        
+        SearchMerchantDeptInfoParam smdIp = new SearchMerchantDeptInfoParam();
+        smdIp.setDeptCode(param.getDeptCode());
+        smdIp.setMerchantId(param.getMerchantId());
+        MerchantDept mdObj = merchantDeptMapper.selectByDeptCode(smdIp);
+        
+        // 校验编辑是否在同级目录下有同名     再校验编辑信息父级编码不能超过三级
+        if(param.getDeptCode().equals(param.getParentCode())) {
+            throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_CODE_ERROR);
+        }
+        
+        MerchantDeptInfo mdi = merchantDeptMapper.selectByMerchantIdAndName(smd);
         if(ObjectUtils.isNotNull(mdi)) {
-            if(!param.getDeptName().trim().equals(mdi.getDeptName())) {
+            if(!mdObj.getDeptName().equals(param.getDeptName())) {
                 throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_EXIST);
             }
         }
+        
         
         MerchantDept md = merchantDeptMapper.selectByDeptAllInfo(smd);
         md.setDeptName(param.getDeptName());

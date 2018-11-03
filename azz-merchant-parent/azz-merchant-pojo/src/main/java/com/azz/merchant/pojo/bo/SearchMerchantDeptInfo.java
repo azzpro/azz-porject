@@ -22,5 +22,7 @@ public class SearchMerchantDeptInfo {
     private String deptName;
     
     private String deptCode;
+    
+    private String parentCode;
 }
 

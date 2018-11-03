@@ -30,6 +30,8 @@ public class PlatformUserErrorCode extends BaseErrorCode{
     
     public static final PlatformUserErrorCode PLATFORM_DEPT_LEVEL_ERROR = new PlatformUserErrorCode(30004, "已是三级部门");
     
+    public static final PlatformUserErrorCode PLATFORM_DEPT_CODE_ERROR = new PlatformUserErrorCode(30005, "不许绑定自身编码");
+    
     // 商户审核错误码
     public static final PlatformUserErrorCode PLATFORM_MERCHANT_ERROR_NO_EXIST = new PlatformUserErrorCode(40000, "商户不存在");
     

@@ -250,9 +250,9 @@ public class GoodsModuleService {
 	    String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
 	    // 新名称为文件名 + 模组编码
 	    String newFileName = fileNameNoSufix + "_" + moduleCode;
-	    // 图片url  TODO
+	    // 图片url
 	    JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
-		    filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_BUSINESS_IMAGE_TYPE);
+		    filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_MODULE_IMAGE_TYPE);
 	    UploadFileInfo file = new UploadFileInfo();
 	    if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 	    	file.setImgUrl(jr.getData());

@@ -211,6 +211,7 @@
   
   <select id="selectParentByParam" parameterType="string" resultType="com.azz.platform.merchant.pojo.vo.ClassificationList" >
   	SELECT
+  		id as id,
 		assortment_code as assortmentCode,
 		assortment_name as assortmentName,
 		assortment_sort as assortmentSort,
@@ -228,6 +229,7 @@
   
   <select id="selectByParam" parameterType="string" resultType="com.azz.platform.merchant.pojo.vo.ClassificationList" >
   	SELECT
+  		id as id,
 		assortment_code as assortmentCode,
 		assortment_name as assortmentName,
 		assortment_sort as assortmentSort,

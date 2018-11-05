@@ -21,6 +21,9 @@ import lombok.Data;
  */
 @Data
 public class ClassificationList {
+    
+    private Long id;
+    
     /**
      * 分类图片url
      *

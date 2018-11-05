@@ -7,12 +7,11 @@
  
 package com.azz.merchant.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
@@ -21,7 +20,6 @@ import com.azz.merchant.pojo.bo.MerchantProductParam;
 import com.azz.merchant.pojo.bo.ModulePrams;
 import com.azz.merchant.pojo.bo.ProductParams;
 import com.azz.merchant.pojo.bo.Products;
-import com.azz.merchant.pojo.vo.Brand;
 import com.azz.merchant.pojo.vo.MerchantProductList;
 import com.azz.merchant.pojo.vo.Module;
 import com.azz.merchant.pojo.vo.ProductParamsBrands;
@@ -63,6 +61,17 @@ public class ProductController {
 		return productService.addProduct(params);
 	}
 	
+	/**
+	 * <p>编辑产品</p>
+	 * @param params
+	 * @return
+	 * @author 刘建麟  2018年10月31日 下午7:47:30
+	 */
+	@RequestMapping(value="updateProduct",method=RequestMethod.POST)
+	public JsonResult<String> updateProduct(@RequestBody ProductParams params){
+		return productService.updateProduct(params);
+	}
+	
 
 	/**
 	 * <p>去新增产品页面</p>
@@ -96,6 +105,19 @@ public class ProductController {
 	@RequestMapping(value="toUpdateProduct",method=RequestMethod.POST)
 	public JsonResult<Products> getModule(String code){
 		return productService.toUpdateProduct(code);
+	}
+	
+	
+	/**
+	 * <p>删除 下架</p>
+	 * @param id
+	 * @param type
+	 * @return
+	 * @author 刘建麟  2018年11月5日 下午2:27:43
+	 */
+	@RequestMapping(value="deleteOrDownProduct",method=RequestMethod.POST)
+	public JsonResult<String> deleteOrDownProduct(@RequestParam("id") Long id,@RequestParam("type") Byte type){
+		return productService.deleteOrDownProduct(id, type);
 	}
 }
 

@@ -28,5 +28,7 @@ public class ProductParams {
 	private Byte status;
 	private Long moduleId;
 	private Long merchantId;
+	private String modify;
+	private Long productId;
 }
 

@@ -20,6 +20,11 @@
     delete from merchant_goods_product_price
     where id = #{id,jdbcType=BIGINT}
   </delete>
+  
+  <delete id="deleteByProductId" parameterType="java.lang.Long">
+    delete from merchant_goods_product_price
+    where product_id = #{pid,jdbcType=BIGINT}
+  </delete>
   <insert id="insert" parameterType="com.azz.merchant.pojo.MerchantGoodsProductPrice">
     insert into merchant_goods_product_price (id, delivery_date, price, 
       product_id)

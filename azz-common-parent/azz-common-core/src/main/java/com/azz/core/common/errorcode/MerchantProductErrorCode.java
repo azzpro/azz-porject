@@ -19,6 +19,10 @@ public class MerchantProductErrorCode extends BaseErrorCode{
     
     public static final MerchantProductErrorCode MERCHANT_PRODUCT_SAVE_ERROR = new MerchantProductErrorCode(20002, "产品保存失败");
     
+    public static final MerchantProductErrorCode MERCHANT_PRODUCT_UPDATE_ERROR = new MerchantProductErrorCode(20055, "产品更新失败");
+    
+    public static final MerchantProductErrorCode MERCHANT_PRODUCT_DOWN_ERROR = new MerchantProductErrorCode(20055, "产品下架失败");
+    
     public static final MerchantProductErrorCode MERCHANT_PRODUCT_NOT_EXIST = new MerchantProductErrorCode(20009, "产品不存在");
     
     public static final MerchantProductErrorCode MERCHANT_PRODUCT_ASSORTMENT_IS_NULL = new MerchantProductErrorCode(20004, "分类参数不能为空");

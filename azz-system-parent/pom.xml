@@ -14,6 +14,8 @@
 		<module>azz-system-pojo</module>
 		<module>azz-system-service</module>
 		<module>azz-system-api</module>
+		<module>azz-sequence-api</module>
+		<module>azz-sequence-service</module>
 	</modules>
 	
 </project>

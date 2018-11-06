@@ -22,4 +22,6 @@ public interface MerchantGoodsProductPriceMapper {
     int updateByPrimaryKey(MerchantGoodsProductPrice record);
     
     List<MerchantGoodsProductPrice> selectPriceByProductId(Long id);
+    
+    int deleteByProductId(Long pid);
 }

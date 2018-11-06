@@ -4,6 +4,7 @@ package com.azz.merchant.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.azz.merchant.pojo.MerchantGoodsProduct;
 import com.azz.merchant.pojo.bo.MerchantProductParam;
@@ -22,6 +23,8 @@ public interface MerchantGoodsProductMapper {
     int updateByPrimaryKeySelective(MerchantGoodsProduct record);
 
     int updateByPrimaryKey(MerchantGoodsProduct record);
+    
+    int updateProductById(@Param("status") Byte status,@Param("id") Long id);
     
     /**
      * <p>根据系统CODE 查询产品</p>
@@ -46,4 +49,5 @@ public interface MerchantGoodsProductMapper {
      * @author 刘建麟  2018年11月2日 下午2:31:40
      */
     List<MerchantProductList> selectProductList(MerchantProductParam param);
+    
 }

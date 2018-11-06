@@ -29,6 +29,7 @@ import com.azz.platform.merchant.pojo.bo.EditClassificationWebParam;
 import com.azz.platform.merchant.pojo.bo.SearchClassificationListParam;
 import com.azz.platform.merchant.pojo.vo.Classification;
 import com.azz.platform.merchant.pojo.vo.ClassificationList;
+import com.azz.platform.merchant.pojo.vo.ClassificationParams;
 import com.azz.util.Base64;
 import com.azz.utils.WebUtils;
 
@@ -113,4 +114,25 @@ public class ClassificationController {
 	    return classificationService.getClassificationInfo(assortmentCode);
 	}
     
+	/**
+	 * <p>分类父级清单</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年11月6日 上午11:04:56
+	 */
+	@RequestMapping("/getClassificationParent")
+    public JsonResult<List<ClassificationParams>> getClassificationParent(SearchClassificationListParam param) {
+        return classificationService.getClassificationParent(param);
+    }
+	
+	/**
+	 * <p>根据分类编码获取子级清单</p>
+	 * @param parentCode
+	 * @return
+	 * @author 彭斌  2018年11月6日 上午11:05:00
+	 */
+	@RequestMapping("/getClassificationChild")
+	public JsonResult<List<ClassificationParams>> getClassificationChild(String parentCode){
+        return classificationService.getClassificationChild(parentCode);
+    }
 }

@@ -34,5 +34,6 @@ public class Products {
 	private String paramsCode;
 	private String assormentName;
 	private List<GoodsBrandInfo> brands;
+	private Long productId;
 }
 

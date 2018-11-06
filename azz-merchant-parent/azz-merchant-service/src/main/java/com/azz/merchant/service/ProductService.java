@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
@@ -108,7 +107,7 @@ public class ProductService {
 	 * @author 刘建麟  2018年11月2日 下午3:01:02
 	 */
 	@RequestMapping(value="getModule",method=RequestMethod.POST)
-	public JsonResult<Pagination<Module>> getModule(ModulePrams mp){
+	public JsonResult<Pagination<Module>> getModule(@RequestBody ModulePrams mp){
 		PageHelper.startPage(mp.getPageNum(), mp.getPageSize());
 		List<Module> assormentId = goodsModuleMapper.selectModuleByAssorId(mp);
 		return JsonResult.successJsonResult(new Pagination<>(assormentId));
@@ -226,6 +225,7 @@ public class ProductService {
 		pps.setAssormentName(assortmentById.getAssortmentName());
 		pps.setProductCode(mp.getProductCode());
 		pps.setBrands(gis);
+		pps.setProductId(mp.getId());
 		pps.setBrandCode(selectBrandById.getBrandCode());
 		pps.setStatus(mp.getProductStatus());
 		pps.setPrices(list);
@@ -299,6 +299,7 @@ public class ProductService {
 				com.azz.merchant.pojo.PlatformGoodsParams goodsParams = platformGoodsParamsMapper.selectParamsByAssortmentId(assid);
 				if(null == goodsParams)
 					throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_VALUES_IS_NULL);
+				
 				//获取产品
 				MerchantGoodsProduct mgp = new MerchantGoodsProduct();
 				mgp.setAssortmentId(assid);
@@ -337,6 +338,7 @@ public class ProductService {
 					mpp.setParamsValue(productParam.getValues());
 					mpp.setProductId(mgp.getId());
 					mpp.setParamsType(productParam.getType());
+					mpp.setParamsChoice(productParam.getChoice());
 					goodsProductParamsMapper.insertSelective(mpp);
 					mpp = null;
 				}
@@ -344,5 +346,115 @@ public class ProductService {
 				
 		return JsonResult.successJsonResult();
 	}
+	
+	/**
+	 * <p>编辑产品</p>
+	 * @param params
+	 * @return
+	 * @author 刘建麟  2018年10月31日 下午7:47:30
+	 */
+	@SuppressWarnings("unused")
+	@Transactional(rollbackFor=Exception.class)
+	public JsonResult<String> updateProduct(@RequestBody ProductParams params){
+			if(null != params) {
+				//获取品牌id
+				Long brandId = params.getBrandId();
+				if(null == brandId)
+					throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"品牌Id不能为空");
+				com.azz.merchant.pojo.PlatformGoodsBrand goodsBrand = platformGoodsBrandMapper.selectBrandById(brandId);
+				if(null == goodsBrand) 
+					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_BRAND_NOT_EXIST);
+				//品牌end
+				
+				//获取分类Id
+				Long assid = params.getAssortmentId();
+				if(null == assid)
+					throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"分类ID不能为空");
+				com.azz.merchant.pojo.PlatformGoodsClassification assortmentById = platformGoodsClassificationMapper.selectAssortmentById(assid);
+				if(null == assortmentById)
+					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_ASSORTMENT_EXIST);
+				
+				//获取模组CODE
+				Long moduleId = params.getModuleId();
+				if(null == moduleId)
+					throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"模组ID不能为空");
+				MerchantGoodsModule goodsModule = goodsModuleMapper.selectModuleById(moduleId);
+				if(null == goodsModule)
+					throw new BaseException(MerchantProductErrorCode.MERCHANT_MODULE_ERROR_NOT_EXIST);
+				com.azz.merchant.pojo.PlatformGoodsParams goodsParams = platformGoodsParamsMapper.selectParamsByAssortmentId(assid);
+				if(null == goodsParams)
+					throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_VALUES_IS_NULL);
+				
+				//获取产品
+				MerchantGoodsProduct mgp = new MerchantGoodsProduct();
+				mgp.setId(params.getProductId());
+				mgp.setAssortmentId(assid);
+				mgp.setBrandId(brandId);
+				mgp.setModifier(params.getModify());
+				mgp.setModifyTime(new Date());
+				mgp.setModuleId(goodsModule.getId());
+				mgp.setProductCode(params.getProductCode());
+				//编辑不需要修改系统编码
+				//mgp.setProductSystemCode(randomSequenceService.getProductCodeNumber());
+				mgp.setProductStatus(params.getStatus());
+				mgp.setBrandId(brandId);
+				mgp.setMerchantId(params.getMerchantId());
+				int selective = goodsProductMapper.updateByPrimaryKeySelective(mgp);
+				if(selective != 1)
+					throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_UPDATE_ERROR);
+				//插入价格
+				List<ProductPrice> prices = params.getPrices();
+				//删除 再插入价格
+				goodsProductPriceMapper.deleteByProductId(params.getProductId());
+				if(null == prices || prices.size() <= 0)
+					throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_PRICE_IS_NULL);
+				for (ProductPrice productPrice : prices) {
+					MerchantGoodsProductPrice mpp = new MerchantGoodsProductPrice();
+					mpp.setDeliveryDate(productPrice.getDeliveryDate());
+					mpp.setPrice(productPrice.getPrice());
+					mpp.setProductId(mgp.getId());
+					goodsProductPriceMapper.insertSelective(mpp);
+					mpp = null;
+				}
+				//删除产品参数
+				goodsProductParamsMapper.deleteByProductId(params.getProductId());
+				//插入产品参数
+				List<ProductParam> pp = params.getParams();
+				if(null == pp || pp.size() <= 0)
+					throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_ASSORTMENT_IS_NULL);
+				for (ProductParam productParam : pp) {
+					MerchantGoodsProductParams mpp = new MerchantGoodsProductParams();
+					mpp.setParamsId(goodsParams.getId());
+					mpp.setParamsName(productParam.getParamName());
+					mpp.setParamsValue(productParam.getValues());
+					mpp.setProductId(mgp.getId());
+					mpp.setParamsType(productParam.getType());
+					mpp.setParamsChoice(productParam.getChoice());
+					goodsProductParamsMapper.insertSelective(mpp);
+					mpp = null;
+				}
+			}
+				
+		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * <p>编辑下架</p>
+	 * @param id
+	 * @param type
+	 * @return
+	 * @author 刘建麟  2018年11月5日 上午11:48:37
+	 */
+	public JsonResult<String> deleteOrDownProduct(Long id,Byte type){
+		if(null == id || null == type)
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"Id或类型不能为空");
+		//type 1 删除  2下架
+		if(type == 1)
+			goodsProductMapper.updateProductById((byte)0, id);
+		if(type == 2)
+			goodsProductMapper.updateProductById((byte)2, id);
+		return JsonResult.successJsonResult();
+	}
+	
 }
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.platform.merchant.mapper.MerchantGoodsProductParamsMapper">
+  <resultMap id="BaseResultMap" type="com.azz.platform.merchant.pojo.MerchantGoodsProductParams">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="params_name" jdbcType="VARCHAR" property="paramsName" />
+    <result column="params_id" jdbcType="BIGINT" property="paramsId" />
+    <result column="params_value" jdbcType="VARCHAR" property="paramsValue" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="params_type" jdbcType="TINYINT" property="paramsType" />
+    <result column="params_choice" jdbcType="TINYINT" property="paramsChoice" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, params_name, params_id, params_value, product_id,params_type,params_choice
+  </sql>
+  <select id="selectParamsByProductId" resultMap="BaseResultMap">
+  select <include refid="Base_Column_List"></include> from merchant_goods_product_params where product_id = #{id}
+  </select>
+</mapper>

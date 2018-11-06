@@ -21,4 +21,6 @@ public interface MerchantGoodsProductParamsMapper {
     int updateByPrimaryKey(MerchantGoodsProductParams record);
     
     List<MerchantGoodsProductParams> selectParamsByProductId(Long id);
+    
+    int deleteByProductId(Long pid);
 }

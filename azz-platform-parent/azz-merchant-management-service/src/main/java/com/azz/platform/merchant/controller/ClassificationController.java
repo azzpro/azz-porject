@@ -10,11 +10,9 @@ package com.azz.platform.merchant.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
@@ -25,6 +23,7 @@ import com.azz.platform.merchant.pojo.bo.EditClassificationParam;
 import com.azz.platform.merchant.pojo.bo.SearchClassificationListParam;
 import com.azz.platform.merchant.pojo.vo.Classification;
 import com.azz.platform.merchant.pojo.vo.ClassificationList;
+import com.azz.platform.merchant.pojo.vo.ClassificationParams;
 import com.azz.platform.merchant.service.ClassificationService;
 
 /**
@@ -69,5 +68,15 @@ public class ClassificationController {
 	 PlatformGoodsClassification getPlatformGoodsClassificationById(Long id) {
 		return classificationService.getPlatformGoodsClassificationById(id);
 	}
+	
+	@RequestMapping(value="getClassificationParent",method=RequestMethod.POST)
+    public JsonResult<List<ClassificationParams>> getClassificationParent(@RequestBody SearchClassificationListParam param){
+        return classificationService.getClassificationParent(param);
+    }
+	
+	@RequestMapping(value="getClassificationChild",method=RequestMethod.POST)
+    public JsonResult<List<ClassificationParams>> getClassificationChild(String parentCode){
+        return classificationService.getClassificationChild(parentCode);
+    }
 }
 

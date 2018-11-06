@@ -95,5 +95,29 @@ public class ProductController {
 	public JsonResult<Products> toUpdateProduct(String code){
 		return productService.toUpdateProduct(code);
 	}
+	
+	/**
+	 * <p>编辑产品</p>
+	 * @param param
+	 * @return
+	 * @author 刘建麟  2018年11月2日 下午3:01:02
+	 */
+	@RequestMapping(value="updateProduct",method=RequestMethod.POST)
+	public JsonResult<String> updateProduct(ProductParams param){
+		param.setModify(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+		return productService.updateProduct(param);
+	}
+	
+	/**
+	 * <p>删除或下架</p>
+	 * @param id
+	 * @param type
+	 * @return
+	 * @author 刘建麟  2018年11月5日 上午11:46:55
+	 */
+	@RequestMapping(value="deleteOrDownProduct",method=RequestMethod.POST)
+	public JsonResult<String> deleteOrDownProduct(Long id,Byte type){
+		return productService.deleteOrDownProduct(id,type);
+	}
 }
 

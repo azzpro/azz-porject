@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.platform.merchant.mapper.MerchantGoodsProductPriceMapper">
+  <resultMap id="BaseResultMap" type="com.azz.platform.merchant.pojo.MerchantGoodsProductPrice">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="delivery_date" jdbcType="INTEGER" property="deliveryDate" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, delivery_date, price, product_id
+  </sql>
+  
+  <select id="selectPriceByProductId" resultMap="BaseResultMap">
+  select <include refid="Base_Column_List"></include> from merchant_goods_product_price where product_id = #{id}
+  </select>
+</mapper>

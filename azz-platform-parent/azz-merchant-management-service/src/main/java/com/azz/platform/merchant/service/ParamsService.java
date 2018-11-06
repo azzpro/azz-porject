@@ -123,6 +123,7 @@ public class ParamsService {
 				for (PlatformGoodsParamsTerm platformGoodsParamsTerm : byCode) {
 					ParamsAll pa = new ParamsAll();
 					pa.setParentCode(code);
+					pa.setAssortName(key.getAssortmentName());
 					pa.setParamsName(platformGoodsParamsTerm.getParamsName());
 					pa.setParamsChoice(platformGoodsParamsTerm.getParamsChoice());
 					pa.setParamsType(platformGoodsParamsTerm.getParamsType());

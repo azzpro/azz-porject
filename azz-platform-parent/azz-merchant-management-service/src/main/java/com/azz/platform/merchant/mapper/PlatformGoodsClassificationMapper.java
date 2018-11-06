@@ -7,9 +7,11 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.azz.platform.merchant.pojo.PlatformGoodsClassification;
+import com.azz.platform.merchant.pojo.bo.SearchClassificationListParam;
 import com.azz.platform.merchant.pojo.bo.SearchSameLevelClassification;
 import com.azz.platform.merchant.pojo.vo.Classification;
 import com.azz.platform.merchant.pojo.vo.ClassificationList;
+import com.azz.platform.merchant.pojo.vo.ClassificationParams;
 import com.azz.platform.merchant.pojo.vo.ClassificationSet;
 
 @Mapper
@@ -56,4 +58,20 @@ public interface PlatformGoodsClassificationMapper {
     PlatformGoodsClassification selectByAssortmentParentCode(String assortmentParentCode);
     
     int selectSameLevelClassification(SearchSameLevelClassification param);
+    
+    /**
+     * <p>条件查询一级分类</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月6日 上午10:45:55
+     */
+    List<ClassificationParams> selectParentByAssortmentName(SearchClassificationListParam param);
+    
+    /**
+     * <p>根据父级查询子级分类</p>
+     * @param parentCode
+     * @return
+     * @author 彭斌  2018年11月6日 上午10:46:09
+     */
+    List<ClassificationParams> selectChild(String parentCode);
 }

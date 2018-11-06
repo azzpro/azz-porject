@@ -1,4 +1,4 @@
-package com.azz.merchant.pojo;
+package com.azz.platform.merchant.pojo;
 
 
 import java.io.Serializable;

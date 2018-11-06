@@ -48,7 +48,22 @@ public class PlatformCaseClassificationParams implements Serializable {
      */
     private Date lastModifyTime;
 
+    /**
+     * 状态0:删除 1：有效 2：无效
+     */
+    private Integer status;
+    
     private static final long serialVersionUID = 1L;
+
+    
+    
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
     /**
      * <br/>

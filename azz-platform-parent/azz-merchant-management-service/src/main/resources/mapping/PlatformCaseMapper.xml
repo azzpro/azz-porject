@@ -198,8 +198,8 @@
   
   <select id="selectParamsByAssortmentId" parameterType="java.lang.Long" resultType="com.azz.platform.merchant.pojo.vo.CaseParams">
   	SELECT
-		pgt.params_code as paramCode,
-		pgt.params_name as paramName,
+		pgpt.params_code as paramCode,
+		pgpt.params_name as paramName,
 		group_concat(pgpv.params_value)  as paramValue
 		FROM platform_goods_params pgp
 	JOIN  platform_goods_params_term pgpt ON pgp.id = pgpt.params_id

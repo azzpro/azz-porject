@@ -25,6 +25,7 @@ import com.azz.platform.merchant.pojo.PlatformCaseClassificationParams;
 import com.azz.platform.merchant.pojo.bo.AddCaseParam;
 import com.azz.platform.merchant.pojo.bo.AddSelectionParams;
 import com.azz.platform.merchant.pojo.bo.CasePic;
+import com.azz.platform.merchant.pojo.bo.DelSelecttionParams;
 import com.azz.platform.merchant.pojo.bo.EditCaseParam;
 import com.azz.platform.merchant.pojo.vo.CaseParams;
 import com.azz.platform.merchant.pojo.vo.CaseParamsList;
@@ -256,6 +257,23 @@ public class CaseService {
             list = platformCaseMapper.selectParamsByCaseCode(caseCode);
         }
         return JsonResult.successJsonResult(list);
+    }
+    
+    /**
+     * <p>移除选型参数</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月6日 下午5:55:11
+     */
+    public JsonResult<String> delSelectionParameter(@RequestBody DelSelecttionParams param){
+        PlatformCaseClassificationParams pccp = platformCaseClassificationParamsMapper.selectParam(param.getCaseId(), param.getParamsId());
+        if(ObjectUtils.isNotNull(pccp)) {
+            pccp.setLastModifyTime(new Date());
+            pccp.setModifier(param.getModifier());
+            pccp.setStatus(0);
+            platformCaseClassificationParamsMapper.updateByPrimaryKeySelective(pccp);
+        }
+        return JsonResult.successJsonResult();
     }
 }
 

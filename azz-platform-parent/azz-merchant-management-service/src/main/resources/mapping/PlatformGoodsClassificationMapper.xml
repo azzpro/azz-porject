@@ -267,7 +267,7 @@
   		id as id,
 		assortment_code as assortmentCode,
 		assortment_name as assortmentName,
-		assortment_parent_code as assortmentParentCode,
+		assortment_parent_code as assortmentParentCode
 	FROM
 		platform_goods_classification
 	WHERE status = 1
@@ -281,7 +281,7 @@
   		id as id,
 		assortment_code as assortmentCode,
 		assortment_name as assortmentName,
-		assortment_parent_code as assortmentParentCode,
+		assortment_parent_code as assortmentParentCode
 	FROM
 		platform_goods_classification
 	WHERE status = 1 and assortment_parent_code = #{parentCode}

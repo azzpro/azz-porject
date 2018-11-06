@@ -270,7 +270,7 @@
 		assortment_parent_code as assortmentParentCode
 	FROM
 		platform_goods_classification
-	WHERE status = 1
+	WHERE status = 1 and assortment_top = 0
 	<if test="param != null and param != ''">
 		and assortment_name = #{param}
 	</if>

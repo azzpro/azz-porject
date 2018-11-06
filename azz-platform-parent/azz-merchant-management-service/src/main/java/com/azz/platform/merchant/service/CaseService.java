@@ -1,15 +1,17 @@
 package com.azz.platform.merchant.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
-import com.azz.core.common.errorcode.PlatformUserErrorCode;
+import com.azz.core.common.errorcode.MerchantProductErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.PlatformConstants;
@@ -19,20 +21,18 @@ import com.azz.platform.merchant.mapper.PlatformCaseMapper;
 import com.azz.platform.merchant.pojo.PlatformCase;
 import com.azz.platform.merchant.pojo.bo.AddCaseParam;
 import com.azz.platform.merchant.pojo.bo.CasePic;
-import com.azz.platform.merchant.pojo.bo.ClassificationPic;
 import com.azz.platform.merchant.pojo.bo.EditCaseParam;
+import com.azz.platform.merchant.pojo.vo.CaseParams;
 import com.azz.system.api.SystemImageUploadService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
 import com.azz.util.StringUtils;
 
 /**
- * <P>
- * 分类管理
- * </P>
  * 
+ * <P>方案管理</P>
  * @version 1.0
- * @author 彭斌 2018年10月20日 下午2:54:40
+ * @author 彭斌  2018年11月6日 下午2:07:01
  */
 @Transactional(rollbackFor = Exception.class)
 @Service
@@ -58,6 +58,23 @@ public class CaseService {
         String originalFileName = cp.getFileName();
         
         PlatformCase pcObj = new PlatformCase();
+        
+        
+        // 编辑的方案名称和原始的方案名不一致校验方案名称是否唯一
+        PlatformCase platformCase = platformCaseMapper.selectByCaseName(param.getCaseName());
+        if(ObjectUtils.isNotNull(platformCase)) {
+            // 方案名称存在
+            throw new BaseException(
+                    MerchantProductErrorCode.MERCHANT_PRODUCT_CASE_EXIST);
+        }
+        
+        // 编辑方案分类校验是否唯一
+        PlatformCase platformCaseByClassification = platformCaseMapper.selectByClassificationId(param.getClassificationId());
+        if(ObjectUtils.isNotNull(platformCaseByClassification)) {
+            // 方案分类存在
+            throw new BaseException(
+                    MerchantProductErrorCode.MERCHANT_PRODUCT_CASE_CLASSIFICATION_EXIST);
+        }
         
         // 新增方案编码 TODO 系统生成
         String caseCode = "";
@@ -88,6 +105,8 @@ public class CaseService {
             throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "主图上传失败，请重试");
         }
         
+        
+        
         pcObj.setCaseCode(caseCode);
         pcObj.setCaseName(param.getCaseName());
         pcObj.setCasePicName(originalFileName);
@@ -106,6 +125,26 @@ public class CaseService {
     public JsonResult<String> editCase(@RequestBody EditCaseParam param){
         
         PlatformCase pcObj = platformCaseMapper.selectByCaseCode(param.getCaseCode());
+        
+        if(!pcObj.getCaseName().equals(param.getCaseName())) {
+            // 编辑的方案名称和原始的方案名不一致校验方案名称是否唯一
+            PlatformCase platformCase = platformCaseMapper.selectByCaseName(param.getCaseName());
+            if(ObjectUtils.isNotNull(platformCase)) {
+                // 方案名称存在
+                throw new BaseException(
+                        MerchantProductErrorCode.MERCHANT_PRODUCT_CASE_EXIST);
+            }
+        }
+        
+        if(!pcObj.getClassificationId().equals(param.getClassificationId())) {
+            // 编辑方案分类校验是否唯一
+            PlatformCase platformCaseByClassification = platformCaseMapper.selectByClassificationId(param.getClassificationId());
+            if(ObjectUtils.isNotNull(platformCaseByClassification)) {
+                // 方案分类存在
+                throw new BaseException(
+                        MerchantProductErrorCode.MERCHANT_PRODUCT_CASE_CLASSIFICATION_EXIST);
+            }
+        }
         
         if(param.getIsEditPic() == 1) {
             // 主图基础校验
@@ -142,23 +181,17 @@ public class CaseService {
             pcObj.setCasePicUrl(jr.getData());
         }
         
-        if(!pcObj.getCaseName().equals(param.getCaseName())) {
-            // 编辑的方案名称和原始的方案名不一致校验方案名称是否唯一
-            PlatformCase platformCase = platformCaseMapper.selectByCaseName(param.getCaseName());
-            if(ObjectUtils.isNotNull(platformCase)) {
-                // 方案名称存在
-                throw new BaseException(
-                        PlatformUserErrorCode.PLATFORM_MERCHANT_AUDIT_STATUS_ERROR_NO_EXIST);
-            }
-        }
         
         pcObj.setCaseName(param.getCaseName());
         pcObj.setCaseStatus(param.getCaseStatus());
         pcObj.setClassificationId(param.getClassificationId());
         pcObj.setRemark(param.getRemark());
         platformCaseMapper.updateByPrimaryKeySelective(pcObj);
-        return null;
+        return JsonResult.successJsonResult();
     }
     
+    public JsonResult<List<CaseParams>> getCaseParamList(@RequestParam("assortmentId") String assortmentId){
+        return null;
+    }
 }
 

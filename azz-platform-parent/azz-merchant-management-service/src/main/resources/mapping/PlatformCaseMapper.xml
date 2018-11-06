@@ -179,13 +179,20 @@
   	select 
     <include refid="Base_Column_List" />
     from platform_case
-    where case_code = #{caseCode,jdbcType=VARCHAR}
+    where case_code = #{caseCode,jdbcType=VARCHAR} and case_status != 0
   </select>
   
   <select id="selectByCaseName" parameterType="java.lang.String" resultMap="BaseResultMap">
   	select 
     <include refid="Base_Column_List" />
     from platform_case
-    where case_name = #{caseName,jdbcType=VARCHAR}
+    where case_name = #{caseName,jdbcType=VARCHAR} and case_status != 0
+  </select>
+  
+  <select id="selectByClassificationId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from platform_case
+    where classification_id = #{classificationId} and case_status != 0
   </select>
 </mapper>

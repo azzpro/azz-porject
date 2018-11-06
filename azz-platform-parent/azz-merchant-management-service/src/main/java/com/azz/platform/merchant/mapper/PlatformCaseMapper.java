@@ -21,4 +21,6 @@ public interface PlatformCaseMapper {
     PlatformCase selectByCaseCode(String caseCode);
     
     PlatformCase selectByCaseName(String caseName);
+    
+    PlatformCase selectByClassificationId(Long classificationId);
 }

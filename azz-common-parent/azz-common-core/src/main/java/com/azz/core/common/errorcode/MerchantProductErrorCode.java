@@ -36,6 +36,10 @@ public class MerchantProductErrorCode extends BaseErrorCode{
     public static final MerchantProductErrorCode MERCHANT_ASSORTMENT_IS_NULL = new MerchantProductErrorCode(20011, "产品分类不能为空");
     
     public static final MerchantProductErrorCode MERCHANT_PRODUCT_VALUES_IS_NULL = new MerchantProductErrorCode(20011, "产品参数不能为空");
+    
+    public static final MerchantProductErrorCode MERCHANT_PRODUCT_CASE_EXIST = new MerchantProductErrorCode(20012, "产品方案已存在");
+    
+    public static final MerchantProductErrorCode MERCHANT_PRODUCT_CASE_CLASSIFICATION_EXIST = new MerchantProductErrorCode(20013, "产品方案分类已存在");
     public MerchantProductErrorCode(int code, String message) {
 	super(code, message);
     }

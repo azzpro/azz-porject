@@ -222,5 +222,11 @@
 	WHERE pc.case_code = #{caseCode}
 	GROUP BY
 		pgpt.params_code
+
+  <select id="getCaseInfoList" parameterType="com.azz.platform.merchant.pojo.bo.SearchCaseInfoParam" resultType="com.azz.platform.merchant.pojo.vo.CaseInfo">
+  	select 
+    <include refid="Base_Column_List" />
+    from platform_case
+    where classification_id = #{classificationId} and case_status != 0
   </select>
 </mapper>

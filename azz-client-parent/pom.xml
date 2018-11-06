@@ -12,8 +12,8 @@
 	
 	<modules>
 		<module>azz-client-pojo</module>
-		<module>azz-client-service</module>
 		<module>azz-client-api</module>
+		<module>azz-client-service</module>
 		<module>azz-client-web</module>
 	</modules>
 	

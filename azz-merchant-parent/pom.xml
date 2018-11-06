@@ -12,8 +12,8 @@
 	
 	<modules>
 		<module>azz-merchant-pojo</module>
-		<module>azz-merchant-service</module>
 		<module>azz-merchant-api</module>
+		<module>azz-merchant-service</module>
 		<module>azz-merchant-web</module>
 	</modules>
 	

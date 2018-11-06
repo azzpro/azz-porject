@@ -27,15 +27,19 @@ import com.azz.core.constants.MerchantConstants.IsChangeCombinationPic;
 import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.merchant.pojo.vo.UploadFileInfo;
+import com.azz.platform.merchant.mapper.PlatformCaseMapper;
 import com.azz.platform.merchant.mapper.PlatformCombinationMapper;
 import com.azz.platform.merchant.mapper.PlatformCombinationModuleMapper;
+import com.azz.platform.merchant.pojo.PlatformCase;
 import com.azz.platform.merchant.pojo.PlatformCombination;
 import com.azz.platform.merchant.pojo.PlatformCombinationModule;
 import com.azz.platform.merchant.pojo.bo.AddCombinationParam;
 import com.azz.platform.merchant.pojo.bo.CombinationPic;
 import com.azz.platform.merchant.pojo.bo.EditCombinationParam;
 import com.azz.platform.merchant.pojo.bo.PutOnOrPutOffOrDelCombinationParam;
+import com.azz.platform.merchant.pojo.bo.SearchCaseInfoParam;
 import com.azz.platform.merchant.pojo.bo.SearchCombinationParam;
+import com.azz.platform.merchant.pojo.vo.CaseInfo;
 import com.azz.platform.merchant.pojo.vo.CombinationInfo;
 import com.azz.platform.merchant.pojo.vo.GoodsModuleInfo;
 import com.azz.system.api.SystemImageUploadService;
@@ -45,7 +49,7 @@ import com.azz.util.StringUtils;
 import com.github.pagehelper.PageHelper;
 
 /**
- * <P>TODO</P>
+ * <P>推荐组合业务</P>
  * @version 1.0
  * @author 黄智聪  2018年11月2日 下午2:23:27
  */
@@ -61,9 +65,12 @@ public class CombinationService {
 
 	@Autowired
 	private PlatformCombinationMapper platformCombinationMapper;
-	
+
 	@Autowired
 	private PlatformCombinationModuleMapper platformCombinationModuleMapper;
+	
+	@Autowired
+	private PlatformCaseMapper platformCaseMapper;
 	
 	/**
 	 * 
@@ -104,10 +111,12 @@ public class CombinationService {
 		JSR303ValidateUtils.validate(param);
 		// 同方案下模组名称是否重复
 		String combinationName = param.getCombinationName();
-		// 根据caseCode查询该case是否存在  TODO
-		String caseCode = param.getCaseCode();
-		Long caseId = 1L;
-		int count = platformCombinationMapper.countCombinationByCombinationNameAndCaseId(null, combinationName, caseId);
+		// 根据caseCode查询该case是否存在 
+		PlatformCase c = platformCaseMapper.selectByCaseCode(param.getCaseCode());
+		if(c == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "方案不存在");
+		}
+		int count = platformCombinationMapper.countCombinationByCombinationNameAndCaseId(null, combinationName, c.getId());
 		if(count > 0) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "方案下推荐组合名称已存在");
 		}
@@ -120,7 +129,7 @@ public class CombinationService {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "所选模组不存在");
 			}
 			// 同方案下关联商家模组是否完全一致
-			count = platformCombinationMapper.countCombinationModuleByCaseIdAndModuleIds(null, moduleIds, caseId);
+			count = platformCombinationMapper.countCombinationModuleByCaseIdAndModuleIds(null, moduleIds, c.getId());
 			int moduleSize = moduleCodes.size();
 			if(count == moduleSize) {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "方案下存在商家模组配置一致的推荐组合");
@@ -134,7 +143,7 @@ public class CombinationService {
 		// 插入推荐组合记录
 		Date nowDate = new Date();
 		PlatformCombination combinationRecord = PlatformCombination.builder()
-				.caseId(caseId)
+				.caseId(c.getId())
 				.combinationCode(combinationCode)
 				.combinationName(param.getCombinationName())
 				.combinationPicName(fileInfo.getOriginalFileName())
@@ -181,10 +190,12 @@ public class CombinationService {
 		}
 		// 除本身的推荐组合以外的，同方案下模组名称是否重复
 		String combinationName = param.getCombinationName();
-		// 根据caseCode查询该case是否存在  TODO
-		String caseCode = param.getCaseCode();
-		Long caseId = 1L;
-		int count = platformCombinationMapper.countCombinationByCombinationNameAndCaseId(combinationCode, combinationName, caseId);
+		// 根据caseCode查询该case是否存在  
+		PlatformCase c = platformCaseMapper.selectByCaseCode(param.getCaseCode());
+		if(c == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "方案不存在");
+		}
+		int count = platformCombinationMapper.countCombinationByCombinationNameAndCaseId(combinationCode, combinationName, c.getId());
 		if(count > 0) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "方案下推荐组合名称已存在");
 		}
@@ -197,7 +208,7 @@ public class CombinationService {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "所选模组不存在");
 			}
 			// 除本身的推荐组合以外的，同方案下关联商家模组是否完全一致
-			count = platformCombinationMapper.countCombinationModuleByCaseIdAndModuleIds(combinationCode, moduleIds, caseId);
+			count = platformCombinationMapper.countCombinationModuleByCaseIdAndModuleIds(combinationCode, moduleIds, c.getId());
 			int moduleSize = moduleCodes.size();
 			if(count == moduleSize) {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "方案下存在商家模组配置一致的推荐组合");
@@ -205,7 +216,7 @@ public class CombinationService {
 		}
 		Date nowDate = new Date();
 		PlatformCombination combinationRecord = PlatformCombination.builder()
-				.caseId(caseId)
+				.caseId(c.getId())
 				.combinationCode(combinationCode)
 				.combinationName(param.getCombinationName())
 				.status(param.getStatus())
@@ -277,6 +288,19 @@ public class CombinationService {
 				.build();
 		platformCombinationMapper.updateByCombinationCode(combinationRecord);
 		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
+	 * <p>查询方案列表</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月6日 下午3:43:38
+	 */
+	public JsonResult<Pagination<CaseInfo>> getCaseInfoList(@RequestBody SearchCaseInfoParam param){
+		PageHelper.startPage(param.getPageNum(), param.getPageSize());
+		List<CaseInfo> infos = platformCaseMapper.getCaseInfoList(param);
+		return JsonResult.successJsonResult(new Pagination<>(infos));
 	}
 	
 	

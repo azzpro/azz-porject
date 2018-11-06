@@ -1,9 +1,13 @@
 package com.azz.platform.merchant.mapper;
 
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.platform.merchant.pojo.PlatformCase;
+import com.azz.platform.merchant.pojo.bo.SearchCaseInfoParam;
+import com.azz.platform.merchant.pojo.vo.CaseInfo;
 @Mapper
 public interface PlatformCaseMapper {
     int deleteByPrimaryKey(Long id);
@@ -23,4 +27,6 @@ public interface PlatformCaseMapper {
     PlatformCase selectByCaseName(String caseName);
     
     PlatformCase selectByClassificationId(Long classificationId);
+    
+    List<CaseInfo> getCaseInfoList(SearchCaseInfoParam param);
 }

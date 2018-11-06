@@ -244,21 +244,6 @@
 	</where>
   </select>
   
-  <select id="countCombinationByCombinationNameAndCaseId" resultType="int">
-  	SELECT
-		count(1)
-	FROM 
-		platform_combination pc
-	<where>
-		pc.status != 0
-		AND pc.combination_name = #{combinationName}
-		AND pc.case_id = #{caseId}
-		<if test="combinationCode != null and combinationCode != ''">
-			AND pc.combination_code != #{combinationCode}
-		</if>
-	</where>
-  </select>
-  
   <select id="countCombinationModuleByCaseIdAndModuleIds" resultType="int">
   	SELECT
 		count(1)
@@ -323,6 +308,7 @@
 	SELECT
 		pc.combination_code AS combinationCode,
 		pc.combination_name AS combinationName,
+		ca.case_code as caseCode,
 		ca.case_name as caseName,
 		pc.`status` AS status,
 		pc.combination_pic_name AS combinationPicName,

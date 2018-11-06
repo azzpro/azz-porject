@@ -26,6 +26,8 @@ public class CombinationInfo {
 	
 	private String combinationName;
 	
+	private String caseCode;
+	
 	private String caseName;
 	
 	private Integer status;

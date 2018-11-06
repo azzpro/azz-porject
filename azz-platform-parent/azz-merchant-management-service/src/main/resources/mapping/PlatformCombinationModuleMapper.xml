@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.platform.merchant.mapper.PlatformCombinationModuleMapper">
+  <resultMap id="BaseResultMap" type="com.azz.platform.merchant.pojo.PlatformCombinationModule">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="combination_id" jdbcType="BIGINT" property="combinationId" />
+    <result column="module_id" jdbcType="BIGINT" property="moduleId" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, combination_id, module_id, creator, create_time, modifier, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from platform_combination_module
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from platform_combination_module
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.platform.merchant.pojo.PlatformCombinationModule">
+    insert into platform_combination_module (id, combination_id, module_id, 
+      creator, create_time, modifier, 
+      modify_time)
+    values (#{id,jdbcType=BIGINT}, #{combinationId,jdbcType=BIGINT}, #{moduleId,jdbcType=BIGINT}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.platform.merchant.pojo.PlatformCombinationModule">
+    insert into platform_combination_module
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="combinationId != null">
+        combination_id,
+      </if>
+      <if test="moduleId != null">
+        module_id,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="combinationId != null">
+        #{combinationId,jdbcType=BIGINT},
+      </if>
+      <if test="moduleId != null">
+        #{moduleId,jdbcType=BIGINT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.platform.merchant.pojo.PlatformCombinationModule">
+    update platform_combination_module
+    <set>
+      <if test="combinationId != null">
+        combination_id = #{combinationId,jdbcType=BIGINT},
+      </if>
+      <if test="moduleId != null">
+        module_id = #{moduleId,jdbcType=BIGINT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.platform.merchant.pojo.PlatformCombinationModule">
+    update platform_combination_module
+    set combination_id = #{combinationId,jdbcType=BIGINT},
+      module_id = #{moduleId,jdbcType=BIGINT},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    insert 
+    	into platform_combination_module(id, combination_id, module_id, creator, create_time, modifier, modify_time)
+    values 
+    <foreach collection="list" item="item" separator=",">
+        (
+	    	#{item.id},
+	     	#{item.combinationId}, 
+	   		#{item.moduleId}, 
+	      	#{item.creator}, 
+	      	#{item.createTime}, 
+	      	#{item.modifier}, 
+	      	#{item.modifyTime}
+     	)
+    </foreach>
+  </insert>
+  
+  <delete id="deleteByCombinationId" parameterType="java.lang.Long">
+    delete from platform_combination_module
+    where combination_id = #{combinationId,jdbcType=BIGINT}
+  </delete>
+</mapper>

@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.platform.merchant.mapper.PlatformCombinationMapper">
+  <resultMap id="BaseResultMap" type="com.azz.platform.merchant.pojo.PlatformCombination">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="combination_code" jdbcType="VARCHAR" property="combinationCode" />
+    <result column="combination_name" jdbcType="VARCHAR" property="combinationName" />
+    <result column="case_id" jdbcType="BIGINT" property="caseId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="recommend_reason" jdbcType="VARCHAR" property="recommendReason" />
+    <result column="combination_pic_name" jdbcType="VARCHAR" property="combinationPicName" />
+    <result column="combination_pic_url" jdbcType="VARCHAR" property="combinationPicUrl" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, combination_code, combination_name, case_id, status, recommend_reason, combination_pic_name, 
+    combination_pic_url, creator, create_time, modifier, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from platform_combination
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectByCombinationCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from platform_combination
+    where combination_code = #{combinationCode}
+    and status != 0 
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from platform_combination
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.platform.merchant.pojo.PlatformCombination">
+    insert into platform_combination (id, combination_code, combination_name, 
+      case_id, status, recommend_reason, 
+      combination_pic_name, combination_pic_url, 
+      creator, create_time, modifier, 
+      modify_time)
+    values (#{id,jdbcType=BIGINT}, #{combinationCode,jdbcType=VARCHAR}, #{combinationName,jdbcType=VARCHAR}, 
+      #{caseId,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, #{recommendReason,jdbcType=VARCHAR}, 
+      #{combinationPicName,jdbcType=VARCHAR}, #{combinationPicUrl,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyProperty="id" useGeneratedKeys="true" parameterType="com.azz.platform.merchant.pojo.PlatformCombination">
+    insert into platform_combination
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="combinationCode != null">
+        combination_code,
+      </if>
+      <if test="combinationName != null">
+        combination_name,
+      </if>
+      <if test="caseId != null">
+        case_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="recommendReason != null">
+        recommend_reason,
+      </if>
+      <if test="combinationPicName != null">
+        combination_pic_name,
+      </if>
+      <if test="combinationPicUrl != null">
+        combination_pic_url,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="combinationCode != null">
+        #{combinationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="combinationName != null">
+        #{combinationName,jdbcType=VARCHAR},
+      </if>
+      <if test="caseId != null">
+        #{caseId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="recommendReason != null">
+        #{recommendReason,jdbcType=VARCHAR},
+      </if>
+      <if test="combinationPicName != null">
+        #{combinationPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="combinationPicUrl != null">
+        #{combinationPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.platform.merchant.pojo.PlatformCombination">
+    update platform_combination
+    <set>
+      <if test="combinationCode != null">
+        combination_code = #{combinationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="combinationName != null">
+        combination_name = #{combinationName,jdbcType=VARCHAR},
+      </if>
+      <if test="caseId != null">
+        case_id = #{caseId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="recommendReason != null">
+        recommend_reason = #{recommendReason,jdbcType=VARCHAR},
+      </if>
+      <if test="combinationPicName != null">
+        combination_pic_name = #{combinationPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="combinationPicUrl != null">
+        combination_pic_url = #{combinationPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByCombinationCode" parameterType="com.azz.platform.merchant.pojo.PlatformCombination">
+    update platform_combination
+    <set>
+      <if test="combinationName != null">
+        combination_name = #{combinationName,jdbcType=VARCHAR},
+      </if>
+      <if test="caseId != null">
+        case_id = #{caseId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="recommendReason != null">
+        recommend_reason = #{recommendReason,jdbcType=VARCHAR},
+      </if>
+      <if test="combinationPicName != null">
+        combination_pic_name = #{combinationPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="combinationPicUrl != null">
+        combination_pic_url = #{combinationPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where combination_code = #{combinationCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.platform.merchant.pojo.PlatformCombination">
+    update platform_combination
+    set combination_code = #{combinationCode,jdbcType=VARCHAR},
+      combination_name = #{combinationName,jdbcType=VARCHAR},
+      case_id = #{caseId,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
+      recommend_reason = #{recommendReason,jdbcType=VARCHAR},
+      combination_pic_name = #{combinationPicName,jdbcType=VARCHAR},
+      combination_pic_url = #{combinationPicUrl,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="countBindingModuleByCombinationCode" resultType="int">
+  	SELECT
+		count(1)
+	FROM
+		platform_combination_module pcm
+	JOIN platform_combination pc ON pc.id = pcm.combination_id
+	WHERE
+		pc.combination_code = #{combinationCode}
+  </select>
+  
+  <select id="countCombinationByCombinationNameAndCaseId" resultType="int">
+  	SELECT
+		count(1)
+	FROM 
+		platform_combination pc
+	<where>
+		pc.status != 0
+		AND pc.combination_name = #{combinationName}
+		AND pc.case_id = #{caseId}
+		<if test="combinationCode != null and combinationCode != ''">
+			AND pc.combination_code != #{combinationCode}
+		</if>
+	</where>
+  </select>
+  
+  <select id="countCombinationByCombinationNameAndCaseId" resultType="int">
+  	SELECT
+		count(1)
+	FROM 
+		platform_combination pc
+	<where>
+		pc.status != 0
+		AND pc.combination_name = #{combinationName}
+		AND pc.case_id = #{caseId}
+		<if test="combinationCode != null and combinationCode != ''">
+			AND pc.combination_code != #{combinationCode}
+		</if>
+	</where>
+  </select>
+  
+  <select id="countCombinationModuleByCaseIdAndModuleIds" resultType="int">
+  	SELECT
+		count(1)
+	FROM
+		platform_combination_module pcm
+	JOIN platform_combination pc ON pc.id = pcm.combination_id
+	JOIN platform_case c ON c.id = pc.case_id
+	WHERE
+		pc.`status` != 0
+	AND c.case_status != 0
+	and c.id = #{caseId}
+	<if test="combinationCode != null and combinationCode != ''">
+		AND pc.combination_code != #{combinationCode}
+	</if>
+	AND pcm.module_id in
+		<foreach collection ="moduleIds" item="moduleId" separator ="," open="(" close=")">
+	         #{moduleId}
+	    </foreach >
+  </select>
+  
+  <select id="getModuleIdsByModuleCodes" resultType="java.lang.Long">
+	SELECT
+		mgm.id
+	FROM
+		merchant_goods_module mgm
+	WHERE
+		mgm.module_status != 0
+	and mgm.module_code in 
+		<foreach collection ="list" item="moduleCode" separator ="," open="(" close=")">
+	         #{moduleCode}
+	    </foreach >
+  </select>
+  
+  <select id="getCombinationInfoList" parameterType="com.azz.platform.merchant.pojo.bo.SearchCombinationParam" resultType="com.azz.platform.merchant.pojo.vo.CombinationInfo">
+	SELECT
+		pc.combination_code AS combinationCode,
+		pc.combination_name AS combinationName,
+		ca.case_name as caseName,
+		pc.`status` AS status,
+		pc.create_time AS createTime,
+		u.user_name AS creator
+	FROM
+		platform_combination pc
+	LEFT JOIN platform_case ca ON ca.id = pc.case_id
+	LEFT JOIN platform_user u ON u.user_code = pc.creator
+	<where> 
+		pc.`status` != 0
+	 	<if test="status != null">
+	 		AND pc.`status` = #{status}
+		</if>
+		<if test="searchInput != null and searchInput != ''">
+			AND (  
+				pc.combination_name LIKE CONCAT('%', #{searchInput}, '%')
+				OR pc.combination_code LIKE CONCAT('%', #{searchInput}, '%') 
+			)
+		</if>
+	</where>
+	ORDER BY pc.create_time desc
+  </select>
+  
+  <select id="getCombinationInfo" parameterType="string" resultType="com.azz.platform.merchant.pojo.vo.CombinationInfo">
+	SELECT
+		pc.combination_code AS combinationCode,
+		pc.combination_name AS combinationName,
+		ca.case_name as caseName,
+		pc.`status` AS status,
+		pc.combination_pic_name AS combinationPicName,
+		pc.combination_pic_url AS combinationPicUrl,
+		pc.create_time AS createTime,
+		u.user_name AS creator
+	FROM
+		platform_combination pc
+	LEFT JOIN platform_case ca ON ca.id = pc.case_id
+	LEFT JOIN platform_user u ON u.user_code = pc.creator
+	where
+		pc.`status` != 0
+	and pc.combination_code = #{combinationCode}
+  </select>
+  
+  <select id="getModuleInfoByCombinationCode" parameterType="string" resultType="com.azz.platform.merchant.pojo.vo.GoodsModuleInfo">
+	SELECT
+		mgm.module_name AS moduleName,
+		mgm.module_code AS moduleCode,
+		mgm.module_status AS moduleStatus,
+		m.merchant_name AS merchantName
+	FROM
+		platform_combination_module pcm
+	JOIN platform_combination pc ON pcm.combination_id = pc.id
+	JOIN merchant_goods_module mgm ON mgm.id = pcm.module_id
+	JOIN merchant m ON m.id = mgm.merchant_id
+	WHERE
+		m.`status` != 0
+	AND mgm.module_status != 0
+	AND pc.`status` != 0
+	where pc.combination_code = #{combinationCode}
+  </select>
+</mapper>

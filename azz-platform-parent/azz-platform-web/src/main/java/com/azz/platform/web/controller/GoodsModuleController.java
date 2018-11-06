@@ -16,7 +16,7 @@ import com.azz.core.common.page.Pagination;
 import com.azz.platform.merchant.api.GoodsModuleService;
 import com.azz.platform.merchant.pojo.bo.PutOnOrPutOffGoodsModuleParam;
 import com.azz.platform.merchant.pojo.bo.SearchGoodsModuleParam;
-import com.azz.platform.merchant.pojo.vo.GoodModuleInfo;
+import com.azz.platform.merchant.pojo.vo.GoodsModuleInfo;
 import com.azz.utils.WebUtils;
 
 /**
@@ -40,7 +40,7 @@ public class GoodsModuleController {
 	 * @author 黄智聪  2018年11月1日 下午3:33:53
 	 */
 	@RequestMapping("/getGoodModuleInfoList")
-	JsonResult<Pagination<GoodModuleInfo>> getGoodModuleInfoList(SearchGoodsModuleParam param) {
+	JsonResult<Pagination<GoodsModuleInfo>> getGoodModuleInfoList(SearchGoodsModuleParam param) {
 		return goodsModuleService.getGoodModuleInfoList(param);
 	}
 	
@@ -52,7 +52,7 @@ public class GoodsModuleController {
 	 * @author 黄智聪  2018年11月1日 下午8:45:15
 	 */
 	@RequestMapping("/getGoodModuleInfo")
-	JsonResult<GoodModuleInfo> getGoodModuleInfo(String moduleCode) {
+	JsonResult<GoodsModuleInfo> getGoodModuleInfo(String moduleCode) {
 		return goodsModuleService.getGoodModuleInfo(moduleCode);
 	}
 	

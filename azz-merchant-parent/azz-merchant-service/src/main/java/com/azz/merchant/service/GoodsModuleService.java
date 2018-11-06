@@ -36,7 +36,7 @@ import com.azz.merchant.pojo.bo.EditGoodsModuleParam;
 import com.azz.merchant.pojo.bo.GoodsModulePic;
 import com.azz.merchant.pojo.bo.PutOnOrPutOffOrDelGoodsModuleParam;
 import com.azz.merchant.pojo.bo.SearchGoodsModuleParam;
-import com.azz.merchant.pojo.vo.GoodModuleInfo;
+import com.azz.merchant.pojo.vo.GoodsModuleInfo;
 import com.azz.merchant.pojo.vo.UploadFileInfo;
 import com.azz.system.api.SystemImageUploadService;
 import com.azz.system.sequence.api.RandomSequenceService;
@@ -75,9 +75,9 @@ public class GoodsModuleService {
 	 * @return
 	 * @author 黄智聪  2018年11月1日 下午3:33:53
 	 */
-	public JsonResult<Pagination<GoodModuleInfo>> getGoodModuleInfoList(@RequestBody SearchGoodsModuleParam param){
+	public JsonResult<Pagination<GoodsModuleInfo>> getGoodModuleInfoList(@RequestBody SearchGoodsModuleParam param){
 		PageHelper.startPage(param.getPageNum(), param.getPageSize());
-		List<GoodModuleInfo> infos = merchantGoodsModuleMapper.getGoodsModuleInfoList(param);
+		List<GoodsModuleInfo> infos = merchantGoodsModuleMapper.getGoodsModuleInfoList(param);
 		return JsonResult.successJsonResult(new Pagination<>(infos));
 	}
 	
@@ -88,7 +88,7 @@ public class GoodsModuleService {
 	 * @return
 	 * @author 黄智聪  2018年11月1日 下午8:45:15
 	 */
-	public JsonResult<GoodModuleInfo> getGoodModuleInfo(String moduleCode){
+	public JsonResult<GoodsModuleInfo> getGoodModuleInfo(String moduleCode){
 		return JsonResult.successJsonResult(merchantGoodsModuleMapper.getGoodsModuleInfo(moduleCode));
 	}
 	

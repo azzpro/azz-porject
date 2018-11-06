@@ -40,6 +40,11 @@ public abstract class MerchantConstants {
 	 * 品牌主图文件大小限制
 	 */
 	public static final long GOODS_BRAND_FILE_SIZE_LIMIT = 2 * 1024 * 1024L;
+	
+	/**
+	 * 推荐组合主图文件大小限制
+	 */
+	public static final long COMBINATION_FILE_SIZE_LIMIT = 2 * 1024 * 1024L;
 
 	/**
 	 * 
@@ -150,6 +155,29 @@ public abstract class MerchantConstants {
 		private String desc;
 
 		IsChangeGoodsBrandPic(int value, String desc) {
+			this.value = value;
+			this.desc = desc;
+		}
+	}
+	
+	/**
+	 * 
+	 * <P>是否修改了推荐组合图片</P>
+	 * @version 1.0
+	 * @author 黄智聪  2018年11月1日 下午5:29:36
+	 */
+	public enum IsChangeCombinationPic {
+		N(0, "否"),
+
+		Y(1, "是");
+
+		@Getter
+		private int value;
+
+		@Getter
+		private String desc;
+
+		IsChangeCombinationPic(int value, String desc) {
 			this.value = value;
 			this.desc = desc;
 		}
@@ -272,6 +300,52 @@ public abstract class MerchantConstants {
 		public static boolean checkStatusExist(int value) {
 			GoodsBrandStatus[] values = GoodsBrandStatus.values();
 			for (GoodsBrandStatus status : values) {
+				if (status.getValue() == value) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+	
+	/**
+	 * 
+	 * <P>推荐组合状态</P>
+	 * @version 1.0
+	 * @author 黄智聪  2018年11月6日 下午3:02:40
+	 */
+	public enum CombinationStatus {
+
+		DISABLE(0, "无效"),
+
+		PUT_ON(1, "上架"),
+
+		PUT_OFF(2, "下架");
+
+		@Getter
+		private int value;
+
+		@Getter
+		private String desc;
+
+		CombinationStatus(int value, String desc) {
+			this.value = value;
+			this.desc = desc;
+		}
+
+		/**
+		 * 
+		 * <p>
+		 * 校验是否存在该状态
+		 * </p>
+		 * 
+		 * @param value
+		 * @return
+		 * @author 黄智聪 2018年10月20日 上午11:29:37
+		 */
+		public static boolean checkStatusExist(int value) {
+			CombinationStatus[] values = CombinationStatus.values();
+			for (CombinationStatus status : values) {
 				if (status.getValue() == value) {
 					return true;
 				}

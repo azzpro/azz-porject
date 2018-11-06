@@ -6,10 +6,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.azz.merchant.pojo.MerchantGoodsModule;
-import com.azz.merchant.pojo.bo.ModuleParams;
 import com.azz.merchant.pojo.bo.ModulePrams;
 import com.azz.merchant.pojo.bo.SearchGoodsModuleParam;
-import com.azz.merchant.pojo.vo.GoodModuleInfo;
+import com.azz.merchant.pojo.vo.GoodsModuleInfo;
 import com.azz.merchant.pojo.vo.Module;
 
 @Mapper
@@ -43,7 +42,7 @@ public interface MerchantGoodsModuleMapper {
      * @return
      * @author 黄智聪  2018年11月1日 下午3:26:00
      */
-    List<GoodModuleInfo> getGoodsModuleInfoList(SearchGoodsModuleParam param);
+    List<GoodsModuleInfo> getGoodsModuleInfoList(SearchGoodsModuleParam param);
     
     /**
      * 
@@ -52,7 +51,7 @@ public interface MerchantGoodsModuleMapper {
      * @return
      * @author 黄智聪  2018年11月1日 下午8:44:16
      */
-    GoodModuleInfo getGoodsModuleInfo(String moduleCode);
+    GoodsModuleInfo getGoodsModuleInfo(String moduleCode);
     
     /**
      * <p>根据CODE查询模组</p>

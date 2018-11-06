@@ -19,7 +19,7 @@ import com.azz.merchant.pojo.bo.AddGoodsModuleParam;
 import com.azz.merchant.pojo.bo.EditGoodsModuleParam;
 import com.azz.merchant.pojo.bo.PutOnOrPutOffOrDelGoodsModuleParam;
 import com.azz.merchant.pojo.bo.SearchGoodsModuleParam;
-import com.azz.merchant.pojo.vo.GoodModuleInfo;
+import com.azz.merchant.pojo.vo.GoodsModuleInfo;
 import com.azz.merchant.service.GoodsModuleService;
 
 
@@ -43,7 +43,7 @@ public class GoodsModuleController {
 	 * @author 黄智聪  2018年11月1日 下午3:33:53
 	 */
 	@RequestMapping("/getGoodModuleInfoList")
-	public JsonResult<Pagination<GoodModuleInfo>> getGoodModuleInfoList(@RequestBody SearchGoodsModuleParam param){
+	public JsonResult<Pagination<GoodsModuleInfo>> getGoodModuleInfoList(@RequestBody SearchGoodsModuleParam param){
 		return goodsModuleService.getGoodModuleInfoList(param);
 	}
 	
@@ -55,7 +55,7 @@ public class GoodsModuleController {
 	 * @author 黄智聪  2018年11月1日 下午8:45:15
 	 */
 	@RequestMapping("/getGoodModuleInfo")
-	public JsonResult<GoodModuleInfo> getGoodModuleInfo(@RequestParam("moduleCode")String moduleCode){
+	public JsonResult<GoodsModuleInfo> getGoodModuleInfo(@RequestParam("moduleCode")String moduleCode){
 		return goodsModuleService.getGoodModuleInfo(moduleCode);
 	}
 	

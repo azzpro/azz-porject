@@ -29,6 +29,7 @@ import com.azz.platform.merchant.pojo.bo.SearchClassificationListParam;
 import com.azz.platform.merchant.pojo.bo.SearchSameLevelClassification;
 import com.azz.platform.merchant.pojo.vo.Classification;
 import com.azz.platform.merchant.pojo.vo.ClassificationList;
+import com.azz.platform.merchant.pojo.vo.ClassificationParams;
 import com.azz.system.api.SystemImageUploadService;
 import com.azz.system.sequence.api.RandomSequenceService;
 import com.azz.util.JSR303ValidateUtils;
@@ -370,5 +371,30 @@ public class ClassificationService {
     	return platformGoodsClassificationMapper.selectByPrimaryKey(id);
     }
     
+    /**
+     * <p>获取一级分类</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月6日 上午10:35:48
+     */
+    public JsonResult<List<ClassificationParams>> getClassificationParent(@RequestBody SearchClassificationListParam param){
+        List<ClassificationParams> list = platformGoodsClassificationMapper.selectParentByAssortmentName(param);
+        return JsonResult.successJsonResult(list);
+    }
+    
+    /**
+     * <p>根据分类编码获取子级的分类</p>
+     * @param parentCode
+     * @return
+     * @author 彭斌  2018年11月6日 上午10:49:44
+     */
+    public JsonResult<List<ClassificationParams>> getClassificationChild(@RequestParam("parentCode") String parentCode){
+        if(null == parentCode || "".equals(parentCode)) {
+            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
+                    "分类编码不存在");
+        }
+        List<ClassificationParams> list = platformGoodsClassificationMapper.selectChild(parentCode);
+        return JsonResult.successJsonResult(list);
+    }
 }
 

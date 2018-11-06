@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.platform.merchant.mapper.PlatformCaseMapper">
+  <resultMap id="BaseResultMap" type="com.azz.platform.merchant.pojo.PlatformCase">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="case_code" jdbcType="VARCHAR" property="caseCode" />
+    <result column="case_name" jdbcType="VARCHAR" property="caseName" />
+    <result column="classification_id" jdbcType="BIGINT" property="classificationId" />
+    <result column="case_status" jdbcType="INTEGER" property="caseStatus" />
+    <result column="case_pic_url" jdbcType="VARCHAR" property="casePicUrl" />
+    <result column="case_pic_name" jdbcType="VARCHAR" property="casePicName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="last_modify_time" jdbcType="TIMESTAMP" property="lastModifyTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, case_code, case_name, classification_id, case_status, case_pic_url, case_pic_name, 
+    create_time, creator, modifier, last_modify_time, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from platform_case
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from platform_case
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.platform.merchant.pojo.PlatformCase">
+    insert into platform_case (id, case_code, case_name, 
+      classification_id, case_status, case_pic_url, 
+      case_pic_name, create_time, creator, 
+      modifier, last_modify_time, remark
+      )
+    values (#{id,jdbcType=BIGINT}, #{caseCode,jdbcType=VARCHAR}, #{caseName,jdbcType=VARCHAR}, 
+      #{classificationId,jdbcType=BIGINT}, #{caseStatus,jdbcType=INTEGER}, #{casePicUrl,jdbcType=VARCHAR}, 
+      #{casePicName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR}, #{lastModifyTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.platform.merchant.pojo.PlatformCase">
+    insert into platform_case
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="caseCode != null">
+        case_code,
+      </if>
+      <if test="caseName != null">
+        case_name,
+      </if>
+      <if test="classificationId != null">
+        classification_id,
+      </if>
+      <if test="caseStatus != null">
+        case_status,
+      </if>
+      <if test="casePicUrl != null">
+        case_pic_url,
+      </if>
+      <if test="casePicName != null">
+        case_pic_name,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="lastModifyTime != null">
+        last_modify_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="caseCode != null">
+        #{caseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="caseName != null">
+        #{caseName,jdbcType=VARCHAR},
+      </if>
+      <if test="classificationId != null">
+        #{classificationId,jdbcType=BIGINT},
+      </if>
+      <if test="caseStatus != null">
+        #{caseStatus,jdbcType=INTEGER},
+      </if>
+      <if test="casePicUrl != null">
+        #{casePicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="casePicName != null">
+        #{casePicName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifyTime != null">
+        #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.platform.merchant.pojo.PlatformCase">
+    update platform_case
+    <set>
+      <if test="caseCode != null">
+        case_code = #{caseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="caseName != null">
+        case_name = #{caseName,jdbcType=VARCHAR},
+      </if>
+      <if test="classificationId != null">
+        classification_id = #{classificationId,jdbcType=BIGINT},
+      </if>
+      <if test="caseStatus != null">
+        case_status = #{caseStatus,jdbcType=INTEGER},
+      </if>
+      <if test="casePicUrl != null">
+        case_pic_url = #{casePicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="casePicName != null">
+        case_pic_name = #{casePicName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifyTime != null">
+        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.platform.merchant.pojo.PlatformCase">
+    update platform_case
+    set case_code = #{caseCode,jdbcType=VARCHAR},
+      case_name = #{caseName,jdbcType=VARCHAR},
+      classification_id = #{classificationId,jdbcType=BIGINT},
+      case_status = #{caseStatus,jdbcType=INTEGER},
+      case_pic_url = #{casePicUrl,jdbcType=VARCHAR},
+      case_pic_name = #{casePicName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectByCaseCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from platform_case
+    where case_code = #{caseCode,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByCaseName" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from platform_case
+    where case_name = #{caseName,jdbcType=VARCHAR}
+  </select>
+</mapper>

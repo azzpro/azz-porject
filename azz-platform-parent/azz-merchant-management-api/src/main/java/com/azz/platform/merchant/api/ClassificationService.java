@@ -23,6 +23,7 @@ import com.azz.platform.merchant.pojo.bo.EditClassificationParam;
 import com.azz.platform.merchant.pojo.bo.SearchClassificationListParam;
 import com.azz.platform.merchant.pojo.vo.Classification;
 import com.azz.platform.merchant.pojo.vo.ClassificationList;
+import com.azz.platform.merchant.pojo.vo.ClassificationParams;
 
 /**
  * <P>TODO</P>
@@ -49,5 +50,11 @@ public interface ClassificationService {
     
     @GetMapping("/azz/api/merchant/product/getPlatformGoodsClassificationById")
     PlatformGoodsClassification getPlatformGoodsClassificationById(Long id);
-}
+    
+    @PostMapping("/azz/api/merchant/product/getClassificationParent")
+    JsonResult<List<ClassificationParams>> getClassificationParent(@RequestBody SearchClassificationListParam param);
+    
+    @PostMapping("/azz/api/merchant/product/getClassificationChild")
+    JsonResult<List<ClassificationParams>> getClassificationChild(@RequestParam("parentCode") String parentCode);
+ }
 

@@ -261,4 +261,29 @@
   	WHERE pgc.assortment_name = #{assortmentName} 
   	AND pgc.assortment_top = #{assortmentTop}
   </select>
+  
+  <select id="selectParentByAssortmentName" parameterType="com.azz.platform.merchant.pojo.bo.SearchClassificationListParam" resultType="com.azz.platform.merchant.pojo.vo.ClassificationParams">
+  	SELECT
+  		id as id,
+		assortment_code as assortmentCode,
+		assortment_name as assortmentName,
+		assortment_parent_code as assortmentParentCode,
+	FROM
+		platform_goods_classification
+	WHERE status = 1
+	<if test="param != null and param != ''">
+		and assortment_name = #{param}
+	</if>
+  </select>
+  
+  <select id="selectChild" parameterType="java.lang.String" resultType="com.azz.platform.merchant.pojo.vo.ClassificationParams">
+  	SELECT
+  		id as id,
+		assortment_code as assortmentCode,
+		assortment_name as assortmentName,
+		assortment_parent_code as assortmentParentCode,
+	FROM
+		platform_goods_classification
+	WHERE status = 1 and assortment_parent_code = #{parentCode}
+  </select>
 </mapper>

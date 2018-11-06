@@ -40,6 +40,10 @@ public class MerchantProductErrorCode extends BaseErrorCode{
     public static final MerchantProductErrorCode MERCHANT_PRODUCT_CASE_EXIST = new MerchantProductErrorCode(20012, "产品方案已存在");
     
     public static final MerchantProductErrorCode MERCHANT_PRODUCT_CASE_CLASSIFICATION_EXIST = new MerchantProductErrorCode(20013, "产品方案分类已存在");
+    
+    public static final MerchantProductErrorCode MERCHANT_PRODUCT_CASE_CLASSIFICATION_IS_NULL = new MerchantProductErrorCode(20014, "产品方案分类id不许为空");
+    
+    public static final MerchantProductErrorCode MERCHANT_PRODUCT_CASE_ID_OR_PARAMS_IS_NULL = new MerchantProductErrorCode(20015, "产品方案id不许为空或者未选取产品参数");
     public MerchantProductErrorCode(int code, String message) {
 	super(code, message);
     }

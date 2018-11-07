@@ -196,6 +196,33 @@
     where classification_id = #{classificationId} and case_status != 0
   </select>
   
+  <select id="selectParamsByAssortmentId" parameterType="java.lang.Long" resultType="com.azz.platform.merchant.pojo.vo.CaseParams">
+  	SELECT
+		pgpt.params_code as paramCode,
+		pgpt.params_name as paramName,
+		group_concat(pgpv.params_value)  as paramValue
+		FROM platform_goods_params pgp
+	JOIN  platform_goods_params_term pgpt ON pgp.id = pgpt.params_id
+	JOIN platform_goods_params_value pgpv ON pgpv.params_parent_id = pgt.id
+	WHERE pgpt.assortment_id = #{classificationId}
+	GROUP BY pgpt.params_code
+  </select>
+  
+  <select id="selectParamsByCaseCode" parameterType="java.lang.String" resultType="com.azz.platform.merchant.pojo.vo.CaseParamsList">
+  	SELECT
+		pgpt.params_name as paramsName,
+		pgpt.params_code as paramsCode,
+		pgpt.params_type as paramsType,
+		group_concat(pgpv.params_value) as paramsValue 
+	FROM
+		platform_case pc
+	JOIN platform_case_classification_params pccp ON pc.id = pccp.case_id
+	JOIN platform_goods_params_term pgpt ON pccp.params_id = pgpt.params_id
+	JOIN platform_goods_params_value pgpv ON pgpv.params_parent_id = pgpt.id
+	WHERE pc.case_code = #{caseCode}
+	GROUP BY
+		pgpt.params_code
+
   <select id="getCaseInfoList" parameterType="com.azz.platform.merchant.pojo.bo.SearchCaseInfoParam" resultType="com.azz.platform.merchant.pojo.vo.CaseInfo">
   	select 
     <include refid="Base_Column_List" />

@@ -2,6 +2,7 @@ package com.azz.platform.merchant.mapper;
 
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.azz.platform.merchant.pojo.PlatformCaseClassificationParams;
 
@@ -18,4 +19,6 @@ public interface PlatformCaseClassificationParamsMapper {
     int updateByPrimaryKeySelective(PlatformCaseClassificationParams record);
 
     int updateByPrimaryKey(PlatformCaseClassificationParams record);
+    
+    PlatformCaseClassificationParams selectParam(@Param("param") Long caseId, @Param("paramsId") Long paramsId);
 }

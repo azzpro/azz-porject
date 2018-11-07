@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.platform.merchant.api.ParamsService;
-import com.azz.platform.merchant.pojo.bo.ParamUpdate;
 import com.azz.platform.merchant.pojo.bo.ParamsData;
 import com.azz.platform.merchant.pojo.bo.SearchParams;
 import com.azz.platform.merchant.pojo.vo.Params;
@@ -83,7 +82,7 @@ public class ParamsController {
 	 * @author 刘建麟  2018年10月31日 下午7:47:30
 	 */
 	@RequestMapping(value="updateParams",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
-	public JsonResult<String> updateParams(@RequestBody ParamUpdate params){
+	public JsonResult<String> updateParams(@RequestBody ParamsData params){
 		params.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
 		return paramsService.updateParams(params);
 	}

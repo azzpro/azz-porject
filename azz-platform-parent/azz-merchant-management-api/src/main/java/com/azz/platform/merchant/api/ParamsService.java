@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
-import com.azz.platform.merchant.pojo.bo.ParamUpdate;
 import com.azz.platform.merchant.pojo.bo.ParamsData;
 import com.azz.platform.merchant.pojo.bo.SearchParams;
 import com.azz.platform.merchant.pojo.vo.Params;
@@ -33,7 +32,7 @@ import com.azz.platform.merchant.pojo.vo.ParamsAll;
 public interface ParamsService {
 	
 	@PostMapping("/azz/api/merchant/searchParamsList")
-	JsonResult<Pagination<Params>> searchParamsList(@RequestBody SearchParams param);
+	public JsonResult<Pagination<Params>> searchParamsList(@RequestBody SearchParams param);
 	
 	@RequestMapping(value="/azz/api/merchant/addParams",method=RequestMethod.POST)
 	public JsonResult<String> addParams(@RequestBody ParamsData params);
@@ -42,7 +41,7 @@ public interface ParamsService {
 	public JsonResult<List<ParamsAll>> toUpdateParams(@RequestParam("code") String code);
 	
 	@RequestMapping(value="/azz/api/merchant/updateParams",method=RequestMethod.POST)
-	public JsonResult<String> updateParams(ParamUpdate params);
+	public JsonResult<String> updateParams(ParamsData params);
 	
 	@RequestMapping(value="/azz/api/merchant/deleteParams",method=RequestMethod.POST)
 	public JsonResult<String> deleteParams(@RequestParam("code") String code);

@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.platform.merchant.pojo.PlatformGoodsParamsTerm;
-import com.azz.platform.merchant.pojo.bo.Param;
 
 @Mapper
 public interface PlatformGoodsParamsTermMapper {

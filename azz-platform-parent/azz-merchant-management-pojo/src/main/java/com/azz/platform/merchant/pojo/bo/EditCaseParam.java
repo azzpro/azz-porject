@@ -7,6 +7,8 @@
  
 package com.azz.platform.merchant.pojo.bo;
 
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -75,5 +77,10 @@ public class EditCaseParam {
      * 是否修改过主图 0 未修改 1修改过
      */
     private Integer isEditPic;
+    
+    /**
+     * 参数id
+     */
+    private List<String> paramsId;
 }
 

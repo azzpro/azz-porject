@@ -24,11 +24,12 @@ import com.azz.platform.merchant.mapper.PlatformCaseMapper;
 import com.azz.platform.merchant.pojo.PlatformCase;
 import com.azz.platform.merchant.pojo.PlatformCaseClassificationParams;
 import com.azz.platform.merchant.pojo.bo.AddCaseParam;
-import com.azz.platform.merchant.pojo.bo.AddSelectionParams;
 import com.azz.platform.merchant.pojo.bo.CasePic;
 import com.azz.platform.merchant.pojo.bo.DelSelecttionParams;
 import com.azz.platform.merchant.pojo.bo.EditCaseParam;
+import com.azz.platform.merchant.pojo.bo.SearchCaseListParam;
 import com.azz.platform.merchant.pojo.bo.SearchCaseParamList;
+import com.azz.platform.merchant.pojo.vo.CaseList;
 import com.azz.platform.merchant.pojo.vo.CaseParams;
 import com.azz.platform.merchant.pojo.vo.CaseParamsList;
 import com.azz.system.api.SystemImageUploadService;
@@ -61,6 +62,18 @@ public class CaseService {
     private RandomSequenceService randomSequenceService;
    
     /**
+     * <p>获取方案列表</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月7日 下午7:56:27
+     */
+    public JsonResult<Pagination<CaseList>> searchCaseList(@RequestBody SearchCaseListParam param){
+        PageHelper.startPage(param.getPageNum(), param.getPageSize());
+        List<CaseList> list = platformCaseMapper.selectCaseListByParam(param);
+        return JsonResult.successJsonResult(new Pagination<>(list));
+    }
+    
+    /**
      * <p>新增方案</p>
      * @param param
      * @return
@@ -76,7 +89,7 @@ public class CaseService {
         PlatformCase pcObj = new PlatformCase();
         
         
-        // 编辑的方案名称和原始的方案名不一致校验方案名称是否唯一
+        // 新增方案名称校验方案名称是否唯一
         PlatformCase platformCase = platformCaseMapper.selectByCaseName(param.getCaseName());
         if(ObjectUtils.isNotNull(platformCase)) {
             // 方案名称存在
@@ -92,8 +105,8 @@ public class CaseService {
                     MerchantProductErrorCode.MERCHANT_PRODUCT_CASE_CLASSIFICATION_EXIST);
         }
         
-        // 新增方案编码 TODO 系统生成
-        String caseCode = randomSequenceService.getClassificationNumber();
+        // 新增方案编码
+        String caseCode = randomSequenceService.getCaseCodeNumber();
         
         if (StringUtils.isBlank(originalFileName)) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
@@ -121,8 +134,6 @@ public class CaseService {
             throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "主图上传失败，请重试");
         }
         
-        
-        
         pcObj.setCaseCode(caseCode);
         pcObj.setCaseName(param.getCaseName());
         pcObj.setCasePicName(originalFileName);
@@ -132,8 +143,23 @@ public class CaseService {
         pcObj.setCreateTime(new Date());
         pcObj.setCreator(param.getCreator());
         pcObj.setRemark(param.getRemark());
-       
         platformCaseMapper.insertSelective(pcObj);
+        
+        // 新增方案选型参数
+        if(param.getParamsId().size() > 0) {
+            //  方案ID
+            Long caseId = pcObj.getId();
+            
+            for (int i = 0; i < param.getParamsId().size(); i++) {
+                PlatformCaseClassificationParams record = new PlatformCaseClassificationParams();
+                record.setCaseId(caseId);
+                record.setCreateTime(new Date());
+                record.setCreator(param.getCreator());
+                record.setParamsId(Long.parseLong(param.getParamsId().get(i)));
+                platformCaseClassificationParamsMapper.insertSelective(record);
+            }
+        }
+        
         return JsonResult.successJsonResult();
     }
 
@@ -209,6 +235,23 @@ public class CaseService {
         pcObj.setClassificationId(param.getClassificationId());
         pcObj.setRemark(param.getRemark());
         platformCaseMapper.updateByPrimaryKeySelective(pcObj);
+        
+        // 新增方案选型参数
+        if(param.getParamsId().size() > 0) {
+            // 方案ID
+            Long caseId = pcObj.getId();
+            // 删除所有该方案下的所有的参数
+            platformCaseClassificationParamsMapper.delCaseClassificationParams(caseId);
+            
+            for (int i = 0; i < param.getParamsId().size(); i++) {
+                PlatformCaseClassificationParams record = new PlatformCaseClassificationParams();
+                record.setCaseId(caseId);
+                record.setCreateTime(new Date());
+                record.setCreator(param.getModifier());
+                record.setParamsId(Long.parseLong(param.getParamsId().get(i)));
+                platformCaseClassificationParamsMapper.insertSelective(record);
+            }
+        }
         return JsonResult.successJsonResult();
     }
     
@@ -228,29 +271,6 @@ public class CaseService {
         return JsonResult.successJsonResult(new Pagination<>(list));
     }
     
-    
-    /**
-     * <p>添加选型参数</p>
-     * @param param
-     * @return
-     * @author 彭斌  2018年11月6日 下午4:40:14
-     */
-    public JsonResult<String> addParam(@RequestBody AddSelectionParams param){
-        if(null == param.getCaseId() || param.getParamsId().size() == 0) {
-            throw new BaseException(
-                    MerchantProductErrorCode.MERCHANT_PRODUCT_CASE_ID_OR_PARAMS_IS_NULL);
-        }
-        
-        for (int i = 0; i < param.getParamsId().size(); i++) {
-            PlatformCaseClassificationParams record = new PlatformCaseClassificationParams();
-            record.setCaseId(param.getCaseId());
-            record.setCreateTime(new Date());
-            record.setCreator(param.getCreator());
-            record.setParamsId(param.getParamsId().get(i));
-            platformCaseClassificationParamsMapper.insertSelective(record);
-        }
-        return JsonResult.successJsonResult();
-    }
     
     /**
      * <p>根据方案编码获取选型参数</p>

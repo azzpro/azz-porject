@@ -41,7 +41,7 @@
       #{modifier,jdbcType=VARCHAR}, #{lastModifyTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.azz.platform.merchant.pojo.PlatformCase">
+  <insert id="insertSelective" keyProperty="id" useGeneratedKeys="true" parameterType="com.azz.platform.merchant.pojo.PlatformCase">
     insert into platform_case
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -247,5 +247,30 @@
 			OR pc.case_code LIKE CONCAT('%', #{searchInput}, '%') 
 		)
 	</if>
+  </select>
+  
+  <select id="selectCaseListByParam" parameterType="com.azz.platform.merchant.pojo.bo.SearchCaseListParam" resultType="com.azz.platform.merchant.pojo.vo.CaseList">
+  	SELECT pc.case_code AS caseCode,
+  		   pc.case_name AS caseName,
+  		   pc.case_status AS status,
+		CONCAT(
+			pgc1.assortment_name,
+			'-',
+			pgc2.assortment_name,
+			'-',
+			pgc3.assortment_name
+		) AS classificationName,
+			pc.create_time AS createTime,
+			pu.user_name AS userName
+ 	FROM platform_case pc
+	LEFT JOIN platform_user pu ON pu.user_code = pc.creator
+	LEFT JOIN platform_goods_classification pgc3 ON pc.classification_id = pgc3.id
+	LEFT JOIN platform_goods_classification pgc2 ON pgc3.assortment_parent_code = pgc2.assortment_code
+	LEFT JOIN platform_goods_classification pgc1 ON pgc2.assortment_parent_code = pgc1.assortment_code
+  	<where>
+  		<if test="status != null">and pc.case_status = #{status}</if>
+  		<if test="param != null and param !=''">and (pc.case_code = #{param} or pc.case_name = #{param})</if>
+  	</where>
+  	ORDER BY pc.create_time desc
   </select>
 </mapper>

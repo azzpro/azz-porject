@@ -27,5 +27,7 @@ public class Params {
 	private Integer paramsCount;
 	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")
 	private Date createTime;
+	private Long aId;
+	private Byte flag;
 }
 

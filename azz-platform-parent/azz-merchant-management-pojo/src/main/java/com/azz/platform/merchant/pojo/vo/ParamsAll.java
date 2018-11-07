@@ -26,5 +26,6 @@ public class ParamsAll {
 	private String parentCode;
 	private String assortName;
 	private String assortCode;
+	private Long paramParentId;
 }
 

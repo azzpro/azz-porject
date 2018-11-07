@@ -81,6 +81,15 @@ public class ParamsService {
 	public JsonResult<Pagination<Params>> searchParamsList(@RequestBody SearchParams param) {
 	        PageHelper.startPage(param.getPageNum(), param.getPageSize());
 	        List<Params> paramsList = goodsParamsMapper.searchParamsList(param);
+	        for (Params params : paramsList) {
+	        	String b = productService.selectProductByAssortmentId(params.getAId());
+	        	if(Objects.equals(b, "NO")) {
+					params.setFlag((byte)1); //不能修改
+				}else {
+					params.setFlag((byte)0);
+				}
+			}
+	        
 	        return JsonResult.successJsonResult(new Pagination<>(paramsList));
 	}
 	
@@ -120,13 +129,8 @@ public class ParamsService {
 					pa.setParamsChoice(platformGoodsParamsTerm.getParamsChoice());
 					pa.setParamsType(platformGoodsParamsTerm.getParamsType());
 					pa.setParamsCode(platformGoodsParamsTerm.getParamsCode());
+					pa.setParamParentId(platformGoodsParamsTerm.getId());
 					List<PlatformGoodsParamsValue> valueById = goodsParamsValueMapper.selectValueById(platformGoodsParamsTerm.getId());
-					String b = productService.selectProductByAssortmentId(key.getId());
-					if(Objects.equals(b, "NO")) {
-						pa.setUpdatFlag((byte)1);
-					}else {
-						pa.setUpdatFlag((byte)0);
-					}
 					if(null != valueById && valueById.size() > 0 && platformGoodsParamsTerm.getParamsType() == 1) {
 						for (PlatformGoodsParamsValue platformGoodsParamsTerm2 : valueById) {
 							sb.append(platformGoodsParamsTerm2.getParamsValue());
@@ -164,25 +168,35 @@ public class ParamsService {
 		PlatformGoodsParams paramsByCode = goodsParamsMapper.selectParamsByCode(ppt.getParentCode());
 		if(null == paramsByCode)
 			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_NULL);
-		//获取父参数主键ID
-		Long id = paramsByCode.getId();
 		//根据分类CODE 查询分类
 		PlatformGoodsClassification key = goodsClassificationMapper.selectByAssortmentCode(ppt.getAssortmentCode());
 		if(null == key)
 			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_ASSORTMENT_EXIST);	
-			
+		
 		//一个分类只能被选中一次
 		int count = goodsParamsMapper.selectAssortCountByCode(key.getId());
 		if(count > 1)
 			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_TOOMANY);
-		// 清空 参数项 和参数值表  根据父参数ID
-		goodsParamsTermMapper.deleteByParamsId(id);
-
-		PlatformGoodsParamsTerm paramsTerm = goodsParamsTermMapper.selectIdTermByCode(ppt.getParamCode());
-		System.out.println(paramsTerm);
-		goodsParamsValueMapper.deleteByParentId(paramsTerm.getId());
+		
+		List<PlatformGoodsParamsTerm> termByCode = goodsParamsTermMapper.selectParamsTermByCode(paramsByCode.getId());
+		StringBuilder sb = new StringBuilder();
+		if(null == termByCode || termByCode.size() <=0)
+			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_NULL);
+		
+		for (PlatformGoodsParamsTerm platformGoodsParamsTerm : termByCode) {
+			sb.append(platformGoodsParamsTerm.getId());
+			if(platformGoodsParamsTerm != termByCode.get(termByCode.size()-1)) {
+				sb.append(",");
+			}
+			// 清空 参数项 
+			goodsParamsTermMapper.deleteByPrimaryKey(platformGoodsParamsTerm.getId());
+		}
+		String[] split = sb.toString().split(",");
+		goodsParamsValueMapper.deleteValue((long[]) ConvertUtils.convert(split,long.class));//删除参数值
+			
 		//参数主表更新 分类ID
-		int idById = goodsParamsMapper.updateAssormentIdById(key.getId(),id);
+		int idById = goodsParamsMapper.updateAssormentIdById(key.getId(),paramsByCode.getId());
+		
 		if(idById != 1) 
 			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_UPDATE_ERROR);
 		//获取参数值
@@ -196,7 +210,6 @@ public class ParamsService {
 				if(set.size() != list.size()) {
 					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_PARAMS);
 				}
-				
 				for (Param paramsData : list) {
 					JSR303ValidateUtils.validate(paramsData);
 					if(null == paramsData) {
@@ -219,7 +232,7 @@ public class ParamsService {
 						for (String string : param) {
 							PlatformGoodsParamsValue ppv = new PlatformGoodsParamsValue();
 							ppv.setParamsValue(Long.valueOf(string));
-							ppv.setParamsParentId(id);
+							ppv.setParamsParentId(ids);
 							goodsParamsValueMapper.insertSelective(ppv);
 							ppv = null;
 						}

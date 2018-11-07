@@ -84,7 +84,7 @@
   </update>
   
   <select id="searchParamsList" resultType="com.azz.platform.merchant.pojo.vo.Params" parameterType="com.azz.platform.merchant.pojo.bo.SearchParams">
-  select a.params_code paramCode ,b.assortment_name assortmentName , c.productUseCount,d.paramsCount ,a.create_time createTime from platform_goods_params a
+  select a.params_code paramCode ,b.assortment_name assortmentName ,a.assortment_id aId, c.productUseCount,d.paramsCount ,a.create_time createTime from platform_goods_params a
 	LEFT JOIN platform_goods_classification b on b.id = a.assortment_id
 	LEFT JOIN (select assortment_id ,count(1) as productUseCount from merchant_goods_product group by assortment_id) c on 
 	a.id = c.assortment_id

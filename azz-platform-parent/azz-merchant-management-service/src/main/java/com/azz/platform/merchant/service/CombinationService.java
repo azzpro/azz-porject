@@ -371,7 +371,7 @@ public class CombinationService {
 	    String newFileName = fileNameNoSufix + "_" + combinationCode;
 	    // 图片url   TODO
 	    JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
-		    filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_BRAND_IMAGE_TYPE);
+		    filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_COMBINATION_IMAGE_TYPE);
 	    UploadFileInfo file = new UploadFileInfo();
 	    if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 	    	file.setImgUrl(jr.getData());

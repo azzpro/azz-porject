@@ -52,6 +52,12 @@ public class FileConstants {
 	//模组图片
 	public static final String AZZ_MODULE_PATH = "module_pic";
 	
+	//推荐组合图片
+	public static final String AZZ_COMBINATION_PATH = "combination_pic";
+			
+	//方案图片
+	public static final String AZZ_CASE_PATH = "case_pic";
+	
 	//平台端
 	public static final int AZZ_PLATFORM = 1;
 	
@@ -81,9 +87,15 @@ public class FileConstants {
 	
 	//品牌图
 	public static final int AZZ_BRAND_IMAGE_TYPE = 7;
-		
+
 	//模组图
 	public static final int AZZ_MODULE_IMAGE_TYPE = 8;
+
+	//推荐组合主图
+	public static final int AZZ_COMBINATION_IMAGE_TYPE = 9;
+	
+	//方案主图
+	public static final int AZZ_CASE_IMAGE_TYPE = 10;
 	
 	//支持的图片格式
 	public static final String AZZ_IMAGE_SUFFIX = "bmp|jpg|png|git|webp|tiff";

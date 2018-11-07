@@ -92,8 +92,8 @@ public class CaseService {
                     MerchantProductErrorCode.MERCHANT_PRODUCT_CASE_CLASSIFICATION_EXIST);
         }
         
-        // 新增方案编码 TODO 系统生成
-        String caseCode = randomSequenceService.getClassificationNumber();
+        // 新增方案编码
+        String caseCode = randomSequenceService.getCaseCodeNumber();
         
         if (StringUtils.isBlank(originalFileName)) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,

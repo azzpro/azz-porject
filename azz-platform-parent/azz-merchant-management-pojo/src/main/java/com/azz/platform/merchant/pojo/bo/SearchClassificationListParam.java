@@ -15,7 +15,7 @@ import lombok.Data;
  * @author 彭斌  2018年10月20日 下午2:50:46
  */
 @Data
-public class SearchClassificationListParam{
+public class SearchClassificationListParam {
     private String param;
 }
 

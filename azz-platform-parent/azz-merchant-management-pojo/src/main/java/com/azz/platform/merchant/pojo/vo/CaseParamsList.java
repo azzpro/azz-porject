@@ -16,6 +16,7 @@ import lombok.Data;
  */
 @Data
 public class CaseParamsList {
+    private Long id;
     private String paramsName;
     private String paramsCode;
     private String paramsType;

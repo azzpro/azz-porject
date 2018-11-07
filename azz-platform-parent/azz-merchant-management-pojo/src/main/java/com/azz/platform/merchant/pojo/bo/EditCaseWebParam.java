@@ -47,7 +47,7 @@ public class EditCaseWebParam {
     
     
     /**
-     * 方案状态（0下架 1上架）
+     * 方案状态（0删除 1上架 2下架）
      *
      * @mbg.generated
      */

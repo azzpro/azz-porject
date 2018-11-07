@@ -6,10 +6,11 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.platform.merchant.pojo.PlatformCase;
+import com.azz.platform.merchant.pojo.bo.SearchCaseInfoParam;
+import com.azz.platform.merchant.pojo.bo.SearchCaseParamList;
+import com.azz.platform.merchant.pojo.vo.CaseInfo;
 import com.azz.platform.merchant.pojo.vo.CaseParams;
 import com.azz.platform.merchant.pojo.vo.CaseParamsList;
-import com.azz.platform.merchant.pojo.bo.SearchCaseInfoParam;
-import com.azz.platform.merchant.pojo.vo.CaseInfo;
 @Mapper
 public interface PlatformCaseMapper {
     int deleteByPrimaryKey(Long id);
@@ -30,7 +31,7 @@ public interface PlatformCaseMapper {
     
     PlatformCase selectByClassificationId(Long classificationId);
     
-    List<CaseParams> selectParamsByAssortmentId(Long classificationId);
+    List<CaseParams> selectParamsByAssortmentId(SearchCaseParamList param);
     
     List<CaseParamsList> selectParamsByCaseCode(String caseCode);
     

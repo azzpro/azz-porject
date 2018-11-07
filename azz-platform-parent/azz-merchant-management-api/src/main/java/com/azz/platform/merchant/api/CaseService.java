@@ -17,10 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.platform.merchant.pojo.bo.AddCaseParam;
-import com.azz.platform.merchant.pojo.bo.AddSelectionParams;
 import com.azz.platform.merchant.pojo.bo.DelSelecttionParams;
 import com.azz.platform.merchant.pojo.bo.EditCaseParam;
+import com.azz.platform.merchant.pojo.bo.SearchCaseListParam;
 import com.azz.platform.merchant.pojo.bo.SearchCaseParamList;
+import com.azz.platform.merchant.pojo.vo.CaseList;
 import com.azz.platform.merchant.pojo.vo.CaseParams;
 import com.azz.platform.merchant.pojo.vo.CaseParamsList;
 
@@ -32,7 +33,15 @@ import com.azz.platform.merchant.pojo.vo.CaseParamsList;
 @FeignClient("azz-merchant-management-service")
 public interface CaseService {
     
-  
+    /**
+     * <p>获取方案列表</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月7日 下午7:58:42
+     */
+    @PostMapping("/azz/api/merchant/case/searchCaseList")
+    JsonResult<Pagination<CaseList>> searchCaseList(@RequestBody SearchCaseListParam param);
+    
     /**
      * <p>新增方案</p>
      * @param param
@@ -59,15 +68,6 @@ public interface CaseService {
      */
     @PostMapping("/azz/api/merchant/case/getCaseParamList")
     JsonResult<Pagination<CaseParams>> getCaseParamList(@RequestBody SearchCaseParamList param);
-
-    /**
-     * <p>添加选型参数</p>
-     * @param param
-     * @return
-     * @author 彭斌  2018年11月7日 上午10:27:16
-     */
-    @PostMapping("/azz/api/merchant/case/addParam")
-    JsonResult<String> addParam(@RequestBody AddSelectionParams param);
 
     /**
      * <p>根据方案编码获取选型参数</p>

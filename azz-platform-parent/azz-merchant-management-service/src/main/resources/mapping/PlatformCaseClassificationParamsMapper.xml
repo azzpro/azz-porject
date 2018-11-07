@@ -133,4 +133,8 @@
     where case_id = #{caseId,jdbcType=BIGINT} 
     and params_id = #{paramsId,jdbcType=BIGINT}
   </select>
+  
+  <delete id="delCaseClassificationParams" parameterType="java.lang.Long" >
+  	DELETE from platform_case_classification_params WHERE case_id = #{caseId,jdbcType=BIGINT}
+  </delete>
 </mapper>

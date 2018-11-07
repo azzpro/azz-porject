@@ -240,5 +240,24 @@ public class SequenceController {
         return "IGG" + tenRandomSequenceService.getSequence();
     }
     
+    /**
+     * <p>方案编码</p>
+     * @return
+     * @author 彭斌  2018年11月7日 下午4:18:30
+     */
+    @RequestMapping(value="getCaseCodeNumber",method=RequestMethod.GET)
+    public String getCaseCodeNumber() {
+        return "IRA" + randomSequenceService.getSequence();
+    }
+    
+    /**
+     * <p>推荐组合编码</p>
+     * @return
+     * @author 彭斌  2018年11月7日 下午4:18:33
+     */
+    @RequestMapping(value="getCombinationCodeNumber",method=RequestMethod.GET)
+    public String getCombinationCodeNumber() {
+        return "IRB" + randomSequenceService.getSequence();
+    }
 }
 

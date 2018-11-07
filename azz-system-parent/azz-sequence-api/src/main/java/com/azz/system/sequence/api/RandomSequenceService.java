@@ -51,5 +51,11 @@ public interface RandomSequenceService {
 	
 	@RequestMapping(value="/azz/api/sequence/getBrandCodeNumber",method=RequestMethod.GET)
 	String getBrandCodeNumber();
+	
+	@RequestMapping(value="/azz/api/sequence/getCaseCodeNumber",method=RequestMethod.GET)
+    String getCaseCodeNumber();
+	
+	@RequestMapping(value="/azz/api/sequence/getCombinationCodeNumber",method=RequestMethod.GET)
+    String getCombinationCodeNumber();
 }
 

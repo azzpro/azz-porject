@@ -100,6 +100,10 @@
   select id,assortment_id from platform_goods_params where params_code=#{code}
   </select>
   
+  <select id="selectAssortCountByCode" resultType="int">
+  select count(1) from platform_goods_params where assortment_id = #{id}
+  </select>
+  
   <delete id="deleteByCode" parameterType="java.lang.String">
     delete from platform_goods_params
     where params_code = #{code,jdbcType=VARCHAR}

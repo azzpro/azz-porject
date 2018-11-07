@@ -37,14 +37,7 @@ azz-system-service:  #系统服务
     ReadTimeout: 5000
     OkToRetryOnAllOperations: false
     MaxAutoRetriesNextServer: 0
-    MaxAutoRetries: 0
-azz-merchant-management-service:  #平台商户服务
-  ribbon:
-    ConnectTimeout: 2000
-    ReadTimeout: 5000
-    OkToRetryOnAllOperations: false
-    MaxAutoRetriesNextServer: 0
-    MaxAutoRetries: 0   
+    MaxAutoRetries: 0  
 eureka:
   client:
     service-url:

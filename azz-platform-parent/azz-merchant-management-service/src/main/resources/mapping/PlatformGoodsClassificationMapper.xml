@@ -44,6 +44,12 @@
       #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP},#{status,jdbcType=INTEGER}
       )
   </insert>
+   <select id="selectByAssortmentCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+    	<include refid="Base_Column_List" />
+    from platform_goods_classification
+    where assortment_code = #{assortmentCode,jdbcType=VARCHAR}
+  </select>
   <insert id="insertSelective" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsClassification">
     insert into platform_goods_classification
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -244,7 +250,6 @@
 		and (assortment_code = #{param} or assortment_name = #{param})
 	</if>
   </select>
-  
   <select id="selectCountById" parameterType="java.lang.Long" resultType="int">
   	SELECT count(1) FROM merchant_goods_module WHERE classification_id = #{classificationId} 
   </select>

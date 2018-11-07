@@ -27,7 +27,7 @@ public interface PlatformGoodsParamsMapper {
     
     int updateAssormentIdById(@Param("aid") Long aid,@Param("id") Long id);
     
-    
+    int selectAssortCountByCode(Long id);
     /**
      * <p>根据编码删除</p>
      * @param code

@@ -205,20 +205,4 @@
   	update merchant_goods_product set product_status = #{status} where id = #{id}
   </update>
   
-  <!-- 提供平台端 产品列表 -->
-  <select id="selectPlatformProductList" resultType="com.azz.merchant.pojo.vo.PlatfomrProductList" parameterType="com.azz.merchant.pojo.bo.PlatformProduct">
-  select a.product_code productCode,a.product_system_code systemCode,b.price price,m.merchant_name merchantName,group_concat(p.params_name) pNames,a.product_status pStatus,a.create_time createTime from merchant_goods_product a
-	LEFT JOIN (select min(price) price,product_id from merchant_goods_product_price GROUP BY product_id )  b
-	on a.id = b.product_id
-	LEFT JOIN merchant m
-	on a.merchant_id = m.id
-	LEFT JOIN
-	merchant_goods_product_params p
-	on p.product_id = a.id
-	GROUP BY a.id
-	where 1=1
-	<if test="param != null and param != ''">
-		and (a.product_code = #{param} or m.merchant_name = #{param})
-	</if>
-  </select>
 </mapper>

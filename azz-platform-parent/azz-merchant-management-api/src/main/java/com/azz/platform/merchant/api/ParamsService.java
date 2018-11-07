@@ -10,7 +10,6 @@ package com.azz.platform.merchant.api;
 import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
-import com.azz.platform.merchant.pojo.PlatformGoodsParams;
-import com.azz.platform.merchant.pojo.bo.Param;
+import com.azz.platform.merchant.pojo.bo.ParamUpdate;
 import com.azz.platform.merchant.pojo.bo.ParamsData;
 import com.azz.platform.merchant.pojo.bo.SearchParams;
 import com.azz.platform.merchant.pojo.vo.Params;
@@ -44,7 +42,7 @@ public interface ParamsService {
 	public JsonResult<List<ParamsAll>> toUpdateParams(@RequestParam("code") String code);
 	
 	@RequestMapping(value="/azz/api/merchant/updateParams",method=RequestMethod.POST)
-	public JsonResult<String> updateParams(Param params);
+	public JsonResult<String> updateParams(ParamUpdate params);
 	
 	@RequestMapping(value="/azz/api/merchant/deleteParams",method=RequestMethod.POST)
 	public JsonResult<String> deleteParams(@RequestParam("code") String code);

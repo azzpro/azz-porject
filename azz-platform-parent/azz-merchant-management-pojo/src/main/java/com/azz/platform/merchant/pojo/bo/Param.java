@@ -17,7 +17,7 @@ public class Param {
 	private String paramName;
 	private Byte paramsType;
 	private Byte paramsChoice;
-	private String param;
+	private String[] param;
 	private String paramCode;
 	private String modifier;
 	private String parentCode;

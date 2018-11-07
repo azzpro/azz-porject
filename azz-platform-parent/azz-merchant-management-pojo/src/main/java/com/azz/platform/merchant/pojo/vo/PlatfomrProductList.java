@@ -27,5 +27,6 @@ public class PlatfomrProductList {
 	private String params;
 	private Byte status;
 	private Date createTime;
+	private Long productId;
 }
 

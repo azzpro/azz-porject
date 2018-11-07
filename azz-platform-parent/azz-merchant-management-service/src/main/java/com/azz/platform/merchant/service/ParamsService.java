@@ -7,30 +7,23 @@
  
 package com.azz.platform.merchant.service;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.TreeSet;
 
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.velocity.anakia.Escape;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.PlatformGoodsErrorCode;
-import com.azz.core.common.errorcode.PlatformUserErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
@@ -44,15 +37,17 @@ import com.azz.platform.merchant.pojo.PlatformGoodsParams;
 import com.azz.platform.merchant.pojo.PlatformGoodsParamsTerm;
 import com.azz.platform.merchant.pojo.PlatformGoodsParamsValue;
 import com.azz.platform.merchant.pojo.bo.Param;
+import com.azz.platform.merchant.pojo.bo.ParamUpdate;
 import com.azz.platform.merchant.pojo.bo.ParamsData;
-import com.azz.platform.merchant.pojo.bo.SearchMerchantParam;
 import com.azz.platform.merchant.pojo.bo.SearchParams;
-import com.azz.platform.merchant.pojo.vo.MerchantApproval;
 import com.azz.platform.merchant.pojo.vo.Params;
 import com.azz.platform.merchant.pojo.vo.ParamsAll;
 import com.azz.system.sequence.api.RandomSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.github.pagehelper.PageHelper;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /**
  * <P>参数管理</P>
@@ -124,6 +119,7 @@ public class ParamsService {
 					ParamsAll pa = new ParamsAll();
 					pa.setParentCode(code);
 					pa.setAssortName(key.getAssortmentName());
+					pa.setAssortCode(key.getAssortmentCode());
 					pa.setParamsName(platformGoodsParamsTerm.getParamsName());
 					pa.setParamsChoice(platformGoodsParamsTerm.getParamsChoice());
 					pa.setParamsType(platformGoodsParamsTerm.getParamsType());
@@ -135,7 +131,7 @@ public class ParamsService {
 					}else {
 						pa.setUpdatFlag((byte)0);
 					}
-					if(null != valueById && valueById.size() > 0) {
+					if(null != valueById && valueById.size() > 0 && platformGoodsParamsTerm.getParamsType() == 1) {
 						for (PlatformGoodsParamsValue platformGoodsParamsTerm2 : valueById) {
 							sb.append(platformGoodsParamsTerm2.getParamsValue());
 							if(platformGoodsParamsTerm2 != valueById.get(valueById.size()-1)) {
@@ -146,8 +142,6 @@ public class ParamsService {
 						list.add(pa);
 						sb = new StringBuffer();
 						pa = null;
-					}else {
-						throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_NULL);
 					}
 				}
 			}else {
@@ -167,57 +161,57 @@ public class ParamsService {
 	 * @author 刘建麟  2018年10月31日 下午5:32:45
 	 */
 	@Transactional(rollbackFor=Exception.class)
-	public JsonResult<String> updateParams(Param ppt){
-		//todo 判断分类ID下是否有产品  有则不让更新  无可以更新  productService
+	public JsonResult<String> updateParams(ParamUpdate ppt){
 		if(null != ppt) {
-			StringBuilder sb = new StringBuilder();
-			PlatformGoodsParams paramsByCode = goodsParamsMapper.selectParamsByCode(ppt.getParentCode());
-			if(null == paramsByCode)
-				throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_NULL);
-			Long id = paramsByCode.getId();
-			if(StringUtils.isBlank(ppt.getAssortmentCode()))
-				throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_CODE_NOTEXIST);
-			PlatformGoodsClassification key = goodsClassificationMapper.selectByAssortmentCode(ppt.getAssortmentCode());
-			if(null == key)
-				throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_ASSORTMENT_EXIST);
-			
-			String b = productService.selectProductByAssortmentId(key.getId());
-			if(Objects.equals(b, "NO"))
-				throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_PRODUCT_EXIST);
-			
-			int idById = goodsParamsMapper.updateAssormentIdById(key.getId(),id);
-			if(idById != 1) 
-				throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_UPDATE_ERROR);
-			//更新参数值
-			PlatformGoodsParamsTerm pt = new PlatformGoodsParamsTerm();
-			pt.setModifier(ppt.getModifier());
-			pt.setModifyTime(new Date());
-			pt.setParamsChoice(ppt.getParamsChoice());
-			pt.setParamsType(ppt.getParamsType());
-			pt.setParamsName(ppt.getParamName());
-			pt.setParamsCode(ppt.getParamCode());
-			PlatformGoodsParamsTerm paramsTerm = goodsParamsTermMapper.selectIdTermByCode(pt.getParamsCode());
-			if(null == paramsTerm)
-				throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_CODE_NOTEXIST);
-			int i = goodsParamsTermMapper.updateBycode(pt);
-			if(i != 1) {
-				throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_UPDATE_ERROR);
-			}else {
-				String values = ppt.getParam();
-				String code = ppt.getParamCode();
-				PlatformGoodsParamsTerm termByCode = goodsParamsTermMapper.selectIdTermByCode(code);
-				if(null != termByCode) {
-					goodsParamsValueMapper.deleteByParentId(termByCode.getId());
-				}else {
+			JSONObject jj = JSONObject.fromObject(ppt);
+			if(!StringUtils.isBlank((String)jj.get("parentCode"))) {
+				PlatformGoodsParams paramsByCode = goodsParamsMapper.selectParamsByCode((String)jj.get("parentCode"));
+				if(null == paramsByCode)
 					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_NULL);
-				}
-				String[] split = values.split(",");
-				for (String string : split) {
-					PlatformGoodsParamsValue pv = new PlatformGoodsParamsValue();
-					pv.setParamsParentId(termByCode.getId());
-					pv.setParamsValue(Long.parseLong(string));
-					goodsParamsValueMapper.insert(pv);
-					pv = null;
+				Long id = paramsByCode.getId();
+				if(StringUtils.isBlank((String)jj.get("assortmentCode")))
+					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_CODE_NOTEXIST);
+				PlatformGoodsClassification key = goodsClassificationMapper.selectByAssortmentCode((String)jj.get("assortmentCode"));
+				if(null == key)
+					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_ASSORTMENT_EXIST);
+				//当前分类只能存在一次
+				int count = goodsParamsMapper.selectAssortCountByCode(key.getId());
+				if(count > 1)
+					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_TOOMANY);
+				String b = productService.selectProductByAssortmentId(key.getId());
+				if(Objects.equals(b, "NO"))
+					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_PRODUCT_EXIST);
+				
+				int idById = goodsParamsMapper.updateAssormentIdById(key.getId(),id);
+				if(idById != 1) 
+					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_UPDATE_ERROR);
+				
+				JSONArray pa = jj.getJSONArray("param");
+				for(int j=0 ; j < pa.size();j++){
+					 	JSONObject jo = pa.getJSONObject(j); 
+					 	PlatformGoodsParamsTerm pt = new PlatformGoodsParamsTerm();
+						pt.setModifier((String)jj.getString("modifier"));
+						pt.setModifyTime(new Date());
+						pt.setParamsChoice((byte)jo.getInt("paramsChoice"));
+						pt.setParamsType((byte)jo.getInt("paramsType"));
+						pt.setParamsName((String)jo.get("paramName"));
+						pt.setParamsCode((String)jj.getString("paramCode"));
+						PlatformGoodsParamsTerm paramsTerm = goodsParamsTermMapper.selectIdTermByCode(pt.getParamsCode());
+						if(null == paramsTerm)
+							throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_CODE_NOTEXIST);
+						int c = goodsParamsTermMapper.updateBycode(pt);
+						if(c != 1)
+							throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_UPDATE_ERROR);
+						goodsParamsValueMapper.deleteByParentId(paramsTerm.getId());
+						JSONArray pam = jo.getJSONArray("param");
+						for (int a = 0; a < pam.size() ;a++) {
+							PlatformGoodsParamsValue pv = new PlatformGoodsParamsValue();
+							pv.setParamsParentId(paramsTerm.getId());
+							pv.setParamsValue((long)pam.getInt(a));
+							goodsParamsValueMapper.insert(pv);
+							pv = null;
+						}
+					pt = null;
 				}
 			}
 		}else {
@@ -249,7 +243,10 @@ public class ParamsService {
 				PlatformGoodsClassification code = goodsClassificationMapper.selectByAssortmentCode(ppt.getAssortmentCode());
 				if(null == code)
 					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_CODE_NOTEXIST);
-					
+				//当前分类只能存在一次
+				int count = goodsParamsMapper.selectAssortCountByCode(code.getId());
+				if(count > 1)
+					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_TOOMANY);
 				PlatformGoodsParams goodsParams = new PlatformGoodsParams();
 				goodsParams.setParamsCode(randomSequenceService.getProductParameterCodeNumber());
 				goodsParams.setCreator(ppt.getCreator());
@@ -274,9 +271,9 @@ public class ParamsService {
 						//获取主键
 						Long id = goodsParamsTerm.getId();
 						
-						String param = paramsData.getParam();
-						String[] split = param.split(",");
-						for (String string : split) {
+						String[] param = paramsData.getParam();
+						//String[] split = param.split(",");
+						for (String string : param) {
 							PlatformGoodsParamsValue ppv = new PlatformGoodsParamsValue();
 							ppv.setParamsValue(Long.valueOf(string));
 							ppv.setParamsParentId(id);

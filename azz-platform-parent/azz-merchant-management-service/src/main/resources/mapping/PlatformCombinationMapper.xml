@@ -339,6 +339,6 @@
 		m.`status` != 0
 	AND mgm.module_status != 0
 	AND pc.`status` != 0
-	where pc.combination_code = #{combinationCode}
+	AND pc.combination_code = #{combinationCode}
   </select>
 </mapper>

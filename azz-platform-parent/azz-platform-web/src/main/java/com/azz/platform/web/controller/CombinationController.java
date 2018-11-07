@@ -12,14 +12,28 @@ import java.io.IOException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.page.Pagination;
+import com.azz.core.constants.MerchantConstants.IsChangeCombinationPic;
 import com.azz.platform.merchant.api.CombinationService;
 import com.azz.platform.merchant.pojo.bo.AddCombinationParam;
 import com.azz.platform.merchant.pojo.bo.AddCombinationWebParam;
 import com.azz.platform.merchant.pojo.bo.CombinationPic;
+import com.azz.platform.merchant.pojo.bo.EditCombinationParam;
+import com.azz.platform.merchant.pojo.bo.EditCombinationWebParam;
+import com.azz.platform.merchant.pojo.bo.PutOnOrPutOffOrDelCombinationParam;
+import com.azz.platform.merchant.pojo.bo.SearchCaseInfoParam;
+import com.azz.platform.merchant.pojo.bo.SearchCombinationParam;
+import com.azz.platform.merchant.pojo.bo.SearchGoodsModuleParam;
+import com.azz.platform.merchant.pojo.bo.SearchProductInfoParam;
+import com.azz.platform.merchant.pojo.vo.CaseInfo;
+import com.azz.platform.merchant.pojo.vo.CombinationInfo;
+import com.azz.platform.merchant.pojo.vo.GoodsModuleInfo;
+import com.azz.platform.merchant.pojo.vo.ProdInfo;
 import com.azz.util.Base64;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.utils.WebUtils;
@@ -36,6 +50,30 @@ public class CombinationController {
 	
 	@Autowired
 	CombinationService combinationService;
+	
+	/**
+	 * 
+	 * <p>查询组合列表</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月5日 下午7:10:34
+	 */
+	@RequestMapping("/getCombinationInfoList")
+	public JsonResult<Pagination<CombinationInfo>> getCombinationInfoList(SearchCombinationParam param){
+		return combinationService.getCombinationInfoList(param);
+	}
+	
+	/**
+	 * 
+	 * <p>查询组合详情</p>
+	 * @param combinationCode
+	 * @return
+	 * @author 黄智聪  2018年11月5日 下午7:21:10
+	 */
+	@RequestMapping("/getCombinationInfo")
+	public JsonResult<CombinationInfo> getCombinationInfo(@RequestParam("combinationCode")String combinationCode){
+		return combinationService.getCombinationInfo(combinationCode);
+	}
 	
 	/**
 	 * 
@@ -57,6 +95,77 @@ public class CombinationController {
 		param.setCreator(WebUtils.getLoginUser().getUserInfo().getUserCode());
 		return combinationService.addCombination(param);
 	}
-
 	
+	/**
+	 * 
+	 * <p>修改推荐组合</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月5日 下午7:41:49
+	 * @throws IOException 
+	 */
+	@RequestMapping("/editCombination")
+	public JsonResult<String> editCombination(EditCombinationWebParam webParam) throws IOException {
+		JSR303ValidateUtils.validate(webParam);
+		EditCombinationParam param = new EditCombinationParam();
+		BeanUtils.copyProperties(webParam, param);
+		MultipartFile combinationPicFile = webParam.getCombinationPicFile();
+		if (webParam.getIsChangeCombinationPic() == IsChangeCombinationPic.Y.getValue() && combinationPicFile != null) {
+			CombinationPic combinationPic = new CombinationPic(combinationPicFile.getOriginalFilename(),
+					combinationPicFile.getSize(), Base64.encode(combinationPicFile.getBytes()));
+			param.setCombinationPic(combinationPic);
+		}
+		param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
+		return combinationService.editCombination(param);
+	}
+	
+	/**
+	 * 
+	 * <p>上架、下架或删除组合</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月6日 下午3:01:18
+	 */
+	@RequestMapping("/putOnOrPutOffOrDelCombination")
+	public JsonResult<String> putOnOrPutOffOrDelCombination(PutOnOrPutOffOrDelCombinationParam param) {
+		param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
+		return combinationService.putOnOrPutOffOrDelCombination(param);
+	}
+	
+	/**
+	 * 
+	 * <p>查询方案列表</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月6日 下午3:43:38
+	 */
+	@RequestMapping("/getCaseInfoList")
+	public JsonResult<Pagination<CaseInfo>> getCaseInfoList(SearchCaseInfoParam param){
+		return combinationService.getCaseInfoList(param);
+	}
+	
+	/**
+	 * 
+	 * <p>查询模组列表</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月6日 下午3:43:38
+	 */
+	@RequestMapping("/getModuleInfoList")
+	public JsonResult<Pagination<GoodsModuleInfo>> getModuleInfoList(SearchGoodsModuleParam param){
+		return combinationService.getModuleInfoList(param);
+	}
+	
+	/**
+	 * 
+	 * <p>查询产品列表</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月6日 下午3:43:38
+	 */
+	@RequestMapping("/getProductInfoList")
+	public JsonResult<Pagination<ProdInfo>> getProductInfoList(SearchProductInfoParam param){
+		return combinationService.getProductInfoList(param);
+	}
+
 }

@@ -196,8 +196,9 @@
     where classification_id = #{classificationId} and case_status != 0
   </select>
   
-  <select id="selectParamsByAssortmentId" parameterType="java.lang.Long" resultType="com.azz.platform.merchant.pojo.vo.CaseParams">
+  <select id="selectParamsByAssortmentId" parameterType="com.azz.platform.merchant.pojo.bo.SearchCaseParamList" resultType="com.azz.platform.merchant.pojo.vo.CaseParams">
   	SELECT
+  		pgp.id as id,
 		pgpt.params_code as paramCode,
 		pgpt.params_name as paramName,
 		group_concat(pgpv.params_value)  as paramValue
@@ -205,11 +206,15 @@
 	JOIN  platform_goods_params_term pgpt ON pgp.id = pgpt.params_id
 	JOIN platform_goods_params_value pgpv ON pgpv.params_parent_id = pgt.id
 	WHERE pgpt.assortment_id = #{classificationId}
+	<if test="param != null and param !=''">
+		and (pgpt.params_code = #{param} or pgpt.params_name = #{param})
+	</if>
 	GROUP BY pgpt.params_code
   </select>
   
   <select id="selectParamsByCaseCode" parameterType="java.lang.String" resultType="com.azz.platform.merchant.pojo.vo.CaseParamsList">
   	SELECT
+  		pc.id as id,
 		pgpt.params_name as paramsName,
 		pgpt.params_code as paramsCode,
 		pgpt.params_type as paramsType,
@@ -222,11 +227,25 @@
 	WHERE pc.case_code = #{caseCode}
 	GROUP BY
 		pgpt.params_code
-	</select>
+  </select>
+  
   <select id="getCaseInfoList" parameterType="com.azz.platform.merchant.pojo.bo.SearchCaseInfoParam" resultType="com.azz.platform.merchant.pojo.vo.CaseInfo">
-  	select 
-    <include refid="Base_Column_List" />
-    from platform_case
-    where classification_id = #{classificationId} and case_status != 0
+  	SELECT
+		case_code AS caseCode,
+		case_name AS caseName,
+		case_status AS caseStatus,
+		pgc.assortment_name AS assortmentName
+	FROM
+		platform_case pc
+	LEFT JOIN platform_goods_classification pgc ON pgc.id = pc.classification_id
+	WHERE
+		pc.case_status != 0
+	AND pgc.`status` != 0
+	<if test="searchInput != null and searchInput != ''">
+		AND (  
+			pc.case_name LIKE CONCAT('%', #{searchInput}, '%')
+			OR pc.case_code LIKE CONCAT('%', #{searchInput}, '%') 
+		)
+	</if>
   </select>
 </mapper>

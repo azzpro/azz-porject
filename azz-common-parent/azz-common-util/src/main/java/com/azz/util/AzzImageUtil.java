@@ -72,7 +72,12 @@ public class AzzImageUtil {
 		if(FileConstants.AZZ_MODULE_IMAGE_TYPE == imagetype) {
 			return FileConstants.AZZ_MODULE_PATH;
 		}
-		
+		if(FileConstants.AZZ_COMBINATION_IMAGE_TYPE == imagetype) {
+			return FileConstants.AZZ_COMBINATION_PATH;
+		}
+		if(FileConstants.AZZ_CASE_IMAGE_TYPE == imagetype) {
+			return FileConstants.AZZ_CASE_PATH;
+		}
 		return "";
 	}
 }	

@@ -57,4 +57,41 @@
   on a.module_id = c.id
   where a.id = #{id}
   </select>
+  
+  <select id="getProductInfoList" parameterType="com.azz.platform.merchant.pojo.bo.SearchProductInfoParam" resultType="com.azz.platform.merchant.pojo.vo.ProdInfo">
+	  SELECT
+		mgp.product_code AS productCode,
+		t.price AS productPrice,
+		mgp.product_status AS productStatus,
+		pgb.brand_name AS brandName,
+		t1.params AS productParams
+	FROM
+		merchant_goods_product mgp
+	LEFT JOIN (
+		SELECT
+			mgpp.product_id,
+			min(mgpp.price) AS price
+		FROM
+			merchant_goods_product_price mgpp
+		GROUP BY
+			mgpp.product_id
+	) t ON mgp.id = t.product_id
+	LEFT JOIN platform_goods_brand pgb ON pgb.id = mgp.brand_id
+	LEFT JOIN (
+		SELECT
+			mgpp.product_id,
+			group_concat(mgpp.params_name) params
+		FROM
+			merchant_goods_product_params mgpp
+		GROUP BY
+			mgpp.product_id
+	) t1 ON t1.product_id = mgp.id
+	where mgp.product_status != 0
+	<if test="searchInput != null and searchInput != ''">
+		AND (  
+				mgp.product_code LIKE CONCAT('%', #{searchInput}, '%')
+			OR pgb.brand_name LIKE CONCAT('%', #{searchInput}, '%') 
+		)
+	</if>
+  </select>
 </mapper>

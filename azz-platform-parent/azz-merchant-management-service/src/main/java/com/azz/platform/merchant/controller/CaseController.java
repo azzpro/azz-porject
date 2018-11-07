@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.page.Pagination;
 import com.azz.platform.merchant.pojo.bo.AddCaseParam;
 import com.azz.platform.merchant.pojo.bo.AddSelectionParams;
 import com.azz.platform.merchant.pojo.bo.DelSelecttionParams;
 import com.azz.platform.merchant.pojo.bo.EditCaseParam;
+import com.azz.platform.merchant.pojo.bo.SearchCaseParamList;
 import com.azz.platform.merchant.pojo.vo.CaseParams;
 import com.azz.platform.merchant.pojo.vo.CaseParamsList;
 import com.azz.platform.merchant.service.CaseService;
@@ -65,8 +67,8 @@ public class CaseController {
 	 * @author 彭斌  2018年11月7日 上午10:34:25
 	 */
 	@RequestMapping(value="getCaseParamList",method=RequestMethod.POST)
-	public JsonResult<List<CaseParams>> getCaseParamList(Long assortmentId){
-	    return caseService.getCaseParamList(assortmentId);
+	public JsonResult<Pagination<CaseParams>> getCaseParamList(@RequestBody SearchCaseParamList param){
+	    return caseService.getCaseParamList(param);
 	}
 	
 	/**

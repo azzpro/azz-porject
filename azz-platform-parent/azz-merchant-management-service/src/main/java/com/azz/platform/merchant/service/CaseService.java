@@ -14,6 +14,7 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.MerchantProductErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
+import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.PlatformConstants;
 import com.azz.core.exception.BaseException;
@@ -27,12 +28,15 @@ import com.azz.platform.merchant.pojo.bo.AddSelectionParams;
 import com.azz.platform.merchant.pojo.bo.CasePic;
 import com.azz.platform.merchant.pojo.bo.DelSelecttionParams;
 import com.azz.platform.merchant.pojo.bo.EditCaseParam;
+import com.azz.platform.merchant.pojo.bo.SearchCaseParamList;
 import com.azz.platform.merchant.pojo.vo.CaseParams;
 import com.azz.platform.merchant.pojo.vo.CaseParamsList;
 import com.azz.system.api.SystemImageUploadService;
+import com.azz.system.sequence.api.RandomSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
 import com.azz.util.StringUtils;
+import com.github.pagehelper.PageHelper;
 
 /**
  * 
@@ -52,6 +56,9 @@ public class CaseService {
     
     @Autowired
     PlatformCaseClassificationParamsMapper platformCaseClassificationParamsMapper;
+    
+    @Autowired
+    private RandomSequenceService randomSequenceService;
    
     /**
      * <p>新增方案</p>
@@ -85,8 +92,8 @@ public class CaseService {
                     MerchantProductErrorCode.MERCHANT_PRODUCT_CASE_CLASSIFICATION_EXIST);
         }
         
-        // 新增方案编码 TODO 系统生成
-        String caseCode = "";
+        // 新增方案编码
+        String caseCode = randomSequenceService.getCaseCodeNumber();
         
         if (StringUtils.isBlank(originalFileName)) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
@@ -109,7 +116,7 @@ public class CaseService {
         String newFileName = fileNameNoSufix +"_"+ caseCode;
 
         // 图片url
-        JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_CLASSIFICATION_IMAGE_TYPE);
+        JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_CASE_IMAGE_TYPE);
         if (jr.getCode() != SystemErrorCode.SUCCESS.getCode()) {
             throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "主图上传失败，请重试");
         }
@@ -186,7 +193,7 @@ public class CaseService {
             String newFileName = fileNameNoSufix + "_" + param.getCaseCode();
             
             // 图片url
-            JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_CLASSIFICATION_IMAGE_TYPE);
+            JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_CASE_IMAGE_TYPE);
             
             if (jr.getCode() != SystemErrorCode.SUCCESS.getCode()) {
                 throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "主图上传失败，请重试");
@@ -211,14 +218,14 @@ public class CaseService {
      * @return
      * @author 彭斌  2018年11月6日 下午4:11:44
      */
-    public JsonResult<List<CaseParams>> getCaseParamList(@RequestParam("assortmentId") Long assortmentId){
-        if(null == assortmentId) {
+    public JsonResult<Pagination<CaseParams>> getCaseParamList(@RequestBody SearchCaseParamList param){
+        if(null == param.getAssortmentId()) {
             throw new BaseException(
                     MerchantProductErrorCode.MERCHANT_PRODUCT_CASE_CLASSIFICATION_IS_NULL);
         }
-        
-        List<CaseParams> list = platformCaseMapper.selectParamsByAssortmentId(assortmentId);
-        return JsonResult.successJsonResult(list);
+        PageHelper.startPage(param.getPageNum(), param.getPageSize());
+        List<CaseParams> list = platformCaseMapper.selectParamsByAssortmentId(param);
+        return JsonResult.successJsonResult(new Pagination<>(list));
     }
     
     

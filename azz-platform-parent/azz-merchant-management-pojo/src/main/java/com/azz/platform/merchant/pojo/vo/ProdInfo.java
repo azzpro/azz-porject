@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2018年11月6日 下午3:28:44
+ * Create on 2018年11月6日 下午5:27:34
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
@@ -12,17 +12,20 @@ import lombok.Data;
 /**
  * <P>TODO</P>
  * @version 1.0
- * @author 彭斌  2018年11月6日 下午3:28:44
+ * @author 黄智聪  2018年11月6日 下午5:27:34
  */
 @Data
-public class CaseParams {
-    
-    private Long id;
-    // 参数编号
-    private String paramCode;
-    // 参数名称
-    private String paramName;
-    // 参数值
-    private String paramValue;
+public class ProdInfo {
+
+	private String productCode;
+	
+	private String brandName;
+	
+	private String productPrice;
+	
+	private Integer productStatus;
+	
+	private String productParams;
+	
 }
 

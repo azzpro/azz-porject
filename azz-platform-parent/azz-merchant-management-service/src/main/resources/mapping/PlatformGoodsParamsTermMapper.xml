@@ -151,14 +151,12 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
-  <!-- 去到修改参数页面 -->
   <select id="selectParamsTermByCode" resultMap="BaseResultMap" parameterType="long">
   select <include refid="Base_Column_List"></include> from platform_goods_params_term where params_id=#{id}
   </select>
   
-  <!-- 去到修改参数页面 -->
   <select id="selectIdTermByCode" resultMap="BaseResultMap" parameterType="string">
-  select id from platform_goods_params_term where params_code=#{code}
+  select <include refid="Base_Column_List"></include> from platform_goods_params_term where params_code=#{code}
   </select>
   
   <!-- 删除参数项 -->

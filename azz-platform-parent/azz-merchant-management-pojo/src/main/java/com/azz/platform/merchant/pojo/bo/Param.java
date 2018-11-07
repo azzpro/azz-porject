@@ -6,6 +6,8 @@
  ******************************************************************************/
  
 package com.azz.platform.merchant.pojo.bo;
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * <P>TODO</P>
  * @version 1.0
@@ -14,6 +16,7 @@ package com.azz.platform.merchant.pojo.bo;
 import lombok.Data;
 @Data
 public class Param {
+	@NotBlank(message="参数名不能为空")
 	private String paramName;
 	private Byte paramsType;
 	private Byte paramsChoice;

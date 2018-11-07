@@ -9,8 +9,8 @@ package com.azz.platform.merchant.service;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.TreeSet;
 
@@ -37,7 +37,6 @@ import com.azz.platform.merchant.pojo.PlatformGoodsParams;
 import com.azz.platform.merchant.pojo.PlatformGoodsParamsTerm;
 import com.azz.platform.merchant.pojo.PlatformGoodsParamsValue;
 import com.azz.platform.merchant.pojo.bo.Param;
-import com.azz.platform.merchant.pojo.bo.ParamUpdate;
 import com.azz.platform.merchant.pojo.bo.ParamsData;
 import com.azz.platform.merchant.pojo.bo.SearchParams;
 import com.azz.platform.merchant.pojo.vo.Params;
@@ -45,9 +44,6 @@ import com.azz.platform.merchant.pojo.vo.ParamsAll;
 import com.azz.system.sequence.api.RandomSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.github.pagehelper.PageHelper;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * <P>参数管理</P>
@@ -139,10 +135,10 @@ public class ParamsService {
 							}
 						}
 						pa.setValues(sb.toString());
-						list.add(pa);
 						sb = new StringBuffer();
-						pa = null;
 					}
+					list.add(pa);
+					pa = null;
 				}
 			}else {
 				throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_NULL);
@@ -161,62 +157,77 @@ public class ParamsService {
 	 * @author 刘建麟  2018年10月31日 下午5:32:45
 	 */
 	@Transactional(rollbackFor=Exception.class)
-	public JsonResult<String> updateParams(ParamUpdate ppt){
-		if(null != ppt) {
-			JSONObject jj = JSONObject.fromObject(ppt);
-			if(!StringUtils.isBlank((String)jj.get("parentCode"))) {
-				PlatformGoodsParams paramsByCode = goodsParamsMapper.selectParamsByCode((String)jj.get("parentCode"));
-				if(null == paramsByCode)
-					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_NULL);
-				Long id = paramsByCode.getId();
-				if(StringUtils.isBlank((String)jj.get("assortmentCode")))
-					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_CODE_NOTEXIST);
-				PlatformGoodsClassification key = goodsClassificationMapper.selectByAssortmentCode((String)jj.get("assortmentCode"));
-				if(null == key)
-					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_ASSORTMENT_EXIST);
-				//当前分类只能存在一次
-				int count = goodsParamsMapper.selectAssortCountByCode(key.getId());
-				if(count > 1)
-					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_TOOMANY);
-				String b = productService.selectProductByAssortmentId(key.getId());
-				if(Objects.equals(b, "NO"))
-					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_PRODUCT_EXIST);
-				
-				int idById = goodsParamsMapper.updateAssormentIdById(key.getId(),id);
-				if(idById != 1) 
-					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_UPDATE_ERROR);
-				
-				JSONArray pa = jj.getJSONArray("param");
-				for(int j=0 ; j < pa.size();j++){
-					 	JSONObject jo = pa.getJSONObject(j); 
-					 	PlatformGoodsParamsTerm pt = new PlatformGoodsParamsTerm();
-						pt.setModifier((String)jj.getString("modifier"));
-						pt.setModifyTime(new Date());
-						pt.setParamsChoice((byte)jo.getInt("paramsChoice"));
-						pt.setParamsType((byte)jo.getInt("paramsType"));
-						pt.setParamsName((String)jo.get("paramName"));
-						pt.setParamsCode((String)jj.getString("paramCode"));
-						PlatformGoodsParamsTerm paramsTerm = goodsParamsTermMapper.selectIdTermByCode(pt.getParamsCode());
-						if(null == paramsTerm)
-							throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_CODE_NOTEXIST);
-						int c = goodsParamsTermMapper.updateBycode(pt);
-						if(c != 1)
-							throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_UPDATE_ERROR);
-						goodsParamsValueMapper.deleteByParentId(paramsTerm.getId());
-						JSONArray pam = jo.getJSONArray("param");
-						for (int a = 0; a < pam.size() ;a++) {
-							PlatformGoodsParamsValue pv = new PlatformGoodsParamsValue();
-							pv.setParamsParentId(paramsTerm.getId());
-							pv.setParamsValue((long)pam.getInt(a));
-							goodsParamsValueMapper.insert(pv);
-							pv = null;
-						}
-					pt = null;
-				}
-			}
-		}else {
+	public JsonResult<String> updateParams(ParamsData ppt){
+		//校验参数
+		JSR303ValidateUtils.validate(ppt);
+		//根据父参数编码 查询父参数
+		PlatformGoodsParams paramsByCode = goodsParamsMapper.selectParamsByCode(ppt.getParentCode());
+		if(null == paramsByCode)
 			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_NULL);
-		}
+		//获取父参数主键ID
+		Long id = paramsByCode.getId();
+		//根据分类CODE 查询分类
+		PlatformGoodsClassification key = goodsClassificationMapper.selectByAssortmentCode(ppt.getAssortmentCode());
+		if(null == key)
+			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_ASSORTMENT_EXIST);	
+			
+		//一个分类只能被选中一次
+		int count = goodsParamsMapper.selectAssortCountByCode(key.getId());
+		if(count > 1)
+			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_TOOMANY);
+		// 清空 参数项 和参数值表  根据父参数ID
+		goodsParamsTermMapper.deleteByParamsId(id);
+
+		PlatformGoodsParamsTerm paramsTerm = goodsParamsTermMapper.selectIdTermByCode(ppt.getParamCode());
+		System.out.println(paramsTerm);
+		goodsParamsValueMapper.deleteByParentId(paramsTerm.getId());
+		//参数主表更新 分类ID
+		int idById = goodsParamsMapper.updateAssormentIdById(key.getId(),id);
+		if(idById != 1) 
+			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_UPDATE_ERROR);
+		//获取参数值
+		List<com.azz.platform.merchant.pojo.bo.Param> list = ppt.getParams();
+			if(null != list && list.size() > 0) {
+				//参数名不能重复
+				TreeSet<String> set = new TreeSet<>();
+				for(Param paramsData1 : list) {
+					set.add(paramsData1.getParamName());
+				}
+				if(set.size() != list.size()) {
+					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_PARAMS);
+				}
+				
+				for (Param paramsData : list) {
+					JSR303ValidateUtils.validate(paramsData);
+					if(null == paramsData) {
+						throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_NULL);
+					}else {
+						PlatformGoodsParamsTerm goodsParamsTerm = new PlatformGoodsParamsTerm();
+						goodsParamsTerm.setParamsName(paramsData.getParamName());
+						goodsParamsTerm.setParamsChoice(paramsData.getParamsChoice());
+						goodsParamsTerm.setParamsType(paramsData.getParamsType());
+						goodsParamsTerm.setCreateTime(new Date());
+						goodsParamsTerm.setCreator(ppt.getCreator());
+						goodsParamsTerm.setParamsId(paramsByCode.getId());
+						goodsParamsTerm.setParamsCode(randomSequenceService.getParameterItemCodeNumber());
+						goodsParamsTermMapper.insertSelective(goodsParamsTerm);
+						//获取主键
+						Long ids = goodsParamsTerm.getId();
+						
+						String[] param = paramsData.getParam();
+						//String[] split = param.split(",");
+						for (String string : param) {
+							PlatformGoodsParamsValue ppv = new PlatformGoodsParamsValue();
+							ppv.setParamsValue(Long.valueOf(string));
+							ppv.setParamsParentId(id);
+							goodsParamsValueMapper.insertSelective(ppv);
+							ppv = null;
+						}
+					}
+				}
+			}else {
+				throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_NULL);
+			}
 		return JsonResult.successJsonResult();
 	}
 	

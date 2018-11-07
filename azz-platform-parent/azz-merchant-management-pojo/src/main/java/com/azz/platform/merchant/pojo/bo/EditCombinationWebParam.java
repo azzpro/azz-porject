@@ -12,7 +12,6 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
@@ -46,7 +45,6 @@ public class EditCombinationWebParam {
 
 	private String recommendReason;
 
-	@NotNull(message = "请上传推荐组合主图")
 	private MultipartFile combinationPicFile;
 
 	@NotNull(message = "缺少请求参数")

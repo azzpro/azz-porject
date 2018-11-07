@@ -27,6 +27,8 @@ import com.azz.core.constants.MerchantConstants.IsChangeCombinationPic;
 import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.merchant.pojo.vo.UploadFileInfo;
+import com.azz.platform.merchant.mapper.MerchantGoodsModuleMapper;
+import com.azz.platform.merchant.mapper.MerchantGoodsProductMapper;
 import com.azz.platform.merchant.mapper.PlatformCaseMapper;
 import com.azz.platform.merchant.mapper.PlatformCombinationMapper;
 import com.azz.platform.merchant.mapper.PlatformCombinationModuleMapper;
@@ -39,9 +41,12 @@ import com.azz.platform.merchant.pojo.bo.EditCombinationParam;
 import com.azz.platform.merchant.pojo.bo.PutOnOrPutOffOrDelCombinationParam;
 import com.azz.platform.merchant.pojo.bo.SearchCaseInfoParam;
 import com.azz.platform.merchant.pojo.bo.SearchCombinationParam;
+import com.azz.platform.merchant.pojo.bo.SearchGoodsModuleParam;
+import com.azz.platform.merchant.pojo.bo.SearchProductInfoParam;
 import com.azz.platform.merchant.pojo.vo.CaseInfo;
 import com.azz.platform.merchant.pojo.vo.CombinationInfo;
 import com.azz.platform.merchant.pojo.vo.GoodsModuleInfo;
+import com.azz.platform.merchant.pojo.vo.ProdInfo;
 import com.azz.system.api.SystemImageUploadService;
 import com.azz.system.sequence.api.RandomSequenceService;
 import com.azz.util.JSR303ValidateUtils;
@@ -70,7 +75,13 @@ public class CombinationService {
 	private PlatformCombinationModuleMapper platformCombinationModuleMapper;
 	
 	@Autowired
+	private MerchantGoodsModuleMapper merchantGoodsModuleMapper;
+	
+	@Autowired
 	private PlatformCaseMapper platformCaseMapper;
+	
+	@Autowired
+	private MerchantGoodsProductMapper merchantGoodsProductMapper;
 	
 	/**
 	 * 
@@ -94,6 +105,9 @@ public class CombinationService {
 	 */
 	public JsonResult<CombinationInfo> getCombinationInfo(String combinationCode){
 		CombinationInfo combinationInfo = platformCombinationMapper.getCombinationInfo(combinationCode);
+		if(combinationInfo == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "推荐组合不存在");
+		}
 		List<GoodsModuleInfo> moduleInfos = platformCombinationMapper.getModuleInfoByCombinationCode(combinationCode);
 		combinationInfo.setGoodsModuleInfos(moduleInfos);
 		return JsonResult.successJsonResult(combinationInfo);
@@ -234,15 +248,16 @@ public class CombinationService {
 		}
 		platformCombinationMapper.updateByCombinationCode(combinationRecord);
 		
+		// 先删掉原来的推荐组合与模组的绑定
+		platformCombinationModuleMapper.deleteByCombinationId(combination.getId());
+
 		// 若维护了模组才向推荐组合、模组关系表中插入记录
 		if(moduleIds != null && moduleIds.size() != 0) {
-			// 先删掉原来的推荐组合与模组的绑定
-			platformCombinationModuleMapper.deleteByCombinationId(combination.getId());
 			// 重新插入推荐组合与模组的关系记录
 			List<PlatformCombinationModule> combinationModuleRecords = new ArrayList<>();
 			for (Long moduleId : moduleIds) {
 				PlatformCombinationModule combinationModuleRecord = PlatformCombinationModule.builder()
-						.combinationId(combinationRecord.getId())
+						.combinationId(combination.getId())
 						.createTime(nowDate)
 						.creator(param.getModifier())
 						.moduleId(moduleId)
@@ -303,6 +318,31 @@ public class CombinationService {
 		return JsonResult.successJsonResult(new Pagination<>(infos));
 	}
 	
+	/**
+	 * 
+	 * <p>查询模组列表</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月6日 下午3:43:38
+	 */
+	public JsonResult<Pagination<GoodsModuleInfo>> getModuleInfoList(@RequestBody SearchGoodsModuleParam param){
+		PageHelper.startPage(param.getPageNum(), param.getPageSize());
+		List<GoodsModuleInfo> infos = merchantGoodsModuleMapper.getGoodsModuleInfoList(param);
+		return JsonResult.successJsonResult(new Pagination<>(infos));
+	}
+	
+	/**
+	 * 
+	 * <p>查询产品列表</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月6日 下午3:43:38
+	 */
+	public JsonResult<Pagination<ProdInfo>> getProductInfoList(@RequestBody SearchProductInfoParam param){
+		PageHelper.startPage(param.getPageNum(), param.getPageSize());
+		List<ProdInfo> infos = merchantGoodsProductMapper.getProductInfoList(param);
+		return JsonResult.successJsonResult(new Pagination<>(infos));
+	}
 	
 	/**
 	 * 

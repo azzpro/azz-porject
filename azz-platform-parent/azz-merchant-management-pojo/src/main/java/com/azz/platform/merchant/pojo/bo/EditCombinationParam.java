@@ -41,7 +41,6 @@ public class EditCombinationParam {
 	
 	private String recommendReason;
 	
-	@NotNull(message = "请上传推荐组合主图")
 	private CombinationPic combinationPic;
 	
 	@NotNull(message = "缺少请求参数")

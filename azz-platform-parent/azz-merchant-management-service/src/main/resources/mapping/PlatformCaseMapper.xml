@@ -197,9 +197,22 @@
   </select>
   
   <select id="getCaseInfoList" parameterType="com.azz.platform.merchant.pojo.bo.SearchCaseInfoParam" resultType="com.azz.platform.merchant.pojo.vo.CaseInfo">
-  	select 
-    <include refid="Base_Column_List" />
-    from platform_case
-    where classification_id = #{classificationId} and case_status != 0
+  	SELECT
+		case_code AS caseCode,
+		case_name AS caseName,
+		case_status AS caseStatus,
+		pgc.assortment_name AS assortmentName
+	FROM
+		platform_case pc
+	LEFT JOIN platform_goods_classification pgc ON pgc.id = pc.classification_id
+	WHERE
+		pc.case_status != 0
+	AND pgc.`status` != 0
+	<if test="searchInput != null and searchInput != ''">
+		AND (  
+			pc.case_name LIKE CONCAT('%', #{searchInput}, '%')
+			OR pc.case_code LIKE CONCAT('%', #{searchInput}, '%') 
+		)
+	</if>
   </select>
 </mapper>

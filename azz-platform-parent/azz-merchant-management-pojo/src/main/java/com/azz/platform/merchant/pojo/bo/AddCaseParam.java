@@ -9,7 +9,9 @@ package com.azz.platform.merchant.pojo.bo;
 
 import javax.validation.constraints.NotNull;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * <P>TODO</P>
@@ -17,6 +19,8 @@ import lombok.Data;
  * @author 彭斌  2018年11月5日 下午6:46:21
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AddCaseParam {
     /**
      * 所属分类id
@@ -48,12 +52,12 @@ public class AddCaseParam {
      */
     private String remark;
     
+    private String creator;
+    
     /**
      * 主图
      */
     @NotNull(message = "分类主图")
     private CasePic casePic;
-    
-    private String creator;
 }
 

@@ -25,5 +25,6 @@ public class ParamsAll {
 	private Byte updatFlag;
 	private String parentCode;
 	private String assortName;
+	private String assortCode;
 }
 

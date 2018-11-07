@@ -12,17 +12,14 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
-import com.azz.platform.merchant.pojo.PlatformGoodsParams;
-import com.azz.platform.merchant.pojo.bo.Param;
+import com.azz.platform.merchant.pojo.bo.ParamUpdate;
 import com.azz.platform.merchant.pojo.bo.ParamsData;
 import com.azz.platform.merchant.pojo.bo.SearchParams;
 import com.azz.platform.merchant.pojo.vo.Params;
@@ -74,7 +71,7 @@ public class ParamsController {
 	 * @author 刘建麟  2018年10月31日 下午7:49:11
 	 */
 	@RequestMapping(value="updateParams",method=RequestMethod.POST)
-	public JsonResult<String> updateParams(@RequestBody Param params){
+	public JsonResult<String> updateParams(@RequestBody ParamUpdate params){
 		return paramsService.updateParams(params);
 	}
 	

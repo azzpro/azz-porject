@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2018年11月5日 下午6:46:21
+ * Create on 2018年11月7日 上午11:10:28
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
@@ -9,25 +9,24 @@ package com.azz.platform.merchant.pojo.bo;
 
 import javax.validation.constraints.NotNull;
 
-import lombok.AllArgsConstructor;
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * <P>TODO</P>
  * @version 1.0
- * @author 彭斌  2018年11月5日 下午6:46:21
+ * @author 彭斌  2018年11月7日 上午11:10:28
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class EditCaseParam {
-    
+public class EditCaseWebParam {
     /**
      * 方案编码
      *
      * @mbg.generated
      */
+    @NotBlank(message = "方案名称不允许为空")
     private String caseCode;
     
     /**
@@ -35,6 +34,7 @@ public class EditCaseParam {
      *
      * @mbg.generated
      */
+    @NotNull(message = "分类编码不允许为空")
     private Long classificationId;
     
     /**
@@ -42,14 +42,16 @@ public class EditCaseParam {
      *
      * @mbg.generated
      */
+    @NotBlank(message = "方案名称不允许为空")
     private String caseName;
     
     
     /**
-     * 方案状态（0下架 1上架）
+     * 方案状态（0删除 1上架 2下架）
      *
      * @mbg.generated
      */
+    @NotBlank(message = "方案状态不许为空")
     private Integer caseStatus;
     
     
@@ -61,12 +63,6 @@ public class EditCaseParam {
     private String remark;
     
     /**
-     * 主图
-     */
-    @NotNull(message = "分类主图")
-    private CasePic casePic;
-    
-    /**
      * 修改人
      */
     private String modifier;
@@ -74,6 +70,10 @@ public class EditCaseParam {
     /**
      * 是否修改过主图 0 未修改 1修改过
      */
+    @NotBlank(message = "是否修改过主图")
     private Integer isEditPic;
+    
+    
+    private MultipartFile caseFile;
 }
 

@@ -1,5 +1,6 @@
 package com.azz.platform.merchant.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,20 +14,29 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.MerchantProductErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
+import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.PlatformConstants;
 import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
+import com.azz.platform.merchant.mapper.PlatformCaseClassificationParamsMapper;
 import com.azz.platform.merchant.mapper.PlatformCaseMapper;
 import com.azz.platform.merchant.pojo.PlatformCase;
+import com.azz.platform.merchant.pojo.PlatformCaseClassificationParams;
 import com.azz.platform.merchant.pojo.bo.AddCaseParam;
+import com.azz.platform.merchant.pojo.bo.AddSelectionParams;
 import com.azz.platform.merchant.pojo.bo.CasePic;
+import com.azz.platform.merchant.pojo.bo.DelSelecttionParams;
 import com.azz.platform.merchant.pojo.bo.EditCaseParam;
+import com.azz.platform.merchant.pojo.bo.SearchCaseParamList;
 import com.azz.platform.merchant.pojo.vo.CaseParams;
+import com.azz.platform.merchant.pojo.vo.CaseParamsList;
 import com.azz.system.api.SystemImageUploadService;
+import com.azz.system.sequence.api.RandomSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
 import com.azz.util.StringUtils;
+import com.github.pagehelper.PageHelper;
 
 /**
  * 
@@ -44,6 +54,12 @@ public class CaseService {
     @Autowired
     PlatformCaseMapper platformCaseMapper;
     
+    @Autowired
+    PlatformCaseClassificationParamsMapper platformCaseClassificationParamsMapper;
+    
+    @Autowired
+    private RandomSequenceService randomSequenceService;
+   
     /**
      * <p>新增方案</p>
      * @param param
@@ -77,7 +93,7 @@ public class CaseService {
         }
         
         // 新增方案编码 TODO 系统生成
-        String caseCode = "";
+        String caseCode = randomSequenceService.getClassificationNumber();
         
         if (StringUtils.isBlank(originalFileName)) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
@@ -121,7 +137,13 @@ public class CaseService {
         return JsonResult.successJsonResult();
     }
 
-
+    /**
+     * 
+     * <p>编辑方案</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月6日 下午4:11:31
+     */
     public JsonResult<String> editCase(@RequestBody EditCaseParam param){
         
         PlatformCase pcObj = platformCaseMapper.selectByCaseCode(param.getCaseCode());
@@ -190,8 +212,75 @@ public class CaseService {
         return JsonResult.successJsonResult();
     }
     
-    public JsonResult<List<CaseParams>> getCaseParamList(@RequestParam("assortmentId") String assortmentId){
-        return null;
+    /**
+     * <p>根据分类编码获取参数信息</p>
+     * @param assortmentId
+     * @return
+     * @author 彭斌  2018年11月6日 下午4:11:44
+     */
+    public JsonResult<Pagination<CaseParams>> getCaseParamList(@RequestBody SearchCaseParamList param){
+        if(null == param.getAssortmentId()) {
+            throw new BaseException(
+                    MerchantProductErrorCode.MERCHANT_PRODUCT_CASE_CLASSIFICATION_IS_NULL);
+        }
+        PageHelper.startPage(param.getPageNum(), param.getPageSize());
+        List<CaseParams> list = platformCaseMapper.selectParamsByAssortmentId(param);
+        return JsonResult.successJsonResult(new Pagination<>(list));
+    }
+    
+    
+    /**
+     * <p>添加选型参数</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月6日 下午4:40:14
+     */
+    public JsonResult<String> addParam(@RequestBody AddSelectionParams param){
+        if(null == param.getCaseId() || param.getParamsId().size() == 0) {
+            throw new BaseException(
+                    MerchantProductErrorCode.MERCHANT_PRODUCT_CASE_ID_OR_PARAMS_IS_NULL);
+        }
+        
+        for (int i = 0; i < param.getParamsId().size(); i++) {
+            PlatformCaseClassificationParams record = new PlatformCaseClassificationParams();
+            record.setCaseId(param.getCaseId());
+            record.setCreateTime(new Date());
+            record.setCreator(param.getCreator());
+            record.setParamsId(param.getParamsId().get(i));
+            platformCaseClassificationParamsMapper.insertSelective(record);
+        }
+        return JsonResult.successJsonResult();
+    }
+    
+    /**
+     * <p>根据方案编码获取选型参数</p>
+     * @param caseCode
+     * @return
+     * @author 彭斌  2018年11月6日 下午5:22:17
+     */
+    public JsonResult<List<CaseParamsList>> getCaseSelectionParameter(@RequestParam("caseCode") String caseCode){
+        List<CaseParamsList> list = new ArrayList<>();
+        if(!"".equals(caseCode)) {
+            list = platformCaseMapper.selectParamsByCaseCode(caseCode);
+        }
+        return JsonResult.successJsonResult(list);
+    }
+    
+    /**
+     * <p>移除选型参数</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月6日 下午5:55:11
+     */
+    public JsonResult<String> delSelectionParameter(@RequestBody DelSelecttionParams param){
+        PlatformCaseClassificationParams pccp = platformCaseClassificationParamsMapper.selectParam(param.getCaseId(), param.getParamsId());
+        if(ObjectUtils.isNotNull(pccp)) {
+            pccp.setLastModifyTime(new Date());
+            pccp.setModifier(param.getModifier());
+            pccp.setStatus(0);
+            platformCaseClassificationParamsMapper.updateByPrimaryKeySelective(pccp);
+        }
+        return JsonResult.successJsonResult();
     }
 }
 

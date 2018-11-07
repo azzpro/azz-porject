@@ -82,7 +82,7 @@ public class ClassificationController {
 	 */
 	@RequestMapping("/editClassification")
     public JsonResult<String> editClassification(EditClassificationWebParam param) throws IOException{
-	    ClassificationPic cp = new ClassificationPic();
+	    ClassificationPic cp = null;
 	    if(param.getIsEditPic() == 1) {
 	        MultipartFile classificationFile = param.getClassificationFile();
 	        cp = new ClassificationPic(classificationFile.getOriginalFilename(), classificationFile.getSize(), Base64.encode(classificationFile.getBytes()));

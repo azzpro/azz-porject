@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.azz.platform.merchant.pojo.MerchantGoodsProductParams;
 import com.azz.platform.merchant.pojo.MerchantGoodsProductPrice;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 
@@ -26,6 +27,7 @@ public class ProductInfo {
 	private String merchantName;//所属商户
 	private String moduleName;//所属模组
 	private Integer currentStatus;//当前状态
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")
 	private Date createTime;//创建时间
 	private List<MerchantGoodsProductPrice> prices;// 交期价格
 	private List<MerchantGoodsProductParams> params;//产品参数

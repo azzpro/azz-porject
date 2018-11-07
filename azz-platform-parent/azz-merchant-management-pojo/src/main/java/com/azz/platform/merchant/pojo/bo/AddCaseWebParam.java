@@ -7,6 +7,8 @@
  
 package com.azz.platform.merchant.pojo.bo;
 
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -52,6 +54,11 @@ public class AddCaseWebParam {
     private String remark;
     
     private String creator;
+    
+    /**
+     * 参数id
+     */
+    private List<String> paramsId;
     
     @NotNull(message = "请上传主图")
     private MultipartFile caseFile;

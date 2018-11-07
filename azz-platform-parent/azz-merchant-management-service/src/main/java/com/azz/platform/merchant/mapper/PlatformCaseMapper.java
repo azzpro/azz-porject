@@ -7,8 +7,10 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.platform.merchant.pojo.PlatformCase;
 import com.azz.platform.merchant.pojo.bo.SearchCaseInfoParam;
+import com.azz.platform.merchant.pojo.bo.SearchCaseListParam;
 import com.azz.platform.merchant.pojo.bo.SearchCaseParamList;
 import com.azz.platform.merchant.pojo.vo.CaseInfo;
+import com.azz.platform.merchant.pojo.vo.CaseList;
 import com.azz.platform.merchant.pojo.vo.CaseParams;
 import com.azz.platform.merchant.pojo.vo.CaseParamsList;
 @Mapper
@@ -36,4 +38,6 @@ public interface PlatformCaseMapper {
     List<CaseParamsList> selectParamsByCaseCode(String caseCode);
     
     List<CaseInfo> getCaseInfoList(SearchCaseInfoParam param);
+    
+    List<CaseList> selectCaseListByParam(SearchCaseListParam param);
 }

@@ -7,6 +7,8 @@
  
 package com.azz.platform.merchant.pojo.bo;
 
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -73,6 +75,10 @@ public class EditCaseWebParam {
     @NotBlank(message = "是否修改过主图")
     private Integer isEditPic;
     
+    /**
+     * 参数id
+     */
+    private List<String> paramsId;
     
     private MultipartFile caseFile;
 }

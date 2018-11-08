@@ -356,8 +356,8 @@ public class CaseService {
         JSR303ValidateUtils.validate(param);
         PlatformCase pc = platformCaseMapper.selectByCaseCode(param.getCaseCode());
         if(ObjectUtils.isNotNull(pc)) {
-            if(1 != param.getStauts() || 2 != param.getStauts()) {
-                pc.setCaseStatus(param.getStauts());
+            if(1 != param.getStatus() || 2 != param.getStatus()) {
+                pc.setCaseStatus(param.getStatus());
                 pc.setModifier(param.getModifier());
                 pc.setLastModifyTime(new Date());
                 platformCaseMapper.updateByPrimaryKeySelective(pc);

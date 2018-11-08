@@ -23,7 +23,7 @@ public class CaseShelfParam {
     private String caseCode;
     
     @NotBlank(message = "方案状态不允许为空")
-    private Integer stauts;
+    private Integer status;
     
     private String modifier;
 }

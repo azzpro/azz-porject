@@ -202,10 +202,10 @@
 		pgpt.params_code as paramCode,
 		pgpt.params_name as paramName,
 		group_concat(pgpv.params_value)  as paramValue
-		FROM platform_goods_params pgp
+	FROM platform_goods_params pgp
 	JOIN  platform_goods_params_term pgpt ON pgp.id = pgpt.params_id
 	JOIN platform_goods_params_value pgpv ON pgpv.params_parent_id = pgpt.id
-	WHERE pgpt.assortment_id = #{assortmentId}
+	WHERE pgp.assortment_id = #{assortmentId}
 	<if test="param != null and param !=''">
 		and (pgpt.params_code = #{param} or pgpt.params_name = #{param})
 	</if>

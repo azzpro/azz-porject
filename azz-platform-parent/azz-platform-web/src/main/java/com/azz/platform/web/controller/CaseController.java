@@ -8,7 +8,6 @@
 package com.azz.platform.web.controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,14 +24,16 @@ import com.azz.platform.merchant.api.CaseService;
 import com.azz.platform.merchant.pojo.bo.AddCaseParam;
 import com.azz.platform.merchant.pojo.bo.AddCaseWebParam;
 import com.azz.platform.merchant.pojo.bo.CasePic;
+import com.azz.platform.merchant.pojo.bo.CaseShelfParam;
+import com.azz.platform.merchant.pojo.bo.DelCaseParams;
 import com.azz.platform.merchant.pojo.bo.DelSelecttionParams;
 import com.azz.platform.merchant.pojo.bo.EditCaseParam;
 import com.azz.platform.merchant.pojo.bo.EditCaseWebParam;
 import com.azz.platform.merchant.pojo.bo.SearchCaseListParam;
 import com.azz.platform.merchant.pojo.bo.SearchCaseParamList;
+import com.azz.platform.merchant.pojo.vo.CaseDetail;
 import com.azz.platform.merchant.pojo.vo.CaseList;
 import com.azz.platform.merchant.pojo.vo.CaseParams;
-import com.azz.platform.merchant.pojo.vo.CaseParamsList;
 import com.azz.util.Base64;
 import com.azz.utils.WebUtils;
 
@@ -108,14 +109,14 @@ public class CaseController {
 	
 	
 	/**
-	 * <p>根据方案编码获取选型参数</p>
+	 * <p>根据方案编码获取方案详情和选型参数</p>
 	 * @param caseCode
 	 * @return
 	 * @author 彭斌  2018年11月7日 上午11:28:37
 	 */
-	@RequestMapping("/getCaseSelectionParameter")
-    public JsonResult<List<CaseParamsList>> getCaseSelectionParameter(@RequestParam("caseCode") String caseCode){
-	    return caseService.getCaseSelectionParameter(caseCode);
+	@RequestMapping("/getCaseInfo")
+    public JsonResult<CaseDetail> getCaseInfo(@RequestParam("caseCode") String caseCode){
+	    return caseService.getCaseInfo(caseCode);
 	}
     
 	/**
@@ -126,7 +127,31 @@ public class CaseController {
 	 */
 	@RequestMapping("/delSelectionParameter")
     public JsonResult<String> delSelectionParameter(DelSelecttionParams param) {
+	    param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
         return caseService.delSelectionParameter(param);
     }
 	
+	/**
+	 * <p>删除方案</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年11月8日 上午11:10:44
+	 */
+	@RequestMapping("/delCase")
+	public JsonResult<String> delCase(DelCaseParams param){
+	    param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
+	    return caseService.delCase(param);
+	}
+	
+	/**
+	 * <p>方案上架下架</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年11月8日 上午11:28:00
+	 */
+	@RequestMapping("/caseShelf")
+	public JsonResult<String> caseShelf(CaseShelfParam param){
+	    param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
+	    return caseService.caseShelf(param);
+	}
 }

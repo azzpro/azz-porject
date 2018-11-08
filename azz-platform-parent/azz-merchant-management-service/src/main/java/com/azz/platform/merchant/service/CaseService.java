@@ -1,6 +1,5 @@
 package com.azz.platform.merchant.service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,10 +24,13 @@ import com.azz.platform.merchant.pojo.PlatformCase;
 import com.azz.platform.merchant.pojo.PlatformCaseClassificationParams;
 import com.azz.platform.merchant.pojo.bo.AddCaseParam;
 import com.azz.platform.merchant.pojo.bo.CasePic;
+import com.azz.platform.merchant.pojo.bo.CaseShelfParam;
+import com.azz.platform.merchant.pojo.bo.DelCaseParams;
 import com.azz.platform.merchant.pojo.bo.DelSelecttionParams;
 import com.azz.platform.merchant.pojo.bo.EditCaseParam;
 import com.azz.platform.merchant.pojo.bo.SearchCaseListParam;
 import com.azz.platform.merchant.pojo.bo.SearchCaseParamList;
+import com.azz.platform.merchant.pojo.vo.CaseDetail;
 import com.azz.platform.merchant.pojo.vo.CaseList;
 import com.azz.platform.merchant.pojo.vo.CaseParams;
 import com.azz.platform.merchant.pojo.vo.CaseParamsList;
@@ -273,20 +275,6 @@ public class CaseService {
     
     
     /**
-     * <p>根据方案编码获取选型参数</p>
-     * @param caseCode
-     * @return
-     * @author 彭斌  2018年11月6日 下午5:22:17
-     */
-    public JsonResult<List<CaseParamsList>> getCaseSelectionParameter(@RequestParam("caseCode") String caseCode){
-        List<CaseParamsList> list = new ArrayList<>();
-        if(!"".equals(caseCode)) {
-            list = platformCaseMapper.selectParamsByCaseCode(caseCode);
-        }
-        return JsonResult.successJsonResult(list);
-    }
-    
-    /**
      * <p>移除选型参数</p>
      * @param param
      * @return
@@ -299,6 +287,81 @@ public class CaseService {
             pccp.setModifier(param.getModifier());
             pccp.setStatus(0);
             platformCaseClassificationParamsMapper.updateByPrimaryKeySelective(pccp);
+        }
+        return JsonResult.successJsonResult();
+    }
+
+    /**
+     * <p>根据方案编码获取方案详情</p>
+     * @param caseCode
+     * @return
+     * @author 彭斌  2018年11月8日 上午10:22:33
+     */
+    public JsonResult<CaseDetail> getCaseInfo(@RequestParam("caseCode") String caseCode){
+        CaseDetail caseDetail = new CaseDetail();
+        if(null != caseCode && !"".equals(caseCode)) {
+            PlatformCase pc = platformCaseMapper.selectByCaseCode(caseCode);
+            if(ObjectUtils.isNotNull(pc)) {
+                caseDetail.setCaseCode(pc.getCaseCode());
+                caseDetail.setCaseName(pc.getCaseName());
+                caseDetail.setCasePicName(pc.getCasePicName());
+                caseDetail.setCasePicUrl(pc.getCasePicUrl());
+                caseDetail.setCaseStatus(pc.getCaseStatus());
+                caseDetail.setClassificationId(pc.getClassificationId());
+                caseDetail.setRemark(pc.getRemark());
+            }
+            caseDetail.setCaseParamsList(platformCaseMapper.selectParamsByCaseCode(caseCode));
+        }
+        return JsonResult.successJsonResult(caseDetail);
+    }
+
+
+    /**
+     * <p>删除方案</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月8日 上午10:52:01
+     */
+    public JsonResult<String> delCase(@RequestBody DelCaseParams param){
+        JSR303ValidateUtils.validate(param);
+        PlatformCase pc = platformCaseMapper.selectByCaseCode(param.getCaseCode());
+        if(ObjectUtils.isNotNull(pc)) {
+            // 删除方案基本信息
+            pc.setCaseStatus(0);
+            pc.setLastModifyTime(new Date());
+            pc.setModifier(param.getModifier());
+            platformCaseMapper.updateByPrimaryKeySelective(pc);
+            
+            // 删除方案的选型参数
+            List<CaseParamsList> list = platformCaseMapper.selectParamsByCaseCode(param.getCaseCode());
+            if(list.size() > 0) {
+                PlatformCaseClassificationParams pccp = new PlatformCaseClassificationParams();
+                pccp.setCaseId(pc.getId());
+                pccp.setModifier(param.getModifier());
+                pccp.setLastModifyTime(new Date());
+                pccp.setStatus(0);
+                platformCaseClassificationParamsMapper.delCaseParams(pccp);
+            }
+        }
+        return JsonResult.successJsonResult();
+    }
+
+    /**
+     * <p>方案上架下架</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月8日 上午11:21:20
+     */
+    public JsonResult<String> caseShelf(@RequestBody CaseShelfParam param){
+        JSR303ValidateUtils.validate(param);
+        PlatformCase pc = platformCaseMapper.selectByCaseCode(param.getCaseCode());
+        if(ObjectUtils.isNotNull(pc)) {
+            if(1 != param.getStauts() || 2 != param.getStauts()) {
+                pc.setCaseStatus(param.getStauts());
+                pc.setModifier(param.getModifier());
+                pc.setLastModifyTime(new Date());
+                platformCaseMapper.updateByPrimaryKeySelective(pc);
+            }
         }
         return JsonResult.successJsonResult();
     }

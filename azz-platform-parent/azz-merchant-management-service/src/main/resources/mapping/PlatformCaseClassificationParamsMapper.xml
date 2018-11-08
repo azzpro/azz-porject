@@ -137,4 +137,29 @@
   <delete id="delCaseClassificationParams" parameterType="java.lang.Long" >
   	DELETE from platform_case_classification_params WHERE case_id = #{caseId,jdbcType=BIGINT}
   </delete>
+  
+  <update id="delCaseParams" parameterType="com.azz.platform.merchant.pojo.PlatformCaseClassificationParams">
+    update platform_case_classification_params
+    <set>
+      <if test="paramsId != null">
+        params_id = #{paramsId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifyTime != null">
+        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where case_id = #{caseId,jdbcType=BIGINT}
+  </update>
 </mapper>

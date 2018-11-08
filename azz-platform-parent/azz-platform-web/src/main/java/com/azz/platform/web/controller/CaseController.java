@@ -12,7 +12,6 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,7 +57,7 @@ public class CaseController {
 	 * @author 彭斌  2018年11月7日 下午7:59:44
 	 */
 	@RequestMapping("/searchCaseList")
-	public JsonResult<Pagination<CaseList>> searchCaseList(@RequestBody SearchCaseListParam param){
+	public JsonResult<Pagination<CaseList>> searchCaseList(SearchCaseListParam param){
 	    return caseService.searchCaseList(param);
 	}
 	

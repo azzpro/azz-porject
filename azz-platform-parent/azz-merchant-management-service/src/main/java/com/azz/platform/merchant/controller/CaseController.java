@@ -21,8 +21,10 @@ import com.azz.platform.merchant.pojo.bo.CaseShelfParam;
 import com.azz.platform.merchant.pojo.bo.DelCaseParams;
 import com.azz.platform.merchant.pojo.bo.DelSelecttionParams;
 import com.azz.platform.merchant.pojo.bo.EditCaseParam;
+import com.azz.platform.merchant.pojo.bo.SearchCaseListParam;
 import com.azz.platform.merchant.pojo.bo.SearchCaseParamList;
 import com.azz.platform.merchant.pojo.vo.CaseDetail;
+import com.azz.platform.merchant.pojo.vo.CaseList;
 import com.azz.platform.merchant.pojo.vo.CaseParams;
 import com.azz.platform.merchant.service.CaseService;
 
@@ -37,6 +39,17 @@ public class CaseController {
 	
 	@Autowired
 	private CaseService  caseService;
+	
+	/**
+	 * <p>查询方案分页列表</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年11月8日 下午2:00:32
+	 */
+	@RequestMapping(value="searchCaseList",method=RequestMethod.POST)
+	public JsonResult<Pagination<CaseList>> searchCaseList(@RequestBody SearchCaseListParam param){
+	    return caseService.searchCaseList(param);
+	}
 	
 	/**
 	 * <p>新增方案参数</p>
@@ -110,7 +123,7 @@ public class CaseController {
 	 * @return
 	 * @author 彭斌  2018年11月8日 上午11:25:42
 	 */
-	@RequestMapping(value="delCase",method=RequestMethod.POST)
+	@RequestMapping(value="caseShelf",method=RequestMethod.POST)
 	JsonResult<String> caseShelf(@RequestBody CaseShelfParam param){
 	    return caseService.caseShelf(param);
 	}

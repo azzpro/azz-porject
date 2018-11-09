@@ -10,6 +10,7 @@ package com.azz.merchant.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,8 +69,20 @@ public class ProductController {
 	 * @author 刘建麟  2018年11月2日 下午3:01:02
 	 */
 	@RequestMapping(value="toAddProduct",method=RequestMethod.POST)
-	public JsonResult<ProductParamsBrands> toAddProduct(Long assortmentId){
-		JsonResult<ProductParamsBrands> product = productService.toAddProduct(assortmentId);
+	public JsonResult<ProductParamsBrands> toAddProduct(){
+		JsonResult<ProductParamsBrands> product = productService.toAddProduct();
+		return product;
+	}
+	
+	/**
+	 * <p>新增产品页面  加载品牌列表 参数列表</p>
+	 * @param param
+	 * @return
+	 * @author 刘建麟  2018年11月2日 下午3:01:02
+	 */
+	@RequestMapping(value="getPrams",method=RequestMethod.POST)
+	public JsonResult<com.azz.merchant.pojo.vo.ProductParams> getPrams(Long assortmentId){
+		JsonResult<com.azz.merchant.pojo.vo.ProductParams> product = productService.getPrams(assortmentId);
 		return product;
 	}
 	
@@ -79,8 +92,8 @@ public class ProductController {
 	 * @return
 	 * @author 刘建麟  2018年11月2日 下午3:01:02
 	 */
-	@RequestMapping(value="addProduct",method=RequestMethod.POST)
-	public JsonResult<String> addProduct(ProductParams param){
+	@RequestMapping(value="addProduct",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
+	public JsonResult<String> addProduct(@RequestBody ProductParams param){
 		param.setCreator(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
 		return productService.addProduct(param);
 	}
@@ -92,8 +105,8 @@ public class ProductController {
 	 * @author 刘建麟  2018年11月2日 下午3:01:02
 	 */
 	@RequestMapping(value="toUpdateProduct",method=RequestMethod.POST)
-	public JsonResult<Products> toUpdateProduct(String code){
-		return productService.toUpdateProduct(code);
+	public JsonResult<Products> toUpdateProduct(Long id){
+		return productService.toUpdateProduct(id);
 	}
 	
 	/**
@@ -102,8 +115,8 @@ public class ProductController {
 	 * @return
 	 * @author 刘建麟  2018年11月2日 下午3:01:02
 	 */
-	@RequestMapping(value="updateProduct",method=RequestMethod.POST)
-	public JsonResult<String> updateProduct(ProductParams param){
+	@RequestMapping(value="updateProduct",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
+	public JsonResult<String> updateProduct(@RequestBody ProductParams param){
 		param.setModify(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
 		return productService.updateProduct(param);
 	}

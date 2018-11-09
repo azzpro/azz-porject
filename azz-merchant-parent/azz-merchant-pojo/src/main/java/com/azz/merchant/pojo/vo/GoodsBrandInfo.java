@@ -31,7 +31,9 @@ public class GoodsBrandInfo {
 	
 	private String brandDescription;
 	
-	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd hh:mm:ss")
+	private Long brandId;
+	
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createTime;
 
 }

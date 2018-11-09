@@ -21,6 +21,5 @@ public class ProductParamsBrands {
 	
 	private List<Brand> brands;
 	
-	private List<ParamsValue> pvs;
 }
 

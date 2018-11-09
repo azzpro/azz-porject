@@ -180,7 +180,7 @@
   
   <!-- 商户下产品列表 -->
   <select id="selectProductList" parameterType="com.azz.merchant.pojo.bo.MerchantProductParam" resultType="com.azz.merchant.pojo.vo.MerchantProductList">
-  	select a.product_code productCode,a.product_system_code systemCode,b.module_name moduleName,c.deliveryDate,c.price,a.product_status status,a.creator creator,a.create_time createTime from merchant_goods_product a
+  	select a.id productId,a.product_code productCode,a.product_system_code systemCode,b.module_name moduleName,c.deliveryDate,c.price,a.product_status status,a.creator creator,a.create_time createTime from merchant_goods_product a
 	LEFT JOIN merchant_goods_module b on a.module_id = b.id
 	LEFT JOIN (select min(delivery_date) as  deliveryDate,min(price) as price,product_id from merchant_goods_product_price GROUP BY product_id) c on c.product_id = a.id
   	<where>
@@ -193,6 +193,7 @@
   		<if test="merchantId != null">
   			and a.merchant_id = #{merchantId}
   		</if>
+  		and a.product_status != 0
   	</where>
   	order by a.create_time DESC
   </select>

@@ -35,5 +35,9 @@ public class Products {
 	private String assormentName;
 	private List<GoodsBrandInfo> brands;
 	private Long productId;
+	private Long brandId;
+	private Long assortmentId;
+	private String moduleName;
+	private Long moduleId;
 }
 

@@ -48,13 +48,15 @@ public interface ProductService {
 	public JsonResult<String> deleteOrDownProduct(@RequestParam("id") Long id,@RequestParam("type") Byte type);
 	
 	@RequestMapping(value="/azz/api/merchant/product/toUpdateProduct",method=RequestMethod.POST)
-	public JsonResult<Products> toUpdateProduct(@RequestParam("code") String code);
+	public JsonResult<Products> toUpdateProduct(@RequestParam("id") Long id);
 	
 	@RequestMapping(value="/azz/api/merchant/product/toAddProduct",method=RequestMethod.POST)
-	public JsonResult<ProductParamsBrands> toAddProduct(@RequestParam("assortmentId") Long assortmentId);
+	public JsonResult<ProductParamsBrands> toAddProduct();
 	
 	@RequestMapping(value="/azz/api/merchant/product/getModule",method=RequestMethod.POST)
 	public JsonResult<Pagination<Module>> getModule(@RequestBody ModulePrams mp);
 	
+	@RequestMapping(value="/azz/api/merchant/product/getPrams",method=RequestMethod.POST)
+	public JsonResult<com.azz.merchant.pojo.vo.ProductParams> getPrams(@RequestParam("assortmentId") Long assortmentId);
 }
 

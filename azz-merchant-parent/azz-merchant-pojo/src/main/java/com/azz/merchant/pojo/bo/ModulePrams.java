@@ -20,7 +20,6 @@ import lombok.Data;
 public class ModulePrams extends QueryPage{
 	private Integer assortmentId;
 	private Integer merchantId;
-	private String moduleCode;
-	private String moduleName;
+	private String param;
 }
 

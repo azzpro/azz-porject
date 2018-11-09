@@ -33,11 +33,8 @@
   <if test="merchantId != null">
   	and merchant_id = #{merchantId}
   </if>
-  <if test="moduleCode != null and moduleCode != ''">
-  	and module_code = #{moduleCode}
-  </if>
-  <if test="moduleName != null and moduleName != ''">
-  	and module_name LIKE CONCAT('%', #{moduleName}, '%')
+  <if test="param != null and param != ''">
+  	and (module_code = #{param} or module_name LIKE CONCAT('%', #{param}, '%'))
   </if>
   order by create_time desc
   </select>

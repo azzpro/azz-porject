@@ -15,6 +15,8 @@ package com.azz.merchant.pojo.vo;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
@@ -24,8 +26,10 @@ public class MerchantProductList {
 	private Integer deliveryDate;
 	private BigDecimal price;
 	private String creator;
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createTime;
 	private Integer status;
 	private String systemCode;
+	private Long productId;
 }
 

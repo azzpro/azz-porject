@@ -84,8 +84,20 @@ public class ProductController {
 	 * @author 刘建麟  2018年10月31日 下午7:47:30
 	 */
 	@RequestMapping(value="toAddProduct",method=RequestMethod.POST)
-	public JsonResult<ProductParamsBrands> toAddProduct(Long assortmentId){
-		JsonResult<ProductParamsBrands> addProduct = productService.toAddProduct(assortmentId);
+	public JsonResult<ProductParamsBrands> toAddProduct(){
+		JsonResult<ProductParamsBrands> addProduct = productService.toAddProduct();
+		return addProduct;
+	}
+	
+	/**
+	 * <p>去新增产品页面</p>
+	 * @param params
+	 * @return
+	 * @author 刘建麟  2018年10月31日 下午7:47:30
+	 */
+	@RequestMapping(value="getPrams",method=RequestMethod.POST)
+	public JsonResult<com.azz.merchant.pojo.vo.ProductParams> getPrams(Long assortmentId){
+		JsonResult<com.azz.merchant.pojo.vo.ProductParams> addProduct = productService.getPrams(assortmentId);
 		return addProduct;
 	}
 	
@@ -107,8 +119,8 @@ public class ProductController {
 	 * @author 刘建麟  2018年11月3日 下午12:38:37
 	 */
 	@RequestMapping(value="toUpdateProduct",method=RequestMethod.POST)
-	public JsonResult<Products> getModule(String code){
-		return productService.toUpdateProduct(code);
+	public JsonResult<Products> getModule(Long id){
+		return productService.toUpdateProduct(id);
 	}
 	
 	

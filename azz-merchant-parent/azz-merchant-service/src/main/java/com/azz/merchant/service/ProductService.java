@@ -114,12 +114,65 @@ public class ProductService {
 	}
 	
 	/**
+	 * <p>新增产品页面获取参数</p>
+	 * @param params
+	 * @return
+	 * @author 刘建麟  2018年10月31日 下午7:47:30
+	 */
+	@RequestMapping(value="getPrams",method=RequestMethod.POST)
+	public JsonResult<com.azz.merchant.pojo.vo.ProductParams> getPrams(Long assortmentId){
+		if(null == assortmentId)
+			throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_ASSORTMENT_IS_NULL);
+		com.azz.merchant.pojo.PlatformGoodsParams goodsParams = platformGoodsParamsMapper.selectParamsByAssortmentId(assortmentId);
+		/*if(null == goodsParams)
+			throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_VALUES_IS_NULL);*/
+		//根据参数ID 查询参数项类型
+		List<PlatformGoodsParamsTerm> paramsId = null;
+		if(null != goodsParams) {
+			paramsId = platformGoodsParamsTermMapper.selectParamsByParamsId(goodsParams.getId());
+		}
+		com.azz.merchant.pojo.vo.ProductParams pp = new com.azz.merchant.pojo.vo.ProductParams();
+		if(null !=  paramsId && paramsId.size() > 0) {
+			List<ParamsValue> pvs = new ArrayList<>();
+			List<Long> values = new ArrayList<>();
+			StringBuilder sb = new StringBuilder();
+			//根据参数项ID 查询值
+			for (PlatformGoodsParamsTerm platformGoodsParamsTerm : paramsId) {
+				ParamsValue pv = new ParamsValue();
+				pv.setChoice(platformGoodsParamsTerm.getParamsChoice());
+				pv.setType(platformGoodsParamsTerm.getParamsType());
+				pv.setParamName(platformGoodsParamsTerm.getParamsName());
+				if(platformGoodsParamsTerm.getParamsType() == 1) {
+					List<PlatformGoodsParamsValue> termId = platformGoodsParamsValueMapper.selectValueByTermId(platformGoodsParamsTerm.getId());
+					for (PlatformGoodsParamsValue ppv : termId) {
+						sb.append(ppv.getParamsValue());
+						if(ppv != termId.get(termId.size()-1)) {
+							sb.append(",");
+						}
+						
+					}
+					values = Arrays.asList(sb.toString().split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+					pv.setValues(values);
+					sb = new StringBuilder();
+				}
+				pvs.add(pv);
+				pv = null;
+			}
+			pp.setPvs(pvs);
+		}
+		
+		
+
+		return new JsonResult<>(pp);
+	}
+	
+	/**
 	 * <p>去新增产品页面</p>
 	 * @return
 	 * @author 刘建麟  2018年11月3日 上午11:56:24
 	 */
 	@RequestMapping(value="toAddProduct",method=RequestMethod.POST)
-	public JsonResult<ProductParamsBrands> toAddProduct(Long assortmentId){
+	public JsonResult<ProductParamsBrands> toAddProduct(){
 		ProductParamsBrands pps = new ProductParamsBrands();
 		List<com.azz.merchant.pojo.PlatformGoodsBrand> brands = brandMapper.selectBrand();
 		if(null == brands)
@@ -129,46 +182,12 @@ public class ProductService {
 			Brand bd = new Brand();
 			bd.setBrandCode(platformGoodsBrand.getBrandCode());
 			bd.setBrandName(platformGoodsBrand.getBrandName());
+			bd.setBrandId(platformGoodsBrand.getId());
 			list.add(bd);
 			bd = null;
 		}
 		pps.setBrands(list);
-		//根据分类ID加载参数列表
-		if(null == assortmentId)
-			throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_ASSORTMENT_IS_NULL);
-		com.azz.merchant.pojo.PlatformGoodsParams goodsParams = platformGoodsParamsMapper.selectParamsByAssortmentId(assortmentId);
-		if(null == goodsParams)
-			throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_VALUES_IS_NULL);
-		//根据参数ID 查询参数项类型
-		List<PlatformGoodsParamsTerm> paramsId = platformGoodsParamsTermMapper.selectParamsByParamsId(goodsParams.getId());
-		if(null ==  paramsId || paramsId.size() == 0)
-			throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_VALUES_IS_NULL);
-		List<ParamsValue> pvs = new ArrayList<>();
-		List<Long> values = new ArrayList<>();
-		StringBuilder sb = new StringBuilder();
-		//根据参数项ID 查询值
-		for (PlatformGoodsParamsTerm platformGoodsParamsTerm : paramsId) {
-			ParamsValue pv = new ParamsValue();
-			pv.setChoice(platformGoodsParamsTerm.getParamsChoice());
-			pv.setType(platformGoodsParamsTerm.getParamsType());
-			pv.setParamName(platformGoodsParamsTerm.getParamsName());
-			if(platformGoodsParamsTerm.getParamsType() == 1) {
-				List<PlatformGoodsParamsValue> termId = platformGoodsParamsValueMapper.selectValueByTermId(platformGoodsParamsTerm.getId());
-				for (PlatformGoodsParamsValue ppv : termId) {
-					sb.append(ppv.getParamsValue());
-					if(ppv != termId.get(termId.size()-1)) {
-						sb.append(",");
-					}
-					
-				}
-				values = Arrays.asList(sb.toString().split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
-				pv.setValues(values);
-				sb = new StringBuilder();
-			}
-			pvs.add(pv);
-			pv = null;
-		}
-		pps.setPvs(pvs);
+		
 		return new JsonResult<>(pps);
 	}
 	/**
@@ -177,11 +196,11 @@ public class ProductService {
 	 * @return
 	 * @author 刘建麟  2018年11月2日 下午7:45:51
 	 */
-	public JsonResult<Products> toUpdateProduct(String code){
-		if(StringUtils.isBlank(code))
-			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"产品CODE不能为空");
+	public JsonResult<Products> toUpdateProduct(Long id){
+		if(null == id)
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"产品ID不能为空");
 		//查分类
-		MerchantGoodsProduct mp = goodsProductMapper.selectProductBySystemCode(code);
+		MerchantGoodsProduct mp = goodsProductMapper.selectByPrimaryKey(id);
 		if(null == mp)
 			throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_NOT_EXIST);
 		
@@ -206,10 +225,12 @@ public class ProductService {
 			GoodsBrandInfo gbi = new GoodsBrandInfo();
 			gbi.setBrandCode(platformGoodsBrand.getBrandCode());
 			gbi.setBrandName(platformGoodsBrand.getBrandName());
+			gbi.setBrandId(platformGoodsBrand.getId());
 			gis.add(gbi);
 			gbi = null;
 		}
-		
+		//获取模组
+		MerchantGoodsModule module = goodsModuleMapper.selectModuleById(mp.getModuleId());
 		//查询产品价格
 		List<MerchantGoodsProductPrice> list = goodsProductPriceMapper.selectPriceByProductId(mp.getId());
 		
@@ -226,10 +247,14 @@ public class ProductService {
 		pps.setProductCode(mp.getProductCode());
 		pps.setBrands(gis);
 		pps.setProductId(mp.getId());
-		pps.setBrandCode(selectBrandById.getBrandCode());
+		pps.setBrandId(selectBrandById.getId());
 		pps.setStatus(mp.getProductStatus());
 		pps.setPrices(list);
 		pps.setParams(list2);
+		pps.setAssortmentCode(assortmentById.getAssortmentCode());
+		pps.setAssortmentId(assortmentById.getId());
+		pps.setModuleId(module.getId());
+		pps.setModuleName(module.getModuleName());
 		return new JsonResult<>(pps);
 	}
 	
@@ -329,18 +354,18 @@ public class ProductService {
 				}
 				//插入产品参数
 				List<ProductParam> pp = params.getParams();
-				if(null == pp || pp.size() <= 0)
-					throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_ASSORTMENT_IS_NULL);
-				for (ProductParam productParam : pp) {
-					MerchantGoodsProductParams mpp = new MerchantGoodsProductParams();
-					mpp.setParamsId(goodsParams.getId());
-					mpp.setParamsName(productParam.getParamName());
-					mpp.setParamsValue(productParam.getValues());
-					mpp.setProductId(mgp.getId());
-					mpp.setParamsType(productParam.getType());
-					mpp.setParamsChoice(productParam.getChoice());
-					goodsProductParamsMapper.insertSelective(mpp);
-					mpp = null;
+				if(null != pp || pp.size() > 0) {
+					for (ProductParam productParam : pp) {
+						MerchantGoodsProductParams mpp = new MerchantGoodsProductParams();
+						mpp.setParamsId(goodsParams.getId());
+						mpp.setParamsName(productParam.getParamName());
+						mpp.setParamsValue(productParam.getValues());
+						mpp.setProductId(mgp.getId());
+						mpp.setParamsType(productParam.getType());
+						mpp.setParamsChoice(productParam.getChoice());
+						goodsProductParamsMapper.insertSelective(mpp);
+						mpp = null;
+					}
 				}
 			}
 				
@@ -420,18 +445,18 @@ public class ProductService {
 				goodsProductParamsMapper.deleteByProductId(params.getProductId());
 				//插入产品参数
 				List<ProductParam> pp = params.getParams();
-				if(null == pp || pp.size() <= 0)
-					throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_ASSORTMENT_IS_NULL);
-				for (ProductParam productParam : pp) {
-					MerchantGoodsProductParams mpp = new MerchantGoodsProductParams();
-					mpp.setParamsId(goodsParams.getId());
-					mpp.setParamsName(productParam.getParamName());
-					mpp.setParamsValue(productParam.getValues());
-					mpp.setProductId(mgp.getId());
-					mpp.setParamsType(productParam.getType());
-					mpp.setParamsChoice(productParam.getChoice());
-					goodsProductParamsMapper.insertSelective(mpp);
-					mpp = null;
+				if(null != pp || pp.size() > 0) {
+					for (ProductParam productParam : pp) {
+						MerchantGoodsProductParams mpp = new MerchantGoodsProductParams();
+						mpp.setParamsId(goodsParams.getId());
+						mpp.setParamsName(productParam.getParamName());
+						mpp.setParamsValue(productParam.getValues());
+						mpp.setProductId(mgp.getId());
+						mpp.setParamsType(productParam.getType());
+						mpp.setParamsChoice(productParam.getChoice());
+						goodsProductParamsMapper.insertSelective(mpp);
+						mpp = null;
+					}
 				}
 			}
 				
@@ -453,6 +478,8 @@ public class ProductService {
 			goodsProductMapper.updateProductById((byte)0, id);
 		if(type == 2)
 			goodsProductMapper.updateProductById((byte)2, id);
+		if(type == 3)
+			goodsProductMapper.updateProductById((byte)1, id);
 		return JsonResult.successJsonResult();
 	}
 	

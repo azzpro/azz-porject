@@ -23,4 +23,6 @@ public interface PlatformCaseClassificationParamsMapper {
     PlatformCaseClassificationParams selectParam(@Param("param") Long caseId, @Param("paramsId") Long paramsId);
 
     int delCaseClassificationParams(Long caseId);
+    
+    int delCaseParams(PlatformCaseClassificationParams record);
 }

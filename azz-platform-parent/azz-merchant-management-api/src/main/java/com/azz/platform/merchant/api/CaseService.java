@@ -17,10 +17,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.platform.merchant.pojo.bo.AddCaseParam;
+import com.azz.platform.merchant.pojo.bo.CaseShelfParam;
+import com.azz.platform.merchant.pojo.bo.DelCaseParams;
 import com.azz.platform.merchant.pojo.bo.DelSelecttionParams;
 import com.azz.platform.merchant.pojo.bo.EditCaseParam;
 import com.azz.platform.merchant.pojo.bo.SearchCaseListParam;
 import com.azz.platform.merchant.pojo.bo.SearchCaseParamList;
+import com.azz.platform.merchant.pojo.vo.CaseDetail;
 import com.azz.platform.merchant.pojo.vo.CaseList;
 import com.azz.platform.merchant.pojo.vo.CaseParams;
 import com.azz.platform.merchant.pojo.vo.CaseParamsList;
@@ -86,5 +89,32 @@ public interface CaseService {
      */
     @PostMapping("/azz/api/merchant/case/delSelectionParameter")
     JsonResult<String> delSelectionParameter(@RequestBody DelSelecttionParams param);
+    
+    /**
+     * <p>根据方案编码获取方案详情</p>
+     * @param caseCode
+     * @return
+     * @author 彭斌  2018年11月8日 上午10:20:58
+     */
+    @PostMapping("/azz/api/merchant/case/getCaseInfo")
+    JsonResult<CaseDetail> getCaseInfo(@RequestParam("caseCode") String caseCode);
+    
+    /**
+     * <p>删除方案</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月8日 上午10:49:34
+     */
+    @PostMapping("/azz/api/merchant/case/delCase")
+    JsonResult<String> delCase(@RequestBody DelCaseParams param);
+    
+    /**
+     * <p>方案上架下架</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月8日 上午11:26:22
+     */
+    @PostMapping("/azz/api/merchant/case/caseShelf")
+    JsonResult<String> caseShelf(@RequestBody CaseShelfParam param);
 }
 

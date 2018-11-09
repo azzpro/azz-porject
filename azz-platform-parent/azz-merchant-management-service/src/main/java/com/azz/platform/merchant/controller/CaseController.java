@@ -7,22 +7,25 @@
  
 package com.azz.platform.merchant.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.platform.merchant.pojo.bo.AddCaseParam;
+import com.azz.platform.merchant.pojo.bo.CaseShelfParam;
+import com.azz.platform.merchant.pojo.bo.DelCaseParams;
 import com.azz.platform.merchant.pojo.bo.DelSelecttionParams;
 import com.azz.platform.merchant.pojo.bo.EditCaseParam;
+import com.azz.platform.merchant.pojo.bo.SearchCaseListParam;
 import com.azz.platform.merchant.pojo.bo.SearchCaseParamList;
+import com.azz.platform.merchant.pojo.vo.CaseDetail;
+import com.azz.platform.merchant.pojo.vo.CaseList;
 import com.azz.platform.merchant.pojo.vo.CaseParams;
-import com.azz.platform.merchant.pojo.vo.CaseParamsList;
 import com.azz.platform.merchant.service.CaseService;
 
 /**
@@ -36,6 +39,17 @@ public class CaseController {
 	
 	@Autowired
 	private CaseService  caseService;
+	
+	/**
+	 * <p>查询方案分页列表</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年11月8日 下午2:00:32
+	 */
+	@RequestMapping(value="searchCaseList",method=RequestMethod.POST)
+	public JsonResult<Pagination<CaseList>> searchCaseList(@RequestBody SearchCaseListParam param){
+	    return caseService.searchCaseList(param);
+	}
 	
 	/**
 	 * <p>新增方案参数</p>
@@ -71,14 +85,14 @@ public class CaseController {
 	}
 	
 	/**
-	 * <p>根据方案编码获取选型参数</p>
+	 * <p>根据方案编码获取方案详情和选型参数</p>
 	 * @param caseCode
 	 * @return
 	 * @author 彭斌  2018年11月7日 上午10:36:38
 	 */
-	@RequestMapping(value="getCaseSelectionParameter",method=RequestMethod.POST)
-	public JsonResult<List<CaseParamsList>> getCaseSelectionParameter(String caseCode){
-	    return caseService.getCaseSelectionParameter(caseCode);
+	@RequestMapping(value="getCaseInfo",method=RequestMethod.POST)
+	public JsonResult<CaseDetail> getCaseInfo(@RequestParam("caseCode") String caseCode){
+	    return caseService.getCaseInfo(caseCode);
 	}
 	
 	/**
@@ -92,6 +106,26 @@ public class CaseController {
 	    return caseService.delSelectionParameter(param);
 	}
 	
+	/**
+	 * <p>删除方案</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年11月8日 上午11:06:43
+	 */
+	@RequestMapping(value="delCase",method=RequestMethod.POST)
+	public JsonResult<String> delCase(@RequestBody DelCaseParams param){
+	    return caseService.delCase(param);
+	}
 	
+	/**
+	 * <p>方案上架下架</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年11月8日 上午11:25:42
+	 */
+	@RequestMapping(value="caseShelf",method=RequestMethod.POST)
+	JsonResult<String> caseShelf(@RequestBody CaseShelfParam param){
+	    return caseService.caseShelf(param);
+	}
 }
 

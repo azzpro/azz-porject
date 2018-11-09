@@ -150,8 +150,7 @@ public class CombinationService {
 			}
 		}
 		CombinationPic pic = param.getCombinationPic();
-		// TODO 序号生成要改
-		String combinationCode = randomSequenceService.getBrandCodeNumber();
+		String combinationCode = randomSequenceService.getCombinationCodeNumber();
 		// 上传模组图片
 		UploadFileInfo fileInfo = this.uploadCombinationPic(pic, combinationCode);
 		// 插入推荐组合记录
@@ -348,7 +347,7 @@ public class CombinationService {
 	 * 
 	 * <p>上传推荐组合主图文件</p>
 	 * @param pic
-	 * @param moduleCode
+	 * @param combinationCode
 	 * @return
 	 * @author 黄智聪  2018年11月1日 下午4:49:22
 	 */
@@ -369,7 +368,7 @@ public class CombinationService {
 	    String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
 	    // 新名称为文件名 + 组合编码
 	    String newFileName = fileNameNoSufix + "_" + combinationCode;
-	    // 图片url   TODO
+	    // 图片url
 	    JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
 		    filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_COMBINATION_IMAGE_TYPE);
 	    UploadFileInfo file = new UploadFileInfo();

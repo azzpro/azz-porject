@@ -271,7 +271,7 @@
   	<where>
   		pc.case_status != 0
   		<if test="status != null">and pc.case_status = #{status}</if>
-  		<if test="param != null and param !=''">and (pc.case_code = #{param} or pc.case_name = #{param})</if>
+  		<if test="param != null and param !=''">and (pc.case_code LIKE CONCAT('%', #{param}, '%') or pc.case_name LIKE CONCAT('%', #{param}, '%'))</if>
   	</where>
   	ORDER BY pc.create_time desc
   </select>

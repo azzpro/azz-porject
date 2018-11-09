@@ -20,8 +20,10 @@ import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.platform.merchant.mapper.PlatformCaseClassificationParamsMapper;
 import com.azz.platform.merchant.mapper.PlatformCaseMapper;
+import com.azz.platform.merchant.mapper.PlatformGoodsClassificationMapper;
 import com.azz.platform.merchant.pojo.PlatformCase;
 import com.azz.platform.merchant.pojo.PlatformCaseClassificationParams;
+import com.azz.platform.merchant.pojo.PlatformGoodsClassification;
 import com.azz.platform.merchant.pojo.bo.AddCaseParam;
 import com.azz.platform.merchant.pojo.bo.CasePic;
 import com.azz.platform.merchant.pojo.bo.CaseShelfParam;
@@ -63,6 +65,9 @@ public class CaseService {
     @Autowired
     private RandomSequenceService randomSequenceService;
    
+    @Autowired
+    PlatformGoodsClassificationMapper platformGoodsClassificationMapper;
+    
     /**
      * <p>获取方案列表</p>
      * @param param
@@ -306,12 +311,15 @@ public class CaseService {
         if(null != caseCode && !"".equals(caseCode)) {
             PlatformCase pc = platformCaseMapper.selectByCaseCode(caseCode);
             if(ObjectUtils.isNotNull(pc)) {
+                PlatformGoodsClassification pgc = platformGoodsClassificationMapper.selectByPrimaryKey(pc.getClassificationId());
                 caseDetail.setCaseCode(pc.getCaseCode());
                 caseDetail.setCaseName(pc.getCaseName());
                 caseDetail.setCasePicName(pc.getCasePicName());
                 caseDetail.setCasePicUrl(pc.getCasePicUrl());
                 caseDetail.setCaseStatus(pc.getCaseStatus());
-                caseDetail.setClassificationId(pc.getClassificationId());
+                caseDetail.setClassificationId(pgc.getId());
+                caseDetail.setClassificationCode(pgc.getAssortmentCode());
+                caseDetail.setClassificationName(pgc.getAssortmentName());
                 caseDetail.setRemark(pc.getRemark());
             }
             caseDetail.setCaseParamsList(platformCaseMapper.selectParamsByCaseCode(caseCode));

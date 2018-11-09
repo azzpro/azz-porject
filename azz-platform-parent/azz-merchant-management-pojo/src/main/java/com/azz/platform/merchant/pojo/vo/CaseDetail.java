@@ -38,6 +38,20 @@ public class CaseDetail {
      * @mbg.generated
      */
     private Long classificationId;
+    
+    /**
+     * 分类编码
+     *
+     * @mbg.generated
+     */
+    private String classificationCode;
+    
+    /**
+     * 分类名称
+     *
+     * @mbg.generated
+     */
+    private String classificationName;
 
     /**
      * 方案状态（0删除 1上架 2下架）

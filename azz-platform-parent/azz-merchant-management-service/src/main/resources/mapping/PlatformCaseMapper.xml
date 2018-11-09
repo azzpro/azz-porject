@@ -198,14 +198,14 @@
   
   <select id="selectParamsByAssortmentId" parameterType="com.azz.platform.merchant.pojo.bo.SearchCaseParamList" resultType="com.azz.platform.merchant.pojo.vo.CaseParams">
   	SELECT
-  		pgp.id as id,
+  		pgpt.id as id,
 		pgpt.params_code as paramCode,
 		pgpt.params_name as paramName,
 		pgpt.params_type as paramsType,
 		group_concat(pgpv.params_value)  as paramValue
 	FROM platform_goods_params pgp
-	JOIN  platform_goods_params_term pgpt ON pgp.id = pgpt.params_id
-	JOIN platform_goods_params_value pgpv ON pgpv.params_parent_id = pgpt.id
+	LEFT JOIN  platform_goods_params_term pgpt ON pgp.id = pgpt.params_id
+	LEFT JOIN platform_goods_params_value pgpv ON pgpv.params_parent_id = pgpt.id
 	WHERE pgp.assortment_id = #{assortmentId}
 	<if test="param != null and param !=''">
 		and (pgpt.params_code = #{param} or pgpt.params_name = #{param})
@@ -215,7 +215,7 @@
   
   <select id="selectParamsByCaseCode" parameterType="java.lang.String" resultType="com.azz.platform.merchant.pojo.vo.CaseParamsList">
   	SELECT
-  		pc.id as id,
+  		pgpt.id as id,
 		pgpt.params_name as paramsName,
 		pgpt.params_code as paramsCode,
 		pgpt.params_type as paramsType,
@@ -223,7 +223,7 @@
 	FROM
 		platform_case pc
 	JOIN platform_case_classification_params pccp ON pc.id = pccp.case_id
-	JOIN platform_goods_params_term pgpt ON pccp.params_id = pgpt.params_id
+	JOIN platform_goods_params_term pgpt ON pccp.params_id = pgpt.id
 	JOIN platform_goods_params_value pgpv ON pgpv.params_parent_id = pgpt.id
 	WHERE pc.case_code = #{caseCode}
 	GROUP BY

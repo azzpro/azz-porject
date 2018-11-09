@@ -7,6 +7,8 @@
  
 package com.azz.platform.merchant.pojo.bo;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 import lombok.Data;
@@ -22,7 +24,7 @@ public class CaseShelfParam {
     @NotBlank(message = "方案编码不允许为空")
     private String caseCode;
     
-    @NotBlank(message = "方案状态不允许为空")
+    @NotNull(message = "方案状态不允许为空")
     private Integer status;
     
     private String modifier;

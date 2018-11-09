@@ -24,5 +24,7 @@ public class CaseParams {
     private String paramName;
     // 参数值
     private String paramValue;
+    // 参数项类型 1 下拉 2填写
+    private Integer paramsType;
 }
 

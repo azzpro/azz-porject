@@ -7,8 +7,6 @@
  
 package com.azz.platform.merchant.pojo.bo;
 
-import java.util.List;
-
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -59,7 +57,7 @@ public class AddCaseParam {
     /**
      * 参数id
      */
-    private List<String> paramsId;
+    private String paramsId;
     
     /**
      * 主图

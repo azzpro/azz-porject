@@ -201,6 +201,7 @@
   		pgp.id as id,
 		pgpt.params_code as paramCode,
 		pgpt.params_name as paramName,
+		pgpt.params_type as paramsType,
 		group_concat(pgpv.params_value)  as paramValue
 	FROM platform_goods_params pgp
 	JOIN  platform_goods_params_term pgpt ON pgp.id = pgpt.params_id
@@ -268,6 +269,7 @@
 	LEFT JOIN platform_goods_classification pgc2 ON pgc3.assortment_parent_code = pgc2.assortment_code
 	LEFT JOIN platform_goods_classification pgc1 ON pgc2.assortment_parent_code = pgc1.assortment_code
   	<where>
+  		pc.case_status != 0
   		<if test="status != null">and pc.case_status = #{status}</if>
   		<if test="param != null and param !=''">and (pc.case_code = #{param} or pc.case_name = #{param})</if>
   	</where>

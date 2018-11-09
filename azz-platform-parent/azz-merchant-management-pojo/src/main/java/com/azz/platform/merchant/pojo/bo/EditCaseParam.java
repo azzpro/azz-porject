@@ -81,6 +81,6 @@ public class EditCaseParam {
     /**
      * 参数id
      */
-    private List<String> paramsId;
+    private String paramsId;
 }
 

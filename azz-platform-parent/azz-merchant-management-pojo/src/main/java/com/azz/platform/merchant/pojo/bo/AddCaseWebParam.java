@@ -58,7 +58,7 @@ public class AddCaseWebParam {
     /**
      * 参数id
      */
-    private List<String> paramsId;
+    private String paramsId;
     
     @NotNull(message = "请上传主图")
     private MultipartFile caseFile;

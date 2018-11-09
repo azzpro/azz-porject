@@ -7,8 +7,6 @@
  
 package com.azz.platform.merchant.pojo.bo;
 
-import java.util.List;
-
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -78,7 +76,7 @@ public class EditCaseWebParam {
     /**
      * 参数id
      */
-    private List<String> paramsId;
+    private String paramsId;
     
     private MultipartFile caseFile;
 }

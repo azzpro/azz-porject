@@ -148,23 +148,24 @@ public class CaseService {
         platformCaseMapper.insertSelective(pcObj);
         
         // 新增方案选型参数
-        if(param.getParamsId().size() > 0) {
+        if(null != param.getParamsId() && !"".equals(param.getParamsId())) {
             //  方案ID
             Long caseId = pcObj.getId();
             
-            for (int i = 0; i < param.getParamsId().size(); i++) {
+            String[] paramsIdList = param.getParamsId().split(",");
+            for (int i = 0; i < paramsIdList.length; i++) {
                 PlatformCaseClassificationParams record = new PlatformCaseClassificationParams();
                 record.setCaseId(caseId);
                 record.setCreateTime(new Date());
                 record.setCreator(param.getCreator());
-                record.setParamsId(Long.parseLong(param.getParamsId().get(i)));
+                record.setParamsId(Long.parseLong(paramsIdList[i]));
                 platformCaseClassificationParamsMapper.insertSelective(record);
             }
         }
         
         return JsonResult.successJsonResult();
     }
-
+    
     /**
      * 
      * <p>编辑方案</p>
@@ -239,21 +240,24 @@ public class CaseService {
         platformCaseMapper.updateByPrimaryKeySelective(pcObj);
         
         // 新增方案选型参数
-        if(param.getParamsId().size() > 0) {
-            // 方案ID
+        // 新增方案选型参数
+        if(null != param.getParamsId() && !"".equals(param.getParamsId())) {
+            //  方案ID
             Long caseId = pcObj.getId();
             // 删除所有该方案下的所有的参数
             platformCaseClassificationParamsMapper.delCaseClassificationParams(caseId);
             
-            for (int i = 0; i < param.getParamsId().size(); i++) {
+            String[] paramsIdList = param.getParamsId().split(",");
+            for (int i = 0; i < paramsIdList.length; i++) {
                 PlatformCaseClassificationParams record = new PlatformCaseClassificationParams();
                 record.setCaseId(caseId);
                 record.setCreateTime(new Date());
                 record.setCreator(param.getModifier());
-                record.setParamsId(Long.parseLong(param.getParamsId().get(i)));
+                record.setParamsId(Long.parseLong(paramsIdList[i]));
                 platformCaseClassificationParamsMapper.insertSelective(record);
             }
         }
+        
         return JsonResult.successJsonResult();
     }
     

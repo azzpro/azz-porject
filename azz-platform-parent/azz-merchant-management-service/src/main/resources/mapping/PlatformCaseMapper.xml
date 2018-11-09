@@ -222,9 +222,9 @@
 		group_concat(pgpv.params_value) as paramsValue 
 	FROM
 		platform_case pc
-	JOIN platform_case_classification_params pccp ON pc.id = pccp.case_id
-	JOIN platform_goods_params_term pgpt ON pccp.params_id = pgpt.id
-	JOIN platform_goods_params_value pgpv ON pgpv.params_parent_id = pgpt.id
+	LEFT JOIN platform_case_classification_params pccp ON pc.id = pccp.case_id
+	LEFT JOIN platform_goods_params_term pgpt ON pccp.params_id = pgpt.id
+	LEFT JOIN platform_goods_params_value pgpv ON pgpv.params_parent_id = pgpt.id
 	WHERE pc.case_code = #{caseCode}
 	GROUP BY
 		pgpt.params_code

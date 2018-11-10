@@ -21,7 +21,7 @@ public class CaseInfo {
 	
 	private String caseName;
 	
-	private String caseStatus;
+	private Integer caseStatus;
 	
 	private String assortmentName;
 	

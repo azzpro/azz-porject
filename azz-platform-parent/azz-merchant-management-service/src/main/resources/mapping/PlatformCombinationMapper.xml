@@ -313,6 +313,7 @@
 		pc.`status` AS status,
 		pc.combination_pic_name AS combinationPicName,
 		pc.combination_pic_url AS combinationPicUrl,
+		pc.recommend_reason AS recommendReason,
 		pc.create_time AS createTime,
 		u.user_name AS creator
 	FROM

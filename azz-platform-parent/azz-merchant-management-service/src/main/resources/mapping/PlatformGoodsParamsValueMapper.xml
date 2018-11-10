@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.azz.platform.merchant.pojo.PlatformGoodsParamsValue">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="params_parent_id" jdbcType="BIGINT" property="paramsParentId" />
-    <result column="params_value" jdbcType="BIGINT" property="paramsValue" />
+    <result column="params_value" jdbcType="VARCHAR" property="paramsValue" />
     <result column="params_unit" jdbcType="VARCHAR" property="paramsUnit" />
   </resultMap>
   <sql id="Base_Column_List">
@@ -23,7 +23,7 @@
   <insert id="insert" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsParamsValue">
     insert into platform_goods_params_value (id, params_parent_id, params_value, 
       params_unit)
-    values (#{id,jdbcType=BIGINT}, #{paramsParentId,jdbcType=BIGINT}, #{paramsValue,jdbcType=BIGINT}, 
+    values (#{id,jdbcType=BIGINT}, #{paramsParentId,jdbcType=BIGINT}, #{paramsValue}, 
       #{paramsUnit,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsParamsValue">
@@ -50,7 +50,7 @@
         #{paramsParentId,jdbcType=BIGINT},
       </if>
       <if test="paramsValue != null">
-        #{paramsValue,jdbcType=BIGINT},
+        #{paramsValue,jdbcType=VARCHAR},
       </if>
       <if test="paramsUnit != null">
         #{paramsUnit,jdbcType=VARCHAR},
@@ -64,7 +64,7 @@
         params_parent_id = #{paramsParentId,jdbcType=BIGINT},
       </if>
       <if test="paramsValue != null">
-        params_value = #{paramsValue,jdbcType=BIGINT},
+        params_value = #{paramsValue,jdbcType=VARCHAR},
       </if>
       <if test="paramsUnit != null">
         params_unit = #{paramsUnit,jdbcType=VARCHAR},
@@ -75,7 +75,7 @@
   <update id="updateByPrimaryKey" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsParamsValue">
     update platform_goods_params_value
     set params_parent_id = #{paramsParentId,jdbcType=BIGINT},
-      params_value = #{paramsValue,jdbcType=BIGINT},
+      params_value = #{paramsValue,jdbcType=VARCHAR},
       params_unit = #{paramsUnit,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -88,7 +88,7 @@
     update platform_goods_params_value
     <set>
       <if test="value != null">
-        params_value = #{value,jdbcType=BIGINT},
+        params_value = #{value,jdbcType=VARCHAR},
       </if>
     </set>
     where params_parent_id = #{pid,jdbcType=BIGINT}

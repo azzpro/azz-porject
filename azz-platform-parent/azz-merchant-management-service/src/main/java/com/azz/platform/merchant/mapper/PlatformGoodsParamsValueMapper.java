@@ -23,7 +23,7 @@ public interface PlatformGoodsParamsValueMapper {
     int updateByPrimaryKey(PlatformGoodsParamsValue record);
     
     
-    int deleteValue(long[] array);
+    int deleteValue(String[] array);
     
     /**
      * <p>根据父ID 删除value</p>

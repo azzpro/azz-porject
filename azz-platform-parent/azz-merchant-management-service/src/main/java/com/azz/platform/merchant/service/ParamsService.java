@@ -192,7 +192,7 @@ public class ParamsService {
 			goodsParamsTermMapper.deleteByPrimaryKey(platformGoodsParamsTerm.getId());
 		}
 		String[] split = sb.toString().split(",");
-		goodsParamsValueMapper.deleteValue((long[]) ConvertUtils.convert(split,long.class));//删除参数值
+		goodsParamsValueMapper.deleteValue(split);//删除参数值
 			
 		//参数主表更新 分类ID
 		int idById = goodsParamsMapper.updateAssormentIdById(key.getId(),paramsByCode.getId());
@@ -231,7 +231,7 @@ public class ParamsService {
 						//String[] split = param.split(",");
 						for (String string : param) {
 							PlatformGoodsParamsValue ppv = new PlatformGoodsParamsValue();
-							ppv.setParamsValue(Long.valueOf(string));
+							ppv.setParamsValue(string);
 							ppv.setParamsParentId(ids);
 							goodsParamsValueMapper.insertSelective(ppv);
 							ppv = null;
@@ -299,7 +299,7 @@ public class ParamsService {
 						//String[] split = param.split(",");
 						for (String string : param) {
 							PlatformGoodsParamsValue ppv = new PlatformGoodsParamsValue();
-							ppv.setParamsValue(Long.valueOf(string));
+							ppv.setParamsValue(string);
 							ppv.setParamsParentId(id);
 							goodsParamsValueMapper.insertSelective(ppv);
 							ppv = null;
@@ -350,7 +350,7 @@ public class ParamsService {
 			}
 		}
 		String[] split = sb.toString().split(",");
-		goodsParamsValueMapper.deleteValue((long[]) ConvertUtils.convert(split,long.class));
+		goodsParamsValueMapper.deleteValue(split);
 		
 		//删除参数项
 		goodsParamsTermMapper.deleteByParamsId(id);

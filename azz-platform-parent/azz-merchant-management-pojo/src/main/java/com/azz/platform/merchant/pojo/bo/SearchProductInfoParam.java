@@ -23,6 +23,8 @@ public class SearchProductInfoParam extends QueryPage{
 
 	private static final long serialVersionUID = -6530736690887301456L;
 	
+	private String moduleCode;
+	
 	private String searchInput;
 	
 }

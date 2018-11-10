@@ -7,12 +7,9 @@
  
 package com.azz.platform.merchant.pojo.bo;
 
-import java.util.List;
-
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
@@ -43,7 +40,7 @@ public class AddCombinationWebParam {
 	@NotNull(message = "请上传推荐组合主图")
 	private MultipartFile combinationPicFile;
 	
-	private List<String> moduleCodes;
+	private String moduleCodes;
 
 	private String creator;
 	

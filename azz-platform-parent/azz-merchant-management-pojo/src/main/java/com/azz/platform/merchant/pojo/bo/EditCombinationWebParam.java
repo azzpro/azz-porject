@@ -7,8 +7,6 @@
 
 package com.azz.platform.merchant.pojo.bo;
 
-import java.util.List;
-
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -50,7 +48,7 @@ public class EditCombinationWebParam {
 	@NotNull(message = "缺少请求参数")
 	private Integer isChangeCombinationPic;
 
-	private List<String> moduleCodes;
+	private String moduleCodes;
 
 	private String modifier;
 

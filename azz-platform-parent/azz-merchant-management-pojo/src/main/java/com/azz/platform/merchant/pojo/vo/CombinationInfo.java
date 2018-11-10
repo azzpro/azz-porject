@@ -39,6 +39,8 @@ public class CombinationInfo {
 	
 	private String combinationPicName;
 	
+	private String recommendReason;
+	
 	private String combinationPicUrl;
 	
 	private List<GoodsModuleInfo> goodsModuleInfos;

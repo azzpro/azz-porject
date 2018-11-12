@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class AzzSequenceServiceApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) { 
 		System.setProperty("spring.devtools.restart.enabled", "true");
 		SpringApplication.run(AzzSequenceServiceApplication.class, args);
 	}

@@ -265,6 +265,7 @@
 				<artifactId>hibernate-validator</artifactId>
 				<version>5.4.0.Final</version>
 			</dependency>
+			
 			<dependency>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>

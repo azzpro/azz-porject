@@ -16,6 +16,9 @@
 		<module>azz-system-api</module>
 		<module>azz-sequence-api</module>
 		<module>azz-sequence-service</module>
+		<module>azz-order-pojo</module>
+		<module>azz-order-service</module>
+		<module>azz-order-api</module>
 	</modules>
 	
 </project>

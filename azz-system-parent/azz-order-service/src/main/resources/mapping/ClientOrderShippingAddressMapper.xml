@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.azz.order.client.dao.ClientOrderShippingAddressMapper">
+<mapper namespace="com.azz.order.client.mapper.ClientOrderShippingAddressMapper">
   <resultMap id="BaseResultMap" type="com.azz.order.client.pojo.ClientOrderShippingAddress">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="client_user_id" jdbcType="BIGINT" property="clientUserId" />

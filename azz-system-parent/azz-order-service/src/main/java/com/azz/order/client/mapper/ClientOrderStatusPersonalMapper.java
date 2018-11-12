@@ -1,4 +1,4 @@
-package com.azz.order.client.dao;
+package com.azz.order.client.mapper;
 
 import com.azz.order.client.pojo.ClientOrderStatusPersonal;
 

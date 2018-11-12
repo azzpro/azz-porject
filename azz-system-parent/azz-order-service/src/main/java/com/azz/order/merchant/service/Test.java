@@ -5,7 +5,7 @@
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
-package com.azz.merchant.service;
+package com.azz.order.merchant.service;
 /**
  * <P>TODO</P>
  * @version 1.0

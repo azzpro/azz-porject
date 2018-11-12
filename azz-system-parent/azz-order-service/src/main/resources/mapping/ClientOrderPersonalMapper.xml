@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.order.client.mapper.ClientOrderPersonalMapper">
+  <resultMap id="BaseResultMap" type="com.azz.order.client.pojo.ClientOrderPersonal">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="client_order_code" jdbcType="VARCHAR" property="clientOrderCode" />
+    <result column="client_user_id" jdbcType="BIGINT" property="clientUserId" />
+    <result column="grand_total" jdbcType="DECIMAL" property="grandTotal" />
+    <result column="order_status_id" jdbcType="INTEGER" property="orderStatusId" />
+    <result column="payment_method" jdbcType="INTEGER" property="paymentMethod" />
+    <result column="payment_status" jdbcType="INTEGER" property="paymentStatus" />
+    <result column="payment_type" jdbcType="INTEGER" property="paymentType" />
+    <result column="invoice_status" jdbcType="INTEGER" property="invoiceStatus" />
+    <result column="order_shipping_id" jdbcType="BIGINT" property="orderShippingId" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="handler" jdbcType="VARCHAR" property="handler" />
+    <result column="handler_time" jdbcType="TIMESTAMP" property="handlerTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, client_order_code, client_user_id, grand_total, order_status_id, payment_method, 
+    payment_status, payment_type, invoice_status, order_shipping_id, remark, status, 
+    handler, handler_time, creator, create_time, modifier, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from client_order_personal
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from client_order_personal
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.order.client.pojo.ClientOrderPersonal">
+    insert into client_order_personal (id, client_order_code, client_user_id, 
+      grand_total, order_status_id, payment_method, 
+      payment_status, payment_type, invoice_status, 
+      order_shipping_id, remark, status, 
+      handler, handler_time, creator, 
+      create_time, modifier, modify_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{clientOrderCode,jdbcType=VARCHAR}, #{clientUserId,jdbcType=BIGINT}, 
+      #{grandTotal,jdbcType=DECIMAL}, #{orderStatusId,jdbcType=INTEGER}, #{paymentMethod,jdbcType=INTEGER}, 
+      #{paymentStatus,jdbcType=INTEGER}, #{paymentType,jdbcType=INTEGER}, #{invoiceStatus,jdbcType=INTEGER}, 
+      #{orderShippingId,jdbcType=BIGINT}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{handler,jdbcType=VARCHAR}, #{handlerTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.order.client.pojo.ClientOrderPersonal">
+    insert into client_order_personal
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="clientOrderCode != null">
+        client_order_code,
+      </if>
+      <if test="clientUserId != null">
+        client_user_id,
+      </if>
+      <if test="grandTotal != null">
+        grand_total,
+      </if>
+      <if test="orderStatusId != null">
+        order_status_id,
+      </if>
+      <if test="paymentMethod != null">
+        payment_method,
+      </if>
+      <if test="paymentStatus != null">
+        payment_status,
+      </if>
+      <if test="paymentType != null">
+        payment_type,
+      </if>
+      <if test="invoiceStatus != null">
+        invoice_status,
+      </if>
+      <if test="orderShippingId != null">
+        order_shipping_id,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="handler != null">
+        handler,
+      </if>
+      <if test="handlerTime != null">
+        handler_time,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="clientOrderCode != null">
+        #{clientOrderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="clientUserId != null">
+        #{clientUserId,jdbcType=BIGINT},
+      </if>
+      <if test="grandTotal != null">
+        #{grandTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="orderStatusId != null">
+        #{orderStatusId,jdbcType=INTEGER},
+      </if>
+      <if test="paymentMethod != null">
+        #{paymentMethod,jdbcType=INTEGER},
+      </if>
+      <if test="paymentStatus != null">
+        #{paymentStatus,jdbcType=INTEGER},
+      </if>
+      <if test="paymentType != null">
+        #{paymentType,jdbcType=INTEGER},
+      </if>
+      <if test="invoiceStatus != null">
+        #{invoiceStatus,jdbcType=INTEGER},
+      </if>
+      <if test="orderShippingId != null">
+        #{orderShippingId,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="handler != null">
+        #{handler,jdbcType=VARCHAR},
+      </if>
+      <if test="handlerTime != null">
+        #{handlerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.order.client.pojo.ClientOrderPersonal">
+    update client_order_personal
+    <set>
+      <if test="clientOrderCode != null">
+        client_order_code = #{clientOrderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="clientUserId != null">
+        client_user_id = #{clientUserId,jdbcType=BIGINT},
+      </if>
+      <if test="grandTotal != null">
+        grand_total = #{grandTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="orderStatusId != null">
+        order_status_id = #{orderStatusId,jdbcType=INTEGER},
+      </if>
+      <if test="paymentMethod != null">
+        payment_method = #{paymentMethod,jdbcType=INTEGER},
+      </if>
+      <if test="paymentStatus != null">
+        payment_status = #{paymentStatus,jdbcType=INTEGER},
+      </if>
+      <if test="paymentType != null">
+        payment_type = #{paymentType,jdbcType=INTEGER},
+      </if>
+      <if test="invoiceStatus != null">
+        invoice_status = #{invoiceStatus,jdbcType=INTEGER},
+      </if>
+      <if test="orderShippingId != null">
+        order_shipping_id = #{orderShippingId,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="handler != null">
+        handler = #{handler,jdbcType=VARCHAR},
+      </if>
+      <if test="handlerTime != null">
+        handler_time = #{handlerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.order.client.pojo.ClientOrderPersonal">
+    update client_order_personal
+    set client_order_code = #{clientOrderCode,jdbcType=VARCHAR},
+      client_user_id = #{clientUserId,jdbcType=BIGINT},
+      grand_total = #{grandTotal,jdbcType=DECIMAL},
+      order_status_id = #{orderStatusId,jdbcType=INTEGER},
+      payment_method = #{paymentMethod,jdbcType=INTEGER},
+      payment_status = #{paymentStatus,jdbcType=INTEGER},
+      payment_type = #{paymentType,jdbcType=INTEGER},
+      invoice_status = #{invoiceStatus,jdbcType=INTEGER},
+      order_shipping_id = #{orderShippingId,jdbcType=BIGINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      handler = #{handler,jdbcType=VARCHAR},
+      handler_time = #{handlerTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

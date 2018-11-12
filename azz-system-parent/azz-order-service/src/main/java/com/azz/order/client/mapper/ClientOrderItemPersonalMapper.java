@@ -1,7 +1,10 @@
 package com.azz.order.client.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.azz.order.client.pojo.ClientOrderItemPersonal;
 
+@Mapper
 public interface ClientOrderItemPersonalMapper {
     int deleteByPrimaryKey(Long id);
 

@@ -245,4 +245,45 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <resultMap id="clientOrderInfo" type="com.azz.order.client.pojo.vo.ClientOrderInfo">
+  	<result column="clientOrderCode" jdbcType="VARCHAR" property="clientOrderCode" />
+    <result column="grandTotal" jdbcType="DECIMAL" property="grandTotal" />
+    <result column="orderStatus" jdbcType="INTEGER" property="orderStatus" />
+    <result column="paymentMethod" jdbcType="INTEGER" property="paymentMethod" />
+    <result column="orderTime" jdbcType="TIMESTAMP" property="orderTime" />
+    <result column="receiverName" jdbcType="VARCHAR" property="receiverName" />
+  	<collection property="orderItems" ofType="com.azz.order.client.pojo.vo.ClientOrderItemInfo">
+        <result column="productCode" property="productCode" jdbcType="VARCHAR"/>
+        <result column="modulePicUrl" property="modulePicUrl" jdbcType="VARCHAR"/>
+        <result column="moduleName" property="moduleName" jdbcType="VARCHAR"/>
+        <result column="deliveryTime" property="deliveryTime" jdbcType="TIMESTAMP"/>
+        <result column="quantity" property="quantity" jdbcType="INTEGER"/>
+    </collection>
+  </resultMap>
+  
+  <select id="getClientOrderInfoList" parameterType="com.azz.order.client.pojo.bo.SearchClientOrderParam" resultMap="clientOrderInfo">
+    SELECT
+		cop.id as clientOrderId,
+		cop.client_order_code AS clientOrderCode,
+		cop.create_time AS orderTime,
+		cop.payment_method AS paymentMethod,
+		os.status_name AS orderStatus,
+		cop.grand_total AS grandTotal,
+		cosa.receiver_name AS receiverName,
+		coip.module_pic_url AS modulePicUrl,
+		coip.product_code AS productCode,
+		coip.module_name AS moduleName,
+		coip.quantity AS quantity,
+		coip.delivery_time as deliveryTime
+	FROM
+		client_order_personal cop
+	LEFT JOIN order_status os ON os.status_type = 1
+	AND os.id = cop.order_status_id
+	LEFT JOIN client_order_item_personal coip ON coip.client_order_id = cop.id
+	LEFT JOIN client_order_shipping_address cosa ON cosa.id = cop.order_shipping_id
+	LEFT JOIN client_user cu ON cu.id = cosa.client_user_id
+  </select>
+  
+  
 </mapper>

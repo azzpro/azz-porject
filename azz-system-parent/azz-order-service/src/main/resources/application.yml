@@ -32,9 +32,9 @@ feign:
   hystrix: 
     enabled: false
     
-#mybatis:
-#  config-location: classpath:mybatis/mybatis-config.xml
-#  mapper-locations: classpath:mapping/**/*.xml
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mapping/**/*.xml
   
 aliyun:
   product: Dysmsapi

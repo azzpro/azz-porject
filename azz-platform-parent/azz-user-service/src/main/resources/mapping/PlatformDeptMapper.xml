@@ -184,7 +184,7 @@
 			platform_dept dept
 		LEFT JOIN platform_user u ON dept.creator = u.user_code
 		WHERE
-			dept.parent_code = '0' AND (dept.status != 0
+			dept.parent_code = '0' AND (dept.status != 0)
 		<if test="deptNameCode != null and deptNameCode!='' "> 
 			AND (dept.dept_name LIKE CONCAT('%',#{deptNameCode},'%') OR dept.dept_code LIKE CONCAT('%',#{deptNameCode},'%') )
 		</if>

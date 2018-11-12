@@ -6,12 +6,18 @@
  ******************************************************************************/
  
 package com.azz.client.service;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 /**
- * <P>TODO</P>
+ * <P>客户端订单业务</P>
  * @version 1.0
  * @author 黄智聪  2018年11月12日 下午3:14:43
  */
-public class Test {
+@Transactional(rollbackFor = Exception.class)
+@Service
+public class OrderService {
 
 }
 

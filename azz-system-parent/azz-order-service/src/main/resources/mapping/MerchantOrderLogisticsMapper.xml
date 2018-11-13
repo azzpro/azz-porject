@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.order.merchant.mapper.MerchantOrderLogisticsMapper">
+  <resultMap id="BaseResultMap" type="com.azz.order.merchant.pojo.MerchantOrderLogistics">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="merchant_order_id" jdbcType="BIGINT" property="merchantOrderId" />
+    <result column="express_company_id" jdbcType="INTEGER" property="expressCompanyId" />
+    <result column="logistisc_company_name" jdbcType="VARCHAR" property="logistiscCompanyName" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+    <result column="shipment_info_name" jdbcType="VARCHAR" property="shipmentInfoName" />
+    <result column="shipment_info_url" jdbcType="VARCHAR" property="shipmentInfoUrl" />
+    <result column="delivery_type" jdbcType="INTEGER" property="deliveryType" />
+    <result column="delivery_person" jdbcType="VARCHAR" property="deliveryPerson" />
+    <result column="delivery_phone_number" jdbcType="VARCHAR" property="deliveryPhoneNumber" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, merchant_order_id, express_company_id, logistisc_company_name, number, shipment_info_name, 
+    shipment_info_url, delivery_type, delivery_person, delivery_phone_number, remark, 
+    create_time, creator, modify_time, modifier
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_order_logistics
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from merchant_order_logistics
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.order.merchant.pojo.MerchantOrderLogistics">
+    insert into merchant_order_logistics (id, merchant_order_id, express_company_id, 
+      logistisc_company_name, number, shipment_info_name, 
+      shipment_info_url, delivery_type, delivery_person, 
+      delivery_phone_number, remark, create_time, 
+      creator, modify_time, modifier
+      )
+    values (#{id,jdbcType=BIGINT}, #{merchantOrderId,jdbcType=BIGINT}, #{expressCompanyId,jdbcType=INTEGER}, 
+      #{logistiscCompanyName,jdbcType=VARCHAR}, #{number,jdbcType=VARCHAR}, #{shipmentInfoName,jdbcType=VARCHAR}, 
+      #{shipmentInfoUrl,jdbcType=VARCHAR}, #{deliveryType,jdbcType=INTEGER}, #{deliveryPerson,jdbcType=VARCHAR}, 
+      #{deliveryPhoneNumber,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{creator,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.order.merchant.pojo.MerchantOrderLogistics">
+    insert into merchant_order_logistics
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="merchantOrderId != null">
+        merchant_order_id,
+      </if>
+      <if test="expressCompanyId != null">
+        express_company_id,
+      </if>
+      <if test="logistiscCompanyName != null">
+        logistisc_company_name,
+      </if>
+      <if test="number != null">
+        number,
+      </if>
+      <if test="shipmentInfoName != null">
+        shipment_info_name,
+      </if>
+      <if test="shipmentInfoUrl != null">
+        shipment_info_url,
+      </if>
+      <if test="deliveryType != null">
+        delivery_type,
+      </if>
+      <if test="deliveryPerson != null">
+        delivery_person,
+      </if>
+      <if test="deliveryPhoneNumber != null">
+        delivery_phone_number,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="merchantOrderId != null">
+        #{merchantOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="expressCompanyId != null">
+        #{expressCompanyId,jdbcType=INTEGER},
+      </if>
+      <if test="logistiscCompanyName != null">
+        #{logistiscCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="shipmentInfoName != null">
+        #{shipmentInfoName,jdbcType=VARCHAR},
+      </if>
+      <if test="shipmentInfoUrl != null">
+        #{shipmentInfoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryType != null">
+        #{deliveryType,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryPerson != null">
+        #{deliveryPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryPhoneNumber != null">
+        #{deliveryPhoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.order.merchant.pojo.MerchantOrderLogistics">
+    update merchant_order_logistics
+    <set>
+      <if test="merchantOrderId != null">
+        merchant_order_id = #{merchantOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="expressCompanyId != null">
+        express_company_id = #{expressCompanyId,jdbcType=INTEGER},
+      </if>
+      <if test="logistiscCompanyName != null">
+        logistisc_company_name = #{logistiscCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null">
+        number = #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="shipmentInfoName != null">
+        shipment_info_name = #{shipmentInfoName,jdbcType=VARCHAR},
+      </if>
+      <if test="shipmentInfoUrl != null">
+        shipment_info_url = #{shipmentInfoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryType != null">
+        delivery_type = #{deliveryType,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryPerson != null">
+        delivery_person = #{deliveryPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryPhoneNumber != null">
+        delivery_phone_number = #{deliveryPhoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.order.merchant.pojo.MerchantOrderLogistics">
+    update merchant_order_logistics
+    set merchant_order_id = #{merchantOrderId,jdbcType=BIGINT},
+      express_company_id = #{expressCompanyId,jdbcType=INTEGER},
+      logistisc_company_name = #{logistiscCompanyName,jdbcType=VARCHAR},
+      number = #{number,jdbcType=VARCHAR},
+      shipment_info_name = #{shipmentInfoName,jdbcType=VARCHAR},
+      shipment_info_url = #{shipmentInfoUrl,jdbcType=VARCHAR},
+      delivery_type = #{deliveryType,jdbcType=INTEGER},
+      delivery_person = #{deliveryPerson,jdbcType=VARCHAR},
+      delivery_phone_number = #{deliveryPhoneNumber,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

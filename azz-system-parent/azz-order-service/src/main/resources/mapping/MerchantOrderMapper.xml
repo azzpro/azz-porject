@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.order.merchant.mapper.MerchantOrderMapper">
+  <resultMap id="BaseResultMap" type="com.azz.order.merchant.pojo.MerchantOrder">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="merchant_order_code" jdbcType="VARCHAR" property="merchantOrderCode" />
+    <result column="merchant_id" jdbcType="BIGINT" property="merchantId" />
+    <result column="client_order_id" jdbcType="BIGINT" property="clientOrderId" />
+    <result column="grand_total" jdbcType="DECIMAL" property="grandTotal" />
+    <result column="order_status_id" jdbcType="INTEGER" property="orderStatusId" />
+    <result column="invoice_status" jdbcType="INTEGER" property="invoiceStatus" />
+    <result column="order_type" jdbcType="INTEGER" property="orderType" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, merchant_order_code, merchant_id, client_order_id, grand_total, order_status_id, 
+    invoice_status, order_type, status, create_time, modifier, modify_time, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_order
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from merchant_order
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.order.merchant.pojo.MerchantOrder">
+    insert into merchant_order (id, merchant_order_code, merchant_id, 
+      client_order_id, grand_total, order_status_id, 
+      invoice_status, order_type, status, 
+      create_time, modifier, modify_time, 
+      remark)
+    values (#{id,jdbcType=BIGINT}, #{merchantOrderCode,jdbcType=VARCHAR}, #{merchantId,jdbcType=BIGINT}, 
+      #{clientOrderId,jdbcType=BIGINT}, #{grandTotal,jdbcType=DECIMAL}, #{orderStatusId,jdbcType=INTEGER}, 
+      #{invoiceStatus,jdbcType=INTEGER}, #{orderType,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.order.merchant.pojo.MerchantOrder">
+    insert into merchant_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="merchantOrderCode != null">
+        merchant_order_code,
+      </if>
+      <if test="merchantId != null">
+        merchant_id,
+      </if>
+      <if test="clientOrderId != null">
+        client_order_id,
+      </if>
+      <if test="grandTotal != null">
+        grand_total,
+      </if>
+      <if test="orderStatusId != null">
+        order_status_id,
+      </if>
+      <if test="invoiceStatus != null">
+        invoice_status,
+      </if>
+      <if test="orderType != null">
+        order_type,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="merchantOrderCode != null">
+        #{merchantOrderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null">
+        #{merchantId,jdbcType=BIGINT},
+      </if>
+      <if test="clientOrderId != null">
+        #{clientOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="grandTotal != null">
+        #{grandTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="orderStatusId != null">
+        #{orderStatusId,jdbcType=INTEGER},
+      </if>
+      <if test="invoiceStatus != null">
+        #{invoiceStatus,jdbcType=INTEGER},
+      </if>
+      <if test="orderType != null">
+        #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.order.merchant.pojo.MerchantOrder">
+    update merchant_order
+    <set>
+      <if test="merchantOrderCode != null">
+        merchant_order_code = #{merchantOrderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null">
+        merchant_id = #{merchantId,jdbcType=BIGINT},
+      </if>
+      <if test="clientOrderId != null">
+        client_order_id = #{clientOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="grandTotal != null">
+        grand_total = #{grandTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="orderStatusId != null">
+        order_status_id = #{orderStatusId,jdbcType=INTEGER},
+      </if>
+      <if test="invoiceStatus != null">
+        invoice_status = #{invoiceStatus,jdbcType=INTEGER},
+      </if>
+      <if test="orderType != null">
+        order_type = #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.order.merchant.pojo.MerchantOrder">
+    update merchant_order
+    set merchant_order_code = #{merchantOrderCode,jdbcType=VARCHAR},
+      merchant_id = #{merchantId,jdbcType=BIGINT},
+      client_order_id = #{clientOrderId,jdbcType=BIGINT},
+      grand_total = #{grandTotal,jdbcType=DECIMAL},
+      order_status_id = #{orderStatusId,jdbcType=INTEGER},
+      invoice_status = #{invoiceStatus,jdbcType=INTEGER},
+      order_type = #{orderType,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectOrderList" parameterType="com.azz.order.merchant.pojo.bo.SearchOrderListParam" resultType="com.azz.order.merchant.pojo.vo.OrderList">
+  	SELECT
+		mo.merchant_order_code as orderCode,
+		os.status_name as statusName,
+		mo.grand_total as grandTotal,
+		cu.client_user_name as userName,
+		cop.create_time as orderTime,
+		cop.creator as receiver,
+		mos.create_time as processingTime
+	FROM
+		merchant_order mo
+	JOIN client_order_personal cop ON mo.client_order_id = cop.id
+	JOIN client_user cu ON cop.client_user_id = cu.id
+	JOIN order_status os ON mo.order_status_id = os.id
+	LEFT JOIN merchant_order_status mos ON mo.id = mos.merchant_order_id
+	AND mos.merchant_status_id = 1
+	<where>
+		<if test="null != orderStatus">AND mo.order_status_id = #{orderStatus}</if>
+		<if test="null != param and '' != param">AND (mo.merchant_order_code LIKE CONCAT('%',#{param},'%') OR cu.client_user_name LIKE CONCAT('%',#{param},'%') OR cop.creator LIKE CONCAT('%',#{param},'%'))</if>
+	</where>
+	ORDER BY mo.create_time DESC
+  </select>
+</mapper>

@@ -23,15 +23,29 @@ public class ClientOrderInfo {
 
 	private String clientOrderCode;
 	
-	private Date orderTime;
-	
 	private Integer paymentMethod;
 	
 	private String orderStatus;
 	
+	private Integer orderStatusId;
+	
 	private BigDecimal grandTotal;
 	
 	private String receiverName;
+	
+	private String receiverPhoneNumber;
+	
+	private String receiverAddress;
+
+	private Integer invoiceStatus;
+	
+	private String orderType = "个人订单";
+	
+	private String orderCreator;
+	
+	private Date orderTime;
+
+	private String remark;
 	
 	private List<ClientOrderItemInfo> orderItems;
 

@@ -28,8 +28,6 @@ public class SearchClientOrderParam extends QueryPage {
 	
 	private Integer orderStatus;
 	
-	private String orderCode;
-	
-	private String productCode;
+	private String searchInput;
 
 }

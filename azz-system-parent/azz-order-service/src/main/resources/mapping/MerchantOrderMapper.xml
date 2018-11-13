@@ -245,4 +245,49 @@
 		mo.merchant_id = #{merchantId}
 	AND mo.merchant_order_code = #{orderCode}
   </select>
+  
+  <select id="selectReceiverAddressInfo" parameterType="java.lang.String" resultType="com.azz.order.merchant.pojo.vo.ReceiverAddress">
+  	SELECT
+		cosa.receiver_name as receiverName,
+		cosa.receiver_phone_number as number,
+	  	cosa.address_alias as addressAlias,
+		CONCAT(cosa.province_name,cosa.city_name,cosa.area_name,cosa.detail_address) as address
+	FROM
+		client_order_shipping_address cosa
+	JOIN client_order_personal cop ON cop.order_shipping_id = cosa.id
+	JOIN merchant_order mo ON mo.client_order_id = cop.id
+	WHERE
+		mo.merchant_order_code = #{orderCode}
+  </select>
+  
+  <select id="selectShipInfo" parameterType="java.lang.String" resultType="com.azz.order.merchant.pojo.vo.ShipInfo">
+  	SELECT
+		mos.creator as creator,
+		mos.create_time as createTime,
+	  	ec.company_name as companyName,
+		mol.logistisc_company_name as logistiscCompanyName,
+		mol.number as number,
+		mol.delivery_person as deliveryPerson,
+		mol.delivery_phone_number as deliveryPhoneNumber,
+		mol.shipment_file_info as shipmentFileInfo
+	FROM
+		merchant_order_status mos
+	JOIN merchant_order mo ON mos.merchant_order_id = mo.id
+	LEFT JOIN merchant_order_logistics mol ON mol.merchant_order_id = mo.id
+	LEFT JOIN express_company ec ON mol.express_company_id = ec.id
+	WHERE mos.status_type = 2 
+	AND mos.id = 3 
+	AND mo.merchant_order_code = #{orderCode}
+  </select>
+  
+  <select id="selectSignFor" parameterType="java.lang.String" resultType="com.azz.order.merchant.pojo.vo.SignForInfo">
+  	SELECT
+		csf.consignee,
+		csf.create_time,
+		csf.sign_file_info
+	FROM
+		client_sign_for csf
+	LEFT JOIN merchant_order mo ON csf.merchant_order_id = mo.id
+	WHERE mo.merchant_order_code = #{orderCode}
+  </select>
 </mapper>

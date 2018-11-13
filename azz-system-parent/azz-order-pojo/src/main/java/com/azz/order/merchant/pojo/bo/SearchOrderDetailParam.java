@@ -7,6 +7,10 @@
  
 package com.azz.order.merchant.pojo.bo;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 import lombok.Data;
 
 /**
@@ -17,6 +21,7 @@ import lombok.Data;
 @Data
 public class SearchOrderDetailParam {
     private Long merchantId;
+    @NotBlank(message = "订单编码不允许为空")
     private String orderCode;
 }
 

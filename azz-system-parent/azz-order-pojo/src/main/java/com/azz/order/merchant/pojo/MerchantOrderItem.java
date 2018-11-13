@@ -21,11 +21,18 @@ public class MerchantOrderItem implements Serializable {
     private Long merchantOrderId;
 
     /**
-     * 产品id
+     * 产品编码
      *
      * @mbg.generated
      */
-    private Long productId;
+    private String productCode;
+    
+    /**
+     * 产品名称
+     *
+     * @mbg.generated
+     */
+    private String productName;
 
     /**
      * 模组名称
@@ -168,28 +175,21 @@ public class MerchantOrderItem implements Serializable {
         this.merchantOrderId = merchantOrderId;
     }
 
-    /**
-     * 产品id<br/>
-     * 返回值对应的表列名 merchant_order_item.product_id
-     *
-     * @return 返回值对应 merchant_order_item.product_id
-     *
-     * @mbg.generated
-     */
-    public Long getProductId() {
-        return productId;
+
+    public String getProductCode() {
+        return productCode;
     }
 
-    /**
-     * 产品id<br/>
-     * merchant_order_item.product_id
-     *
-     * @param productId 值对应 merchant_order_item.product_id
-     *
-     * @mbg.generated
-     */
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     /**
@@ -504,83 +504,4 @@ public class MerchantOrderItem implements Serializable {
         this.modifyTime = modifyTime;
     }
 
-    @Override
-    public boolean equals(Object that) {
-        if (this == that) {
-            return true;
-        }
-        if (that == null) {
-            return false;
-        }
-        if (getClass() != that.getClass()) {
-            return false;
-        }
-        MerchantOrderItem other = (MerchantOrderItem) that;
-        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getMerchantOrderId() == null ? other.getMerchantOrderId() == null : this.getMerchantOrderId().equals(other.getMerchantOrderId()))
-            && (this.getProductId() == null ? other.getProductId() == null : this.getProductId().equals(other.getProductId()))
-            && (this.getModuleName() == null ? other.getModuleName() == null : this.getModuleName().equals(other.getModuleName()))
-            && (this.getProductParamsName() == null ? other.getProductParamsName() == null : this.getProductParamsName().equals(other.getProductParamsName()))
-            && (this.getAssortmentName() == null ? other.getAssortmentName() == null : this.getAssortmentName().equals(other.getAssortmentName()))
-            && (this.getBrandName() == null ? other.getBrandName() == null : this.getBrandName().equals(other.getBrandName()))
-            && (this.getDeliveryDate() == null ? other.getDeliveryDate() == null : this.getDeliveryDate().equals(other.getDeliveryDate()))
-            && (this.getDeliveryTime() == null ? other.getDeliveryTime() == null : this.getDeliveryTime().equals(other.getDeliveryTime()))
-            && (this.getModulePicUrl() == null ? other.getModulePicUrl() == null : this.getModulePicUrl().equals(other.getModulePicUrl()))
-            && (this.getProductPrice() == null ? other.getProductPrice() == null : this.getProductPrice().equals(other.getProductPrice()))
-            && (this.getQuantity() == null ? other.getQuantity() == null : this.getQuantity().equals(other.getQuantity()))
-            && (this.getCreator() == null ? other.getCreator() == null : this.getCreator().equals(other.getCreator()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getModifier() == null ? other.getModifier() == null : this.getModifier().equals(other.getModifier()))
-            && (this.getModifyTime() == null ? other.getModifyTime() == null : this.getModifyTime().equals(other.getModifyTime()));
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getMerchantOrderId() == null) ? 0 : getMerchantOrderId().hashCode());
-        result = prime * result + ((getProductId() == null) ? 0 : getProductId().hashCode());
-        result = prime * result + ((getModuleName() == null) ? 0 : getModuleName().hashCode());
-        result = prime * result + ((getProductParamsName() == null) ? 0 : getProductParamsName().hashCode());
-        result = prime * result + ((getAssortmentName() == null) ? 0 : getAssortmentName().hashCode());
-        result = prime * result + ((getBrandName() == null) ? 0 : getBrandName().hashCode());
-        result = prime * result + ((getDeliveryDate() == null) ? 0 : getDeliveryDate().hashCode());
-        result = prime * result + ((getDeliveryTime() == null) ? 0 : getDeliveryTime().hashCode());
-        result = prime * result + ((getModulePicUrl() == null) ? 0 : getModulePicUrl().hashCode());
-        result = prime * result + ((getProductPrice() == null) ? 0 : getProductPrice().hashCode());
-        result = prime * result + ((getQuantity() == null) ? 0 : getQuantity().hashCode());
-        result = prime * result + ((getCreator() == null) ? 0 : getCreator().hashCode());
-        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
-        result = prime * result + ((getModifier() == null) ? 0 : getModifier().hashCode());
-        result = prime * result + ((getModifyTime() == null) ? 0 : getModifyTime().hashCode());
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", merchantOrderId=").append(merchantOrderId);
-        sb.append(", productId=").append(productId);
-        sb.append(", moduleName=").append(moduleName);
-        sb.append(", productParamsName=").append(productParamsName);
-        sb.append(", assortmentName=").append(assortmentName);
-        sb.append(", brandName=").append(brandName);
-        sb.append(", deliveryDate=").append(deliveryDate);
-        sb.append(", deliveryTime=").append(deliveryTime);
-        sb.append(", modulePicUrl=").append(modulePicUrl);
-        sb.append(", productPrice=").append(productPrice);
-        sb.append(", quantity=").append(quantity);
-        sb.append(", creator=").append(creator);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", modifier=").append(modifier);
-        sb.append(", modifyTime=").append(modifyTime);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
-    }
 }

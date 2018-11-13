@@ -4,7 +4,8 @@
   <resultMap id="BaseResultMap" type="com.azz.order.merchant.pojo.MerchantOrderItem">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="merchant_order_id" jdbcType="BIGINT" property="merchantOrderId" />
-    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
     <result column="module_name" jdbcType="VARCHAR" property="moduleName" />
     <result column="product_params_name" jdbcType="VARCHAR" property="productParamsName" />
     <result column="assortment_name" jdbcType="VARCHAR" property="assortmentName" />
@@ -20,7 +21,7 @@
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, merchant_order_id, product_id, module_name, product_params_name, assortment_name, 
+    id, merchant_order_id, product_code, product_name, module_name, product_params_name, assortment_name, 
     brand_name, delivery_date, delivery_time, module_pic_url, product_price, quantity, 
     creator, create_time, modifier, modify_time
   </sql>
@@ -35,13 +36,13 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.azz.order.merchant.pojo.MerchantOrderItem">
-    insert into merchant_order_item (id, merchant_order_id, product_id, 
+    insert into merchant_order_item (id, merchant_order_id, product_code, product_name,
       module_name, product_params_name, assortment_name, 
       brand_name, delivery_date, delivery_time, 
       module_pic_url, product_price, quantity, 
       creator, create_time, modifier, 
       modify_time)
-    values (#{id,jdbcType=BIGINT}, #{merchantOrderId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, 
+    values (#{id,jdbcType=BIGINT}, #{merchantOrderId,jdbcType=BIGINT}, #{productCode,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
       #{moduleName,jdbcType=VARCHAR}, #{productParamsName,jdbcType=VARCHAR}, #{assortmentName,jdbcType=VARCHAR}, 
       #{brandName,jdbcType=VARCHAR}, #{deliveryDate,jdbcType=INTEGER}, #{deliveryTime,jdbcType=TIMESTAMP}, 
       #{modulePicUrl,jdbcType=VARCHAR}, #{productPrice,jdbcType=DECIMAL}, #{quantity,jdbcType=INTEGER}, 
@@ -57,8 +58,11 @@
       <if test="merchantOrderId != null">
         merchant_order_id,
       </if>
-      <if test="productId != null">
-        product_id,
+      <if test="productCode != null">
+        product_code,
+      </if>
+      <if test="productName != null">
+        product_name,
       </if>
       <if test="moduleName != null">
         module_name,
@@ -107,8 +111,11 @@
       <if test="merchantOrderId != null">
         #{merchantOrderId,jdbcType=BIGINT},
       </if>
-      <if test="productId != null">
-        #{productId,jdbcType=BIGINT},
+      <if test="productCode != null">
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
       </if>
       <if test="moduleName != null">
         #{moduleName,jdbcType=VARCHAR},
@@ -157,8 +164,11 @@
       <if test="merchantOrderId != null">
         merchant_order_id = #{merchantOrderId,jdbcType=BIGINT},
       </if>
-      <if test="productId != null">
-        product_id = #{productId,jdbcType=BIGINT},
+      <if test="productCode != null">
+        product_code = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
       </if>
       <if test="moduleName != null">
         module_name = #{moduleName,jdbcType=VARCHAR},
@@ -205,7 +215,8 @@
   <update id="updateByPrimaryKey" parameterType="com.azz.order.merchant.pojo.MerchantOrderItem">
     update merchant_order_item
     set merchant_order_id = #{merchantOrderId,jdbcType=BIGINT},
-      product_id = #{productId,jdbcType=BIGINT},
+      product_code = #{productCode,jdbcType=VARCHAR},
+      product_name = #{productName,jdbcType=VARCHAR},
       module_name = #{moduleName,jdbcType=VARCHAR},
       product_params_name = #{productParamsName,jdbcType=VARCHAR},
       assortment_name = #{assortmentName,jdbcType=VARCHAR},

@@ -6,7 +6,9 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.order.merchant.pojo.MerchantOrder;
+import com.azz.order.merchant.pojo.bo.SearchOrderDetailParam;
 import com.azz.order.merchant.pojo.bo.SearchOrderListParam;
+import com.azz.order.merchant.pojo.vo.OrderDetail;
 import com.azz.order.merchant.pojo.vo.OrderList;
 @Mapper
 public interface MerchantOrderMapper {
@@ -23,4 +25,6 @@ public interface MerchantOrderMapper {
     int updateByPrimaryKey(MerchantOrder record);
     
     List<OrderList> selectOrderList(SearchOrderListParam param);
+    
+    OrderDetail selectOrderInfo(SearchOrderDetailParam param);
 }

@@ -28,13 +28,6 @@ public class MerchantOrderItem implements Serializable {
     private String productCode;
     
     /**
-     * 产品名称
-     *
-     * @mbg.generated
-     */
-    private String productName;
-
-    /**
      * 模组名称
      *
      * @mbg.generated
@@ -182,14 +175,6 @@ public class MerchantOrderItem implements Serializable {
 
     public void setProductCode(String productCode) {
         this.productCode = productCode;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
     }
 
     /**

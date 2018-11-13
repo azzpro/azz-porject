@@ -1,7 +1,9 @@
 package com.azz.order.client.mapper;
 
-import com.azz.order.client.pojo.ClientOrderShippingAddress;
+import org.apache.ibatis.annotations.Mapper;
 
+import com.azz.order.client.pojo.ClientOrderShippingAddress;
+@Mapper
 public interface ClientOrderShippingAddressMapper {
     int deleteByPrimaryKey(Long id);
 

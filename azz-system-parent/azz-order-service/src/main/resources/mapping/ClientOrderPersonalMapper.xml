@@ -245,4 +245,148 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <resultMap id="clientOrderInfo" type="com.azz.order.client.pojo.vo.ClientOrderInfo">
+  	<result column="clientOrderCode" jdbcType="VARCHAR" property="clientOrderCode" />
+    <result column="grandTotal" jdbcType="DECIMAL" property="grandTotal" />
+    <result column="orderStatus" jdbcType="INTEGER" property="orderStatus" />
+    <result column="paymentMethod" jdbcType="INTEGER" property="paymentMethod" />
+    <result column="invoiceStatus" jdbcType="INTEGER" property="invoiceStatus" />
+    <result column="orderStatusId" jdbcType="INTEGER" property="orderStatusId" />
+    <result column="orderTime" jdbcType="TIMESTAMP" property="orderTime" />
+    <result column="receiverName" jdbcType="VARCHAR" property="receiverName" />
+    <result column="receiverPhoneNumber" property="receiverPhoneNumber" jdbcType="VARCHAR"/>
+	<result column="receiverAddress" property="receiverAddress" jdbcType="VARCHAR"/>
+    <result column="orderCreator" jdbcType="VARCHAR" property="orderCreator" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  	<collection property="orderItems" ofType="com.azz.order.client.pojo.vo.ClientOrderItemInfo">
+        <result column="productCode" property="productCode" jdbcType="VARCHAR"/>
+        <result column="modulePicUrl" property="modulePicUrl" jdbcType="VARCHAR"/>
+        <result column="moduleName" property="moduleName" jdbcType="VARCHAR"/>
+        <result column="deliveryTime" property="deliveryTime" jdbcType="TIMESTAMP"/>
+        <result column="quantity" property="quantity" jdbcType="INTEGER"/>
+	    <result column="productPrice" jdbcType="DECIMAL" property="productPrice" />
+	    <result column="productPriceSum" jdbcType="DECIMAL" property="productPriceSum" />
+    </collection>
+  </resultMap>
+  
+  <select id="getClientOrderInfoList" parameterType="com.azz.order.client.pojo.bo.SearchClientOrderParam" resultMap="clientOrderInfo">
+    SELECT
+		cop.id as clientOrderId,
+		cop.client_order_code AS clientOrderCode,
+		cop.create_time AS orderTime,
+		cop.payment_method AS paymentMethod,
+		cop.invoice_status as invoiceStatus,
+		cu.client_user_name as orderCreator,
+		cop.order_status_id as orderStatusId,
+		os.status_name AS orderStatus,
+		cop.grand_total AS grandTotal,
+		cop.remark as remark,
+		cosa.receiver_name AS receiverName,
+		cosa.receiver_phone_number as receiverPhoneNumber,
+		CONCAT(cosa.province_name,cosa.city_name,cosa.area_name,cosa.detail_address) as receiverAddress,
+		coip.module_pic_url AS modulePicUrl,
+		coip.product_code AS productCode,
+		coip.module_name AS moduleName,
+		coip.quantity AS quantity,
+		coip.product_price as productPrice,
+		coip.product_price *  coip.quantity as productPriceSum,
+		coip.delivery_time as deliveryTime
+	FROM
+		client_order_personal cop
+	LEFT JOIN order_status os ON os.status_type = 1
+	AND os.id = cop.order_status_id
+	LEFT JOIN client_order_item_personal coip ON coip.client_order_id = cop.id
+	LEFT JOIN client_order_shipping_address cosa ON cosa.id = cop.order_shipping_id
+	LEFT JOIN client_user cu ON cu.id = cosa.client_user_id
+	<where>
+		cop.status != 0
+		<if test="orderStatus != null">
+			AND cop.order_status_id = #{orderStatus}
+		</if>
+		<if test="searchInput != null and searchInput != ''">
+			AND (
+				coip.product_code LIKE CONCAT('%', #{searchInput}, '%')
+			OR cop.client_order_code LIKE CONCAT('%', #{searchInput}, '%') 
+			)
+		</if>
+	</where>
+	ORDER BY cop.create_time DESC
+  </select>
+  
+  <select id="getClientOrderDetailByClientOrderCode" parameterType="string" resultMap="clientOrderInfo">
+    SELECT
+		cop.id as clientOrderId,
+		cop.client_order_code AS clientOrderCode,
+		cop.create_time AS orderTime,
+		cop.payment_method AS paymentMethod,
+		cop.invoice_status as invoiceStatus,
+		cu.client_user_name as orderCreator,
+		cop.order_status_id as orderStatusId,
+		os.status_name AS orderStatus,
+		cop.grand_total AS grandTotal,
+		cop.remark as remark,
+		cosa.receiver_name AS receiverName,
+		coip.module_pic_url AS modulePicUrl,
+		coip.product_code AS productCode,
+		coip.module_name AS moduleName,
+		coip.quantity AS quantity,
+		coip.product_price as productPrice,
+		coip.product_price *  coip.quantity as productPriceSum,
+		coip.delivery_time as deliveryTime
+	FROM
+		client_order_personal cop
+	LEFT JOIN order_status os ON os.status_type = 1
+	AND os.id = cop.order_status_id
+	LEFT JOIN client_order_item_personal coip ON coip.client_order_id = cop.id
+	LEFT JOIN client_order_shipping_address cosa ON cosa.id = cop.order_shipping_id
+	LEFT JOIN client_user cu ON cu.id = cosa.client_user_id
+	where cop.status != 0
+	and cop.client_order_code = #{clientOrderCode} 
+  </select>
+  
+  <select id="getDeliveryInfoByClientOrderCode" parameterType="string" resultType="com.azz.order.client.pojo.vo.DeliveryInfo">
+    SELECT
+		mol.delivery_type AS deliveryType,
+		mol.delivery_person AS deliveryPerson,
+		mol.delivery_phone_number AS deliveryPhoneNumber,
+		mol.logistisc_company_name AS logistiscCompanyName,
+		ec.company_name AS expressCompany,
+		mol.number AS number,
+		mol.shipment_file_info AS shipmentFileInfo,
+		mol.create_time AS deliveryTime,
+		t.productCodes AS productCodes
+	FROM
+		merchant_order_logistics mol
+	LEFT JOIN merchant_order mo ON mol.merchant_order_id = mo.id AND mo.order_type = 1
+	LEFT JOIN client_order_personal cop ON mo.client_order_id = cop.id
+	LEFT JOIN express_company ec ON ec.id = mol.express_company_id
+	LEFT JOIN (
+		SELECT
+			GROUP_CONCAT(moi.product_code) AS productCodes,
+			moi.merchant_order_id
+		FROM
+			merchant_order_item moi
+		GROUP BY
+			moi.merchant_order_id 
+	) t ON t.merchant_order_id = mo.id
+	where cop. STATUS != 0 
+	and cop.client_order_code = #{clientOrderCode} 
+  </select>
+  
+  <select id="getSignInfoByClientOrderCode" parameterType="string" resultType="com.azz.order.client.pojo.vo.SignInfo">
+    SELECT
+		ed.consignee AS consignee,
+		ed.create_time AS signTime,
+		ed.sign_file_info AS signFileInfo
+	FROM
+		express_delivery ed
+	LEFT JOIN merchant_order mo ON ed.merchant_order_id = mo.id
+	AND mo.order_type = 1
+	LEFT JOIN client_order_personal cop ON mo.client_order_id = cop.id
+	WHERE
+		cop. STATUS != 0
+	AND cop.client_order_code = #{clientOrderCode} 
+  </select>
+  
 </mapper>

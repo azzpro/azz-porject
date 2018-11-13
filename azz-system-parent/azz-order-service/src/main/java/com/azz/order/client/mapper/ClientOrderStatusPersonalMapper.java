@@ -1,7 +1,9 @@
 package com.azz.order.client.mapper;
 
-import com.azz.order.client.pojo.ClientOrderStatusPersonal;
+import org.apache.ibatis.annotations.Mapper;
 
+import com.azz.order.client.pojo.ClientOrderStatusPersonal;
+@Mapper
 public interface ClientOrderStatusPersonalMapper {
     int deleteByPrimaryKey(Long id);
 

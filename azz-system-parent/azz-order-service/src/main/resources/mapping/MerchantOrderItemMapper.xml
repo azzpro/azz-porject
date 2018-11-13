@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.order.merchant.mapper.MerchantOrderItemMapper">
+  <resultMap id="BaseResultMap" type="com.azz.order.merchant.pojo.MerchantOrderItem">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="merchant_order_id" jdbcType="BIGINT" property="merchantOrderId" />
+    <result column="product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="module_name" jdbcType="VARCHAR" property="moduleName" />
+    <result column="product_params_name" jdbcType="VARCHAR" property="productParamsName" />
+    <result column="assortment_name" jdbcType="VARCHAR" property="assortmentName" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
+    <result column="delivery_date" jdbcType="INTEGER" property="deliveryDate" />
+    <result column="delivery_time" jdbcType="TIMESTAMP" property="deliveryTime" />
+    <result column="module_pic_url" jdbcType="VARCHAR" property="modulePicUrl" />
+    <result column="product_price" jdbcType="DECIMAL" property="productPrice" />
+    <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, merchant_order_id, product_code, module_name, product_params_name, assortment_name, 
+    brand_name, delivery_date, delivery_time, module_pic_url, product_price, quantity, 
+    creator, create_time, modifier, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_order_item
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from merchant_order_item
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.order.merchant.pojo.MerchantOrderItem">
+    insert into merchant_order_item (id, merchant_order_id, product_code,
+      module_name, product_params_name, assortment_name, 
+      brand_name, delivery_date, delivery_time, 
+      module_pic_url, product_price, quantity, 
+      creator, create_time, modifier, 
+      modify_time)
+    values (#{id,jdbcType=BIGINT}, #{merchantOrderId,jdbcType=BIGINT}, #{productCode,jdbcType=VARCHAR},
+      #{moduleName,jdbcType=VARCHAR}, #{productParamsName,jdbcType=VARCHAR}, #{assortmentName,jdbcType=VARCHAR}, 
+      #{brandName,jdbcType=VARCHAR}, #{deliveryDate,jdbcType=INTEGER}, #{deliveryTime,jdbcType=TIMESTAMP}, 
+      #{modulePicUrl,jdbcType=VARCHAR}, #{productPrice,jdbcType=DECIMAL}, #{quantity,jdbcType=INTEGER}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.order.merchant.pojo.MerchantOrderItem">
+    insert into merchant_order_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="merchantOrderId != null">
+        merchant_order_id,
+      </if>
+      <if test="productCode != null">
+        product_code,
+      </if>
+      <if test="moduleName != null">
+        module_name,
+      </if>
+      <if test="productParamsName != null">
+        product_params_name,
+      </if>
+      <if test="assortmentName != null">
+        assortment_name,
+      </if>
+      <if test="brandName != null">
+        brand_name,
+      </if>
+      <if test="deliveryDate != null">
+        delivery_date,
+      </if>
+      <if test="deliveryTime != null">
+        delivery_time,
+      </if>
+      <if test="modulePicUrl != null">
+        module_pic_url,
+      </if>
+      <if test="productPrice != null">
+        product_price,
+      </if>
+      <if test="quantity != null">
+        quantity,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="merchantOrderId != null">
+        #{merchantOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="productCode != null">
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleName != null">
+        #{moduleName,jdbcType=VARCHAR},
+      </if>
+      <if test="productParamsName != null">
+        #{productParamsName,jdbcType=VARCHAR},
+      </if>
+      <if test="assortmentName != null">
+        #{assortmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null">
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryDate != null">
+        #{deliveryDate,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryTime != null">
+        #{deliveryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modulePicUrl != null">
+        #{modulePicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="productPrice != null">
+        #{productPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="quantity != null">
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.order.merchant.pojo.MerchantOrderItem">
+    update merchant_order_item
+    <set>
+      <if test="merchantOrderId != null">
+        merchant_order_id = #{merchantOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="productCode != null">
+        product_code = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleName != null">
+        module_name = #{moduleName,jdbcType=VARCHAR},
+      </if>
+      <if test="productParamsName != null">
+        product_params_name = #{productParamsName,jdbcType=VARCHAR},
+      </if>
+      <if test="assortmentName != null">
+        assortment_name = #{assortmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null">
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryDate != null">
+        delivery_date = #{deliveryDate,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryTime != null">
+        delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modulePicUrl != null">
+        module_pic_url = #{modulePicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="productPrice != null">
+        product_price = #{productPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="quantity != null">
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.order.merchant.pojo.MerchantOrderItem">
+    update merchant_order_item
+    set merchant_order_id = #{merchantOrderId,jdbcType=BIGINT},
+      product_code = #{productCode,jdbcType=VARCHAR},
+      module_name = #{moduleName,jdbcType=VARCHAR},
+      product_params_name = #{productParamsName,jdbcType=VARCHAR},
+      assortment_name = #{assortmentName,jdbcType=VARCHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      delivery_date = #{deliveryDate,jdbcType=INTEGER},
+      delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
+      module_pic_url = #{modulePicUrl,jdbcType=VARCHAR},
+      product_price = #{productPrice,jdbcType=DECIMAL},
+      quantity = #{quantity,jdbcType=INTEGER},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

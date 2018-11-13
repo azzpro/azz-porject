@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.alibaba.fastjson.JSONArray;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.order.merchant.mapper.MerchantOrderMapper;
@@ -23,6 +24,7 @@ import com.azz.order.merchant.pojo.vo.OrderDetail;
 import com.azz.order.merchant.pojo.vo.OrderList;
 import com.azz.order.merchant.pojo.vo.ReceiverAddress;
 import com.azz.order.merchant.pojo.vo.ShipInfo;
+import com.azz.order.merchant.pojo.vo.SignFileInfo;
 import com.azz.order.merchant.pojo.vo.SignForInfo;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
@@ -64,12 +66,6 @@ public class MerchantOrderService {
 	    OrderDetail od = merchantOrderMapper.selectOrderInfo(param);
 		if(ObjectUtils.isNotNull(od)) {
 		    String merchantOrderCode = param.getOrderCode();
-		    /*if(signInfo != null) {
-            // 发货文件信息的json字符串
-            String signFileInfo = signInfo.getSignFileInfo();
-            List<SignFileInfo> signFileInfos = JSONArray.parseArray(signFileInfo, SignFileInfo.class);
-            signInfo.setSignFileInfos(signFileInfos);
-        }*/
 		    // 获取收货地址信息
 		    ReceiverAddress receiverAddress = merchantOrderMapper.selectReceiverAddressInfo(merchantOrderCode);
 		    if(ObjectUtils.isNotNull(receiverAddress)) {
@@ -83,7 +79,10 @@ public class MerchantOrderService {
 		    // 获取签收信息
 		    SignForInfo signForInfo = merchantOrderMapper.selectSignFor(merchantOrderCode);
 		    if(ObjectUtils.isNotNull(signForInfo)) {
-                od.setSignForInfo(signForInfo);
+		        String signFileInfoJson = signForInfo.getSignFileInfo();
+		        List<SignFileInfo> signFileInfos = JSONArray.parseArray(signFileInfoJson, SignFileInfo.class);
+		        signForInfo.setSignFileInfos(signFileInfos);
+		        od.setSignForInfo(signForInfo);
             }
 		}
 		return JsonResult.successJsonResult(od);

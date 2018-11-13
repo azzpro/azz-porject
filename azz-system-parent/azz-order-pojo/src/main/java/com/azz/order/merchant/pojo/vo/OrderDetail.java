@@ -25,7 +25,7 @@ public class OrderDetail {
     private String orderStatus;
     private Date orderTime;
     private BigDecimal grandTotal;
-    
+    private String remark;
     // 产品详情
     private List<OrderItem> orderItems;
     

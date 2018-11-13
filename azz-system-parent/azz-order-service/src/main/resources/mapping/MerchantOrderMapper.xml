@@ -215,6 +215,7 @@
     <result column="orderStatus" jdbcType="VARCHAR" property="orderStatus" />
     <result column="orderTime" jdbcType="TIMESTAMP" property="orderTime" />
     <result column="grandTotal" jdbcType="DECIMAL" property="grandTotal" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
   	<collection property="orderItems" ofType="com.azz.order.merchant.pojo.vo.OrderItem">
         <result column="productCode" property="productCode" jdbcType="VARCHAR"/>
         <result column="modulePicUrl" property="modulePicUrl" jdbcType="VARCHAR"/>
@@ -236,7 +237,8 @@
 		moi.product_code as productCode,
 		moi.quantity as quantity,
 		moi.product_price as productPrice,
-		moi.delivery_time as deliveryTime
+		moi.delivery_time as deliveryTime,
+		mo.remark as remark
 	FROM
 		merchant_order mo
 	JOIN merchant_order_item moi ON mo.id = moi.merchant_order_id

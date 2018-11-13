@@ -241,7 +241,6 @@
 		merchant_order mo
 	JOIN merchant_order_item moi ON mo.id = moi.merchant_order_id
 	JOIN order_status os ON mo.order_status_id = os.id
-	JOIN merchant_goods_product mgp ON moi.product_id = mgp.id
 	WHERE
 		mo.merchant_id = #{merchantId}
 	AND mo.merchant_order_code = #{orderCode}

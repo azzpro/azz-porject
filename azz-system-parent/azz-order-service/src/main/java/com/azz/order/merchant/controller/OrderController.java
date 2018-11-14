@@ -8,11 +8,13 @@
 package com.azz.order.merchant.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
+import com.azz.order.merchant.pojo.bo.EditOrderStatus;
 import com.azz.order.merchant.pojo.bo.SearchOrderDetailParam;
 import com.azz.order.merchant.pojo.bo.SearchOrderListParam;
 import com.azz.order.merchant.pojo.vo.OrderDetail;
@@ -51,6 +53,17 @@ public class OrderController {
 	@RequestMapping("/getMerchantOrderDetail")
 	public JsonResult<OrderDetail> getMerchantOrderDetail(SearchOrderDetailParam param){
 	    return merchantOrderService.getMerchantOrderDetail(param);
+	}
+	
+	/**
+	 * <p>订单流转状态变更</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年11月14日 下午4:11:36
+	 */
+	@RequestMapping("/editMerchantOrderStatus")
+	public JsonResult<String> editMerchantOrderStatus(EditOrderStatus param){
+	    return merchantOrderService.editOrderStatus(param);
 	}
 }
 

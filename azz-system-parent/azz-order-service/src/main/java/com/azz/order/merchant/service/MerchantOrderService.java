@@ -7,6 +7,7 @@
  
 package com.azz.order.merchant.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,28 +16,38 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
+import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.common.page.Pagination;
+import com.azz.core.constants.ClientConstants;
+import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.MerchantConstants;
+import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
+import com.azz.order.merchant.mapper.MerchantOrderLogisticsMapper;
 import com.azz.order.merchant.mapper.MerchantOrderMapper;
 import com.azz.order.merchant.mapper.MerchantOrderStatusMapper;
 import com.azz.order.merchant.pojo.MerchantOrder;
+import com.azz.order.merchant.pojo.MerchantOrderLogistics;
 import com.azz.order.merchant.pojo.MerchantOrderStatus;
 import com.azz.order.merchant.pojo.bo.EditOrderStatus;
 import com.azz.order.merchant.pojo.bo.SearchOrderDetailParam;
 import com.azz.order.merchant.pojo.bo.SearchOrderListParam;
 import com.azz.order.merchant.pojo.bo.SearchOrderStatusParam;
+import com.azz.order.merchant.pojo.bo.ShipmentFile;
 import com.azz.order.merchant.pojo.vo.OrderDetail;
 import com.azz.order.merchant.pojo.vo.OrderList;
 import com.azz.order.merchant.pojo.vo.ReceiverAddress;
 import com.azz.order.merchant.pojo.vo.ShipInfo;
 import com.azz.order.merchant.pojo.vo.SignFileInfo;
 import com.azz.order.merchant.pojo.vo.SignForInfo;
+import com.azz.system.api.SystemImageUploadService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
+import com.azz.util.StringUtils;
 import com.github.pagehelper.PageHelper;
 
 /**
@@ -54,6 +65,11 @@ public class MerchantOrderService {
 	@Autowired
     private MerchantOrderStatusMapper merchantOrderStatusMapper;
 	
+	@Autowired
+    private MerchantOrderLogisticsMapper merchantOrderLogisticsMapper;
+	
+	@Autowired
+	private SystemImageUploadService systemImageUploadService;
 	/**
 	 * <p>查询商户订单管理</p>
 	 * @param param
@@ -150,11 +166,89 @@ public class MerchantOrderService {
 	    
 	    // 订单发货需记录发货信息
 	    if(MerchantConstants.MerchantOrderStatus.NOT_SENT_OUT.getValue() == statusId) {
+	        if(null == param.getDeliveryType()) {
+	            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "配送方式为必选项");
+	        }
+	        if(null == param.getExpressCompanyId()) {
+	            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "快递公司为必选项");
+	        }
+	        if(null == param.getNumber()) {
+                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "单号为必选项");
+            }
+	        if(null == param.getDeliveryPerson()) {
+                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "配送人员为必选项");
+            }
+	        if(null == param.getDeliveryPhoneNumber()) {
+                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "配送人员联系方式为必选项");
+            }
+	        if(param.getShipmentFiles().size() == 0) {
+	            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "出货信息为必选项");
+	        }
 	        
+	        MerchantOrderLogistics record = new MerchantOrderLogistics();
+	        //  1快递 2物流 3自送
+	        switch (param.getDeliveryType()) {
+                case 1:
+                    record.setExpressCompanyId(param.getExpressCompanyId());
+                    record.setNumber(param.getNumber());
+                    break;
+                case 2:
+                    record.setLogistiscCompanyName(param.getLogistiscCompanyName());
+                    record.setNumber(param.getNumber());
+                    break;
+                case 3:
+                    record.setDeliveryPerson(param.getDeliveryPerson());
+                    record.setDeliveryPhoneNumber(param.getDeliveryPhoneNumber());
+                    break;
+                default:
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "配送方式不存在");
+            }
+	        
+	        List<SignFileInfo> uploadFileInfos = new ArrayList<>();
+	        
+	        List<ShipmentFile> shipmentFiles = param.getShipmentFiles();
+	        for (int i = 0; i < shipmentFiles.size(); i++) {
+	            ShipmentFile shipmentFile =  shipmentFiles.get(i);
+	            if(StringUtils.isBlank(shipmentFile.getFileName())) {
+	                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + (i + 1) + "个出库单文件名为空");
+	             }
+	            if(shipmentFile.getFileSize() > ClientConstants.BUSINESS_LICENSE_FILE_SIZE_LIMIT) {
+	                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + (i + 1) + "个出库单文件大小不能超过20M");
+	            }
+	                String filedata = shipmentFile.getFileBase64Str();
+	            if(StringUtils.isBlank(filedata)) {
+	                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + (i + 1) + "个出库单文件内容为空");
+	            }
+	            
+	            int dotIndex = shipmentFile.getFileName().lastIndexOf(".");
+	            String fileNameNoSufix = shipmentFile.getFileName().substring(0, dotIndex);
+	            String sufix = shipmentFile.getFileName().substring(dotIndex + 1, shipmentFile.getFileName().length());
+	            // 新名称为文件名  + 第几张
+	            String newFileName = fileNameNoSufix + "_" + param.getOrderCode() + "_" + (i+1);
+	            // 图片url
+	            JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
+	                filedata, FileConstants.AZZ_CLIENT, FileConstants.AZZ_TRADING_CERTIFICATE_IMAGE_TYPE);
+	            if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
+	                SignFileInfo file = new SignFileInfo(jr.getData(), shipmentFile.getFileName());
+    	            uploadFileInfos.add(file);
+	            }else {
+	                throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE,"出库单上传失败，请重试");
+	            }
+            }
+	        
+	        String shipmentInfoUrl = JSON.toJSONString(uploadFileInfos);
+	        record.setMerchantOrderId(mo.getId());
+	        record.setDeliveryType(param.getDeliveryType());
+	        record.setShipmentFileInfo(shipmentInfoUrl);
+	        record.setCreateTime(new Date());
+	        record.setCreator(param.getModifier());
+	        merchantOrderLogisticsMapper.insertSelective(record);
 	    }
 	    
 	    return JsonResult.successJsonResult();
 	}
+	
+	
 	
 }
 

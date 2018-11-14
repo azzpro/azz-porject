@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2018年11月13日 上午11:00:23
+ * Create on 2018年10月23日 下午9:12:26
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
@@ -12,18 +12,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * <P>TODO</P>
+ * <P></P>
  * @version 1.0
- * @author 黄智聪  2018年11月13日 上午11:00:23
+ * @author 彭斌  2018年11月14日 下午3:40:39
  */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class SignFileInfo {
-	
-	private String fileName;
-	
-	private String fileUrl;
-
+@AllArgsConstructor
+public class UploadFileInfo {
+    
+    private String imgUrl;
+    
+    private String originalFileName;
+    
 }
 

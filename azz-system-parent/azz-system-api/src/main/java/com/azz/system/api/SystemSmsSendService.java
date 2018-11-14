@@ -8,9 +8,14 @@
 package com.azz.system.api;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import com.azz.core.common.JsonResult;
+import com.azz.system.bo.SmsCodeValidation;
+import com.azz.system.bo.SmsParams;
+import com.azz.system.vo.SmsInfo;
 
 /**
  * <P>短信发送</P>
@@ -21,7 +26,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface SystemSmsSendService {
 	
 	
-	@RequestMapping(value="/azz/api/smsSend",method=RequestMethod.POST)
-	String smsSend(@RequestParam("phone") String phone,@RequestParam("nickname")String nickname,@RequestParam("template") String template);
+	@RequestMapping(value="/azz/api/system/smsSend",method=RequestMethod.POST)
+	JsonResult<String> sendSmsCode(@RequestBody SmsParams sms);
+	
+	@RequestMapping(value="/azz/api/system/validationCode",method=RequestMethod.POST)
+	JsonResult<SmsInfo> validationCode(@RequestBody SmsCodeValidation sv);
 }
 

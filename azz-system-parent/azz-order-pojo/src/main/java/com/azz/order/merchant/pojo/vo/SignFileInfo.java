@@ -7,7 +7,9 @@
  
 package com.azz.order.merchant.pojo.vo;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * <P>TODO</P>
@@ -15,6 +17,8 @@ import lombok.Data;
  * @author 黄智聪  2018年11月13日 上午11:00:23
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class SignFileInfo {
 	
 	private String fileName;

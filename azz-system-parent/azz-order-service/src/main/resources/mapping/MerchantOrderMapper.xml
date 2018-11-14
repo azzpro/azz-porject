@@ -353,4 +353,25 @@
 	and mo.client_order_id = #{clientOrderId}
   </select>
   
+  <select id="selectPlatformMerchantOrder" parameterType="com.azz.order.platform.bo.SearchMerchantOrderParam" resultType="com.azz.order.platform.vo.MerchantOrderList">
+  	SELECT
+		mo.merchant_order_code as orderCode,
+		cop.client_order_code as clientOrderCode,
+		m.merchant_name as merchantName,
+		mo.grand_total as grandTotal,
+		os.status_name as orderStatus,
+		mos.creator as processinPerson,
+		mos.create_time as processingTime
+	FROM
+		merchant_order mo
+	LEFT JOIN client_order_personal cop ON mo.client_order_id = cop.id
+	LEFT JOIN merchant m ON mo.merchant_id = m.id
+	JOIN order_status os ON mo.order_status_id = os.id
+	LEFT JOIN merchant_order_status mos ON mo.id = mos.merchant_order_id
+	<where>
+		<if test="">AND mo.order_status_id = #{orderStatus}</if>
+		<if test="">AND (mo.merchant_order_code LIKE CONCAT('%',#{param},'%') OR cop.client_order_code LIKE CONCAT('%',#{param},'%'))</if>
+	</where>
+	ORDER BY mo.create_time DESC
+  </select>
 </mapper>

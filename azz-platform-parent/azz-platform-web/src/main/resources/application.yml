@@ -8,7 +8,20 @@ spring:
     name: azz-platform-web
   aop:
     proxy-target-class: true
-
+  zipkin:
+    enabled: true
+    base-url: http://localhost:7777/
+    service:
+      name: ${spring.application.name}
+  sleuth:
+    enabled: true
+    sampler:
+      percentage: 1
+  rabbitmq: 
+    host: 120.78.162.226
+    port: 5672
+    username: admin
+    password: 123456
 feign:
   httpclient: 
     enabled: true #feign原生是调用java.url 去发起HTTP请求，此配置是将请求客户端更换成apahce http

@@ -8,6 +8,20 @@ spring:
     name: azz-merchant-service
   messages:
     basename: i18n/Messages
+  zipkin:
+    enabled: true
+    base-url: http://localhost:7777/
+    service:
+      name: ${spring.application.name}
+  sleuth:
+    enabled: true
+    sampler:
+      percentage: 1
+  rabbitmq: 
+    host: 120.78.162.226
+    port: 5672
+    username: admin
+    password: 123456
   datasource:
     username: root
     password: azz2025

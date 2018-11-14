@@ -246,6 +246,14 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
+  <select id="getClientOrderPersonalByClientOrderCode" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from client_order_personal
+    where status != 0 
+    and client_order_code = #{clientOrderCode}
+  </select>
+  
   <resultMap id="clientOrderInfo" type="com.azz.order.client.pojo.vo.ClientOrderInfo">
   	<result column="clientOrderCode" jdbcType="VARCHAR" property="clientOrderCode" />
     <result column="grandTotal" jdbcType="DECIMAL" property="grandTotal" />

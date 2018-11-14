@@ -347,8 +347,8 @@ public class MerchantService {
 	    int dotIndex = originalFileName.lastIndexOf(".");
 	    String fileNameNoSufix = originalFileName.substring(0, dotIndex);
 	    String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
-	    // 新名称为文件名 + 商户编码 + 文件后缀
-	    String newFileName = fileNameNoSufix + "_" + merchantCode;
+	    // 新名称为文件名 + 商户编码 + 第几张
+	    String newFileName = fileNameNoSufix + "_" + merchantCode + "_" + (i+1);
 	    // 图片url
 	    JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
 		    filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_BUSINESS_IMAGE_TYPE);
@@ -377,8 +377,8 @@ public class MerchantService {
 	    int dotIndex = originalFileName.lastIndexOf(".");
 	    String fileNameNoSufix = originalFileName.substring(0, dotIndex);
 	    String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
-	    // 新名称为文件名 + 商户编码 + 文件后缀
-	    String newFileName = fileNameNoSufix + "_" + merchantCode;
+	    // 新名称为文件名 + 商户编码 + 第几张
+	    String newFileName = fileNameNoSufix + "_" + merchantCode + "_" + (i+1);
 	    // 图片url
 	    JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
 		    filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_TRADING_CERTIFICATE_IMAGE_TYPE);

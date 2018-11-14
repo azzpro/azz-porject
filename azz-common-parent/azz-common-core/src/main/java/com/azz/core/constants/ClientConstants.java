@@ -37,6 +37,11 @@ public abstract class ClientConstants {
     public static final long TRADING_CERTIFICATE_FILE_SIZE_LIMIT = 20 * 1024 * 1024L;
     
     /**
+     * 签收单文件大小限制
+     */
+    public static final long SIGN_FORM_FILE_SIZE_LIMIT = 10 * 1024 * 1024L;
+    
+    /**
      * 收货地址限制数量
      */
     public static final int SHIPPING_ADDRESS_AMOUNT_LIMIT = 10;

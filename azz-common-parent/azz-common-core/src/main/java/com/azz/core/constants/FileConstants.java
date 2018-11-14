@@ -54,9 +54,12 @@ public class FileConstants {
 	
 	//推荐组合图片
 	public static final String AZZ_COMBINATION_PATH = "combination_pic";
-			
+
 	//方案图片
 	public static final String AZZ_CASE_PATH = "case_pic";
+	
+	//签收单图片
+	public static final String AZZ_SIGN_FORM_PATH = "sign_form_pic";
 	
 	//平台端
 	public static final int AZZ_PLATFORM = 1;
@@ -96,6 +99,9 @@ public class FileConstants {
 	
 	//方案主图
 	public static final int AZZ_CASE_IMAGE_TYPE = 10;
+	
+	//签收单
+	public static final int AZZ_SIGN_FORM_IMAGE_TYPE = 11;
 	
 	//支持的图片格式
 	public static final String AZZ_IMAGE_SUFFIX = "bmp|jpg|png|git|webp|tiff";

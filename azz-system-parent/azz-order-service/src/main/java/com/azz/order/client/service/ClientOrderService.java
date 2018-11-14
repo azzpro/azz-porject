@@ -7,6 +7,7 @@
  
 package com.azz.order.client.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,21 +16,31 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
+import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.ClientConstants;
 import com.azz.core.constants.ClientConstants.ShippingAddressStatus;
 import com.azz.core.constants.ClientConstants.isDefaultShippingAddress;
+import com.azz.core.constants.FileConstants;
+import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.order.client.mapper.ClientOrderPersonalMapper;
 import com.azz.order.client.mapper.ClientOrderShippingAddressMapper;
+import com.azz.order.client.mapper.ClientSignForMapper;
+import com.azz.order.client.pojo.ClientOrderPersonal;
 import com.azz.order.client.pojo.ClientOrderShippingAddress;
+import com.azz.order.client.pojo.ClientSignFor;
 import com.azz.order.client.pojo.bo.AddShippingAddressParam;
 import com.azz.order.client.pojo.bo.DelShippingAddressParam;
 import com.azz.order.client.pojo.bo.EditShippingAddressParam;
 import com.azz.order.client.pojo.bo.SearchClientOrderParam;
+import com.azz.order.client.pojo.bo.SignForm;
+import com.azz.order.client.pojo.bo.UploadFileInfo;
+import com.azz.order.client.pojo.bo.UploadSignFormParam;
 import com.azz.order.client.pojo.vo.ClientOrderDetail;
 import com.azz.order.client.pojo.vo.ClientOrderInfo;
 import com.azz.order.client.pojo.vo.DeliveryInfo;
@@ -39,7 +50,9 @@ import com.azz.order.client.pojo.vo.SignFileInfo;
 import com.azz.order.client.pojo.vo.SignInfo;
 import com.azz.order.merchant.mapper.ClientUserMapper;
 import com.azz.order.merchant.pojo.ClientUser;
+import com.azz.system.api.SystemImageUploadService;
 import com.azz.util.JSR303ValidateUtils;
+import com.azz.util.StringUtils;
 import com.github.pagehelper.PageHelper;
 
 /**
@@ -60,6 +73,12 @@ public class ClientOrderService {
 	@Autowired
 	private ClientUserMapper clientUserMapper;
 	
+	@Autowired
+	private ClientSignForMapper clientSignForMapper;
+	
+	@Autowired
+    private SystemImageUploadService systemImageUploadService;
+    
 	/**
 	 * 
 	 * <p>查询客户端订单列表</p>
@@ -225,7 +244,7 @@ public class ClientOrderService {
 	 * @return
 	 * @author 黄智聪  2018年11月13日 下午2:58:08
 	 */
-	public JsonResult<String> DelShippingAddress(@RequestBody DelShippingAddressParam param){
+	public JsonResult<String> delShippingAddress(@RequestBody DelShippingAddressParam param){
 		ClientOrderShippingAddress shippingAddressRecord = ClientOrderShippingAddress.builder()
 				.id(param.getShippingId())
 				.status(ShippingAddressStatus.INVALID.getValue())
@@ -233,6 +252,63 @@ public class ClientOrderService {
 				.modifyTime(new Date())
 				.build();
 		clientOrderShippingAddressMapper.updateByPrimaryKeySelective(shippingAddressRecord);
+		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
+	 * <p>上传签收单</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月14日 上午10:55:45
+	 */
+	public JsonResult<String> uploadSignForm(@RequestBody UploadSignFormParam param){
+		// 参数校验
+		JSR303ValidateUtils.validate(param);
+		ClientOrderPersonal order = clientOrderPersonalMapper.getClientOrderPersonalByClientOrderCode(param.getClientOrderCode());
+		if(order == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "签收单所属订单不存在");
+		}
+		List<UploadFileInfo> uploadFiles = new ArrayList<>();
+		List<SignForm> signForms = param.getSignForms();
+		for (int i = 0 ; i < signForms.size(); i++) {
+			SignForm signForm = signForms.get(i);
+			String originalFileName = signForm.getFileName();
+		    if(StringUtils.isBlank(originalFileName)) {
+		    	throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + (i + 1) + "个签收单文件名为空");
+		    }
+		    if(signForm.getFileSize() > ClientConstants.SIGN_FORM_FILE_SIZE_LIMIT) {
+		    	throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + (i + 1) + "个签收单文件大小不能超过10M");
+		    }
+		    String filedata = signForm.getFileBase64Str();
+		    if(StringUtils.isBlank(filedata)) {
+		    	throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + (i + 1) + "个签收单文件内容为空");
+		    }
+		    int dotIndex = originalFileName.lastIndexOf(".");
+		    String fileNameNoSufix = originalFileName.substring(0, dotIndex);
+		    String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
+		    // 新名称为文件名 + 客户订单编码 + 第几张
+		    String newFileName = fileNameNoSufix + "_" + param.getClientOrderCode() + "_" + (i+1);
+		    // 图片url
+		    JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
+			    filedata, FileConstants.AZZ_CLIENT, FileConstants.AZZ_SIGN_FORM_IMAGE_TYPE);
+		    if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
+		    	UploadFileInfo file = new UploadFileInfo(jr.getData(), originalFileName);
+		    	uploadFiles.add(file);
+		    }else {
+		    	throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE,"签收单上传失败，请重试");
+		    }
+		    // json字符串
+		    String signFileInfo = JSON.toJSONString(uploadFiles);
+			ClientSignFor clientSignForRecord = ClientSignFor.builder()
+					.clientOrderId(order.getId())
+					.consignee(param.getConsignee())
+					.createTime(new Date())
+					.creator(param.getCreator())
+					.signFileInfo(signFileInfo)
+					.build();
+			clientSignForMapper.insertSelective(clientSignForRecord);
+		}
 		return JsonResult.successJsonResult();
 	}
 	

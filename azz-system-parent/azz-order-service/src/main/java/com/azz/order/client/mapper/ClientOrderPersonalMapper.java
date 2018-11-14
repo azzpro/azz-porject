@@ -44,6 +44,15 @@ public interface ClientOrderPersonalMapper {
      * @return
      * @author 黄智聪  2018年11月13日 上午11:06:57
      */
+    ClientOrderPersonal getClientOrderPersonalByClientOrderCode(String clientOrderCode);
+    
+    /**
+     * 
+     * <p>查询订单详情</p>
+     * @param clientOrderCode
+     * @return
+     * @author 黄智聪  2018年11月13日 上午11:06:57
+     */
     ClientOrderInfo getClientOrderDetailByClientOrderCode(String clientOrderCode);
     
     /**

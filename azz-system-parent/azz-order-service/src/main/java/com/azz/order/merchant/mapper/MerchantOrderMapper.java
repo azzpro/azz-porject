@@ -13,6 +13,8 @@ import com.azz.order.merchant.pojo.vo.OrderList;
 import com.azz.order.merchant.pojo.vo.ReceiverAddress;
 import com.azz.order.merchant.pojo.vo.ShipInfo;
 import com.azz.order.merchant.pojo.vo.SignForInfo;
+import com.azz.order.platform.bo.SearchMerchantOrderParam;
+import com.azz.order.platform.vo.MerchantOrderList;
 @Mapper
 public interface MerchantOrderMapper {
     int deleteByPrimaryKey(Long id);
@@ -27,22 +29,52 @@ public interface MerchantOrderMapper {
 
     int updateByPrimaryKey(MerchantOrder record);
     
-    // 获取商户订单列表
+    /**
+     * <p>【商户端】获取商户订单列表</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月14日 下午5:11:09
+     */
     List<OrderList> selectOrderList(SearchOrderListParam param);
     
-    // 获取商户订单基本详情
+    /**
+     * <p>【商户端】获取商户订单基本详情</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月14日 下午5:10:59
+     */
     OrderDetail selectOrderInfo(SearchOrderDetailParam param);
 
-    // 收货地址
+    /**
+     * <p>【商户端】收货地址</p>
+     * @param orderCode
+     * @return
+     * @author 彭斌  2018年11月14日 下午5:10:47
+     */
     ReceiverAddress selectReceiverAddressInfo(String orderCode);
 
-    // 发货信息
+    /**
+     * <p>【商户端】发货信息</p>
+     * @param orderCode
+     * @return
+     * @author 彭斌  2018年11月14日 下午5:10:38
+     */
     ShipInfo selectShipInfo(String orderCode);
     
-    // 签收信息
+    /**
+     * <p>【商户端】签收信息</p>
+     * @param orderCode
+     * @return
+     * @author 彭斌  2018年11月14日 下午5:10:26
+     */
     SignForInfo selectSignFor(String orderCode);
     
-    // 获取订单头信息
+    /**
+     * <p>【商户端】获取订单头信息</p>
+     * @param orderCode
+     * @return
+     * @author 彭斌  2018年11月14日 下午5:09:57
+     */
     MerchantOrder selectMerchantOrderInfo(String orderCode);
     
     /**
@@ -52,4 +84,14 @@ public interface MerchantOrderMapper {
      * @author 黄智聪  2018年11月14日 下午1:59:58
      */
     int countSendOutMerchantOrderByClientOrderId(Long clientOrderId); 
+
+    /**
+     * <p>【平台端】商户订单列表</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月14日 下午5:09:43
+     */
+    List<MerchantOrderList> selectPlatformMerchantOrder(SearchMerchantOrderParam param);
+    
+    
 }

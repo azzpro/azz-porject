@@ -363,7 +363,7 @@ public abstract class MerchantConstants {
 
 	    NOT_CONFIRMED(1, "待确认"),
 
-	    NOT_DELIVERY(2, "待发货"),
+	    NOT_SENT_OUT(2, "待发货"),
 
 	    NOT_SIGNED(3, "待签收"),
 

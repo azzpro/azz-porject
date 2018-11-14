@@ -7,6 +7,8 @@
  
 package com.azz.order.merchant.pojo.bo;
 
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -32,6 +34,27 @@ public class EditOrderStatus {
     // 1待确认  2待发货  3待签收  4已完成  5已取消
     @NotNull(message = "订单状态不允许为空")
     private Integer status;
+    
+    // 出货信息
+    private List<ShipmentFile> shipmentFiles;
+    
+    // 配送方式
+    private Integer deliveryType;
+    
+    // 快递公司id
+    private Integer expressCompanyId;
+    
+    // 物流公司名称
+    private String logistiscCompanyName;
+    
+    // 单号
+    private String number;
+    
+    // 配送人
+    private String deliveryPerson;
+    
+    // 配送人手机号码
+    private String deliveryPhoneNumber;
     
     private String modifier;
 }

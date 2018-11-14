@@ -5,11 +5,10 @@
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
-package com.azz.order.client.pojo.vo;
+package com.azz.order.platform.vo;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 import lombok.Data;
 
@@ -19,37 +18,21 @@ import lombok.Data;
  * @author 黄智聪  2018年11月12日 下午4:19:35
  */
 @Data
-public class ClientOrderInfo {
+public class PlatformClientOrderInfo {
 
 	private String clientOrderCode;
 	
-	private Integer paymentMethod;
-	
-	private String orderStatus;
-	
-	private Integer orderStatusId;
+	private String orderCreator;
 	
 	private BigDecimal grandTotal;
 	
-	private String receiverName;
-	
-	private String receiverPhoneNumber;
-	
-	private String receiverAddress;
-	
-	private String addressAlias;
-
-	private Integer invoiceStatus;
-	
-	private String orderType = "个人订单";
-	
-	private String orderCreator;
-	
 	private Date orderTime;
-
-	private String remark;
 	
-	private List<ClientOrderItemInfo> orderItems;
+	private Integer orderStatus;
+	
+	private String handler;
+	
+	private Date handleTime;
 
 }
 

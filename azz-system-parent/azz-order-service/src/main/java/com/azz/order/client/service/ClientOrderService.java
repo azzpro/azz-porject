@@ -7,6 +7,7 @@
  
 package com.azz.order.client.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +19,27 @@ import com.alibaba.fastjson.JSONArray;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.page.Pagination;
+import com.azz.core.constants.ClientConstants;
+import com.azz.core.constants.ClientConstants.ShippingAddressStatus;
+import com.azz.core.constants.ClientConstants.isDefaultShippingAddress;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.order.client.mapper.ClientOrderPersonalMapper;
+import com.azz.order.client.mapper.ClientOrderShippingAddressMapper;
+import com.azz.order.client.pojo.ClientOrderShippingAddress;
+import com.azz.order.client.pojo.bo.AddShippingAddressParam;
+import com.azz.order.client.pojo.bo.DelShippingAddressParam;
+import com.azz.order.client.pojo.bo.EditShippingAddressParam;
 import com.azz.order.client.pojo.bo.SearchClientOrderParam;
 import com.azz.order.client.pojo.vo.ClientOrderDetail;
 import com.azz.order.client.pojo.vo.ClientOrderInfo;
 import com.azz.order.client.pojo.vo.DeliveryInfo;
 import com.azz.order.client.pojo.vo.ExpressFileInfo;
+import com.azz.order.client.pojo.vo.ShippingAddress;
 import com.azz.order.client.pojo.vo.SignFileInfo;
 import com.azz.order.client.pojo.vo.SignInfo;
+import com.azz.order.merchant.mapper.ClientUserMapper;
+import com.azz.order.merchant.pojo.ClientUser;
+import com.azz.util.JSR303ValidateUtils;
 import com.github.pagehelper.PageHelper;
 
 /**
@@ -37,9 +50,15 @@ import com.github.pagehelper.PageHelper;
 @Transactional(rollbackFor = Exception.class)
 @Service
 public class ClientOrderService {
-	
+
 	@Autowired
 	private ClientOrderPersonalMapper clientOrderPersonalMapper;
+	
+	@Autowired
+	private ClientOrderShippingAddressMapper clientOrderShippingAddressMapper;
+	
+	@Autowired
+	private ClientUserMapper clientUserMapper;
 	
 	/**
 	 * 
@@ -87,6 +106,135 @@ public class ClientOrderService {
 		}
 		return JsonResult.successJsonResult(new ClientOrderDetail(orderInfo, deliveryInfos, signInfo));
 	}
-
+	
+	/**
+	 * 
+	 * <p>查询收货地址信息</p>
+	 * @param clientUserCode
+	 * @return
+	 * @author 黄智聪  2018年11月13日 下午2:58:08
+	 */
+	public JsonResult<List<ShippingAddress>> getShippingAddressList(String clientUserCode){
+		return JsonResult.successJsonResult(clientOrderShippingAddressMapper.getShippingAddressByClientUserCode(clientUserCode));
+	}
+	
+	/**
+	 * 
+	 * <p>查询收货地址信息</p>
+	 * @param clientUserCode
+	 * @return
+	 * @author 黄智聪  2018年11月13日 下午2:58:08
+	 */
+	public JsonResult<ShippingAddress> getShippingAddress(Long shippingId){
+		ShippingAddress address = clientOrderShippingAddressMapper.getShippingAddressByShippingId(shippingId);
+		if(address == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "收货地址不存在");
+		}
+		return JsonResult.successJsonResult(address);
+	}
+	
+	/**
+	 * 
+	 * <p>新增收货地址信息</p>
+	 * @param clientUserCode
+	 * @return
+	 * @author 黄智聪  2018年11月13日 下午2:58:08
+	 */
+	public JsonResult<String> AddShippingAddress(@RequestBody AddShippingAddressParam param){
+		// 参数校验
+		JSR303ValidateUtils.validate(param);
+		ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getClientUserCode());
+		if(user == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户不存在");
+		}
+		int count = clientOrderShippingAddressMapper.countShippingAddressByClientUserCode(param.getClientUserCode());
+		if(count > ClientConstants.SHIPPING_ADDRESS_AMOUNT_LIMIT) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "收货地址不能超过10个");
+		}
+		// 若为默认地址，将该客户的其他地址改为非默认
+		if(isDefaultShippingAddress.YES.getValue() == param.getIsDefault()) {
+			clientOrderShippingAddressMapper.setOtherShippingAddressNotDefault(user.getId());
+		}
+		ClientOrderShippingAddress shippingAddressRecord = ClientOrderShippingAddress.builder()
+				.addressAlias(param.getAddressAlias())
+				.areaCode(param.getAreaCode())
+				.areaName(param.getAreaName())
+				.cityCode(param.getCityCode())
+				.cityName(param.getCityName())
+				.clientUserId(user.getId())
+				.createTime(new Date())
+				.creator(param.getCreator())
+				.detailAddress(param.getDetailAddress())
+				.isDefault(param.getIsDefault())
+				.provinceCode(param.getProvinceCode())
+				.provinceName(param.getProvinceName())
+				.receiverName(param.getReceiverName())
+				.receiverPhoneNumber(param.getReceiverPhoneNumber())
+				.build();
+		clientOrderShippingAddressMapper.insertSelective(shippingAddressRecord);
+		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
+	 * <p>修改收货地址信息</p>
+	 * @param clientUserCode
+	 * @return
+	 * @author 黄智聪  2018年11月13日 下午2:58:08
+	 */
+	public JsonResult<String> EditShippingAddress(@RequestBody EditShippingAddressParam param){
+		// 参数校验
+		JSR303ValidateUtils.validate(param);
+		ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getClientUserCode());
+		if(user == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户不存在");
+		}
+		ShippingAddress address = clientOrderShippingAddressMapper.getShippingAddressByShippingId(param.getShippingId());
+		if(address == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "收货地址不存在");
+		}
+		// 若为默认地址，将该用户的其他地址改为非默认
+		if(isDefaultShippingAddress.YES.getValue() == param.getIsDefault()) {
+			clientOrderShippingAddressMapper.setOtherShippingAddressNotDefault(user.getId());
+		}
+		ClientOrderShippingAddress shippingAddressRecord = ClientOrderShippingAddress.builder()
+				.id(param.getShippingId())
+				.addressAlias(param.getAddressAlias())
+				.areaCode(param.getAreaCode())
+				.areaName(param.getAreaName())
+				.cityCode(param.getCityCode())
+				.cityName(param.getCityName())
+				.clientUserId(user.getId())
+				.detailAddress(param.getDetailAddress())
+				.isDefault(param.getIsDefault())
+				.provinceCode(param.getProvinceCode())
+				.provinceName(param.getProvinceName())
+				.modifier(param.getModifier())
+				.modifyTime(new Date())
+				.receiverName(param.getReceiverName())
+				.receiverPhoneNumber(param.getReceiverPhoneNumber())
+				.build();
+		clientOrderShippingAddressMapper.updateByPrimaryKeySelective(shippingAddressRecord);
+		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
+	 * <p>查询收货地址信息</p>
+	 * @param clientUserCode
+	 * @return
+	 * @author 黄智聪  2018年11月13日 下午2:58:08
+	 */
+	public JsonResult<String> DelShippingAddress(@RequestBody DelShippingAddressParam param){
+		ClientOrderShippingAddress shippingAddressRecord = ClientOrderShippingAddress.builder()
+				.id(param.getShippingId())
+				.status(ShippingAddressStatus.INVALID.getValue())
+				.modifier(param.getModifier())
+				.modifyTime(new Date())
+				.build();
+		clientOrderShippingAddressMapper.updateByPrimaryKeySelective(shippingAddressRecord);
+		return JsonResult.successJsonResult();
+	}
+	
 }
 

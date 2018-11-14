@@ -9,6 +9,8 @@ import com.azz.order.client.pojo.bo.SearchClientOrderParam;
 import com.azz.order.client.pojo.vo.ClientOrderInfo;
 import com.azz.order.client.pojo.vo.DeliveryInfo;
 import com.azz.order.client.pojo.vo.SignInfo;
+import com.azz.order.platform.bo.SearchPlatformClientOrderParam;
+import com.azz.order.platform.vo.PlatformClientOrderInfo;
 @Mapper
 public interface ClientOrderPersonalMapper {
     int deleteByPrimaryKey(Long id);
@@ -23,6 +25,9 @@ public interface ClientOrderPersonalMapper {
 
     int updateByPrimaryKey(ClientOrderPersonal record);
     
+    /***************************************************************************************/
+    /************************************以下为客户端sql***************************************/
+    /***************************************************************************************/
     /**
      * 
      * <p>查询客户订单列表</p>
@@ -58,4 +63,27 @@ public interface ClientOrderPersonalMapper {
      * @author 黄智聪  2018年11月13日 下午2:04:36
      */
     SignInfo getSignInfoByClientOrderCode(String clientOrderCode);
+    /***************************************************************************************/
+    /************************************以上为客户端sql***************************************/
+    /***************************************************************************************/
+    
+    
+    
+    
+    /***************************************************************************************/
+    /************************************以下为平台端sql***************************************/
+    /***************************************************************************************/
+    
+    /**
+     * 
+     * <p>查询平台客户订单列表</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年11月13日 下午7:35:54
+     */
+    List<PlatformClientOrderInfo> getPlatformClientOrderInfoList(SearchPlatformClientOrderParam param);
+    
+    /***************************************************************************************/
+    /************************************以上为平台端sql***************************************/
+    /***************************************************************************************/
 }

@@ -35,6 +35,11 @@ public abstract class ClientConstants {
      * 经营执照文件大小限制
      */
     public static final long TRADING_CERTIFICATE_FILE_SIZE_LIMIT = 20 * 1024 * 1024L;
+    
+    /**
+     * 收货地址限制数量
+     */
+    public static final int SHIPPING_ADDRESS_AMOUNT_LIMIT = 10;
 
     /**
      * 
@@ -127,4 +132,53 @@ public abstract class ClientConstants {
     	    this.desc = desc;
     	}
     }
+    
+    /**
+     * 
+     * <P>收货地址</P>
+     * @version 1.0
+     * @author 黄智聪  2018年11月13日 下午5:04:16
+     */
+    public enum ShippingAddressStatus {
+
+    	INVALID(0, "无效"),
+
+    	VALID(1, "有效");
+
+    	@Getter
+    	private int value;
+
+    	@Getter
+    	private String desc;
+
+    	ShippingAddressStatus(int value, String desc) {
+    	    this.value = value;
+    	    this.desc = desc;
+    	}
+    }
+    
+    /**
+     * 
+     * <P>收货地址</P>
+     * @version 1.0
+     * @author 黄智聪  2018年11月13日 下午5:04:16
+     */
+    public enum isDefaultShippingAddress {
+
+    	YES(1, "是"),
+
+    	NO(0, "否");
+
+    	@Getter
+    	private int value;
+
+    	@Getter
+    	private String desc;
+
+    	isDefaultShippingAddress(int value, String desc) {
+    	    this.value = value;
+    	    this.desc = desc;
+    	}
+    }
+    
 }

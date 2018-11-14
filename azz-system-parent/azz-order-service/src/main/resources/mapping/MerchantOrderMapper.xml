@@ -292,4 +292,11 @@
 	LEFT JOIN merchant_order mo ON csf.merchant_order_id = mo.id
 	WHERE mo.merchant_order_code = #{orderCode}
   </select>
+  
+  <select id="selectMerchantOrderInfo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_order
+    where merchant_order_code = #{orderCode}
+  </select>
 </mapper>

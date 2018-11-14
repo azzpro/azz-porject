@@ -41,4 +41,7 @@ public interface MerchantOrderMapper {
     
     // 签收信息
     SignForInfo selectSignFor(String orderCode);
+    
+    // 获取订单头信息
+    MerchantOrder selectMerchantOrderInfo(String orderCode);
 }

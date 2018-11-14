@@ -103,4 +103,12 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="selectOrderStatus" parameterType="com.azz.order.merchant.pojo.bo.SearchOrderStatusParam" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from merchant_order_status
+    where merchant_order_id = #{merchantOrderId}
+    and merchant_status_id = #{merchantStatusId}
+  </select>
 </mapper>

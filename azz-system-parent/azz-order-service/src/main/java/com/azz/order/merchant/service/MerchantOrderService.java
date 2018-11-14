@@ -7,6 +7,7 @@
  
 package com.azz.order.merchant.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.alibaba.fastjson.JSONArray;
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.page.Pagination;
+import com.azz.core.constants.MerchantConstants;
+import com.azz.exception.JSR303ValidationException;
 import com.azz.order.merchant.mapper.MerchantOrderMapper;
+import com.azz.order.merchant.mapper.MerchantOrderStatusMapper;
+import com.azz.order.merchant.pojo.MerchantOrder;
+import com.azz.order.merchant.pojo.MerchantOrderStatus;
+import com.azz.order.merchant.pojo.bo.EditOrderStatus;
 import com.azz.order.merchant.pojo.bo.SearchOrderDetailParam;
 import com.azz.order.merchant.pojo.bo.SearchOrderListParam;
+import com.azz.order.merchant.pojo.bo.SearchOrderStatusParam;
 import com.azz.order.merchant.pojo.vo.OrderDetail;
 import com.azz.order.merchant.pojo.vo.OrderList;
 import com.azz.order.merchant.pojo.vo.ReceiverAddress;
@@ -41,6 +50,9 @@ public class MerchantOrderService {
 	
 	@Autowired
 	private MerchantOrderMapper merchantOrderMapper;
+	
+	@Autowired
+    private MerchantOrderStatusMapper merchantOrderStatusMapper;
 	
 	/**
 	 * <p>查询商户订单管理</p>
@@ -88,5 +100,55 @@ public class MerchantOrderService {
 		return JsonResult.successJsonResult(od);
 	}
 
+	
+	/**
+	 * <p>订单流转</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年11月14日 上午9:59:49
+	 */
+	public JsonResult<String> editOrderStatus(@RequestBody EditOrderStatus param){
+	    JSR303ValidateUtils.validate(param);
+	    
+	    MerchantOrder mo = merchantOrderMapper.selectMerchantOrderInfo(param.getOrderCode());
+	    if(ObjectUtils.isNull(mo)) {
+	        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单不存在");
+	    }
+	    // 校验订单状态合法性
+	    Integer statusId = mo.getOrderStatusId();
+	    boolean isExist = MerchantConstants.MerchantOrderStatus.checkStatusExist(statusId);
+	    if(!isExist) {
+	        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "无效的订单状态");
+	    }
+	    
+	    if(MerchantConstants.MerchantOrderStatus.NOT_CONFIRMED.getValue() != statusId ||
+	            MerchantConstants.MerchantOrderStatus.NOT_DELIVERY.getValue() != statusId) {
+	        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单状态超出变更范围");
+	    }
+	    
+	    // 变更商户订单头部信息
+	    mo.setOrderStatusId(statusId);
+	    mo.setModifier(param.getModifier());
+	    mo.setModifyTime(new Date());
+	    merchantOrderMapper.updateByPrimaryKeySelective(mo);
+	    
+	    SearchOrderStatusParam sosp = new SearchOrderStatusParam();
+	    sosp.setMerchantOrderId(mo.getId());
+	    sosp.setMerchantStatusId(param.getStatus());
+	    MerchantOrderStatus mos = merchantOrderStatusMapper.selectOrderStatus(sosp);
+	    if(ObjectUtils.isNotNull(mos)) {
+	        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单状态已变更");
+	    }
+	    // 新增商户订单状态信息
+	    mos = new MerchantOrderStatus();
+	    mos.setMerchantOrderId(mo.getId());
+	    mos.setMerchantStatusId(param.getStatus());
+	    mos.setCreator(param.getModifier());
+	    mos.setCreateTime(new Date());
+	    merchantOrderStatusMapper.insertSelective(mos);
+	    
+	    return JsonResult.successJsonResult();
+	}
+	
 }
 

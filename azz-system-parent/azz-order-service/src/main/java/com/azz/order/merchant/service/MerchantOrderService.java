@@ -149,9 +149,9 @@ public class MerchantOrderService {
 	    merchantOrderStatusMapper.insertSelective(mos);
 	    
 	    // 订单发货需记录发货信息
-	    if(MerchantConstants.MerchantOrderStatus.NOT_SENT_OUT.getValue() == statusId) {
+	    /*if(MerchantConstants.MerchantOrderStatus.NOT_SENT_OUT.getValue() == statusId) {
 	        
-	    }
+	    }*/
 	    
 	    return JsonResult.successJsonResult();
 	}

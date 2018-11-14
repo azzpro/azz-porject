@@ -51,6 +51,7 @@
     <include refid="Base_Column_List" />
     from merchant
     where merchant_code = #{merchantCode}
+    and status != 0 
   </select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">

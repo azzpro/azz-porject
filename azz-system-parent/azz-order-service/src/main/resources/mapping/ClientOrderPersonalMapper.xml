@@ -257,7 +257,6 @@
   <resultMap id="clientOrderInfo" type="com.azz.order.client.pojo.vo.ClientOrderInfo">
   	<result column="clientOrderCode" jdbcType="VARCHAR" property="clientOrderCode" />
     <result column="grandTotal" jdbcType="DECIMAL" property="grandTotal" />
-    <result column="orderStatus" jdbcType="INTEGER" property="orderStatus" />
     <result column="paymentMethod" jdbcType="INTEGER" property="paymentMethod" />
     <result column="invoiceStatus" jdbcType="INTEGER" property="invoiceStatus" />
     <result column="orderStatusId" jdbcType="INTEGER" property="orderStatusId" />
@@ -269,6 +268,7 @@
     <result column="addressAlias" jdbcType="VARCHAR" property="addressAlias" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
   	<collection property="orderItems" ofType="com.azz.order.client.pojo.vo.ClientOrderItemInfo">
+  		<result column="merchantName" property="merchantName" jdbcType="VARCHAR"/>
         <result column="productCode" property="productCode" jdbcType="VARCHAR"/>
         <result column="modulePicUrl" property="modulePicUrl" jdbcType="VARCHAR"/>
         <result column="moduleName" property="moduleName" jdbcType="VARCHAR"/>
@@ -288,12 +288,11 @@
 		cop.invoice_status as invoiceStatus,
 		cu.client_user_name as orderCreator,
 		cop.order_status_id as orderStatusId,
-		os.status_name AS orderStatus,
 		cop.grand_total AS grandTotal,
 		cop.remark as remark,
 		cosa.receiver_name AS receiverName,
-		cosa.receiver_phone_number as receiverPhoneNumber,
-		CONCAT(cosa.province_name,cosa.city_name,cosa.area_name,cosa.detail_address) as receiverAddress,
+		cosa.address_alias AS addressAlias,
+		m.merchant_name as merchantName,
 		coip.module_pic_url AS modulePicUrl,
 		coip.product_code AS productCode,
 		coip.module_name AS moduleName,
@@ -303,9 +302,10 @@
 		coip.delivery_time as deliveryTime
 	FROM
 		client_order_personal cop
-	LEFT JOIN order_status os ON os.status_type = 1
-	AND os.id = cop.order_status_id
+	LEFT JOIN order_status os ON os.status_type = 1 AND os.id = cop.order_status_id
 	LEFT JOIN client_order_item_personal coip ON coip.client_order_id = cop.id
+	LEFT JOIN merchant_goods_product mgp on mgp.product_code = coip.product_code
+	LEFT JOIN merchant m on m.id = mgp.merchant_id
 	LEFT JOIN client_order_shipping_address cosa ON cosa.id = cop.order_shipping_id
 	LEFT JOIN client_user cu ON cu.id = cosa.client_user_id
 	<where>
@@ -332,11 +332,11 @@
 		cop.invoice_status as invoiceStatus,
 		cu.client_user_name as orderCreator,
 		cop.order_status_id as orderStatusId,
-		os.status_name AS orderStatus,
 		cop.grand_total AS grandTotal,
 		cop.remark as remark,
 		cosa.receiver_name AS receiverName,
 		cosa.address_alias AS addressAlias,
+		m.merchant_name as merchantName,
 		coip.module_pic_url AS modulePicUrl,
 		coip.product_code AS productCode,
 		coip.module_name AS moduleName,
@@ -346,9 +346,10 @@
 		coip.delivery_time as deliveryTime
 	FROM
 		client_order_personal cop
-	LEFT JOIN order_status os ON os.status_type = 1
-	AND os.id = cop.order_status_id
+	LEFT JOIN order_status os ON os.status_type = 1 AND os.id = cop.order_status_id
 	LEFT JOIN client_order_item_personal coip ON coip.client_order_id = cop.id
+	LEFT JOIN merchant_goods_product mgp on mgp.product_code = coip.product_code
+	LEFT JOIN merchant m on m.id = mgp.merchant_id
 	LEFT JOIN client_order_shipping_address cosa ON cosa.id = cop.order_shipping_id
 	LEFT JOIN client_user cu ON cu.id = cosa.client_user_id
 	where cop.status != 0
@@ -423,6 +424,83 @@
 		</if>
 	</where>
 	ORDER BY cop.create_time DESC
+  </select>
+  
+  <select id="getAllocatedMerchantOrderInfoByClientOrderCode" parameterType="string" resultType="com.azz.order.platform.vo.AllocatedMerchantOrderInfo">
+    SELECT
+		cop.client_order_code AS clientOrderCode,
+		cop.payment_method AS paymentMethod,
+		cop.order_status_id as orderStatusId,
+		cop.grand_total AS grandTotal
+	FROM
+		client_order_personal cop
+	where cop.status != 0
+	and cop.client_order_code = #{clientOrderCode} 
+  </select>
+  
+  <resultMap id="merchantOrderInfo" type="com.azz.order.platform.vo.MerchantOrderInfo">
+  	<result column="merchantCode" jdbcType="VARCHAR" property="merchantCode" />
+  	<result column="merchantName" jdbcType="VARCHAR" property="merchantName" />
+    <result column="eachMerchantGrandTotal" jdbcType="DECIMAL" property="eachMerchantGrandTotal" />
+  	<collection property="orderItems" ofType="com.azz.order.platform.vo.MerchantOrderItemInfo">
+  		<result column="deliveryDate" property="deliveryDate" jdbcType="INTEGER"/>
+        <result column="productParamsName" property="productParamsName" jdbcType="VARCHAR"/>
+        <result column="brandName" property="brandName" jdbcType="VARCHAR"/>
+        <result column="assortmentName" property="assortmentName" jdbcType="VARCHAR"/>
+        <result column="productCode" property="productCode" jdbcType="VARCHAR"/>
+        <result column="modulePicUrl" property="modulePicUrl" jdbcType="VARCHAR"/>
+        <result column="moduleName" property="moduleName" jdbcType="VARCHAR"/>
+        <result column="deliveryTime" property="deliveryTime" jdbcType="TIMESTAMP"/>
+        <result column="quantity" property="quantity" jdbcType="INTEGER"/>
+	    <result column="productPrice" jdbcType="DECIMAL" property="productPrice" />
+	    <result column="productPriceSum" jdbcType="DECIMAL" property="productPriceSum" />
+    </collection>
+  </resultMap>
+  
+  <select id="getMerchantOrderListByClientOrderCode" parameterType="string" resultMap="merchantOrderInfo">
+    SELECT
+    	m.merchant_code as merchantCode,
+		m.merchant_name AS merchantName,
+		t.eachMerchantProductPriceSum AS eachMerchantGrandTotal,
+		coip.delivery_date as deliveryDate,
+		coip.product_params_name as productParamsName,
+		coip.brand_name as brandName,
+		coip.assortment_name as assortmentName,
+		coip.module_pic_url AS modulePicUrl,
+		coip.product_code AS productCode,
+		coip.module_name AS moduleName,
+		coip.quantity AS quantity,
+		coip.product_price AS productPrice,
+		coip.product_price * coip.quantity AS productPriceSum,
+		coip.delivery_time AS deliveryTime
+	FROM
+		client_order_personal cop
+	LEFT JOIN client_order_item_personal coip ON coip.client_order_id = cop.id
+	LEFT JOIN merchant_goods_product mgp ON mgp.product_code = coip.product_code
+	LEFT JOIN merchant m ON m.id = mgp.merchant_id
+	LEFT JOIN (
+		SELECT
+			m.id AS merchantId,
+			sum(
+				coip.product_price * coip.quantity
+			) AS eachMerchantProductPriceSum
+		FROM
+			client_order_personal cop
+		LEFT JOIN client_order_item_personal coip ON coip.client_order_id = cop.id
+		LEFT JOIN merchant_goods_product mgp ON mgp.product_code = coip.product_code
+		LEFT JOIN merchant m ON m.id = mgp.merchant_id
+		WHERE
+			cop. STATUS != 0
+		AND cop.client_order_code = #{clientOrderCode} 
+		GROUP BY
+			m.id
+	) t ON t.merchantId = m.id
+	WHERE
+		cop. STATUS != 0
+	AND cop.client_order_code = #{clientOrderCode} 
+	<if test="merchantCode != null">
+		AND m.merchant_code = #{merchantCode}
+	</if>
   </select>
   
 </mapper>

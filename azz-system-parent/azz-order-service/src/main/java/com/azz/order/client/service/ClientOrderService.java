@@ -104,6 +104,9 @@ public class ClientOrderService {
 	 * @author 黄智聪  2018年11月13日 上午10:56:03
 	 */
 	public JsonResult<ClientOrderDetail> getClientOrderDetail(String clientOrderCode){
+		if(StringUtils.isBlank(clientOrderCode)) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单号不允许为空");
+		}
 		// 查询订单详情
 		ClientOrderInfo orderInfo = clientOrderPersonalMapper.getClientOrderDetailByClientOrderCode(clientOrderCode);
 		if(orderInfo == null) {

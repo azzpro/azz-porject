@@ -13,6 +13,7 @@ import com.azz.order.merchant.pojo.vo.OrderList;
 import com.azz.order.merchant.pojo.vo.ReceiverAddress;
 import com.azz.order.merchant.pojo.vo.ShipInfo;
 import com.azz.order.merchant.pojo.vo.SignForInfo;
+import com.azz.order.platform.Merchant;
 @Mapper
 public interface MerchantOrderMapper {
     int deleteByPrimaryKey(Long id);
@@ -26,6 +27,8 @@ public interface MerchantOrderMapper {
     int updateByPrimaryKeySelective(MerchantOrder record);
 
     int updateByPrimaryKey(MerchantOrder record);
+    
+    Merchant selectMerchantByMerchantCode(String merchantCode);
     
     // 获取商户订单列表
     List<OrderList> selectOrderList(SearchOrderListParam param);

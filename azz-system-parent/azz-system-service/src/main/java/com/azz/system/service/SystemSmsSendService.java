@@ -31,6 +31,7 @@ import com.azz.core.common.errorcode.SmsErrorCode;
 import com.azz.core.constants.SmsConstants;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.exception.SmsException;
+import com.azz.system.bo.SmsCheck;
 import com.azz.system.bo.SmsCodeValidation;
 import com.azz.system.bo.SmsParams;
 import com.azz.system.mapper.SystemMsgLogMapper;
@@ -69,16 +70,30 @@ private static final Logger LOG = LoggerFactory.getLogger(SystemSmsSendService.c
 	@Autowired
 	private SystemMsgLogMapper smlm;
 	
-	
+	/**
+	 * <p>验证码是否正确</p>
+	 * @param sc
+	 * @return
+	 * @author 刘建麟  2018年11月14日 下午7:00:59
+	 */
+	public JsonResult<SmsInfo> checkMsgCode(@RequestBody SmsCheck sc){
+		JSR303ValidateUtils.validate(sc);
+		SystemMsgLog code = smlm.findMsgLogByPhoneAndCode(Long.parseLong(sc.getPhone()), sc.getCode());
+		if(null == code) {
+			return new JsonResult<>(new SmsInfo("1111", "FAILE"));
+		}else {
+			return new JsonResult<>(new SmsInfo("0000", "SUCCESS"));
+		}
+	}
 	
 	/**
-	 * <p>校验验证码是否有效</p>
+	 * <p>校验验证码时间是否有效</p>
 	 * @param phone
 	 * @param sec
 	 * @return
 	 * @author 刘建麟  2018年11月14日 下午5:30:38
 	 */
-	public JsonResult<SmsInfo> validationCode(@RequestBody SmsCodeValidation sv){
+	 public JsonResult<SmsInfo> checkMsgCodeTime(@RequestBody SmsCodeValidation sv){
 		JSR303ValidateUtils.validate(sv);
 		SystemMsgLog findMsgLog = smlm.findMsgLog(Long.parseLong(sv.getPhone()));
 		if(null != findMsgLog) {

@@ -27,6 +27,13 @@
   		system_msg_log where msg_phone=#{phone} and msg_status = 1 order by msg_time desc limit 1
   </select>
   
+  <select id="findMsgLogByPhoneAndCode" resultMap="BaseResultMap">
+  	select 
+  		id,msg_title,msg_phone,msg_time,msg_status,msg_platform,msg_content,msg_type ,msg_code
+  	from 
+  		system_msg_log where msg_phone=#{phone} and msg_status = 1 and msg_code=#{code}
+  </select>
+  
   <update id="updaetSmsStatus">
   	update system_msg_log set msg_status = #{status} where id = #{id}
   </update>

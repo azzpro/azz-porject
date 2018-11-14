@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
+import com.azz.system.bo.SmsCheck;
 import com.azz.system.bo.SmsCodeValidation;
 import com.azz.system.bo.SmsParams;
 import com.azz.system.service.SystemSmsSendService;
@@ -42,14 +43,25 @@ public class SmsSendController {
 	}
 	
 	/**
-	 * <p>短信验证码校验</p>
+	 * <p>短信验证码时间校验</p>
 	 * @param sms
 	 * @return
 	 * @author 刘建麟  2018年11月14日 上午11:24:14
 	 */
-	@RequestMapping("validationCode")
-	public JsonResult<SmsInfo> validationCode(@RequestBody SmsCodeValidation sms) {
-		return sendService.validationCode(sms);
+	@RequestMapping("checkMsgCodeTime")
+	public JsonResult<SmsInfo> checkMsgCodeTime(@RequestBody SmsCodeValidation sms) {
+		return sendService.checkMsgCodeTime(sms);
+	}
+	
+	/**
+	 * <p>短信验证码时间校验</p>
+	 * @param sms
+	 * @return
+	 * @author 刘建麟  2018年11月14日 上午11:24:14
+	 */
+	@RequestMapping("checkMsgCode")
+	public JsonResult<SmsInfo> checkMsgCode(@RequestBody SmsCheck sms) {
+		return sendService.checkMsgCode(sms);
 	}
 }
 

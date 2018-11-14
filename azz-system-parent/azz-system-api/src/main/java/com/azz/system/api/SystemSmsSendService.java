@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.azz.core.common.JsonResult;
+import com.azz.system.bo.SmsCheck;
 import com.azz.system.bo.SmsCodeValidation;
 import com.azz.system.bo.SmsParams;
 import com.azz.system.vo.SmsInfo;
@@ -30,6 +31,9 @@ public interface SystemSmsSendService {
 	JsonResult<String> sendSmsCode(@RequestBody SmsParams sms);
 	
 	@RequestMapping(value="/azz/api/system/validationCode",method=RequestMethod.POST)
-	JsonResult<SmsInfo> validationCode(@RequestBody SmsCodeValidation sv);
+	JsonResult<SmsInfo> checkMsgCodeTime(@RequestBody SmsCodeValidation sv);
+
+	@RequestMapping(value="/azz/api/system/checkMsgCode",method=RequestMethod.POST)
+	JsonResult<SmsInfo> checkMsgCode(@RequestBody SmsCheck sc);
 }
 

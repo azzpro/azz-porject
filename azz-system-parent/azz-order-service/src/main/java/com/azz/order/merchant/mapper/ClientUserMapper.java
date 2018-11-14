@@ -18,4 +18,6 @@ public interface ClientUserMapper {
     int updateByPrimaryKeySelective(ClientUser record);
 
     int updateByPrimaryKey(ClientUser record);
+    
+    ClientUser getClientUserByClientUserCode(String clientUserCode);
 }

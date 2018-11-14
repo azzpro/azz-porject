@@ -19,7 +19,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.page.Pagination;
-import com.azz.core.constants.MerchantConstants.MerchantOrderStatusEnum;
+import com.azz.core.constants.MerchantConstants.MerchantOrderStatus;
 import com.azz.core.constants.MerchantConstants.MerchantOrderType;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.order.client.mapper.ClientOrderPersonalMapper;
@@ -34,7 +34,6 @@ import com.azz.order.merchant.mapper.MerchantOrderItemMapper;
 import com.azz.order.merchant.mapper.MerchantOrderMapper;
 import com.azz.order.merchant.mapper.MerchantOrderStatusMapper;
 import com.azz.order.merchant.pojo.MerchantOrder;
-import com.azz.order.merchant.pojo.MerchantOrderStatus;
 import com.azz.order.platform.Merchant;
 import com.azz.order.platform.bo.AllocateClientOrderParam;
 import com.azz.order.platform.bo.MerchantOrderInfoParam;
@@ -178,7 +177,7 @@ public class PlatformClientOrderService {
 					.grandTotal(merchantOrderInfo.getEachMerchantGrandTotal())
 					.merchantId(merchant.getId())
 					.merchantOrderCode(System.currentTimeMillis() + "")// TODO
-					.orderStatusId(MerchantOrderStatusEnum.NOT_CONFIRMED.getValue())
+					.orderStatusId(MerchantOrderStatus.NOT_CONFIRMED.getValue())
 					.orderType(MerchantOrderType.PERSON.getValue())
 					.remark(info.getRemark())
 					.build();

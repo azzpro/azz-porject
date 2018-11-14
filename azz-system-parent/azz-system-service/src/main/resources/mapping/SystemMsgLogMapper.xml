@@ -1,4 +1,4 @@
-<!-- <?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.azz.system.mapper.SystemMsgLogMapper">
   <resultMap id="BaseResultMap" type="com.azz.system.pojo.SystemMsgLog">
@@ -7,45 +7,29 @@
   <result column="msg_phone" property="msgPhone" jdbcType="BIGINT" /> 
   <result column="msg_time" property="msgTime" jdbcType="TIMESTAMP" /> 
   <result column="msg_status" property="msgStatus" jdbcType="INTEGER" /> 
-  <result column="msg_platform" property="msgPlatform" jdbcType="INTEGER" /> 
+  <result column="msg_platform" property="msgPlatform" jdbcType="VARCHAR" /> 
   <result column="msg_content" property="msgContent" jdbcType="LONGVARCHAR" /> 
   <result column="msg_type" property="msgType" jdbcType="INTEGER" /> 
-
-  </resultMap>
-  	<sql id="Base_Column_List">
-   	 id, msg_title, msg_content, msg_phone, msg_time, msg_status, msg_platform, msg_type, 
-   	 msg_error
-  	</sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from system_msg_log
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from system_msg_log
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.azz.system.pojo.SystemMsgLog" useGeneratedKeys="true" keyProperty="id">
-    insert into system_msg_log (id, msg_title, msg_content, 
-      msg_phone, msg_time, msg_status, 
-      msg_platform, msg_type, msg_error
-      )
-    values (#{id,jdbcType=BIGINT}, #{msgTitle,jdbcType=VARCHAR}, #{msgContent,jdbcType=VARCHAR}, 
-      #{msgPhone,jdbcType=BIGINT}, #{msgTime,jdbcType=TIMESTAMP}, #{msgStatus,jdbcType=INTEGER}, 
-      #{msgPlatform,jdbcType=INTEGER}, #{msgType,jdbcType=INTEGER}, #{msgError,jdbcType=VARCHAR}
-      )
-  </insert>
+  <result column="msg_code" property="msgCode" jdbcType="VARCHAR" /> 
+</resultMap>
   
-    通过手机号和短信类型获取短信信息 
-  <select id="findMsgLogByPhoneAndType" resultMap="BaseResultMap">
+  <select id="findMsgLogByPhone" resultMap="BaseResultMap">
   	select 
-  		id,msg_title,msg_phone,msg_time,msg_status,msg_platform,msg_content,msg_type 
+  		id,msg_title,msg_phone,msg_time,msg_status,msg_platform,msg_content,msg_type ,msg_code
   	from 
-  		system_msg_log where msg_phone=#{phone} and msg_type=#{type} order by id desc limit 1
+  		system_msg_log where msg_phone=#{phone} and date_format(msg_time,'%Y-%m-%d') = #{date} order by msg_time
   </select> 
   
+   <select id="findMsgLog" resultMap="BaseResultMap">
+  	select 
+  		id,msg_title,msg_phone,msg_time,msg_status,msg_platform,msg_content,msg_type ,msg_code
+  	from 
+  		system_msg_log where msg_phone=#{phone} and msg_status = 1 order by msg_time desc limit 1
+  </select>
   
+  <update id="updaetSmsStatus">
+  	update system_msg_log set msg_status = #{status} where id = #{id}
+  </update>
   <insert id="insertSelective" parameterType="com.azz.system.pojo.SystemMsgLog" useGeneratedKeys="true" keyProperty="id">
     insert into system_msg_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -73,8 +57,8 @@
       <if test="msgType != null">
         msg_type,
       </if>
-      <if test="msgError != null">
-        msg_error,
+      <if test="msgCode != null">
+        msg_code,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -97,56 +81,14 @@
         #{msgStatus,jdbcType=INTEGER},
       </if>
       <if test="msgPlatform != null">
-        #{msgPlatform,jdbcType=INTEGER},
+        #{msgPlatform,jdbcType=VARCHAR},
       </if>
       <if test="msgType != null">
         #{msgType,jdbcType=INTEGER},
       </if>
-      <if test="msgError != null">
-        #{msgError,jdbcType=VARCHAR},
+      <if test="msgCode != null">
+        #{msgCode,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.azz.system.pojo.SystemMsgLog">
-    update system_msg_log
-    <set>
-      <if test="msgTitle != null">
-        msg_title = #{msgTitle,jdbcType=VARCHAR},
-      </if>
-      <if test="msgContent != null">
-        msg_content = #{msgContent,jdbcType=VARCHAR},
-      </if>
-      <if test="msgPhone != null">
-        msg_phone = #{msgPhone,jdbcType=BIGINT},
-      </if>
-      <if test="msgTime != null">
-        msg_time = #{msgTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="msgStatus != null">
-        msg_status = #{msgStatus,jdbcType=INTEGER},
-      </if>
-      <if test="msgPlatform != null">
-        msg_platform = #{msgPlatform,jdbcType=INTEGER},
-      </if>
-      <if test="msgType != null">
-        msg_type = #{msgType,jdbcType=INTEGER},
-      </if>
-      <if test="msgError != null">
-        msg_error = #{msgError,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.azz.system.pojo.SystemMsgLog">
-    update system_msg_log
-    set msg_title = #{msgTitle,jdbcType=VARCHAR},
-      msg_content = #{msgContent,jdbcType=VARCHAR},
-      msg_phone = #{msgPhone,jdbcType=BIGINT},
-      msg_time = #{msgTime,jdbcType=TIMESTAMP},
-      msg_status = #{msgStatus,jdbcType=INTEGER},
-      msg_platform = #{msgPlatform,jdbcType=INTEGER},
-      msg_type = #{msgType,jdbcType=INTEGER},
-      msg_error = #{msgError,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-</mapper> -->
+</mapper>

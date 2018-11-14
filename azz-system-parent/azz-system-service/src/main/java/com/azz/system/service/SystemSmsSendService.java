@@ -7,14 +7,15 @@
  
 package com.azz.system.service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Date;
+import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
@@ -24,8 +25,21 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
+import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
+import com.azz.core.common.errorcode.SmsErrorCode;
+import com.azz.core.constants.SmsConstants;
 import com.azz.exception.JSR303ValidationException;
+import com.azz.exception.SmsException;
+import com.azz.system.bo.SmsCodeValidation;
+import com.azz.system.bo.SmsParams;
+import com.azz.system.mapper.SystemMsgLogMapper;
+import com.azz.system.pojo.SystemMsgLog;
+import com.azz.system.vo.SmsInfo;
+import com.azz.util.CalendarUtil;
+import com.azz.util.JSR303ValidateUtils;
+import com.azz.util.RandomStringUtils;
+import com.azz.util.SmsInfoUtil;
 
 /**
  * <P>TODO</P>
@@ -52,16 +66,73 @@ private static final Logger LOG = LoggerFactory.getLogger(SystemSmsSendService.c
 	@Value("${aliyun.domain}")
 	private String domain;
 	
+	@Autowired
+	private SystemMsgLogMapper smlm;
+	
+	
+	
 	/**
-	 * <p>发送短信</p>
+	 * <p>校验验证码是否有效</p>
 	 * @param phone
-	 * @param nickname
-	 * @author 刘建麟  2018年10月23日 下午5:36:36
+	 * @param sec
+	 * @return
+	 * @author 刘建麟  2018年11月14日 下午5:30:38
 	 */
-	public Map<String,Object> sendSms(String phone,String nickname, String template) {
-		if(StringUtils.isBlank(phone)) {
-			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"手机号码不能为空");
+	public JsonResult<SmsInfo> validationCode(@RequestBody SmsCodeValidation sv){
+		JSR303ValidateUtils.validate(sv);
+		SystemMsgLog findMsgLog = smlm.findMsgLog(Long.parseLong(sv.getPhone()));
+		if(null != findMsgLog) {
+			if((System.currentTimeMillis()/1000-findMsgLog.getMsgTime().getTime()/1000) < sv.getSec()) {
+				return new JsonResult<>(new SmsInfo("0000", "SUCCESS"));
+			}
+			return new JsonResult<>(new SmsInfo("1111", "FAILE"));
 		}
+		throw new SmsException(SmsErrorCode.SMS_ERROR_MSG_NOT_EXIST);
+	}
+	
+	/**
+	 * <p>发送验证码</p>
+	 * @param sms
+	 * @return
+	 * @author 刘建麟  2018年11月14日 下午5:28:56
+	 */
+	public JsonResult<String> sendSmsCode(@RequestBody SmsParams sms){
+		JSR303ValidateUtils.validate(sms);
+		//发送频率校验
+		String today = CalendarUtil.getFormatDateTime(new Date(), "yyyy-MM-dd");
+		List<SystemMsgLog> logs = smlm.findMsgLogByPhone(Long.parseLong(sms.getPhone()), today);
+		if (!smsSendRole(logs))
+			throw new SmsException(SmsErrorCode.SMS_ERROR_TOO_QUICK);
+		SmsConstants smsConstants = SmsInfoUtil.getSmsConstants(sms.getMsgType());
+		if(null == smsConstants)
+			throw new SmsException(SmsErrorCode.SMS_ERROR_TYPE_NOT_EXIST);
+		SystemMsgLog sml = new SystemMsgLog();
+		sml.setMsgCode(RandomStringUtils.randomNumeric(6));
+		sml.setMsgContent(smsConstants.getMsgContent());
+		sml.setMsgPhone(Long.parseLong(sms.getPhone()));
+		sml.setMsgTitle(smsConstants.getName());
+		sml.setMsgType(sms.getMsgType());
+		sml.setMsgPlatform("阿里云短信平台");
+		sml.setMsgTime(new Date());
+		int i = smlm.insertSelective(sml);
+		if(i == 1) {
+			JsonResult<SmsInfo> sms2 = sendSms(sml,smsConstants);
+			if(null != sms2 && sms2.getData().getCode().equals("OK")) {
+				smlm.updaetSmsStatus(1, sml.getId());
+				return JsonResult.successJsonResult();
+			}else {
+				smlm.updaetSmsStatus(2, sml.getId());
+				LOG.error("短信发送错误码====>"+sms2.getData().getCode());
+				LOG.error("短信发送错误====>"+sms2.getData().getMsg());
+				throw new SmsException(SmsErrorCode.SMS_ERROR_SEND_ERROR);
+			}
+		}else {
+			throw new SmsException(SmsErrorCode.SMS_ERROR_SEND_ERROR);
+		}
+		
+	}
+	
+	private JsonResult<SmsInfo> sendSms(SystemMsgLog sml,SmsConstants sc) {
 		//设置HTTP 超时时间
 		System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
         System.setProperty("sun.net.client.defaultReadTimeout", "10000");
@@ -77,16 +148,15 @@ private static final Logger LOG = LoggerFactory.getLogger(SystemSmsSendService.c
         //组装请求对象
         SendSmsRequest request = new SendSmsRequest();
         //发送手机号
-        request.setPhoneNumbers(phone);
+        request.setPhoneNumbers(sml.getMsgPhone()+"");
         //必填:短信签名
         request.setSignName(signName);
         //必填:短信模板
-        request.setTemplateCode(template);
-        //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
-        request.setTemplateParam("{\"name\":\"Tom\", \"code\":\"123\"}");
-
-        //可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
-        request.setOutId("yourOutId");
+        request.setTemplateCode(sc.getCode());
+        if(sc.getType() == 2) {//短信通知
+        	//短信验证码
+        	request.setTemplateParam("{\"code\":"+sml.getMsgCode()+"}");
+        }
 
         SendSmsResponse sendSmsResponse = null;
         try {
@@ -96,13 +166,42 @@ private static final Logger LOG = LoggerFactory.getLogger(SystemSmsSendService.c
 		} catch (ClientException e) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"短信发送异常");
 		}
-        if(null == sendSmsResponse || !sendSmsResponse.getCode().equals("DELIVRD")) {
-        	throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"短信发送失败");
+        if(null == sendSmsResponse || !sendSmsResponse.getCode().equals("OK")) {
+        	return new JsonResult<>(new SmsInfo(sendSmsResponse.getCode(),sendSmsResponse.getMessage()));
         }
-        Map<String,Object> sms = new HashMap<String,Object>();
-        sms.put("code", sendSmsResponse.getCode());
-        sms.put("msg", sendSmsResponse.getMessage());
-        return sms;
+        return new JsonResult<>(new SmsInfo(sendSmsResponse.getCode(),sendSmsResponse.getMessage()));
+	}
+	
+	private boolean smsSendRole(List<SystemMsgLog> smslogs) {
+		boolean b = true;
+		if (null == smslogs || smslogs.isEmpty())
+			return b;
+
+		// 30秒内限制1条
+		Date lastSendTime = smslogs.get(smslogs.size()-1).getMsgTime();
+		if ((System.currentTimeMillis() - lastSendTime.getTime()) < 1000l * 30) {
+			return false;
+		}
+		// 1小时内限制10条
+		int count = getCountByHour(smslogs);
+		if (count > 10) {
+			return false;
+		}
+		// 1天内限制20条
+		if (smslogs.size() > 20)
+			return false;
+
+		return b;
+	}
+	private int getCountByHour(List<SystemMsgLog> logs) {
+		int n = 0;
+		long now = System.currentTimeMillis();
+		for (SystemMsgLog log : logs) {
+			Date tmp = log.getMsgTime();
+			if (now - tmp.getTime() < 1000 * 60 * 60)
+				n++;
+		}
+		return n;
 	}
 }
 

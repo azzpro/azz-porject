@@ -18,6 +18,8 @@ public class SystemMsgLog implements Serializable {
      * @mbg.generated
      */
     private String msgTitle;
+    
+    private String msgCode;
 
     /**
      * 短信内容
@@ -48,11 +50,11 @@ public class SystemMsgLog implements Serializable {
     private Integer msgStatus;
 
     /**
-     * 短信平台 1建周 2 亿美
+     * 短信平台 
      *
      * @mbg.generated
      */
-    private Integer msgPlatform;
+    private String msgPlatform;
 
     /**
      * 类型   1 : 注册 2 : 找回密码  3：忘记密码 4：提现 ，5：修改登录手机号
@@ -61,12 +63,6 @@ public class SystemMsgLog implements Serializable {
      */
     private Integer msgType;
 
-    /**
-     * 短信错误信息
-     *
-     * @mbg.generated
-     */
-    private String msgError;
 
     private static final long serialVersionUID = 1L;
 
@@ -207,7 +203,7 @@ public class SystemMsgLog implements Serializable {
      *
      * @mbg.generated
      */
-    public Integer getMsgPlatform() {
+    public String getMsgPlatform() {
         return msgPlatform;
     }
 
@@ -219,7 +215,7 @@ public class SystemMsgLog implements Serializable {
      *
      * @mbg.generated
      */
-    public void setMsgPlatform(Integer msgPlatform) {
+    public void setMsgPlatform(String msgPlatform) {
         this.msgPlatform = msgPlatform;
     }
 
@@ -247,36 +243,24 @@ public class SystemMsgLog implements Serializable {
         this.msgType = msgType;
     }
 
-    /**
-     * 短信错误信息<br/>
-     * 返回值对应的表列名 msg_log.msg_error
-     *
-     * @return 返回值对应 msg_log.msg_error
-     *
-     * @mbg.generated
-     */
-    public String getMsgError() {
-        return msgError;
-    }
 
-    /**
-     * 短信错误信息<br/>
-     * msg_log.msg_error
-     *
-     * @param msgError 值对应 msg_log.msg_error
-     *
-     * @mbg.generated
-     */
-    public void setMsgError(String msgError) {
-        this.msgError = msgError == null ? null : msgError.trim();
-    }
+	public String getMsgCode() {
+		return msgCode;
+	}
+
+	public void setMsgCode(String msgCode) {
+		this.msgCode = msgCode;
+	}
 
 	@Override
 	public String toString() {
-		return "SystemMsgLog [id=" + id + ", msgTitle=" + msgTitle + ", msgContent=" + msgContent + ", msgPhone="
-				+ msgPhone + ", msgTime=" + msgTime + ", msgStatus=" + msgStatus + ", msgPlatform=" + msgPlatform
-				+ ", msgType=" + msgType + ", msgError=" + msgError + "]";
+		return "SystemMsgLog [id=" + id + ", msgTitle=" + msgTitle + ", msgCode=" + msgCode + ", msgContent="
+				+ msgContent + ", msgPhone=" + msgPhone + ", msgTime=" + msgTime + ", msgStatus=" + msgStatus
+				+ ", msgPlatform=" + msgPlatform + ", msgType=" + msgType + "]";
 	}
+
+	
+	
 
     
 }

@@ -24,7 +24,7 @@ import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.ClientConstants;
 import com.azz.core.constants.FileConstants;
-import com.azz.core.constants.MerchantConstants;
+import com.azz.core.constants.MerchantConstants.MerchantOrderStatusEnum;
 import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.order.merchant.mapper.MerchantOrderLogisticsMapper;
@@ -132,13 +132,13 @@ public class MerchantOrderService {
 	    }
 	    // 校验订单状态合法性
 	    Integer statusId = mo.getOrderStatusId();
-	    boolean isExist = MerchantConstants.MerchantOrderStatus.checkStatusExist(statusId);
+	    boolean isExist = MerchantOrderStatusEnum.checkStatusExist(statusId);
 	    if(!isExist) {
 	        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "无效的订单状态");
 	    }
 	    
-	    if(MerchantConstants.MerchantOrderStatus.NOT_CONFIRMED.getValue() != statusId ||
-	            MerchantConstants.MerchantOrderStatus.NOT_SENT_OUT.getValue() != statusId) {
+	    if(MerchantOrderStatusEnum.NOT_CONFIRMED.getValue() != statusId ||
+	            MerchantOrderStatusEnum.NOT_SENT_OUT.getValue() != statusId) {
 	        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单状态超出变更范围");
 	    }
 	    
@@ -166,7 +166,7 @@ public class MerchantOrderService {
 	    
 	    // 订单发货需记录发货信息
 	    
-	    if(MerchantConstants.MerchantOrderStatus.NOT_SENT_OUT.getValue() == statusId) {
+	    if(MerchantOrderStatusEnum.NOT_SENT_OUT.getValue() == statusId) {
 	    	if(null == param.getDeliveryType()) {
 	    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "配送方式为必选项");
 	    	}

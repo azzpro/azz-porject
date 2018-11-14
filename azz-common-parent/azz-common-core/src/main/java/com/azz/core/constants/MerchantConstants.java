@@ -353,4 +353,45 @@ public abstract class MerchantConstants {
 			return false;
 		}
 	}
+	
+	/**
+	 * <P>商户订单状态</P>
+	 * @version 1.0
+	 * @author 彭斌  2018年11月14日 上午10:46:37
+	 */
+	public enum MerchantOrderStatus {
+
+	    NOT_CONFIRMED(1, "待确认"),
+
+	    NOT_SENT_OUT(2, "待发货"),
+
+	    NOT_SIGNED(3, "待签收"),
+
+	    COMPLETED(4, "已完成"),
+        
+	    CANCELLED(5, "已取消");
+
+        @Getter
+        private int value;
+
+        @Getter
+        private String desc;
+
+        MerchantOrderStatus(int value, String desc) {
+            this.value = value;
+            this.desc = desc;
+        }
+        
+        public static boolean checkStatusExist(int value) {
+            MerchantOrderStatus[] values = MerchantOrderStatus.values();
+            for (MerchantOrderStatus status : values) {
+                if (status.getValue() == value) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+    }
+	
 }

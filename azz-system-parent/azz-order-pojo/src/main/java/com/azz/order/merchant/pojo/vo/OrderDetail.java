@@ -25,8 +25,17 @@ public class OrderDetail {
     private String orderStatus;
     private Date orderTime;
     private BigDecimal grandTotal;
-    
+    private String remark;
     // 产品详情
-    List<OrderItem> orderItems;
+    private List<OrderItem> orderItems;
+    
+    // 获取收货地址信息
+    private ReceiverAddress receiverAddress;
+    
+    // 获取发货信息
+    private ShipInfo shipInfo;
+    
+    // 获取签收信息
+    private SignForInfo signForInfo;
 }
 

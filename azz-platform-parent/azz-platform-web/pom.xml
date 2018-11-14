@@ -113,7 +113,6 @@
 				<classifier>jdk15</classifier>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<finalName>azz-platform-web</finalName>
 		<plugins>

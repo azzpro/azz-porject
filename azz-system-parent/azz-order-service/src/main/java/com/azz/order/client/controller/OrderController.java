@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.order.client.pojo.bo.SearchClientOrderParam;
+import com.azz.order.client.pojo.vo.ClientOrderDetail;
 import com.azz.order.client.pojo.vo.ClientOrderInfo;
 import com.azz.order.client.service.ClientOrderService;
 
@@ -23,7 +24,7 @@ import com.azz.order.client.service.ClientOrderService;
  * @author 黄智聪  2018年11月12日 下午3:14:43
  */
 @RestController
-@RequestMapping("/azz/client/order")
+@RequestMapping("/azz/api/client/order")
 public class OrderController {
 	
 	@Autowired
@@ -32,6 +33,11 @@ public class OrderController {
 	@RequestMapping("/getClientOrderInfoList")
 	public JsonResult<Pagination<ClientOrderInfo>> getClientOrderInfoList(/*@RequestBody */SearchClientOrderParam param){
 		return clientOrderService.getClientOrderInfoList(param);
+	}
+	
+	@RequestMapping("/getClientOrderDetail")
+	public JsonResult<ClientOrderDetail> getClientOrderDetail(String clientOrderCode){
+		return clientOrderService.getClientOrderDetail(clientOrderCode);
 	}
 
 }

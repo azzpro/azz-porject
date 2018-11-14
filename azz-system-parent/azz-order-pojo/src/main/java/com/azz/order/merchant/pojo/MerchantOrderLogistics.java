@@ -36,20 +36,6 @@ public class MerchantOrderLogistics implements Serializable {
     private String number;
 
     /**
-     * 出货信息文件名称
-     *
-     * @mbg.generated
-     */
-    private String shipmentInfoName;
-
-    /**
-     * 出货信息url
-     *
-     * @mbg.generated
-     */
-    private String shipmentInfoUrl;
-
-    /**
      * 配送方式   1快递 2物流 3自送
      *
      * @mbg.generated
@@ -104,6 +90,13 @@ public class MerchantOrderLogistics implements Serializable {
      * @mbg.generated
      */
     private String modifier;
+
+    /**
+     * 出货文件信息   文件名、url数组的json字符串
+     *
+     * @mbg.generated
+     */
+    private String shipmentFileInfo;
 
     private static final long serialVersionUID = 1L;
 
@@ -225,54 +218,6 @@ public class MerchantOrderLogistics implements Serializable {
      */
     public void setNumber(String number) {
         this.number = number == null ? null : number.trim();
-    }
-
-    /**
-     * 出货信息文件名称<br/>
-     * 返回值对应的表列名 merchant_order_logistics.shipment_info_name
-     *
-     * @return 返回值对应 merchant_order_logistics.shipment_info_name
-     *
-     * @mbg.generated
-     */
-    public String getShipmentInfoName() {
-        return shipmentInfoName;
-    }
-
-    /**
-     * 出货信息文件名称<br/>
-     * merchant_order_logistics.shipment_info_name
-     *
-     * @param shipmentInfoName 值对应 merchant_order_logistics.shipment_info_name
-     *
-     * @mbg.generated
-     */
-    public void setShipmentInfoName(String shipmentInfoName) {
-        this.shipmentInfoName = shipmentInfoName == null ? null : shipmentInfoName.trim();
-    }
-
-    /**
-     * 出货信息url<br/>
-     * 返回值对应的表列名 merchant_order_logistics.shipment_info_url
-     *
-     * @return 返回值对应 merchant_order_logistics.shipment_info_url
-     *
-     * @mbg.generated
-     */
-    public String getShipmentInfoUrl() {
-        return shipmentInfoUrl;
-    }
-
-    /**
-     * 出货信息url<br/>
-     * merchant_order_logistics.shipment_info_url
-     *
-     * @param shipmentInfoUrl 值对应 merchant_order_logistics.shipment_info_url
-     *
-     * @mbg.generated
-     */
-    public void setShipmentInfoUrl(String shipmentInfoUrl) {
-        this.shipmentInfoUrl = shipmentInfoUrl == null ? null : shipmentInfoUrl.trim();
     }
 
     /**
@@ -467,6 +412,30 @@ public class MerchantOrderLogistics implements Serializable {
         this.modifier = modifier == null ? null : modifier.trim();
     }
 
+    /**
+     * 出货文件信息   文件名、url数组的json字符串<br/>
+     * 返回值对应的表列名 merchant_order_logistics.shipment_file_info
+     *
+     * @return 返回值对应 merchant_order_logistics.shipment_file_info
+     *
+     * @mbg.generated
+     */
+    public String getShipmentFileInfo() {
+        return shipmentFileInfo;
+    }
+
+    /**
+     * 出货文件信息   文件名、url数组的json字符串<br/>
+     * merchant_order_logistics.shipment_file_info
+     *
+     * @param shipmentFileInfo 值对应 merchant_order_logistics.shipment_file_info
+     *
+     * @mbg.generated
+     */
+    public void setShipmentFileInfo(String shipmentFileInfo) {
+        this.shipmentFileInfo = shipmentFileInfo == null ? null : shipmentFileInfo.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -484,8 +453,6 @@ public class MerchantOrderLogistics implements Serializable {
             && (this.getExpressCompanyId() == null ? other.getExpressCompanyId() == null : this.getExpressCompanyId().equals(other.getExpressCompanyId()))
             && (this.getLogistiscCompanyName() == null ? other.getLogistiscCompanyName() == null : this.getLogistiscCompanyName().equals(other.getLogistiscCompanyName()))
             && (this.getNumber() == null ? other.getNumber() == null : this.getNumber().equals(other.getNumber()))
-            && (this.getShipmentInfoName() == null ? other.getShipmentInfoName() == null : this.getShipmentInfoName().equals(other.getShipmentInfoName()))
-            && (this.getShipmentInfoUrl() == null ? other.getShipmentInfoUrl() == null : this.getShipmentInfoUrl().equals(other.getShipmentInfoUrl()))
             && (this.getDeliveryType() == null ? other.getDeliveryType() == null : this.getDeliveryType().equals(other.getDeliveryType()))
             && (this.getDeliveryPerson() == null ? other.getDeliveryPerson() == null : this.getDeliveryPerson().equals(other.getDeliveryPerson()))
             && (this.getDeliveryPhoneNumber() == null ? other.getDeliveryPhoneNumber() == null : this.getDeliveryPhoneNumber().equals(other.getDeliveryPhoneNumber()))
@@ -493,7 +460,8 @@ public class MerchantOrderLogistics implements Serializable {
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
             && (this.getCreator() == null ? other.getCreator() == null : this.getCreator().equals(other.getCreator()))
             && (this.getModifyTime() == null ? other.getModifyTime() == null : this.getModifyTime().equals(other.getModifyTime()))
-            && (this.getModifier() == null ? other.getModifier() == null : this.getModifier().equals(other.getModifier()));
+            && (this.getModifier() == null ? other.getModifier() == null : this.getModifier().equals(other.getModifier()))
+            && (this.getShipmentFileInfo() == null ? other.getShipmentFileInfo() == null : this.getShipmentFileInfo().equals(other.getShipmentFileInfo()));
     }
 
     @Override
@@ -505,8 +473,6 @@ public class MerchantOrderLogistics implements Serializable {
         result = prime * result + ((getExpressCompanyId() == null) ? 0 : getExpressCompanyId().hashCode());
         result = prime * result + ((getLogistiscCompanyName() == null) ? 0 : getLogistiscCompanyName().hashCode());
         result = prime * result + ((getNumber() == null) ? 0 : getNumber().hashCode());
-        result = prime * result + ((getShipmentInfoName() == null) ? 0 : getShipmentInfoName().hashCode());
-        result = prime * result + ((getShipmentInfoUrl() == null) ? 0 : getShipmentInfoUrl().hashCode());
         result = prime * result + ((getDeliveryType() == null) ? 0 : getDeliveryType().hashCode());
         result = prime * result + ((getDeliveryPerson() == null) ? 0 : getDeliveryPerson().hashCode());
         result = prime * result + ((getDeliveryPhoneNumber() == null) ? 0 : getDeliveryPhoneNumber().hashCode());
@@ -515,6 +481,7 @@ public class MerchantOrderLogistics implements Serializable {
         result = prime * result + ((getCreator() == null) ? 0 : getCreator().hashCode());
         result = prime * result + ((getModifyTime() == null) ? 0 : getModifyTime().hashCode());
         result = prime * result + ((getModifier() == null) ? 0 : getModifier().hashCode());
+        result = prime * result + ((getShipmentFileInfo() == null) ? 0 : getShipmentFileInfo().hashCode());
         return result;
     }
 
@@ -529,8 +496,6 @@ public class MerchantOrderLogistics implements Serializable {
         sb.append(", expressCompanyId=").append(expressCompanyId);
         sb.append(", logistiscCompanyName=").append(logistiscCompanyName);
         sb.append(", number=").append(number);
-        sb.append(", shipmentInfoName=").append(shipmentInfoName);
-        sb.append(", shipmentInfoUrl=").append(shipmentInfoUrl);
         sb.append(", deliveryType=").append(deliveryType);
         sb.append(", deliveryPerson=").append(deliveryPerson);
         sb.append(", deliveryPhoneNumber=").append(deliveryPhoneNumber);
@@ -539,6 +504,7 @@ public class MerchantOrderLogistics implements Serializable {
         sb.append(", creator=").append(creator);
         sb.append(", modifyTime=").append(modifyTime);
         sb.append(", modifier=").append(modifier);
+        sb.append(", shipmentFileInfo=").append(shipmentFileInfo);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

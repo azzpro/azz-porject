@@ -246,6 +246,14 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
+  <select id="getClientOrderPersonalByClientOrderCode" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from client_order_personal
+    where status != 0 
+    and client_order_code = #{clientOrderCode}
+  </select>
+  
   <resultMap id="clientOrderInfo" type="com.azz.order.client.pojo.vo.ClientOrderInfo">
   	<result column="clientOrderCode" jdbcType="VARCHAR" property="clientOrderCode" />
     <result column="grandTotal" jdbcType="DECIMAL" property="grandTotal" />
@@ -258,6 +266,7 @@
     <result column="receiverPhoneNumber" property="receiverPhoneNumber" jdbcType="VARCHAR"/>
 	<result column="receiverAddress" property="receiverAddress" jdbcType="VARCHAR"/>
     <result column="orderCreator" jdbcType="VARCHAR" property="orderCreator" />
+    <result column="addressAlias" jdbcType="VARCHAR" property="addressAlias" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
   	<collection property="orderItems" ofType="com.azz.order.client.pojo.vo.ClientOrderItemInfo">
         <result column="productCode" property="productCode" jdbcType="VARCHAR"/>
@@ -327,6 +336,7 @@
 		cop.grand_total AS grandTotal,
 		cop.remark as remark,
 		cosa.receiver_name AS receiverName,
+		cosa.address_alias AS addressAlias,
 		coip.module_pic_url AS modulePicUrl,
 		coip.product_code AS productCode,
 		coip.module_name AS moduleName,
@@ -376,17 +386,43 @@
   
   <select id="getSignInfoByClientOrderCode" parameterType="string" resultType="com.azz.order.client.pojo.vo.SignInfo">
     SELECT
-		ed.consignee AS consignee,
-		ed.create_time AS signTime,
-		ed.sign_file_info AS signFileInfo
+		csf.consignee AS consignee,
+		csf.create_time AS signTime,
+		csf.sign_file_info AS signFileInfo
 	FROM
-		express_delivery ed
-	LEFT JOIN merchant_order mo ON ed.merchant_order_id = mo.id
+		client_sign_for csf
+	LEFT JOIN merchant_order mo ON csf.merchant_order_id = mo.id
 	AND mo.order_type = 1
 	LEFT JOIN client_order_personal cop ON mo.client_order_id = cop.id
-	WHERE
-		cop. STATUS != 0
+	WHERE cop. STATUS != 0
 	AND cop.client_order_code = #{clientOrderCode} 
+  </select>
+  
+  <select id="getPlatformClientOrderInfoList" parameterType="com.azz.order.platform.bo.SearchPlatformClientOrderParam" resultType="com.azz.order.platform.vo.PlatformClientOrderInfo">
+    SELECT
+		cop.client_order_code AS clientOrderCode,
+		cu.client_user_name as orderCreator,
+		cop.grand_total AS grandTotal,
+		cop.create_time AS orderTime,
+		cop.order_status_id AS orderStatusId,
+		cop. HANDLER AS HANDLER,
+		cop.handler_time AS handlerTime
+	FROM
+		client_order_personal cop
+	LEFT JOIN client_user cu ON cu.client_user_code = cop.creator
+	<where>
+		cop.status != 0
+		<if test="orderStatus != null">
+			AND cop.order_status_id = #{orderStatus}
+		</if>
+		<if test="searchInput != null and searchInput != ''">
+			AND (
+				cu.client_user_name LIKE CONCAT('%', #{searchInput}, '%')
+			OR cop.client_order_code LIKE CONCAT('%', #{searchInput}, '%') 
+			)
+		</if>
+	</where>
+	ORDER BY cop.create_time DESC
   </select>
   
 </mapper>

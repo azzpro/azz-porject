@@ -16,5 +16,7 @@ public interface MerchantOrderLogisticsMapper {
 
     int updateByPrimaryKeySelective(MerchantOrderLogistics record);
 
+    int updateByPrimaryKeyWithBLOBs(MerchantOrderLogistics record);
+
     int updateByPrimaryKey(MerchantOrderLogistics record);
 }

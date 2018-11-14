@@ -24,7 +24,7 @@ import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.ClientConstants;
 import com.azz.core.constants.FileConstants;
-import com.azz.core.constants.MerchantConstants;
+import com.azz.core.constants.MerchantConstants.MerchantOrderStatusEnum;
 import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.order.merchant.mapper.MerchantOrderLogisticsMapper;
@@ -132,13 +132,13 @@ public class MerchantOrderService {
 	    }
 	    // 校验订单状态合法性
 	    Integer statusId = mo.getOrderStatusId();
-	    boolean isExist = MerchantConstants.MerchantOrderStatus.checkStatusExist(statusId);
+	    boolean isExist = MerchantOrderStatusEnum.checkStatusExist(statusId);
 	    if(!isExist) {
 	        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "无效的订单状态");
 	    }
 	    
-	    if(MerchantConstants.MerchantOrderStatus.NOT_CONFIRMED.getValue() != statusId ||
-	            MerchantConstants.MerchantOrderStatus.NOT_SENT_OUT.getValue() != statusId) {
+	    if(MerchantOrderStatusEnum.NOT_CONFIRMED.getValue() != statusId ||
+	            MerchantOrderStatusEnum.NOT_SENT_OUT.getValue() != statusId) {
 	        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单状态超出变更范围");
 	    }
 	    
@@ -165,86 +165,86 @@ public class MerchantOrderService {
 	    merchantOrderStatusMapper.insertSelective(mos);
 	    
 	    // 订单发货需记录发货信息
-	    if(MerchantConstants.MerchantOrderStatus.NOT_SENT_OUT.getValue() == statusId) {
-	        if(null == param.getDeliveryType()) {
-	            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "配送方式为必选项");
-	        }
-	        if(null == param.getExpressCompanyId()) {
-	            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "快递公司为必选项");
-	        }
-	        if(null == param.getNumber()) {
-                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "单号为必选项");
-            }
-	        if(null == param.getDeliveryPerson()) {
-                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "配送人员为必选项");
-            }
-	        if(null == param.getDeliveryPhoneNumber()) {
-                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "配送人员联系方式为必选项");
-            }
-	        if(param.getShipmentFiles().size() == 0) {
-	            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "出货信息为必选项");
-	        }
-	        
-	        MerchantOrderLogistics record = new MerchantOrderLogistics();
-	        //  1快递 2物流 3自送
-	        switch (param.getDeliveryType()) {
-                case 1:
-                    record.setExpressCompanyId(param.getExpressCompanyId());
-                    record.setNumber(param.getNumber());
-                    break;
-                case 2:
-                    record.setLogistiscCompanyName(param.getLogistiscCompanyName());
-                    record.setNumber(param.getNumber());
-                    break;
-                case 3:
-                    record.setDeliveryPerson(param.getDeliveryPerson());
-                    record.setDeliveryPhoneNumber(param.getDeliveryPhoneNumber());
-                    break;
-                default:
-                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "配送方式不存在");
-            }
-	        
-	        List<SignFileInfo> uploadFileInfos = new ArrayList<>();
-	        
-	        List<ShipmentFile> shipmentFiles = param.getShipmentFiles();
-	        for (int i = 0; i < shipmentFiles.size(); i++) {
-	            ShipmentFile shipmentFile =  shipmentFiles.get(i);
-	            if(StringUtils.isBlank(shipmentFile.getFileName())) {
-	                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + (i + 1) + "个出库单文件名为空");
-	             }
-	            if(shipmentFile.getFileSize() > ClientConstants.BUSINESS_LICENSE_FILE_SIZE_LIMIT) {
-	                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + (i + 1) + "个出库单文件大小不能超过20M");
-	            }
-	                String filedata = shipmentFile.getFileBase64Str();
-	            if(StringUtils.isBlank(filedata)) {
-	                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + (i + 1) + "个出库单文件内容为空");
-	            }
-	            
-	            int dotIndex = shipmentFile.getFileName().lastIndexOf(".");
-	            String fileNameNoSufix = shipmentFile.getFileName().substring(0, dotIndex);
-	            String sufix = shipmentFile.getFileName().substring(dotIndex + 1, shipmentFile.getFileName().length());
-	            // 新名称为文件名  + 第几张
-	            String newFileName = fileNameNoSufix + "_" + param.getOrderCode() + "_" + (i+1);
-	            // 图片url
-	            JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
-	                filedata, FileConstants.AZZ_CLIENT, FileConstants.AZZ_TRADING_CERTIFICATE_IMAGE_TYPE);
-	            if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
-	                SignFileInfo file = new SignFileInfo(jr.getData(), shipmentFile.getFileName());
-    	            uploadFileInfos.add(file);
-	            }else {
-	                throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE,"出库单上传失败，请重试");
-	            }
-            }
-	        
-	        String shipmentInfoUrl = JSON.toJSONString(uploadFileInfos);
-	        record.setMerchantOrderId(mo.getId());
-	        record.setDeliveryType(param.getDeliveryType());
-	        record.setShipmentFileInfo(shipmentInfoUrl);
-	        record.setCreateTime(new Date());
-	        record.setCreator(param.getModifier());
-	        merchantOrderLogisticsMapper.insertSelective(record);
+	    
+	    if(MerchantOrderStatusEnum.NOT_SENT_OUT.getValue() == statusId) {
+	    	if(null == param.getDeliveryType()) {
+	    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "配送方式为必选项");
+	    	}
+	    	if(null == param.getExpressCompanyId()) {
+	    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "快递公司为必选项");
+	    	}
+	    	if(null == param.getNumber()) {
+	    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "单号为必选项");
+	    	}
+	    	if(null == param.getDeliveryPerson()) {
+	    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "配送人员为必选项");
+	    	}
+	    	if(null == param.getDeliveryPhoneNumber()) {
+	    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "配送人员联系方式为必选项");
+	    	}
+	    	if(param.getShipmentFiles().size() == 0) {
+	    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "出货信息为必选项");
+	    	}
+	    	
+	    }
+	    MerchantOrderLogistics record = new MerchantOrderLogistics();
+	    //  1快递 2物流 3自送
+	    switch (param.getDeliveryType()) {
+	    case 1:
+	    	record.setExpressCompanyId(param.getExpressCompanyId());
+	    	record.setNumber(param.getNumber());
+	    	break;
+	    case 2:
+	    	record.setLogistiscCompanyName(param.getLogistiscCompanyName());
+	    	record.setNumber(param.getNumber());
+	    	break;
+	    case 3:
+	    	record.setDeliveryPerson(param.getDeliveryPerson());
+	    	record.setDeliveryPhoneNumber(param.getDeliveryPhoneNumber());
+	    	break;
+	    default:
+	    	throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "配送方式不存在");
 	    }
 	    
+	    List<SignFileInfo> uploadFileInfos = new ArrayList<>();
+	    
+	    List<ShipmentFile> shipmentFiles = param.getShipmentFiles();
+	    for (int i = 0; i < shipmentFiles.size(); i++) {
+	    	ShipmentFile shipmentFile =  shipmentFiles.get(i);
+	    	if(StringUtils.isBlank(shipmentFile.getFileName())) {
+	    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + (i + 1) + "个出库单文件名为空");
+	    	}
+	    	if(shipmentFile.getFileSize() > ClientConstants.BUSINESS_LICENSE_FILE_SIZE_LIMIT) {
+	    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + (i + 1) + "个出库单文件大小不能超过20M");
+	    	}
+	    	String filedata = shipmentFile.getFileBase64Str();
+	    	if(StringUtils.isBlank(filedata)) {
+	    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + (i + 1) + "个出库单文件内容为空");
+	    	}
+	    	
+	    	int dotIndex = shipmentFile.getFileName().lastIndexOf(".");
+	    	String fileNameNoSufix = shipmentFile.getFileName().substring(0, dotIndex);
+	    	String sufix = shipmentFile.getFileName().substring(dotIndex + 1, shipmentFile.getFileName().length());
+	    	// 新名称为文件名  + 第几张
+	    	String newFileName = fileNameNoSufix + "_" + param.getOrderCode() + "_" + (i+1);
+	    	// 图片url
+	    	JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
+	    			filedata, FileConstants.AZZ_CLIENT, FileConstants.AZZ_TRADING_CERTIFICATE_IMAGE_TYPE);
+	    	if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
+	    		SignFileInfo file = new SignFileInfo(jr.getData(), shipmentFile.getFileName());
+	    		uploadFileInfos.add(file);
+	    	}else {
+	    		throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE,"出库单上传失败，请重试");
+	    	}
+	    }
+	    
+	    String shipmentInfoUrl = JSON.toJSONString(uploadFileInfos);
+	    record.setMerchantOrderId(mo.getId());
+	    record.setDeliveryType(param.getDeliveryType());
+	    record.setShipmentFileInfo(shipmentInfoUrl);
+	    record.setCreateTime(new Date());
+	    record.setCreator(param.getModifier());
+	    merchantOrderLogisticsMapper.insertSelective(record);
 	    return JsonResult.successJsonResult();
 	}
 	

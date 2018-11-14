@@ -187,6 +187,48 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
+  <resultMap id="BaseMerchantResultMap" type="com.azz.order.platform.Merchant">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
+    <result column="legal_person_name" jdbcType="VARCHAR" property="legalPersonName" />
+    <result column="legal_person_id_card" jdbcType="VARCHAR" property="legalPersonIdCard" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="credit_code" jdbcType="VARCHAR" property="creditCode" />
+    <result column="company_tel" jdbcType="VARCHAR" property="companyTel" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="trading_certificate_first_file_name" jdbcType="VARCHAR" property="tradingCertificateFirstFileName" />
+    <result column="trading_certificate_first_file_url" jdbcType="VARCHAR" property="tradingCertificateFirstFileUrl" />
+    <result column="trading_certificate_second_file_name" jdbcType="VARCHAR" property="tradingCertificateSecondFileName" />
+    <result column="trading_certificate_second_file_url" jdbcType="VARCHAR" property="tradingCertificateSecondFileUrl" />
+    <result column="trading_certificate_third_file_name" jdbcType="VARCHAR" property="tradingCertificateThirdFileName" />
+    <result column="trading_certificate_third_file_url" jdbcType="VARCHAR" property="tradingCertificateThirdFileUrl" />
+    <result column="business_license_file_name" jdbcType="VARCHAR" property="businessLicenseFileName" />
+    <result column="business_license_file_url" jdbcType="VARCHAR" property="businessLicenseFileUrl" />
+    <result column="legal_person_id_card_file_name" jdbcType="VARCHAR" property="legalPersonIdCardFileName" />
+    <result column="legal_person_id_card_file_url" jdbcType="VARCHAR" property="legalPersonIdCardFileUrl" />
+    <result column="auditor" jdbcType="VARCHAR" property="auditor" />
+    <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="salt" jdbcType="VARCHAR" property="salt" />
+    <result column="registered_person" jdbcType="VARCHAR" property="registeredPerson" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="qualification_apply_status" jdbcType="INTEGER" property="qualificationApplyStatus" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <select id="selectMerchantByMerchantCode" parameterType="string" resultMap="BaseMerchantResultMap">
+    select 
+	    id, merchant_code, merchant_name, legal_person_name, legal_person_id_card, company_name, 
+	    credit_code, company_tel, address, trading_certificate_first_file_name, trading_certificate_first_file_url, 
+	    trading_certificate_second_file_name, trading_certificate_second_file_url, trading_certificate_third_file_name, 
+	    trading_certificate_third_file_url, business_license_file_name, business_license_file_url, 
+	    legal_person_id_card_file_name, legal_person_id_card_file_url, auditor, contact_phone, 
+	    password, salt, registered_person, status, qualification_apply_status, remark, create_time
+    from merchant
+    where status != 0 and merchant_code = #{merchantCode}
+  </select>
+  
   <select id="selectOrderList" parameterType="com.azz.order.merchant.pojo.bo.SearchOrderListParam" resultType="com.azz.order.merchant.pojo.vo.OrderList">
   	SELECT
 		mo.merchant_order_code as orderCode,

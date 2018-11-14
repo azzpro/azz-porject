@@ -13,6 +13,7 @@ import com.azz.order.merchant.pojo.vo.OrderList;
 import com.azz.order.merchant.pojo.vo.ReceiverAddress;
 import com.azz.order.merchant.pojo.vo.ShipInfo;
 import com.azz.order.merchant.pojo.vo.SignForInfo;
+import com.azz.order.platform.Merchant;
 import com.azz.order.platform.bo.SearchMerchantOrderParam;
 import com.azz.order.platform.vo.MerchantOrderList;
 @Mapper
@@ -28,6 +29,8 @@ public interface MerchantOrderMapper {
     int updateByPrimaryKeySelective(MerchantOrder record);
 
     int updateByPrimaryKey(MerchantOrder record);
+    
+    Merchant selectMerchantByMerchantCode(String merchantCode);
     
     /**
      * <p>【商户端】获取商户订单列表</p>

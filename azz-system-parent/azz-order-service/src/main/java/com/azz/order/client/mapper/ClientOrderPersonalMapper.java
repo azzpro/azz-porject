@@ -3,6 +3,7 @@ package com.azz.order.client.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.azz.order.client.pojo.ClientOrderPersonal;
 import com.azz.order.client.pojo.bo.SearchClientOrderParam;
@@ -10,6 +11,8 @@ import com.azz.order.client.pojo.vo.ClientOrderInfo;
 import com.azz.order.client.pojo.vo.DeliveryInfo;
 import com.azz.order.client.pojo.vo.SignInfo;
 import com.azz.order.platform.bo.SearchPlatformClientOrderParam;
+import com.azz.order.platform.vo.AllocatedMerchantOrderInfo;
+import com.azz.order.platform.vo.MerchantOrderInfo;
 import com.azz.order.platform.vo.PlatformClientOrderInfo;
 @Mapper
 public interface ClientOrderPersonalMapper {
@@ -91,6 +94,24 @@ public interface ClientOrderPersonalMapper {
      * @author 黄智聪  2018年11月13日 下午7:35:54
      */
     List<PlatformClientOrderInfo> getPlatformClientOrderInfoList(SearchPlatformClientOrderParam param);
+    
+    /**
+     * 
+     * <p>查询分配后的商户订单信息</p>
+     * @param clientOrderCode
+     * @return
+     * @author 黄智聪  2018年11月14日 下午4:26:41
+     */
+    AllocatedMerchantOrderInfo getAllocatedMerchantOrderInfoByClientOrderCode(String clientOrderCode);
+    
+    /**
+     * 
+     * <p>查询拆单后的商户订单列表</p>
+     * @param clientOrderCode
+     * @return
+     * @author 黄智聪  2018年11月14日 下午4:55:06
+     */
+    List<MerchantOrderInfo> getMerchantOrderListByClientOrderCode(@Param("clientOrderCode")String clientOrderCode, @Param("merchantCode")String merchantCode);
     
     /***************************************************************************************/
     /************************************以上为平台端sql***************************************/

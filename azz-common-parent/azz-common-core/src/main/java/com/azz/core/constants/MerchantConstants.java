@@ -359,7 +359,7 @@ public abstract class MerchantConstants {
 	 * @version 1.0
 	 * @author 彭斌  2018年11月14日 上午10:46:37
 	 */
-	public enum MerchantOrderStatus {
+	public enum MerchantOrderStatusEnum {
 
 	    NOT_CONFIRMED(1, "待确认"),
 
@@ -377,14 +377,49 @@ public abstract class MerchantConstants {
         @Getter
         private String desc;
 
-        MerchantOrderStatus(int value, String desc) {
+        MerchantOrderStatusEnum(int value, String desc) {
             this.value = value;
             this.desc = desc;
         }
         
         public static boolean checkStatusExist(int value) {
-            MerchantOrderStatus[] values = MerchantOrderStatus.values();
-            for (MerchantOrderStatus status : values) {
+        	MerchantOrderStatusEnum[] values = MerchantOrderStatusEnum.values();
+            for (MerchantOrderStatusEnum status : values) {
+                if (status.getValue() == value) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+    }
+	
+	/**
+	 * 
+	 * <P>商户订单状态</P>
+	 * @version 1.0
+	 * @author 黄智聪  2018年11月14日 下午5:51:32
+	 */
+	public enum MerchantOrderType {
+
+	    PERSON(1, "个人"),
+
+	    ENTERPRISE(2, "企业");
+
+        @Getter
+        private int value;
+
+        @Getter
+        private String desc;
+
+        MerchantOrderType(int value, String desc) {
+            this.value = value;
+            this.desc = desc;
+        }
+        
+        public static boolean checkStatusExist(int value) {
+        	MerchantOrderType[] values = MerchantOrderType.values();
+            for (MerchantOrderType status : values) {
                 if (status.getValue() == value) {
                     return true;
                 }

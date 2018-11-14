@@ -299,4 +299,16 @@
     from merchant_order
     where merchant_order_code = #{orderCode}
   </select>
+  
+  <select id="countSendOutMerchantOrderByClientOrderId" parameterType="java.lang.Long" resultType="int">
+    SELECT
+		count(1)
+	FROM
+		client_order_personal cop
+	LEFT JOIN merchant_order mo ON mo.client_order_id = cop.id
+	AND cop.`status` != 0
+	WHERE mo. STATUS = 2
+	and mo.client_order_id = #{clientOrderId}
+  </select>
+  
 </mapper>

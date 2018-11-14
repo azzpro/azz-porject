@@ -44,4 +44,12 @@ public interface MerchantOrderMapper {
     
     // 获取订单头信息
     MerchantOrder selectMerchantOrderInfo(String orderCode);
+    
+    /**
+     * 
+     * <p>查询待发货的商户订单数量</p>
+     * @return
+     * @author 黄智聪  2018年11月14日 下午1:59:58
+     */
+    int countSendOutMerchantOrderByClientOrderId(Long clientOrderId); 
 }

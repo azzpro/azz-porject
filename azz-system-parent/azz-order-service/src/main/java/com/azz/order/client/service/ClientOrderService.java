@@ -49,6 +49,7 @@ import com.azz.order.client.pojo.vo.ShippingAddress;
 import com.azz.order.client.pojo.vo.SignFileInfo;
 import com.azz.order.client.pojo.vo.SignInfo;
 import com.azz.order.merchant.mapper.ClientUserMapper;
+import com.azz.order.merchant.mapper.MerchantOrderMapper;
 import com.azz.order.merchant.pojo.ClientUser;
 import com.azz.system.api.SystemImageUploadService;
 import com.azz.util.JSR303ValidateUtils;
@@ -66,6 +67,9 @@ public class ClientOrderService {
 
 	@Autowired
 	private ClientOrderPersonalMapper clientOrderPersonalMapper;
+	
+	@Autowired
+	private MerchantOrderMapper merchantOrderMapper;
 	
 	@Autowired
 	private ClientOrderShippingAddressMapper clientOrderShippingAddressMapper;
@@ -268,6 +272,11 @@ public class ClientOrderService {
 		ClientOrderPersonal order = clientOrderPersonalMapper.getClientOrderPersonalByClientOrderCode(param.getClientOrderCode());
 		if(order == null) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "签收单所属订单不存在");
+		}
+		// 签收前，确认是否已经全部商户订单都发货了
+		int count = merchantOrderMapper.countSendOutMerchantOrderByClientOrderId(order.getId());
+		if(count > 0) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "还有包裹未签收，请耐心等待");
 		}
 		List<UploadFileInfo> uploadFiles = new ArrayList<>();
 		List<SignForm> signForms = param.getSignForms();

@@ -179,7 +179,7 @@ public class ClientOrderService {
 	 * @return
 	 * @author 黄智聪  2018年11月13日 下午2:58:08
 	 */
-	public JsonResult<String> AddShippingAddress(@RequestBody AddShippingAddressParam param){
+	public JsonResult<String> addShippingAddress(@RequestBody AddShippingAddressParam param){
 		// 参数校验
 		JSR303ValidateUtils.validate(param);
 		ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getClientUserCode());
@@ -221,7 +221,7 @@ public class ClientOrderService {
 	 * @return
 	 * @author 黄智聪  2018年11月13日 下午2:58:08
 	 */
-	public JsonResult<String> EditShippingAddress(@RequestBody EditShippingAddressParam param){
+	public JsonResult<String> editShippingAddress(@RequestBody EditShippingAddressParam param){
 		// 参数校验
 		JSR303ValidateUtils.validate(param);
 		ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getClientUserCode());

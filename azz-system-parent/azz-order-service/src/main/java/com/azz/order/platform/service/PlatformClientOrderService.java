@@ -7,6 +7,7 @@
  
 package com.azz.order.platform.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,11 +20,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.page.Pagination;
+import com.azz.core.constants.ClientConstants.ClientOrderStatus;
 import com.azz.core.constants.MerchantConstants.MerchantOrderStatusEnum;
 import com.azz.core.constants.MerchantConstants.MerchantOrderType;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.order.client.mapper.ClientOrderPersonalMapper;
+import com.azz.order.client.mapper.ClientOrderStatusPersonalMapper;
 import com.azz.order.client.pojo.ClientOrderPersonal;
+import com.azz.order.client.pojo.ClientOrderStatusPersonal;
 import com.azz.order.client.pojo.vo.ClientOrderDetail;
 import com.azz.order.client.pojo.vo.ClientOrderInfo;
 import com.azz.order.client.pojo.vo.DeliveryInfo;
@@ -34,12 +38,15 @@ import com.azz.order.merchant.mapper.MerchantOrderItemMapper;
 import com.azz.order.merchant.mapper.MerchantOrderMapper;
 import com.azz.order.merchant.mapper.MerchantOrderStatusMapper;
 import com.azz.order.merchant.pojo.MerchantOrder;
+import com.azz.order.merchant.pojo.MerchantOrderItem;
+import com.azz.order.merchant.pojo.MerchantOrderStatus;
 import com.azz.order.platform.Merchant;
 import com.azz.order.platform.bo.AllocateClientOrderParam;
 import com.azz.order.platform.bo.MerchantOrderInfoParam;
 import com.azz.order.platform.bo.SearchPlatformClientOrderParam;
 import com.azz.order.platform.vo.AllocatedMerchantOrderInfo;
 import com.azz.order.platform.vo.MerchantOrderInfo;
+import com.azz.order.platform.vo.MerchantOrderItemInfo;
 import com.azz.order.platform.vo.PlatformClientOrderInfo;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
@@ -56,6 +63,9 @@ public class PlatformClientOrderService {
 
 	@Autowired
 	private ClientOrderPersonalMapper clientOrderPersonalMapper;
+	
+	@Autowired
+	private ClientOrderStatusPersonalMapper clientOrderStatusPersonalMapper;
 	
 	@Autowired
 	private MerchantOrderMapper merchantOrderMapper;
@@ -171,6 +181,7 @@ public class PlatformClientOrderService {
 			if(merchant == null) {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户不存在"); 
 			}
+			// 新增一个待确认的商户订单
 			MerchantOrder merchantOrderRecord = MerchantOrder.builder()
 					.clientOrderId(clientOrder.getId())
 					.createTime(nowDate)
@@ -182,9 +193,60 @@ public class PlatformClientOrderService {
 					.remark(info.getRemark())
 					.build();
 			merchantOrderMapper.insertSelective(merchantOrderRecord);
-			//MerchantOrderStatus merchantOrderStatusRecord = MerchantOrderStatus
-			//merchantOrderStatusMapper.insertSelective(merchantOrderStatusRecord);
+			
+			// 新增商户订单状态变更记录
+			MerchantOrderStatus merchantOrderStatusRecord = MerchantOrderStatus.builder()
+					.createTime(nowDate)
+					.creator(param.getAllocatePerson())
+					.merchantOrderId(merchantOrderRecord.getId())
+					.merchantStatusId(MerchantOrderStatusEnum.NOT_CONFIRMED.getValue())
+					.remark(info.getRemark())
+					.build();
+			merchantOrderStatusMapper.insertSelective(merchantOrderStatusRecord);
+			
+			// 新增商户订单细项
+			List<MerchantOrderItemInfo> items = merchantOrderInfo.getOrderItems();
+			List<MerchantOrderItem> merchantOrderItemRecords = new ArrayList<>();
+			for (MerchantOrderItemInfo itemInfo : items) {
+				MerchantOrderItem item = MerchantOrderItem.builder()
+						.assortmentName(itemInfo.getAssortmentName())
+						.brandName(itemInfo.getBrandName())
+						.createTime(nowDate)
+						.creator(param.getAllocatePerson())
+						.deliveryDate(itemInfo.getDeliveryDate())
+						.deliveryTime(itemInfo.getDeliveryTime())
+						.merchantOrderId(merchantOrderRecord.getId())
+						.moduleName(itemInfo.getModuleName())
+						.modulePicUrl(itemInfo.getModulePicUrl())
+						.productCode(itemInfo.getProductCode())
+						.productParamsName(itemInfo.getProductParamsName())
+						.productPrice(itemInfo.getProductPrice())
+						.quantity(itemInfo.getQuantity())
+						.build();
+				merchantOrderItemRecords.add(item);
+			}
+			merchantOrderItemMapper.batchInsert(merchantOrderItemRecords);
 		}
+		
+		// 客户订单状态改为待配货
+		ClientOrderPersonal clientOrderRecord = ClientOrderPersonal.builder()
+				.modifier(param.getAllocatePerson())
+				.modifyTime(nowDate)
+				.orderStatusId(ClientOrderStatus.NOT_ALLOCATED.getValue())
+				.id(clientOrder.getId())
+				.build();
+		clientOrderPersonalMapper.updateByPrimaryKeySelective(clientOrderRecord);
+		
+		// 新增客户订单状态变更记录
+		ClientOrderStatusPersonal clientOrderStatusRecord = ClientOrderStatusPersonal.builder()
+				.createTime(nowDate)
+				.creator(param.getAllocatePerson())
+				.orderId(clientOrder.getId())
+				.orderStatusId(ClientOrderStatus.NOT_ALLOCATED.getValue())
+				.remark("平台端用户拆单确认")
+				.build();
+		clientOrderStatusPersonalMapper.insertSelective(clientOrderStatusRecord);
+		
 		return JsonResult.successJsonResult();
 	}
 	

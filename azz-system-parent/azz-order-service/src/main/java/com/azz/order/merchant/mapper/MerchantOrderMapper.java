@@ -87,6 +87,15 @@ public interface MerchantOrderMapper {
      * @author 黄智聪  2018年11月14日 下午1:59:58
      */
     int countSendOutMerchantOrderByClientOrderId(Long clientOrderId); 
+    
+    /**
+     * 
+     * <p>根据客户订单id查询所关联的商户订单id</p>
+     * @param clientOrderId
+     * @return
+     * @author 黄智聪  2018年11月14日 下午7:09:55
+     */
+    Long getMerchantOrderIdByClientOrderId(Long clientOrderId);
 
     /**
      * <p>【平台端】商户订单列表</p>

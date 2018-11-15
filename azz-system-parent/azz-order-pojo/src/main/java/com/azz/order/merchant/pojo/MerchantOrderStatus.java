@@ -4,6 +4,13 @@ package com.azz.order.merchant.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class MerchantOrderStatus implements Serializable {
     private Long id;
 

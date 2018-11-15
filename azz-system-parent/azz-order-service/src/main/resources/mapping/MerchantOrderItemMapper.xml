@@ -48,6 +48,25 @@
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
       #{modifyTime,jdbcType=TIMESTAMP})
   </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    insert into merchant_order_item (id, merchant_order_id, product_code,
+      module_name, product_params_name, assortment_name, 
+      brand_name, delivery_date, delivery_time, 
+      module_pic_url, product_price, quantity, 
+      creator, create_time, modifier, 
+      modify_time)
+    values 
+    <foreach collection="list" item="item" separator=",">
+        (#{item.id,jdbcType=BIGINT}, #{item.merchantOrderId,jdbcType=BIGINT}, #{item.productCode,jdbcType=VARCHAR},
+      #{item.moduleName,jdbcType=VARCHAR}, #{item.productParamsName,jdbcType=VARCHAR}, #{item.assortmentName,jdbcType=VARCHAR}, 
+      #{item.brandName,jdbcType=VARCHAR}, #{item.deliveryDate,jdbcType=INTEGER}, #{item.deliveryTime,jdbcType=TIMESTAMP}, 
+      #{item.modulePicUrl,jdbcType=VARCHAR}, #{item.productPrice,jdbcType=DECIMAL}, #{item.quantity,jdbcType=INTEGER}, 
+      #{item.creator,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.modifier,jdbcType=VARCHAR}, 
+      #{item.modifyTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+  
   <insert id="insertSelective" parameterType="com.azz.order.merchant.pojo.MerchantOrderItem">
     insert into merchant_order_item
     <trim prefix="(" suffix=")" suffixOverrides=",">

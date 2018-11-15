@@ -274,13 +274,13 @@
 		os.status_name as orderStatus,
 		mo.create_time as orderTime,
 		mo.grand_total as grandTotal,
+		mo.remark as remark,
 		moi.module_name as moduleName,
 		moi.module_pic_url as modulePicUrl,
 		moi.product_code as productCode,
 		moi.quantity as quantity,
 		moi.product_price as productPrice,
-		moi.delivery_time as deliveryTime,
-		mo.remark as remark
+		moi.delivery_time as deliveryTime
 	FROM
 		merchant_order mo
 	JOIN merchant_order_item moi ON mo.id = moi.merchant_order_id
@@ -324,9 +324,9 @@
   
   <select id="selectSignFor" parameterType="java.lang.String" resultType="com.azz.order.merchant.pojo.vo.SignForInfo">
   	SELECT
-		csf.consignee,
-		csf.create_time,
-		csf.sign_file_info
+		csf.consignee as consignee,
+		csf.create_time as createTime,
+		csf.sign_file_info as  signFileInfo
 	FROM
 		client_sign_for csf
 	LEFT JOIN merchant_order mo ON csf.client_order_id = mo.client_order_id

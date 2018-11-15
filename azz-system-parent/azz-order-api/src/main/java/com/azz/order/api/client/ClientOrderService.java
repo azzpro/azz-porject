@@ -30,7 +30,7 @@ import com.azz.order.client.pojo.vo.ShippingAddress;
  * @author 彭斌  2018年11月15日 下午2:09:21
  */
 @FeignClient("azz-system-service")
-public interface OrderService {
+public interface ClientOrderService {
     
 	/**
 	 * 

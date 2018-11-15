@@ -25,7 +25,7 @@ import com.azz.order.platform.vo.PlatformClientOrderInfo;
  * @author 黄智聪  2018年11月15日 下午2:27:14
  */
 @FeignClient("azz-system-service")
-public interface ClientOrderService {
+public interface PlatformClientOrderService {
 	
 	/**
 	 * 

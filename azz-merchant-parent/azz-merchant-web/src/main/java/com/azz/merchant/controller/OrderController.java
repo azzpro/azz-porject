@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.merchant.utils.WebUtils;
-import com.azz.order.api.merchant.OrderService;
+import com.azz.order.api.merchant.MerchantOrderService;
 import com.azz.order.merchant.pojo.bo.EditOrderStatus;
 import com.azz.order.merchant.pojo.bo.EditOrderStatusWebParam;
 import com.azz.order.merchant.pojo.bo.SearchOrderDetailParam;
@@ -41,7 +41,7 @@ public class OrderController {
 
 
     @Autowired
-    OrderService orderService;
+    MerchantOrderService orderService;
 
     /**
      * <p>

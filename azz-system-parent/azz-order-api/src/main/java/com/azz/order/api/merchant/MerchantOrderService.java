@@ -44,7 +44,7 @@ public interface MerchantOrderService {
      * @author 彭斌  2018年11月15日 下午2:25:48
      */
     @RequestMapping(value="/azz/api/merchant/order/getMerchantOrderDetail",method=RequestMethod.POST)
-    JsonResult<OrderDetail> getMerchantOrderDetail(SearchOrderDetailParam param);
+    JsonResult<OrderDetail> getMerchantOrderDetail(@RequestBody SearchOrderDetailParam param);
     
     /**
      * <p>订单流转状态变更</p>
@@ -53,7 +53,7 @@ public interface MerchantOrderService {
      * @author 彭斌  2018年11月15日 下午2:26:37
      */
     @RequestMapping(value="/azz/api/merchant/order/editMerchantOrderStatus",method=RequestMethod.POST)
-    JsonResult<String> editMerchantOrderStatus(EditOrderStatus param);
+    JsonResult<String> editMerchantOrderStatus(@RequestBody EditOrderStatus param);
     
 }
 

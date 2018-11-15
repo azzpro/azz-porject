@@ -8,6 +8,7 @@
 package com.azz.order.merchant.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,7 +40,7 @@ public class MerchantOrderController {
 	 * @author 彭斌  2018年11月13日 下午6:13:54
 	 */
 	@RequestMapping("/getMerchantOrderList")
-	public JsonResult<Pagination<OrderList>> getMerchantOrderList(SearchOrderListParam param){
+	public JsonResult<Pagination<OrderList>> getMerchantOrderList(@RequestBody SearchOrderListParam param){
 		return merchantOrderService.getMerchantOrderList(param);
 	}
 
@@ -50,7 +51,7 @@ public class MerchantOrderController {
 	 * @author 彭斌  2018年11月13日 下午6:38:49
 	 */
 	@RequestMapping("/getMerchantOrderDetail")
-	public JsonResult<OrderDetail> getMerchantOrderDetail(SearchOrderDetailParam param){
+	public JsonResult<OrderDetail> getMerchantOrderDetail(@RequestBody SearchOrderDetailParam param){
 	    return merchantOrderService.getMerchantOrderDetail(param);
 	}
 	
@@ -61,7 +62,7 @@ public class MerchantOrderController {
 	 * @author 彭斌  2018年11月14日 下午4:11:36
 	 */
 	@RequestMapping("/editMerchantOrderStatus")
-	public JsonResult<String> editMerchantOrderStatus(EditOrderStatus param){
+	public JsonResult<String> editMerchantOrderStatus(@RequestBody EditOrderStatus param){
 	    return merchantOrderService.editOrderStatus(param);
 	}
 }

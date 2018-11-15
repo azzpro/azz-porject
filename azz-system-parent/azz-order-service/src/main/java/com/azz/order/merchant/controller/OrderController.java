@@ -26,7 +26,7 @@ import com.azz.order.merchant.service.MerchantOrderService;
  * @author 彭斌  2018年11月13日 下午6:10:27
  */
 @RestController
-@RequestMapping("/azz/merchant/order")
+@RequestMapping("/azz/api/merchant/order")
 public class OrderController {
 	
 	@Autowired

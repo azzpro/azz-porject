@@ -25,7 +25,7 @@ import com.azz.order.platform.vo.MerchantOrderList;
  * @author 彭斌  2018年11月13日 下午6:10:27
  */
 @RestController
-@RequestMapping("/azz/platform/merchant/order")
+@RequestMapping("/azz/api/platform/merchant/order")
 public class MerchantOrderController {
 	
 	@Autowired

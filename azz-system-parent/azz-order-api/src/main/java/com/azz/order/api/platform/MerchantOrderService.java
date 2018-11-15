@@ -33,7 +33,7 @@ public interface MerchantOrderService {
      * @author 彭斌  2018年11月13日 下午5:07:04
      */
     @RequestMapping(value="/azz/api/platform/merchant/order/getPlatformMerchantOrderList",method=RequestMethod.POST)
-    public JsonResult<Pagination<MerchantOrderList>> getPlatformMerchantOrderList(SearchMerchantOrderParam param);
+    JsonResult<Pagination<MerchantOrderList>> getPlatformMerchantOrderList(SearchMerchantOrderParam param);
     
     /**
      * <p>获取平台端商户订单详情</p>
@@ -42,7 +42,7 @@ public interface MerchantOrderService {
      * @author 彭斌  2018年11月15日 下午2:25:48
      */
     @RequestMapping(value="/azz/api/platform/merchant/order/getMerchantOrderDetail",method=RequestMethod.POST)
-    public JsonResult<OrderDetail> getMerchantOrderDetail(SearchOrderDetailParam param);
+    JsonResult<OrderDetail> getMerchantOrderDetail(SearchOrderDetailParam param);
     
 }
 

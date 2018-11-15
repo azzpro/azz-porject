@@ -75,6 +75,15 @@ public interface ClientOrderPersonalMapper {
      * @author 黄智聪  2018年11月13日 下午2:04:36
      */
     SignInfo getSignInfoByClientOrderCode(String clientOrderCode);
+    
+    /**
+     * 
+     * <p>查询6小时未支付的客户订单id集合</p>
+     * @param clientOrderCode
+     * @return
+     * @author 黄智聪  2018年11月13日 上午11:06:57
+     */
+    List<Long> getSixHoursNotPaidClientOrderIds(Integer orderStatusId);
     /***************************************************************************************/
     /************************************以上为客户端sql***************************************/
     /***************************************************************************************/

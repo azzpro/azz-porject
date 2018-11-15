@@ -399,6 +399,16 @@
 	AND cop.client_order_code = #{clientOrderCode} 
   </select>
   
+  <select id="getNotPaidClientOrderIds" parameterType="java.lang.Integer" resultType="java.lang.Long">
+    SELECT
+		cop.id
+	FROM
+		client_order_personal cop 
+	WHERE cop. STATUS != 0
+	AND DATE_ADD(cop.create_time,INTERVAL 6 HOUR) &lt; NOW()  
+	AND cop.order_status_id = #{orderStatusId}
+  </select>
+  
   <select id="getPlatformClientOrderInfoList" parameterType="com.azz.order.platform.bo.SearchPlatformClientOrderParam" resultType="com.azz.order.platform.vo.PlatformClientOrderInfo">
     SELECT
 		cop.client_order_code AS clientOrderCode,

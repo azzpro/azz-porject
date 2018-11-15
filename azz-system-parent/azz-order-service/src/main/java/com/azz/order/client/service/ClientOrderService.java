@@ -23,6 +23,7 @@ import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.ClientConstants;
+import com.azz.core.constants.ClientConstants.ClientOrderStatus;
 import com.azz.core.constants.ClientConstants.ShippingAddressStatus;
 import com.azz.core.constants.ClientConstants.isDefaultShippingAddress;
 import com.azz.core.constants.FileConstants;
@@ -31,9 +32,11 @@ import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.order.client.mapper.ClientOrderPersonalMapper;
 import com.azz.order.client.mapper.ClientOrderShippingAddressMapper;
+import com.azz.order.client.mapper.ClientOrderStatusPersonalMapper;
 import com.azz.order.client.mapper.ClientSignForMapper;
 import com.azz.order.client.pojo.ClientOrderPersonal;
 import com.azz.order.client.pojo.ClientOrderShippingAddress;
+import com.azz.order.client.pojo.ClientOrderStatusPersonal;
 import com.azz.order.client.pojo.ClientSignFor;
 import com.azz.order.client.pojo.bo.AddShippingAddressParam;
 import com.azz.order.client.pojo.bo.DelShippingAddressParam;
@@ -71,6 +74,9 @@ public class ClientOrderService {
 
 	@Autowired
 	private ClientOrderPersonalMapper clientOrderPersonalMapper;
+	
+	@Autowired
+	private ClientOrderStatusPersonalMapper clientOrderStatusPersonalMapper;
 	
 	@Autowired
 	private MerchantOrderMapper merchantOrderMapper;
@@ -271,6 +277,26 @@ public class ClientOrderService {
 	
 	/**
 	 * 
+	 * <p>校验客户订单是否能执行签收操作</p>
+	 * @param clientOrderCode
+	 * @return
+	 * @author 黄智聪  2018年11月15日 上午10:27:31
+	 */
+	public JsonResult<String> checkSignOperation(String clientOrderCode){
+		ClientOrderPersonal order = clientOrderPersonalMapper.getClientOrderPersonalByClientOrderCode(clientOrderCode);
+		if(order == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "签收单所属订单不存在");
+		}
+		// 签收前，确认是否已经全部商户订单都发货了
+		int count = merchantOrderMapper.countSendOutMerchantOrderByClientOrderId(order.getId());
+		if(count > 0) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "还有包裹未签收，请耐心等待");
+		}
+		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
 	 * <p>上传签收单</p>
 	 * @param param
 	 * @return
@@ -350,6 +376,38 @@ public class ClientOrderService {
 				.build();
 		merchantOrderStatusMapper.insertSelective(merchantOrderStatusRecord);
 		
+		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
+	 * <p>关闭订单--6小时未支付的待支付订单，状态改为已关闭</p>
+	 * @return
+	 * @author 黄智聪  2018年11月15日 上午10:38:19
+	 */
+	public JsonResult<String> closeClientOrders(){
+		// 查询6小时未支付的客户订单id集合
+		List<Long> clientOrderIds = clientOrderPersonalMapper.getSixHoursNotPaidClientOrderIds(ClientOrderStatus.NOT_PAID.getValue());
+		Date nowDate = new Date();
+		for (Long id : clientOrderIds) {
+			// 修改客户订单状态订单状态为已关闭
+			ClientOrderPersonal clientOrderRecord = ClientOrderPersonal.builder()
+					.id(id)
+					.orderStatusId(ClientOrderStatus.CLOSED.getValue())
+					.modifier("system")// TODO
+					.modifyTime(nowDate)
+					.build(); 
+			clientOrderPersonalMapper.updateByPrimaryKeySelective(clientOrderRecord);
+			// 新增客户订单状态变更记录
+			ClientOrderStatusPersonal clientOrderStatusRecord = ClientOrderStatusPersonal.builder()
+					.createTime(nowDate)
+					.creator("system")
+					.orderId(id)
+					.orderStatusId(ClientOrderStatus.CLOSED.getValue())
+					.remark("6小时未支付，客户订单状态改为已关闭")
+					.build();
+			clientOrderStatusPersonalMapper.insertSelective(clientOrderStatusRecord);
+		}
 		return JsonResult.successJsonResult();
 	}
 	

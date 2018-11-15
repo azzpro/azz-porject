@@ -43,7 +43,7 @@
       #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, 
       #{remark,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.azz.order.merchant.pojo.MerchantOrder">
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.azz.order.merchant.pojo.MerchantOrder">
     insert into merchant_order
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -351,6 +351,16 @@
 	AND cop.`status` != 0
 	WHERE mo. STATUS = 2
 	and mo.client_order_id = #{clientOrderId}
+  </select>
+  
+  <select id="getMerchantOrderIdByClientOrderId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    SELECT
+		mo.id
+	FROM
+		client_order_personal cop
+	LEFT JOIN merchant_order mo ON mo.client_order_id = cop.id AND cop.`status` != 0
+	WHERE mo.client_order_id = #{clientOrderId}
+	limit 1
   </select>
   
   <select id="selectPlatformMerchantOrder" parameterType="com.azz.order.platform.bo.SearchMerchantOrderParam" resultType="com.azz.order.platform.vo.MerchantOrderList">

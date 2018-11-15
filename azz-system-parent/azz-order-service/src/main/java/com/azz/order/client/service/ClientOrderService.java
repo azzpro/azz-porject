@@ -26,6 +26,7 @@ import com.azz.core.constants.ClientConstants;
 import com.azz.core.constants.ClientConstants.ShippingAddressStatus;
 import com.azz.core.constants.ClientConstants.isDefaultShippingAddress;
 import com.azz.core.constants.FileConstants;
+import com.azz.core.constants.MerchantConstants.MerchantOrderStatusEnum;
 import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.order.client.mapper.ClientOrderPersonalMapper;
@@ -50,7 +51,10 @@ import com.azz.order.client.pojo.vo.SignFileInfo;
 import com.azz.order.client.pojo.vo.SignInfo;
 import com.azz.order.merchant.mapper.ClientUserMapper;
 import com.azz.order.merchant.mapper.MerchantOrderMapper;
+import com.azz.order.merchant.mapper.MerchantOrderStatusMapper;
 import com.azz.order.merchant.pojo.ClientUser;
+import com.azz.order.merchant.pojo.MerchantOrder;
+import com.azz.order.merchant.pojo.MerchantOrderStatus;
 import com.azz.system.api.SystemImageUploadService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
@@ -70,6 +74,9 @@ public class ClientOrderService {
 	
 	@Autowired
 	private MerchantOrderMapper merchantOrderMapper;
+	
+	@Autowired
+	private MerchantOrderStatusMapper merchantOrderStatusMapper;
 	
 	@Autowired
 	private ClientOrderShippingAddressMapper clientOrderShippingAddressMapper;
@@ -283,6 +290,7 @@ public class ClientOrderService {
 		}
 		List<UploadFileInfo> uploadFiles = new ArrayList<>();
 		List<SignForm> signForms = param.getSignForms();
+		Date nowDate = new Date();
 		for (int i = 0 ; i < signForms.size(); i++) {
 			SignForm signForm = signForms.get(i);
 			String originalFileName = signForm.getFileName();
@@ -315,12 +323,33 @@ public class ClientOrderService {
 			ClientSignFor clientSignForRecord = ClientSignFor.builder()
 					.clientOrderId(order.getId())
 					.consignee(param.getConsignee())
-					.createTime(new Date())
+					.createTime(nowDate)
 					.creator(param.getCreator())
 					.signFileInfo(signFileInfo)
 					.build();
 			clientSignForMapper.insertSelective(clientSignForRecord);
 		}
+		
+		// 将商户订单状态改为已完成
+		Long merchantOrderId = merchantOrderMapper.getMerchantOrderIdByClientOrderId(order.getId());
+		MerchantOrder merchantOrderRecord = MerchantOrder.builder()
+				.orderStatusId(MerchantOrderStatusEnum.COMPLETED.getValue())
+				.modifier(param.getCreator())
+				.modifyTime(nowDate)
+				.id(merchantOrderId)
+				.build();
+		merchantOrderMapper.updateByPrimaryKeySelective(merchantOrderRecord);
+		
+		// 新增商户订单状态变更记录
+		MerchantOrderStatus merchantOrderStatusRecord = MerchantOrderStatus.builder()
+				.createTime(nowDate)
+				.creator(param.getCreator())
+				.merchantOrderId(merchantOrderId)
+				.merchantStatusId(MerchantOrderStatusEnum.COMPLETED.getValue())
+				.remark("客户已签收，修改商户订单状态为已完成")
+				.build();
+		merchantOrderStatusMapper.insertSelective(merchantOrderStatusRecord);
+		
 		return JsonResult.successJsonResult();
 	}
 	

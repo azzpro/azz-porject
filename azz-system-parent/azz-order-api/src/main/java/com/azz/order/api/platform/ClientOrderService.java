@@ -1,37 +1,31 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2018年11月12日 下午3:14:43
+ * Create on 2018年11月15日 下午2:27:14
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
-package com.azz.order.platform.controller;
+package com.azz.order.api.platform;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.order.client.pojo.vo.ClientOrderDetail;
 import com.azz.order.platform.bo.AllocateClientOrderParam;
 import com.azz.order.platform.bo.SearchPlatformClientOrderParam;
-import com.azz.order.platform.service.PlatformClientOrderService;
 import com.azz.order.platform.vo.AllocatedMerchantOrderInfo;
 import com.azz.order.platform.vo.PlatformClientOrderInfo;
 
 /**
- * <P>平台端商户订单管理</P>
+ * <P>TODO</P>
  * @version 1.0
- * @author 彭斌  2018年11月13日 下午6:10:27
+ * @author 黄智聪  2018年11月15日 下午2:27:14
  */
-@RestController
-@RequestMapping("/azz/api/platform/client/order")
-public class ClientOrderController {
-	
-	@Autowired
-	private PlatformClientOrderService platformClientOrderService;
+@FeignClient("azz-system-service")
+public interface ClientOrderService {
 	
 	/**
 	 * 
@@ -40,10 +34,8 @@ public class ClientOrderController {
 	 * @return
 	 * @author 黄智聪  2018年11月13日 上午10:54:40
 	 */
-	@RequestMapping("/getClientOrderInfoList")
-	public JsonResult<Pagination<PlatformClientOrderInfo>> getClientOrderInfoList(@RequestBody SearchPlatformClientOrderParam param){
-		return platformClientOrderService.getClientOrderInfoList(param);
-	}
+	@RequestMapping("/azz/api/platform/client/order/getClientOrderInfoList")
+	JsonResult<Pagination<PlatformClientOrderInfo>> getClientOrderInfoList(@RequestBody SearchPlatformClientOrderParam param);
 	
 	/**
 	 * 
@@ -52,10 +44,8 @@ public class ClientOrderController {
 	 * @return
 	 * @author 黄智聪  2018年11月13日 上午10:56:03
 	 */
-	@RequestMapping("/getClientOrderDetail")
-	public JsonResult<ClientOrderDetail> getClientOrderDetail(String clientOrderCode){
-		return platformClientOrderService.getClientOrderDetail(clientOrderCode);
-	}
+	@RequestMapping("/azz/api/platform/client/order/getClientOrderDetail")
+	JsonResult<ClientOrderDetail> getClientOrderDetail(String clientOrderCode);
 	
 	/**
 	 * 
@@ -64,10 +54,8 @@ public class ClientOrderController {
 	 * @return
 	 * @author 黄智聪  2018年11月14日 下午3:58:10
 	 */
-	@RequestMapping("/getAllocatedMerchantOrder")
-	public JsonResult<AllocatedMerchantOrderInfo> getAllocatedMerchantOrder(String clientOrderCode){
-		return platformClientOrderService.getAllocatedMerchantOrder(clientOrderCode);
-	}
+	@RequestMapping("/azz/api/platform/client/order/getAllocatedMerchantOrder")
+	JsonResult<AllocatedMerchantOrderInfo> getAllocatedMerchantOrder(String clientOrderCode);
 	
 	/**
 	 * 
@@ -76,10 +64,8 @@ public class ClientOrderController {
 	 * @return
 	 * @author 黄智聪  2018年11月14日 下午2:31:17
 	 */
-	@RequestMapping("/allocateClientOrder")
-	public JsonResult<String> allocateClientOrder(@RequestBody AllocateClientOrderParam param){
-		return platformClientOrderService.allocateClientOrder(param);
-	}
+	@RequestMapping("/azz/api/platform/client/order/allocateClientOrder")
+	JsonResult<String> allocateClientOrder(@RequestBody AllocateClientOrderParam param);
 	
 }
 

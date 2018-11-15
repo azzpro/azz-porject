@@ -120,7 +120,17 @@ public interface ClientOrderPersonalMapper {
      * @return
      * @author 黄智聪  2018年11月14日 下午4:55:06
      */
-    List<MerchantOrderInfo> getMerchantOrderListByClientOrderCode(@Param("clientOrderCode")String clientOrderCode, @Param("merchantCode")String merchantCode);
+    List<MerchantOrderInfo> getMerchantOrderListByClientOrderCode(@Param("clientOrderCode")String clientOrderCode);
+    
+    /**
+     * 
+     * <p>查询拆单后的具体某个商户的订单列表</p>
+     * @param clientOrderCode
+     * @param merchantCode
+     * @return
+     * @author 黄智聪  2018年11月14日 下午4:55:06
+     */
+    MerchantOrderInfo getMerchantOrderListByClientOrderCodeAndMerchantCode(@Param("clientOrderCode")String clientOrderCode, @Param("merchantCode")String merchantCode);
     
     /***************************************************************************************/
     /************************************以上为平台端sql***************************************/

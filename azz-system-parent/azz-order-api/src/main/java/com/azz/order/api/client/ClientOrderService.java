@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
@@ -50,7 +51,7 @@ public interface ClientOrderService {
 	 * @author 黄智聪  2018年11月13日 上午10:56:03
 	 */
 	@RequestMapping("/azz/api/client/order/getClientOrderDetail")
-	JsonResult<ClientOrderDetail> getClientOrderDetail(String clientOrderCode);
+	JsonResult<ClientOrderDetail> getClientOrderDetail(@RequestParam("clientOrderCode")String clientOrderCode);
 	
 	/**
 	 * 
@@ -60,7 +61,7 @@ public interface ClientOrderService {
 	 * @author 黄智聪  2018年11月13日 下午2:58:08
 	 */
 	@RequestMapping("/azz/api/client/order/getShippingAddressList")
-	JsonResult<List<ShippingAddress>> getShippingAddressList(String clientUserCode);
+	JsonResult<List<ShippingAddress>> getShippingAddressList(@RequestParam("clientUserCode")String clientUserCode);
 	
 	/**
 	 * 
@@ -70,7 +71,7 @@ public interface ClientOrderService {
 	 * @author 黄智聪  2018年11月13日 下午2:58:08
 	 */
 	@RequestMapping("/azz/api/client/order/getShippingAddress")
-	JsonResult<ShippingAddress> getShippingAddress(Long shippingId);
+	JsonResult<ShippingAddress> getShippingAddress(@RequestParam("shippingId")Long shippingId);
 	
 	/**
 	 * 
@@ -110,7 +111,7 @@ public interface ClientOrderService {
 	 * @author 黄智聪  2018年11月15日 上午10:27:31
 	 */
 	@RequestMapping("/azz/api/client/order/checkSignOperation")
-	JsonResult<String> checkSignOperation(String clientOrderCode);
+	JsonResult<String> checkSignOperation(@RequestParam("clientOrderCode")String clientOrderCode);
 	
 	/**
 	 * 

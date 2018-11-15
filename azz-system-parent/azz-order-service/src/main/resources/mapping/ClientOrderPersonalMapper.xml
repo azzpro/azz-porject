@@ -335,6 +335,7 @@
 		cop.grand_total AS grandTotal,
 		cop.remark as remark,
 		cosa.receiver_name AS receiverName,
+		cosa.receiver_phone_number as receiverPhoneNumber,
 		cosa.address_alias AS addressAlias,
 		m.merchant_name as merchantName,
 		coip.module_pic_url AS modulePicUrl,
@@ -392,9 +393,7 @@
 		csf.sign_file_info AS signFileInfo
 	FROM
 		client_sign_for csf
-	LEFT JOIN merchant_order mo ON csf.merchant_order_id = mo.id
-	AND mo.order_type = 1
-	LEFT JOIN client_order_personal cop ON mo.client_order_id = cop.id
+	LEFT JOIN client_order_personal cop ON csf.client_order_id = cop.id
 	WHERE cop. STATUS != 0
 	AND cop.client_order_code = #{clientOrderCode} 
   </select>
@@ -415,12 +414,13 @@
 		cu.client_user_name as orderCreator,
 		cop.grand_total AS grandTotal,
 		cop.create_time AS orderTime,
-		cop.order_status_id AS orderStatusId,
-		cop. HANDLER AS HANDLER,
+		cop.order_status_id AS orderStatus,
+		pu.user_name AS handler,
 		cop.handler_time AS handlerTime
 	FROM
 		client_order_personal cop
 	LEFT JOIN client_user cu ON cu.client_user_code = cop.creator
+	LEFT JOIN platform_user pu on pu.user_code = cop.handler
 	<where>
 		cop.status != 0
 		<if test="orderStatus != null">
@@ -508,9 +508,50 @@
 	WHERE
 		cop. STATUS != 0
 	AND cop.client_order_code = #{clientOrderCode} 
-	<if test="merchantCode != null">
-		AND m.merchant_code = #{merchantCode}
-	</if>
+  </select>
+  
+  <select id="getMerchantOrderListByClientOrderCodeAndMerchantCode" resultMap="merchantOrderInfo">
+    SELECT
+    	m.merchant_code as merchantCode,
+		m.merchant_name AS merchantName,
+		t.eachMerchantProductPriceSum AS eachMerchantGrandTotal,
+		coip.delivery_date as deliveryDate,
+		coip.product_params_name as productParamsName,
+		coip.brand_name as brandName,
+		coip.assortment_name as assortmentName,
+		coip.module_pic_url AS modulePicUrl,
+		coip.product_code AS productCode,
+		coip.module_name AS moduleName,
+		coip.quantity AS quantity,
+		coip.product_price AS productPrice,
+		coip.product_price * coip.quantity AS productPriceSum,
+		coip.delivery_time AS deliveryTime
+	FROM
+		client_order_personal cop
+	LEFT JOIN client_order_item_personal coip ON coip.client_order_id = cop.id
+	LEFT JOIN merchant_goods_product mgp ON mgp.product_code = coip.product_code
+	LEFT JOIN merchant m ON m.id = mgp.merchant_id
+	LEFT JOIN (
+		SELECT
+			m.id AS merchantId,
+			sum(
+				coip.product_price * coip.quantity
+			) AS eachMerchantProductPriceSum
+		FROM
+			client_order_personal cop
+		LEFT JOIN client_order_item_personal coip ON coip.client_order_id = cop.id
+		LEFT JOIN merchant_goods_product mgp ON mgp.product_code = coip.product_code
+		LEFT JOIN merchant m ON m.id = mgp.merchant_id
+		WHERE
+			cop. STATUS != 0
+		AND cop.client_order_code = #{clientOrderCode} 
+		GROUP BY
+			m.id
+	) t ON t.merchantId = m.id
+	WHERE
+		cop. STATUS != 0
+	AND cop.client_order_code = #{clientOrderCode} 
+	AND m.merchant_code = #{merchantCode}
   </select>
   
 </mapper>

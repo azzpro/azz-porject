@@ -157,7 +157,7 @@ public class ClientController {
 		    jr.setMsg(msg);
 		    return jr;
 	    }
-	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR,"登录失败，请重试");
+	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR,"登录失败,请重试");
 	}
 	JsonResult<LoginClientUserInfo> jr = clientService.getLoginClientUserInfoByPhoneNumber(param.getPhoneNumber());
 	LoginClientUserInfo loginClientUser = jr.getData();

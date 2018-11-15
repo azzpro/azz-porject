@@ -47,7 +47,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         //2:添加fastJson的配置信息;
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         fastJsonConfig.setDateFormat("yyyy-MM-dd hh:mm:ss");
-        fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat);
+        fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat,SerializerFeature.WriteMapNullValue);
         //3处理中文乱码问题
         List<MediaType> fastMediaTypes = new ArrayList<>();
         fastMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);

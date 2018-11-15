@@ -10,6 +10,7 @@ package com.azz.order.api.platform;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
@@ -45,7 +46,7 @@ public interface PlatformClientOrderService {
 	 * @author 黄智聪  2018年11月13日 上午10:56:03
 	 */
 	@RequestMapping("/azz/api/platform/client/order/getClientOrderDetail")
-	JsonResult<ClientOrderDetail> getClientOrderDetail(String clientOrderCode);
+	JsonResult<ClientOrderDetail> getClientOrderDetail(@RequestParam("clientOrderCode")String clientOrderCode);
 	
 	/**
 	 * 
@@ -55,7 +56,7 @@ public interface PlatformClientOrderService {
 	 * @author 黄智聪  2018年11月14日 下午3:58:10
 	 */
 	@RequestMapping("/azz/api/platform/client/order/getAllocatedMerchantOrder")
-	JsonResult<AllocatedMerchantOrderInfo> getAllocatedMerchantOrder(String clientOrderCode);
+	JsonResult<AllocatedMerchantOrderInfo> getAllocatedMerchantOrder(@RequestParam("clientOrderCode")String clientOrderCode);
 	
 	/**
 	 * 

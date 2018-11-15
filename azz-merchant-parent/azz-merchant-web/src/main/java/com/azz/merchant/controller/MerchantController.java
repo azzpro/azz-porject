@@ -153,7 +153,7 @@ public class MerchantController {
 		    jr.setMsg(msg);
 		    return jr;
 	    }
-	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR,"登录失败，请重试");
+	    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR,"登录失败,请重试");
 	}
 	JsonResult<LoginMerchantUserInfo> jr = merchantService.getLoginMerchantUserInfoByPhoneNumber(param.getPhoneNumber());
 	LoginMerchantUserInfo loginMerchantUser = jr.getData();

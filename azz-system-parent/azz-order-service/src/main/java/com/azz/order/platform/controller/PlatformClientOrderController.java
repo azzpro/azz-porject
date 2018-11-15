@@ -10,6 +10,7 @@ package com.azz.order.platform.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
@@ -53,7 +54,7 @@ public class PlatformClientOrderController {
 	 * @author 黄智聪  2018年11月13日 上午10:56:03
 	 */
 	@RequestMapping("/getClientOrderDetail")
-	public JsonResult<ClientOrderDetail> getClientOrderDetail(String clientOrderCode){
+	public JsonResult<ClientOrderDetail> getClientOrderDetail(@RequestParam("clientOrderCode")String clientOrderCode){
 		return platformClientOrderService.getClientOrderDetail(clientOrderCode);
 	}
 	

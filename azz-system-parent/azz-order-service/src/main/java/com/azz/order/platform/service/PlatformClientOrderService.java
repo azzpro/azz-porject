@@ -147,7 +147,7 @@ public class PlatformClientOrderService {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "分配后的商户订单信息不存在"); 
 		}
 		// 查询拆单后的商户订单列表
-		List<MerchantOrderInfo> merchantOrderInfos = clientOrderPersonalMapper.getMerchantOrderListByClientOrderCode(clientOrderCode, null);
+		List<MerchantOrderInfo> merchantOrderInfos = clientOrderPersonalMapper.getMerchantOrderListByClientOrderCode(clientOrderCode);
 		info.setMerchantOrderInfos(merchantOrderInfos);
 		return JsonResult.successJsonResult(info);
 	}
@@ -166,17 +166,18 @@ public class PlatformClientOrderService {
  		if(clientOrder == null) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户订单号不存在"); 
 		}
+ 		if(ClientOrderStatus.NOT_CONFIRMED.getValue() != clientOrder.getOrderStatusId()) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户订单状态异常"); 
+		}
  		List<MerchantOrderInfoParam> infos = param.getInfos();
  		Date nowDate = new Date();
 		for (MerchantOrderInfoParam info : infos) {
 			JSR303ValidateUtils.validate(info);
-			// 根据商户编码查询拆单后的商户订单信息
-			List<MerchantOrderInfo> merchantOrderInfos = clientOrderPersonalMapper.getMerchantOrderListByClientOrderCode(param.getClientOrderCode(), info.getMerchantCode());
-			if(merchantOrderInfos.size() == 0) {
+			// 根据商户编码查询出来的这个商户订单列表
+			MerchantOrderInfo merchantOrderInfo = clientOrderPersonalMapper.getMerchantOrderListByClientOrderCodeAndMerchantCode(param.getClientOrderCode(), info.getMerchantCode());
+			if(merchantOrderInfo == null) {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "拆单后的商户订单信息不存在"); 
 			}
-			// 根据商户编码查询出来的这个商户订单列表，按道理来说只会查询到一条，因此get(0)获取其具体的信息
-			MerchantOrderInfo merchantOrderInfo = merchantOrderInfos.get(0);
 			Merchant merchant = merchantOrderMapper.selectMerchantByMerchantCode(merchantOrderInfo.getMerchantCode());
 			if(merchant == null) {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户不存在"); 
@@ -233,6 +234,8 @@ public class PlatformClientOrderService {
 				.modifier(param.getAllocatePerson())
 				.modifyTime(nowDate)
 				.orderStatusId(ClientOrderStatus.NOT_ALLOCATED.getValue())
+				.handler(param.getAllocatePerson())
+				.handlerTime(nowDate)
 				.id(clientOrder.getId())
 				.build();
 		clientOrderPersonalMapper.updateByPrimaryKeySelective(clientOrderRecord);

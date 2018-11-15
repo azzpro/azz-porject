@@ -12,10 +12,9 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.web.multipart.MultipartFile;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * <P>TODO</P>
@@ -23,9 +22,7 @@ import lombok.NoArgsConstructor;
  * @author 彭斌  2018年11月14日 上午9:57:29
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class EditOrderStatus {
+public class EditOrderStatusWebParam {
     
     // 商户id
     @NotNull(message = "商户id不允许为空")
@@ -40,7 +37,7 @@ public class EditOrderStatus {
     private Integer status;
     
     // 出货信息
-    private List<ShipmentFile> shipmentFiles;
+    private List<MultipartFile> shipmentFiles;
     
     // 配送方式
     private Integer deliveryType;

@@ -32,7 +32,7 @@ public class PlatformClientOrderInfo {
 	
 	private String handler;
 	
-	private Date handleTime;
+	private Date handlerTime;
 
 }
 

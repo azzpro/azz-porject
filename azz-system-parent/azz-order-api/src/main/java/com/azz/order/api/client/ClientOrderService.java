@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2018年11月12日 下午3:14:43
+ * Create on 2018年10月22日 上午10:30:18
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
-package com.azz.order.client.controller;
+package com.azz.order.api.client;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
@@ -24,20 +24,15 @@ import com.azz.order.client.pojo.bo.UploadSignFormParam;
 import com.azz.order.client.pojo.vo.ClientOrderDetail;
 import com.azz.order.client.pojo.vo.ClientOrderInfo;
 import com.azz.order.client.pojo.vo.ShippingAddress;
-import com.azz.order.client.service.ClientOrderService;
 
 /**
- * <P>客户端订单业务</P>
+ * <P>TODO</P>
  * @version 1.0
- * @author 黄智聪  2018年11月12日 下午3:14:43
+ * @author 彭斌  2018年11月15日 下午2:09:21
  */
-@RestController
-@RequestMapping("/azz/api/client/order")
-public class OrderController {
-	
-	@Autowired
-	private ClientOrderService clientOrderService;
-	
+@FeignClient("azz-order-service")
+public interface ClientOrderService {
+    
 	/**
 	 * 
 	 * <p>查询客户端订单列表</p>
@@ -45,10 +40,8 @@ public class OrderController {
 	 * @return
 	 * @author 黄智聪  2018年11月13日 上午10:54:40
 	 */
-	@RequestMapping("/getClientOrderInfoList")
-	public JsonResult<Pagination<ClientOrderInfo>> getClientOrderInfoList(@RequestBody SearchClientOrderParam param){
-		return clientOrderService.getClientOrderInfoList(param);
-	}
+	@RequestMapping("/azz/api/client/order/getClientOrderInfoList")
+	JsonResult<Pagination<ClientOrderInfo>> getClientOrderInfoList(@RequestBody SearchClientOrderParam param);
 	
 	/**
 	 * 
@@ -57,10 +50,8 @@ public class OrderController {
 	 * @return
 	 * @author 黄智聪  2018年11月13日 上午10:56:03
 	 */
-	@RequestMapping("/getClientOrderDetail")
-	public JsonResult<ClientOrderDetail> getClientOrderDetail(String clientOrderCode){
-		return clientOrderService.getClientOrderDetail(clientOrderCode);
-	}
+	@RequestMapping("/azz/api/client/order/getClientOrderDetail")
+	JsonResult<ClientOrderDetail> getClientOrderDetail(@RequestParam("clientOrderCode")String clientOrderCode);
 	
 	/**
 	 * 
@@ -69,10 +60,8 @@ public class OrderController {
 	 * @return
 	 * @author 黄智聪  2018年11月13日 下午2:58:08
 	 */
-	@RequestMapping("/getShippingAddressList")
-	public JsonResult<List<ShippingAddress>> getShippingAddressList(String clientUserCode){
-		return clientOrderService.getShippingAddressList(clientUserCode);
-	}
+	@RequestMapping("/azz/api/client/order/getShippingAddressList")
+	JsonResult<List<ShippingAddress>> getShippingAddressList(@RequestParam("clientUserCode")String clientUserCode);
 	
 	/**
 	 * 
@@ -81,10 +70,8 @@ public class OrderController {
 	 * @return
 	 * @author 黄智聪  2018年11月13日 下午2:58:08
 	 */
-	@RequestMapping("/getShippingAddress")
-	public JsonResult<ShippingAddress> getShippingAddress(Long shippingId){
-		return clientOrderService.getShippingAddress(shippingId);
-	}
+	@RequestMapping("/azz/api/client/order/getShippingAddress")
+	JsonResult<ShippingAddress> getShippingAddress(@RequestParam("shippingId")Long shippingId);
 	
 	/**
 	 * 
@@ -93,10 +80,8 @@ public class OrderController {
 	 * @return
 	 * @author 黄智聪  2018年11月13日 下午2:58:08
 	 */
-	@RequestMapping("/addShippingAddress")
-	public JsonResult<String> addShippingAddress(@RequestBody AddShippingAddressParam param){
-		return clientOrderService.addShippingAddress(param);
-	}
+	@RequestMapping("/azz/api/client/order/addShippingAddress")
+	JsonResult<String> addShippingAddress(@RequestBody AddShippingAddressParam param);
 	
 	/**
 	 * 
@@ -105,10 +90,8 @@ public class OrderController {
 	 * @return
 	 * @author 黄智聪  2018年11月13日 下午2:58:08
 	 */
-	@RequestMapping("/editShippingAddress")
-	public JsonResult<String> editShippingAddress(@RequestBody EditShippingAddressParam param){
-		return clientOrderService.editShippingAddress(param);
-	}
+	@RequestMapping("/azz/api/client/order/editShippingAddress")
+	JsonResult<String> editShippingAddress(@RequestBody EditShippingAddressParam param);
 	
 	/**
 	 * 
@@ -117,10 +100,8 @@ public class OrderController {
 	 * @return
 	 * @author 黄智聪  2018年11月13日 下午2:58:08
 	 */
-	@RequestMapping("/delShippingAddress")
-	public JsonResult<String> delShippingAddress(@RequestBody DelShippingAddressParam param){
-		return clientOrderService.delShippingAddress(param);
-	}
+	@RequestMapping("/azz/api/client/order/delShippingAddress")
+	JsonResult<String> delShippingAddress(@RequestBody DelShippingAddressParam param);
 	
 	/**
 	 * 
@@ -129,10 +110,8 @@ public class OrderController {
 	 * @return
 	 * @author 黄智聪  2018年11月15日 上午10:27:31
 	 */
-	@RequestMapping("/checkSignOperation")
-	public JsonResult<String> checkSignOperation(String clientOrderCode){
-		return clientOrderService.checkSignOperation(clientOrderCode);
-	}
+	@RequestMapping("/azz/api/client/order/checkSignOperation")
+	JsonResult<String> checkSignOperation(@RequestParam("clientOrderCode")String clientOrderCode);
 	
 	/**
 	 * 
@@ -141,10 +120,8 @@ public class OrderController {
 	 * @return
 	 * @author 黄智聪  2018年11月14日 上午10:55:45
 	 */
-	@RequestMapping("/uploadSignForm")
-	public JsonResult<String> uploadSignForm(@RequestBody UploadSignFormParam param){
-		return clientOrderService.uploadSignForm(param);
-	}
+	@RequestMapping("/azz/api/client/order/uploadSignForm")
+	JsonResult<String> uploadSignForm(@RequestBody UploadSignFormParam param);
 	
 	/**
 	 * 
@@ -152,10 +129,8 @@ public class OrderController {
 	 * @return
 	 * @author 黄智聪  2018年11月15日 上午10:38:19
 	 */
-	@RequestMapping("/closeClientOrders")
-	public JsonResult<String> closeClientOrders(){
-		return clientOrderService.closeClientOrders();
-	}
-	
+	@RequestMapping("/azz/api/client/order/closeClientOrders")
+	JsonResult<String> closeClientOrders();
+    
 }
 

@@ -8,6 +8,7 @@
 package com.azz.order.merchant.pojo.vo;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -34,6 +35,8 @@ public class ShipInfo {
     private String deliveryPhoneNumber;
     // 出货文件信息
     private String shipmentFileInfo;
+    
+    List<SignFileInfo> shipmentFileInfos;
     
 }
 

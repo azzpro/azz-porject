@@ -33,7 +33,7 @@ import com.azz.order.client.service.ClientOrderService;
  */
 @RestController
 @RequestMapping("/azz/api/client/order")
-public class OrderController {
+public class ClientOrderController {
 	
 	@Autowired
 	private ClientOrderService clientOrderService;

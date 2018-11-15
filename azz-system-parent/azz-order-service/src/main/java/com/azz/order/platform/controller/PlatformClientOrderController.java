@@ -28,7 +28,7 @@ import com.azz.order.platform.vo.PlatformClientOrderInfo;
  */
 @RestController
 @RequestMapping("/azz/api/platform/client/order")
-public class ClientOrderController {
+public class PlatformClientOrderController {
 	
 	@Autowired
 	private PlatformClientOrderService platformClientOrderService;

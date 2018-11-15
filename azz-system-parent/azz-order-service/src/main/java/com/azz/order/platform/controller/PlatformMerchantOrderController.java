@@ -26,7 +26,7 @@ import com.azz.order.platform.vo.MerchantOrderList;
  */
 @RestController
 @RequestMapping("/azz/api/platform/merchant/order")
-public class MerchantOrderController {
+public class PlatformMerchantOrderController {
 	
 	@Autowired
 	private PlatformMerchantOrderService orderService;

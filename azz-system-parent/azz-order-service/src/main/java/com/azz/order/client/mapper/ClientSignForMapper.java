@@ -1,7 +1,9 @@
 package com.azz.order.client.mapper;
 
-import com.azz.order.client.pojo.ClientSignFor;
+import org.apache.ibatis.annotations.Mapper;
 
+import com.azz.order.client.pojo.ClientSignFor;
+@Mapper
 public interface ClientSignForMapper {
     int deleteByPrimaryKey(Long id);
 

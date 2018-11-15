@@ -27,7 +27,7 @@ import com.azz.order.merchant.service.MerchantOrderService;
  */
 @RestController
 @RequestMapping("/azz/api/merchant/order")
-public class OrderController {
+public class MerchantOrderController {
 	
 	@Autowired
 	private MerchantOrderService merchantOrderService;

@@ -29,5 +29,7 @@ public interface SystemMsgLogMapper {
 	int updaetSmsStatus(@Param("status") Integer status,@Param("id") Long id);
 	
 	SystemMsgLog findMsgLog(Long phone );
+	
+	SystemMsgLog findMsgLogByPhoneAndCode(@Param("phone") Long phone,@Param("code") String code);
 }
 

@@ -71,7 +71,7 @@
     </dependencyManagement>
 
 	<build>
-		<finalName>azz-eureka-server</finalName>
+		<finalName>azz-zipkin-server</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

@@ -23,10 +23,15 @@ import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.ClientConstants;
+import com.azz.core.constants.ClientConstants.ClientOrderStatus;
 import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.MerchantConstants.MerchantOrderStatusEnum;
 import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
+import com.azz.order.client.mapper.ClientOrderPersonalMapper;
+import com.azz.order.client.mapper.ClientOrderStatusPersonalMapper;
+import com.azz.order.client.pojo.ClientOrderPersonal;
+import com.azz.order.client.pojo.ClientOrderStatusPersonal;
 import com.azz.order.merchant.mapper.ExpressCompanyMapper;
 import com.azz.order.merchant.mapper.MerchantOrderLogisticsMapper;
 import com.azz.order.merchant.mapper.MerchantOrderMapper;
@@ -72,6 +77,12 @@ public class MerchantOrderService {
 	
 	@Autowired
 	private ExpressCompanyMapper expressCompanyMapper;
+	
+	@Autowired
+    private ClientOrderPersonalMapper clientOrderPersonalMapper;
+    
+    @Autowired
+    private ClientOrderStatusPersonalMapper clientOrderStatusPersonalMapper;
 	
 	@Autowired
 	private SystemImageUploadService systemImageUploadService;
@@ -146,8 +157,8 @@ public class MerchantOrderService {
 	        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "无效的订单状态");
 	    }
 	    
-	    if(MerchantOrderStatusEnum.NOT_CONFIRMED.getValue() != statusId ||
-	            MerchantOrderStatusEnum.NOT_SENT_OUT.getValue() != statusId) {
+	    if(MerchantOrderStatusEnum.NOT_SENT_OUT.getValue() != statusId ||
+	            MerchantOrderStatusEnum.NOT_SIGNED.getValue() != statusId) {
 	        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单状态超出变更范围");
 	    }
 	    
@@ -159,22 +170,50 @@ public class MerchantOrderService {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单状态已变更");
         }
         
+        // 查询客户订单信息
+        ClientOrderPersonal clientOrderObj = clientOrderPersonalMapper.selectByPrimaryKey(mo.getId());
+        if(ObjectUtils.isNull(clientOrderObj)) {
+            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户订单未找到");
+        }
+        // 客户订单状态变更记录
+        ClientOrderStatusPersonal cosp = new ClientOrderStatusPersonal();
+        
+        if(MerchantOrderStatusEnum.NOT_CONFIRMED.getValue() == statusId) {
+            clientOrderObj.setOrderStatusId(ClientOrderStatus.NOT_ALLOCATED.getValue());
+            mo.setOrderStatusId(MerchantOrderStatusEnum.NOT_SENT_OUT.getValue());
+            cosp.setOrderStatusId(ClientOrderStatus.NOT_ALLOCATED.getValue());
+        } else if(MerchantOrderStatusEnum.NOT_SENT_OUT.getValue() == statusId) {
+            clientOrderObj.setOrderStatusId(ClientOrderStatus.NOT_SIGNED.getValue());
+            mo.setOrderStatusId(MerchantOrderStatusEnum.NOT_SIGNED.getValue());
+            cosp.setOrderStatusId(ClientOrderStatus.NOT_SIGNED.getValue());
+        }
+        
 	    // 变更商户订单头部信息
-	    mo.setOrderStatusId(statusId);
 	    mo.setModifier(param.getModifier());
 	    mo.setModifyTime(new Date());
-	    merchantOrderMapper.updateByPrimaryKeySelective(mo);
 	    
 	    // 新增商户订单状态信息
-	    mos = new MerchantOrderStatus();
-	    mos.setMerchantOrderId(mo.getId());
-	    mos.setMerchantStatusId(param.getStatus());
-	    mos.setCreator(param.getModifier());
-	    mos.setCreateTime(new Date());
+        mos = new MerchantOrderStatus();
+        mos.setMerchantOrderId(mo.getId());
+        mos.setMerchantStatusId(param.getStatus());
+        mos.setCreator(param.getModifier());
+        mos.setCreateTime(new Date());
+	    
+	    merchantOrderMapper.updateByPrimaryKeySelective(mo);
 	    merchantOrderStatusMapper.insertSelective(mos);
 	    
-	    // 订单发货需记录发货信息
+	    // 变更客户订单状态
+	    clientOrderObj.setModifier(param.getModifier());
+	    clientOrderObj.setModifyTime(new Date());
+	    clientOrderPersonalMapper.updateByPrimaryKey(clientOrderObj);
 	    
+	    // 变更客户订单状态记录
+	    cosp.setOrderId(mo.getId());
+	    cosp.setCreator(param.getModifier());
+	    cosp.setCreateTime(new Date());
+	    clientOrderStatusPersonalMapper.insertSelective(cosp);
+	    
+	    // 订单发货需记录发货信息
 	    if(MerchantOrderStatusEnum.NOT_SENT_OUT.getValue() == statusId) {
 	    	if(null == param.getDeliveryType()) {
 	    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "配送方式为必选项");
@@ -195,7 +234,6 @@ public class MerchantOrderService {
 	    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "出货信息为必选项");
 	    	}
 	    	
-	    }
 	    MerchantOrderLogistics record = new MerchantOrderLogistics();
 	    //  1快递 2物流 3自送
 	    switch (param.getDeliveryType()) {
@@ -254,6 +292,7 @@ public class MerchantOrderService {
 	    record.setCreateTime(new Date());
 	    record.setCreator(param.getModifier());
 	    merchantOrderLogisticsMapper.insertSelective(record);
+	    }
 	    return JsonResult.successJsonResult();
 	}
 	

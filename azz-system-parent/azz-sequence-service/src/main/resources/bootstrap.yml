@@ -1,0 +1,5 @@
+server:
+  port: 7202
+spring:
+  application:
+    name: azz-sequence-service

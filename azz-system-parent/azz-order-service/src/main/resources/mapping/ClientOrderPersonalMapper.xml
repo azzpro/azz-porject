@@ -446,7 +446,8 @@
 		cop.client_order_code AS clientOrderCode,
 		cop.payment_method AS paymentMethod,
 		cop.order_status_id as orderStatusId,
-		cop.grand_total AS grandTotal
+		cop.grand_total AS grandTotal,
+		cop.handler_time as handlerTime
 	FROM
 		client_order_personal cop
 	where cop.status != 0

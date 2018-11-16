@@ -20,12 +20,16 @@ import com.alibaba.fastjson.JSONArray;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.page.Pagination;
+import com.azz.core.constants.ClientConstants.ClientOrderOperationType;
 import com.azz.core.constants.ClientConstants.ClientOrderStatus;
+import com.azz.core.constants.ClientConstants.ClientOrderType;
 import com.azz.core.constants.MerchantConstants.MerchantOrderStatusEnum;
 import com.azz.core.constants.MerchantConstants.MerchantOrderType;
 import com.azz.exception.JSR303ValidationException;
+import com.azz.order.client.mapper.ClientOrderOperationRecordMapper;
 import com.azz.order.client.mapper.ClientOrderPersonalMapper;
 import com.azz.order.client.mapper.ClientOrderStatusPersonalMapper;
+import com.azz.order.client.pojo.ClientOrderOperationRecord;
 import com.azz.order.client.pojo.ClientOrderPersonal;
 import com.azz.order.client.pojo.ClientOrderStatusPersonal;
 import com.azz.order.client.pojo.vo.ClientOrderDetail;
@@ -47,6 +51,7 @@ import com.azz.order.platform.bo.SearchPlatformClientOrderParam;
 import com.azz.order.platform.vo.AllocatedMerchantOrderInfo;
 import com.azz.order.platform.vo.MerchantOrderInfo;
 import com.azz.order.platform.vo.MerchantOrderItemInfo;
+import com.azz.order.platform.vo.OrderOperationRecord;
 import com.azz.order.platform.vo.PlatformClientOrderInfo;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
@@ -63,9 +68,12 @@ public class PlatformClientOrderService {
 
 	@Autowired
 	private ClientOrderPersonalMapper clientOrderPersonalMapper;
-	
+
 	@Autowired
 	private ClientOrderStatusPersonalMapper clientOrderStatusPersonalMapper;
+	
+	@Autowired
+	private ClientOrderOperationRecordMapper clientOrderOperationRecordMapper;
 	
 	@Autowired
 	private MerchantOrderMapper merchantOrderMapper;
@@ -124,6 +132,32 @@ public class PlatformClientOrderService {
 			signInfo.setSignFileInfos(signFileInfos);
 		}
 		return JsonResult.successJsonResult(new ClientOrderDetail(orderInfo, deliveryInfos, signInfo));
+	}
+	
+	/**
+	 * 
+	 * <p>查询客户订单拆单后的生成的商户订单</p>
+	 * @param clientOrderCode
+	 * @return
+	 * @author 黄智聪  2018年11月16日 上午11:14:56
+	 */
+	public JsonResult<AllocatedMerchantOrderInfo> getGeneratedMerchantOrderInfo(String clientOrderCode){
+		if(StringUtils.isBlank(clientOrderCode)) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单号不允许为空");
+		}
+		ClientOrderPersonal clientOrder = clientOrderPersonalMapper.getClientOrderPersonalByClientOrderCode(clientOrderCode);
+		if(clientOrder == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户订单号不存在"); 
+		}
+		// 查询分配后的商户订单信息 
+		AllocatedMerchantOrderInfo info = clientOrderPersonalMapper.getAllocatedMerchantOrderInfoByClientOrderCode(clientOrderCode);
+		if(info == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "分配后的商户订单信息不存在"); 
+		}
+		// 查询客户订单拆单后的生成的商户订单列表
+		List<MerchantOrderInfo> merchantOrderInfos = clientOrderPersonalMapper.getGeneratedMerchantOrderListByClientOrderCode(clientOrder.getId());
+		info.setMerchantOrderInfos(merchantOrderInfos);
+		return JsonResult.successJsonResult(info);
 	}
 	
 	/**
@@ -250,7 +284,34 @@ public class PlatformClientOrderService {
 				.build();
 		clientOrderStatusPersonalMapper.insertSelective(clientOrderStatusRecord);
 		
+		// 新增客户订单的操作记录
+		int allocatedAmount = infos.size();
+		ClientOrderOperationRecord clientOrderOperationRecord = ClientOrderOperationRecord.builder()
+				.clientOrderId(clientOrder.getId())
+				.operator(param.getAllocatePerson())
+				.optRemark("订单共被分配至" + allocatedAmount + "个商户")
+				.optTime(nowDate)
+				.optType(ClientOrderOperationType.ALLOCATE_ORDER.getValue())
+				.orderType(ClientOrderType.PERSONAL.getValue())
+				.build();
+		clientOrderOperationRecordMapper.insertSelective(clientOrderOperationRecord);
+		
 		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
+	 * <p>查询客户订单操作记录</p>
+	 * @param clientOrderCode
+	 * @return
+	 * @author 黄智聪  2018年11月16日 下午2:31:47
+	 */
+	public JsonResult<List<OrderOperationRecord>> getClientOrderOperationRecords(String clientOrderCode){
+		if(StringUtils.isBlank(clientOrderCode)) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单号不允许为空");
+		}
+		List<OrderOperationRecord> records = clientOrderOperationRecordMapper.getClientOrderOperationRecordByClientOrderCode(clientOrderCode);
+		return JsonResult.successJsonResult(records);
 	}
 	
 }

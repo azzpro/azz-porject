@@ -228,5 +228,57 @@ public abstract class ClientConstants {
         }
         
     }
+	
+	 /**
+     * 
+     * <P>客户订单操作类型 1订单拆单 2重新拆单 3取消派单</P>
+     * @version 1.0
+     * @author 黄智聪  2018年11月14日 下午2:09:47
+     */
+	public enum ClientOrderOperationType {
+
+	    ALLOCATE_ORDER(1, "订单拆单"),
+
+	    REALLOCATE_ORDER(2, "重新拆单"),
+
+	    CANCEL_ALLOCATE_ORDER(3, "取消派单");
+
+        @Getter
+        private int value;
+
+        @Getter
+        private String desc;
+
+        ClientOrderOperationType(int value, String desc) {
+            this.value = value;
+            this.desc = desc;
+        }
+        
+    }
+	
+	/**
+     * 
+     * <P>客户订单操作类型 1订单拆单 2重新拆单 3取消派单</P>
+     * @version 1.0
+     * @author 黄智聪  2018年11月14日 下午2:09:47
+     */
+	public enum ClientOrderType {
+
+	    PERSONAL(1, "个人订单"),
+
+	    ENTERPRISE(2, "企业订单");
+
+        @Getter
+        private int value;
+
+        @Getter
+        private String desc;
+
+        ClientOrderType(int value, String desc) {
+            this.value = value;
+            this.desc = desc;
+        }
+        
+    }
     
 }

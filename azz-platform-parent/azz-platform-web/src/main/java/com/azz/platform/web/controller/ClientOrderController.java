@@ -7,6 +7,8 @@
  
 package com.azz.platform.web.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,7 @@ import com.azz.order.client.pojo.vo.ClientOrderDetail;
 import com.azz.order.platform.bo.AllocateClientOrderParam;
 import com.azz.order.platform.bo.SearchPlatformClientOrderParam;
 import com.azz.order.platform.vo.AllocatedMerchantOrderInfo;
+import com.azz.order.platform.vo.OrderOperationRecord;
 import com.azz.order.platform.vo.PlatformClientOrderInfo;
 import com.azz.utils.WebUtils;
 
@@ -73,6 +76,18 @@ public class ClientOrderController {
 	
 	/**
 	 * 
+	 * <p>查询客户订单拆单后的生成的商户订单</p>
+	 * @param clientOrderCode
+	 * @return
+	 * @author 黄智聪  2018年11月14日 下午3:58:10
+	 */
+	@RequestMapping("/getGeneratedMerchantOrderInfo")
+	public JsonResult<AllocatedMerchantOrderInfo> getGeneratedMerchantOrderInfo(String clientOrderCode){
+		return platformClientOrderService.getGeneratedMerchantOrderInfo(clientOrderCode);
+	}
+	
+	/**
+	 * 
 	 * <p>分配客户订单</p>
 	 * @param param
 	 * @return
@@ -82,6 +97,18 @@ public class ClientOrderController {
 	public JsonResult<String> allocateClientOrder(@RequestBody AllocateClientOrderParam param){
 		param.setAllocatePerson(WebUtils.getLoginUser().getUserInfo().getUserCode());
 		return platformClientOrderService.allocateClientOrder(param);
+	}
+	
+	/**
+	 * 
+	 * <p>查询客户订单操作记录</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月14日 下午2:31:17
+	 */
+	@RequestMapping("/getClientOrderOperationRecords")
+	public JsonResult<List<OrderOperationRecord>> getClientOrderOperationRecords(String clientOrderCode){
+		return platformClientOrderService.getClientOrderOperationRecords(clientOrderCode);
 	}
 
 }

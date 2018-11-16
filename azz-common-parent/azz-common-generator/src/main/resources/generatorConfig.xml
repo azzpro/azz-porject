@@ -48,8 +48,8 @@
 			<property name="enableSubPackages" value="true" />
 		</javaClientGenerator>
 
-		<table tableName="client_sign_for"
-			domainObjectName="ClientSignFor" enableCountByExample="false"
+		<table tableName="client_order_operation_record"
+			domainObjectName="ClientOrderOperationRecord" enableCountByExample="false"
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false"></table>
 		

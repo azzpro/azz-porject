@@ -124,6 +124,15 @@ public interface ClientOrderPersonalMapper {
     
     /**
      * 
+     * <p>查询客户订单拆单后的生成的商户订单列表</p>
+     * @param clientOrderCode
+     * @return
+     * @author 黄智聪  2018年11月14日 下午4:55:06
+     */
+    List<MerchantOrderInfo> getGeneratedMerchantOrderListByClientOrderCode(@Param("clientOrderId")Long clientOrderId);
+    
+    /**
+     * 
      * <p>查询拆单后的具体某个商户的订单列表</p>
      * @param clientOrderCode
      * @param merchantCode

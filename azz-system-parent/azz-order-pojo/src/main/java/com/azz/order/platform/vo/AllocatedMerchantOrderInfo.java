@@ -8,6 +8,7 @@
 package com.azz.order.platform.vo;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import lombok.Data;
@@ -27,6 +28,8 @@ public class AllocatedMerchantOrderInfo {
 	private Integer orderStatusId;// 这里是客户订单的状态
 	
 	private Integer paymentMethod;
+	
+	private Date handlerTime;// 处理时间，即拆单时间
 	
 	// 拆单信息
 	private List<MerchantOrderInfo> merchantOrderInfos;

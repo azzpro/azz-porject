@@ -320,6 +320,9 @@
 			OR cop.client_order_code LIKE CONCAT('%', #{searchInput}, '%') 
 			)
 		</if>
+		<if test="clientUserCode != null and clientUserCode != ''">
+			AND cu.client_user_code = #{clientUserCode}
+		</if>
 	</where>
 	ORDER BY cop.create_time DESC
   </select>
@@ -454,6 +457,8 @@
   	<result column="merchantCode" jdbcType="VARCHAR" property="merchantCode" />
   	<result column="merchantName" jdbcType="VARCHAR" property="merchantName" />
     <result column="eachMerchantGrandTotal" jdbcType="DECIMAL" property="eachMerchantGrandTotal" />
+    <result column="merchantOrderCode" jdbcType="VARCHAR" property="merchantOrderCode" />
+  	<result column="orderStatusId" jdbcType="INTEGER" property="orderStatusId" />
   	<collection property="orderItems" ofType="com.azz.order.platform.vo.MerchantOrderItemInfo">
   		<result column="deliveryDate" property="deliveryDate" jdbcType="INTEGER"/>
         <result column="productParamsName" property="productParamsName" jdbcType="VARCHAR"/>
@@ -554,6 +559,31 @@
 		cop. STATUS != 0
 	AND cop.client_order_code = #{clientOrderCode} 
 	AND m.merchant_code = #{merchantCode}
+  </select>
+  
+  <select id="getGeneratedMerchantOrderListByClientOrderCode" parameterType="java.lang.Long" resultMap="merchantOrderInfo">
+  	SELECT
+		mo.merchant_order_code as merchantOrderCode,
+		mo.order_status_id as orderStatusId,
+   	 	m.merchant_code as merchantCode,
+		m.merchant_name AS merchantName,
+		mo.grand_total AS eachMerchantGrandTotal,
+		moi.delivery_date as deliveryDate,
+		moi.product_params_name as productParamsName,
+		moi.brand_name as brandName,
+		moi.assortment_name as assortmentName,
+		moi.module_pic_url AS modulePicUrl,
+		moi.product_code AS productCode,
+		moi.module_name AS moduleName,
+		moi.quantity AS quantity,
+		moi.product_price AS productPrice,
+		moi.product_price * moi.quantity AS productPriceSum,
+		moi.delivery_time AS deliveryTime
+	from merchant_order mo 
+	left join merchant_order_item moi on moi.merchant_order_id = mo.id
+	LEFT JOIN merchant m on mo.merchant_id = m.id
+	where mo.`status` != 0 
+	and mo.client_order_id = #{clientOrderId}
   </select>
   
 </mapper>

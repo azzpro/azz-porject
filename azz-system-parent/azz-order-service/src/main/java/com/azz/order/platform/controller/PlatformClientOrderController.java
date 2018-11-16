@@ -7,6 +7,8 @@
  
 package com.azz.order.platform.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,7 @@ import com.azz.order.platform.bo.AllocateClientOrderParam;
 import com.azz.order.platform.bo.SearchPlatformClientOrderParam;
 import com.azz.order.platform.service.PlatformClientOrderService;
 import com.azz.order.platform.vo.AllocatedMerchantOrderInfo;
+import com.azz.order.platform.vo.OrderOperationRecord;
 import com.azz.order.platform.vo.PlatformClientOrderInfo;
 
 /**
@@ -66,8 +69,20 @@ public class PlatformClientOrderController {
 	 * @author 黄智聪  2018年11月14日 下午3:58:10
 	 */
 	@RequestMapping("/getAllocatedMerchantOrder")
-	public JsonResult<AllocatedMerchantOrderInfo> getAllocatedMerchantOrder(String clientOrderCode){
+	public JsonResult<AllocatedMerchantOrderInfo> getAllocatedMerchantOrder(@RequestParam("clientOrderCode")String clientOrderCode){
 		return platformClientOrderService.getAllocatedMerchantOrder(clientOrderCode);
+	}
+	
+	/**
+	 * 
+	 * <p>查询客户订单拆单后的生成的商户订单</p>
+	 * @param clientOrderCode
+	 * @return
+	 * @author 黄智聪  2018年11月14日 下午3:58:10
+	 */
+	@RequestMapping("/getGeneratedMerchantOrderInfo")
+	public JsonResult<AllocatedMerchantOrderInfo> getGeneratedMerchantOrderInfo(@RequestParam("clientOrderCode")String clientOrderCode){
+		return platformClientOrderService.getGeneratedMerchantOrderInfo(clientOrderCode);
 	}
 	
 	/**
@@ -80,6 +95,18 @@ public class PlatformClientOrderController {
 	@RequestMapping("/allocateClientOrder")
 	public JsonResult<String> allocateClientOrder(@RequestBody AllocateClientOrderParam param){
 		return platformClientOrderService.allocateClientOrder(param);
+	}
+	
+	/**
+	 * 
+	 * <p>查询客户订单操作记录</p>
+	 * @param clientOrderCode
+	 * @return
+	 * @author 黄智聪  2018年11月16日 下午3:18:05
+	 */
+	@RequestMapping("/getClientOrderOperationRecords")
+	public JsonResult<List<OrderOperationRecord>> getClientOrderOperationRecords(@RequestParam("clientOrderCode")String clientOrderCode){
+		return platformClientOrderService.getClientOrderOperationRecords(clientOrderCode);
 	}
 	
 }

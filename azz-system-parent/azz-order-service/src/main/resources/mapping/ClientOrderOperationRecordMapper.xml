@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.order.client.mapper.ClientOrderOperationRecordMapper">
+  <resultMap id="BaseResultMap" type="com.azz.order.client.pojo.ClientOrderOperationRecord">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="client_order_id" jdbcType="BIGINT" property="clientOrderId" />
+    <result column="opt_type" jdbcType="INTEGER" property="optType" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="opt_remark" jdbcType="VARCHAR" property="optRemark" />
+    <result column="order_type" jdbcType="INTEGER" property="orderType" />
+    <result column="opt_time" jdbcType="TIMESTAMP" property="optTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, client_order_id, opt_type, operator, opt_remark, order_type, opt_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from client_order_operation_record
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from client_order_operation_record
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.order.client.pojo.ClientOrderOperationRecord">
+    insert into client_order_operation_record (id, client_order_id, opt_type, 
+      operator, opt_remark, order_type, 
+      opt_time)
+    values (#{id,jdbcType=BIGINT}, #{clientOrderId,jdbcType=BIGINT}, #{optType,jdbcType=INTEGER}, 
+      #{operator,jdbcType=VARCHAR}, #{optRemark,jdbcType=VARCHAR}, #{orderType,jdbcType=INTEGER}, 
+      #{optTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.order.client.pojo.ClientOrderOperationRecord">
+    insert into client_order_operation_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="clientOrderId != null">
+        client_order_id,
+      </if>
+      <if test="optType != null">
+        opt_type,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="optRemark != null">
+        opt_remark,
+      </if>
+      <if test="orderType != null">
+        order_type,
+      </if>
+      <if test="optTime != null">
+        opt_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="clientOrderId != null">
+        #{clientOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="optType != null">
+        #{optType,jdbcType=INTEGER},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="optRemark != null">
+        #{optRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null">
+        #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="optTime != null">
+        #{optTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.order.client.pojo.ClientOrderOperationRecord">
+    update client_order_operation_record
+    <set>
+      <if test="clientOrderId != null">
+        client_order_id = #{clientOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="optType != null">
+        opt_type = #{optType,jdbcType=INTEGER},
+      </if>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="optRemark != null">
+        opt_remark = #{optRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null">
+        order_type = #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="optTime != null">
+        opt_time = #{optTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.order.client.pojo.ClientOrderOperationRecord">
+    update client_order_operation_record
+    set client_order_id = #{clientOrderId,jdbcType=BIGINT},
+      opt_type = #{optType,jdbcType=INTEGER},
+      operator = #{operator,jdbcType=VARCHAR},
+      opt_remark = #{optRemark,jdbcType=VARCHAR},
+      order_type = #{orderType,jdbcType=INTEGER},
+      opt_time = #{optTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getClientOrderOperationRecordByClientOrderCode" parameterType="java.lang.String" resultType="com.azz.order.platform.vo.OrderOperationRecord">
+    SELECT
+		pu.user_name AS operator,
+		coor.opt_remark AS optRemark,
+		coor.opt_time AS optTime,
+		CASE coor.opt_type
+		WHEN 1 THEN
+			'订单拆单'
+		WHEN 2 THEN
+			'重新拆单'
+		WHEN 3 THEN
+			'取消派单'
+		END AS optType
+	FROM
+		client_order_operation_record coor
+	LEFT JOIN client_order_personal cop ON coor.client_order_id = cop.id
+	LEFT JOIN platform_user pu ON pu.user_code = coor.operator
+	WHERE
+		cop.client_order_code = #{clientOrderCode}
+	order by coor.opt_time asc
+  </select>
+</mapper>

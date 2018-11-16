@@ -7,6 +7,8 @@
  
 package com.azz.order.api.platform;
 
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,7 @@ import com.azz.order.client.pojo.vo.ClientOrderDetail;
 import com.azz.order.platform.bo.AllocateClientOrderParam;
 import com.azz.order.platform.bo.SearchPlatformClientOrderParam;
 import com.azz.order.platform.vo.AllocatedMerchantOrderInfo;
+import com.azz.order.platform.vo.OrderOperationRecord;
 import com.azz.order.platform.vo.PlatformClientOrderInfo;
 
 /**
@@ -60,6 +63,17 @@ public interface PlatformClientOrderService {
 	
 	/**
 	 * 
+	 * <p>查询客户订单拆单后的生成的商户订单</p>
+	 * @param clientOrderCode
+	 * @return
+	 * @author 黄智聪  2018年11月14日 下午3:58:10
+	 */
+	@RequestMapping("/azz/api/platform/client/order/getGeneratedMerchantOrderInfo")
+	JsonResult<AllocatedMerchantOrderInfo> getGeneratedMerchantOrderInfo(@RequestParam("clientOrderCode")String clientOrderCode);
+	
+	
+	/**
+	 * 
 	 * <p>分配客户订单</p>
 	 * @param param
 	 * @return
@@ -68,5 +82,14 @@ public interface PlatformClientOrderService {
 	@RequestMapping("/azz/api/platform/client/order/allocateClientOrder")
 	JsonResult<String> allocateClientOrder(@RequestBody AllocateClientOrderParam param);
 	
+	/**
+	 * 
+	 * <p>查询客户订单操作记录</p>
+	 * @param clientOrderCode
+	 * @return
+	 * @author 黄智聪  2018年11月16日 下午3:18:46
+	 */
+	@RequestMapping("/azz/api/platform/client/order/getClientOrderOperationRecords")
+	JsonResult<List<OrderOperationRecord>> getClientOrderOperationRecords(@RequestParam("clientOrderCode")String clientOrderCode);
 }
 

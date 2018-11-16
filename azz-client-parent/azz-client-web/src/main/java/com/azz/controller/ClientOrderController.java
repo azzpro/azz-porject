@@ -55,6 +55,7 @@ public class ClientOrderController {
 	 */
 	@RequestMapping("/getClientOrderInfoList")
 	public JsonResult<Pagination<ClientOrderInfo>> getClientOrderInfoList(SearchClientOrderParam param){
+		param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 		return clientOrderService.getClientOrderInfoList(param);
 	}
 	

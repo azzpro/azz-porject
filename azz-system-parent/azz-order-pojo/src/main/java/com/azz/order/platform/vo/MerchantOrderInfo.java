@@ -20,11 +20,15 @@ import lombok.Data;
 @Data
 public class MerchantOrderInfo {
 	
+	private String merchantOrderCode;
+	
 	private String merchantCode;
 	
 	private String merchantName;
 	
 	private BigDecimal eachMerchantGrandTotal;// 每个商户订单的订单金额总和
+	
+	private Integer orderStatusId;// 商户订单的状态
 	
 	private List<MerchantOrderItemInfo> orderItems;
 	

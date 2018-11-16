@@ -250,6 +250,7 @@
 		<if test="null != orderStatus">AND mo.order_status_id = #{orderStatus}</if>
 		<if test="null != param and '' != param">AND (mo.merchant_order_code LIKE CONCAT('%',#{param},'%') OR cu.client_user_name LIKE CONCAT('%',#{param},'%') OR cop.creator LIKE CONCAT('%',#{param},'%'))</if>
 	</where>
+	GROUP BY mo.merchant_order_code
 	ORDER BY mo.create_time DESC
   </select>
   

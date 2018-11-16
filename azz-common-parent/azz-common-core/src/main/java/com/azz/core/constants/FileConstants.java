@@ -61,6 +61,9 @@ public class FileConstants {
 	//签收单图片
 	public static final String AZZ_SIGN_FORM_PATH = "sign_form_pic";
 	
+	//发货单图片
+    public static final String AZZ_SHIPMENT_FORM_PATH = "shipment_form_pic";
+	
 	//平台端
 	public static final int AZZ_PLATFORM = 1;
 	
@@ -103,6 +106,9 @@ public class FileConstants {
 	//签收单
 	public static final int AZZ_SIGN_FORM_IMAGE_TYPE = 11;
 	
+	// 发货单
+    public static final int AZZ_SHIPMENT_FORM_IMAGE_TYPE = 12;
+    
 	//支持的图片格式
 	public static final String AZZ_IMAGE_SUFFIX = "bmp|jpg|png|git|webp|tiff";
 	

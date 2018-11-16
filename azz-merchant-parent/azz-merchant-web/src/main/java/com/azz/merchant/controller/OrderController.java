@@ -87,14 +87,12 @@ public class OrderController {
     JsonResult<String> editMerchantOrderStatus(EditOrderStatusWebParam param) throws IOException {
         param.setMerchantId(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantId());
         param.setModifier(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantCode());
-        List<ShipmentFile> sf = null;
+        List<ShipmentFile> sf = new ArrayList<>();
         if (param.getStatus() == 2) {
-            sf = new ArrayList<>();
-            List<MultipartFile> shipmentFiles = param.getShipmentFiles();
-            for (int i = 0; i < shipmentFiles.size(); i++) {
+            for (MultipartFile shipmentFiles : param.getShipmentFiles()) {
                 ShipmentFile shipmentFile = new ShipmentFile(
-                        shipmentFiles.get(i).getOriginalFilename(), shipmentFiles.get(i).getSize(),
-                        Base64.encode(shipmentFiles.get(i).getBytes()));
+                        shipmentFiles.getOriginalFilename(), shipmentFiles.getSize(),
+                        Base64.encode(shipmentFiles.getBytes()));
                 sf.add(shipmentFile);
             }
         }

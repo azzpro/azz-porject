@@ -78,9 +78,12 @@ public class AzzImageUtil {
 		if(FileConstants.AZZ_CASE_IMAGE_TYPE == imagetype) {
 			return FileConstants.AZZ_CASE_PATH;
 		}
-		if(FileConstants.AZZ_SIGN_FORM_IMAGE_TYPE == imagetype) {
-			return FileConstants.AZZ_SIGN_FORM_PATH;
-		}
+        if(FileConstants.AZZ_SIGN_FORM_IMAGE_TYPE == imagetype) {
+            return FileConstants.AZZ_SIGN_FORM_PATH;
+        }
+        if(FileConstants.AZZ_SHIPMENT_FORM_IMAGE_TYPE == imagetype) {
+            return FileConstants.AZZ_SHIPMENT_FORM_PATH;
+        }
 		return "";
 	}
 }	

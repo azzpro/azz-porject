@@ -37,7 +37,7 @@ public class EditOrderStatusWebParam {
     private Integer status;
     
     // 出货信息
-    private List<MultipartFile> shipmentFiles;
+    private MultipartFile[] shipmentFiles;
     
     // 配送方式
     private Integer deliveryType;

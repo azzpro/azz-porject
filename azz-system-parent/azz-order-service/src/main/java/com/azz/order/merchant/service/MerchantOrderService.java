@@ -158,20 +158,20 @@ public class MerchantOrderService {
 	    }
 	    
 	    if(MerchantOrderStatusEnum.NOT_SENT_OUT.getValue() != statusId &&
-	            MerchantOrderStatusEnum.NOT_SIGNED.getValue() != statusId) {
+	            MerchantOrderStatusEnum.NOT_CONFIRMED.getValue() != statusId) {
 	        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单状态超出变更范围");
 	    }
 	    
-	    SearchOrderStatusParam sosp = new SearchOrderStatusParam();
+	    /*SearchOrderStatusParam sosp = new SearchOrderStatusParam();
         sosp.setMerchantOrderId(mo.getId());
         sosp.setMerchantStatusId(param.getStatus());
         MerchantOrderStatus mos = merchantOrderStatusMapper.selectOrderStatus(sosp);
-        if(ObjectUtils.isNotNull(mos)) {
+        if(ObjectUtils.isNull(mos)) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单状态已变更");
-        }
+        }*/
         
         // 查询客户订单信息
-        ClientOrderPersonal clientOrderObj = clientOrderPersonalMapper.selectByPrimaryKey(mo.getId());
+        ClientOrderPersonal clientOrderObj = clientOrderPersonalMapper.selectByPrimaryKey(mo.getClientOrderId());
         if(ObjectUtils.isNull(clientOrderObj)) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户订单未找到");
         }
@@ -193,12 +193,13 @@ public class MerchantOrderService {
 	    mo.setModifyTime(new Date());
 	    
 	    // 新增商户订单状态信息
-        mos = new MerchantOrderStatus();
+	    MerchantOrderStatus mos = new MerchantOrderStatus();
         mos.setMerchantOrderId(mo.getId());
         mos.setMerchantStatusId(param.getStatus());
         mos.setCreator(param.getModifier());
         mos.setCreateTime(new Date());
-	    
+        mos.setRemark("商户端订单变更记录");
+        
 	    merchantOrderMapper.updateByPrimaryKeySelective(mo);
 	    merchantOrderStatusMapper.insertSelective(mos);
 	    
@@ -218,17 +219,26 @@ public class MerchantOrderService {
 	    	if(null == param.getDeliveryType()) {
 	    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "配送方式为必选项");
 	    	}
-	    	if(null == param.getExpressCompanyId()) {
-	    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "快递公司为必选项");
+	    	if(param.getDeliveryType() == 1) {
+	    	    if(null == param.getExpressCompanyId()) {
+	    	        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "快递公司为必选项");
+	    	    }
+	    	    if(null == param.getNumber()) {
+	    	        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "单号为必选项");
+	    	    }
 	    	}
-	    	if(null == param.getNumber()) {
-	    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "单号为必选项");
+	    	if(param.getDeliveryType() == 2) {
+	    	    if(null == param.getLogistiscCompanyName()) {
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "物流公司为必选项");
+                }
 	    	}
-	    	if(null == param.getDeliveryPerson()) {
-	    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "配送人员为必选项");
-	    	}
-	    	if(null == param.getDeliveryPhoneNumber()) {
-	    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "配送人员联系方式为必选项");
+	    	if(param.getDeliveryType() == 3) {
+	    	    if(null == param.getDeliveryPerson()) {
+	    	        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "配送人员为必选项");
+	    	    }
+	    	    if(null == param.getDeliveryPhoneNumber()) {
+	    	        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "配送人员联系方式为必选项");
+	    	    }
 	    	}
 	    	if(param.getShipmentFiles().size() == 0) {
 	    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "出货信息为必选项");
@@ -276,7 +286,7 @@ public class MerchantOrderService {
 	    	String newFileName = fileNameNoSufix + "_" + param.getOrderCode() + "_" + (i+1);
 	    	// 图片url
 	    	JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
-	    			filedata, FileConstants.AZZ_CLIENT, FileConstants.AZZ_TRADING_CERTIFICATE_IMAGE_TYPE);
+	    			filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_SHIPMENT_FORM_IMAGE_TYPE);
 	    	if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 	    		SignFileInfo file = new SignFileInfo(jr.getData(), shipmentFile.getFileName());
 	    		uploadFileInfos.add(file);

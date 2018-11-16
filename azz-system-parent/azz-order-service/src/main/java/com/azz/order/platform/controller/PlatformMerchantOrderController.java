@@ -8,6 +8,7 @@
 package com.azz.order.platform.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,7 +39,7 @@ public class PlatformMerchantOrderController {
 	 * @author 彭斌  2018年11月15日 上午10:22:34
 	 */
 	@RequestMapping("/getPlatformMerchantOrderList")
-	public JsonResult<Pagination<MerchantOrderList>> getPlatformMerchantOrderList(SearchMerchantOrderParam param){
+	public JsonResult<Pagination<MerchantOrderList>> getPlatformMerchantOrderList(@RequestBody SearchMerchantOrderParam param){
 		return orderService.getMerchantOrderInfoList(param);
 	}
 
@@ -49,7 +50,7 @@ public class PlatformMerchantOrderController {
 	 * @author 彭斌  2018年11月13日 下午6:38:49
 	 */
 	@RequestMapping("/getPlatformMerchantOrderDetail")
-	public JsonResult<OrderDetail> getMerchantOrderDetail(SearchOrderDetailParam param){
+	public JsonResult<OrderDetail> getMerchantOrderDetail(@RequestBody SearchOrderDetailParam param){
 	    return orderService.getPlatformMerchantOrderDetail(param);
 	}
 	

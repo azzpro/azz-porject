@@ -27,6 +27,7 @@ import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.MerchantConstants.MerchantOrderStatusEnum;
 import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
+import com.azz.order.merchant.mapper.ExpressCompanyMapper;
 import com.azz.order.merchant.mapper.MerchantOrderLogisticsMapper;
 import com.azz.order.merchant.mapper.MerchantOrderMapper;
 import com.azz.order.merchant.mapper.MerchantOrderStatusMapper;
@@ -38,6 +39,7 @@ import com.azz.order.merchant.pojo.bo.SearchOrderDetailParam;
 import com.azz.order.merchant.pojo.bo.SearchOrderListParam;
 import com.azz.order.merchant.pojo.bo.SearchOrderStatusParam;
 import com.azz.order.merchant.pojo.bo.ShipmentFile;
+import com.azz.order.merchant.pojo.vo.ExpressCompanyInfo;
 import com.azz.order.merchant.pojo.vo.OrderDetail;
 import com.azz.order.merchant.pojo.vo.OrderList;
 import com.azz.order.merchant.pojo.vo.ReceiverAddress;
@@ -67,6 +69,9 @@ public class MerchantOrderService {
 	
 	@Autowired
     private MerchantOrderLogisticsMapper merchantOrderLogisticsMapper;
+	
+	@Autowired
+	private ExpressCompanyMapper expressCompanyMapper;
 	
 	@Autowired
 	private SystemImageUploadService systemImageUploadService;
@@ -252,7 +257,14 @@ public class MerchantOrderService {
 	    return JsonResult.successJsonResult();
 	}
 	
-	
+	/**
+	 * <p>获取所有快递公司列表</p>
+	 * @return
+	 * @author 彭斌  2018年11月16日 上午9:21:22
+	 */
+	public JsonResult<List<ExpressCompanyInfo>> getAllExpressCompany(){
+	    return JsonResult.successJsonResult(expressCompanyMapper.selectAll());
+	}
 	
 }
 

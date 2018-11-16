@@ -1,11 +1,8 @@
 server: 
   tomcat: 
     uri-encoding: UTF-8
-  port: 7101
   max-http-header-size: 4048576
 spring: 
-  application:
-    name: azz-client-service
   zipkin:
     enabled: true
     base-url: http://localhost:7777/

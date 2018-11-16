@@ -7,6 +7,8 @@
  
 package com.azz.order.merchant.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,7 @@ import com.azz.core.common.page.Pagination;
 import com.azz.order.merchant.pojo.bo.EditOrderStatus;
 import com.azz.order.merchant.pojo.bo.SearchOrderDetailParam;
 import com.azz.order.merchant.pojo.bo.SearchOrderListParam;
+import com.azz.order.merchant.pojo.vo.ExpressCompanyInfo;
 import com.azz.order.merchant.pojo.vo.OrderDetail;
 import com.azz.order.merchant.pojo.vo.OrderList;
 import com.azz.order.merchant.service.MerchantOrderService;
@@ -65,5 +68,16 @@ public class MerchantOrderController {
 	public JsonResult<String> editMerchantOrderStatus(@RequestBody EditOrderStatus param){
 	    return merchantOrderService.editOrderStatus(param);
 	}
+	
+	/**
+	 * <p>获取所有快递公司</p>
+	 * @return
+	 * @author 彭斌  2018年11月16日 上午9:22:43
+	 */
+	@RequestMapping("/getAllExpressCompany")
+	public JsonResult<List<ExpressCompanyInfo>> getAllExpressCompany(){
+	    return merchantOrderService.getAllExpressCompany();
+	}
 }
+
 

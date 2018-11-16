@@ -23,6 +23,7 @@ import com.azz.order.merchant.pojo.bo.EditOrderStatusWebParam;
 import com.azz.order.merchant.pojo.bo.SearchOrderDetailParam;
 import com.azz.order.merchant.pojo.bo.SearchOrderListParam;
 import com.azz.order.merchant.pojo.bo.ShipmentFile;
+import com.azz.order.merchant.pojo.vo.ExpressCompanyInfo;
 import com.azz.order.merchant.pojo.vo.OrderDetail;
 import com.azz.order.merchant.pojo.vo.OrderList;
 import com.azz.util.Base64;
@@ -100,5 +101,15 @@ public class OrderController {
                 param.getOrderCode(), param.getStatus(), sf, param.getDeliveryType(),
                 param.getExpressCompanyId(), param.getLogistiscCompanyName(), param.getNumber(),
                 param.getDeliveryPerson(), param.getDeliveryPhoneNumber(), param.getModifier()));
+    }
+    
+    /**
+     * <p>获取所以快递公司信息</p>
+     * @return
+     * @author 彭斌  2018年11月16日 上午9:31:00
+     */
+    @RequestMapping("/getAllExpressCompany")
+    JsonResult<List<ExpressCompanyInfo>> getAllExpressCompany(){
+        return orderService.getAllExpressCompany();
     }
 }

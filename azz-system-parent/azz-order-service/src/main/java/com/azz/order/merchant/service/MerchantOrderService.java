@@ -288,7 +288,7 @@ public class MerchantOrderService {
 	    	JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
 	    			filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_SHIPMENT_FORM_IMAGE_TYPE);
 	    	if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
-	    		SignFileInfo file = new SignFileInfo(jr.getData(), shipmentFile.getFileName());
+	    		SignFileInfo file = new SignFileInfo(shipmentFile.getFileName(),jr.getData());
 	    		uploadFileInfos.add(file);
 	    	}else {
 	    		throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE,"出库单上传失败，请重试");

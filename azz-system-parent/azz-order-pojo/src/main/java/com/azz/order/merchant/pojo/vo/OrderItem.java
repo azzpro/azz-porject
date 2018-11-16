@@ -25,5 +25,6 @@ public class OrderItem {
     private BigDecimal productPrice;
     private Integer quantity;
     private Date deliveryTime;
+    private BigDecimal subtotal;
 }
 

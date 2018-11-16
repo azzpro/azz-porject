@@ -41,8 +41,8 @@ public interface PlatformMerchantOrderService {
      * @return
      * @author 彭斌  2018年11月15日 下午2:25:48
      */
-    @RequestMapping(value="/azz/api/platform/merchant/order/getMerchantOrderDetail",method=RequestMethod.POST)
-    JsonResult<OrderDetail> getMerchantOrderDetail(SearchOrderDetailParam param);
+    @RequestMapping(value="/azz/api/platform/merchant/order/getPlatformMerchantOrderDetail",method=RequestMethod.POST)
+    JsonResult<OrderDetail> getPlatformMerchantOrderDetail(SearchOrderDetailParam param);
     
 }
 

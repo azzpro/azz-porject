@@ -50,7 +50,7 @@ public class PlatformMerchantOrderController {
 	 * @author 彭斌  2018年11月13日 下午6:38:49
 	 */
 	@RequestMapping("/getPlatformMerchantOrderDetail")
-	public JsonResult<OrderDetail> getMerchantOrderDetail(@RequestBody SearchOrderDetailParam param){
+	public JsonResult<OrderDetail> getPlatformMerchantOrderDetail(@RequestBody SearchOrderDetailParam param){
 	    return orderService.getPlatformMerchantOrderDetail(param);
 	}
 	

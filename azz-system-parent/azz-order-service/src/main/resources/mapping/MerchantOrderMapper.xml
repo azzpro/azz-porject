@@ -268,6 +268,7 @@
         <result column="deliveryTime" property="deliveryTime" jdbcType="TIMESTAMP"/>
         <result column="quantity" property="quantity" jdbcType="INTEGER"/>
         <result column="productPrice" jdbcType="DECIMAL" property="productPrice" />
+        <result column="subtotal" jdbcType="DECIMAL" property="subtotal" />
     </collection>
   </resultMap>
   
@@ -284,6 +285,7 @@
 		moi.product_code as productCode,
 		moi.quantity as quantity,
 		moi.product_price as productPrice,
+		moi.quantity*moi.product_price as subtotal,
 		moi.delivery_time as deliveryTime
 	FROM
 		merchant_order mo
@@ -381,9 +383,10 @@
 	JOIN order_status os ON mo.order_status_id = os.id
 	LEFT JOIN merchant_order_status mos ON mo.id = mos.merchant_order_id
 	<where>
-		<if test="">AND mo.order_status_id = #{orderStatus}</if>
-		<if test="">AND (mo.merchant_order_code LIKE CONCAT('%',#{param},'%') OR cop.client_order_code LIKE CONCAT('%',#{param},'%'))</if>
+		<if test="null != orderStatus">AND mo.order_status_id = #{orderStatus}</if>
+		<if test="null != param and '' != param">AND (mo.merchant_order_code LIKE CONCAT('%',#{param},'%') OR cop.client_order_code LIKE CONCAT('%',#{param},'%'))</if>
 	</where>
+	GROUP BY mo.merchant_order_code
 	ORDER BY mo.create_time DESC
   </select>
 </mapper>

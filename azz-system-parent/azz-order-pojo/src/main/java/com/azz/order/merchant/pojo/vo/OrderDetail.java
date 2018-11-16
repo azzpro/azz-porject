@@ -23,6 +23,7 @@ public class OrderDetail {
     // 订单基本信息
     private String orderCode;
     private String orderStatus;
+    private Integer orderStatusId;
     private Date orderTime;
     private BigDecimal grandTotal;
     private String remark;

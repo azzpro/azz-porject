@@ -115,7 +115,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   
-  <select id="selectAll" parameterType="com.azz.order.merchant.pojo.vo.ExpressCompanyInfo">
+  <select id="selectAll" resultType="com.azz.order.merchant.pojo.vo.ExpressCompanyInfo">
     select  id as id, company_name as companyName
     from express_company
   </select>

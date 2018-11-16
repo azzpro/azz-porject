@@ -1,0 +1,28 @@
+server:
+  port: 2222
+spring:
+  application:
+    name: azz-config-server
+  cloud:
+    config:
+      label: master
+      server:
+        git:
+          uri: https://github.com/azzpro/azz-config.git
+          username: m18676389907@163.com
+          password: liuyun@123
+          search-paths: '{application}'
+ 
+eureka:
+  client:
+    service-url:
+       defaultZone: http://root:123456@localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${spring.application.name}:${spring.application.instance_id:${server.port}}
+#encrypt:
+#  key: didispace
+#  key-store:
+#    location: classpath:config-server.keystore
+#    password: liuyun123
+#    secret: liuyun123

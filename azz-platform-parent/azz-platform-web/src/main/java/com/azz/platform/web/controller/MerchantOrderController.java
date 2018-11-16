@@ -38,7 +38,7 @@ public class MerchantOrderController {
 	 * @author 彭斌  2018年11月15日 下午4:09:36
 	 */
 	@RequestMapping("/getPlatformMerchantOrderList")
-	public JsonResult<Pagination<MerchantOrderList>> getClientOrderInfoList(SearchMerchantOrderParam param){
+	public JsonResult<Pagination<MerchantOrderList>> getPlatformMerchantOrderList(SearchMerchantOrderParam param){
 		return platformMerchantOrderService.getPlatformMerchantOrderList(param);
 	}
 	

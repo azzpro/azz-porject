@@ -246,6 +246,7 @@
 	LEFT JOIN merchant_order_status mos ON mo.id = mos.merchant_order_id
 	AND mos.merchant_status_id = 1
 	<where>
+		AND mo.merchant_id = #{merchantId}
 		<if test="null != orderStatus">AND mo.order_status_id = #{orderStatus}</if>
 		<if test="null != param and '' != param">AND (mo.merchant_order_code LIKE CONCAT('%',#{param},'%') OR cu.client_user_name LIKE CONCAT('%',#{param},'%') OR cop.creator LIKE CONCAT('%',#{param},'%'))</if>
 	</where>
@@ -258,6 +259,7 @@
     <result column="orderTime" jdbcType="TIMESTAMP" property="orderTime" />
     <result column="grandTotal" jdbcType="DECIMAL" property="grandTotal" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="orderStatusId" jdbcType="INTEGER" property="orderStatusId" />
   	<collection property="orderItems" ofType="com.azz.order.merchant.pojo.vo.OrderItem">
         <result column="productCode" property="productCode" jdbcType="VARCHAR"/>
         <result column="modulePicUrl" property="modulePicUrl" jdbcType="VARCHAR"/>
@@ -275,6 +277,7 @@
 		mo.create_time as orderTime,
 		mo.grand_total as grandTotal,
 		mo.remark as remark,
+		mo.order_status_id as orderStatusId,
 		moi.module_name as moduleName,
 		moi.module_pic_url as modulePicUrl,
 		moi.product_code as productCode,
@@ -316,7 +319,7 @@
 		mol.shipment_file_info as shipmentFileInfo
 	FROM
 		merchant_order_status mos
-	JOIN merchant_order mo ON mos.merchant_order_id = mo.id
+	JOIN merchant_order mo ON mos.merchant_order_id = mo.id AND mos.merchant_status_id = 2
 	LEFT JOIN merchant_order_logistics mol ON mol.merchant_order_id = mo.id
 	LEFT JOIN express_company ec ON mol.express_company_id = ec.id
 	WHERE mo.merchant_order_code = #{orderCode}
@@ -329,7 +332,7 @@
 		csf.sign_file_info as  signFileInfo
 	FROM
 		client_sign_for csf
-	LEFT JOIN merchant_order mo ON csf.client_order_id = mo.client_order_id
+	JOIN merchant_order mo ON csf.client_order_id = mo.client_order_id
 	WHERE mo.merchant_order_code = #{orderCode}
   </select>
   

@@ -55,6 +55,7 @@ public class OrderController {
      */
     @RequestMapping("/getMerchantOrderList")
     public JsonResult<Pagination<OrderList>> getMerchantOrderList(SearchOrderListParam param) {
+        param.setMerchantId(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantId());
         return orderService.getMerchantOrderList(param);
     }
 

@@ -316,7 +316,7 @@
 		mol.shipment_file_info as shipmentFileInfo
 	FROM
 		merchant_order_status mos
-	JOIN merchant_order mo ON mos.merchant_order_id = mo.id
+	JOIN merchant_order mo ON mos.merchant_order_id = mo.id AND mos.merchant_status_id = 2
 	LEFT JOIN merchant_order_logistics mol ON mol.merchant_order_id = mo.id
 	LEFT JOIN express_company ec ON mol.express_company_id = ec.id
 	WHERE mo.merchant_order_code = #{orderCode}
@@ -329,7 +329,7 @@
 		csf.sign_file_info as  signFileInfo
 	FROM
 		client_sign_for csf
-	LEFT JOIN merchant_order mo ON csf.client_order_id = mo.client_order_id
+	JOIN merchant_order mo ON csf.client_order_id = mo.client_order_id
 	WHERE mo.merchant_order_code = #{orderCode}
   </select>
   

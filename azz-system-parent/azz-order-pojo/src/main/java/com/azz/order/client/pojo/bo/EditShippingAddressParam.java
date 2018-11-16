@@ -56,8 +56,6 @@ public class EditShippingAddressParam {
 
 	private String addressAlias;
 	
-	private String clientUserCode;
-	
 	private String modifier;
 
 }

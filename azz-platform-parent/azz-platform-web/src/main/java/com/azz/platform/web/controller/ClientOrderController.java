@@ -8,7 +8,9 @@
 package com.azz.platform.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
@@ -76,8 +78,8 @@ public class ClientOrderController {
 	 * @return
 	 * @author 黄智聪  2018年11月14日 下午2:31:17
 	 */
-	@RequestMapping("/allocateClientOrder")
-	public JsonResult<String> allocateClientOrder(AllocateClientOrderParam param){
+	@RequestMapping(value="allocateClientOrder",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
+	public JsonResult<String> allocateClientOrder(@RequestBody AllocateClientOrderParam param){
 		param.setAllocatePerson(WebUtils.getLoginUser().getUserInfo().getUserCode());
 		return platformClientOrderService.allocateClientOrder(param);
 	}

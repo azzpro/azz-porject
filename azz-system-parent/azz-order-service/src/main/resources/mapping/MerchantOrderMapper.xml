@@ -347,7 +347,7 @@
 		client_order_personal cop
 	LEFT JOIN merchant_order mo ON mo.client_order_id = cop.id
 	AND cop.`status` != 0
-	WHERE mo. STATUS = 2
+	WHERE mo.order_status_id = 2
 	and mo.client_order_id = #{clientOrderId}
   </select>
   

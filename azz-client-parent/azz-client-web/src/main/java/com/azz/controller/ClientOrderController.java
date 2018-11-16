@@ -78,8 +78,8 @@ public class ClientOrderController {
 	 * @author 黄智聪  2018年11月13日 下午2:58:08
 	 */
 	@RequestMapping("/getShippingAddressList")
-	public JsonResult<List<ShippingAddress>> getShippingAddressList(String clientUserCode){
-		return clientOrderService.getShippingAddressList(clientUserCode);
+	public JsonResult<List<ShippingAddress>> getShippingAddressList(){
+		return clientOrderService.getShippingAddressList(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 	}
 	
 	/**
@@ -164,6 +164,7 @@ public class ClientOrderController {
 					signFormFile.getSize(), Base64.encode(signFormFile.getBytes()));
 			signForms.add(signForm);
 		}
+		param.setSignForms(signForms);
 		param.setCreator(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 		return clientOrderService.uploadSignForm(param);
 	}

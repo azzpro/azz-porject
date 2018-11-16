@@ -8,6 +8,7 @@
 package com.azz.order.client.pojo.bo;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
@@ -27,6 +28,7 @@ public class UploadSignFormWebParam {
 	@NotBlank(message = "请填写收货人")
 	private String consignee;
 
+	@NotEmpty(message = "请上传签收单")
 	private MultipartFile[] signFormFiles;//签收单文件集合
 
 	private String creator;

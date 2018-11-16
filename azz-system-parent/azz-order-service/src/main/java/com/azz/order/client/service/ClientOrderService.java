@@ -182,12 +182,12 @@ public class ClientOrderService {
 	public JsonResult<String> addShippingAddress(@RequestBody AddShippingAddressParam param){
 		// 参数校验
 		JSR303ValidateUtils.validate(param);
-		ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getClientUserCode());
+		ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getCreator());
 		if(user == null) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户不存在");
 		}
-		int count = clientOrderShippingAddressMapper.countShippingAddressByClientUserCode(param.getClientUserCode());
-		if(count > ClientConstants.SHIPPING_ADDRESS_AMOUNT_LIMIT) {
+		int count = clientOrderShippingAddressMapper.countShippingAddressByClientUserCode(param.getCreator());
+		if(count >= ClientConstants.SHIPPING_ADDRESS_AMOUNT_LIMIT) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "收货地址不能超过10个");
 		}
 		// 若为默认地址，将该客户的其他地址改为非默认
@@ -224,7 +224,7 @@ public class ClientOrderService {
 	public JsonResult<String> editShippingAddress(@RequestBody EditShippingAddressParam param){
 		// 参数校验
 		JSR303ValidateUtils.validate(param);
-		ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getClientUserCode());
+		ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getModifier());
 		if(user == null) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户不存在");
 		}
@@ -265,6 +265,8 @@ public class ClientOrderService {
 	 * @author 黄智聪  2018年11月13日 下午2:58:08
 	 */
 	public JsonResult<String> delShippingAddress(@RequestBody DelShippingAddressParam param){
+		// 参数校验
+		JSR303ValidateUtils.validate(param);
 		ClientOrderShippingAddress shippingAddressRecord = ClientOrderShippingAddress.builder()
 				.id(param.getShippingId())
 				.status(ShippingAddressStatus.INVALID.getValue())
@@ -287,6 +289,9 @@ public class ClientOrderService {
 		if(order == null) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "签收单所属订单不存在");
 		}
+		if(order.getOrderStatusId() != ClientOrderStatus.NOT_ALLOCATED.getValue()) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户订单状态异常");
+		}
 		// 签收前，确认是否已经全部商户订单都发货了
 		int count = merchantOrderMapper.countSendOutMerchantOrderByClientOrderId(order.getId());
 		if(count > 0) {
@@ -308,6 +313,9 @@ public class ClientOrderService {
 		ClientOrderPersonal order = clientOrderPersonalMapper.getClientOrderPersonalByClientOrderCode(param.getClientOrderCode());
 		if(order == null) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "签收单所属订单不存在");
+		}
+		if(order.getOrderStatusId() != ClientOrderStatus.NOT_ALLOCATED.getValue()) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户订单状态异常");
 		}
 		// 签收前，确认是否已经全部商户订单都发货了
 		int count = merchantOrderMapper.countSendOutMerchantOrderByClientOrderId(order.getId());
@@ -344,17 +352,17 @@ public class ClientOrderService {
 		    }else {
 		    	throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE,"签收单上传失败，请重试");
 		    }
-		    // json字符串
-		    String signFileInfo = JSON.toJSONString(uploadFiles);
-			ClientSignFor clientSignForRecord = ClientSignFor.builder()
-					.clientOrderId(order.getId())
-					.consignee(param.getConsignee())
-					.createTime(nowDate)
-					.creator(param.getCreator())
-					.signFileInfo(signFileInfo)
-					.build();
-			clientSignForMapper.insertSelective(clientSignForRecord);
 		}
+		// json字符串
+		String signFileInfo = JSON.toJSONString(uploadFiles);
+		ClientSignFor clientSignForRecord = ClientSignFor.builder()
+				.clientOrderId(order.getId())
+				.consignee(param.getConsignee())
+				.createTime(nowDate)
+				.creator(param.getCreator())
+				.signFileInfo(signFileInfo)
+				.build();
+		clientSignForMapper.insertSelective(clientSignForRecord);
 		
 		// 将商户订单状态改为已完成
 		Long merchantOrderId = merchantOrderMapper.getMerchantOrderIdByClientOrderId(order.getId());

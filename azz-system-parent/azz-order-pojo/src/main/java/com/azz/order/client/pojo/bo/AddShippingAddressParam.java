@@ -53,8 +53,6 @@ public class AddShippingAddressParam {
 
 	private String addressAlias;
 	
-	private String clientUserCode;
-	
 	private String creator;
 
 }

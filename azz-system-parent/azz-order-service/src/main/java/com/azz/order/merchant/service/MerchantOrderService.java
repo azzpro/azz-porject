@@ -157,7 +157,7 @@ public class MerchantOrderService {
 	        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "无效的订单状态");
 	    }
 	    
-	    if(MerchantOrderStatusEnum.NOT_SENT_OUT.getValue() != statusId ||
+	    if(MerchantOrderStatusEnum.NOT_SENT_OUT.getValue() != statusId &&
 	            MerchantOrderStatusEnum.NOT_SIGNED.getValue() != statusId) {
 	        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单状态超出变更范围");
 	    }

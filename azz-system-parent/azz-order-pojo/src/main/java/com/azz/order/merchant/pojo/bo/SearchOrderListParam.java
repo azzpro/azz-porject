@@ -19,6 +19,7 @@ import lombok.Data;
 @Data
 public class SearchOrderListParam extends QueryPage{
     private Integer orderStatus;
+    private Long merchantId;
     private String param;
 }
 

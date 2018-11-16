@@ -265,5 +265,6 @@ public class MerchantOrderService {
 	public JsonResult<List<ExpressCompanyInfo>> getAllExpressCompany(){
 	    return JsonResult.successJsonResult(expressCompanyMapper.selectAll());
 	}
+	
 }
 

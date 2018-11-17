@@ -70,11 +70,16 @@ public class PlatformMerchantOrderService {
             if(ObjectUtils.isNotNull(receiverAddress)) {
                 od.setReceiverAddress(receiverAddress);
             }
+            
             // 获取发货信息
             ShipInfo shipInfo = merchantOrderMapper.selectShipInfo(merchantOrderCode);
             if(ObjectUtils.isNotNull(shipInfo)) {
+                String shipmentFileInfoJson =shipInfo.getShipmentFileInfo();
+                List<SignFileInfo> signFileInfos = JSONArray.parseArray(shipmentFileInfoJson, SignFileInfo.class);
+                shipInfo.setShipmentFileInfos(signFileInfos);
                 od.setShipInfo(shipInfo);
             }
+            
             // 获取签收信息
             SignForInfo signForInfo = merchantOrderMapper.selectSignFor(merchantOrderCode);
             if(ObjectUtils.isNotNull(signForInfo)) {

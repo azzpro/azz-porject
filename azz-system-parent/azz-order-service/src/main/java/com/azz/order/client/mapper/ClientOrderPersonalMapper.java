@@ -6,7 +6,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.azz.order.client.pojo.ClientOrderPersonal;
+import com.azz.order.client.pojo.bo.SearchAddInvoiceApplyParam;
 import com.azz.order.client.pojo.bo.SearchClientOrderParam;
+import com.azz.order.client.pojo.vo.ClientAddInvoice;
 import com.azz.order.client.pojo.vo.ClientOrderInfo;
 import com.azz.order.client.pojo.vo.DeliveryInfo;
 import com.azz.order.client.pojo.vo.SignInfo;
@@ -84,6 +86,15 @@ public interface ClientOrderPersonalMapper {
      * @author 黄智聪  2018年11月13日 上午11:06:57
      */
     List<Long> getSixHoursNotPaidClientOrderIds(Integer orderStatusId);
+    
+    /**
+     * <p>获取新增开票申请</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月19日 下午5:04:12
+     */
+    List<ClientAddInvoice> getInvoiceClient(SearchAddInvoiceApplyParam param);
+    
     /***************************************************************************************/
     /************************************以上为客户端sql***************************************/
     /***************************************************************************************/

@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.azz.sharding.ZmpayDatasourceAutoConfig
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.azz.druid.monitor.config.DruidMonitorConfiguration

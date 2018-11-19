@@ -129,8 +129,8 @@ public interface ClientOrderService {
 	 * @return
 	 * @author 黄智聪  2018年11月15日 上午10:38:19
 	 */
-	@RequestMapping("/azz/api/client/order/closeClientOrders")
-	JsonResult<String> closeClientOrders();
+	//@RequestMapping("/azz/api/client/order/closeClientOrders")
+	//JsonResult<String> closeClientOrders();
     
 }
 

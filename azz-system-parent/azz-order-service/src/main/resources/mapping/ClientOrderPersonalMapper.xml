@@ -389,6 +389,7 @@
 	) t ON t.merchant_order_id = mo.id
 	where cop. STATUS != 0 
 	and cop.client_order_code = #{clientOrderCode} 
+	order by mol.create_time asc
   </select>
   
   <select id="getSignInfoByClientOrderCode" parameterType="string" resultType="com.azz.order.client.pojo.vo.SignInfo">
@@ -403,7 +404,7 @@
 	AND cop.client_order_code = #{clientOrderCode} 
   </select>
   
-  <select id="getNotPaidClientOrderIds" parameterType="java.lang.Integer" resultType="java.lang.Long">
+  <select id="getSixHoursNotPaidClientOrderIds" parameterType="java.lang.Integer" resultType="java.lang.Long">
     SELECT
 		cop.id
 	FROM

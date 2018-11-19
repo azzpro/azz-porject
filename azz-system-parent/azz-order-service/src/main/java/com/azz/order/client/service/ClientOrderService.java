@@ -289,7 +289,7 @@ public class ClientOrderService {
 		if(order == null) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "签收单所属订单不存在");
 		}
-		if(order.getOrderStatusId() != ClientOrderStatus.NOT_ALLOCATED.getValue()) {
+		if(order.getOrderStatusId() != ClientOrderStatus.NOT_SIGNED.getValue()) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户订单状态异常");
 		}
 		// 签收前，确认是否已经全部商户订单都发货了
@@ -314,7 +314,7 @@ public class ClientOrderService {
 		if(order == null) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "签收单所属订单不存在");
 		}
-		if(order.getOrderStatusId() != ClientOrderStatus.NOT_ALLOCATED.getValue()) {
+		if(order.getOrderStatusId() != ClientOrderStatus.NOT_SIGNED.getValue()) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户订单状态异常");
 		}
 		// 签收前，确认是否已经全部商户订单都发货了
@@ -383,6 +383,27 @@ public class ClientOrderService {
 				.remark("客户已签收，修改商户订单状态为已完成")
 				.build();
 		merchantOrderStatusMapper.insertSelective(merchantOrderStatusRecord);
+		
+		// 客户订单状态改为待配货
+		ClientOrderPersonal clientOrderRecord = ClientOrderPersonal.builder()
+				.modifier(param.getCreator())
+				.modifyTime(nowDate)
+				.orderStatusId(ClientOrderStatus.COMPLETED.getValue())
+				.handler(param.getCreator())
+				.handlerTime(nowDate)
+				.id(order.getId())
+				.build();
+		clientOrderPersonalMapper.updateByPrimaryKeySelective(clientOrderRecord);
+		
+		// 新增客户订单状态变更记录
+		ClientOrderStatusPersonal clientOrderStatusRecord = ClientOrderStatusPersonal.builder()
+				.createTime(nowDate)
+				.creator(param.getCreator())
+				.orderId(order.getId())
+				.orderStatusId(ClientOrderStatus.COMPLETED.getValue())
+				.remark("客户上传签收单，订单状态改为已完成")
+				.build();
+		clientOrderStatusPersonalMapper.insertSelective(clientOrderStatusRecord);
 		
 		return JsonResult.successJsonResult();
 	}

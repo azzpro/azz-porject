@@ -176,10 +176,12 @@ public class ClientOrderController {
 	 * @return
 	 * @author 黄智聪  2018年11月15日 上午10:38:19
 	 */
+	/*
 	@RequestMapping("/closeClientOrders")
 	public JsonResult<String> closeClientOrders(){
 		return clientOrderService.closeClientOrders(); 
 	}
+	*/
 	
 }
 

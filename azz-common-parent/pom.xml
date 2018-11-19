@@ -12,7 +12,6 @@
 
 	<modules>
 		<module>azz-common-core</module>
-		<module>azz-common-druid</module>
 		<module>azz-common-util</module>
 		<module>azz-common-sharding</module>
 	</modules>

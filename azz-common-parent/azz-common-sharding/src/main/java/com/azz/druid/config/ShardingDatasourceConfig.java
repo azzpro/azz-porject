@@ -1,7 +1,6 @@
 package com.azz.druid.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 import com.azz.druid.datasource.config.DataSourceConfig;
 import com.azz.druid.monitor.config.MonitorConfig;

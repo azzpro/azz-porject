@@ -354,7 +354,7 @@ public class ProductService {
 				}
 				//插入产品参数
 				List<ProductParam> pp = params.getParams();
-				if(null != pp || pp.size() > 0) {
+				if(null != pp && pp.size() > 0) {
 					for (ProductParam productParam : pp) {
 						MerchantGoodsProductParams mpp = new MerchantGoodsProductParams();
 						mpp.setParamsId(goodsParams.getId());
@@ -445,7 +445,7 @@ public class ProductService {
 				goodsProductParamsMapper.deleteByProductId(params.getProductId());
 				//插入产品参数
 				List<ProductParam> pp = params.getParams();
-				if(null != pp || pp.size() > 0) {
+				if(null != pp && pp.size() > 0) {
 					for (ProductParam productParam : pp) {
 						MerchantGoodsProductParams mpp = new MerchantGoodsProductParams();
 						mpp.setParamsId(goodsParams.getId());

@@ -142,6 +142,7 @@ public class ProductService {
 				pv.setChoice(platformGoodsParamsTerm.getParamsChoice());
 				pv.setType(platformGoodsParamsTerm.getParamsType());
 				pv.setParamName(platformGoodsParamsTerm.getParamsName());
+				pv.setTermId(platformGoodsParamsTerm.getId());
 				if(platformGoodsParamsTerm.getParamsType() == 1) {
 					List<PlatformGoodsParamsValue> termId = platformGoodsParamsValueMapper.selectValueByTermId(platformGoodsParamsTerm.getId());
 					for (PlatformGoodsParamsValue ppv : termId) {
@@ -358,6 +359,7 @@ public class ProductService {
 					for (ProductParam productParam : pp) {
 						MerchantGoodsProductParams mpp = new MerchantGoodsProductParams();
 						mpp.setParamsId(goodsParams.getId());
+						mpp.setParamsTermId(productParam.getTermId());
 						mpp.setParamsName(productParam.getParamName());
 						mpp.setParamsValue(productParam.getValues());
 						mpp.setProductId(mgp.getId());
@@ -452,6 +454,7 @@ public class ProductService {
 						mpp.setParamsName(productParam.getParamName());
 						mpp.setParamsValue(productParam.getValues());
 						mpp.setProductId(mgp.getId());
+						mpp.setParamsTermId(productParam.getTermId());
 						mpp.setParamsType(productParam.getType());
 						mpp.setParamsChoice(productParam.getChoice());
 						goodsProductParamsMapper.insertSelective(mpp);

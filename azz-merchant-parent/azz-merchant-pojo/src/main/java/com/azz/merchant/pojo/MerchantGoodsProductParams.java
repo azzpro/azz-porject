@@ -44,8 +44,17 @@ public class MerchantGoodsProductParams implements Serializable {
     private Byte paramsChoice;
 
     private static final long serialVersionUID = 1L;
+    private Long paramsTermId;
+    
+    public Long getParamsTermId() {
+		return paramsTermId;
+	}
 
-    /**
+	public void setParamsTermId(Long paramsTermId) {
+		this.paramsTermId = paramsTermId;
+	}
+
+	/**
      * 主键<br/>
      * 返回值对应的表列名 merchant_goods_product_params.id
      *

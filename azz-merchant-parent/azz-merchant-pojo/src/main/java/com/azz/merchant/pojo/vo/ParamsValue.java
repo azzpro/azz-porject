@@ -25,5 +25,6 @@ public class ParamsValue {
 	//1必选 2非必选
 	private Byte choice;
 	private List<Long> values;
+	private Long termId;
 }
 

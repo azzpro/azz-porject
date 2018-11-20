@@ -20,5 +20,6 @@ public class ProductParam {
 	private Byte type;
 	private String values;
 	private Byte choice;
+	private Long termId;
 }
 

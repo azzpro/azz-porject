@@ -207,4 +207,10 @@
 	</where>
 	ORDER BY ci.create_time DESC
   </select>
+  
+  <select id="getExistClientInvoice" parameterType="java.lang.Long" resultType="int">
+  	SELECT count(1) FROM client_invoice ci
+	WHERE ci.client_order_id = #{clientOrderId}
+	AND (ci.`status` = 0 OR ci.`status` = 1 OR ci.`status` = 2 OR ci.`status` = 4)
+  </select>
 </mapper>

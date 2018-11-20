@@ -2,6 +2,7 @@ package com.azz.order.client.pojo;
 
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class ClientInvoice implements Serializable {
@@ -31,7 +32,7 @@ public class ClientInvoice implements Serializable {
      *
      * @mbg.generated
      */
-    private Long amount;
+    private BigDecimal amount;
 
     /**
      * 开票数量
@@ -178,7 +179,7 @@ public class ClientInvoice implements Serializable {
      *
      * @mbg.generated
      */
-    public Long getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
@@ -190,7 +191,7 @@ public class ClientInvoice implements Serializable {
      *
      * @mbg.generated
      */
-    public void setAmount(Long amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

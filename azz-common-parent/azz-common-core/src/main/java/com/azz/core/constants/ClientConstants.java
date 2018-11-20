@@ -281,4 +281,26 @@ public abstract class ClientConstants {
         
     }
     
+	public enum ClientInvoiceType {
+	    // 0 待审批 1 待开票 2 待签收 3 已拒绝 4 已完成 5 已取消
+	    PENDING(0, "待审批"),
+	    PENDING_INVOICE(1, "待开票"),
+        NOT_SIGN(2, "待签收"),
+        REJECTED(3, "已拒绝"),
+        COMPLETED(4, "已完成"),
+        CANCELLED(5, "已取消");
+
+        @Getter
+        private int value;
+
+        @Getter
+        private String desc;
+
+        ClientInvoiceType(int value, String desc) {
+            this.value = value;
+            this.desc = desc;
+        }
+        
+    }
+	
 }

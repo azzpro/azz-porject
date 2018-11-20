@@ -24,4 +24,6 @@ public interface ClientInvoiceMapper {
     int updateByPrimaryKey(ClientInvoice record);
     
     List<ClientInvoiceList> getClientInvoiceList(SearchClientInvoiceParam param);
+    
+    int getExistClientInvoice(Long clientOrderId);
 }

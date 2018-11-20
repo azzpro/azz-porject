@@ -19,7 +19,7 @@ import lombok.Data;
 @Data
 public class SearchInvoiceTemplateParam {
     
-    @NotBlank(message = "用户id不许为空")
+    @NotBlank(message = "发票类型不许为空")
     private Integer invoiceType;
     @NotBlank(message = "用户编码不许为空")
     private String clientUserCode;

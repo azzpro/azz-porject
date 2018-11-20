@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.order.client.pojo.ClientInvoiceTemplate;
+import com.azz.order.client.pojo.bo.SearchCountTemplateParam;
 import com.azz.order.client.pojo.bo.SearchInvoiceTemplateParam;
 import com.azz.order.client.pojo.vo.ClientInvoiceTemplateList;
 @Mapper
@@ -29,4 +30,12 @@ public interface ClientInvoiceTemplateMapper {
      * @author 彭斌  2018年11月19日 下午3:11:52
      */
     List<ClientInvoiceTemplateList> getInvoiceTemplate(SearchInvoiceTemplateParam param);
+
+    /**
+     * <p>多参数获取模板校验</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月20日 下午2:41:48
+     */
+    int getCountTemplate(SearchCountTemplateParam param);
 }

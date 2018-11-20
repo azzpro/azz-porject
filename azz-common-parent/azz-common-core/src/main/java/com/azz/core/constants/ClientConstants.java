@@ -303,4 +303,21 @@ public abstract class ClientConstants {
         
     }
 	
+	public enum InvoiceType {
+        // 0 普通发票 1 增值税专用发票
+	    ORDINARY_INVOICE(0, "普通发票"),
+	    VAT_SPECIAL_INVOICE(1, "增值税专用发票");
+
+        @Getter
+        private int value;
+
+        @Getter
+        private String desc;
+
+        InvoiceType(int value, String desc) {
+            this.value = value;
+            this.desc = desc;
+        }
+        
+    }
 }

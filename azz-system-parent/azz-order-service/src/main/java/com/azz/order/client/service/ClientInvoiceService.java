@@ -7,6 +7,7 @@
  
 package com.azz.order.client.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +19,18 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.ClientConstants.ClientInvoiceType;
+import com.azz.core.constants.ClientConstants.InvoiceType;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.order.client.mapper.ClientInvoiceMapper;
 import com.azz.order.client.mapper.ClientInvoiceTemplateMapper;
 import com.azz.order.client.mapper.ClientOrderPersonalMapper;
-import com.azz.order.client.mapper.ClientOrderShippingAddressMapper;
 import com.azz.order.client.pojo.ClientInvoice;
+import com.azz.order.client.pojo.ClientInvoiceTemplate;
+import com.azz.order.client.pojo.bo.AddEditInvoiceTemplateParam;
 import com.azz.order.client.pojo.bo.AddInvoiceApplyParam;
 import com.azz.order.client.pojo.bo.SearchAddInvoiceApplyParam;
 import com.azz.order.client.pojo.bo.SearchClientInvoiceParam;
+import com.azz.order.client.pojo.bo.SearchCountTemplateParam;
 import com.azz.order.client.pojo.bo.SearchInvoiceTemplateParam;
 import com.azz.order.client.pojo.vo.ClientAddInvoice;
 import com.azz.order.client.pojo.vo.ClientInvoiceList;
@@ -56,9 +60,6 @@ public class ClientInvoiceService {
     private ClientOrderPersonalMapper clientOrderPersonalMapper;
     
     @Autowired
-    private ClientOrderShippingAddressMapper clientOrderShippingAddressMapper;
-    
-    @Autowired
     private DbSequenceService dbSequenceService;
     
     @Autowired
@@ -77,7 +78,7 @@ public class ClientInvoiceService {
     }
     
     /**
-     * <p>根据发票类型和客户id获取所有发票模板信息</p>
+     * <p>根据发票类型和客户编码获取所有发票模板信息</p>
      * @param param
      * @return
      * @author 彭斌  2018年11月19日 下午4:05:09
@@ -131,6 +132,199 @@ public class ClientInvoiceService {
         ciObj.setStatus(ClientInvoiceType.PENDING.getValue());
         // 添加开票申请
         clientInvoiceMapper.insertSelective(ciObj);
+        return JsonResult.successJsonResult();
+    }
+
+    /**
+     * <p>获取客户发票详情</p>
+     * @param invoiceId
+     * @return
+     * @author 彭斌  2018年11月20日 上午11:35:32
+     */
+    public JsonResult<ClientInvoiceTemplate> getClientInvoiceTemplateDetail(Long invoiceId){
+        ClientInvoiceTemplate cit = clientInvoiceTemplateMapper.selectByPrimaryKey(invoiceId);
+        return JsonResult.successJsonResult(cit);
+    }
+    
+    /**
+     * <p>发票模板管理新增，编辑操作</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月20日 下午2:00:59
+     */
+    public JsonResult<String> addEditInvoiceTemplate(@RequestBody AddEditInvoiceTemplateParam param){
+        JSR303ValidateUtils.validate(param);
+        
+        ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getClientUserCode());
+        if(ObjectUtils.isNull(user)) {
+            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户信息不存在");
+        }
+        
+        SearchCountTemplateParam sctp = new SearchCountTemplateParam();
+        sctp.setClientUserId(user.getId());
+        sctp.setInvoiceType(param.getInvoiceType());
+        
+        if(ObjectUtils.isNull(param.getId())) {
+            // 新增模板信息
+            ClientInvoiceTemplate record = new ClientInvoiceTemplate();
+            record.setClientUserId(user.getId());
+            record.setCreateTime(new Date());
+            record.setCreator(param.getClientUserCode());
+            
+            if(ObjectUtils.isNull(param.getNumber())) {
+                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "填写纳税识别号");
+            }
+            
+            if(InvoiceType.ORDINARY_INVOICE.getValue() == param.getInvoiceType()) {
+                // 普通发票操作
+                if(ObjectUtils.isNull(param.getInvoiceTitle())) {
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "填写发票抬头");
+                }
+                
+                // 客户普通发票抬头唯一校验
+                sctp.setInvoiceTile(param.getInvoiceTitle());
+                int countTitle = clientInvoiceTemplateMapper.getCountTemplate(sctp);
+                if(countTitle > 0) {
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "已录入发票抬头");
+                }
+                
+                // 客户普通发票纳税号唯一校验
+                sctp.setNumber(param.getNumber());
+                sctp.setInvoiceTile(null);
+                int countNumber = clientInvoiceTemplateMapper.getCountTemplate(sctp);
+                if(countNumber > 0) {
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "已录入纳税识别号");
+                }
+                record.setInvoiceTitle(param.getInvoiceTitle());
+                record.setTaxIdentificationNumber(param.getNumber());
+                record.setRemark(param.getRemark());
+                record.setInvoiceType(InvoiceType.ORDINARY_INVOICE.getValue());
+            } else if(InvoiceType.VAT_SPECIAL_INVOICE.getValue() == param.getInvoiceType()) {
+                // 增值发票操作
+                if(ObjectUtils.isNull(param.getCompanyName())) {
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "填写公司名称");
+                }
+                if(ObjectUtils.isNull(param.getRegAddress())) {
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "填写注册地址");
+                }
+                if(ObjectUtils.isNull(param.getRegPhone())) {
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "填写注册电话");
+                }
+                if(ObjectUtils.isNull(param.getBank())) {
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "填写开户银行");
+                }
+                if(ObjectUtils.isNull(param.getBankAccount())) {
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "填写银行账号");
+                }
+                
+                // 客户增值发票公司名称唯一校验
+                sctp.setCompanyName(param.getCompanyName());
+                int countCompany = clientInvoiceTemplateMapper.getCountTemplate(sctp);
+                if(countCompany > 0) {
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "已录入公司名称");
+                }
+                
+                // 客户增值发票纳税号唯一校验
+                sctp.setNumber(param.getNumber());
+                sctp.setCompanyName(null);
+                int countNumber = clientInvoiceTemplateMapper.getCountTemplate(sctp);
+                if(countNumber > 0) {
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "已录入纳税识别号");
+                }
+                record.setCompanyName(param.getCompanyName());
+                record.setTaxIdentificationNumber(param.getNumber());
+                record.setRegAddress(param.getRegAddress());
+                record.setRegTelephone(param.getRegPhone());
+                record.setBank(param.getBank());
+                record.setBankAccount(param.getBankAccount());
+                record.setInvoiceType(InvoiceType.VAT_SPECIAL_INVOICE.getValue());
+            } else {
+                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "发票类型不存在");
+            }
+            // 新增客户普通发票
+            clientInvoiceTemplateMapper.insertSelective(record);
+        } else {
+            // 修改模板信息
+            ClientInvoiceTemplate citObj = clientInvoiceTemplateMapper.selectByPrimaryKey(param.getId());
+            citObj.setModifier(param.getClientUserCode());
+            citObj.setModifyTime(new Date());
+            if(InvoiceType.ORDINARY_INVOICE.getValue() == param.getInvoiceType()) {
+                
+                if(ObjectUtils.isNull(param.getInvoiceTitle())) {
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "填写发票抬头");
+                }
+                // 修改的信息是否重复
+                if(!citObj.getInvoiceTitle().equals(param.getInvoiceTitle())) {
+                    // 客户普通发票抬头唯一校验
+                    sctp.setInvoiceTile(param.getInvoiceTitle());
+                    int countTitle = clientInvoiceTemplateMapper.getCountTemplate(sctp);
+                    if(countTitle > 0) {
+                        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "已录入发票抬头");
+                    }
+                }
+                
+                if(!citObj.getTaxIdentificationNumber().equals(param.getNumber())) {
+                    // 客户普通发票纳税号唯一校验
+                    sctp.setNumber(param.getNumber());
+                    sctp.setInvoiceTile(null);
+                    int countNumber = clientInvoiceTemplateMapper.getCountTemplate(sctp);
+                    if(countNumber > 0) {
+                        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "已录入纳税识别号");
+                    }
+                }
+                citObj.setInvoiceTitle(param.getInvoiceTitle());
+                citObj.setTaxIdentificationNumber(param.getNumber());
+                citObj.setRemark(param.getRemark());
+            } else if(InvoiceType.VAT_SPECIAL_INVOICE.getValue() == param.getInvoiceType()) {
+                
+                if(ObjectUtils.isNull(param.getCompanyName())) {
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "填写公司名称");
+                }
+                if(ObjectUtils.isNull(param.getRegAddress())) {
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "填写注册地址");
+                }
+                if(ObjectUtils.isNull(param.getRegPhone())) {
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "填写注册电话");
+                }
+                if(ObjectUtils.isNull(param.getBank())) {
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "填写开户银行");
+                }
+                if(ObjectUtils.isNull(param.getBankAccount())) {
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "填写银行账号");
+                }
+                // 修改增值发票
+                if(!citObj.getCompanyName().equals(param.getCompanyName())) {
+                    // 客户增值发票公司名称唯一校验
+                    sctp.setCompanyName(param.getCompanyName());
+                    int countCompany = clientInvoiceTemplateMapper.getCountTemplate(sctp);
+                    if(countCompany > 0) {
+                        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "已录入公司名称");
+                    }
+                }
+                
+                if(!citObj.getTaxIdentificationNumber().equals(param.getNumber())) {
+                    // 客户增值发票纳税号唯一校验
+                    sctp.setNumber(param.getNumber());
+                    sctp.setCompanyName(null);
+                    int countNumber = clientInvoiceTemplateMapper.getCountTemplate(sctp);
+                    if(countNumber > 0) {
+                        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "已录入纳税识别号");
+                    }
+                }
+                
+                citObj.setCompanyName(param.getCompanyName());
+                citObj.setTaxIdentificationNumber(param.getNumber());
+                citObj.setRegAddress(param.getRegAddress());
+                citObj.setRegTelephone(param.getRegPhone());
+                citObj.setBank(param.getBank());
+                citObj.setBankAccount(param.getBankAccount());
+            } else {
+                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "发票类型不存在");
+            }
+            
+            // 编辑增值发票模板信息
+            clientInvoiceTemplateMapper.updateByPrimaryKeySelective(citObj);
+        }
         return JsonResult.successJsonResult();
     }
 }

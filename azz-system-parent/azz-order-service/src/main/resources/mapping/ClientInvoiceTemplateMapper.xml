@@ -252,4 +252,17 @@
 	WHERE cit.invoice_type = #{invoiceType} AND cu.client_user_code = #{clientUserCode}
 	ORDER BY cit.create_time DESC
   </select>
+  
+  <select id="getCountTemplate" parameterType="com.azz.order.client.pojo.bo.SearchCountTemplateParam" resultType="int">
+  	SELECT
+		count(1)
+	FROM
+		client_invoice_template
+	WHERE
+		client_user_id = #{clientUserId}
+		AND invoice_type = #{invoiceType}
+	<if test="null != number and '' != number">AND tax_identification_number = #{number}</if>
+	<if test="null != invoiceTile and '' != invoiceTile">AND invoice_title = #{invoiceTile}</if>
+	<if test="null != companyName and '' != companyName">AND company_name = #{companyName}</if>
+  </select>
 </mapper>

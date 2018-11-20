@@ -134,7 +134,7 @@ public class ProductService {
 		com.azz.merchant.pojo.vo.ProductParams pp = new com.azz.merchant.pojo.vo.ProductParams();
 		if(null !=  paramsId && paramsId.size() > 0) {
 			List<ParamsValue> pvs = new ArrayList<>();
-			List<Long> values = new ArrayList<>();
+			List<String> values = new ArrayList<>();
 			StringBuilder sb = new StringBuilder();
 			//根据参数项ID 查询值
 			for (PlatformGoodsParamsTerm platformGoodsParamsTerm : paramsId) {
@@ -152,7 +152,7 @@ public class ProductService {
 						}
 						
 					}
-					values = Arrays.asList(sb.toString().split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+					values = Arrays.asList(sb.toString().split(",")).stream().map(s -> s.trim()).collect(Collectors.toList());
 					pv.setValues(values);
 					sb = new StringBuilder();
 				}

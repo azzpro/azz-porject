@@ -38,6 +38,9 @@ public interface DbSequenceService {
 	String getMerchantDepartmentNumber();
 	
 	@RequestMapping(value="/azz/api/sequence/getMerchantPowerNumber",method=RequestMethod.GET)
-	String getMerchantPowerNumber();
+	String getClientInvoiceApplyNumber();
+	
+	@RequestMapping(value="/azz/api/sequence/getMerchantPowerNumber",method=RequestMethod.GET)
+    String getMerchantInvoiceApplyNumber();
 }
 

@@ -33,7 +33,7 @@
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from client_invoice_template
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT} and client_user_id = #{clientUserId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.azz.order.client.pojo.ClientInvoiceTemplate">
     insert into client_invoice_template (id, client_user_id, invoice_type, 

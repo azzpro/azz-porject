@@ -7,6 +7,8 @@
  
 package com.azz.order.client.pojo.bo;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 import lombok.Data;
@@ -19,7 +21,7 @@ import lombok.Data;
 @Data
 public class SearchInvoiceTemplateParam {
     
-    @NotBlank(message = "发票类型不许为空")
+    @NotNull(message = "发票类型不许为空")
     private Integer invoiceType;
     @NotBlank(message = "用户编码不许为空")
     private String clientUserCode;

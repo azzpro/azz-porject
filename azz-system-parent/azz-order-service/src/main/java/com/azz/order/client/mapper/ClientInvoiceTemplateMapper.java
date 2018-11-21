@@ -4,6 +4,7 @@ package com.azz.order.client.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.azz.order.client.pojo.ClientInvoiceTemplate;
 import com.azz.order.client.pojo.bo.SearchCountTemplateParam;
@@ -11,7 +12,7 @@ import com.azz.order.client.pojo.bo.SearchInvoiceTemplateParam;
 import com.azz.order.client.pojo.vo.ClientInvoiceTemplateList;
 @Mapper
 public interface ClientInvoiceTemplateMapper {
-    int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(@Param("id") Long id,@Param("clientUserId")Long clientUserId);
 
     int insert(ClientInvoiceTemplate record);
 

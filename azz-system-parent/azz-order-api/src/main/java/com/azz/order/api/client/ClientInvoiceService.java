@@ -88,5 +88,14 @@ public interface ClientInvoiceService {
 	@RequestMapping("/azz/api/client/invoice/addEditInvoiceTemplate")
 	JsonResult<String> addEditInvoiceTemplate(@RequestBody AddEditInvoiceTemplateParam param);
 	
+	/**
+	 * <p>删除发票模板</p>
+	 * @param id
+	 * @param userCode
+	 * @return
+	 * @author 彭斌  2018年11月21日 上午10:29:10
+	 */
+	@RequestMapping("/azz/api/client/invoice/delInvoiceTemplate")
+	JsonResult<String> delInvoiceTemplate(@RequestParam("id") Long id,@RequestParam("userCode") String userCode);
 }
 

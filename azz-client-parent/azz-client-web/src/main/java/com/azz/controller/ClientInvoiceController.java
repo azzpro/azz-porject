@@ -10,7 +10,6 @@ package com.azz.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,7 +46,7 @@ public class ClientInvoiceController {
 	 * @author 彭斌  2018年11月20日 下午4:17:24
 	 */
 	@RequestMapping("/getClientInvoiceList")
-	public JsonResult<Pagination<ClientInvoiceList>> getClientInvoiceList(@RequestBody SearchClientInvoiceParam param){
+	public JsonResult<Pagination<ClientInvoiceList>> getClientInvoiceList(SearchClientInvoiceParam param){
 		param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 		return clientInvoiceService.getClientInvoiceList(param);
 	}
@@ -59,7 +58,7 @@ public class ClientInvoiceController {
 	 * @author 彭斌  2018年11月20日 下午4:17:38
 	 */
 	@RequestMapping("/getInvoiceTemplateList")
-	public JsonResult<List<ClientInvoiceTemplateList>> getInvoiceTemplateList(@RequestBody SearchInvoiceTemplateParam param){
+	public JsonResult<List<ClientInvoiceTemplateList>> getInvoiceTemplateList(SearchInvoiceTemplateParam param){
 	    param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 	    return clientInvoiceService.getInvoiceTemplateList(param);
 	}
@@ -71,7 +70,7 @@ public class ClientInvoiceController {
 	 * @author 彭斌  2018年11月20日 下午4:17:45
 	 */
 	@RequestMapping("/getInvoiceClientList")
-	public JsonResult<List<ClientAddInvoice>> getInvoiceClientList(@RequestBody SearchAddInvoiceApplyParam param){
+	public JsonResult<List<ClientAddInvoice>> getInvoiceClientList(SearchAddInvoiceApplyParam param){
 	    param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 	    return clientInvoiceService.getInvoiceClientList(param);
 	}
@@ -83,7 +82,7 @@ public class ClientInvoiceController {
 	 * @author 彭斌  2018年11月20日 下午4:17:54
 	 */
 	@RequestMapping("/addInvoiceApply")
-	public JsonResult<String> addInvoiceApply(@RequestBody AddInvoiceApplyParam param){
+	public JsonResult<String> addInvoiceApply(AddInvoiceApplyParam param){
 	    param.setCreator(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 	    return clientInvoiceService.addInvoiceApply(param);
 	}
@@ -106,11 +105,20 @@ public class ClientInvoiceController {
 	 * @author 彭斌  2018年11月20日 下午4:18:10
 	 */
 	@RequestMapping("/addEditInvoiceTemplate")
-	public JsonResult<String> addEditInvoiceTemplate(@RequestBody AddEditInvoiceTemplateParam param){
+	public JsonResult<String> addEditInvoiceTemplate(AddEditInvoiceTemplateParam param){
 	    param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 		return clientInvoiceService.addEditInvoiceTemplate(param);
 	}
 	
-	
+	/**
+	 * <p>删除发票模板</p>
+	 * @param id
+	 * @return
+	 * @author 彭斌  2018年11月21日 上午10:30:27
+	 */
+	@RequestMapping("/delInvoiceTemplate")
+	public JsonResult<String> delInvoiceTemplate(Long id){
+	    return clientInvoiceService.delInvoiceTemplate(id, WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
+	}
 }
 

@@ -104,5 +104,17 @@ public class ClientInvoiceController {
 	public JsonResult<String> addEditInvoiceTemplate(@RequestBody AddEditInvoiceTemplateParam param){
 	    return clientInvoiceService.addEditInvoiceTemplate(param);
 	}
+	
+	/**
+	 * <p>删除发票模板</p>
+	 * @param id
+	 * @param userCode
+	 * @return
+	 * @author 彭斌  2018年11月21日 上午10:28:16
+	 */
+	@RequestMapping("/delInvoiceTemplate")
+	public JsonResult<String> delInvoiceTemplate(Long id,String userCode){
+	    return clientInvoiceService.delInvoiceTemplate(id, userCode);
+	}
 }
 

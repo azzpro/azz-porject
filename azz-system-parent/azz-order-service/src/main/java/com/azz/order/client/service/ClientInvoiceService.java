@@ -327,5 +327,21 @@ public class ClientInvoiceService {
         }
         return JsonResult.successJsonResult();
     }
+    
+    /**
+     * <p>删除发票模板</p>
+     * @param id
+     * @param userCode
+     * @return
+     * @author 彭斌  2018年11月21日 上午10:26:20
+     */
+    public JsonResult<String> delInvoiceTemplate(Long id,String userCode){
+        ClientUser user = clientUserMapper.getClientUserByClientUserCode(userCode);
+        if(ObjectUtils.isNull(user)) {
+            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户信息不存在");
+        }
+        clientInvoiceTemplateMapper.deleteByPrimaryKey(id,user.getId());
+        return JsonResult.successJsonResult();
+    }
 }
 

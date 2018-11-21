@@ -7,6 +7,7 @@
  
 package com.azz.order.client.pojo.vo;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import lombok.Data;
@@ -20,7 +21,7 @@ import lombok.Data;
 public class ClientInvoiceList {
     private String clientApplyCode;
     private Integer invoiceType;
-    private Long amount;
+    private BigDecimal amount;
     private Integer quantity;
     private Integer status;
     private Date createTime;

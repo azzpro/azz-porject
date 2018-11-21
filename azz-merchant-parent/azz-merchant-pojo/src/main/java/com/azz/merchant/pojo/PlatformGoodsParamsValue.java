@@ -22,7 +22,7 @@ public class PlatformGoodsParamsValue implements Serializable {
      *
      * @mbg.generated
      */
-    private Long paramsValue;
+    private String paramsValue;
 
     /**
      * 参数单位
@@ -89,7 +89,7 @@ public class PlatformGoodsParamsValue implements Serializable {
      *
      * @mbg.generated
      */
-    public Long getParamsValue() {
+    public String getParamsValue() {
         return paramsValue;
     }
 
@@ -101,7 +101,7 @@ public class PlatformGoodsParamsValue implements Serializable {
      *
      * @mbg.generated
      */
-    public void setParamsValue(Long paramsValue) {
+    public void setParamsValue(String paramsValue) {
         this.paramsValue = paramsValue;
     }
 

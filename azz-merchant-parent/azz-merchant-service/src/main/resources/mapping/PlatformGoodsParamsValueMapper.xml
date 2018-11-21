@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.azz.merchant.pojo.PlatformGoodsParamsValue">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="params_parent_id" jdbcType="BIGINT" property="paramsParentId" />
-    <result column="params_value" jdbcType="BIGINT" property="paramsValue" />
+    <result column="params_value" jdbcType="VARCHAR" property="paramsValue" />
     <result column="params_unit" jdbcType="VARCHAR" property="paramsUnit" />
   </resultMap>
   <sql id="Base_Column_List">

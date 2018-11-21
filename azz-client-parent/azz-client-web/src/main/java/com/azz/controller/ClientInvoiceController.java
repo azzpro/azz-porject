@@ -23,11 +23,14 @@ import com.azz.order.client.pojo.bo.AddEditInvoiceTemplateParam;
 import com.azz.order.client.pojo.bo.AddInvoiceApplyParam;
 import com.azz.order.client.pojo.bo.SearchAddInvoiceApplyParam;
 import com.azz.order.client.pojo.bo.SearchClientInvoiceParam;
+import com.azz.order.client.pojo.bo.SearchClientOrderParam;
 import com.azz.order.client.pojo.bo.SearchInvoiceTemplateParam;
 import com.azz.order.client.pojo.vo.ClientAddInvoice;
 import com.azz.order.client.pojo.vo.ClientInvoiceApplyDetail;
 import com.azz.order.client.pojo.vo.ClientInvoiceList;
 import com.azz.order.client.pojo.vo.ClientInvoiceTemplateList;
+import com.azz.order.client.pojo.vo.ClientOrderInfo;
+import com.azz.order.client.pojo.vo.ClientOrderItemInfo;
 
 /**
  * <P>发票管理</P>
@@ -133,6 +136,18 @@ public class ClientInvoiceController {
 	public JsonResult<ClientInvoiceApplyDetail> getClientInvoiceApplyDetail(SearchAddInvoiceApplyParam param){
 	    param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 	    return clientInvoiceService.getClientInvoiceApplyDetail(param);
+	}
+	
+	/**
+	 * <p>获取客户订单明细</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年11月21日 下午4:27:53
+	 */
+	@RequestMapping("/getClientOrderItems")
+	public JsonResult<List<ClientOrderItemInfo>> getClientOrderItems(SearchClientOrderParam param){
+	    param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
+        return clientInvoiceService.getClientOrderItems(param);
 	}
 }
 

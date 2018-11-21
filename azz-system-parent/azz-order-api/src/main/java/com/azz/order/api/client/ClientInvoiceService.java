@@ -21,11 +21,14 @@ import com.azz.order.client.pojo.bo.AddEditInvoiceTemplateParam;
 import com.azz.order.client.pojo.bo.AddInvoiceApplyParam;
 import com.azz.order.client.pojo.bo.SearchAddInvoiceApplyParam;
 import com.azz.order.client.pojo.bo.SearchClientInvoiceParam;
+import com.azz.order.client.pojo.bo.SearchClientOrderParam;
 import com.azz.order.client.pojo.bo.SearchInvoiceTemplateParam;
 import com.azz.order.client.pojo.vo.ClientAddInvoice;
 import com.azz.order.client.pojo.vo.ClientInvoiceApplyDetail;
 import com.azz.order.client.pojo.vo.ClientInvoiceList;
 import com.azz.order.client.pojo.vo.ClientInvoiceTemplateList;
+import com.azz.order.client.pojo.vo.ClientOrderInfo;
+import com.azz.order.client.pojo.vo.ClientOrderItemInfo;
 
 /**
  * <P>TODO</P>
@@ -107,5 +110,14 @@ public interface ClientInvoiceService {
 	 */
 	@RequestMapping("/azz/api/client/invoice/getClientInvoiceApplyDetail")
 	JsonResult<ClientInvoiceApplyDetail> getClientInvoiceApplyDetail(@RequestBody SearchAddInvoiceApplyParam param);
+
+	/**
+	 * <p>获取客户订单明细</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年11月21日 下午4:25:59
+	 */
+	@RequestMapping("/azz/api/client/invoice/getClientOrderItems")
+	JsonResult<List<ClientOrderItemInfo>> getClientOrderItems(@RequestBody SearchClientOrderParam param);
 }
 

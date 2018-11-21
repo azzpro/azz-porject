@@ -364,7 +364,7 @@ public class ClientInvoiceService {
      * @return
      * @author 彭斌  2018年11月21日 下午1:57:48
      */
-    public JsonResult<ClientInvoiceApplyDetail> getClientInvoiceApplyDetail(SearchAddInvoiceApplyParam param){
+    public JsonResult<ClientInvoiceApplyDetail> getClientInvoiceApplyDetail(@RequestBody SearchAddInvoiceApplyParam param){
         JSR303ValidateUtils.validate(param);
         // 关联订单基本信息、开票详情、寄送地址
         ClientInvoiceApplyDetail ciad = clientInvoiceMapper.getClientInvoiceOrderApplyDetail(param);
@@ -387,6 +387,17 @@ public class ClientInvoiceService {
         ciad.setOrderItem(orderItem);
         
         return JsonResult.successJsonResult(ciad);
+    }
+    
+    /**
+     * <p>获取客户产品明细</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月21日 下午4:23:51
+     */
+    public JsonResult<List<ClientOrderItemInfo>> getClientOrderItems(@RequestBody SearchClientOrderParam param){
+        List<ClientOrderInfo> coiList = clientOrderPersonalMapper.getClientOrderInfoList(param);
+        return JsonResult.successJsonResult(coiList.get(0).getOrderItems());
     }
 }
 

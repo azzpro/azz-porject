@@ -24,8 +24,8 @@ import lombok.Data;
 public class AddInvoiceApplyParam {
     @NotNull(message = "订单金额不许为空")
     private BigDecimal amount;
-    @NotNull(message = "客户订单id不许为空")
-    private Long clientOrderId;
+    @NotNull(message = "客户订单编码不许为空")
+    private String clientOrderCode;
     @NotNull(message = "客户发票模板id不许为空")
     private Long invoiceTemplateId;
     @NotNull(message = "客户收货地址id不许为空")

@@ -208,9 +208,60 @@
 	ORDER BY ci.create_time DESC
   </select>
   
-  <select id="getExistClientInvoice" parameterType="java.lang.Long" resultType="int">
+  <select id="getExistClientInvoice" parameterType="java.lang.String" resultType="int">
   	SELECT count(1) FROM client_invoice ci
-	WHERE ci.client_order_id = #{clientOrderId}
+  	JOIN client_order_personal cop ON ci.client_order_id = cop.id
+	WHERE cop.client_order_code = #{clientOrderCode}
 	AND (ci.`status` = 0 OR ci.`status` = 1 OR ci.`status` = 2 OR ci.`status` = 4)
+  </select>
+  
+  <select id="getClientInvoiceOrderApplyDetail" parameterType="com.azz.order.client.pojo.bo.SearchAddInvoiceApplyParam" resultType="com.azz.order.client.pojo.vo.ClientInvoiceApplyDetail">
+  	SELECT
+		cop.client_order_code as orderCode,
+		cop.order_status_id as statusId,
+		cop.payment_method as paymentMethod,
+		cop.grand_total as grandTotal,
+		ci.amount as applyAmount,
+		cosa.receiver_name as receiverName,
+		cosa.receiver_phone_number as receiverPhoneNumber,
+		cosa.address_alias as addressAlias,
+		cosa.detail_address as detailAddress,
+		ci.client_apply_code as clientApplyCode,
+		cit.invoice_type as invoiceType,
+		ci.create_time as createTime,
+		cit.invoice_title as invoiceTitle,
+		cit.tax_identification_number as taxIdentificationNumber,
+		cit.company_name as companyName,
+		cit.bank as bank,
+		cit.bank_account as bankAccount,
+		cit.reg_address as regAddress,
+		cit.reg_telephone as regTelephone,
+		cit.remark as remark
+	FROM
+		client_invoice ci
+	LEFT JOIN client_invoice_template cit ON ci.invoice_template_id = cit.id
+	LEFT JOIN client_order_personal cop ON ci.client_order_id = cop.id
+	LEFT JOIN client_order_shipping_address cosa ON ci.shipping_address_id = cosa.id
+	JOIN client_user cu ON ci.client_user_id = cu.id
+	WHERE cop.client_order_code = #{clientOrderCode} and cu.client_user_code = #{clientUserCode}
+  </select>
+  
+  <select id="getInvoiceDeliveryDetail" parameterType="java.lang.String" resultType="com.azz.order.client.pojo.vo.ClientInvoiceDeliveryDetail">
+  	SELECT
+		mi.apply_amount as applyAmount,
+		mi.merchant_apply_code as merchantApplyCode,
+		mil.delivery_type as deliveryType,
+		ec.company_name as companyName,
+		mil.number as number,
+		mil.delivery_person as deliveryPerson,
+		mil.delivery_phone as deliveryPhone
+	FROM
+		merchant_invoice mi
+	LEFT JOIN merchant_order mo ON mi.merchant_order_id = mo.id
+	LEFT JOIN client_order_personal cop ON mo.client_order_id = cop.id
+	LEFT JOIN merchant_invoice_logistics mil ON mil.merchant_invoice_id = mi.id
+	LEFT JOIN express_company ec ON mil.express_company_id = ec.id
+	WHERE
+	cop.client_order_code = #{clientOrderCode}
   </select>
 </mapper>

@@ -23,6 +23,7 @@ import com.azz.order.client.pojo.bo.SearchAddInvoiceApplyParam;
 import com.azz.order.client.pojo.bo.SearchClientInvoiceParam;
 import com.azz.order.client.pojo.bo.SearchInvoiceTemplateParam;
 import com.azz.order.client.pojo.vo.ClientAddInvoice;
+import com.azz.order.client.pojo.vo.ClientInvoiceApplyDetail;
 import com.azz.order.client.pojo.vo.ClientInvoiceList;
 import com.azz.order.client.pojo.vo.ClientInvoiceTemplateList;
 import com.azz.order.client.service.ClientInvoiceService;
@@ -115,6 +116,17 @@ public class ClientInvoiceController {
 	@RequestMapping("/delInvoiceTemplate")
 	public JsonResult<String> delInvoiceTemplate(Long id,String userCode){
 	    return clientInvoiceService.delInvoiceTemplate(id, userCode);
+	}
+	
+	/**
+	 * <p>申请详情</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年11月21日 下午1:59:05
+	 */
+	@RequestMapping("/getClientInvoiceApplyDetail")
+	public JsonResult<ClientInvoiceApplyDetail> getClientInvoiceApplyDetail(@RequestBody SearchAddInvoiceApplyParam param){
+	    return clientInvoiceService.getClientInvoiceApplyDetail(param);
 	}
 }
 

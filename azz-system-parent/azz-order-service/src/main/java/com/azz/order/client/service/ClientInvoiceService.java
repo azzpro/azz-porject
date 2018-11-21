@@ -7,6 +7,7 @@
  
 package com.azz.order.client.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,15 +27,21 @@ import com.azz.order.client.mapper.ClientInvoiceTemplateMapper;
 import com.azz.order.client.mapper.ClientOrderPersonalMapper;
 import com.azz.order.client.pojo.ClientInvoice;
 import com.azz.order.client.pojo.ClientInvoiceTemplate;
+import com.azz.order.client.pojo.ClientOrderPersonal;
 import com.azz.order.client.pojo.bo.AddEditInvoiceTemplateParam;
 import com.azz.order.client.pojo.bo.AddInvoiceApplyParam;
 import com.azz.order.client.pojo.bo.SearchAddInvoiceApplyParam;
 import com.azz.order.client.pojo.bo.SearchClientInvoiceParam;
+import com.azz.order.client.pojo.bo.SearchClientOrderParam;
 import com.azz.order.client.pojo.bo.SearchCountTemplateParam;
 import com.azz.order.client.pojo.bo.SearchInvoiceTemplateParam;
 import com.azz.order.client.pojo.vo.ClientAddInvoice;
+import com.azz.order.client.pojo.vo.ClientInvoiceApplyDetail;
+import com.azz.order.client.pojo.vo.ClientInvoiceDeliveryDetail;
 import com.azz.order.client.pojo.vo.ClientInvoiceList;
 import com.azz.order.client.pojo.vo.ClientInvoiceTemplateList;
+import com.azz.order.client.pojo.vo.ClientOrderInfo;
+import com.azz.order.client.pojo.vo.ClientOrderItemInfo;
 import com.azz.order.merchant.mapper.ClientUserMapper;
 import com.azz.order.merchant.pojo.ClientUser;
 import com.azz.system.sequence.api.DbSequenceService;
@@ -109,8 +116,14 @@ public class ClientInvoiceService {
      */
     public JsonResult<String> addInvoiceApply(@RequestBody AddInvoiceApplyParam param){
         JSR303ValidateUtils.validate(param);
+        
+        ClientOrderPersonal cop = clientOrderPersonalMapper.getClientOrderPersonalByClientOrderCode(param.getClientOrderCode());
+        if(ObjectUtils.isNull(cop)) {
+            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单未找到");
+        }
+        
         // 校验订单是否已经申请过并且已拒绝
-        int isExist = clientInvoiceMapper.getExistClientInvoice(param.getClientOrderId());
+        int isExist = clientInvoiceMapper.getExistClientInvoice(param.getClientOrderCode());
         if(isExist > 0) {
             // 已经申请待处理状态不允许再次申请
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单已申请开票待处理不允许再次申请");
@@ -124,7 +137,7 @@ public class ClientInvoiceService {
         ClientInvoice ciObj = new ClientInvoice();
         ciObj.setClientApplyCode(dbSequenceService.getClientInvoiceApplyNumber());
         ciObj.setAmount(param.getAmount());
-        ciObj.setClientOrderId(param.getClientOrderId());
+        ciObj.setClientOrderId(cop.getId());
         ciObj.setClientUserId(user.getId());
         ciObj.setCreator(param.getCreator());
         ciObj.setInvoiceTemplateId(param.getInvoiceTemplateId());
@@ -136,7 +149,7 @@ public class ClientInvoiceService {
     }
 
     /**
-     * <p>获取客户发票详情</p>
+     * <p>获取客户发票模板详情</p>
      * @param invoiceId
      * @return
      * @author 彭斌  2018年11月20日 上午11:35:32
@@ -342,6 +355,37 @@ public class ClientInvoiceService {
         }
         clientInvoiceTemplateMapper.deleteByPrimaryKey(id,user.getId());
         return JsonResult.successJsonResult();
+    }
+    
+    /**
+     * <p>申请详情</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月21日 下午1:57:48
+     */
+    public JsonResult<ClientInvoiceApplyDetail> getClientInvoiceApplyDetail(SearchAddInvoiceApplyParam param){
+        JSR303ValidateUtils.validate(param);
+        // 关联订单基本信息、开票详情、寄送地址
+        ClientInvoiceApplyDetail ciad = clientInvoiceMapper.getClientInvoiceOrderApplyDetail(param);
+        
+        // 开票信息
+        List<ClientInvoiceDeliveryDetail> ciddList = clientInvoiceMapper.getInvoiceDeliveryDetail(param.getClientOrderCode());
+        if(ObjectUtils.isNotNull(ciddList)) {
+            ciad.setInvoiceDelivery(ciddList);
+        }
+        
+        // 产品明细
+        SearchClientOrderParam scop = new SearchClientOrderParam();
+        scop.setClientUserCode(param.getClientOrderCode());
+        scop.setSearchInput(param.getClientOrderCode());
+        List<ClientOrderInfo> coiList = clientOrderPersonalMapper.getClientOrderInfoList(scop);
+        List<ClientOrderItemInfo> orderItem = new ArrayList<>();
+        if(ObjectUtils.isNotNull(coiList) && coiList.size() > 0) {
+            orderItem = coiList.get(0).getOrderItems();
+        }
+        ciad.setOrderItem(orderItem);
+        
+        return JsonResult.successJsonResult(ciad);
     }
 }
 

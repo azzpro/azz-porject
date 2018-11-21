@@ -6,7 +6,10 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.order.client.pojo.ClientInvoice;
+import com.azz.order.client.pojo.bo.SearchAddInvoiceApplyParam;
 import com.azz.order.client.pojo.bo.SearchClientInvoiceParam;
+import com.azz.order.client.pojo.vo.ClientInvoiceApplyDetail;
+import com.azz.order.client.pojo.vo.ClientInvoiceDeliveryDetail;
 import com.azz.order.client.pojo.vo.ClientInvoiceList;
 
 @Mapper
@@ -25,5 +28,9 @@ public interface ClientInvoiceMapper {
     
     List<ClientInvoiceList> getClientInvoiceList(SearchClientInvoiceParam param);
     
-    int getExistClientInvoice(Long clientOrderId);
+    int getExistClientInvoice(String clientOrderCode);
+    
+    ClientInvoiceApplyDetail getClientInvoiceOrderApplyDetail(SearchAddInvoiceApplyParam param);
+
+    List<ClientInvoiceDeliveryDetail> getInvoiceDeliveryDetail(String clientOrderCode);
 }

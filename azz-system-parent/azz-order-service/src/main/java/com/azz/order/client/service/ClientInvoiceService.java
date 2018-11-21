@@ -102,10 +102,11 @@ public class ClientInvoiceService {
      * @return
      * @author 彭斌  2018年11月19日 下午5:08:28
      */
-    public JsonResult<List<ClientAddInvoice>> getInvoiceClientList(@RequestBody SearchAddInvoiceApplyParam param){
+    public JsonResult<Pagination<ClientAddInvoice>> getInvoiceClientList(@RequestBody SearchAddInvoiceApplyParam param){
         JSR303ValidateUtils.validate(param);
+        PageHelper.startPage(param.getPageNum(), param.getPageSize());
         List<ClientAddInvoice> list = clientOrderPersonalMapper.getInvoiceClient(param);
-        return JsonResult.successJsonResult(list);
+        return JsonResult.successJsonResult(new Pagination<>(list));
     }
     
     /**

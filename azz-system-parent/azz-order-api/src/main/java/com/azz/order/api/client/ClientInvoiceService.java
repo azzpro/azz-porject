@@ -60,7 +60,7 @@ public interface ClientInvoiceService {
 	 * @author 彭斌  2018年11月20日 下午4:03:00
 	 */
 	@RequestMapping("/azz/api/client/invoice/getInvoiceClientList")
-	JsonResult<List<ClientAddInvoice>> getInvoiceClientList(@RequestBody SearchAddInvoiceApplyParam param);
+	JsonResult<Pagination<ClientAddInvoice>> getInvoiceClientList(@RequestBody SearchAddInvoiceApplyParam param);
 	
 	/**
 	 * <p>新增发票申请</p>

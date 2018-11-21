@@ -69,7 +69,7 @@ public class ClientInvoiceController {
 	 * @author 彭斌  2018年11月20日 下午3:48:37
 	 */
 	@RequestMapping("/getInvoiceClientList")
-	public JsonResult<List<ClientAddInvoice>> getInvoiceClientList(@RequestBody SearchAddInvoiceApplyParam param){
+	public JsonResult<Pagination<ClientAddInvoice>> getInvoiceClientList(@RequestBody SearchAddInvoiceApplyParam param){
 	    return clientInvoiceService.getInvoiceClientList(param);
 	}
 	

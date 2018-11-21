@@ -7,6 +7,8 @@
  
 package com.azz.order.client.pojo.bo;
 
+import com.azz.core.common.QueryPage;
+
 import lombok.Data;
 
 /**
@@ -15,7 +17,7 @@ import lombok.Data;
  * @author 彭斌  2018年11月19日 下午4:52:00
  */
 @Data
-public class SearchAddInvoiceApplyParam {
+public class SearchAddInvoiceApplyParam extends QueryPage{
     private String clientUserCode;
     private String clientOrderCode;
 }

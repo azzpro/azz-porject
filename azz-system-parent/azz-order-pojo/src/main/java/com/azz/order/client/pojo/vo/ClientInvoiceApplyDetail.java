@@ -41,8 +41,8 @@ public class ClientInvoiceApplyDetail {
     private String regTelephone;
     private String remark;
     
-    private List<ClientInvoiceDeliveryDetail> invoiceDelivery;
+    List<ClientInvoiceDeliveryDetail> invoiceDelivery;
 
-    private List<ClientOrderItemInfo> orderItem;
+    List<ClientOrderItemInfo> orderItem;
 }
 

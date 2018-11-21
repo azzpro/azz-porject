@@ -370,13 +370,13 @@ public class ClientInvoiceService {
         
         // 开票信息
         List<ClientInvoiceDeliveryDetail> ciddList = clientInvoiceMapper.getInvoiceDeliveryDetail(param.getClientOrderCode());
-        if(ObjectUtils.isNotNull(ciddList)) {
+        if(ObjectUtils.isNotNull(ciddList)  && ciddList.size() > 0) {
             ciad.setInvoiceDelivery(ciddList);
         }
         
         // 产品明细
         SearchClientOrderParam scop = new SearchClientOrderParam();
-        scop.setClientUserCode(param.getClientOrderCode());
+        scop.setClientUserCode(param.getClientUserCode());
         scop.setSearchInput(param.getClientOrderCode());
         List<ClientOrderInfo> coiList = clientOrderPersonalMapper.getClientOrderInfoList(scop);
         List<ClientOrderItemInfo> orderItem = new ArrayList<>();

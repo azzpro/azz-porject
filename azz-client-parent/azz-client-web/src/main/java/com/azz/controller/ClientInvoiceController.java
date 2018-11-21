@@ -131,6 +131,7 @@ public class ClientInvoiceController {
 	 */
 	@RequestMapping("/getClientInvoiceApplyDetail")
 	public JsonResult<ClientInvoiceApplyDetail> getClientInvoiceApplyDetail(SearchAddInvoiceApplyParam param){
+	    param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 	    return clientInvoiceService.getClientInvoiceApplyDetail(param);
 	}
 }

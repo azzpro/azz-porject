@@ -12,15 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.azz.sequence.sequence.service.TenRandomSequenceService;
+import com.azz.sequence.sequence.service.ClientInvoiceApplySequenceService;
 import com.azz.sequence.sequence.service.MerchantDeptSequenceService;
 import com.azz.sequence.sequence.service.MerchantEmployeeSequenceService;
+import com.azz.sequence.sequence.service.MerchantInvoiceApplySequenceService;
 import com.azz.sequence.sequence.service.MerchantPowerSequenceService;
 import com.azz.sequence.sequence.service.MerchantTenantSequenceService;
 import com.azz.sequence.sequence.service.PlatDeptSequenceService;
 import com.azz.sequence.sequence.service.PlatEmployeeSequenceService;
 import com.azz.sequence.sequence.service.PlatPowerSequenceService;
 import com.azz.sequence.sequence.service.RandomSequenceService;
+import com.azz.sequence.sequence.service.TenRandomSequenceService;
 
 /**
  * <P>TODO</P>
@@ -58,6 +60,12 @@ public class SequenceController {
 	
 	@Autowired
     private TenRandomSequenceService tenRandomSequenceService;
+	
+	@Autowired
+    private ClientInvoiceApplySequenceService clientInvoiceApplySequenceService;
+	
+	@Autowired
+    private MerchantInvoiceApplySequenceService merchantInvoiceApplySequenceService;
 	
 	/**
 	 * <p>客户端 客户编号</p>
@@ -258,6 +266,26 @@ public class SequenceController {
     @RequestMapping(value="getCombinationCodeNumber",method=RequestMethod.GET)
     public String getCombinationCodeNumber() {
         return "IRB" + randomSequenceService.getSequence();
+    }
+    
+    /**
+     * <p>获取客户端发票申请编码</p>
+     * @return
+     * @author 彭斌  2018年11月20日 上午10:01:31
+     */
+    @RequestMapping(value="getClientInvoiceApplyNumber",method=RequestMethod.GET)
+    public String getClientInvoiceApplyNumber() {
+        return clientInvoiceApplySequenceService.getSequence();
+    }
+    
+    /**
+     * <p>获取商户端发票申请编码</p>
+     * @return
+     * @author 彭斌  2018年11月20日 上午10:01:34
+     */
+    @RequestMapping(value="getMerchantInvoiceApplyNumber",method=RequestMethod.GET)
+    public String getMerchantInvoiceApplyNumber() {
+        return merchantInvoiceApplySequenceService.getSequence();
     }
 }
 

@@ -68,8 +68,9 @@
     		<artifactId>httpclient</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>druid</artifactId>
+			<groupId>com.azz</groupId>
+			<artifactId>azz-common-sharding</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.azz</groupId>

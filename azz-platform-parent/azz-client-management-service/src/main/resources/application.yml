@@ -19,17 +19,39 @@ spring:
     password: 123456
   messages:
     basename: i18n/Messages
-  datasource:
-    username: root
-    password: azz2025
-    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://120.78.162.226:3306/azz_dev?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
-    driver-class-name: com.mysql.jdbc.Driver
-    dbcp2:
-      min-idle: 5
-      initial-size: 5
-      max-total: 5
-      max-wait-millis: 200
+azz: 
+ datasource:
+    dataSourceConfig: 
+      -
+        url : jdbc:mysql://120.78.162.226:3306/azz_dev?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+        db: azz_dev
+        defaultDatasource: true
+        username: root
+        password: azz2025
+        type: com.alibaba.druid.pool.DruidDataSource
+        driverClassName: com.mysql.jdbc.Driver
+        maxActive: 20
+        initialSize: 1
+        maxWait: 60000
+        minIdle: 1
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        maxOpenPreparedStatements: 20
+        validationQuery: SELECT 1 FROM DUAL
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 20
+        filters: stat,wall,log4j
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    monitorConfig:
+      available: true
+      allow: 127.0.0.1
+      deny: 127.0.0.2
+      loginUsername: admin
+      loginPassword: 123456
+      resetEnable: false  
 feign:
   httpclient: 
     enabled: true #feign原生是调用java.url 去发起HTTP请求，此配置是将请求客户端更换成apahce http

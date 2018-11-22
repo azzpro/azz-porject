@@ -134,7 +134,7 @@ public class ProductService {
 		com.azz.merchant.pojo.vo.ProductParams pp = new com.azz.merchant.pojo.vo.ProductParams();
 		if(null !=  paramsId && paramsId.size() > 0) {
 			List<ParamsValue> pvs = new ArrayList<>();
-			List<Long> values = new ArrayList<>();
+			List<String> values = new ArrayList<>();
 			StringBuilder sb = new StringBuilder();
 			//根据参数项ID 查询值
 			for (PlatformGoodsParamsTerm platformGoodsParamsTerm : paramsId) {
@@ -142,6 +142,7 @@ public class ProductService {
 				pv.setChoice(platformGoodsParamsTerm.getParamsChoice());
 				pv.setType(platformGoodsParamsTerm.getParamsType());
 				pv.setParamName(platformGoodsParamsTerm.getParamsName());
+				pv.setTermId(platformGoodsParamsTerm.getId());
 				if(platformGoodsParamsTerm.getParamsType() == 1) {
 					List<PlatformGoodsParamsValue> termId = platformGoodsParamsValueMapper.selectValueByTermId(platformGoodsParamsTerm.getId());
 					for (PlatformGoodsParamsValue ppv : termId) {
@@ -151,7 +152,7 @@ public class ProductService {
 						}
 						
 					}
-					values = Arrays.asList(sb.toString().split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+					values = Arrays.asList(sb.toString().split(",")).stream().map(s -> s.trim()).collect(Collectors.toList());
 					pv.setValues(values);
 					sb = new StringBuilder();
 				}
@@ -354,10 +355,11 @@ public class ProductService {
 				}
 				//插入产品参数
 				List<ProductParam> pp = params.getParams();
-				if(null != pp || pp.size() > 0) {
+				if(null != pp && pp.size() > 0) {
 					for (ProductParam productParam : pp) {
 						MerchantGoodsProductParams mpp = new MerchantGoodsProductParams();
 						mpp.setParamsId(goodsParams.getId());
+						mpp.setParamsTermId(productParam.getTermId());
 						mpp.setParamsName(productParam.getParamName());
 						mpp.setParamsValue(productParam.getValues());
 						mpp.setProductId(mgp.getId());
@@ -445,13 +447,14 @@ public class ProductService {
 				goodsProductParamsMapper.deleteByProductId(params.getProductId());
 				//插入产品参数
 				List<ProductParam> pp = params.getParams();
-				if(null != pp || pp.size() > 0) {
+				if(null != pp && pp.size() > 0) {
 					for (ProductParam productParam : pp) {
 						MerchantGoodsProductParams mpp = new MerchantGoodsProductParams();
 						mpp.setParamsId(goodsParams.getId());
 						mpp.setParamsName(productParam.getParamName());
 						mpp.setParamsValue(productParam.getValues());
 						mpp.setProductId(mgp.getId());
+						mpp.setParamsTermId(productParam.getTermId());
 						mpp.setParamsType(productParam.getType());
 						mpp.setParamsChoice(productParam.getChoice());
 						goodsProductParamsMapper.insertSelective(mpp);

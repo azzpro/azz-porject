@@ -53,6 +53,11 @@
 			<artifactId>azz-system-api</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.azz</groupId>
+			<artifactId>azz-sequence-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
         <dependency>
     		<groupId>org.springframework.cloud</groupId>
     		<artifactId>spring-cloud-starter-hystrix</artifactId>
@@ -76,8 +81,9 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>druid</artifactId>
+			<groupId>com.azz</groupId>
+			<artifactId>azz-common-sharding</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.azz</groupId>

@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.order.client.mapper.ClientInvoiceMapper">
+  <resultMap id="BaseResultMap" type="com.azz.order.client.pojo.ClientInvoice">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="client_apply_code" jdbcType="VARCHAR" property="clientApplyCode" />
+    <result column="client_user_id" jdbcType="BIGINT" property="clientUserId" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="client_order_id" jdbcType="BIGINT" property="clientOrderId" />
+    <result column="invoice_template_id" jdbcType="BIGINT" property="invoiceTemplateId" />
+    <result column="shipping_address_id" jdbcType="BIGINT" property="shippingAddressId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, client_apply_code, client_user_id, amount, quantity, client_order_id, invoice_template_id, 
+    shipping_address_id, status, creator, create_time, modifier, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from client_invoice
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from client_invoice
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.order.client.pojo.ClientInvoice">
+    insert into client_invoice (id, client_apply_code, client_user_id, 
+      amount, quantity, client_order_id, 
+      invoice_template_id, shipping_address_id, status, 
+      creator, create_time, modifier, 
+      modify_time)
+    values (#{id,jdbcType=BIGINT}, #{clientApplyCode,jdbcType=VARCHAR}, #{clientUserId,jdbcType=BIGINT}, 
+      #{amount,jdbcType=DECIMAL}, #{quantity,jdbcType=INTEGER}, #{clientOrderId,jdbcType=BIGINT}, 
+      #{invoiceTemplateId,jdbcType=BIGINT}, #{shippingAddressId,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.order.client.pojo.ClientInvoice">
+    insert into client_invoice
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="clientApplyCode != null">
+        client_apply_code,
+      </if>
+      <if test="clientUserId != null">
+        client_user_id,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="quantity != null">
+        quantity,
+      </if>
+      <if test="clientOrderId != null">
+        client_order_id,
+      </if>
+      <if test="invoiceTemplateId != null">
+        invoice_template_id,
+      </if>
+      <if test="shippingAddressId != null">
+        shipping_address_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="clientApplyCode != null">
+        #{clientApplyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="clientUserId != null">
+        #{clientUserId,jdbcType=BIGINT},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="quantity != null">
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="clientOrderId != null">
+        #{clientOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="invoiceTemplateId != null">
+        #{invoiceTemplateId,jdbcType=BIGINT},
+      </if>
+      <if test="shippingAddressId != null">
+        #{shippingAddressId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.order.client.pojo.ClientInvoice">
+    update client_invoice
+    <set>
+      <if test="clientApplyCode != null">
+        client_apply_code = #{clientApplyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="clientUserId != null">
+        client_user_id = #{clientUserId,jdbcType=BIGINT},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="quantity != null">
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="clientOrderId != null">
+        client_order_id = #{clientOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="invoiceTemplateId != null">
+        invoice_template_id = #{invoiceTemplateId,jdbcType=BIGINT},
+      </if>
+      <if test="shippingAddressId != null">
+        shipping_address_id = #{shippingAddressId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.order.client.pojo.ClientInvoice">
+    update client_invoice
+    set client_apply_code = #{clientApplyCode,jdbcType=VARCHAR},
+      client_user_id = #{clientUserId,jdbcType=BIGINT},
+      amount = #{amount,jdbcType=DECIMAL},
+      quantity = #{quantity,jdbcType=INTEGER},
+      client_order_id = #{clientOrderId,jdbcType=BIGINT},
+      invoice_template_id = #{invoiceTemplateId,jdbcType=BIGINT},
+      shipping_address_id = #{shippingAddressId,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getClientInvoiceList" parameterType="com.azz.order.client.pojo.bo.SearchClientInvoiceParam" resultType="com.azz.order.client.pojo.vo.ClientInvoiceList">
+  	SELECT
+		ci.client_apply_code as clientApplyCode,
+		cit.invoice_type as invoiceType,
+		ci.amount as amount,
+		ci.`status` as status,
+		ci.create_time as createTime,
+		ci.quantity as quantity,
+		cop.client_order_code as clientOrderCode
+	FROM
+		client_invoice ci
+	JOIN client_invoice_template cit ON cit.id = ci.invoice_template_id
+	JOIN client_order_personal cop ON ci.client_order_id = cop.id
+	JOIN client_user cu ON ci.client_user_id = cu.id
+	<where>
+		cu.client_user_code = #{clientUserCode}
+		<if test="null != status">AND ci.`status` = #{status}</if>
+		<if test="null != param and '' != param">AND (ci.client_apply_code LIKE CONCAT('%',#{param},'%') OR cop.client_order_code LIKE CONCAT('%',#{param},'%'))</if>
+	</where>
+	ORDER BY ci.create_time DESC
+  </select>
+  
+  <select id="getExistClientInvoice" parameterType="java.lang.String" resultType="int">
+  	SELECT count(1) FROM client_invoice ci
+  	JOIN client_order_personal cop ON ci.client_order_id = cop.id
+	WHERE cop.client_order_code = #{clientOrderCode}
+	AND (ci.`status` = 0 OR ci.`status` = 1 OR ci.`status` = 2 OR ci.`status` = 4)
+  </select>
+  
+  <select id="getClientInvoiceOrderApplyDetail" parameterType="com.azz.order.client.pojo.bo.SearchAddInvoiceApplyParam" resultType="com.azz.order.client.pojo.vo.ClientInvoiceApplyDetail">
+  	SELECT
+		cop.client_order_code as orderCode,
+		cop.order_status_id as statusId,
+		cop.payment_method as paymentMethod,
+		cop.grand_total as grandTotal,
+		ci.amount as applyAmount,
+		cosa.receiver_name as receiverName,
+		cosa.receiver_phone_number as receiverPhoneNumber,
+		cosa.address_alias as addressAlias,
+		cosa.detail_address as detailAddress,
+		ci.client_apply_code as clientApplyCode,
+		cit.invoice_type as invoiceType,
+		ci.create_time as createTime,
+		cit.invoice_title as invoiceTitle,
+		cit.tax_identification_number as taxIdentificationNumber,
+		cit.company_name as companyName,
+		cit.bank as bank,
+		cit.bank_account as bankAccount,
+		cit.reg_address as regAddress,
+		cit.reg_telephone as regTelephone,
+		cit.remark as remark
+	FROM
+		client_invoice ci
+	LEFT JOIN client_invoice_template cit ON ci.invoice_template_id = cit.id
+	LEFT JOIN client_order_personal cop ON ci.client_order_id = cop.id
+	LEFT JOIN client_order_shipping_address cosa ON ci.shipping_address_id = cosa.id
+	JOIN client_user cu ON ci.client_user_id = cu.id
+	WHERE cop.client_order_code = #{clientOrderCode} and cu.client_user_code = #{clientUserCode}
+  </select>
+  
+  <select id="getInvoiceDeliveryDetail" parameterType="java.lang.String" resultType="com.azz.order.client.pojo.vo.ClientInvoiceDeliveryDetail">
+  	SELECT
+		mi.apply_amount as applyAmount,
+		mi.merchant_apply_code as merchantApplyCode,
+		mil.delivery_type as deliveryType,
+		ec.company_name as companyName,
+		mil.number as number,
+		mil.delivery_person as deliveryPerson,
+		mil.delivery_phone as deliveryPhone
+	FROM
+		merchant_invoice mi
+	LEFT JOIN merchant_order mo ON mi.merchant_order_id = mo.id
+	LEFT JOIN client_order_personal cop ON mo.client_order_id = cop.id
+	LEFT JOIN merchant_invoice_logistics mil ON mil.merchant_invoice_id = mi.id
+	LEFT JOIN express_company ec ON mil.express_company_id = ec.id
+	WHERE
+	cop.client_order_code = #{clientOrderCode}
+  </select>
+</mapper>

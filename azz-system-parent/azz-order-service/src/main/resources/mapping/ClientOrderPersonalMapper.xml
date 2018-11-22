@@ -588,4 +588,22 @@
 	and mo.client_order_id = #{clientOrderId}
   </select>
   
+  <select id="getInvoiceClient" parameterType="com.azz.order.client.pojo.bo.SearchAddInvoiceApplyParam" resultType="com.azz.order.client.pojo.vo.ClientAddInvoice">
+  	SELECT
+		cop.id as id,
+		cop.client_order_code as clientOrderCode,
+		cop.grand_total as grandTotal,
+		cop.invoice_status as invoiceStatus,
+		cop.order_status_id as orderStatusId,
+		cop.create_time as createTime
+	FROM
+		client_order_personal cop
+	JOIN client_user cu ON cop.client_user_id = cu.id
+	WHERE
+		cu.client_user_code = #{clientUserCode}
+		<if test="null != clientOrderCode and '' != clientOrderCode">
+			AND cop.client_order_code = #{clientOrderCode}
+		</if>
+	ORDER BY cop.create_time DESC
+  </select>
 </mapper>

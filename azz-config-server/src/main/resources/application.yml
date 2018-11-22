@@ -20,9 +20,3 @@ eureka:
   instance:
     prefer-ip-address: true
     instance-id: ${spring.cloud.client.ipAddress}:${spring.application.name}:${spring.application.instance_id:${server.port}}
-#encrypt:
-#  key: didispace
-#  key-store:
-#    location: classpath:config-server.keystore
-#    password: liuyun123
-#    secret: liuyun123

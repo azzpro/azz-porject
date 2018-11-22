@@ -145,12 +145,10 @@ public class PlatformInvoiceService {
         
         ci.setModifier(param.getPlatformUserCode());
         ci.setModifyTime(new Date());
-        clientInvoiceMapper.updateByPrimaryKeySelective(ci);
         
         if(1 == param.getStatus()) {
             // 生成商户发票信息
             ClientInvoiceTemplate cit = clientInvoiceTemplateMapper.selectByPrimaryKey(ci.getInvoiceTemplateId());
-            
             List<MerchantOrder> list = merchantOrderMapper.selectMerchantOrderByClientOrderId(ci.getClientOrderId());
             for (int i = 0; i < list.size(); i++) {
                 MerchantInvoice record = new MerchantInvoice();
@@ -164,8 +162,11 @@ public class PlatformInvoiceService {
                 record.setStatus(MerchantInvoiceApplyStatusEnum.NOT_CONFIRMED.getValue());
                 merchantInvoiceMapper.insertSelective(record);
             }
+            // 更新发票总数
+            ci.setQuantity(list.size());
         }
         
+        clientInvoiceMapper.updateByPrimaryKeySelective(ci);
         return JsonResult.successJsonResult();
     }
 }

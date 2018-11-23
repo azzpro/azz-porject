@@ -320,4 +320,29 @@ public abstract class ClientConstants {
         }
         
     }
+	
+	/**
+	 * 
+	 * <P>选型记录状态</P>
+	 * @version 1.0
+	 * @author 黄智聪  2018年11月23日 下午6:43:19
+	 */
+	public enum SelectionRecordStatus {
+		
+		INVALID(0, "无效"),
+
+    	VALID(1, "有效");
+
+    	@Getter
+    	private int value;
+
+    	@Getter
+    	private String desc;
+
+    	SelectionRecordStatus(int value, String desc) {
+    	    this.value = value;
+    	    this.desc = desc;
+    	}
+        
+    }
 }

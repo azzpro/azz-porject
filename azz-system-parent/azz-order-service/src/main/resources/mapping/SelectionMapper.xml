@@ -37,6 +37,7 @@
 		t.maxVal AS maxVal
 	FROM
 		merchant_goods_product_params pgpp
+	JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status != 0
 	LEFT JOIN (
 		SELECT
 			pgpp.params_term_id AS params_term_id,
@@ -48,8 +49,9 @@
 			) AS maxVal
 		FROM
 			merchant_goods_product_params pgpp
+		JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status != 0
 		<where>
-		 	pgpp.params_type = 2
+			pgpp.params_type = 2
 		AND pgpp.params_choice = 1
 		AND	pgpp.params_id IN (
 				SELECT
@@ -78,7 +80,7 @@
 			pgpp.params_term_id
 	) t ON t.params_term_id = pgpp.params_term_id
 	<where>
-		pgpp.params_id IN (
+	AND	pgpp.params_id IN (
 			SELECT
 				pccp.params_id
 			FROM
@@ -118,6 +120,68 @@
 		pgpp.params_term_id
   </select> 
   
+  <resultMap id="combinationParamsInfo" type="com.azz.order.selection.vo.CombinationInitParams">
+  	<result column="paramsType" jdbcType="INTEGER" property="paramsType" />
+  	<collection property="paramsTerms" ofType="com.azz.order.selection.vo.CombinationParamsTerm">
+  		<result column="paramsTermId" property="paramsTermId" jdbcType="BIGINT"/>
+        <result column="paramsName" property="paramsName" jdbcType="VARCHAR"/>
+        <result column="paramValues" property="paramValues" jdbcType="VARCHAR"/>
+    </collection>
+  </resultMap>
+  
+  <select id="getCombinationInitParams" parameterType="com.azz.order.selection.bo.SearchInitParamsParam" resultMap="combinationParamsInfo">
+  	SELECT
+		pgpp.params_term_id AS paramsTermId,
+		pgpp.params_type AS paramsType,
+		pgpp.params_name AS paramsName,
+		group_concat(DISTINCT pgpp.params_value) AS paramValues
+	FROM
+		merchant_goods_product_params pgpp
+	JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status != 0
+	JOIN platform_combination_module pcm ON pcm.module_id = mgp.module_id
+	JOIN platform_combination pc ON pc.id = pcm.combination_id
+	JOIN platform_case cs ON pc.case_id = cs.id
+	WHERE
+		pc.status != 0
+	AND	cs.case_code = #{caseCode}
+	AND pgpp.product_id IN (
+			SELECT 
+				DISTINCT pgpp.product_id
+			FROM
+				merchant_goods_product_params pgpp
+			<where>	
+				<if test="inputParams != null and inputParams.size() > 0">
+					<foreach collection="inputParams" item="inputParam">
+						AND	pgpp.product_id IN (
+							SELECT
+								pgpp.product_id
+							FROM
+								merchant_goods_product_params pgpp
+							WHERE
+								pgpp.params_type = 2
+							AND pgpp.params_value BETWEEN #{inputParam.minVal} AND #{inputParam.maxVal}
+						)
+					</foreach>
+				</if>
+				<if test="selectParams != null and selectParams.size() > 0">
+					<foreach collection="selectParams" item="selectParam">
+						AND pgpp.product_id IN (
+							SELECT
+								pgpp.product_id
+							FROM
+								merchant_goods_product_params pgpp
+							WHERE
+								pgpp.params_type = 1
+							AND pgpp.params_value LIKE #{selectParam}
+						)
+					</foreach>
+				</if>
+			</where>
+			)
+		GROUP BY
+			pgpp.params_term_id
+  </select>
+  
   <select id="getCombinationInfos" parameterType="com.azz.order.selection.bo.SearchInitParamsParam" resultType="com.azz.order.selection.vo.CombinationInfo">
   	SELECT
 		pc.combination_code AS combinationCode,
@@ -149,8 +213,9 @@
 					platform_combination pc
 				JOIN platform_combination_module pcm ON pcm.combination_id = pc.id
 				JOIN merchant_goods_module mgm ON mgm.id = pcm.module_id
-				JOIN merchant_goods_product mgp ON mgp.module_id = mgm.id
-				JOIN merchant_goods_product_price price ON price.product_id = mgp.id
+				JOIN merchant_goods_product mgp ON mgp.module_id = mgm.id 
+				JOIN merchant_goods_product_price price ON price.product_id = mgp.id 
+				WHERE mgp.product_status != 0
 				ORDER BY
 					price.price
 			) ascCasePrice
@@ -158,7 +223,9 @@
 			ascCasePrice.caseId
 	) t ON pc.id = t.caseId
 	<where>
-		cs.case_code = #{caseCode}
+		AND mgp.product_status != 0
+		AND	pc.status != 0
+		AND cs.case_code = #{caseCode}
 		<if test="inputParams != null and inputParams.size() > 0">
 			<foreach collection="inputParams" item="inputParam">
 				AND	pgpp.product_id IN (
@@ -166,6 +233,7 @@
 						pgpp.product_id
 					FROM
 						merchant_goods_product_params pgpp
+					JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status != 0
 					WHERE
 						pgpp.params_type = 2
 					AND pgpp.params_value BETWEEN #{inputParam.minVal} AND #{inputParam.maxVal}
@@ -179,6 +247,7 @@
 						pgpp.product_id
 					FROM
 						merchant_goods_product_params pgpp
+					JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status != 0
 					WHERE
 						pgpp.params_type = 1
 					AND pgpp.params_value LIKE #{selectParam}
@@ -188,20 +257,213 @@
 	</where>
 	GROUP BY
 		pc.id
+	order by pc.create_time desc
   </select>
   
+  <select id="getCombinationDetail" parameterType="string" resultType="com.azz.order.selection.vo.CombinationDetail">
+  SELECT
+		pc.case_id as caseId,
+		pc.combination_code AS combinationCode,
+		pc.combination_name AS combinationName,
+		pc.combination_pic_url AS combinationPicUrl,
+		pc.combination_pic_name AS combinationPicName
+	FROM
+		platform_combination pc
+  WHERE pc.status != 0
+	AND pc.combination_code = #{combinationCode}
   
+  </select>
   
+  <select id="getCombinationDetailInitParams" parameterType="com.azz.order.selection.bo.SearchCombinationInitParamsParam" resultMap="paramsInfo">
+  	SELECT
+		pgpp.params_term_id AS paramsTermId,
+		pgpp.params_type AS paramsType,
+		pgpp.params_name AS paramsName,
+		group_concat(DISTINCT pgpp.params_value) AS paramValues
+	FROM
+		merchant_goods_product_params pgpp
+	<where>
+			pgpp.params_type = 1
+		AND pgpp.params_id IN (
+			SELECT DISTINCT
+				pgpp.params_id
+			FROM
+				platform_combination pc
+			JOIN platform_combination_module pcm ON pcm.combination_id = pc.id
+			JOIN merchant_goods_product mgp ON mgp.module_id = pcm.module_id
+			JOIN merchant_goods_product_params pgpp ON pgpp.product_id = mgp.id
+			WHERE
+				mgp.product_status != 0
+			AND	pc.combination_code = #{combinationCode}
+		)
+		<if test="selectParams != null and selectParams.size() > 0">
+			<foreach collection="selectParams" item="selectParam">
+				AND pgpp.product_id IN (
+					SELECT
+						pgpp.product_id
+					FROM
+						merchant_goods_product_params pgpp
+					WHERE
+						pgpp.params_type = 1
+					AND pgpp.params_value LIKE #{selectParam}
+				)
+			</foreach>
+		</if>
+	</where>	
+	GROUP BY
+		pgpp.params_term_id
+  </select>
   
+  <select id="getParamsNamesByCaseId" parameterType="java.lang.Long" resultType="com.azz.order.selection.vo.Params">
+	SELECT
+		pgpp.params_term_id as paramsTermId,
+		pgpp.params_name AS paramsName
+	FROM
+		merchant_goods_product_params pgpp
+	JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status != 0
+	WHERE
+		pgpp.product_id IN (
+			SELECT
+				mgp.id AS productId
+			FROM
+				merchant_goods_product mgp
+			WHERE
+				mgp.assortment_id = (
+					SELECT
+						pc.classification_id
+					FROM
+						platform_case pc
+					WHERE
+						pc.id = #{caseId}
+				)
+		)
+	GROUP BY
+		pgpp.params_term_id
+  </select>
   
+  <resultMap id="productInfo" type="com.azz.order.selection.vo.ProductInfo">
+  	<result column="productCode" property="productCode" jdbcType="VARCHAR"/>
+    <result column="deliveryDate" property="deliveryDate" jdbcType="INTEGER"/>
+    <result column="price" property="price" jdbcType="DECIMAL"/>
+  	<collection property="productParams" ofType="com.azz.order.selection.vo.ProductParams">
+  		<result column="paramsTermId" property="paramsTermId" jdbcType="BIGINT"/>
+        <result column="paramsName" property="paramsName" jdbcType="VARCHAR"/>
+        <result column="paramsValue" property="paramsValue" jdbcType="VARCHAR"/>
+    </collection>
+  </resultMap>
   
+  <select id="getProductInfos" parameterType="com.azz.order.selection.bo.SearchCombinationInitParamsParam" resultMap="productInfo">
+	  SELECT
+		t.product_code as productCode,
+		t.delivery_date as deliveryDate,
+		t.price as price,
+		mgpp.params_term_id as paramsTermId,
+		mgpp.params_name as paramsName,
+		mgpp.params_value as paramsValue
+	FROM
+		(
+			SELECT
+				t.product_id,
+				t.product_code,
+				t.delivery_date,
+				t.price
+			FROM
+				(
+					SELECT
+						pgp.id AS product_id,
+						pgp.product_code,
+						mgpp.delivery_date,
+						mgpp.price
+					FROM
+						merchant_goods_product pgp
+					JOIN merchant_goods_product_price mgpp ON pgp.id = mgpp.product_id
+					WHERE
+					AND mgp.product_status != 0
+						pgp.id IN (
+							SELECT
+								mgp.id AS productId
+							FROM
+								merchant_goods_product mgp
+							WHERE
+								mgp.assortment_id = (
+									SELECT
+										cs.classification_id
+									FROM
+										platform_case cs
+									join platform_combination pc on cs.id = pc.case_id
+									WHERE
+										pc.combination_code = #{combinationCode}
+								)
+						)
+					ORDER BY
+						mgpp.price
+				) t
+			GROUP BY
+				t.product_code
+		) t
+	JOIN merchant_goods_product_params mgpp ON mgpp.product_id = t.product_id
+	JOIN merchant_goods_product mgp ON mgp.id = mgpp.product_id
+	JOIN platform_combination_module pcm ON pcm.module_id = mgp.module_id
+	JOIN platform_combination pc on pc.id = pcm.combination_id
+  	<where>
+  		pc.combination_code = #{combinationCode}
+  	AND mgp.product_status != 0
+  		<if test="selectParams != null and selectParams.size() > 0">
+			<foreach collection="selectParams" item="selectParam">
+				AND mgpp.product_id IN (
+					SELECT
+						mgpp.product_id
+					FROM
+						merchant_goods_product_params mgpp
+					WHERE
+						mgpp.params_type = 1
+					AND mgpp.params_value LIKE #{selectParam}
+				)
+			</foreach>
+		</if>
+  	</where>
+  	order by mgp.create_time desc
+  </select>
   
+  <resultMap id="productPrice" type="com.azz.order.selection.vo.ProductPrice">
+  	<result column="productCode" property="productCode" jdbcType="VARCHAR"/>
+  	<collection property="prices" ofType="com.azz.order.selection.vo.Price">
+  		<result column="productPriceId" property="productPriceId" jdbcType="BIGINT"/>
+  		<result column="deliveryDate" property="deliveryDate" jdbcType="INTEGER"/>
+	    <result column="price" property="price" jdbcType="DECIMAL"/>
+    </collection>
+  </resultMap>
   
+  <select id="getProductPrice" parameterType="string" resultMap="productPrice">
+	  SELECT
+		mgp.product_code AS productCode,
+		mgpp.id AS productPriceId,
+		mgpp.delivery_date AS deliveryDate,
+		mgpp.price AS price
+	FROM
+		merchant_goods_product_price mgpp
+	JOIN merchant_goods_product mgp ON mgp.id = mgpp.product_id
+	WHERE
+		mgp.product_code = #{productCode}
+  </select>
   
-  
-  
-  
-  
+  <select id="getProductInfoByProductCode" resultType="com.azz.order.selection.vo.ProductInfomation">
+	  SELECT
+		pgp.product_code AS productCode,
+		mgpp.delivery_date AS deliveryDate,
+		mgpp.price AS price,
+		mgm.module_name AS moduleName,
+		group_concat(
+			DISTINCT params.params_value
+		) AS paramValues
+	FROM
+		merchant_goods_product pgp
+	JOIN merchant_goods_module mgm ON mgm.id = pgp.module_id
+	JOIN merchant_goods_product_price mgpp ON pgp.id = mgpp.product_id AND mgpp.id = #{productPriceId}
+	JOIN merchant_goods_product_params params ON params.product_id = pgp.id
+	WHERE
+		pgp.product_code = #{productCode}
+  </select>
   
   
   

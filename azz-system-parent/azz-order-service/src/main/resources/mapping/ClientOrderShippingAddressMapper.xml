@@ -246,6 +246,28 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
+  <select id="getDefaultShippingAddressByClientUserCode" parameterType="string" resultType="com.azz.order.client.pojo.vo.ShippingAddress">
+	  SELECT
+		cosa.id AS shippingId,
+		cosa.is_default AS isDefault,
+		cosa.receiver_name AS receiverName,
+		cosa.receiver_phone_number AS receiverPhoneNumber,
+		cosa.province_code as provinceCode,
+		cosa.province_name as provinceName,
+		cosa.city_code as cityCode,
+		cosa.city_name as cityName,
+		cosa.area_code as areaCode,
+		cosa.area_name as areaName,
+		cosa.detail_address as detailAddress,
+		cosa.address_alias as addressAlias
+	FROM
+		client_order_shipping_address cosa
+	LEFT JOIN client_user cu ON cu.id = cosa.client_user_id
+	WHERE cosa. STATUS != 0
+	and cosa.is_default = 1
+	and cu.client_user_code = #{clientUserCode}
+  </select>
+  
   <select id="getShippingAddressByClientUserCode" parameterType="string" resultType="com.azz.order.client.pojo.vo.ShippingAddress">
 	  SELECT
 		cosa.id AS shippingId,

@@ -389,4 +389,13 @@
 	GROUP BY mo.merchant_order_code
 	ORDER BY mo.create_time DESC
   </select>
+  
+  <!-- platform invoice sql start-->
+  <select id="selectMerchantOrderByClientOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_order
+    where client_order_id = #{clientOrderId,jdbcType=BIGINT}
+  </select>
+  <!-- platform invoice sql end-->
 </mapper>

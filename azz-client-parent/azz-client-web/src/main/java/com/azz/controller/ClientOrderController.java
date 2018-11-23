@@ -85,6 +85,18 @@ public class ClientOrderController {
 	
 	/**
 	 * 
+	 * <p>查询默认收货地址信息</p>
+	 * @param clientUserCode
+	 * @return
+	 * @author 黄智聪  2018年11月13日 下午2:58:08
+	 */
+	@RequestMapping("/getDefaultShippingAddress")
+	public JsonResult<ShippingAddress> getDefaultShippingAddress(){
+		return clientOrderService.getDefaultShippingAddress(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
+	}
+	
+	/**
+	 * 
 	 * <p>查询收货地址信息</p>
 	 * @param clientUserCode
 	 * @return

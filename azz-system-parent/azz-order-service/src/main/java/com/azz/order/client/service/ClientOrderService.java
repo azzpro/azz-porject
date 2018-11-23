@@ -148,6 +148,17 @@ public class ClientOrderService {
 	
 	/**
 	 * 
+	 * <p>查询默认收货地址信息</p>
+	 * @param clientUserCode
+	 * @return
+	 * @author 黄智聪  2018年11月13日 下午2:58:08
+	 */
+	public JsonResult<ShippingAddress> getDefaultShippingAddress(String clientUserCode){
+		return JsonResult.successJsonResult(clientOrderShippingAddressMapper.getDefaultShippingAddressByClientUserCode(clientUserCode));
+	}
+	
+	/**
+	 * 
 	 * <p>查询收货地址信息</p>
 	 * @param clientUserCode
 	 * @return

@@ -606,4 +606,46 @@
 		</if>
 	ORDER BY cop.create_time DESC
   </select>
+  
+  <select id="getClientOrderInfoListByParam" parameterType="java.lang.String" resultMap="clientOrderInfo">
+    SELECT
+		cop.id as clientOrderId,
+		cop.client_order_code AS clientOrderCode,
+		cop.create_time AS orderTime,
+		cop.payment_method AS paymentMethod,
+		cop.invoice_status as invoiceStatus,
+		cu.client_user_name as orderCreator,
+		cop.order_status_id as orderStatusId,
+		cop.grand_total AS grandTotal,
+		cop.remark as remark,
+		cosa.receiver_name AS receiverName,
+		cosa.address_alias AS addressAlias,
+		CONCAT(cosa.province_name,cosa.city_name,cosa.area_name,cosa.detail_address) as receiverAddress,
+		m.merchant_name as merchantName,
+		coip.module_pic_url AS modulePicUrl,
+		coip.product_code AS productCode,
+		coip.module_name AS moduleName,
+		coip.quantity AS quantity,
+		coip.product_price as productPrice,
+		coip.product_price *  coip.quantity as productPriceSum,
+		coip.delivery_time as deliveryTime
+	FROM
+		client_order_personal cop
+	LEFT JOIN order_status os ON os.status_type = 1 AND os.id = cop.order_status_id
+	LEFT JOIN client_order_item_personal coip ON coip.client_order_id = cop.id
+	LEFT JOIN merchant_goods_product mgp on mgp.product_code = coip.product_code
+	LEFT JOIN merchant m on m.id = mgp.merchant_id
+	LEFT JOIN client_order_shipping_address cosa ON cosa.id = cop.order_shipping_id
+	LEFT JOIN client_user cu ON cu.id = cosa.client_user_id
+	<where>
+		cop.status != 0
+		<if test="orderCode != null and orderCode != ''">
+			AND cop.client_order_code = #{orderCode}
+		</if>
+		<if test="clientUserCode != null and clientUserCode != ''">
+			AND cu.client_user_code = #{clientUserCode}
+		</if>
+	</where>
+	ORDER BY cop.create_time DESC
+  </select>
 </mapper>

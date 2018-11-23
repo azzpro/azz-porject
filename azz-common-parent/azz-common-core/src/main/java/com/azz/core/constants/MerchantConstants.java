@@ -394,6 +394,30 @@ public abstract class MerchantConstants {
         
     }
 	
+	// 0 待确认 1 待开票 2 待签收 3 已完成
+	public enum MerchantInvoiceApplyStatusEnum {
+
+        NOT_CONFIRMED(0, "待确认"),
+
+        NOT_INVOICED(1, "待开票"),
+
+        NOT_SIGNED(2, "待签收"),
+
+        COMPLETED(3, "已完成");
+
+        @Getter
+        private int value;
+
+        @Getter
+        private String desc;
+
+        MerchantInvoiceApplyStatusEnum(int value, String desc) {
+            this.value = value;
+            this.desc = desc;
+        }
+        
+    }
+	
 	/**
 	 * 
 	 * <P>商户订单状态</P>

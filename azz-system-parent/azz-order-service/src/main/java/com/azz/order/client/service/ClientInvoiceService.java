@@ -144,6 +144,7 @@ public class ClientInvoiceService {
         ciObj.setInvoiceTemplateId(param.getInvoiceTemplateId());
         ciObj.setShippingAddressId(param.getShippingAddressId());
         ciObj.setStatus(ClientInvoiceType.PENDING.getValue());
+        ciObj.setCreateTime(new Date());
         // 添加开票申请
         clientInvoiceMapper.insertSelective(ciObj);
         return JsonResult.successJsonResult();
@@ -368,7 +369,9 @@ public class ClientInvoiceService {
         JSR303ValidateUtils.validate(param);
         // 关联订单基本信息、开票详情、寄送地址
         ClientInvoiceApplyDetail ciad = clientInvoiceMapper.getClientInvoiceOrderApplyDetail(param);
-        
+        if(ObjectUtils.isNull(ciad)) {
+            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单基本信息不存在");
+        }
         // 开票信息
         List<ClientInvoiceDeliveryDetail> ciddList = clientInvoiceMapper.getInvoiceDeliveryDetail(param.getClientOrderCode());
         if(ObjectUtils.isNotNull(ciddList)  && ciddList.size() > 0) {
@@ -376,10 +379,7 @@ public class ClientInvoiceService {
         }
         
         // 产品明细
-        SearchClientOrderParam scop = new SearchClientOrderParam();
-        scop.setClientUserCode(param.getClientUserCode());
-        scop.setSearchInput(param.getClientOrderCode());
-        List<ClientOrderInfo> coiList = clientOrderPersonalMapper.getClientOrderInfoList(scop);
+        List<ClientOrderInfo> coiList = clientOrderPersonalMapper.getClientOrderInfoListByParam(param.getClientOrderCode(),param.getClientUserCode());
         List<ClientOrderItemInfo> orderItem = new ArrayList<>();
         if(ObjectUtils.isNotNull(coiList) && coiList.size() > 0) {
             orderItem = coiList.get(0).getOrderItems();
@@ -397,7 +397,10 @@ public class ClientInvoiceService {
      */
     public JsonResult<List<ClientOrderItemInfo>> getClientOrderItems(@RequestBody SearchClientOrderParam param){
         List<ClientOrderInfo> coiList = clientOrderPersonalMapper.getClientOrderInfoList(param);
-        return JsonResult.successJsonResult(coiList.get(0).getOrderItems());
+        if(ObjectUtils.isNotNull(coiList) && coiList.size() > 0 && coiList.get(0).getOrderItems().size() > 0) {
+            return JsonResult.successJsonResult(coiList.get(0).getOrderItems());
+        }
+        return JsonResult.successJsonResult(null);
     }
 }
 

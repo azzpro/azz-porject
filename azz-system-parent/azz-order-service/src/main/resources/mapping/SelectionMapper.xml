@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.selection.mapper.SelectionMapper">
+  
+  <select id="getSelectionCaseInfos" resultType="com.azz.order.selection.vo.SelectionCaseInfo">
+  	SELECT
+		pc.case_code AS caseCode,
+		pc.case_name AS caseName,
+		pc.case_pic_url AS casePicUrl
+	FROM
+		platform_case pc
+	WHERE
+		pc.case_status != 0
+	ORDER BY
+		pc.create_time DESC
+  </select> 
+  
+  
+  <resultMap id="paramsInfo" type="com.azz.order.selection.vo.InitParams">
+  	<result column="paramsType" jdbcType="INTEGER" property="paramsType" />
+  	<collection property="paramsTerms" ofType="com.azz.order.selection.vo.ParamsTerm">
+  		<result column="paramsTermId" property="paramsTermId" jdbcType="BIGINT"/>
+        <result column="paramsName" property="paramsName" jdbcType="VARCHAR"/>
+        <result column="paramValues" property="paramValues" jdbcType="VARCHAR"/>
+        <result column="minVal" property="minVal" jdbcType="DECIMAL"/>
+        <result column="maxVal" property="maxVal" jdbcType="DECIMAL"/>
+    </collection>
+  </resultMap>
+  
+  <select id="getInitParams" parameterType="com.azz.order.selection.bo.SearchInitParamsParam" resultMap="paramsInfo">
+  	SELECT
+		pgpp.params_term_id AS paramsTermId,
+		pgpp.params_type AS paramsType,
+		pgpp.params_name AS paramsName,
+		group_concat(DISTINCT pgpp.params_value) AS paramValues,
+		t.minVal AS minVal,
+		t.maxVal AS maxVal
+	FROM
+		merchant_goods_product_params pgpp
+	LEFT JOIN (
+		SELECT
+			pgpp.params_term_id AS params_term_id,
+			MIN(
+				cast(pgpp.params_value AS DECIMAL)
+			) AS minVal,
+			MAX(
+				cast(pgpp.params_value AS DECIMAL)
+			) AS maxVal
+		FROM
+			merchant_goods_product_params pgpp
+		<where>
+		 	pgpp.params_type = 2
+		AND pgpp.params_choice = 1
+		AND	pgpp.params_id IN (
+				SELECT
+					pccp.params_id
+				FROM
+					platform_case_classification_params pccp
+				JOIN platform_case pc ON pc.id = pccp.case_id
+				WHERE
+					pc.case_code = #{caseCode}
+			)
+		<if test="inputParams != null and inputParams.size() > 0">
+			<foreach collection="inputParams" item="inputParam">
+				AND	pgpp.product_id IN (
+					SELECT
+						pgpp.product_id
+					FROM
+						merchant_goods_product_params pgpp
+					WHERE
+						pgpp.params_type = 2
+					AND pgpp.params_value BETWEEN #{inputParam.minVal} AND #{inputParam.maxVal}
+				)
+			</foreach>
+		</if>
+		</where>
+		GROUP BY
+			pgpp.params_term_id
+	) t ON t.params_term_id = pgpp.params_term_id
+	<where>
+		pgpp.params_id IN (
+			SELECT
+				pccp.params_id
+			FROM
+				platform_case_classification_params pccp
+			JOIN platform_case pc ON pc.id = pccp.case_id
+			WHERE
+				pc.case_code = #{caseCode}
+		)
+		<if test="inputParams != null and inputParams.size() > 0">
+			<foreach collection="inputParams" item="inputParam">
+				AND	pgpp.product_id IN (
+					SELECT
+						pgpp.product_id
+					FROM
+						merchant_goods_product_params pgpp
+					WHERE
+						pgpp.params_type = 2
+					AND pgpp.params_value BETWEEN #{inputParam.minVal} AND #{inputParam.maxVal}
+				)
+			</foreach>
+		</if>
+		<if test="selectParams != null and selectParams.size() > 0">
+			<foreach collection="selectParams" item="selectParam">
+				AND pgpp.product_id IN (
+					SELECT
+						pgpp.product_id
+					FROM
+						merchant_goods_product_params pgpp
+					WHERE
+						pgpp.params_type = 1
+					AND pgpp.params_value LIKE #{selectParam}
+				)
+			</foreach>
+		</if>
+	</where>
+	GROUP BY
+		pgpp.params_term_id
+  </select> 
+  
+  <select id="getCombinationInfos" parameterType="com.azz.order.selection.bo.SearchInitParamsParam" resultType="com.azz.order.selection.vo.CombinationInfo">
+  	SELECT
+		pc.combination_code AS combinationCode,
+		pc.combination_name AS combinationName,
+		pc.combination_pic_url AS combinationPicUrl,
+		pc.combination_pic_name AS combinationPicName,
+		t.delivery_date AS deliveryDate,
+		t.price AS price
+	FROM
+		platform_combination pc
+	JOIN platform_combination_module pcm ON pcm.combination_id = pc.id
+	JOIN platform_case cs ON cs.id = pc.case_id
+	JOIN merchant_goods_product mgp ON mgp.module_id = pcm.module_id
+	JOIN merchant_goods_product_params pgpp ON pgpp.product_id = mgp.id
+	JOIN (
+		SELECT
+			ascCasePrice.caseId,
+			ascCasePrice.product_id,
+			ascCasePrice.delivery_date,
+			ascCasePrice.price
+		FROM
+			(
+				SELECT
+					pc.id AS caseId,
+					price.product_id,
+					price.delivery_date,
+					price.price
+				FROM
+					platform_combination pc
+				JOIN platform_combination_module pcm ON pcm.combination_id = pc.id
+				JOIN merchant_goods_module mgm ON mgm.id = pcm.module_id
+				JOIN merchant_goods_product mgp ON mgp.module_id = mgm.id
+				JOIN merchant_goods_product_price price ON price.product_id = mgp.id
+				ORDER BY
+					price.price
+			) ascCasePrice
+		GROUP BY
+			ascCasePrice.caseId
+	) t ON pc.id = t.caseId
+	<where>
+		cs.case_code = #{caseCode}
+		<if test="inputParams != null and inputParams.size() > 0">
+			<foreach collection="inputParams" item="inputParam">
+				AND	pgpp.product_id IN (
+					SELECT
+						pgpp.product_id
+					FROM
+						merchant_goods_product_params pgpp
+					WHERE
+						pgpp.params_type = 2
+					AND pgpp.params_value BETWEEN #{inputParam.minVal} AND #{inputParam.maxVal}
+				)
+			</foreach>
+		</if>
+		<if test="selectParams != null and selectParams.size() > 0">
+			<foreach collection="selectParams" item="selectParam">
+				AND pgpp.product_id IN (
+					SELECT
+						pgpp.product_id
+					FROM
+						merchant_goods_product_params pgpp
+					WHERE
+						pgpp.params_type = 1
+					AND pgpp.params_value LIKE #{selectParam}
+				)
+			</foreach>
+		</if>
+	</where>
+	GROUP BY
+		pc.id
+  </select>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</mapper>

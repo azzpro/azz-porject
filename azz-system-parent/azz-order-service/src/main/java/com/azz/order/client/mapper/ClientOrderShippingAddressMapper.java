@@ -22,6 +22,15 @@ public interface ClientOrderShippingAddressMapper {
     
     /**
      * 
+     * <p>根据客户编码查询默认收货地址</p>
+     * @param clientUserCode
+     * @return
+     * @author 黄智聪  2018年11月13日 下午3:28:37
+     */
+    ShippingAddress getDefaultShippingAddressByClientUserCode(String clientUserCode);
+    
+    /**
+     * 
      * <p>根据客户编码查询收货地址列表</p>
      * @param clientUserCode
      * @return

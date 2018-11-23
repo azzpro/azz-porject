@@ -25,7 +25,7 @@ public interface MerchantOrderMapper {
     int insertSelective(MerchantOrder record);
 
     MerchantOrder selectByPrimaryKey(Long id);
-
+    
     int updateByPrimaryKeySelective(MerchantOrder record);
 
     int updateByPrimaryKey(MerchantOrder record);
@@ -105,5 +105,11 @@ public interface MerchantOrderMapper {
      */
     List<MerchantOrderList> selectPlatformMerchantOrder(SearchMerchantOrderParam param);
     
-    
+    /**
+     * <p>【平台端】根据客户订单id获取所有商户订单信息</p>
+     * @param clientOrderId
+     * @return
+     * @author 彭斌  2018年11月22日 下午4:37:56
+     */
+    List<MerchantOrder> selectMerchantOrderByClientOrderId(Long clientOrderId);
 }

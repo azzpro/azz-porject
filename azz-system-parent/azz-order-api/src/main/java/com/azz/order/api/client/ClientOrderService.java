@@ -65,6 +65,16 @@ public interface ClientOrderService {
 	
 	/**
 	 * 
+	 * <p>查询默认收货地址信息</p>
+	 * @param clientUserCode
+	 * @return
+	 * @author 黄智聪  2018年11月13日 下午2:58:08
+	 */
+	@RequestMapping("/azz/api/client/order/getDefaultShippingAddress")
+	JsonResult<ShippingAddress> getDefaultShippingAddress(@RequestParam("clientUserCode")String clientUserCode);
+	
+	/**
+	 * 
 	 * <p>查询收货地址信息</p>
 	 * @param clientUserCode
 	 * @return

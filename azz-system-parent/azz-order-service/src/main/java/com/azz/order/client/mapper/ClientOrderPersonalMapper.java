@@ -95,6 +95,14 @@ public interface ClientOrderPersonalMapper {
      */
     List<ClientAddInvoice> getInvoiceClient(SearchAddInvoiceApplyParam param);
     
+    /**
+     * <p>获取订单明细支持订单编码与客户编码索取</p>
+     * @param orderCode
+     * @param clientUserCode
+     * @return
+     * @author 彭斌  2018年11月22日 下午3:29:44
+     */
+    List<ClientOrderInfo> getClientOrderInfoListByParam(@Param("orderCode") String orderCode, @Param("clientUserCode") String clientUserCode);
     /***************************************************************************************/
     /************************************以上为客户端sql***************************************/
     /***************************************************************************************/

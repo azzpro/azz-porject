@@ -13,8 +13,11 @@ import com.azz.order.selection.vo.CombinationInitParams;
 import com.azz.order.selection.vo.InitParams;
 import com.azz.order.selection.vo.Params;
 import com.azz.order.selection.vo.ProductInfo;
+import com.azz.order.selection.vo.ProductInfomation;
 import com.azz.order.selection.vo.ProductPrice;
 import com.azz.order.selection.vo.SelectionCaseInfo;
+
+import feign.Param;
 @Mapper
 public interface SelectionMapper {
 	
@@ -105,5 +108,15 @@ public interface SelectionMapper {
 	 * @author 黄智聪  2018年11月23日 上午11:09:56
 	 */
 	ProductPrice getProductPrice(String productCode);
+
+	/**
+	 * 
+	 * <p>根据产品编码、产品价格id查询该产品信息</p>
+	 * @param productCode
+	 * @param productPriceId
+	 * @return
+	 * @author 黄智聪  2018年11月23日 下午5:09:12
+	 */
+	ProductInfomation getProductInfoByProductCode(@Param("productCode")String productCode, @Param("productPriceId")Long productPriceId);
 	
 }

@@ -8,6 +8,7 @@
 package com.azz.selection.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +20,32 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.QueryPage;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.page.Pagination;
+import com.azz.core.constants.ClientConstants.SelectionRecordStatus;
 import com.azz.exception.JSR303ValidationException;
+import com.azz.order.merchant.mapper.ClientUserMapper;
+import com.azz.order.merchant.pojo.ClientUser;
+import com.azz.order.selection.ClientSelectionRecord;
+import com.azz.order.selection.ClientShoppingCart;
+import com.azz.order.selection.bo.AddSelectionRecordParam;
+import com.azz.order.selection.bo.AddToShoppingCartParam;
+import com.azz.order.selection.bo.DelSelectionRecordParam;
 import com.azz.order.selection.bo.SearchCombinationInitParamsParam;
 import com.azz.order.selection.bo.SearchInitParamsParam;
+import com.azz.order.selection.bo.SearchSelectionRecordParam;
 import com.azz.order.selection.vo.CombinationDetail;
 import com.azz.order.selection.vo.CombinationInfo;
 import com.azz.order.selection.vo.CombinationInitParams;
 import com.azz.order.selection.vo.InitParams;
 import com.azz.order.selection.vo.Params;
 import com.azz.order.selection.vo.ProductInfo;
+import com.azz.order.selection.vo.ProductInfomation;
 import com.azz.order.selection.vo.ProductParams;
 import com.azz.order.selection.vo.ProductPrice;
 import com.azz.order.selection.vo.SelectionCaseInfo;
+import com.azz.order.selection.vo.SelectionRecord;
+import com.azz.order.selection.vo.ShoppingCartProductInfo;
+import com.azz.selection.mapper.ClientSelectionRecordMapper;
+import com.azz.selection.mapper.ClientShoppingCartMapper;
 import com.azz.selection.mapper.SelectionMapper;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
@@ -44,9 +59,18 @@ import com.github.pagehelper.PageHelper;
 @Transactional(rollbackFor = Exception.class)
 @Service
 public class SelectionService {
-	
+
 	@Autowired
 	private SelectionMapper selectionMapper;
+	
+	@Autowired
+	private ClientUserMapper clientUserMapper;
+	
+	@Autowired
+	private ClientSelectionRecordMapper clientSelectionRecordMapper;
+	
+	@Autowired
+	private ClientShoppingCartMapper clientShoppingCartMapper;
 
 	/**
 	 * 
@@ -224,13 +248,145 @@ public class SelectionService {
 	
 	/**
 	 * 
-	 * <p>根据产品编码查询该产品的价格信息</p>
+	 * <p>根据产品编码查询该产品的价格信息 7</p>
 	 * @param productCode
 	 * @return
 	 * @author 黄智聪  2018年11月23日 上午11:11:52
 	 */
 	public JsonResult<ProductPrice> getProductPrice(String productCode){
 		return JsonResult.successJsonResult(selectionMapper.getProductPrice(productCode));
+	}
+	
+	/**
+	 * 
+	 * <p>查询选型记录 8</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月23日 上午11:11:52
+	 */
+	public JsonResult<Pagination<SelectionRecord>> getSelectionRecordByClientUserCode(@RequestBody SearchSelectionRecordParam param){
+		JSR303ValidateUtils.validate(param);
+		PageHelper.startPage(param.getPageNum(), param.getPageSize());
+		List<SelectionRecord> records = clientSelectionRecordMapper.getSelectionRecordByClientUserCode(param);
+		return JsonResult.successJsonResult(new Pagination<>(records));
+	}
+	
+	/**
+	 * 
+	 * <p>保存选型记录 9</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月23日 下午3:48:46
+	 */
+	public JsonResult<String> addSelectionRecord(@RequestBody AddSelectionRecordParam param){
+		JSR303ValidateUtils.validate(param);
+		String productCode = param.getProductCode();
+		Long productPriceId = param.getProductPriceId();
+		ProductInfomation productInfo = selectionMapper.getProductInfoByProductCode(productCode, productPriceId);
+		if(productInfo == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "产品信息不存在");
+		}
+		ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getClientUserCode());
+		ClientSelectionRecord clientSelectionRecord = ClientSelectionRecord.builder()
+				.clientUserId(user.getId())
+				.createTime(new Date())
+				.deliveryDate(productInfo.getDeliveryDate())
+				.moduleName(productInfo.getModuleName())
+				.paramsValue(productInfo.getParamValues())
+				.price(productInfo.getPrice())
+				.productCode(productInfo.getProductCode())
+				.build();
+		clientSelectionRecordMapper.insertSelective(clientSelectionRecord);
+		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
+	 * <p>删除选型记录 10</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月23日 下午6:32:17
+	 */
+	public JsonResult<String> delSelectionRecord(@RequestBody DelSelectionRecordParam param){
+		JSR303ValidateUtils.validate(param);
+		List<Long> selectionRecordIds = param.getSelectionRecordIds();
+		Date nowDate = new Date();
+		for (Long selectionRecordId : selectionRecordIds) {
+			ClientSelectionRecord clientSelectionRecord = ClientSelectionRecord.builder()
+					.id(selectionRecordId)
+					.status(SelectionRecordStatus.INVALID.getValue())
+					.modifier(param.getClientUserCode())
+					.lastModifyTime(nowDate)
+					.build();
+			clientSelectionRecordMapper.updateByPrimaryKeySelective(clientSelectionRecord);
+		}
+		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
+	 * <p>添加产品到购物车 11</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月23日 下午3:48:46
+	 */
+	public JsonResult<String> addProductsToShoppingCart(@RequestBody AddToShoppingCartParam param){
+		JSR303ValidateUtils.validate(param);
+		ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getClientUserCode());
+		List<Long> selectionRecordIds = param.getSelectionRecordIds();
+		Date nowDate = new Date();
+		for (Long selectionRecordId : selectionRecordIds) {
+			ClientShoppingCart shoppingCartRecord = ClientShoppingCart.builder()
+					.clientUserId(user.getId())
+					.createTime(nowDate)
+					.creator(param.getClientUserCode())
+					.selectionRecordId(selectionRecordId)
+					.build();
+			clientShoppingCartMapper.insertSelective(shoppingCartRecord);
+		}
+		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
+	 * <p>查询购物车产品信息 12</p>
+	 * @param clientUserCode
+	 * @return
+	 * @author 黄智聪  2018年11月23日 下午6:23:58
+	 */
+	public JsonResult<List<ShoppingCartProductInfo>> getShoppingCartProductInfos(String clientUserCode){
+		return JsonResult.successJsonResult(clientShoppingCartMapper.getShoppingCartProductInfos(clientUserCode));
+	}
+	
+	/**
+	 * 
+	 * <p>移除购物车中的产品 13</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月23日 下午6:49:03
+	 */
+	public JsonResult<String> removeShoppingCartProduct(Long shoppingCartId){
+		if(shoppingCartId == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "请选择要移除的记录");
+		}
+		clientShoppingCartMapper.deleteByPrimaryKey(shoppingCartId);
+		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
+	 * <p>查询用户是否能对购物车的产品进行下单操作 14</p>
+	 * @param clientUserCode
+	 * @return
+	 * @author 黄智聪  2018年11月23日 下午6:57:21
+	 */
+	public JsonResult<String> checkOrderOpt(String clientUserCode){
+		// 查询客户购物车中的产品存在的下架商品数量
+		int count = clientShoppingCartMapper.countPutOffProducts(clientUserCode);
+		if(count > 0) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "购物车中存在已下架产品，请移除");
+		}
+		return JsonResult.successJsonResult();
 	}
 	
 }

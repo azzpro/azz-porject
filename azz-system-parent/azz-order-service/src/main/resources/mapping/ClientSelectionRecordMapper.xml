@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.azz.selection.mapper.ClientSelectionRecordMapper">
   <resultMap id="BaseResultMap" type="com.azz.order.selection.ClientSelectionRecord">
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="id" jdbcType="BIGINT" property="id" />
     <result column="client_user_id" jdbcType="BIGINT" property="clientUserId" />
-    <result column="product_code" jdbcType="BIGINT" property="productCode" />
+    <result column="product_code" jdbcType="VARCHAR" property="productCode" />
     <result column="price" jdbcType="DECIMAL" property="price" />
     <result column="delivery_date" jdbcType="INTEGER" property="deliveryDate" />
     <result column="module_name" jdbcType="VARCHAR" property="moduleName" />
@@ -42,7 +42,7 @@
       status, create_time, creator, 
       last_modify_time, modifier, params_value
       )
-    values (#{id,jdbcType=INTEGER}, #{clientUserId,jdbcType=BIGINT}, #{productCode,jdbcType=BIGINT}, 
+    values (#{id,jdbcType=BIGINT}, #{clientUserId,jdbcType=BIGINT}, #{productCode,jdbcType=VARCHAR}, 
       #{price,jdbcType=DECIMAL}, #{deliveryDate,jdbcType=INTEGER}, #{moduleName,jdbcType=VARCHAR}, 
       #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
       #{lastModifyTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{paramsValue,jdbcType=LONGVARCHAR}
@@ -90,13 +90,13 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        #{id,jdbcType=INTEGER},
+        #{id,jdbcType=BIGINT},
       </if>
       <if test="clientUserId != null">
         #{clientUserId,jdbcType=BIGINT},
       </if>
       <if test="productCode != null">
-        #{productCode,jdbcType=BIGINT},
+        #{productCode,jdbcType=VARCHAR},
       </if>
       <if test="price != null">
         #{price,jdbcType=DECIMAL},
@@ -134,7 +134,7 @@
         client_user_id = #{clientUserId,jdbcType=BIGINT},
       </if>
       <if test="productCode != null">
-        product_code = #{productCode,jdbcType=BIGINT},
+        product_code = #{productCode,jdbcType=VARCHAR},
       </if>
       <if test="price != null">
         price = #{price,jdbcType=DECIMAL},
@@ -164,12 +164,12 @@
         params_value = #{paramsValue,jdbcType=LONGVARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.azz.order.selection.ClientSelectionRecord">
     update client_selection_record
     set client_user_id = #{clientUserId,jdbcType=BIGINT},
-      product_code = #{productCode,jdbcType=BIGINT},
+      product_code = #{productCode,jdbcType=VARCHAR},
       price = #{price,jdbcType=DECIMAL},
       delivery_date = #{deliveryDate,jdbcType=INTEGER},
       module_name = #{moduleName,jdbcType=VARCHAR},
@@ -179,12 +179,12 @@
       last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
       modifier = #{modifier,jdbcType=VARCHAR},
       params_value = #{paramsValue,jdbcType=LONGVARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.azz.order.selection.ClientSelectionRecord">
     update client_selection_record
     set client_user_id = #{clientUserId,jdbcType=BIGINT},
-      product_code = #{productCode,jdbcType=BIGINT},
+      product_code = #{productCode,jdbcType=VARCHAR},
       price = #{price,jdbcType=DECIMAL},
       delivery_date = #{deliveryDate,jdbcType=INTEGER},
       module_name = #{moduleName,jdbcType=VARCHAR},
@@ -193,6 +193,31 @@
       creator = #{creator,jdbcType=VARCHAR},
       last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
       modifier = #{modifier,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="getSelectionRecordByClientUserCode" parameterType="com.azz.order.selection.bo.SearchSelectionRecordParam"  resultType="com.azz.order.selection.vo.SelectionRecord">
+  	SELECT
+		csr.product_code AS productCode,
+		csr.price AS price,
+		mgp.product_status AS productStatus,
+		csr.delivery_date AS deliveryDate,
+		csr.module_name AS moduleName,
+		csr.create_time AS createTime,
+		csr.params_value AS paramsValue
+	FROM
+		client_selection_record csr
+	LEFT JOIN merchant_goods_product mgp ON mgp.product_code = csr.product_code
+	JOIN client_user cu ON cu.id = csr.client_user_id
+	WHERE
+		csr.status != 0 
+	AND	cu.client_user_code = #{clientUserCode}
+		<if test="searchInput != null and searchInput != ''">
+			AND (
+				csr.module_name LIKE CONCAT('%', #{searchInput}, '%')
+			OR csr.product_code LIKE CONCAT('%', #{searchInput}, '%') 
+			)
+		</if>
+  </select>
+  
 </mapper>

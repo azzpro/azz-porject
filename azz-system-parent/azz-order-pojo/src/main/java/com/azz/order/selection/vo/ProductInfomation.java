@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2018年11月23日 上午11:06:06
+ * Create on 2018年11月23日 下午5:06:55
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
@@ -14,16 +14,16 @@ import lombok.Data;
 /**
  * <P>TODO</P>
  * @version 1.0
- * @author 黄智聪  2018年11月23日 上午11:06:06
+ * @author 黄智聪  2018年11月23日 下午5:06:55
  */
 @Data
-public class Price {
+public class ProductInfomation {
 	
-	private Long productPriceId;
-
+	private String productCode;
 	private Integer deliveryDate;
-	
 	private BigDecimal price;
-	
+	private String moduleName;
+	private String paramValues;
+
 }
 

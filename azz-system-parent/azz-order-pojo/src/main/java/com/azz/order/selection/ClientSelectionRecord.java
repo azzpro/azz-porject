@@ -4,13 +4,20 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ClientSelectionRecord implements Serializable {
     /**
      * 主键id
      *
      * @mbg.generated
      */
-    private Integer id;
+    private Long id;
 
     /**
      * 客户id
@@ -24,7 +31,7 @@ public class ClientSelectionRecord implements Serializable {
      *
      * @mbg.generated
      */
-    private Long productCode;
+    private String productCode;
 
     /**
      * 参考单价
@@ -99,7 +106,7 @@ public class ClientSelectionRecord implements Serializable {
      *
      * @mbg.generated
      */
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -111,7 +118,7 @@ public class ClientSelectionRecord implements Serializable {
      *
      * @mbg.generated
      */
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -147,7 +154,7 @@ public class ClientSelectionRecord implements Serializable {
      *
      * @mbg.generated
      */
-    public Long getProductCode() {
+    public String getProductCode() {
         return productCode;
     }
 
@@ -159,7 +166,7 @@ public class ClientSelectionRecord implements Serializable {
      *
      * @mbg.generated
      */
-    public void setProductCode(Long productCode) {
+    public void setProductCode(String productCode) {
         this.productCode = productCode;
     }
 

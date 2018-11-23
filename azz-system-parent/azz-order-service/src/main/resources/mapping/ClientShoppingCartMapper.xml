@@ -115,4 +115,38 @@
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="getShoppingCartProductInfos" parameterType="string"  resultType="com.azz.order.selection.vo.ShoppingCartProductInfo">
+	  SELECT
+	  		csc.id as shoppingCartId,
+			csc.selection_record_id AS selectionRecordId,
+			csr.product_code AS productCode,
+			csr.price AS price,
+			mgp.product_status AS productStatus,
+			csr.delivery_date AS deliveryDate,
+			csr.module_name AS moduleName
+		FROM
+			client_shopping_cart csc
+		JOIN client_selection_record csr ON csr.id = csc.selection_record_id
+		JOIN client_user cu ON cu.id = csc.client_user_id
+		LEFT JOIN merchant_goods_product mgp ON mgp.product_code = csr.product_code
+		WHERE
+			csr. STATUS != 0
+		AND cu.client_user_code = #{clientUserCode}
+  </select>
+  
+  <select id="countPutOffProducts" parameterType="string"  resultType="int">
+	  SELECT
+			count(1)
+		FROM
+			client_shopping_cart csc
+		JOIN client_selection_record csr ON csr.id = csc.selection_record_id
+		LEFT JOIN merchant_goods_product mgp ON mgp.product_code = csr.product_code
+		JOIN client_user cu ON cu.id = csc.client_user_id
+		WHERE
+			csr. STATUS != 0
+		and mgp.product_status = 2
+		AND cu.client_user_code = #{clientUserCode}
+  </select>
+  
 </mapper>

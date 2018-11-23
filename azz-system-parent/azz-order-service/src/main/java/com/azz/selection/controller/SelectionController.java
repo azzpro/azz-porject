@@ -18,6 +18,7 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.QueryPage;
 import com.azz.core.common.page.Pagination;
 import com.azz.order.selection.bo.SearchInitParamsParam;
+import com.azz.order.selection.vo.CombinationDetail;
 import com.azz.order.selection.vo.CombinationInfo;
 import com.azz.order.selection.vo.InitParams;
 import com.azz.order.selection.vo.SelectionCaseInfo;
@@ -68,6 +69,18 @@ public class SelectionController {
 	@RequestMapping("/getCombinationInfos")
 	public JsonResult<Pagination<CombinationInfo>> getCombinationInfos(/*@RequestBody */SearchInitParamsParam param){
 		return selectionService.getCombinationInfos(param);
+	}
+	
+	/**
+	 * 
+	 * <p>查询推荐组合详情（包含推荐组合的信息、所包含的产品的公共选型参数、产品列表）  5</p>
+	 * @param combinationCode
+	 * @return
+	 * @author 黄智聪  2018年11月22日 下午3:12:23
+	 */
+	@RequestMapping("/getCombinationDetail")
+	public JsonResult<CombinationDetail> getCombinationDetail(String combinationCode){
+		return selectionService.getCombinationDetail(combinationCode);
 	}
 
 }

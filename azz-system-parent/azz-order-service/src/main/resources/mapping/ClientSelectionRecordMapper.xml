@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.selection.mapper.ClientSelectionRecordMapper">
+  <resultMap id="BaseResultMap" type="com.azz.order.selection.ClientSelectionRecord">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="client_user_id" jdbcType="BIGINT" property="clientUserId" />
+    <result column="product_code" jdbcType="BIGINT" property="productCode" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="delivery_date" jdbcType="INTEGER" property="deliveryDate" />
+    <result column="module_name" jdbcType="VARCHAR" property="moduleName" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="last_modify_time" jdbcType="TIMESTAMP" property="lastModifyTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.azz.order.selection.ClientSelectionRecord">
+    <result column="params_value" jdbcType="LONGVARCHAR" property="paramsValue" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, client_user_id, product_code, price, delivery_date, module_name, status, create_time, 
+    creator, last_modify_time, modifier
+  </sql>
+  <sql id="Blob_Column_List">
+    params_value
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from client_selection_record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from client_selection_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.azz.order.selection.ClientSelectionRecord">
+    insert into client_selection_record (id, client_user_id, product_code, 
+      price, delivery_date, module_name, 
+      status, create_time, creator, 
+      last_modify_time, modifier, params_value
+      )
+    values (#{id,jdbcType=INTEGER}, #{clientUserId,jdbcType=BIGINT}, #{productCode,jdbcType=BIGINT}, 
+      #{price,jdbcType=DECIMAL}, #{deliveryDate,jdbcType=INTEGER}, #{moduleName,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
+      #{lastModifyTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{paramsValue,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.order.selection.ClientSelectionRecord">
+    insert into client_selection_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="clientUserId != null">
+        client_user_id,
+      </if>
+      <if test="productCode != null">
+        product_code,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="deliveryDate != null">
+        delivery_date,
+      </if>
+      <if test="moduleName != null">
+        module_name,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="lastModifyTime != null">
+        last_modify_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="paramsValue != null">
+        params_value,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="clientUserId != null">
+        #{clientUserId,jdbcType=BIGINT},
+      </if>
+      <if test="productCode != null">
+        #{productCode,jdbcType=BIGINT},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="deliveryDate != null">
+        #{deliveryDate,jdbcType=INTEGER},
+      </if>
+      <if test="moduleName != null">
+        #{moduleName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifyTime != null">
+        #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="paramsValue != null">
+        #{paramsValue,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.order.selection.ClientSelectionRecord">
+    update client_selection_record
+    <set>
+      <if test="clientUserId != null">
+        client_user_id = #{clientUserId,jdbcType=BIGINT},
+      </if>
+      <if test="productCode != null">
+        product_code = #{productCode,jdbcType=BIGINT},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="deliveryDate != null">
+        delivery_date = #{deliveryDate,jdbcType=INTEGER},
+      </if>
+      <if test="moduleName != null">
+        module_name = #{moduleName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifyTime != null">
+        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="paramsValue != null">
+        params_value = #{paramsValue,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.azz.order.selection.ClientSelectionRecord">
+    update client_selection_record
+    set client_user_id = #{clientUserId,jdbcType=BIGINT},
+      product_code = #{productCode,jdbcType=BIGINT},
+      price = #{price,jdbcType=DECIMAL},
+      delivery_date = #{deliveryDate,jdbcType=INTEGER},
+      module_name = #{moduleName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      params_value = #{paramsValue,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.order.selection.ClientSelectionRecord">
+    update client_selection_record
+    set client_user_id = #{clientUserId,jdbcType=BIGINT},
+      product_code = #{productCode,jdbcType=BIGINT},
+      price = #{price,jdbcType=DECIMAL},
+      delivery_date = #{deliveryDate,jdbcType=INTEGER},
+      module_name = #{moduleName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

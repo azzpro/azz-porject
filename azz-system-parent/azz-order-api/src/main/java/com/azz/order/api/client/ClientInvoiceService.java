@@ -23,6 +23,7 @@ import com.azz.order.client.pojo.bo.SearchAddInvoiceApplyParam;
 import com.azz.order.client.pojo.bo.SearchClientInvoiceParam;
 import com.azz.order.client.pojo.bo.SearchClientOrderParam;
 import com.azz.order.client.pojo.bo.SearchInvoiceTemplateParam;
+import com.azz.order.client.pojo.bo.SigningInvoiceParam;
 import com.azz.order.client.pojo.vo.ClientAddInvoice;
 import com.azz.order.client.pojo.vo.ClientInvoiceApplyDetail;
 import com.azz.order.client.pojo.vo.ClientInvoiceList;
@@ -118,5 +119,14 @@ public interface ClientInvoiceService {
 	 */
 	@RequestMapping("/azz/api/client/invoice/getClientOrderItems")
 	JsonResult<List<ClientOrderItemInfo>> getClientOrderItems(@RequestBody SearchClientOrderParam param);
+	
+	/**
+	 * <p>客户确认签收</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年11月24日 下午1:58:45
+	 */
+	@RequestMapping("/azz/api/client/invoice/signingInvoice")
+	JsonResult<String> signingInvoice(@RequestBody SigningInvoiceParam param);
 }
 

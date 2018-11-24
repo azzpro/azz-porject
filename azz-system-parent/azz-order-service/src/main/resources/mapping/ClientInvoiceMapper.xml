@@ -348,5 +348,12 @@
     from client_invoice
     where client_apply_code = #{clientApplyCode}
   </select>
+  
+  <select id="getClientInvoiceByCLientOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from client_invoice
+    where client_order_id = #{clientOrderId} and status != 5
+  </select>
   <!-- platform invoice SQL end -->
 </mapper>

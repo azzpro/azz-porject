@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.page.Pagination;
+import com.azz.core.constants.ClientConstants.ClientInvoiceType;
 import com.azz.core.constants.MerchantConstants.MerchantInvoiceApplyStatusEnum;
 import com.azz.exception.JSR303ValidationException;
+import com.azz.order.client.mapper.ClientInvoiceMapper;
+import com.azz.order.client.pojo.ClientInvoice;
 import com.azz.order.merchant.mapper.MerchantInvoiceLogisticsMapper;
 import com.azz.order.merchant.mapper.MerchantInvoiceMapper;
 import com.azz.order.merchant.mapper.MerchantOrderMapper;
@@ -55,6 +58,10 @@ public class MerchantInvoiceService {
 	
 	@Autowired
     private MerchantInvoiceLogisticsMapper merchantInvoiceLogisticsMapper;
+	
+	@Autowired
+	private ClientInvoiceMapper clientInvoiceMapper;
+	
 	/**
 	 * <p>商户发票管理列表</p>
 	 * @param param
@@ -134,6 +141,20 @@ public class MerchantInvoiceService {
 	    if(ObjectUtils.isNull(mi)) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "未找到商户发票信息");
         }
+	    
+	    // 商户发票状态更新为待签收
+	    mi.setStatus(MerchantInvoiceApplyStatusEnum.NOT_SIGNED.getValue());
+	    mi.setModifier(param.getMerchantUserCode());
+	    mi.setModifyTime(new Date());
+	    merchantInvoiceMapper.updateByPrimaryKeySelective(mi);
+	    
+	    // 客户发票状态更新为待签收
+	    ClientInvoice clientInvoiceObj = clientInvoiceMapper.getClientInvoiceByCLientOrderId(mo.getClientOrderId());
+	    clientInvoiceObj.setModifier(param.getMerchantUserCode());
+	    clientInvoiceObj.setModifyTime(new Date());
+	    clientInvoiceObj.setStatus(ClientInvoiceType.NOT_SIGN.getValue());
+	    clientInvoiceMapper.updateByPrimaryKeySelective(clientInvoiceObj);
+	    
 	    MerchantInvoiceLogistics mil = new MerchantInvoiceLogistics();
 	    if(param.getDeliveryType() == 0) {
 	        mil.setExpressCompanyId(param.getExpressCompanyId());

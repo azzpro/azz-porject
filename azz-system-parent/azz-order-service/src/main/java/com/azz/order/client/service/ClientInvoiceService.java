@@ -21,6 +21,7 @@ import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.ClientConstants.ClientInvoiceType;
 import com.azz.core.constants.ClientConstants.InvoiceType;
+import com.azz.core.constants.MerchantConstants.MerchantInvoiceApplyStatusEnum;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.order.client.mapper.ClientInvoiceMapper;
 import com.azz.order.client.mapper.ClientInvoiceTemplateMapper;
@@ -35,6 +36,7 @@ import com.azz.order.client.pojo.bo.SearchClientInvoiceParam;
 import com.azz.order.client.pojo.bo.SearchClientOrderParam;
 import com.azz.order.client.pojo.bo.SearchCountTemplateParam;
 import com.azz.order.client.pojo.bo.SearchInvoiceTemplateParam;
+import com.azz.order.client.pojo.bo.SigningInvoiceParam;
 import com.azz.order.client.pojo.vo.ClientAddInvoice;
 import com.azz.order.client.pojo.vo.ClientInvoiceApplyDetail;
 import com.azz.order.client.pojo.vo.ClientInvoiceDeliveryDetail;
@@ -43,7 +45,11 @@ import com.azz.order.client.pojo.vo.ClientInvoiceTemplateList;
 import com.azz.order.client.pojo.vo.ClientOrderInfo;
 import com.azz.order.client.pojo.vo.ClientOrderItemInfo;
 import com.azz.order.merchant.mapper.ClientUserMapper;
+import com.azz.order.merchant.mapper.MerchantInvoiceMapper;
+import com.azz.order.merchant.mapper.MerchantOrderMapper;
 import com.azz.order.merchant.pojo.ClientUser;
+import com.azz.order.merchant.pojo.MerchantInvoice;
+import com.azz.order.merchant.pojo.MerchantOrder;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
@@ -71,6 +77,13 @@ public class ClientInvoiceService {
     
     @Autowired
     private ClientUserMapper clientUserMapper;
+    
+    @Autowired
+    private MerchantOrderMapper merchantOrderMapper;
+    
+    @Autowired
+    private MerchantInvoiceMapper merchantInvoiceMapper;
+    
     
     /**
      * <p>查询客户发票管理列表</p>
@@ -401,6 +414,53 @@ public class ClientInvoiceService {
             return JsonResult.successJsonResult(coiList.get(0).getOrderItems());
         }
         return JsonResult.successJsonResult(null);
+    }
+    
+    /**
+     * <p>客户确认签收发票</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月24日 上午11:51:41
+     */
+    public JsonResult<String> signingInvoice(@RequestBody SigningInvoiceParam param){
+        JSR303ValidateUtils.validate(param);
+        
+        // 校验是否满足所有商户已经开发票
+        ClientOrderPersonal copObj = clientOrderPersonalMapper.getClientOrderPersonalByClientOrderCode(param.getClientOrderCode());
+        if(ObjectUtils.isNull(copObj)) {
+            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单基本信息不存在");
+        }
+        // **********************根据客户订单id获取商户订单集合**********************
+        List<MerchantOrder> list = merchantOrderMapper.selectMerchantOrderByClientOrderId(copObj.getId());
+        if(ObjectUtils.isNull(list) || list.size() == 0) {
+            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "未找到商户订单");
+        }
+        
+        for (int i = 0; i < list.size(); i++) {
+            MerchantOrder mo = list.get(i);
+            Long merchantOrderId = mo.getId();
+            // **********************根据商户订单id获取商户发票详情**********************
+            MerchantInvoice miObj = merchantInvoiceMapper.selectMerchantInvoiceByOrderId(merchantOrderId);
+            if(ObjectUtils.isNotNull(miObj)) {
+                if(miObj.getStatus() != MerchantInvoiceApplyStatusEnum.NOT_SIGNED.getValue()) {
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "可能部分发票已开出，稍后再全部签收");
+                }
+                // 商户发票状态更新已完成操作
+                miObj.setStatus(MerchantInvoiceApplyStatusEnum.COMPLETED.getValue());
+                merchantInvoiceMapper.updateByPrimaryKeySelective(miObj);
+            }
+            
+        }
+        // 客户发票状态更新已完成操作
+        ClientInvoice clientInvoice = clientInvoiceMapper.getClientInvoiceByCLientOrderId(copObj.getId());
+        if(ObjectUtils.isNull(clientInvoice)) {
+            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户发票信息不存在");
+        }
+        
+        clientInvoice.setStatus(ClientInvoiceType.COMPLETED.getValue());
+        clientInvoiceMapper.updateByPrimaryKeySelective(clientInvoice);
+        
+        return JsonResult.successJsonResult();
     }
 }
 

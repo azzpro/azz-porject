@@ -42,7 +42,6 @@ import com.azz.order.merchant.pojo.MerchantOrderStatus;
 import com.azz.order.merchant.pojo.bo.EditOrderStatus;
 import com.azz.order.merchant.pojo.bo.SearchOrderDetailParam;
 import com.azz.order.merchant.pojo.bo.SearchOrderListParam;
-import com.azz.order.merchant.pojo.bo.SearchOrderStatusParam;
 import com.azz.order.merchant.pojo.bo.ShipmentFile;
 import com.azz.order.merchant.pojo.vo.ExpressCompanyInfo;
 import com.azz.order.merchant.pojo.vo.OrderDetail;

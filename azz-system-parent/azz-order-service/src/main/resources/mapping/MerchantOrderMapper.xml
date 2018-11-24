@@ -395,7 +395,7 @@
     select 
     <include refid="Base_Column_List" />
     from merchant_order
-    where client_order_id = #{clientOrderId,jdbcType=BIGINT}
+    where client_order_id = #{clientOrderId,jdbcType=BIGINT} and status = 1
   </select>
   <!-- platform invoice sql end-->
 </mapper>

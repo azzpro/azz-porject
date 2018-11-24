@@ -7,10 +7,6 @@
  
 package com.azz.order.selection.bo;
 
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotBlank;
-
 import lombok.Data;
 
 /**
@@ -21,10 +17,8 @@ import lombok.Data;
 @Data
 public class OrderItem {
 
-	@NotBlank(message = "产品编码不允许为空")
 	private String productCode;
 	
-	@NotNull(message = "下单产品数量不允许为空")
 	private Integer quantity;
 	
 }

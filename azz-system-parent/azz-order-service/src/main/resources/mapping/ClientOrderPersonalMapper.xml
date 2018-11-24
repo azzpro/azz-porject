@@ -52,7 +52,7 @@
       #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.azz.order.client.pojo.ClientOrderPersonal">
+  <insert id="insertSelective" parameterType="com.azz.order.client.pojo.ClientOrderPersonal" useGeneratedKeys="true" keyProperty="id">
     insert into client_order_personal
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

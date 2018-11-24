@@ -4,6 +4,7 @@ package com.azz.selection.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.azz.order.selection.bo.SearchCombinationInitParamsParam;
 import com.azz.order.selection.bo.SearchInitParamsParam;
@@ -17,7 +18,6 @@ import com.azz.order.selection.vo.ProductInfomation;
 import com.azz.order.selection.vo.ProductPrice;
 import com.azz.order.selection.vo.SelectionCaseInfo;
 
-import feign.Param;
 @Mapper
 public interface SelectionMapper {
 	
@@ -118,5 +118,14 @@ public interface SelectionMapper {
 	 * @author 黄智聪  2018年11月23日 下午5:09:12
 	 */
 	ProductInfomation getProductInfoByProductCode(@Param("productCode")String productCode, @Param("productPriceId")Long productPriceId);
+	
+	/**
+	 * 
+	 * <p>查询确认订单页面的商品信息</p>
+	 * @param clientUserCode
+	 * @return
+	 * @author 黄智聪  2018年11月24日 下午3:01:19
+	 */
+	List<ProductInfomation> getConfirmOrderProductInfos(String clientUserCode);
 	
 }

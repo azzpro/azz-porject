@@ -5,6 +5,7 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="client_user_id" jdbcType="BIGINT" property="clientUserId" />
     <result column="product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="product_price_id" jdbcType="BIGINT" property="productPriceId" />
     <result column="price" jdbcType="DECIMAL" property="price" />
     <result column="delivery_date" jdbcType="INTEGER" property="deliveryDate" />
     <result column="module_name" jdbcType="VARCHAR" property="moduleName" />
@@ -18,7 +19,7 @@
     <result column="params_value" jdbcType="LONGVARCHAR" property="paramsValue" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, client_user_id, product_code, price, delivery_date, module_name, status, create_time, 
+    id, client_user_id, product_code, product_price_id, price,delivery_date, module_name, status, create_time, 
     creator, last_modify_time, modifier
   </sql>
   <sql id="Blob_Column_List">
@@ -38,12 +39,12 @@
   </delete>
   <insert id="insert" parameterType="com.azz.order.selection.ClientSelectionRecord">
     insert into client_selection_record (id, client_user_id, product_code, 
-      price, delivery_date, module_name, 
+      product_price_id,price, delivery_date, module_name, 
       status, create_time, creator, 
       last_modify_time, modifier, params_value
       )
     values (#{id,jdbcType=BIGINT}, #{clientUserId,jdbcType=BIGINT}, #{productCode,jdbcType=VARCHAR}, 
-      #{price,jdbcType=DECIMAL}, #{deliveryDate,jdbcType=INTEGER}, #{moduleName,jdbcType=VARCHAR}, 
+      #{productPriceId,jdbcType=BIGINT}, #{price,jdbcType=DECIMAL}, #{deliveryDate,jdbcType=INTEGER}, #{moduleName,jdbcType=VARCHAR}, 
       #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
       #{lastModifyTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{paramsValue,jdbcType=LONGVARCHAR}
       )
@@ -60,7 +61,10 @@
       <if test="productCode != null">
         product_code,
       </if>
-      <if test="price != null">
+      <if test="productPriceId != null">
+        product_price_id,
+      </if>
+       <if test="price != null">
         price,
       </if>
       <if test="deliveryDate != null">
@@ -97,6 +101,9 @@
       </if>
       <if test="productCode != null">
         #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productPriceId != null">
+        #{productPriceId,jdbcType=BIGINT},
       </if>
       <if test="price != null">
         #{price,jdbcType=DECIMAL},
@@ -136,6 +143,9 @@
       <if test="productCode != null">
         product_code = #{productCode,jdbcType=VARCHAR},
       </if>
+      <if test="productPriceId != null">
+        product_price_id = #{productPriceId,jdbcType=BIGINT},
+      </if>
       <if test="price != null">
         price = #{price,jdbcType=DECIMAL},
       </if>
@@ -170,6 +180,7 @@
     update client_selection_record
     set client_user_id = #{clientUserId,jdbcType=BIGINT},
       product_code = #{productCode,jdbcType=VARCHAR},
+      product_price_id = #{productPriceId,jdbcType=BIGINT},
       price = #{price,jdbcType=DECIMAL},
       delivery_date = #{deliveryDate,jdbcType=INTEGER},
       module_name = #{moduleName,jdbcType=VARCHAR},
@@ -185,6 +196,7 @@
     update client_selection_record
     set client_user_id = #{clientUserId,jdbcType=BIGINT},
       product_code = #{productCode,jdbcType=VARCHAR},
+      product_price_id = #{productPriceId,jdbcType=BIGINT},
       price = #{price,jdbcType=DECIMAL},
       delivery_date = #{deliveryDate,jdbcType=INTEGER},
       module_name = #{moduleName,jdbcType=VARCHAR},
@@ -198,6 +210,7 @@
   
   <select id="getSelectionRecordByClientUserCode" parameterType="com.azz.order.selection.bo.SearchSelectionRecordParam"  resultType="com.azz.order.selection.vo.SelectionRecord">
   	SELECT
+  		csr.id AS selectionRecordId,
 		csr.product_code AS productCode,
 		csr.price AS price,
 		mgp.product_status AS productStatus,

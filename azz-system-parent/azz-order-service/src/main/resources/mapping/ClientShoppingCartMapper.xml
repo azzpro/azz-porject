@@ -149,4 +149,38 @@
 		AND cu.client_user_code = #{clientUserCode}
   </select>
   
+  <select id="getShoppingCartOrderItems" resultType="com.azz.order.selection.vo.ShoppingCartItemInfo">
+	  SELECT
+		csr.product_code AS productCode,
+		csr.params_value AS paramsValue,
+		pgc.assortment_name AS assortmentName,
+		pgb.brand_name AS brandName,
+		mgpp.delivery_date AS deliveryDate,
+		mgm.module_name AS moduleName,
+		mgm.module_pic_url AS modulePicUrl,
+		mgpp.price AS productPrice
+	FROM
+		client_shopping_cart csc
+	JOIN client_selection_record csr ON csr.id = csc.selection_record_id
+	LEFT JOIN merchant_goods_product mgp ON mgp.product_code = csr.product_code
+	LEFT JOIN merchant_goods_product_price mgpp ON csr.product_price_id = mgpp.id 
+	LEFT JOIN platform_goods_brand pgb ON pgb.id = mgp.brand_id
+	LEFT JOIN platform_goods_classification pgc ON pgc.id = mgp.assortment_id
+	LEFT JOIN merchant_goods_module mgm ON mgm.id = mgp.module_id
+	LEFT JOIN client_user cu ON cu.id = csc.client_user_id
+	WHERE
+		csr. STATUS != 0
+	AND mgp.product_status != 2
+	AND cu.client_user_code = #{clientUserCode}
+	AND csr.product_code in
+	<foreach collection="orderItems" item="orderItem" open="(" close=")" separator=",">
+		#{orderItem.productCode}
+	</foreach>
+  </select>
+  
+  <delete id="deleteShoppingCartByClientUserId" parameterType="java.lang.Long">
+  	delete from client_shopping_cart
+    where client_user_id = #{clientUserId,jdbcType=BIGINT}
+  </delete>
+  
 </mapper>

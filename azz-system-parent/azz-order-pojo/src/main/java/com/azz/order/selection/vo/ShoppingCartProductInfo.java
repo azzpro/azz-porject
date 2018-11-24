@@ -21,6 +21,7 @@ public class ShoppingCartProductInfo {
 
 	private Long shoppingCartId;
 	private Long selectionRecordId;
+	private Long productPriceId;
 	private String productCode;
 	private BigDecimal price;
 	private Integer productStatus;

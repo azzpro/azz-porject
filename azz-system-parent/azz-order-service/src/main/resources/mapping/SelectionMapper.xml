@@ -377,9 +377,8 @@
 					FROM
 						merchant_goods_product pgp
 					JOIN merchant_goods_product_price mgpp ON pgp.id = mgpp.product_id
-					WHERE
-					AND mgp.product_status != 0
-						pgp.id IN (
+					WHERE pgp.product_status != 0
+					AND	pgp.id IN (
 							SELECT
 								mgp.id AS productId
 							FROM
@@ -463,6 +462,22 @@
 	JOIN merchant_goods_product_params params ON params.product_id = pgp.id
 	WHERE
 		pgp.product_code = #{productCode}
+  </select>
+  
+  <select id="getConfirmOrderProductInfos" parameterType="string" resultType="com.azz.order.selection.vo.ProductInfomation">
+	  SELECT
+		csr.product_code AS productCode,
+		csr.params_value AS paramsValue,
+		mgpp.delivery_date AS deliveryDate,
+		mgpp.price AS price
+	FROM
+		client_shopping_cart csc
+	JOIN client_selection_record csr ON csr.id = csc.selection_record_id
+	LEFT JOIN merchant_goods_product_price mgpp ON csr.product_price_id = mgpp.id 
+	LEFT JOIN client_user cu ON cu.id = csc.client_user_id
+	WHERE
+		csr.STATUS != 0
+	AND cu.client_user_code = #{clientUserCode}
   </select>
   
   

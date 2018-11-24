@@ -32,6 +32,8 @@ public class ClientSelectionRecord implements Serializable {
      * @mbg.generated
      */
     private String productCode;
+    
+    private Long productPriceId;
 
     /**
      * 参考单价
@@ -453,4 +455,12 @@ public class ClientSelectionRecord implements Serializable {
         sb.append("]");
         return sb.toString();
     }
+
+	public Long getProductPriceId() {
+		return productPriceId;
+	}
+
+	public void setProductPriceId(Long productPriceId) {
+		this.productPriceId = productPriceId;
+	}
 }

@@ -29,6 +29,7 @@ import com.azz.order.selection.ClientShoppingCart;
 import com.azz.order.selection.bo.AddSelectionRecordParam;
 import com.azz.order.selection.bo.AddToShoppingCartParam;
 import com.azz.order.selection.bo.DelSelectionRecordParam;
+import com.azz.order.selection.bo.OrderParam;
 import com.azz.order.selection.bo.SearchCombinationInitParamsParam;
 import com.azz.order.selection.bo.SearchInitParamsParam;
 import com.azz.order.selection.bo.SearchSelectionRecordParam;
@@ -386,6 +387,20 @@ public class SelectionService {
 		if(count > 0) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "购物车中存在已下架产品，请移除");
 		}
+		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
+	 * <p>下单</p>
+	 * @return
+	 * @author 黄智聪  2018年11月24日 上午10:58:45
+	 */
+	public JsonResult<String> addOrder(@RequestBody OrderParam param){
+		JSR303ValidateUtils.validate(param);
+		
+		
+		
 		return JsonResult.successJsonResult();
 	}
 	

@@ -2,9 +2,12 @@ package com.azz.selection.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.azz.order.selection.ClientShoppingCart;
 import com.azz.order.selection.vo.ShoppingCartProductInfo;
 
+@Mapper
 public interface ClientShoppingCartMapper {
     int deleteByPrimaryKey(Long id);
 

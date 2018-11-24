@@ -2,10 +2,13 @@ package com.azz.selection.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.azz.order.selection.ClientSelectionRecord;
 import com.azz.order.selection.bo.SearchSelectionRecordParam;
 import com.azz.order.selection.vo.SelectionRecord;
 
+@Mapper
 public interface ClientSelectionRecordMapper {
     int deleteByPrimaryKey(Integer id);
 

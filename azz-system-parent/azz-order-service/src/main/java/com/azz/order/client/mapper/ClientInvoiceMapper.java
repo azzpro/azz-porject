@@ -69,4 +69,12 @@ public interface ClientInvoiceMapper {
      * @author 彭斌  2018年11月22日 下午4:15:30
      */
     ClientInvoice getClientInvoiceByApplyCode(String clientApplyCode);
+    
+    /**
+     * <p>【商户】获取客户发票基本详情</p>
+     * @param clientOrderId
+     * @return
+     * @author 彭斌  2018年11月24日 上午10:35:32
+     */
+    ClientInvoice getClientInvoiceByCLientOrderId(Long clientOrderId);
 }

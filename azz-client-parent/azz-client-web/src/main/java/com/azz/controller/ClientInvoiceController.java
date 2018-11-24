@@ -10,6 +10,7 @@ package com.azz.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,6 +25,7 @@ import com.azz.order.client.pojo.bo.SearchAddInvoiceApplyParam;
 import com.azz.order.client.pojo.bo.SearchClientInvoiceParam;
 import com.azz.order.client.pojo.bo.SearchClientOrderParam;
 import com.azz.order.client.pojo.bo.SearchInvoiceTemplateParam;
+import com.azz.order.client.pojo.bo.SigningInvoiceParam;
 import com.azz.order.client.pojo.vo.ClientAddInvoice;
 import com.azz.order.client.pojo.vo.ClientInvoiceApplyDetail;
 import com.azz.order.client.pojo.vo.ClientInvoiceList;
@@ -146,6 +148,18 @@ public class ClientInvoiceController {
 	public JsonResult<List<ClientOrderItemInfo>> getClientOrderItems(SearchClientOrderParam param){
 	    param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
         return clientInvoiceService.getClientOrderItems(param);
+	}
+	
+	/**
+	 * <p>客户确认签收</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年11月24日 下午1:59:57
+	 */
+	@RequestMapping("/signingInvoice")
+	public JsonResult<String> signingInvoice(SigningInvoiceParam param){
+	    param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
+	    return clientInvoiceService.signingInvoice(param);
 	}
 }
 

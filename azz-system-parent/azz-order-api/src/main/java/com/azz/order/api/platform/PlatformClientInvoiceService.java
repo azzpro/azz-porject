@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
-import com.azz.order.client.pojo.vo.ClientInvoiceList;
 import com.azz.order.platform.bo.AuditInvoiceStatusParam;
 import com.azz.order.platform.bo.SearchInvoiceListParam;
 import com.azz.order.platform.vo.PlatformClientInvoiceApplyDetail;
+import com.azz.order.platform.vo.PlatformClientInvoiceList;
 
 /**
  * <P>TODO</P>
@@ -34,7 +34,7 @@ public interface PlatformClientInvoiceService {
 	 * @author 彭斌  2018年11月22日 下午12:42:38
 	 */
 	@RequestMapping("/azz/api/platform/client/invoice/getPlatformClientInvoiceList")
-	JsonResult<Pagination<ClientInvoiceList>> getPlatformClientInvoiceList(@RequestBody SearchInvoiceListParam param);
+	JsonResult<Pagination<PlatformClientInvoiceList>> getPlatformClientInvoiceList(@RequestBody SearchInvoiceListParam param);
 	
 	/**
 	 * <p>平台端申请详情</p>

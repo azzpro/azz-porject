@@ -334,8 +334,8 @@
 		mil.delivery_person as deliveryPerson,
 		mil.delivery_phone as deliveryPhone
 	FROM
-		merchant_invoice mi
-	JOIN merchant_order mo ON mi.merchant_order_id = mo.id
+		merchant_order mo
+	LEFT JOIN merchant_invoice mi ON mi.merchant_order_id = mo.id
 	LEFT JOIN client_order_personal cop ON mo.client_order_id = cop.id
 	LEFT JOIN merchant_invoice_logistics mil ON mil.merchant_invoice_id = mi.id
 	LEFT JOIN express_company ec ON mil.express_company_id = ec.id

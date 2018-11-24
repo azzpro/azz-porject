@@ -100,9 +100,7 @@ public class PlatformInvoiceService {
         
         // 关联商户
         List<ClientOrderRelevanceInvoice> list = clientInvoiceMapper.getOrderRelevanceInvoiceList(clientOrderCode);
-        if(list.size() > 0 && ObjectUtils.isNotNull(list)) {
-            pciad.setRelevanceMerchantItem(list);
-        }
+        pciad.setRelevanceMerchantItem(list);
         
         // 产品详情
         List<ClientOrderInfo> coiList = clientOrderPersonalMapper.getClientOrderInfoListByParam(clientOrderCode,"");

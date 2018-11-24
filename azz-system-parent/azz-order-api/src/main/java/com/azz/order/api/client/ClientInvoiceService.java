@@ -27,7 +27,6 @@ import com.azz.order.client.pojo.vo.ClientAddInvoice;
 import com.azz.order.client.pojo.vo.ClientInvoiceApplyDetail;
 import com.azz.order.client.pojo.vo.ClientInvoiceList;
 import com.azz.order.client.pojo.vo.ClientInvoiceTemplateList;
-import com.azz.order.client.pojo.vo.ClientOrderInfo;
 import com.azz.order.client.pojo.vo.ClientOrderItemInfo;
 
 /**

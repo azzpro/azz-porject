@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.order.api.platform.PlatformClientInvoiceService;
-import com.azz.order.client.pojo.vo.ClientInvoiceList;
 import com.azz.order.platform.bo.AuditInvoiceStatusParam;
 import com.azz.order.platform.bo.SearchInvoiceListParam;
 import com.azz.order.platform.vo.PlatformClientInvoiceApplyDetail;
+import com.azz.order.platform.vo.PlatformClientInvoiceList;
 import com.azz.utils.WebUtils;
 
 /**
@@ -44,7 +44,7 @@ public class InvoiceController {
 	 * @author 彭斌  2018年11月22日 下午6:43:16
 	 */
 	@RequestMapping("/getPlatformClientInvoiceList")
-	public JsonResult<Pagination<ClientInvoiceList>> getPlatformClientInvoiceList(SearchInvoiceListParam param){
+	public JsonResult<Pagination<PlatformClientInvoiceList>> getPlatformClientInvoiceList(SearchInvoiceListParam param){
 	    return platformClientInvoiceService.getPlatformClientInvoiceList(param);
 	}
 	

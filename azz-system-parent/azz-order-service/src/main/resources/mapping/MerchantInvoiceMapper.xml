@@ -174,4 +174,79 @@
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="getMerchantInvoiceList" parameterType="com.azz.order.merchant.pojo.bo.SearchInvoiceListParam" resultType="com.azz.order.merchant.pojo.vo.MerchantInvoiceList">
+  	SELECT
+		mi.merchant_apply_code as merchantApplyCode,
+		mi.invoice_type as invoiceType,
+		mo.merchant_order_code as clientOrderCode,
+		mi.apply_amount as applyAmount,
+		mi.status as applyStatus,
+		pu.user_name as creator,
+		mi.create_time as createTime
+	FROM
+		merchant_invoice mi
+	JOIN merchant_order mo ON mi.merchant_order_id = mo.id
+	LEFT JOIN platform_user pu ON mi.creator = pu.user_code
+	WHERE mi.merchant_id = #{merchantId,jdbcType=BIGINT}
+	<if test="null != status">AND mi.status = #{status}</if>
+	<if test="null != param and '' != param">
+		AND (mi.merchant_apply_code LIKE CONCAT('%',#{param},'%') OR mo.merchant_order_code LIKE CONCAT('%',#{param},'%'))
+	</if>
+	ORDER BY mi.create_time DESC
+  </select>
+  
+  <select id="getMerchantInvoiceDetailInfo" parameterType="java.lang.String" resultType="com.azz.order.merchant.pojo.vo.MerchantInvoiceDetail">
+  	SELECT
+  		mo.merchant_id as merchantId,
+		mo.merchant_order_code as merchantOrderCode,
+		cop.order_status_id as clientOrderStatus,
+		cop.payment_method as paymentMethod,
+		mo.grand_total as grandTotal,
+		mi.apply_amount as applyAmount,
+		mi.status as merchantInvoiceApplyStatus,
+		mi.merchant_apply_code as merchantApplyCode,
+		mi.invoice_type as invoiceType,
+		cit.invoice_title as invoiceTitle,
+		cit.tax_identification_number as taxIdentificationNumber,
+		cit.bank as bank,
+		cit.bank_account as bankAccount,
+		cit.company_name as companyName,
+		cit.create_time as createTime,	
+		cit.reg_address as regAddress,
+		cit.reg_telephone as regTelephone,
+		cosa.receiver_name as receiverName,
+		cosa.receiver_phone_number as receiverPhoneNumber,
+		cosa.province_name as provinceName,
+		cosa.city_name as cityName,
+		cosa.area_name as areaName,
+		cosa.address_alias as addressAlias,
+		cosa.detail_address as detailAddress,
+		mu.merchant_user_name as deliveryCreator,
+		mil.create_time as deliveryCreateTime,
+		mil.delivery_type as deliveryType,
+		mil.delivery_person as deliveryPerson,
+		mil.delivery_phone as deliveryPhone,
+		mil.number as number,
+		ec.company_name	as deliveryCompanyName
+	FROM
+		merchant_order mo
+	LEFT JOIN merchant_invoice mi ON mi.merchant_order_id = mo.id
+	LEFT JOIN client_order_personal cop ON cop.id = mo.client_order_id
+	LEFT JOIN client_user cu ON cop.client_user_id = cu.id
+	JOIN client_invoice_template cit ON cit.client_user_id = cu.id
+	JOIN client_invoice ci ON ci.invoice_template_id = cit.id
+	LEFT JOIN merchant_invoice_logistics mil ON mil.merchant_invoice_id = mi.id
+	LEFT JOIN merchant_user mu ON mu.merchant_user_code = mil.creator
+	LEFT JOIN express_company ec ON mil.express_company_id = ec.id
+	LEFT JOIN client_order_shipping_address cosa ON ci.shipping_address_id = cosa.id
+	WHERE mo.merchant_order_code = #{merchantOrderCode}
+  </select>
+  
+  <select id="selectMerchantInvoiceByOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_invoice
+    where merchant_order_id = #{merchantOrderId,jdbcType=BIGINT}
+  </select>
 </mapper>

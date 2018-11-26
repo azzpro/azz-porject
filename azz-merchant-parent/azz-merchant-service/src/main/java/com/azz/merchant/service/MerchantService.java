@@ -29,6 +29,7 @@ import com.azz.core.constants.MerchantConstants.IsMerchantRegister;
 import com.azz.core.constants.MerchantConstants.QualificationApplyStatus;
 import com.azz.core.constants.MerchantConstants.UserStatus;
 import com.azz.core.constants.SmsConstants;
+import com.azz.core.constants.SmsConstants.SmsCode;
 import com.azz.core.exception.BaseException;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.exception.JSR303ValidationException;
@@ -196,7 +197,7 @@ public class MerchantService {
     	sv.setPhone(phoneNumber);
     	sv.setSec(MerchantConstants.MERCHANT_REGIST_SMS_TIME_OUT);
     	JsonResult<SmsInfo> jr = systemSmsSendService.checkMsgCodeTime(sv);
-    	if(!jr.getData().getCode().equals("0000")) {
+    	if(!jr.getData().getCode().equals(SmsCode.SUCCESS.getCode())) {
     		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "短信验证码已失效，请重新获取");
     	}
     	// 再校验验证码是否正确
@@ -204,7 +205,7 @@ public class MerchantService {
     	sc.setCode(verificationCode);
     	sc.setPhone(phoneNumber);
     	jr = systemSmsSendService.checkMsgCode(sc);
-    	if(!jr.getData().getCode().equals("0000")) { // TODO
+    	if(!jr.getData().getCode().equals(SmsCode.SUCCESS.getCode())) { // TODO
     		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "验证码错误");
     	}
     }

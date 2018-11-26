@@ -23,6 +23,7 @@ import com.azz.sequence.sequence.service.PlatDeptSequenceService;
 import com.azz.sequence.sequence.service.PlatEmployeeSequenceService;
 import com.azz.sequence.sequence.service.PlatPowerSequenceService;
 import com.azz.sequence.sequence.service.RandomSequenceService;
+import com.azz.sequence.sequence.service.SevenRandomSequenceService;
 import com.azz.sequence.sequence.service.TenRandomSequenceService;
 
 /**
@@ -70,6 +71,9 @@ public class SequenceController {
 	
 	@Autowired
     private MerchantInvoiceApplySequenceService merchantInvoiceApplySequenceService;
+	
+	@Autowired
+    private SevenRandomSequenceService sevenRandomSequenceService;
 	
 	/**
 	 * <p>支付流水号</p>
@@ -301,5 +305,26 @@ public class SequenceController {
     public String getMerchantInvoiceApplyNumber() {
         return merchantInvoiceApplySequenceService.getSequence();
     }
+    
+    /**
+     * <p>获取客户个人订单编号</p>
+     * @return
+     * @author 彭斌  2018年11月26日 下午3:49:49
+     */
+    @RequestMapping(value="getClientPersonalOrderCodeNumber",method=RequestMethod.GET)
+    public String getClientPersonalOrderCodeNumber() {
+        return "IOR1" + sevenRandomSequenceService.getSequence();
+    }
+    
+    /**
+     * <p>获取商户订单编号</p>
+     * @return
+     * @author 彭斌  2018年11月26日 下午3:49:49
+     */
+    @RequestMapping(value="getMerchantOrderCodeNumber",method=RequestMethod.GET)
+    public String getMerchantOrderCodeNumber() {
+        return "IOR3" + sevenRandomSequenceService.getSequence();
+    }
+    
 }
 

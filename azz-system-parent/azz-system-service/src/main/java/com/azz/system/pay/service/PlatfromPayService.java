@@ -31,6 +31,7 @@ import com.azz.order.api.client.ClientOrderService;
 import com.azz.order.api.client.SelectionService;
 import com.azz.order.client.pojo.vo.ClientOrderDetail;
 import com.azz.order.client.pojo.vo.ClientOrderInfo;
+import com.azz.order.selection.bo.CallBackParam;
 import com.azz.system.bo.SubmitPayParams;
 import com.azz.system.pay.mapper.PlatformPayMapper;
 import com.azz.system.pojo.PlatformPay;
@@ -81,13 +82,17 @@ public class PlatfromPayService {
 		pfp.setPayMoney(orderInfo.getGrandTotal());
 		pfp.setPayTime(new Date());
 		pfp.setPayType(spp.getOrderPayType());
-		pfp.setPayStatus((byte)PayStatus.PAID.getValue());//支付状态 默认待支付
+		pfp.setPayStatus((byte)PayStatus.PAY_PAID.getValue());//支付状态 默认待支付
 		//pfp.setThreePartyNumber(); //
 		pfp.setPayNumber(rss.getPayCodeNumber());
 		ppm.insertPay(pfp);
 		
 		//更新订单状态
-		//selectService.c
+		CallBackParam cbp = new CallBackParam();
+		cbp.setClientOrderCode(pfp.getOrderNumber());
+		cbp.setPaymentMethod((int)pfp.getPayMethod());
+		cbp.setPaymentType((int)pfp.getPayType());
+		selectService.clientOrderPaySuccessOpt(cbp);
 		return JsonResult.successJsonResult();
 	}
 }

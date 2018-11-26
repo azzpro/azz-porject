@@ -19,12 +19,15 @@ import lombok.Data;
  * @author 黄智聪  2018年11月26日 下午1:41:54
  */
 @Data
-public class PayOrderParam {
+public class CallBackParam {
 	
 	@NotBlank(message = "订单编码不允许为空")
 	private String clientOrderCode;
 	
-	@NotNull(message = "支付类型")
+	@NotNull(message = "支付方式不允许为空")
+	private Integer paymentMethod;
+	
+	@NotNull(message = "支付类型不允许为空")
 	private Integer paymentType;
 	
 }

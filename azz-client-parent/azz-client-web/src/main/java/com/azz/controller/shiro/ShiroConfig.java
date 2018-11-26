@@ -45,6 +45,16 @@ public class ShiroConfig {
 	// 开放登陆接口
 	filterChainDefinitionMap.put("/azz/api/client/login", "anon");
 	filterChainDefinitionMap.put("/azz/api/client/regist", "anon");
+	
+	// 开放官网选型部分接口
+	filterChainDefinitionMap.put("/azz/api/client/selection/getSelectionCaseInfos", "anon");
+	filterChainDefinitionMap.put("/azz/api/client/selection/getInitParamsByCaseCode", "anon");
+	filterChainDefinitionMap.put("/azz/api/client/selection/getCombinationInitParams", "anon");
+	filterChainDefinitionMap.put("/azz/api/client/selection/getCombinationInfos", "anon");
+	filterChainDefinitionMap.put("/azz/api/client/selection/getCombinationDetail", "anon");
+	filterChainDefinitionMap.put("/azz/api/client/selection/getProductInfos", "anon");
+	filterChainDefinitionMap.put("/azz/api/client/selection/getProductPrice", "anon");
+	
 	// 其余接口一律拦截
 	// 主要这行代码必须放在所有权限设置的最后，不然会导致所有 url 都被拦截
 	filterChainDefinitionMap.put("/**", "authc");

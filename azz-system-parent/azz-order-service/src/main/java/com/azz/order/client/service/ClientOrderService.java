@@ -451,5 +451,25 @@ public class ClientOrderService {
 		return JsonResult.successJsonResult();
 	}
 	
+	/**
+	 * 
+	 * <p>客户订单是否支付成功</p>
+	 * @return
+	 * @author 黄智聪  2018年11月26日 下午5:15:27
+	 */
+	public JsonResult<String> checkClientOrderPaySuccess(String clientOrderCode){
+		ClientOrderPersonal order = clientOrderPersonalMapper.getClientOrderPersonalByClientOrderCode(clientOrderCode);
+		if(order == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户订单不存在");
+		}
+		int currentOrderStatusId = order.getOrderStatusId();
+		if(ClientOrderStatus.CLOSED.getValue() == currentOrderStatusId) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户订单已关闭");
+		}
+		if(ClientOrderStatus.NOT_PAID.getValue() == currentOrderStatusId) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户订单未支付");
+		}
+		return JsonResult.successJsonResult();
+	}
 }
 

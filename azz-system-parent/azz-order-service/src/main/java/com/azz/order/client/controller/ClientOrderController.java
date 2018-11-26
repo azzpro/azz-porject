@@ -169,5 +169,17 @@ public class ClientOrderController {
 		return clientOrderService.closeClientOrders();
 	}
 	
+	/**
+	 * 
+	 * <p>客户订单是否支付成功</p>
+	 * @param clientOrderCode
+	 * @return
+	 * @author 黄智聪  2018年11月26日 下午5:42:04
+	 */
+	@RequestMapping("/checkClientOrderPaySuccess")
+	public JsonResult<String> checkClientOrderPaySuccess(String clientOrderCode){
+		return clientOrderService.checkClientOrderPaySuccess(clientOrderCode);
+	}
+	
 }
 

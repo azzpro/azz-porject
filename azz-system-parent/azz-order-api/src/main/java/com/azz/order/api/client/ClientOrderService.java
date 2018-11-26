@@ -142,5 +142,15 @@ public interface ClientOrderService {
 	//@RequestMapping("/azz/api/client/order/closeClientOrders")
 	//JsonResult<String> closeClientOrders();
     
+	/**
+	 * 
+	 * <p>客户订单是否支付成功</p>
+	 * @param clientOrderCode
+	 * @return
+	 * @author 黄智聪  2018年11月26日 下午5:43:24
+	 */
+	@RequestMapping("/azz/api/client/order/checkClientOrderPaySuccess")
+	JsonResult<String> checkClientOrderPaySuccess(@RequestParam("clientOrderCode")String clientOrderCode);
+	
 }
 

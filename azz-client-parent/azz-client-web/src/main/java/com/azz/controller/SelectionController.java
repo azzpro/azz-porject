@@ -1,23 +1,23 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2018年11月19日 下午5:53:57
+ * Create on 2018年11月26日 上午10:57:20
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
-package com.azz.selection.controller;
+package com.azz.controller;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.azz.controller.utils.WebUtils;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.QueryPage;
 import com.azz.core.common.page.Pagination;
+import com.azz.order.api.client.SelectionService;
 import com.azz.order.selection.bo.AddSelectionRecordParam;
 import com.azz.order.selection.bo.AddToShoppingCartParam;
 import com.azz.order.selection.bo.DelSelectionRecordParam;
@@ -34,12 +34,11 @@ import com.azz.order.selection.vo.ProductPrice;
 import com.azz.order.selection.vo.SelectionCaseInfo;
 import com.azz.order.selection.vo.SelectionRecord;
 import com.azz.order.selection.vo.ShoppingCartProductInfo;
-import com.azz.selection.service.SelectionService;
 
 /**
- * <P>选型控制器</P>
+ * <P>选型</P>
  * @version 1.0
- * @author 黄智聪  2018年11月19日 下午5:53:57
+ * @author 黄智聪  2018年11月26日 上午10:57:20
  */
 @RestController
 @RequestMapping("/azz/api/client/selection")
@@ -55,7 +54,7 @@ public class SelectionController {
 	 * @author 黄智聪  2018年11月19日 下午5:57:39
 	 */
 	@RequestMapping("/getSelectionCaseInfos")
-	public JsonResult<Pagination<SelectionCaseInfo>> getSelectionCaseInfos(@RequestBody QueryPage param){
+	public JsonResult<Pagination<SelectionCaseInfo>> getSelectionCaseInfos(QueryPage param){
 		return selectionService.getSelectionCaseInfos(param);
 	}
 	
@@ -67,7 +66,7 @@ public class SelectionController {
 	 * @author 黄智聪  2018年11月20日 下午7:32:51
 	 */
 	@RequestMapping("/getInitParamsByCaseCode")
-	public JsonResult<List<InitParams>> getInitParamsByCaseCode(@RequestBody SearchInitParamsParam param){
+	public JsonResult<List<InitParams>> getInitParamsByCaseCode(SearchInitParamsParam param){
 		return selectionService.getInitParamsByCaseCode(param);
 	}
 	
@@ -79,7 +78,7 @@ public class SelectionController {
 	 * @author 黄智聪  2018年11月20日 下午7:32:14
 	 */
 	@RequestMapping("/getCombinationInitParams")
-	public JsonResult<List<CombinationInitParams>> getCombinationInitParams(@RequestBody SearchInitParamsParam param){
+	public JsonResult<List<CombinationInitParams>> getCombinationInitParams(SearchInitParamsParam param){
 		return selectionService.getCombinationInitParams(param);
 	}
 	
@@ -91,7 +90,7 @@ public class SelectionController {
 	 * @author 黄智聪  2018年11月20日 下午7:32:51
 	 */
 	@RequestMapping("/getCombinationInfos")
-	public JsonResult<Pagination<CombinationInfo>> getCombinationInfos(@RequestBody SearchInitParamsParam param){
+	public JsonResult<Pagination<CombinationInfo>> getCombinationInfos(SearchInitParamsParam param){
 		return selectionService.getCombinationInfos(param);
 	}
 	
@@ -103,7 +102,7 @@ public class SelectionController {
 	 * @author 黄智聪  2018年11月22日 下午3:12:23
 	 */
 	@RequestMapping("/getCombinationDetail")
-	public JsonResult<CombinationDetail> getCombinationDetail(@RequestParam("combinationCode") String combinationCode){
+	public JsonResult<CombinationDetail> getCombinationDetail(String combinationCode){
 		return selectionService.getCombinationDetail(combinationCode);
 	}
 	
@@ -115,7 +114,7 @@ public class SelectionController {
 	 * @author 黄智聪  2018年11月22日 下午9:15:42
 	 */
 	@RequestMapping("/getProductInfos")
-	public JsonResult<List<List<Object>>> getProductInfos(@RequestBody SearchCombinationInitParamsParam searchParam){
+	public JsonResult<List<List<Object>>> getProductInfos(SearchCombinationInitParamsParam searchParam){
 		return selectionService.getProductInfos(searchParam);
 	}
 	
@@ -127,7 +126,7 @@ public class SelectionController {
 	 * @author 黄智聪  2018年11月23日 上午11:11:52
 	 */
 	@RequestMapping("/getProductPrice")
-	public JsonResult<ProductPrice> getProductPrice(@RequestParam("productCode") String productCode){
+	public JsonResult<ProductPrice> getProductPrice(String productCode){
 		return selectionService.getProductPrice(productCode);
 	}
 	
@@ -139,7 +138,8 @@ public class SelectionController {
 	 * @author 黄智聪  2018年11月23日 上午11:11:52
 	 */
 	@RequestMapping("/getSelectionRecord")
-	public JsonResult<Pagination<SelectionRecord>> getSelectionRecord(@RequestBody SearchSelectionRecordParam param){
+	public JsonResult<Pagination<SelectionRecord>> getSelectionRecord(SearchSelectionRecordParam param){
+		param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 		return selectionService.getSelectionRecord(param);
 	}
 	
@@ -151,7 +151,8 @@ public class SelectionController {
 	 * @author 黄智聪  2018年11月23日 下午3:48:46
 	 */
 	@RequestMapping("/addSelectionRecord")
-	public JsonResult<String> addSelectionRecord(@RequestBody AddSelectionRecordParam param){
+	public JsonResult<String> addSelectionRecord(AddSelectionRecordParam param){
+		param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 		return selectionService.addSelectionRecord(param);
 	}
 	
@@ -163,7 +164,8 @@ public class SelectionController {
 	 * @author 黄智聪  2018年11月23日 下午6:32:17
 	 */
 	@RequestMapping("/delSelectionRecord")
-	public JsonResult<String> delSelectionRecord(@RequestBody DelSelectionRecordParam param){
+	public JsonResult<String> delSelectionRecord(DelSelectionRecordParam param){
+		param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 		return selectionService.delSelectionRecord(param);
 	}
 	
@@ -175,7 +177,8 @@ public class SelectionController {
 	 * @author 黄智聪  2018年11月23日 下午3:48:46
 	 */
 	@RequestMapping("/addProductsToShoppingCart")
-	public JsonResult<String> addProductsToShoppingCart(@RequestBody AddToShoppingCartParam param){
+	public JsonResult<String> addProductsToShoppingCart(AddToShoppingCartParam param){
+		param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 		return selectionService.addProductsToShoppingCart(param);
 	}
 	
@@ -187,8 +190,8 @@ public class SelectionController {
 	 * @author 黄智聪  2018年11月23日 下午6:23:58
 	 */
 	@RequestMapping("/getShoppingCartProductInfos")
-	public JsonResult<List<ShoppingCartProductInfo>> getShoppingCartProductInfos(@RequestParam("clientUserCode") String clientUserCode){
-		return selectionService.getShoppingCartProductInfos(clientUserCode);
+	public JsonResult<List<ShoppingCartProductInfo>> getShoppingCartProductInfos(){
+		return selectionService.getShoppingCartProductInfos(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 	}
 	
 	/**
@@ -199,7 +202,7 @@ public class SelectionController {
 	 * @author 黄智聪  2018年11月23日 下午6:49:03
 	 */
 	@RequestMapping("/removeShoppingCartProduct")
-	public JsonResult<String> removeShoppingCartProduct(@RequestParam("shoppingCartId") Long shoppingCartId){
+	public JsonResult<String> removeShoppingCartProduct(Long shoppingCartId){
 		return selectionService.removeShoppingCartProduct(shoppingCartId);
 	}
 	
@@ -211,8 +214,8 @@ public class SelectionController {
 	 * @author 黄智聪  2018年11月24日 下午3:03:52
 	 */
 	@RequestMapping("/getConfirmOrderProductInfos")
-	public JsonResult<List<ProductInfomation>> getConfirmOrderProductInfos(@RequestParam("clientUserCode")String clientUserCode){
-		return selectionService.getConfirmOrderProductInfos(clientUserCode);
+	public JsonResult<List<ProductInfomation>> getConfirmOrderProductInfos(){
+		return selectionService.getConfirmOrderProductInfos(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 	}
 	
 	/**
@@ -223,8 +226,8 @@ public class SelectionController {
 	 * @author 黄智聪  2018年11月23日 下午6:57:21
 	 */
 	@RequestMapping("/checkOrderOpt")
-	public JsonResult<String> checkOrderOpt(@RequestParam("clientUserCode")String clientUserCode){
-		return selectionService.checkOrderOpt(clientUserCode);
+	public JsonResult<String> checkOrderOpt(){
+		return selectionService.checkOrderOpt(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 	}
 	
 	/**
@@ -234,7 +237,8 @@ public class SelectionController {
 	 * @author 黄智聪  2018年11月24日 上午10:58:45
 	 */
 	@RequestMapping("/addOrder")
-	public JsonResult<String> addOrder(@RequestBody OrderParam param){
+	public JsonResult<String> addOrder(OrderParam param){
+		param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 		return selectionService.addOrder(param);
 	}
 

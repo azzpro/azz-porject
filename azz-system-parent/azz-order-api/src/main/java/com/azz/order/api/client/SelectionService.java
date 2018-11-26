@@ -1,19 +1,18 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2018年11月19日 下午5:53:57
+ * Create on 2018年11月26日 上午10:29:02
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
-package com.azz.selection.controller;
+package com.azz.order.api.client;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.QueryPage;
@@ -34,19 +33,14 @@ import com.azz.order.selection.vo.ProductPrice;
 import com.azz.order.selection.vo.SelectionCaseInfo;
 import com.azz.order.selection.vo.SelectionRecord;
 import com.azz.order.selection.vo.ShoppingCartProductInfo;
-import com.azz.selection.service.SelectionService;
 
 /**
- * <P>选型控制器</P>
+ * <P>选型</P>
  * @version 1.0
- * @author 黄智聪  2018年11月19日 下午5:53:57
+ * @author 黄智聪  2018年11月26日 上午10:29:02
  */
-@RestController
-@RequestMapping("/azz/api/client/selection")
-public class SelectionController {
-	
-	@Autowired
-	private SelectionService selectionService;
+@FeignClient("azz-order-service")
+public interface SelectionService {
 	
 	/**
 	 * <p>查询选型的所有方案列表 1</p>
@@ -54,10 +48,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月19日 下午5:57:39
 	 */
-	@RequestMapping("/getSelectionCaseInfos")
-	public JsonResult<Pagination<SelectionCaseInfo>> getSelectionCaseInfos(@RequestBody QueryPage param){
-		return selectionService.getSelectionCaseInfos(param);
-	}
+	@RequestMapping("/azz/api/client/selection/getSelectionCaseInfos")
+	JsonResult<Pagination<SelectionCaseInfo>> getSelectionCaseInfos(@RequestBody QueryPage param);
 	
 	/**
 	 * 
@@ -66,10 +58,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月20日 下午7:32:51
 	 */
-	@RequestMapping("/getInitParamsByCaseCode")
-	public JsonResult<List<InitParams>> getInitParamsByCaseCode(@RequestBody SearchInitParamsParam param){
-		return selectionService.getInitParamsByCaseCode(param);
-	}
+	@RequestMapping("/azz/api/client/selection/getInitParamsByCaseCode")
+	JsonResult<List<InitParams>> getInitParamsByCaseCode(@RequestBody SearchInitParamsParam param);
 	
 	/**
 	 * 
@@ -78,10 +68,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月20日 下午7:32:14
 	 */
-	@RequestMapping("/getCombinationInitParams")
-	public JsonResult<List<CombinationInitParams>> getCombinationInitParams(@RequestBody SearchInitParamsParam param){
-		return selectionService.getCombinationInitParams(param);
-	}
+	@RequestMapping("/azz/api/client/selection/getCombinationInitParams")
+	JsonResult<List<CombinationInitParams>> getCombinationInitParams(@RequestBody SearchInitParamsParam param);
 	
 	/**
 	 * 
@@ -90,10 +78,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月20日 下午7:32:51
 	 */
-	@RequestMapping("/getCombinationInfos")
-	public JsonResult<Pagination<CombinationInfo>> getCombinationInfos(@RequestBody SearchInitParamsParam param){
-		return selectionService.getCombinationInfos(param);
-	}
+	@RequestMapping("/azz/api/client/selection/getCombinationInfos")
+	JsonResult<Pagination<CombinationInfo>> getCombinationInfos(@RequestBody SearchInitParamsParam param);
 	
 	/**
 	 * 
@@ -102,10 +88,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月22日 下午3:12:23
 	 */
-	@RequestMapping("/getCombinationDetail")
-	public JsonResult<CombinationDetail> getCombinationDetail(@RequestParam("combinationCode") String combinationCode){
-		return selectionService.getCombinationDetail(combinationCode);
-	}
+	@RequestMapping("/azz/api/client/selection/getCombinationDetail")
+	JsonResult<CombinationDetail> getCombinationDetail(@RequestParam("combinationCode") String combinationCode);
 	
 	/**
 	 * 
@@ -114,10 +98,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月22日 下午9:15:42
 	 */
-	@RequestMapping("/getProductInfos")
-	public JsonResult<List<List<Object>>> getProductInfos(@RequestBody SearchCombinationInitParamsParam searchParam){
-		return selectionService.getProductInfos(searchParam);
-	}
+	@RequestMapping("/azz/api/client/selection/getProductInfos")
+	JsonResult<List<List<Object>>> getProductInfos(@RequestBody SearchCombinationInitParamsParam searchParam);
 	
 	/**
 	 * 
@@ -126,10 +108,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月23日 上午11:11:52
 	 */
-	@RequestMapping("/getProductPrice")
-	public JsonResult<ProductPrice> getProductPrice(@RequestParam("productCode") String productCode){
-		return selectionService.getProductPrice(productCode);
-	}
+	@RequestMapping("/azz/api/client/selection/getProductPrice")
+	JsonResult<ProductPrice> getProductPrice(@RequestParam("productCode") String productCode);
 	
 	/**
 	 * 
@@ -138,10 +118,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月23日 上午11:11:52
 	 */
-	@RequestMapping("/getSelectionRecord")
-	public JsonResult<Pagination<SelectionRecord>> getSelectionRecord(@RequestBody SearchSelectionRecordParam param){
-		return selectionService.getSelectionRecord(param);
-	}
+	@RequestMapping("/azz/api/client/selection/getSelectionRecord")
+	JsonResult<Pagination<SelectionRecord>> getSelectionRecord(@RequestBody SearchSelectionRecordParam param);
 	
 	/**
 	 * 
@@ -150,10 +128,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月23日 下午3:48:46
 	 */
-	@RequestMapping("/addSelectionRecord")
-	public JsonResult<String> addSelectionRecord(@RequestBody AddSelectionRecordParam param){
-		return selectionService.addSelectionRecord(param);
-	}
+	@RequestMapping("/azz/api/client/selection/addSelectionRecord")
+	JsonResult<String> addSelectionRecord(@RequestBody AddSelectionRecordParam param);
 	
 	/**
 	 * 
@@ -162,10 +138,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月23日 下午6:32:17
 	 */
-	@RequestMapping("/delSelectionRecord")
-	public JsonResult<String> delSelectionRecord(@RequestBody DelSelectionRecordParam param){
-		return selectionService.delSelectionRecord(param);
-	}
+	@RequestMapping("/azz/api/client/selection/delSelectionRecord")
+	JsonResult<String> delSelectionRecord(@RequestBody DelSelectionRecordParam param);
 	
 	/**
 	 * 
@@ -174,10 +148,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月23日 下午3:48:46
 	 */
-	@RequestMapping("/addProductsToShoppingCart")
-	public JsonResult<String> addProductsToShoppingCart(@RequestBody AddToShoppingCartParam param){
-		return selectionService.addProductsToShoppingCart(param);
-	}
+	@RequestMapping("/azz/api/client/selection/addProductsToShoppingCart")
+	JsonResult<String> addProductsToShoppingCart(@RequestBody AddToShoppingCartParam param);
 	
 	/**
 	 * 
@@ -186,10 +158,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月23日 下午6:23:58
 	 */
-	@RequestMapping("/getShoppingCartProductInfos")
-	public JsonResult<List<ShoppingCartProductInfo>> getShoppingCartProductInfos(@RequestParam("clientUserCode") String clientUserCode){
-		return selectionService.getShoppingCartProductInfos(clientUserCode);
-	}
+	@RequestMapping("/azz/api/client/selection/getShoppingCartProductInfos")
+	JsonResult<List<ShoppingCartProductInfo>> getShoppingCartProductInfos(@RequestParam("clientUserCode") String clientUserCode);
 	
 	/**
 	 * 
@@ -198,10 +168,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月23日 下午6:49:03
 	 */
-	@RequestMapping("/removeShoppingCartProduct")
-	public JsonResult<String> removeShoppingCartProduct(@RequestParam("shoppingCartId") Long shoppingCartId){
-		return selectionService.removeShoppingCartProduct(shoppingCartId);
-	}
+	@RequestMapping("/azz/api/client/selection/removeShoppingCartProduct")
+	JsonResult<String> removeShoppingCartProduct(@RequestParam("shoppingCartId") Long shoppingCartId);
 	
 	/**
 	 * 
@@ -210,10 +178,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月24日 下午3:03:52
 	 */
-	@RequestMapping("/getConfirmOrderProductInfos")
-	public JsonResult<List<ProductInfomation>> getConfirmOrderProductInfos(@RequestParam("clientUserCode")String clientUserCode){
-		return selectionService.getConfirmOrderProductInfos(clientUserCode);
-	}
+	@RequestMapping("/azz/api/client/selection/getConfirmOrderProductInfos")
+	JsonResult<List<ProductInfomation>> getConfirmOrderProductInfos(@RequestParam("clientUserCode")String clientUserCode);
 	
 	/**
 	 * 
@@ -222,21 +188,17 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月23日 下午6:57:21
 	 */
-	@RequestMapping("/checkOrderOpt")
-	public JsonResult<String> checkOrderOpt(@RequestParam("clientUserCode")String clientUserCode){
-		return selectionService.checkOrderOpt(clientUserCode);
-	}
-	
+	@RequestMapping("/azz/api/client/selection/checkOrderOpt")
+	JsonResult<String> checkOrderOpt(@RequestParam("clientUserCode")String clientUserCode);
+
 	/**
 	 * 
 	 * <p>下单 16</p>
 	 * @return
 	 * @author 黄智聪  2018年11月24日 上午10:58:45
 	 */
-	@RequestMapping("/addOrder")
-	public JsonResult<String> addOrder(@RequestBody OrderParam param){
-		return selectionService.addOrder(param);
-	}
+	@RequestMapping("/azz/api/client/selection/addOrder")
+	JsonResult<String> addOrder(@RequestBody OrderParam param);
 
 }
 

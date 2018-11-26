@@ -25,7 +25,7 @@ public class AddToShoppingCartParam {
 	@NotBlank(message = "客户编码不允许为空")
 	private String clientUserCode;
 	
-	@NotEmpty(message = "请选择产品")
+	@NotEmpty(message = "请选择选型产品")
 	private List<Long> selectionRecordIds;
 
 }

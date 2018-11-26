@@ -287,7 +287,7 @@ public class SelectionService {
 	 * @return
 	 * @author 黄智聪  2018年11月23日 上午11:11:52
 	 */
-	public JsonResult<Pagination<SelectionRecord>> getSelectionRecordByClientUserCode(@RequestBody SearchSelectionRecordParam param){
+	public JsonResult<Pagination<SelectionRecord>> getSelectionRecord(@RequestBody SearchSelectionRecordParam param){
 		JSR303ValidateUtils.validate(param);
 		PageHelper.startPage(param.getPageNum(), param.getPageSize());
 		List<SelectionRecord> records = clientSelectionRecordMapper.getSelectionRecordByClientUserCode(param);

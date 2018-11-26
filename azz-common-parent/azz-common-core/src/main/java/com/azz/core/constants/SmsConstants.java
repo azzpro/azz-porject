@@ -74,6 +74,29 @@ public enum SmsConstants {
 		this.msgType = msgType;
 	}
 	
-	
+	public enum SmsCode{
+		SUCCESS("成功","0000"),
+		FAILD("失败","1111");
+		
+		private String desc;
+		private String code;
+		public String getDesc() {
+			return desc;
+		}
+		public void setDesc(String desc) {
+			this.desc = desc;
+		}
+		public String getCode() {
+			return code;
+		}
+		public void setCode(String code) {
+			this.code = code;
+		}
+		private SmsCode(String desc, String code) {
+			this.desc = desc;
+			this.code = code;
+		}
+		
+	}
 }
 

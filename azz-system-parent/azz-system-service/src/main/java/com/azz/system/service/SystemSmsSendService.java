@@ -29,6 +29,7 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.SmsErrorCode;
 import com.azz.core.constants.SmsConstants;
+import com.azz.core.constants.SmsConstants.SmsCode;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.exception.SmsException;
 import com.azz.system.bo.SmsCheck;
@@ -98,9 +99,9 @@ private static final Logger LOG = LoggerFactory.getLogger(SystemSmsSendService.c
 		SystemMsgLog findMsgLog = smlm.findMsgLog(Long.parseLong(sv.getPhone()));
 		if(null != findMsgLog) {
 			if((System.currentTimeMillis()/1000-findMsgLog.getMsgTime().getTime()/1000) < sv.getSec()) {
-				return new JsonResult<>(new SmsInfo("0000", "SUCCESS"));
+				return new JsonResult<>(new SmsInfo(SmsCode.SUCCESS.getCode(), SmsCode.SUCCESS.getDesc()));
 			}
-			return new JsonResult<>(new SmsInfo("1111", "FAILE"));
+			return new JsonResult<>(new SmsInfo(SmsCode.FAILD.getCode(), SmsCode.FAILD.getDesc()));
 		}
 		throw new SmsException(SmsErrorCode.SMS_ERROR_MSG_NOT_EXIST);
 	}

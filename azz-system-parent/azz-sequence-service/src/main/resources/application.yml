@@ -112,6 +112,10 @@ azz:
      type: randomSequence
      args: {length: '6'}
     -
+     id: pay
+     type: paySequence
+     args: {length: '7'}
+    -
      id: ProductRandom
      type: ProductRandomSequence
      args: {length: '10'}

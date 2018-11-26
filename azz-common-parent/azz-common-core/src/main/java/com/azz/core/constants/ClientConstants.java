@@ -351,4 +351,57 @@ public abstract class ClientConstants {
     	}
         
     }
+	
+	/**
+	 * 
+	 * <P>支付方式</P>
+	 * @version 1.0
+	 * @author 黄智聪  2018年11月23日 下午6:43:19
+	 */
+	public enum PayMethod {
+		
+		ONLINE(1, "线上"),
+
+    	UNDERLINE(2, "线下");
+
+    	@Getter
+    	private int value;
+
+    	@Getter
+    	private String desc;
+
+    	PayMethod(int value, String desc) {
+    	    this.value = value;
+    	    this.desc = desc;
+    	}
+        
+    }
+	/**
+	 * 
+	 * <P>支付状态</P>
+	 * @version 1.0
+	 * @author 黄智聪  2018年11月23日 下午6:43:19
+	 */
+	public enum PayStatus {
+		
+		PAID(1, "待支付"),
+
+    	SUCCESS(2, "支付成功"),
+    	
+		CLOSE(3, "关闭支付"),
+		
+		FAILE(4, "支付失败");
+		
+    	@Getter
+    	private int value;
+
+    	@Getter
+    	private String desc;
+
+    	PayStatus(int value, String desc) {
+    	    this.value = value;
+    	    this.desc = desc;
+    	}
+        
+    }
 }

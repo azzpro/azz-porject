@@ -18,6 +18,7 @@ import com.azz.sequence.sequence.service.MerchantEmployeeSequenceService;
 import com.azz.sequence.sequence.service.MerchantInvoiceApplySequenceService;
 import com.azz.sequence.sequence.service.MerchantPowerSequenceService;
 import com.azz.sequence.sequence.service.MerchantTenantSequenceService;
+import com.azz.sequence.sequence.service.PayRandomSequenceService;
 import com.azz.sequence.sequence.service.PlatDeptSequenceService;
 import com.azz.sequence.sequence.service.PlatEmployeeSequenceService;
 import com.azz.sequence.sequence.service.PlatPowerSequenceService;
@@ -62,10 +63,23 @@ public class SequenceController {
     private TenRandomSequenceService tenRandomSequenceService;
 	
 	@Autowired
+    private PayRandomSequenceService payRandomSequenceService;
+	
+	@Autowired
     private ClientInvoiceApplySequenceService clientInvoiceApplySequenceService;
 	
 	@Autowired
     private MerchantInvoiceApplySequenceService merchantInvoiceApplySequenceService;
+	
+	/**
+	 * <p>支付流水号</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:36:33
+	 */
+	@RequestMapping(value="getPayCodeNumber",method=RequestMethod.GET)
+	public String getPayCodeNumber() {
+		return "IORP1"+payRandomSequenceService.getSequence();
+	}
 	
 	/**
 	 * <p>客户端 客户编号</p>

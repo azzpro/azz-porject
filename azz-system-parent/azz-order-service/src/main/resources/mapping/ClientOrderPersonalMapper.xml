@@ -256,6 +256,7 @@
   
   <resultMap id="clientOrderInfo" type="com.azz.order.client.pojo.vo.ClientOrderInfo">
   	<result column="clientOrderCode" jdbcType="VARCHAR" property="clientOrderCode" />
+  	<result column="clientPhoneNumber" jdbcType="VARCHAR" property="clientPhoneNumber" />
     <result column="grandTotal" jdbcType="DECIMAL" property="grandTotal" />
     <result column="paymentMethod" jdbcType="INTEGER" property="paymentMethod" />
     <result column="invoiceStatus" jdbcType="INTEGER" property="invoiceStatus" />
@@ -335,6 +336,7 @@
 		cop.payment_method AS paymentMethod,
 		cop.invoice_status as invoiceStatus,
 		cu.client_user_name as orderCreator,
+		cu.phone_number as clientPhoneNumber,
 		cop.order_status_id as orderStatusId,
 		cop.grand_total AS grandTotal,
 		cop.remark as remark,

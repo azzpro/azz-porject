@@ -523,7 +523,7 @@ public class SelectionService {
 		return JsonResult.successJsonResult(clientOrderCode);
 	}
 	
-	public JsonResult<String> payOrder(@RequestBody PayOrderParam param){
+	public JsonResult<String> orderPaySuccessCallBack(@RequestBody PayOrderParam param){
 		JSR303ValidateUtils.validate(param);
 		String clientOrderCode = param.getClientOrderCode();
 		param.getPaymentType();

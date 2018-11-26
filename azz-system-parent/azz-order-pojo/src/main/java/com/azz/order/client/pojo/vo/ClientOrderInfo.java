@@ -23,6 +23,8 @@ public class ClientOrderInfo {
 
 	private String clientOrderCode;
 	
+	private String clientPhoneNumber;
+	
 	private Integer paymentMethod;
 	
 	private Integer orderStatusId;

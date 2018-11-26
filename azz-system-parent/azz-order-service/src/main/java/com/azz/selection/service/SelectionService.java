@@ -23,8 +23,8 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.QueryPage;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.page.Pagination;
-import com.azz.core.constants.ClientConstants;
 import com.azz.core.constants.ClientConstants.ClientOrderStatus;
+import com.azz.core.constants.ClientConstants.PaymentStatus;
 import com.azz.core.constants.ClientConstants.SelectionRecordStatus;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.order.client.mapper.ClientOrderItemPersonalMapper;
@@ -39,10 +39,10 @@ import com.azz.order.selection.ClientSelectionRecord;
 import com.azz.order.selection.ClientShoppingCart;
 import com.azz.order.selection.bo.AddSelectionRecordParam;
 import com.azz.order.selection.bo.AddToShoppingCartParam;
+import com.azz.order.selection.bo.CallBackParam;
 import com.azz.order.selection.bo.DelSelectionRecordParam;
 import com.azz.order.selection.bo.OrderItem;
 import com.azz.order.selection.bo.OrderParam;
-import com.azz.order.selection.bo.PayOrderParam;
 import com.azz.order.selection.bo.SearchCombinationInitParamsParam;
 import com.azz.order.selection.bo.SearchInitParamsParam;
 import com.azz.order.selection.bo.SearchSelectionRecordParam;
@@ -63,7 +63,6 @@ import com.azz.selection.mapper.ClientSelectionRecordMapper;
 import com.azz.selection.mapper.ClientShoppingCartMapper;
 import com.azz.selection.mapper.SelectionMapper;
 import com.azz.util.DateUtils;
-import com.azz.util.DecimalUtil;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
 import com.github.pagehelper.PageHelper;
@@ -516,17 +515,21 @@ public class SelectionService {
 			clientOrderItemPersonalMapper.insertSelective(clientOrderItemRecord);
 		}
 		
-		// 发票操作  TODO
-		
 		// 清空客户的购物车信息
 		clientShoppingCartMapper.deleteShoppingCartByClientUserId(user.getId());
 		return JsonResult.successJsonResult(clientOrderCode);
 	}
 	
-	public JsonResult<String> orderPaySuccessCallBack(@RequestBody PayOrderParam param){
+	/**
+	 * 
+	 * <p>客户订单支付成功后的操作</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月26日 下午3:41:55
+	 */
+	public JsonResult<String> clientOrderPaySuccessOpt(@RequestBody CallBackParam param){
 		JSR303ValidateUtils.validate(param);
 		String clientOrderCode = param.getClientOrderCode();
-		param.getPaymentType();
 		ClientOrderPersonal order = clientOrderPersonalMapper.getClientOrderPersonalByClientOrderCode(clientOrderCode);
 		if(order == null) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户订单不存在");
@@ -534,15 +537,28 @@ public class SelectionService {
 		if(ClientOrderStatus.NOT_PAID.getValue() != order.getOrderStatusId()) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户订单状态异常");
 		}
-		// 订单失效时间为订单创建时间 + 6小时
-		Date orderDeadTime = DateUtils.addHour(order.getCreateTime(), ClientConstants.CLIENT_ORDER_DEAD_TIME_HOURS);
-		// 失效时间  < 当前时间，订单视为失效
-		if(DecimalUtil.lt(new BigDecimal(orderDeadTime.getTime()), new BigDecimal(System.currentTimeMillis()))) {
-			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单已失效，请重新下单");
-		}
+		Date nowDate = new Date();
+		// 修改订单
+		ClientOrderPersonal clientOrderRecord = ClientOrderPersonal.builder()
+				.id(order.getId())
+				.orderStatusId(ClientOrderStatus.NOT_CONFIRMED.getValue())
+				.paymentMethod(param.getPaymentMethod())
+				.paymentType(param.getPaymentType())
+				.paymentStatus(PaymentStatus.PAY_SUCCESS.getValue())
+				.modifyTime(nowDate)
+				.build();
+		clientOrderPersonalMapper.updateByPrimaryKeySelective(clientOrderRecord);
 		
+		// 新增客户订单状态变更记录
+		ClientOrderStatusPersonal clientOrderStatusRecord = ClientOrderStatusPersonal.builder()
+				.createTime(nowDate)
+				.orderId(clientOrderRecord.getId())
+				.orderStatusId(ClientOrderStatus.NOT_CONFIRMED.getValue())
+				.remark("订单支付成功，生成待确认订单")
+				.build();
+		clientOrderStatusPersonalMapper.insertSelective(clientOrderStatusRecord);
 		
-		return null;
+		return JsonResult.successJsonResult();
 	}
 	
 }

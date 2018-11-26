@@ -20,6 +20,7 @@ import com.azz.core.common.QueryPage;
 import com.azz.core.common.page.Pagination;
 import com.azz.order.selection.bo.AddSelectionRecordParam;
 import com.azz.order.selection.bo.AddToShoppingCartParam;
+import com.azz.order.selection.bo.CallBackParam;
 import com.azz.order.selection.bo.DelSelectionRecordParam;
 import com.azz.order.selection.bo.OrderParam;
 import com.azz.order.selection.bo.SearchCombinationInitParamsParam;
@@ -236,6 +237,18 @@ public class SelectionController {
 	@RequestMapping("/addOrder")
 	public JsonResult<String> addOrder(@RequestBody OrderParam param){
 		return selectionService.addOrder(param);
+	}
+	
+	/**
+	 * 
+	 * <p>客户订单支付成功后的操作</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月26日 下午4:20:48
+	 */
+	@RequestMapping("/clientOrderPaySuccessOpt")
+	public JsonResult<String> clientOrderPaySuccessOpt(@RequestBody CallBackParam param){
+		return selectionService.clientOrderPaySuccessOpt(param);
 	}
 
 }

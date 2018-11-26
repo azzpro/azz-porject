@@ -357,12 +357,14 @@ public class SelectionService {
 	 */
 	public JsonResult<String> addProductsToShoppingCart(@RequestBody AddToShoppingCartParam param){
 		JSR303ValidateUtils.validate(param);
-		ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getClientUserCode());
+		String clientUserCode = param.getClientUserCode();
+		ClientUser user = clientUserMapper.getClientUserByClientUserCode(clientUserCode);
 		List<Long> selectionRecordIds = param.getSelectionRecordIds();
 		Date nowDate = new Date();
 		for (Long selectionRecordId : selectionRecordIds) {
-			ClientShoppingCart record = clientShoppingCartMapper.selectByPrimaryKey(selectionRecordId);
-			if(record == null) {// 若选型记录已添加至购物车，啥也不干，否则才添加至购物车
+			// 查询客户选型记录所在的购物车
+			ClientShoppingCart record = clientShoppingCartMapper.selectBySelectionRecordIdAndClientUserCode(selectionRecordId, clientUserCode);
+			if(record == null) {// 若选型记录未添加至购物车，才将选型记录添加至购物车，否则啥也不干
 				ClientShoppingCart shoppingCartRecord = ClientShoppingCart.builder()
 						.clientUserId(user.getId())
 						.createTime(nowDate)

@@ -19,6 +19,16 @@ public interface ClientShoppingCartMapper {
     int insertSelective(ClientShoppingCart record);
 
     ClientShoppingCart selectByPrimaryKey(Long id);
+    
+    /**
+     * 
+     * <p>查询客户选型记录所在的购物车</p>
+     * @param selectionRecordId
+     * @param clientUserCode
+     * @return
+     * @author 黄智聪  2018年11月26日 上午10:20:16
+     */
+    ClientShoppingCart selectBySelectionRecordIdAndClientUserCode(@Param("selectionRecordId")Long selectionRecordId, @Param("clientUserCode")String clientUserCode);
 
     int updateByPrimaryKeySelective(ClientShoppingCart record);
 

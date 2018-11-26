@@ -522,7 +522,7 @@ public class SelectionService {
 	
 	/**
 	 * 
-	 * <p>客户订单支付成功后的操作</p>
+	 * <p>客户订单支付成功后的操作 17</p>
 	 * @param param
 	 * @return
 	 * @author 黄智聪  2018年11月26日 下午3:41:55

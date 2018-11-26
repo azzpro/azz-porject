@@ -384,13 +384,13 @@ public abstract class ClientConstants {
 	 */
 	public enum PayStatus {
 		
-		PAY_PAID(1, "待支付"),
+		NOT_PAID(1, "待支付"),
 
     	PAY_SUCCESS(2, "支付成功"),
     	
-		PAY_CLOSE(3, "关闭支付"),
+		PAY_CLOSED(3, "关闭支付"),
 		
-		PAY_FAILE(4, "支付失败");
+		PAY_FAILED(4, "支付失败");
 		
     	@Getter
     	private int value;

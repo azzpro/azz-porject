@@ -63,7 +63,7 @@ public interface MerchantService {
      * @author 黄智聪  2018年10月22日 下午3:25:21
      */
     @GetMapping("/azz/api/merchant/sendVerificationCode")
-    JsonResult<Long> sendVerificationCode(String phoneNumber);
+    JsonResult<String> sendVerificationCode(@RequestParam("phoneNumber")String phoneNumber);
     
     /**
      * 

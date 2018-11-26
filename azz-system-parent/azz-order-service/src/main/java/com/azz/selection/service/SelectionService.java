@@ -62,6 +62,7 @@ import com.azz.order.selection.vo.ShoppingCartProductInfo;
 import com.azz.selection.mapper.ClientSelectionRecordMapper;
 import com.azz.selection.mapper.ClientShoppingCartMapper;
 import com.azz.selection.mapper.SelectionMapper;
+import com.azz.system.sequence.api.RandomSequenceService;
 import com.azz.util.DateUtils;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
@@ -96,6 +97,9 @@ public class SelectionService {
 	
 	@Autowired
 	private ClientOrderItemPersonalMapper clientOrderItemPersonalMapper;
+	
+	@Autowired
+	private RandomSequenceService randomSequenceService;
 
 	/**
 	 * 
@@ -469,7 +473,7 @@ public class SelectionService {
 		Date nowDate = new Date();
 		// 新增未支付的订单记录
 		ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getClientUserCode());
-		String clientOrderCode = System.currentTimeMillis() + "";// TODO
+		String clientOrderCode = randomSequenceService.getClientPersonalOrderCodeNumber();
 		ClientOrderPersonal  clientOrderRecord = ClientOrderPersonal.builder()
 				.clientOrderCode(clientOrderCode)
 				.clientUserId(user.getId())

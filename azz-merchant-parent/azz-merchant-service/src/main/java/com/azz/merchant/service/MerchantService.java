@@ -18,10 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
-import com.azz.core.common.constants.MessageConstants;
-import com.azz.core.common.constants.MessageConstants.MessagePlatform;
-import com.azz.core.common.constants.MessageConstants.MessageSendStatus;
-import com.azz.core.common.constants.MessageConstants.MessageType;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
 import com.azz.core.common.errorcode.ShiroAuthErrorCode;
@@ -32,6 +28,7 @@ import com.azz.core.constants.MerchantConstants;
 import com.azz.core.constants.MerchantConstants.IsMerchantRegister;
 import com.azz.core.constants.MerchantConstants.QualificationApplyStatus;
 import com.azz.core.constants.MerchantConstants.UserStatus;
+import com.azz.core.constants.SmsConstants;
 import com.azz.core.exception.BaseException;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.exception.JSR303ValidationException;
@@ -43,7 +40,6 @@ import com.azz.merchant.mapper.MerchantPermissionMapper;
 import com.azz.merchant.mapper.MerchantRoleMapper;
 import com.azz.merchant.mapper.MerchantUserMapper;
 import com.azz.merchant.mapper.MerchantUserRoleMapper;
-import com.azz.merchant.mapper.MsgLogMapper;
 import com.azz.merchant.pojo.Merchant;
 import com.azz.merchant.pojo.MerchantAddress;
 import com.azz.merchant.pojo.MerchantApply;
@@ -51,7 +47,6 @@ import com.azz.merchant.pojo.MerchantDept;
 import com.azz.merchant.pojo.MerchantRole;
 import com.azz.merchant.pojo.MerchantUser;
 import com.azz.merchant.pojo.MerchantUserRole;
-import com.azz.merchant.pojo.MsgLog;
 import com.azz.merchant.pojo.bo.AddMerchantUserParam;
 import com.azz.merchant.pojo.bo.BusinessLicense;
 import com.azz.merchant.pojo.bo.CompleteMerchantInfoParam;
@@ -70,14 +65,16 @@ import com.azz.merchant.pojo.vo.MerchantUserPermission;
 import com.azz.merchant.pojo.vo.UploadFileInfo;
 import com.azz.model.Password;
 import com.azz.system.api.SystemImageUploadService;
+import com.azz.system.api.SystemSmsSendService;
+import com.azz.system.bo.SmsCheck;
+import com.azz.system.bo.SmsCodeValidation;
+import com.azz.system.bo.SmsParams;
 import com.azz.system.sequence.api.DbSequenceService;
+import com.azz.system.vo.SmsInfo;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.PasswordHelper;
-import com.azz.util.RandomStringUtils;
 import com.azz.util.StringUtils;
 import com.github.pagehelper.PageHelper;
-
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * <P>
@@ -89,11 +86,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Transactional(rollbackFor = Exception.class)
 @Service
-@Slf4j
 public class MerchantService {
-
-    @Autowired
-    private MsgLogMapper msgLogMapper;
 
     @Autowired
     private MerchantMapper merchantMapper;
@@ -124,6 +117,10 @@ public class MerchantService {
     
     @Autowired
     private DbSequenceService dbSequenceService;
+    
+    @Autowired
+    private SystemSmsSendService systemSmsSendService;
+    
     
     
     /**
@@ -179,38 +176,39 @@ public class MerchantService {
      * @return
      * @author 黄智聪 2018年10月22日 下午5:37:30
      */
-    public JsonResult<Long> sendVerificationCode(String phoneNumber) {
-	// 手机校验
-	this.validatePhoneNumber(phoneNumber);
-	// 生成短信验证码
-	String verificationCode = RandomStringUtils.randomNumeric(MessageConstants.MESSAGE_VERYFICATION_CODE_LENGTH);
-	boolean sendSuccess = true;
-	String errorMsg = null;
-	try {
-	    sendPhoneMessage(phoneNumber);
-	} catch (Exception e) {
-	    log.debug("商户注册短信验证码发送失败", e);
-	    sendSuccess = false;
-	    errorMsg = e.getMessage();
-	}
-	MsgLog msgLogRecord = MsgLog.builder().msgContent("您正在注册平台商户账号，验证码为：" + verificationCode + "，有效期十分钟，请及时输入。")
-		.msgTitle("商户注册验证码").msgPhone(Long.parseLong(phoneNumber)).msgError(errorMsg)
-		.msgStatus(sendSuccess ? MessageSendStatus.SUCCESS.getValue() : MessageSendStatus.FAIL.getValue())
-		.msgTime(new Date()).msgType(MessageType.REGIST.getValue()).msgPlatform(MessagePlatform.ALI.getValue())
-		.build();
-	msgLogMapper.insertSelective(msgLogRecord);
-	// 不能抛异常，否则事务回滚
-	if (!sendSuccess) {
-	    JsonResult<Long> jr = new JsonResult<>();
-	    jr.setCode(SystemErrorCode.SYS_ERROR_MESSAGE_SERVICE_CALL_ERROR.getCode());
-	    jr.setMsg(SystemErrorCode.SYS_ERROR_MESSAGE_SERVICE_CALL_ERROR.getMessage());
-	    jr.setData(-1L);
-	    return jr;
-	} else {
-	    return JsonResult.successJsonResult(msgLogRecord.getMsgId());
-	}
+    public JsonResult<String> sendVerificationCode(String phoneNumber) {
+    	SmsParams sms = new SmsParams();
+    	sms.setPhone(phoneNumber);
+    	sms.setMsgType(SmsConstants.MERCHANT_REGISTER.getMsgType());
+    	return systemSmsSendService.sendSmsCode(sms);
     }
-
+    
+    /**
+     * 
+     * <p>校验验证码</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年11月26日 下午7:10:22
+     */
+    public void checkVerificationCode(String phoneNumber, String verificationCode) {
+    	// 先校验验证码是否已失效
+    	SmsCodeValidation sv = new SmsCodeValidation();
+    	sv.setPhone(phoneNumber);
+    	sv.setSec(MerchantConstants.MERCHANT_REGIST_SMS_TIME_OUT);
+    	JsonResult<SmsInfo> jr = systemSmsSendService.checkMsgCodeTime(sv);
+    	if(!jr.getData().getCode().equals("0000")) {
+    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "短信验证码已失效，请重新获取");
+    	}
+    	// 再校验验证码是否正确
+    	SmsCheck sc = new SmsCheck();
+    	sc.setCode(verificationCode);
+    	sc.setPhone(phoneNumber);
+    	jr = systemSmsSendService.checkMsgCode(sc);
+    	if(!jr.getData().getCode().equals("0000")) { // TODO
+    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "验证码错误");
+    	}
+    }
+    
     /**
      * 
      * <p>
@@ -236,6 +234,9 @@ public class MerchantService {
 	if(merchantUser != null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "手机号已被注册");
 	}
+	// 校验
+	this.checkVerificationCode(phoneNumber, param.getVerificationCode());
+	
 	String merchantCode = dbSequenceService.getMerchantTenantNumber();
 	String registerName = param.getRegisterName();
 	Merchant merchantRecord = Merchant.builder()
@@ -653,7 +654,9 @@ public class MerchantService {
      * @author 黄智聪 2018年10月22日 下午6:50:22
      */
     private boolean sendPhoneMessage(String phoneNumber) {
-	return false;
+    	
+    	
+    	return false;
     }
     
     /**

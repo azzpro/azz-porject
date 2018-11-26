@@ -58,13 +58,19 @@ import com.azz.core.constants.ClientConstants.IsEnterpriseAuthenticator;
 import com.azz.core.constants.ClientConstants.QualificationApplyStatus;
 import com.azz.core.constants.ClientConstants.UserStatus;
 import com.azz.core.constants.FileConstants;
+import com.azz.core.constants.SmsConstants;
 import com.azz.core.constants.UserConstants.ClientType;
 import com.azz.core.exception.BaseException;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.model.Password;
 import com.azz.system.api.SystemImageUploadService;
+import com.azz.system.api.SystemSmsSendService;
+import com.azz.system.bo.SmsCheck;
+import com.azz.system.bo.SmsCodeValidation;
+import com.azz.system.bo.SmsParams;
 import com.azz.system.sequence.api.RandomSequenceService;
+import com.azz.system.vo.SmsInfo;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.PasswordHelper;
 import com.azz.util.RandomStringUtils;
@@ -110,6 +116,9 @@ public class ClientService {
     
     @Autowired
     private RandomSequenceService randomSequenceService;
+    
+    @Autowired
+    private SystemSmsSendService systemSmsSendService;
     
     /**
      * 
@@ -186,6 +195,10 @@ public class ClientService {
 	if(clientUser != null) {
 	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "手机号已被注册");
 	}
+
+	// 校验验证码
+	this.checkVerificationCode(phoneNumber, param.getVerificationCode());
+
 	String clientUserCode = randomSequenceService.getClientNumber();
 	// 生成盐值加密的密码
 	Password pwd = PasswordHelper.encryptPasswordByModel(password);
@@ -195,13 +208,40 @@ public class ClientService {
 		.password(pwd.getPassword())
 		.phoneNumber(phoneNumber)
 		.salt(pwd.getSalt())
-		//.isEnterpriseAuthenticator(IsEnterpriseAuthenticator.YES.getValue())
 		.remark("来自客户注册")
 		.creator(clientUserCode)
 		.build();
 	clientUserMapper.insertSelective(clientUserRecord);
 	return JsonResult.successJsonResult();
     }
+    
+    
+    /**
+     * 
+     * <p>校验验证码</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年11月26日 下午7:10:22
+     */
+    public void checkVerificationCode(String phoneNumber, String verificationCode) {
+    	// 先校验验证码是否已失效
+    	SmsCodeValidation sv = new SmsCodeValidation();
+    	sv.setPhone(phoneNumber);
+    	sv.setSec(ClientConstants.CLIENT_REGIST_SMS_TIME_OUT);
+    	JsonResult<SmsInfo> jr = systemSmsSendService.checkMsgCodeTime(sv);
+    	if(!jr.getData().getCode().equals("0000")) {
+    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "短信验证码已失效，请重新获取");
+    	}
+    	// 再校验验证码是否正确
+    	SmsCheck sc = new SmsCheck();
+    	sc.setCode(verificationCode);
+    	sc.setPhone(phoneNumber);
+    	jr = systemSmsSendService.checkMsgCode(sc);
+    	if(!jr.getData().getCode().equals("0000")) { // TODO
+    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "验证码错误");
+    	}
+    }
+    
     
     /**
      * 
@@ -394,7 +434,7 @@ public class ClientService {
 		    .clientUserId(userRecord.getId()).roleId(role.getId()).build();
 	    clientUserRoleMapper.insertSelective(userRoleRecord);
 	    
-	    // 发送短信通知成员 TODO
+	    // 发送短信通知成员
 	    this.sendPasswordMsg(phoneNumber, password);
 	}else {// 若能根据手机号查询到用户信息，判断是否为企业用户
 	    if(u.getClientType() == ClientType.ENTERPRISE.getValue()) { // 若为企业用户，则表示已被企业注册
@@ -582,9 +622,12 @@ public class ClientService {
 	return JsonResult.successJsonResult(info);
     }
     
-    // 发送短信通知成员 TODO
+    // 发送短信通知成员
     private void sendPasswordMsg(String phoneNumber, String password) {
-	//您的企业将您添加为企业成员，初始密码“123456”，请登陆平台后及时修改。
+    	SmsParams sms = new SmsParams();
+    	sms.setPhone(phoneNumber);
+    	sms.setMsgType(SmsConstants.ACCOUNT_CREATE_SUCCESS.getMsgType());
+    	systemSmsSendService.sendSmsCode(sms);
     }
 
     /**

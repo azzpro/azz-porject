@@ -49,9 +49,9 @@ public class MerchantController {
     public JsonResult<LoginMerchantUserInfo> getLoginMerchantUserInfoByPhoneNumber(@RequestParam("phoneNumber")String phoneNumber){
 	return merchantService.getLoginMerchantUserInfoByPhoneNumber(phoneNumber);
     }
-    
+
     @RequestMapping("/sendVerificationCode")
-    public JsonResult<Long> sendVerificationCode(String phoneNumber) {
+    public JsonResult<String> sendVerificationCode(String phoneNumber) {
 	return merchantService.sendVerificationCode(phoneNumber);
     }
     

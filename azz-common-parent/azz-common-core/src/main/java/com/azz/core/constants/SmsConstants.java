@@ -6,6 +6,7 @@
  ******************************************************************************/
  
 package com.azz.core.constants;
+
 /**
  * <P>TODO</P>
  * @version 1.0
@@ -32,7 +33,7 @@ public enum SmsConstants {
 	private String msgContent;
 	private String name;
 	private String code;
-	private Integer type;
+	private Integer type;// 1 通知  2短信验证码
 	private Integer msgType;
 	public String getCode() {
 		return code;
@@ -73,7 +74,6 @@ public enum SmsConstants {
 		this.type = type;
 		this.msgType = msgType;
 	}
-	
 	
 }
 

@@ -247,5 +247,10 @@ public class MerchantController {
     public JsonResult<MerchantInfo> getMerchantInfo(String merchantCode) {
 	return merchantService.getMerchantInfo(merchantCode);
     }
-
+    
+    @RequestMapping("/sendVerificationCode")
+    public JsonResult<String> sendVerificationCode(String phoneNumber) {
+    	return merchantService.sendVerificationCode(phoneNumber);
+    }
+    
 }

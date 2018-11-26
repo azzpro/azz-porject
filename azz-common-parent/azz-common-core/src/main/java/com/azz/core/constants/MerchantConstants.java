@@ -40,11 +40,17 @@ public abstract class MerchantConstants {
 	 * 品牌主图文件大小限制
 	 */
 	public static final long GOODS_BRAND_FILE_SIZE_LIMIT = 2 * 1024 * 1024L;
-	
+
 	/**
 	 * 推荐组合主图文件大小限制
 	 */
 	public static final long COMBINATION_FILE_SIZE_LIMIT = 2 * 1024 * 1024L;
+	
+	/**
+	 * 商户注册短信验证码有效时间 10分钟
+	 */
+	public static final long MERCHANT_REGIST_SMS_TIME_OUT = 10 * 60L;
+	
 
 	/**
 	 * 

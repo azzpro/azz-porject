@@ -22,6 +22,11 @@ public abstract class ClientConstants {
     public static final String LOGIN_CLIENT_USER = "loginClientUser";
     
     /**
+	 * 客户注册短信验证码有效时间 10分钟
+	 */
+	public static final long CLIENT_REGIST_SMS_TIME_OUT = 10 * 60L;
+    
+    /**
      * 客户头像文件大小限制
      */
     public static final long AVATAR_FILE_SIZE_LIMIT = 2 * 1024 * 1024L;

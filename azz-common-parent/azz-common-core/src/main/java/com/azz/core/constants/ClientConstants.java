@@ -40,11 +40,17 @@ public abstract class ClientConstants {
      * 签收单文件大小限制
      */
     public static final long SIGN_FORM_FILE_SIZE_LIMIT = 10 * 1024 * 1024L;
-    
+
     /**
      * 收货地址限制数量
      */
     public static final int SHIPPING_ADDRESS_AMOUNT_LIMIT = 10;
+    
+    /**
+     * 客户订单失效时间： 6小时
+     */
+    public static final int CLIENT_ORDER_DEAD_TIME_HOURS = 6;
+    
 
     /**
      * 

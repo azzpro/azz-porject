@@ -23,6 +23,7 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.QueryPage;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.page.Pagination;
+import com.azz.core.constants.ClientConstants;
 import com.azz.core.constants.ClientConstants.ClientOrderStatus;
 import com.azz.core.constants.ClientConstants.SelectionRecordStatus;
 import com.azz.exception.JSR303ValidationException;
@@ -41,6 +42,7 @@ import com.azz.order.selection.bo.AddToShoppingCartParam;
 import com.azz.order.selection.bo.DelSelectionRecordParam;
 import com.azz.order.selection.bo.OrderItem;
 import com.azz.order.selection.bo.OrderParam;
+import com.azz.order.selection.bo.PayOrderParam;
 import com.azz.order.selection.bo.SearchCombinationInitParamsParam;
 import com.azz.order.selection.bo.SearchInitParamsParam;
 import com.azz.order.selection.bo.SearchSelectionRecordParam;
@@ -61,6 +63,7 @@ import com.azz.selection.mapper.ClientSelectionRecordMapper;
 import com.azz.selection.mapper.ClientShoppingCartMapper;
 import com.azz.selection.mapper.SelectionMapper;
 import com.azz.util.DateUtils;
+import com.azz.util.DecimalUtil;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
 import com.github.pagehelper.PageHelper;
@@ -467,8 +470,9 @@ public class SelectionService {
 		Date nowDate = new Date();
 		// 新增未支付的订单记录
 		ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getClientUserCode());
+		String clientOrderCode = System.currentTimeMillis() + "";// TODO
 		ClientOrderPersonal  clientOrderRecord = ClientOrderPersonal.builder()
-				.clientOrderCode(System.currentTimeMillis() + "")// TODO
+				.clientOrderCode(clientOrderCode)
 				.clientUserId(user.getId())
 				.createTime(nowDate)
 				.creator(param.getClientUserCode())
@@ -512,9 +516,33 @@ public class SelectionService {
 			clientOrderItemPersonalMapper.insertSelective(clientOrderItemRecord);
 		}
 		
+		// 发票操作  TODO
+		
 		// 清空客户的购物车信息
 		clientShoppingCartMapper.deleteShoppingCartByClientUserId(user.getId());
-		return JsonResult.successJsonResult();
+		return JsonResult.successJsonResult(clientOrderCode);
+	}
+	
+	public JsonResult<String> payOrder(@RequestBody PayOrderParam param){
+		JSR303ValidateUtils.validate(param);
+		String clientOrderCode = param.getClientOrderCode();
+		param.getPaymentType();
+		ClientOrderPersonal order = clientOrderPersonalMapper.getClientOrderPersonalByClientOrderCode(clientOrderCode);
+		if(order == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户订单不存在");
+		}
+		if(ClientOrderStatus.NOT_PAID.getValue() != order.getOrderStatusId()) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户订单状态异常");
+		}
+		// 订单失效时间为订单创建时间 + 6小时
+		Date orderDeadTime = DateUtils.addHour(order.getCreateTime(), ClientConstants.CLIENT_ORDER_DEAD_TIME_HOURS);
+		// 失效时间  < 当前时间，订单视为失效
+		if(DecimalUtil.lt(new BigDecimal(orderDeadTime.getTime()), new BigDecimal(System.currentTimeMillis()))) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单已失效，请重新下单");
+		}
+		
+		
+		return null;
 	}
 	
 }

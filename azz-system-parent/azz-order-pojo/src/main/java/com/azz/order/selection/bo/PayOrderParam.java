@@ -7,6 +7,10 @@
  
 package com.azz.order.selection.bo;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 import lombok.Data;
 
 /**
@@ -17,7 +21,11 @@ import lombok.Data;
 @Data
 public class PayOrderParam {
 	
+	@NotBlank(message = "订单编码不允许为空")
 	private String clientOrderCode;
-
+	
+	@NotNull(message = "支付类型")
+	private Integer paymentType;
+	
 }
 

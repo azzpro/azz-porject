@@ -367,6 +367,23 @@ public class DateUtils {
     }
     
     /**
+     * <p>当前的时间 + 小时</p>
+     *
+     * @param date      当前时间
+     * @param addDay 天
+     * @return
+     * @author 王好(18675539583) 2017-10-26 15:18:18
+     */
+    public static final Date addHour(Date date, long addHour) {
+        if (date == null) {
+            return null;
+        }
+        Instant instant = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault())
+        		.plusHours(addHour).atZone(ZoneId.systemDefault()).toInstant();
+        return Date.from(instant);
+    }
+    
+    /**
      * <p>当前的时间 + 天</p>
      *
      * @param date      当前时间

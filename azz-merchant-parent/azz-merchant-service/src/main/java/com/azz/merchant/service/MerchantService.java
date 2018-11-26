@@ -205,7 +205,7 @@ public class MerchantService {
     	sc.setCode(verificationCode);
     	sc.setPhone(phoneNumber);
     	jr = systemSmsSendService.checkMsgCode(sc);
-    	if(!jr.getData().getCode().equals(SmsCode.SUCCESS.getCode())) { // TODO
+    	if(!jr.getData().getCode().equals(SmsCode.SUCCESS.getCode())) {
     		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "验证码错误");
     	}
     }

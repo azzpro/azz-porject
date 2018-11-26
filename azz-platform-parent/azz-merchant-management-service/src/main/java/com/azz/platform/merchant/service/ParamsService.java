@@ -10,11 +10,9 @@ package com.azz.platform.merchant.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.TreeSet;
 
-import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -322,8 +320,7 @@ public class ParamsService {
 	@Transactional(rollbackFor=Exception.class)
 	public JsonResult<String> deleteParams(String code){
 		JSR303ValidateUtils.validate(code);
-		////todo 判断分类ID下是否有产品  有则不让删除  无可以删除  productService
-		StringBuilder sb1 = new StringBuilder();
+		// 判断分类ID下是否有产品  有则不让删除  无可以删除  productService
 		PlatformGoodsParams byCode = goodsParamsMapper.selectParamsByCode(code);
 		if(null == byCode)
 			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_CODE_NOTEXIST);

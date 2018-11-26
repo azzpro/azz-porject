@@ -10,3 +10,4 @@ com.azz.sequence.sequence.service.impl.TenRandomSequenceServiceImpl
 com.azz.sequence.sequence.service.impl.ClientInvoiceApplySequenceServiceImpl
 com.azz.sequence.sequence.service.impl.MerchantInvoiceApplySequenceServiceImpl
 com.azz.sequence.sequence.service.impl.PayRandomSequenceServiceImpl
+com.azz.sequence.sequence.service.impl.SevenRandomSequenceServiceImpl

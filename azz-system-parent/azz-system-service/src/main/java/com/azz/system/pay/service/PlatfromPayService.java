@@ -82,7 +82,7 @@ public class PlatfromPayService {
 		pfp.setPayMoney(orderInfo.getGrandTotal());
 		pfp.setPayTime(new Date());
 		pfp.setPayType(spp.getOrderPayType());
-		pfp.setPayStatus((byte)PayStatus.PAY_PAID.getValue());//支付状态 默认待支付
+		pfp.setPayStatus((byte)PayStatus.NOT_PAID.getValue());//支付状态 默认待支付
 		//pfp.setThreePartyNumber(); //
 		pfp.setPayNumber(rss.getPayCodeNumber());
 		ppm.insertPay(pfp);

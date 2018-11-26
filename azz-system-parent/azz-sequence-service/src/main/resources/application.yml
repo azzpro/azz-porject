@@ -123,5 +123,8 @@ azz:
      id: MerchantInvoiceApplySequence
      type: MerchantInvoiceApplyCodeSequence
      args: {id: 'IRC2', maxSequenceValue: '99999999', length: '8', step: '5'}
- 
+    -
+     id: OrderRandom
+     type: OrderRandomSequence
+     args: {length: '7'}
   

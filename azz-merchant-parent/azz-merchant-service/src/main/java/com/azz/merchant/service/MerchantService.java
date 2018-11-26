@@ -620,46 +620,12 @@ public class MerchantService {
      * @return
      * @author 黄智聪 2018年10月20日 上午11:29:37
      */
-    public void checkStatusExist(int value) {
-	if (!UserStatus.checkStatusExist(value)) {
-	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "用户状态不存在");
-	}
+    private void checkStatusExist(int value) {
+		if (!UserStatus.checkStatusExist(value)) {
+		    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "用户状态不存在");
+		}
     }
 
-    /**
-     * 
-     * <p>
-     * 手机号校验
-     * </p>
-     * 
-     * @param phoneNumber
-     * @author 黄智聪 2018年10月22日 下午6:50:10
-     */
-    private void validatePhoneNumber(String phoneNumber) {
-	if (StringUtils.isBlank(phoneNumber)) {
-	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "手机号不允许为空");
-	}
-	if (!StringUtils.isPhoneNumber(phoneNumber)) {
-	    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "手机格式不正确");
-	}
-    }
-
-    /**
-     * TODO 待实现
-     * <p>
-     * 发送短信
-     * </p>
-     * 
-     * @param phoneNumber
-     * @return
-     * @author 黄智聪 2018年10月22日 下午6:50:22
-     */
-    private boolean sendPhoneMessage(String phoneNumber) {
-    	
-    	
-    	return false;
-    }
-    
     /**
      * 
      * <p>

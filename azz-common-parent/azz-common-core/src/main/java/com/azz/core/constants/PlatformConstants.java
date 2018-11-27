@@ -22,5 +22,8 @@ public abstract class PlatformConstants {
      */
     public static final long CLASSIFICATION_FILE_SIZE_LIMIT = 2 * 1024 * 1024L;
     
-   
+    /**
+     * 首页主图文件大小
+     */
+    public static final long INDEX_FILE_SIZE_LIMIT = 5 * 1024 * 1024L;
 }

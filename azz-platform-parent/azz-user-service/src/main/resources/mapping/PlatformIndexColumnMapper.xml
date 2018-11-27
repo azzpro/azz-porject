@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.platform.user.mapper.PlatformIndexColumnMapper">
+  <resultMap id="BaseResultMap" type="com.azz.platform.user.pojo.PlatformIndexColumn">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="column_name" jdbcType="VARCHAR" property="columnName" />
+    <result column="column_pic_name" jdbcType="VARCHAR" property="columnPicName" />
+    <result column="column_pic_url" jdbcType="VARCHAR" property="columnPicUrl" />
+    <result column="column_code" jdbcType="VARCHAR" property="columnCode" />
+    <result column="column_type" jdbcType="INTEGER" property="columnType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="last_modify_time" jdbcType="TIMESTAMP" property="lastModifyTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, column_name, column_pic_name, column_pic_url, column_code, column_type, create_time, 
+    creator, last_modify_time, modifier, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from platform_index_column
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from platform_index_column
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.platform.user.pojo.PlatformIndexColumn">
+    insert into platform_index_column (id, column_name, column_pic_name, 
+      column_pic_url, column_code, column_type, 
+      create_time, creator, last_modify_time, 
+      modifier, remark)
+    values (#{id,jdbcType=BIGINT}, #{columnName,jdbcType=VARCHAR}, #{columnPicName,jdbcType=VARCHAR}, 
+      #{columnPicUrl,jdbcType=VARCHAR}, #{columnCode,jdbcType=VARCHAR}, #{columnType,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{lastModifyTime,jdbcType=TIMESTAMP}, 
+      #{modifier,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.platform.user.pojo.PlatformIndexColumn">
+    insert into platform_index_column
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="columnName != null">
+        column_name,
+      </if>
+      <if test="columnPicName != null">
+        column_pic_name,
+      </if>
+      <if test="columnPicUrl != null">
+        column_pic_url,
+      </if>
+      <if test="columnCode != null">
+        column_code,
+      </if>
+      <if test="columnType != null">
+        column_type,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="lastModifyTime != null">
+        last_modify_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="columnName != null">
+        #{columnName,jdbcType=VARCHAR},
+      </if>
+      <if test="columnPicName != null">
+        #{columnPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="columnPicUrl != null">
+        #{columnPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="columnCode != null">
+        #{columnCode,jdbcType=VARCHAR},
+      </if>
+      <if test="columnType != null">
+        #{columnType,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifyTime != null">
+        #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.platform.user.pojo.PlatformIndexColumn">
+    update platform_index_column
+    <set>
+      <if test="columnName != null">
+        column_name = #{columnName,jdbcType=VARCHAR},
+      </if>
+      <if test="columnPicName != null">
+        column_pic_name = #{columnPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="columnPicUrl != null">
+        column_pic_url = #{columnPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="columnCode != null">
+        column_code = #{columnCode,jdbcType=VARCHAR},
+      </if>
+      <if test="columnType != null">
+        column_type = #{columnType,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifyTime != null">
+        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.platform.user.pojo.PlatformIndexColumn">
+    update platform_index_column
+    set column_name = #{columnName,jdbcType=VARCHAR},
+      column_pic_name = #{columnPicName,jdbcType=VARCHAR},
+      column_pic_url = #{columnPicUrl,jdbcType=VARCHAR},
+      column_code = #{columnCode,jdbcType=VARCHAR},
+      column_type = #{columnType,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getColumnList" resultType="com.azz.platform.user.pojo.vo.ColumnInfo">
+  	SELECT
+		id as id,
+		column_name as columnName,
+		column_pic_url as columnPicUrl,
+		column_code as columnCode,
+		column_type as columnType,
+		create_time as createTime, 
+	FROM
+		platform_index_column
+	ORDER BY create_time DESC
+  </select>
+</mapper>

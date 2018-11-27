@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.platform.user.mapper.PlatformIndexImageMapper">
+  <resultMap id="BaseResultMap" type="com.azz.platform.user.pojo.PlatformIndexImage">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="index_column_id" jdbcType="BIGINT" property="indexColumnId" />
+    <result column="pic_name" jdbcType="VARCHAR" property="picName" />
+    <result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
+    <result column="jump_link" jdbcType="VARCHAR" property="jumpLink" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="last_modify_time" jdbcType="TIMESTAMP" property="lastModifyTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, index_column_id, pic_name, pic_url, jump_link, create_time, creator, last_modify_time, 
+    modifier, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from platform_index_image
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from platform_index_image
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.platform.user.pojo.PlatformIndexImage">
+    insert into platform_index_image (id, index_column_id, pic_name, 
+      pic_url, jump_link, create_time, 
+      creator, last_modify_time, modifier, 
+      remark)
+    values (#{id,jdbcType=BIGINT}, #{indexColumnId,jdbcType=BIGINT}, #{picName,jdbcType=VARCHAR}, 
+      #{picUrl,jdbcType=VARCHAR}, #{jumpLink,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{creator,jdbcType=VARCHAR}, #{lastModifyTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.platform.user.pojo.PlatformIndexImage">
+    insert into platform_index_image
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="indexColumnId != null">
+        index_column_id,
+      </if>
+      <if test="picName != null">
+        pic_name,
+      </if>
+      <if test="picUrl != null">
+        pic_url,
+      </if>
+      <if test="jumpLink != null">
+        jump_link,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="lastModifyTime != null">
+        last_modify_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="indexColumnId != null">
+        #{indexColumnId,jdbcType=BIGINT},
+      </if>
+      <if test="picName != null">
+        #{picName,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl != null">
+        #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="jumpLink != null">
+        #{jumpLink,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifyTime != null">
+        #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.platform.user.pojo.PlatformIndexImage">
+    update platform_index_image
+    <set>
+      <if test="indexColumnId != null">
+        index_column_id = #{indexColumnId,jdbcType=BIGINT},
+      </if>
+      <if test="picName != null">
+        pic_name = #{picName,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl != null">
+        pic_url = #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="jumpLink != null">
+        jump_link = #{jumpLink,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifyTime != null">
+        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.platform.user.pojo.PlatformIndexImage">
+    update platform_index_image
+    set index_column_id = #{indexColumnId,jdbcType=BIGINT},
+      pic_name = #{picName,jdbcType=VARCHAR},
+      pic_url = #{picUrl,jdbcType=VARCHAR},
+      jump_link = #{jumpLink,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getIndexImageByColumnId" parameterType="java.lang.Long" resultType="int">
+  	SELECT COUNT(1) FROM platform_index_image WHERE index_column_id = #{indexColumnId}
+  </select>
+</mapper>

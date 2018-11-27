@@ -66,6 +66,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.azz</groupId>
+			<artifactId>azz-system-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.azz</groupId>
 			<artifactId>azz-common-sharding</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

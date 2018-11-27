@@ -81,9 +81,9 @@ private static final Logger LOG = LoggerFactory.getLogger(SystemSmsSendService.c
 		JSR303ValidateUtils.validate(sc);
 		SystemMsgLog code = smlm.findMsgLogByPhoneAndCode(Long.parseLong(sc.getPhone()), sc.getCode());
 		if(null == code) {
-			return new JsonResult<>(new SmsInfo("1111", "FAILE"));
+			return new JsonResult<>(new SmsInfo(SmsCode.FAILD.getCode(), SmsCode.FAILD.getDesc()));
 		}else {
-			return new JsonResult<>(new SmsInfo("0000", "SUCCESS"));
+			return new JsonResult<>(new SmsInfo(SmsCode.SUCCESS.getCode(), SmsCode.SUCCESS.getDesc()));
 		}
 	}
 	

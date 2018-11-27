@@ -38,6 +38,7 @@
 	<if test="status != null">
 		and (a.product_status = #{status})
 	</if>
+	and a.product_status != 0
 	GROUP BY a.id
   </select>
   

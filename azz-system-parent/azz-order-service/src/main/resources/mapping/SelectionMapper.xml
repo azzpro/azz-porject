@@ -10,7 +10,7 @@
 	FROM
 		platform_case pc
 	WHERE
-		pc.case_status != 0
+		pc.case_status = 1
 	ORDER BY
 		pc.create_time DESC
   </select> 
@@ -59,8 +59,8 @@
 				FROM
 					platform_case_classification_params pccp
 				JOIN platform_case pc ON pc.id = pccp.case_id
-				WHERE
-					pc.case_code = #{caseCode}
+				WHERE pc.case_status = 1
+				and	pc.case_code = #{caseCode}
 			)
 		<if test="inputParams != null and inputParams.size() > 0">
 			<foreach collection="inputParams" item="inputParam">
@@ -86,8 +86,8 @@
 			FROM
 				platform_case_classification_params pccp
 			JOIN platform_case pc ON pc.id = pccp.case_id
-			WHERE
-				pc.case_code = #{caseCode}
+			WHERE pc.case_status = 1
+			and	pc.case_code = #{caseCode}
 		)
 		<if test="inputParams != null and inputParams.size() > 0">
 			<foreach collection="inputParams" item="inputParam">
@@ -141,8 +141,8 @@
 	JOIN platform_combination_module pcm ON pcm.module_id = mgp.module_id
 	JOIN platform_combination pc ON pc.id = pcm.combination_id
 	JOIN platform_case cs ON pc.case_id = cs.id
-	WHERE
-		pc.status != 0
+	WHERE cs.case_status = 1
+	AND	pc.status = 1
 	AND	cs.case_code = #{caseCode}
 	AND pgpp.product_id IN (
 			SELECT 
@@ -216,6 +216,7 @@
 				JOIN merchant_goods_product mgp ON mgp.module_id = mgm.id 
 				JOIN merchant_goods_product_price price ON price.product_id = mgp.id 
 				WHERE mgp.product_status != 0
+				and pc.status = 1
 				ORDER BY
 					price.price
 			) ascCasePrice
@@ -223,8 +224,9 @@
 			ascCasePrice.caseId
 	) t ON pc.id = t.caseId
 	<where>
+			cs.case_status = 1
 		AND mgp.product_status != 0
-		AND	pc.status != 0
+		AND	pc.status = 1
 		AND cs.case_code = #{caseCode}
 		<if test="inputParams != null and inputParams.size() > 0">
 			<foreach collection="inputParams" item="inputParam">
@@ -269,7 +271,7 @@
 		pc.combination_pic_name AS combinationPicName
 	FROM
 		platform_combination pc
-  WHERE pc.status != 0
+  WHERE pc.status = 1
 	AND pc.combination_code = #{combinationCode}
   
   </select>
@@ -294,6 +296,7 @@
 			JOIN merchant_goods_product_params pgpp ON pgpp.product_id = mgp.id
 			WHERE
 				mgp.product_status != 0
+			AND pc.status = 1
 			AND	pc.combination_code = #{combinationCode}
 		)
 		<if test="selectParams != null and selectParams.size() > 0">
@@ -333,8 +336,8 @@
 						pc.classification_id
 					FROM
 						platform_case pc
-					WHERE
-						pc.id = #{caseId}
+					WHERE pc.case_status = 1
+					AND	pc.id = #{caseId}
 				)
 		)
 	GROUP BY
@@ -391,7 +394,9 @@
 										platform_case cs
 									join platform_combination pc on cs.id = pc.case_id
 									WHERE
-										pc.combination_code = #{combinationCode}
+										cs.case_status = 1
+									AND pc.status = 1	
+									AND	pc.combination_code = #{combinationCode}
 								)
 						)
 					ORDER BY
@@ -406,6 +411,7 @@
 	JOIN platform_combination pc on pc.id = pcm.combination_id
   	<where>
   		pc.combination_code = #{combinationCode}
+  	AND pc.status = 1	
   	AND mgp.product_status != 0
   		<if test="selectParams != null and selectParams.size() > 0">
 			<foreach collection="selectParams" item="selectParam">

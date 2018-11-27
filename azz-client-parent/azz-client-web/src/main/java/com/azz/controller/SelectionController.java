@@ -10,6 +10,7 @@ package com.azz.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -77,8 +78,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月20日 下午7:32:14
 	 */
-	@RequestMapping("/getCombinationInitParams")
-	public JsonResult<List<CombinationInitParams>> getCombinationInitParams(SearchInitParamsParam param){
+	@RequestMapping(value = "/getCombinationInitParams" ,produces="application/json;charset=UTF-8")
+	public JsonResult<List<CombinationInitParams>> getCombinationInitParams(@RequestBody SearchInitParamsParam param){
 		return selectionService.getCombinationInitParams(param);
 	}
 	
@@ -89,8 +90,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月20日 下午7:32:51
 	 */
-	@RequestMapping("/getCombinationInfos")
-	public JsonResult<Pagination<CombinationInfo>> getCombinationInfos(SearchInitParamsParam param){
+	@RequestMapping(value = "/getCombinationInfos",produces="application/json;charset=UTF-8")
+	public JsonResult<Pagination<CombinationInfo>> getCombinationInfos(@RequestBody SearchInitParamsParam param){
 		return selectionService.getCombinationInfos(param);
 	}
 	
@@ -113,8 +114,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月22日 下午9:15:42
 	 */
-	@RequestMapping("/getProductInfos")
-	public JsonResult<List<List<Object>>> getProductInfos(SearchCombinationInitParamsParam searchParam){
+	@RequestMapping(value = "/getProductInfos",produces="application/json;charset=UTF-8")
+	public JsonResult<List<List<Object>>> getProductInfos(@RequestBody SearchCombinationInitParamsParam searchParam){
 		return selectionService.getProductInfos(searchParam);
 	}
 	

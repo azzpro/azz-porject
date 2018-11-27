@@ -71,7 +71,7 @@
 						merchant_goods_product_params pgpp
 					WHERE
 						pgpp.params_type = 2
-					AND pgpp.params_value BETWEEN #{inputParam.minVal} AND #{inputParam.maxVal}
+					AND pgpp.params_value = #{inputParam}
 				)
 			</foreach>
 		</if>
@@ -98,7 +98,7 @@
 						merchant_goods_product_params pgpp
 					WHERE
 						pgpp.params_type = 2
-					AND pgpp.params_value BETWEEN #{inputParam.minVal} AND #{inputParam.maxVal}
+					AND pgpp.params_value = #{inputParam}
 				)
 			</foreach>
 		</if>
@@ -159,7 +159,7 @@
 								merchant_goods_product_params pgpp
 							WHERE
 								pgpp.params_type = 2
-							AND pgpp.params_value BETWEEN #{inputParam.minVal} AND #{inputParam.maxVal}
+							AND pgpp.params_value = #{inputParam}
 						)
 					</foreach>
 				</if>
@@ -238,7 +238,7 @@
 					JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status != 0
 					WHERE
 						pgpp.params_type = 2
-					AND pgpp.params_value BETWEEN #{inputParam.minVal} AND #{inputParam.maxVal}
+					AND pgpp.params_value = #{inputParam}
 				)
 			</foreach>
 		</if>
@@ -259,7 +259,21 @@
 	</where>
 	GROUP BY
 		pc.id
-	order by pc.create_time desc
+	<if test="isPriceAsc == null and isDeliveryDateAsc == null">
+		order by pc.create_time desc
+	</if>
+	<if test="isDeliveryDateAsc == null and isPriceAsc != null and isPriceAsc == 1">
+		order by pc.create_time desc, t.price asc
+	</if>
+	<if test="isDeliveryDateAsc == null and isPriceAsc != null and isPriceAsc == 0">
+		order by pc.create_time desc, t.price desc
+	</if>
+	<if test="isPriceAsc == null and isDeliveryDateAsc != null and isDeliveryDateAsc == 1">
+		order by pc.create_time desc, t.delivery_date asc
+	</if>
+	<if test="isPriceAsc == null and isDeliveryDateAsc != null and isDeliveryDateAsc == 0">
+		order by pc.create_time desc, t.delivery_date desc
+	</if>
   </select>
   
   <select id="getCombinationDetail" parameterType="string" resultType="com.azz.order.selection.vo.CombinationDetail">
@@ -273,7 +287,6 @@
 		platform_combination pc
   WHERE pc.status = 1
 	AND pc.combination_code = #{combinationCode}
-  
   </select>
   
   <select id="getCombinationDetailInitParams" parameterType="com.azz.order.selection.bo.SearchCombinationInitParamsParam" resultMap="paramsInfo">

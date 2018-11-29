@@ -32,7 +32,9 @@ public class EditArticleWebParam {
     private BigDecimal price;
     @NotBlank(message = "参数不许为空")
     private String articleDetail;
+    @NotBlank(message = "参数不许为空")
     private String remark1;
+    @NotBlank(message = "参数不许为空")
     private String remark2;
     // 0未 1修改过
     private Integer editStatus;

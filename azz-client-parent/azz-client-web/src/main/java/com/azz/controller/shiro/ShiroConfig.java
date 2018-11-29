@@ -50,6 +50,7 @@ public class ShiroConfig {
 	filterChainDefinitionMap.put("/azz/api/client/selection/getSelectionCaseInfos", "anon");
 	filterChainDefinitionMap.put("/azz/api/client/selection/getInitParamsByCaseCode", "anon");
 	filterChainDefinitionMap.put("/azz/api/client/selection/getCombinationInitParams", "anon");
+	filterChainDefinitionMap.put("/azz/api/client/selection/getCombinationParams", "anon");
 	filterChainDefinitionMap.put("/azz/api/client/selection/getCombinationInfos", "anon");
 	filterChainDefinitionMap.put("/azz/api/client/selection/getCombinationDetail", "anon");
 	filterChainDefinitionMap.put("/azz/api/client/selection/getProductInfos", "anon");

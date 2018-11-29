@@ -7,7 +7,6 @@
  
 package com.azz.order.selection.bo;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -32,10 +31,10 @@ public class SearchInitParamsParam extends QueryPage{
 	private String caseCode;
 	
 	// 输入的查询参数
-	private List<BigDecimal> inputParams;
+	private List<InputParam> inputParams;
 	
 	// 选中的查询参数
-	private List<String> selectParams;
+	private List<SelectParam> selectParams;
 	
 }
 

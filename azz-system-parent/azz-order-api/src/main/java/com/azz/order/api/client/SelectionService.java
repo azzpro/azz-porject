@@ -65,13 +65,31 @@ public interface SelectionService {
 	
 	/**
 	 * 
-	 * <p>根据参数完善页中选中的参数，获取符合这些参数的产品的公共参数   3</p>
+	 * <pre>
+	 * 		根据参数完善页中选中的参数，获取符合这些参数的产品的公共参数   3
+	 * 	额外说明：
+	 * 	   	此方法查询的是，根据参数完善页面所选中的参数，
+	 * 	   	查询有哪些产品的包含这些选中的参数的，
+	 * 		然后筛选出这些产品所属的推荐组合下的所有产品有哪些公共参数。
+	 * </pre>
 	 * @param caseCode
 	 * @return
 	 * @author 黄智聪  2018年11月20日 下午7:32:14
 	 */
 	@RequestMapping("/azz/api/client/selection/getCombinationInitParams")
 	JsonResult<List<CombinationInitParams>> getCombinationInitParams(@RequestBody SearchInitParamsParam param);
+	
+	/**
+	 * 
+	 * <pre>
+	 * 		根据参数完善页中选中的参数，获取符合这些参数的产品的公共参数   3.1
+	 * </pre>
+	 * @param caseCode
+	 * @return
+	 * @author 黄智聪  2018年11月20日 下午7:32:14
+	 */
+	@RequestMapping("/azz/api/client/selection/getCombinationParams")
+	JsonResult<List<CombinationInitParams>> getCombinationParams(@RequestBody SearchInitParamsParam param);
 	
 	/**
 	 * 
@@ -91,7 +109,7 @@ public interface SelectionService {
 	 * @author 黄智聪  2018年11月22日 下午3:12:23
 	 */
 	@RequestMapping("/azz/api/client/selection/getCombinationDetail")
-	JsonResult<CombinationDetail> getCombinationDetail(@RequestParam("combinationCode") String combinationCode);
+	JsonResult<CombinationDetail> getCombinationDetail(@RequestBody SearchCombinationInitParamsParam searchParam);
 	
 	/**
 	 * 

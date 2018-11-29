@@ -360,7 +360,7 @@ public class ClientService {
 	
 	// 完善资料后，需插入申请记录
 	ClientApply clientApplyRecord = ClientApply.builder()
-		.address(provinceName + cityName + areaName + detailAddress)
+		.address(provinceName + cityName + (areaName == null ? "" : areaName) + detailAddress)
 		.companyName(param.getCompanyName())
 		.companyTel(param.getCompanyTel())
 		.creditCode(creditCode)

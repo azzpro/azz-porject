@@ -49,6 +49,15 @@ public interface SelectionMapper {
 	
 	/**
 	 * 
+	 * <p>根据参数完善页中选中的参数，获取符合这些参数的产品的公共参数</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月22日 下午4:32:20
+	 */
+	List<CombinationInitParams> getCombinationParams(SearchInitParamsParam param);
+	
+	/**
+	 * 
 	 * <p>根据参数完善页中选中的参数，获取包含了符合这些参数的产品的推荐组合</p>
 	 * @param param
 	 * @return

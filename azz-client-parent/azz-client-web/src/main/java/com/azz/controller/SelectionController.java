@@ -67,8 +67,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月20日 下午7:32:51
 	 */
-	@RequestMapping("/getInitParamsByCaseCode")
-	public JsonResult<List<InitParams>> getInitParamsByCaseCode(SearchInitParamsParam param){
+	@RequestMapping(value = "/getInitParamsByCaseCode",produces="application/json;charset=UTF-8")
+	public JsonResult<List<InitParams>> getInitParamsByCaseCode(@RequestBody SearchInitParamsParam param){
 		return selectionService.getInitParamsByCaseCode(param);
 	}
 	
@@ -82,6 +82,20 @@ public class SelectionController {
 	@RequestMapping(value = "/getCombinationInitParams" ,produces="application/json;charset=UTF-8")
 	public JsonResult<List<CombinationInitParams>> getCombinationInitParams(@RequestBody SearchInitParamsParam param){
 		return selectionService.getCombinationInitParams(param);
+	}
+	
+	/**
+	 * 
+	 * <pre>
+	 * 		根据参数完善页中选中的参数，获取符合这些参数的产品的公共参数   3.1
+	 * </pre>
+	 * @param caseCode
+	 * @return
+	 * @author 黄智聪  2018年11月20日 下午7:32:14
+	 */
+	@RequestMapping(value = "/getCombinationParams" ,produces="application/json;charset=UTF-8")
+	public JsonResult<List<CombinationInitParams>> getCombinationParams(@RequestBody SearchInitParamsParam param){
+		return selectionService.getCombinationParams(param);
 	}
 	
 	/**
@@ -103,9 +117,9 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月22日 下午3:12:23
 	 */
-	@RequestMapping("/getCombinationDetail")
-	public JsonResult<CombinationDetail> getCombinationDetail(String combinationCode){
-		return selectionService.getCombinationDetail(combinationCode);
+	@RequestMapping(value = "/getCombinationDetail",produces="application/json;charset=UTF-8")
+	public JsonResult<CombinationDetail> getCombinationDetail(@RequestBody SearchCombinationInitParamsParam searchParam){
+		return selectionService.getCombinationDetail(searchParam);
 	}
 	
 	/**

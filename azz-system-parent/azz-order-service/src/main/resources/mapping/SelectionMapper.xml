@@ -66,12 +66,13 @@
 			<foreach collection="inputParams" item="inputParam">
 				AND	pgpp.product_id IN (
 					SELECT
-						pgpp.product_id
+						distinct pgpp.product_id
 					FROM
 						merchant_goods_product_params pgpp
 					WHERE
 						pgpp.params_type = 2
-					AND pgpp.params_value = #{inputParam}
+					AND pgpp.params_term_id = #{inputParam.paramsTermId}
+					AND pgpp.params_value = #{inputParam.paramsValue}
 				)
 			</foreach>
 		</if>
@@ -93,12 +94,13 @@
 			<foreach collection="inputParams" item="inputParam">
 				AND	pgpp.product_id IN (
 					SELECT
-						pgpp.product_id
+						distinct pgpp.product_id
 					FROM
 						merchant_goods_product_params pgpp
 					WHERE
 						pgpp.params_type = 2
-					AND pgpp.params_value = #{inputParam}
+					AND pgpp.params_term_id = #{inputParam.paramsTermId}
+					AND pgpp.params_value = #{inputParam.paramsValue}
 				)
 			</foreach>
 		</if>
@@ -106,12 +108,13 @@
 			<foreach collection="selectParams" item="selectParam">
 				AND pgpp.product_id IN (
 					SELECT
-						pgpp.product_id
+						distinct pgpp.product_id
 					FROM
 						merchant_goods_product_params pgpp
 					WHERE
 						pgpp.params_type = 1
-					AND pgpp.params_value LIKE #{selectParam}
+					AND pgpp.params_term_id = #{selectParam.paramsTermId}
+					AND pgpp.params_value = #{selectParam.paramsValue}
 				)
 			</foreach>
 		</if>
@@ -152,27 +155,86 @@
 			<where>	
 				<if test="inputParams != null and inputParams.size() > 0">
 					<foreach collection="inputParams" item="inputParam">
-						AND	pgpp.product_id IN (
+						AND	mgp.module_id IN (
 							SELECT
-								pgpp.product_id
+								DISTINCT mgp.module_id
 							FROM
 								merchant_goods_product_params pgpp
+								join merchant_goods_product mgp on mgp.id = pgpp.product_id
 							WHERE
 								pgpp.params_type = 2
-							AND pgpp.params_value = #{inputParam}
+							AND pgpp.params_term_id = #{inputParam.paramsTermId}
+							AND pgpp.params_value = #{inputParam.paramsValue}
 						)
 					</foreach>
 				</if>
 				<if test="selectParams != null and selectParams.size() > 0">
 					<foreach collection="selectParams" item="selectParam">
-						AND pgpp.product_id IN (
+						AND mgp.module_id IN (
 							SELECT
-								pgpp.product_id
+								DISTINCT mgp.module_id
+							FROM
+								merchant_goods_product_params pgpp
+								join merchant_goods_product mgp on mgp.id = pgpp.product_id
+							WHERE
+								pgpp.params_type = 1
+							AND pgpp.params_term_id = #{selectParam.paramsTermId}
+							AND pgpp.params_value = #{selectParam.paramsValue}
+						)
+					</foreach>
+				</if>
+			</where>
+			)
+		GROUP BY
+			pgpp.params_term_id
+  </select>
+  
+  <select id="getCombinationParams" parameterType="com.azz.order.selection.bo.SearchInitParamsParam" resultMap="combinationParamsInfo">
+  	SELECT
+		pgpp.params_term_id AS paramsTermId,
+		pgpp.params_type AS paramsType,
+		pgpp.params_name AS paramsName,
+		group_concat(DISTINCT pgpp.params_value) AS paramValues
+	FROM
+		merchant_goods_product_params pgpp
+	JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status != 0
+	JOIN platform_combination_module pcm ON pcm.module_id = mgp.module_id
+	JOIN platform_combination pc ON pc.id = pcm.combination_id
+	JOIN platform_case cs ON pc.case_id = cs.id
+	WHERE cs.case_status = 1
+	AND	pc.status = 1
+	AND	cs.case_code = #{caseCode}
+	AND pgpp.product_id IN (
+			SELECT 
+				DISTINCT pgpp.product_id
+			FROM
+				merchant_goods_product_params pgpp
+			<where>	
+				<if test="inputParams != null and inputParams.size() > 0">
+					<foreach collection="inputParams" item="inputParam">
+						AND	pgpp.product_id IN (
+							SELECT
+								distinct pgpp.product_id
+							FROM
+								merchant_goods_product_params pgpp
+							WHERE
+								pgpp.params_type = 2
+							AND pgpp.params_term_id = #{inputParam.paramsTermId}
+							AND pgpp.params_value = #{inputParam.paramsValue}
+						)
+					</foreach>
+				</if>
+				<if test="selectParams != null and selectParams.size() > 0">
+					<foreach collection="selectParams" item="selectParam">
+						AND	pgpp.product_id IN (
+							SELECT
+								distinct pgpp.product_id
 							FROM
 								merchant_goods_product_params pgpp
 							WHERE
 								pgpp.params_type = 1
-							AND pgpp.params_value LIKE #{selectParam}
+							AND pgpp.params_term_id = #{selectParam.paramsTermId}
+							AND pgpp.params_value = #{selectParam.paramsValue}
 						)
 					</foreach>
 				</if>
@@ -188,6 +250,7 @@
 		pc.combination_name AS combinationName,
 		pc.combination_pic_url AS combinationPicUrl,
 		pc.combination_pic_name AS combinationPicName,
+		pc.recommend_reason AS recommendReason,
 		t.delivery_date AS deliveryDate,
 		t.price AS price
 	FROM
@@ -232,13 +295,14 @@
 			<foreach collection="inputParams" item="inputParam">
 				AND	pgpp.product_id IN (
 					SELECT
-						pgpp.product_id
+						distinct pgpp.product_id
 					FROM
 						merchant_goods_product_params pgpp
 					JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status != 0
 					WHERE
 						pgpp.params_type = 2
-					AND pgpp.params_value = #{inputParam}
+					AND pgpp.params_term_id = #{inputParam.paramsTermId}
+					AND pgpp.params_value = #{inputParam.paramsValue}
 				)
 			</foreach>
 		</if>
@@ -246,13 +310,14 @@
 			<foreach collection="selectParams" item="selectParam">
 				AND pgpp.product_id IN (
 					SELECT
-						pgpp.product_id
+						distinct pgpp.product_id
 					FROM
 						merchant_goods_product_params pgpp
 					JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status != 0
 					WHERE
 						pgpp.params_type = 1
-					AND pgpp.params_value LIKE #{selectParam}
+					AND pgpp.params_term_id = #{selectParam.paramsTermId}
+					AND pgpp.params_value = #{selectParam.paramsValue}
 				)
 			</foreach>
 		</if>
@@ -282,7 +347,8 @@
 		pc.combination_code AS combinationCode,
 		pc.combination_name AS combinationName,
 		pc.combination_pic_url AS combinationPicUrl,
-		pc.combination_pic_name AS combinationPicName
+		pc.combination_pic_name AS combinationPicName,
+		pc.recommend_reason AS recommendReason
 	FROM
 		platform_combination pc
   WHERE pc.status = 1
@@ -298,8 +364,7 @@
 	FROM
 		merchant_goods_product_params pgpp
 	<where>
-			pgpp.params_type = 1
-		AND pgpp.params_id IN (
+		pgpp.params_id IN (
 			SELECT DISTINCT
 				pgpp.params_id
 			FROM
@@ -312,16 +377,32 @@
 			AND pc.status = 1
 			AND	pc.combination_code = #{combinationCode}
 		)
+		<if test="inputParams != null and inputParams.size() > 0">
+			<foreach collection="inputParams" item="inputParam">
+				AND	pgpp.product_id IN (
+					SELECT
+						distinct pgpp.product_id
+					FROM
+						merchant_goods_product_params pgpp
+					JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status != 0
+					WHERE
+						pgpp.params_type = 2
+					AND pgpp.params_term_id = #{inputParam.paramsTermId}
+					AND pgpp.params_value = #{inputParam.paramsValue}
+				)
+			</foreach>
+		</if>
 		<if test="selectParams != null and selectParams.size() > 0">
 			<foreach collection="selectParams" item="selectParam">
 				AND pgpp.product_id IN (
 					SELECT
-						pgpp.product_id
+						distinct pgpp.product_id
 					FROM
 						merchant_goods_product_params pgpp
 					WHERE
 						pgpp.params_type = 1
-					AND pgpp.params_value LIKE #{selectParam}
+					AND pgpp.params_term_id = #{selectParam.paramsTermId}
+					AND pgpp.params_value = #{selectParam.paramsValue}
 				)
 			</foreach>
 		</if>
@@ -435,7 +516,23 @@
 						merchant_goods_product_params mgpp
 					WHERE
 						mgpp.params_type = 1
-					AND mgpp.params_value LIKE #{selectParam}
+					AND pgpp.params_term_id = #{selectParam.paramsTermId}
+					AND pgpp.params_value = #{selectParam.paramsValue}
+				)
+			</foreach>
+		</if>
+		<if test="inputParams != null and inputParams.size() > 0">
+			<foreach collection="inputParams" item="inputParam">
+				AND	pgpp.product_id IN (
+					SELECT
+						distinct pgpp.product_id
+					FROM
+						merchant_goods_product_params pgpp
+					JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status != 0
+					WHERE
+						pgpp.params_type = 2
+					AND pgpp.params_term_id = #{inputParam.paramsTermId}
+					AND pgpp.params_value = #{inputParam.paramsValue}
 				)
 			</foreach>
 		</if>

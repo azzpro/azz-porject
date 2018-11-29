@@ -31,7 +31,10 @@ public class SearchCombinationInitParamsParam extends QueryPage{
 	private String combinationCode;
 	
 	// 选中的查询参数
-	private List<String> selectParams;
+	private List<SelectParam> selectParams;
+	
+	// 选中的输入参数
+	private List<InputParam> inputParams;
 	
 }
 

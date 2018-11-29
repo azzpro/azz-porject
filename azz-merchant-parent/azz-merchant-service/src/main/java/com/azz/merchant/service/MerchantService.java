@@ -399,7 +399,7 @@ public class MerchantService {
 		.creditCode(creditCode)
 		.createTime(nowDate)
 		.merchantCode(merchantCode)
-		.address(provinceName + cityName + areaName + detailAddress)
+		.address(provinceName + cityName + (areaName == null ? "" : areaName) + detailAddress)
 		.merchantName(param.getMerchantName())
 		.status(QualificationApplyStatus.PENDING.getValue())
 		.build();

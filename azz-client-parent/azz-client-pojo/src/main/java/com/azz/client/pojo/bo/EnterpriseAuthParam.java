@@ -40,9 +40,7 @@ public class EnterpriseAuthParam {
     private String cityCode;
     @NotBlank(message = "请选择市不允许为空")
     private String cityName;
-    @NotBlank(message = "区代码不允许为空")
     private String areaCode;
-    @NotBlank(message = "请选择区")
     private String areaName;
     @NotBlank(message = "详细地址不允许为空")
     private String detailAddress;

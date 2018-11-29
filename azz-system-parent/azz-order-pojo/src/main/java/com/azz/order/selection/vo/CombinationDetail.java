@@ -27,6 +27,8 @@ public class CombinationDetail {
 
 	private String combinationPicName;
 	
+	private String recommendReason;
+	
 	private Long caseId;
 
 	// 选型参数

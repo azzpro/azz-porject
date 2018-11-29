@@ -129,7 +129,13 @@ public class SelectionService {
 	
 	/**
 	 * 
-	 * <p>根据参数完善页中选中的参数，获取符合这些参数的产品的公共参数   3</p>
+	 * <pre>
+	 * 		根据参数完善页中选中的参数，获取符合这些参数的产品的公共参数   3
+	 * 	额外说明：
+	 * 	   	此方法查询的是，根据参数完善页面所选中的参数，
+	 * 	   	查询有哪些产品的包含这些选中的参数的，
+	 * 		然后筛选出这些产品所属的推荐组合下的所有产品有哪些公共参数。
+	 * </pre>
 	 * @param caseCode
 	 * @return
 	 * @author 黄智聪  2018年11月20日 下午7:32:14
@@ -137,6 +143,21 @@ public class SelectionService {
 	public JsonResult<List<CombinationInitParams>> getCombinationInitParams(@RequestBody SearchInitParamsParam param){
 		JSR303ValidateUtils.validate(param);
 		List<CombinationInitParams> infos = selectionMapper.getCombinationInitParams(param);
+		return JsonResult.successJsonResult(infos);
+	}
+	
+	/**
+	 * 
+	 * <pre>
+	 * 		根据参数完善页中选中的参数，获取符合这些参数的产品的公共参数   3.1
+	 * </pre>
+	 * @param caseCode
+	 * @return
+	 * @author 黄智聪  2018年11月20日 下午7:32:14
+	 */
+	public JsonResult<List<CombinationInitParams>> getCombinationParams(@RequestBody SearchInitParamsParam param){
+		JSR303ValidateUtils.validate(param);
+		List<CombinationInitParams> infos = selectionMapper.getCombinationParams(param);
 		return JsonResult.successJsonResult(infos);
 	}
 	
@@ -161,18 +182,16 @@ public class SelectionService {
 	 * @return
 	 * @author 黄智聪  2018年11月22日 下午3:12:23
 	 */
-	public JsonResult<CombinationDetail> getCombinationDetail(String combinationCode){
-		if(StringUtils.isBlank(combinationCode)) {
-			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "推荐组合编码不允许为空");
-		}
+	public JsonResult<CombinationDetail> getCombinationDetail(@RequestBody SearchCombinationInitParamsParam searchParam){
+		JSR303ValidateUtils.validate(searchParam);
 		// 推荐组合的信息
-		CombinationDetail detail = selectionMapper.getCombinationDetail(combinationCode);
+		CombinationDetail detail = selectionMapper.getCombinationDetail(searchParam.getCombinationCode());
 		if(detail == null) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "推荐组合不存在");
 		}
 		// 所包含的产品的公共选型参数
 		SearchCombinationInitParamsParam param = new SearchCombinationInitParamsParam();
-		param.setCombinationCode(combinationCode);
+		param.setCombinationCode(searchParam.getCombinationCode());
 		List<List<Object>> results = new ArrayList<>();// 返回给前端的一个产品集合
 		List<Object> title = new ArrayList<>();
 		title.add("产品编码");

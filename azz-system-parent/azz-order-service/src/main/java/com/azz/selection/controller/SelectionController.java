@@ -87,6 +87,20 @@ public class SelectionController {
 	
 	/**
 	 * 
+	 * <pre>
+	 * 		根据参数完善页中选中的参数，获取符合这些参数的产品的公共参数   3.1
+	 * </pre>
+	 * @param caseCode
+	 * @return
+	 * @author 黄智聪  2018年11月20日 下午7:32:14
+	 */
+	@RequestMapping("/getCombinationParams")
+	public JsonResult<List<CombinationInitParams>> getCombinationParams(@RequestBody SearchInitParamsParam param){
+		return selectionService.getCombinationParams(param);
+	}
+	
+	/**
+	 * 
 	 * <p>查询推荐组合列表 4</p>
 	 * @param caseCode
 	 * @return
@@ -105,8 +119,8 @@ public class SelectionController {
 	 * @author 黄智聪  2018年11月22日 下午3:12:23
 	 */
 	@RequestMapping("/getCombinationDetail")
-	public JsonResult<CombinationDetail> getCombinationDetail(@RequestParam("combinationCode") String combinationCode){
-		return selectionService.getCombinationDetail(combinationCode);
+	public JsonResult<CombinationDetail> getCombinationDetail(@RequestBody SearchCombinationInitParamsParam searchParam){
+		return selectionService.getCombinationDetail(searchParam);
 	}
 	
 	/**

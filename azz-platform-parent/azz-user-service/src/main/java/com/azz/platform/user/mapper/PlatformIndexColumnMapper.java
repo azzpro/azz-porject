@@ -21,4 +21,6 @@ public interface PlatformIndexColumnMapper {
     int updateByPrimaryKey(PlatformIndexColumn record);
     
     List<ColumnInfo> getColumnList();
+    
+    int countColumn(String columnName);
 }

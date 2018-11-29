@@ -1,8 +1,12 @@
 package com.azz.platform.user.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.platform.user.pojo.PlatformIndexArticle;
+import com.azz.platform.user.pojo.bo.SearchArticleParam;
+import com.azz.platform.user.pojo.vo.ArticleInfo;
 @Mapper
 public interface PlatformIndexArticleMapper {
     int deleteByPrimaryKey(Long id);
@@ -20,4 +24,6 @@ public interface PlatformIndexArticleMapper {
     int updateByPrimaryKey(PlatformIndexArticle record);
     
     int getIndexArticleByColumnId(Long indexColumnId);
+    
+    List<ArticleInfo> getArticleTitleList(SearchArticleParam param);
 }

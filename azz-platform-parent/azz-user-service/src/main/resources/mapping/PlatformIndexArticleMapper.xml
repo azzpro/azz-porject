@@ -211,4 +211,23 @@
   <select id="getIndexArticleByColumnId" parameterType="java.lang.Long" resultType="int">
   	SELECT COUNT(1) FROM platform_index_article WHERE index_column_id = #{indexColumnId}
   </select>
+  
+  <select id="getArticleTitleList" parameterType="com.azz.platform.user.pojo.bo.SearchArticleParam" resultType="com.azz.platform.user.pojo.vo.ArticleInfo">
+  	SELECT
+		pia.id as articleId,
+		pia.article_pic_url as articlePicUrl,
+		pia.article_title as articleTitle,
+		pic.column_name as columnName,
+		pu.user_name as creator,
+		pia.create_time as createTime
+	FROM
+		platform_index_article pia
+	LEFT JOIN platform_index_column pic ON pia.index_column_id = pic.id
+	LEFT JOIN platform_user pu ON pia.creator = pu.user_code
+  	<where>
+  		<if test="null != columnId"> AND pia.index_column_id = #{columnId}</if>
+  		<if test="null != articleTitle and '' != articleTitle"> AND pia.article_title LIKE CONCAT('%',#{articleTitle},'%')</if>
+  	</where>
+  	ORDER BY pia.create_time DESC
+  </select>
 </mapper>

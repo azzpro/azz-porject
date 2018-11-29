@@ -154,4 +154,22 @@
   <select id="getIndexImageByColumnId" parameterType="java.lang.Long" resultType="int">
   	SELECT COUNT(1) FROM platform_index_image WHERE index_column_id = #{indexColumnId}
   </select>
+  
+  <select id="selectIndexImageList" parameterType="com.azz.platform.user.pojo.bo.SearchImageParam" resultType="com.azz.platform.user.pojo.vo.ImageInfo">
+    SELECT
+		pii.id as imageId,
+		pii.pic_url as picUrl,
+		pii.jump_link as jumpLink,
+		pic.column_name as columnName,
+		pu.user_name as creator,
+		pii.create_time as createTime
+	FROM
+		 platform_index_image pii
+	LEFT JOIN platform_index_column pic ON pii.index_column_id = pic.id
+	LEFT JOIN platform_user pu ON pii.creator = pu.user_code
+    <where>
+    	<if test="null != columnId">and pii.index_column_id = #{columnId}</if>
+    </where>
+    ORDER BY pii.create_time DESC
+  </select>
 </mapper>

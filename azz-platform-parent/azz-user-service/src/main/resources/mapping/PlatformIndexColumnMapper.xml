@@ -169,7 +169,7 @@
 		column_pic_url as columnPicUrl,
 		column_code as columnCode,
 		column_type as columnType,
-		create_time as createTime, 
+		create_time as createTime
 	FROM
 		platform_index_column
 	ORDER BY create_time DESC

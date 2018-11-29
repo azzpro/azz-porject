@@ -24,6 +24,7 @@ import com.azz.order.selection.bo.DelSelectionRecordParam;
 import com.azz.order.selection.bo.OrderParam;
 import com.azz.order.selection.bo.SearchCombinationInitParamsParam;
 import com.azz.order.selection.bo.SearchInitParamsParam;
+import com.azz.order.selection.bo.SearchInitParamsParamWithSort;
 import com.azz.order.selection.bo.SearchSelectionRecordParam;
 import com.azz.order.selection.vo.CombinationDetail;
 import com.azz.order.selection.vo.CombinationInfo;
@@ -80,7 +81,7 @@ public interface SelectionService {
 	 * @author 黄智聪  2018年11月20日 下午7:32:51
 	 */
 	@RequestMapping("/azz/api/client/selection/getCombinationInfos")
-	JsonResult<Pagination<CombinationInfo>> getCombinationInfos(@RequestBody SearchInitParamsParam param);
+	JsonResult<Pagination<CombinationInfo>> getCombinationInfos(@RequestBody SearchInitParamsParamWithSort param);
 	
 	/**
 	 * 

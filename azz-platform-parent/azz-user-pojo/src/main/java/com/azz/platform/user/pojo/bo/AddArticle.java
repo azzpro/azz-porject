@@ -13,7 +13,9 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * <P>TODO</P>
@@ -21,6 +23,8 @@ import lombok.Data;
  * @author 彭斌  2018年11月28日 下午7:15:50
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AddArticle {
     @NotNull(message = "参数不许为空")
     private Long indexColumnId;

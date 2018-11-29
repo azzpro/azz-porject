@@ -16,10 +16,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.page.Pagination;
+import com.azz.platform.user.pojo.PlatformIndexArticle;
 import com.azz.platform.user.pojo.PlatformIndexColumn;
+import com.azz.platform.user.pojo.PlatformIndexImage;
+import com.azz.platform.user.pojo.bo.AddArticle;
 import com.azz.platform.user.pojo.bo.AddColumn;
+import com.azz.platform.user.pojo.bo.AddImage;
+import com.azz.platform.user.pojo.bo.EditArticle;
 import com.azz.platform.user.pojo.bo.EditColumn;
+import com.azz.platform.user.pojo.bo.EditImage;
+import com.azz.platform.user.pojo.bo.SearchArticleParam;
+import com.azz.platform.user.pojo.bo.SearchImageParam;
+import com.azz.platform.user.pojo.vo.ArticleInfo;
 import com.azz.platform.user.pojo.vo.ColumnInfo;
+import com.azz.platform.user.pojo.vo.ImageInfo;
 
 @FeignClient("azz-user-service")
 public interface IndexService {
@@ -67,5 +78,96 @@ public interface IndexService {
      */
     @GetMapping("/azz/api/index/getColumnInfo")
     JsonResult<PlatformIndexColumn> getColumnInfo(@RequestParam("columnId") Long columnId);
+
+    /**
+     * <p>获取图片管理分页列表</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月29日 下午1:50:57
+     */
+    @PostMapping("/azz/api/index/getImageList")
+    JsonResult<Pagination<ImageInfo>> getImageList(@RequestBody SearchImageParam param);
+
+    /**
+     * <p>新增图片</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月29日 下午1:51:37
+     */
+    @PostMapping("/azz/api/index/addImage")
+    JsonResult<String> addImage(@RequestBody AddImage param);
+    
+    /**
+     * <p>编辑图片管理</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月29日 下午1:52:06
+     */
+    @PostMapping("/azz/api/index/editImage")
+    JsonResult<String> editImage(@RequestBody EditImage param);
+
+    /**
+     * <p>获取图片详情</p>
+     * @param imageId
+     * @return
+     * @author 彭斌  2018年11月29日 下午1:52:54
+     */
+    @GetMapping("/azz/api/index/getImageInfo")
+    JsonResult<PlatformIndexImage> getImageInfo(@RequestParam("imageId") Long imageId);
+
+    /**
+     * <p>删除图片管理</p>
+     * @param imageId
+     * @return
+     * @author 彭斌  2018年11月29日 下午1:53:36
+     */
+    @GetMapping("/azz/api/index/delImage")
+    JsonResult<String> delImage(@RequestParam("imageId") Long imageId);
+    
+    /**
+     * <p>获取文章分页列表</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月29日 下午1:54:23
+     */
+    @PostMapping("/azz/api/index/getArticleList")
+    JsonResult<Pagination<ArticleInfo>> getArticleList(@RequestBody SearchArticleParam param);
+
+    /**
+     * <p>获取文章详情</p>
+     * @param articleId
+     * @return
+     * @author 彭斌  2018年11月29日 下午1:54:57
+     */
+    @GetMapping("/azz/api/index/getArticleInfo")
+    JsonResult<PlatformIndexArticle> getArticleInfo(@RequestParam("articleId") Long articleId);
+    
+    /**
+     * <p>新增文章</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月29日 下午1:55:40
+     */
+    @PostMapping("/azz/api/index/addArticle")
+    JsonResult<String> addArticle(@RequestBody AddArticle param);
+    
+    /**
+     * <p>修改文章</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年11月29日 下午1:56:02
+     */
+    @PostMapping("/azz/api/index/editArticle")
+    JsonResult<String> editArticle(@RequestBody EditArticle param);
+
+    /**
+     * <p>删除文章</p>
+     * @param articleId
+     * @return
+     * @author 彭斌  2018年11月29日 下午1:57:22
+     */
+    @GetMapping("/azz/api/index/delArticle")
+    JsonResult<String> delArticle(@RequestParam("articleId") Long articleId);
+    
 }
 

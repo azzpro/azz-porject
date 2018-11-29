@@ -12,10 +12,9 @@ import java.math.BigDecimal;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.web.multipart.MultipartFile;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * <P>TODO</P>
@@ -23,9 +22,7 @@ import lombok.NoArgsConstructor;
  * @author 彭斌  2018年11月28日 下午7:15:50
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class EditArticle {
+public class EditArticleWebParam {
     private Long articleId;
     @NotNull(message = "参数不许为空")
     private Long indexColumnId;
@@ -39,9 +36,8 @@ public class EditArticle {
     private String remark1;
     @NotBlank(message = "参数不许为空")
     private String remark2;
-    private String userCode;
     // 0未 1修改过
     private Integer editStatus;
-    private MainPicture mainPicture;
+    private MultipartFile mainPicture;
 }
 

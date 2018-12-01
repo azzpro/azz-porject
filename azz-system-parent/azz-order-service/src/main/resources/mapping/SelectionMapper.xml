@@ -364,21 +364,14 @@
 		mgpp.params_name AS paramsName,
 		group_concat(DISTINCT mgpp.params_value) AS paramValues
 	FROM
-		merchant_goods_product_params mgpp
+		platform_combination pc
+	JOIN platform_combination_module pcm ON pcm.combination_id = pc.id
+	JOIN merchant_goods_product mgp ON mgp.module_id = pcm.module_id
+	JOIN merchant_goods_product_params mgpp ON mgpp.product_id = mgp.id
 	<where>
-		mgpp.product_id IN (
-			SELECT DISTINCT
-				pgpp.product_id
-			FROM
-				platform_combination pc
-			JOIN platform_combination_module pcm ON pcm.combination_id = pc.id
-			JOIN merchant_goods_product mgp ON mgp.module_id = pcm.module_id
-			JOIN merchant_goods_product_params pgpp ON pgpp.product_id = mgp.id
-			WHERE
-				mgp.product_status != 0
-			AND pc.status = 1
-			AND	pc.combination_code = #{combinationCode}
-		)
+			mgp.product_status != 0
+		AND pc. STATUS = 1
+		AND pc.combination_code = #{combinationCode}
 		<if test="inputParams != null and inputParams.size() > 0">
 			<foreach collection="inputParams" item="inputParam">
 				AND	mgpp.product_id IN (

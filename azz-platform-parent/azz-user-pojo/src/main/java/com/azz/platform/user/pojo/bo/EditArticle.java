@@ -31,7 +31,7 @@ public class EditArticle {
     private Long indexColumnId;
     @NotBlank(message = "参数不许为空")
     private String articleTitle;
-    @NotBlank(message = "参数不许为空")
+    @NotNull(message = "参数不许为空")
     private BigDecimal price;
     @NotBlank(message = "参数不许为空")
     private String articleDetail;

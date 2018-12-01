@@ -154,6 +154,7 @@
 				DISTINCT pgpp.product_id
 			FROM
 				merchant_goods_product_params pgpp
+			JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status != 0
 			<where>	
 				<if test="inputParams != null and inputParams.size() > 0">
 					<foreach collection="inputParams" item="inputParam">

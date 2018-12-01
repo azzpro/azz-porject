@@ -216,7 +216,7 @@ public class SelectionService {
 		for (ProductInfo productInfo : productInfos) {
 			List<Object> eachResult = new ArrayList<>();
 			eachResult.add(productInfo.getProductCode());// 产品编码
-			eachResult.add(productInfo.getPrice());//单价
+			eachResult.add(productInfo.getPrice().setScale(2).toString());//单价
 			eachResult.add(productInfo.getDeliveryDate());//交期
 			for (int i = 0; i < allProductParams.size(); i++) {
 				Long paramsTermId = allProductParams.get(i).getParamsTermId();

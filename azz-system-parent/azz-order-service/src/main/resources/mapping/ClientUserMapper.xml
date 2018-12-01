@@ -277,4 +277,5 @@
     where status != 0
     and client_user_code = #{clientUserCode}
   </select>
+  
 </mapper>

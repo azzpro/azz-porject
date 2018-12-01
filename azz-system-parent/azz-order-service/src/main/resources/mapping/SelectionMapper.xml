@@ -511,28 +511,29 @@
 			<foreach collection="selectParams" item="selectParam">
 				AND mgpp.product_id IN (
 					SELECT
-						mgpp.product_id
+						distinct mgpp.product_id
 					FROM
 						merchant_goods_product_params mgpp
+						JOIN merchant_goods_product mgp on mgp.id = mgpp.product_id and mgp.product_status != 0
 					WHERE
 						mgpp.params_type = 1
-					AND pgpp.params_term_id = #{selectParam.paramsTermId}
-					AND pgpp.params_value = #{selectParam.paramsValue}
+					AND mgpp.params_term_id = #{selectParam.paramsTermId}
+					AND mgpp.params_value = #{selectParam.paramsValue}
 				)
 			</foreach>
 		</if>
 		<if test="inputParams != null and inputParams.size() > 0">
 			<foreach collection="inputParams" item="inputParam">
-				AND	pgpp.product_id IN (
+				AND	mgpp.product_id IN (
 					SELECT
-						distinct pgpp.product_id
+						distinct mgpp.product_id
 					FROM
-						merchant_goods_product_params pgpp
-					JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status != 0
+						merchant_goods_product_params mgpp
+					JOIN merchant_goods_product mgp on mgp.id = mgpp.product_id and mgp.product_status != 0
 					WHERE
-						pgpp.params_type = 2
-					AND pgpp.params_term_id = #{inputParam.paramsTermId}
-					AND pgpp.params_value = #{inputParam.paramsValue}
+						mgpp.params_type = 2
+					AND mgpp.params_term_id = #{inputParam.paramsTermId}
+					AND mgpp.params_value = #{inputParam.paramsValue}
 				)
 			</foreach>
 		</if>
@@ -560,6 +561,7 @@
 	JOIN merchant_goods_product mgp ON mgp.id = mgpp.product_id
 	WHERE
 		mgp.product_code = #{productCode}
+	order by mgpp.delivery_date
   </select>
   
   <select id="getProductInfoByProductCode" resultType="com.azz.order.selection.vo.ProductInfomation">
@@ -583,7 +585,7 @@
   <select id="getConfirmOrderProductInfos" parameterType="string" resultType="com.azz.order.selection.vo.ProductInfomation">
 	  SELECT
 		csr.product_code AS productCode,
-		csr.params_value AS paramsValue,
+		csr.params_value AS paramValues,
 		mgpp.delivery_date AS deliveryDate,
 		mgpp.price AS price
 	FROM

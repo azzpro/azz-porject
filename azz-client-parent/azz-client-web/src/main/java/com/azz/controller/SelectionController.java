@@ -179,8 +179,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月23日 下午6:32:17
 	 */
-	@RequestMapping("/delSelectionRecord")
-	public JsonResult<String> delSelectionRecord(DelSelectionRecordParam param){
+	@RequestMapping(value = "/delSelectionRecord",produces="application/json;charset=UTF-8")
+	public JsonResult<String> delSelectionRecord(@RequestBody DelSelectionRecordParam param){
 		param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 		return selectionService.delSelectionRecord(param);
 	}
@@ -192,8 +192,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月23日 下午3:48:46
 	 */
-	@RequestMapping("/addProductsToShoppingCart")
-	public JsonResult<String> addProductsToShoppingCart(AddToShoppingCartParam param){
+	@RequestMapping(value = "/addProductsToShoppingCart",produces="application/json;charset=UTF-8")
+	public JsonResult<String> addProductsToShoppingCart(@RequestBody AddToShoppingCartParam param){
 		param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 		return selectionService.addProductsToShoppingCart(param);
 	}
@@ -252,8 +252,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年11月24日 上午10:58:45
 	 */
-	@RequestMapping("/addOrder")
-	public JsonResult<String> addOrder(OrderParam param){
+	@RequestMapping(value = "/addOrder",produces="application/json;charset=UTF-8")
+	public JsonResult<String> addOrder(@RequestBody OrderParam param){
 		param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 		return selectionService.addOrder(param);
 	}

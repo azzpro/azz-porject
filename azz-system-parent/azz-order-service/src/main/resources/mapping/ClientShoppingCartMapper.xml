@@ -21,12 +21,12 @@
     where id = #{id,jdbcType=BIGINT}
   </select>
   
-  <select id="selectBySelectionRecordIdAndClientUserCode" resultMap="BaseResultMap">
+  <select id="selectBySelectionRecordIdAndClientUserId" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from client_shopping_cart
     where selection_record_id = #{selectionRecordId}
-    and client_user_code = #{clientUserCode}
+    and client_user_id = #{clientUserId}
   </select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
@@ -140,8 +140,7 @@
 		JOIN client_user cu ON cu.id = csc.client_user_id
 		LEFT JOIN merchant_goods_product mgp ON mgp.product_code = csr.product_code
 		WHERE
-			csr. STATUS != 0
-		AND cu.client_user_code = #{clientUserCode}
+			cu.client_user_code = #{clientUserCode}
   </select>
   
   <select id="countPutOffProducts" parameterType="string"  resultType="int">

@@ -14,10 +14,11 @@ public interface ClientUserMapper {
     int insertSelective(ClientUser record);
 
     ClientUser selectByPrimaryKey(Long id);
-
+ 
     int updateByPrimaryKeySelective(ClientUser record);
 
     int updateByPrimaryKey(ClientUser record);
     
     ClientUser getClientUserByClientUserCode(String clientUserCode);
+    
 }

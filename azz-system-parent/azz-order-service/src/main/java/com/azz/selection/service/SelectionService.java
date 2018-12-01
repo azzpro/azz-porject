@@ -29,9 +29,11 @@ import com.azz.core.constants.ClientConstants.SelectionRecordStatus;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.order.client.mapper.ClientOrderItemPersonalMapper;
 import com.azz.order.client.mapper.ClientOrderPersonalMapper;
+import com.azz.order.client.mapper.ClientOrderShippingAddressMapper;
 import com.azz.order.client.mapper.ClientOrderStatusPersonalMapper;
 import com.azz.order.client.pojo.ClientOrderItemPersonal;
 import com.azz.order.client.pojo.ClientOrderPersonal;
+import com.azz.order.client.pojo.ClientOrderShippingAddress;
 import com.azz.order.client.pojo.ClientOrderStatusPersonal;
 import com.azz.order.merchant.mapper.ClientUserMapper;
 import com.azz.order.merchant.pojo.ClientUser;
@@ -98,6 +100,9 @@ public class SelectionService {
 	
 	@Autowired
 	private ClientOrderItemPersonalMapper clientOrderItemPersonalMapper;
+	
+	@Autowired
+	private ClientOrderShippingAddressMapper clientOrderShippingAddressMapper;
 	
 	@Autowired
 	private RandomSequenceService randomSequenceService;
@@ -192,6 +197,8 @@ public class SelectionService {
 		// 所包含的产品的公共选型参数
 		SearchCombinationInitParamsParam param = new SearchCombinationInitParamsParam();
 		param.setCombinationCode(searchParam.getCombinationCode());
+		param.setInputParams(searchParam.getInputParams());
+		param.setSelectParams(searchParam.getSelectParams());
 		List<List<Object>> results = new ArrayList<>();// 返回给前端的一个产品集合
 		List<Object> title = new ArrayList<>();
 		title.add("产品编码");
@@ -335,20 +342,26 @@ public class SelectionService {
 		if(productInfo == null) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "产品信息不存在");
 		}
-		ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getClientUserCode());
-		ClientSelectionRecord clientSelectionRecord = ClientSelectionRecord.builder()
-				.clientUserId(user.getId())
-				.createTime(new Date())
-				.creator(param.getClientUserCode())
-				.deliveryDate(productInfo.getDeliveryDate())
-				.moduleName(productInfo.getModuleName())
-				.paramsValue(productInfo.getParamValues())
-				.price(productInfo.getPrice())
-				.productPriceId(productPriceId)
-				.productCode(productInfo.getProductCode())
-				.build();
-		clientSelectionRecordMapper.insertSelective(clientSelectionRecord);
-		return JsonResult.successJsonResult();
+		// 根据产品编码、价格id查询选型记录的个数
+		int count = clientSelectionRecordMapper.countSelectionRecordByProductCodeAndProductPriceId(productCode, productPriceId);
+		if(count > 0) {// 若已存在相同的选型记录，则啥也不做
+			return JsonResult.successJsonResult();
+		}else {// 否则才添加至选型记录
+			ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getClientUserCode());
+			ClientSelectionRecord clientSelectionRecord = ClientSelectionRecord.builder()
+					.clientUserId(user.getId())
+					.createTime(new Date())
+					.creator(param.getClientUserCode())
+					.deliveryDate(productInfo.getDeliveryDate())
+					.moduleName(productInfo.getModuleName())
+					.paramsValue(productInfo.getParamValues())
+					.price(productInfo.getPrice())
+					.productPriceId(productPriceId)
+					.productCode(productInfo.getProductCode())
+					.build();
+			clientSelectionRecordMapper.insertSelective(clientSelectionRecord);
+			return JsonResult.successJsonResult();
+		}
 	}
 	
 	/**
@@ -389,7 +402,7 @@ public class SelectionService {
 		Date nowDate = new Date();
 		for (Long selectionRecordId : selectionRecordIds) {
 			// 查询客户选型记录所在的购物车
-			ClientShoppingCart record = clientShoppingCartMapper.selectBySelectionRecordIdAndClientUserCode(selectionRecordId, clientUserCode);
+			ClientShoppingCart record = clientShoppingCartMapper.selectBySelectionRecordIdAndClientUserId(selectionRecordId, user.getId());
 			if(record == null) {// 若选型记录未添加至购物车，才将选型记录添加至购物车，否则啥也不干
 				ClientShoppingCart shoppingCartRecord = ClientShoppingCart.builder()
 						.clientUserId(user.getId())
@@ -464,6 +477,16 @@ public class SelectionService {
 	 */
 	public JsonResult<String> addOrder(@RequestBody OrderParam param){
 		JSR303ValidateUtils.validate(param);
+		Long shippingId = param.getShippingId();
+		ClientOrderShippingAddress shippingAddress = clientOrderShippingAddressMapper.selectByPrimaryKey(shippingId);
+		if(shippingAddress == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "收货地址不存在");
+		}
+		Long clientUserId = shippingAddress.getClientUserId();
+		ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getClientUserCode());
+		if(!clientUserId.equals(user.getId())) {// 非当前登录用户的收货地址
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "收货地址无效");
+		}
 		// 前端传入的商品信息
 		List<OrderItem> orderItems = param.getOrderItems();
 		Map<String,Integer> itemMap = new HashMap<>();// key(productCode):value(productCode对应的数量)
@@ -488,11 +511,10 @@ public class SelectionService {
 		// 总金额
 		BigDecimal grandTotal = BigDecimal.ZERO; 
 		for (ShoppingCartItemInfo item : items) {
-			grandTotal = grandTotal.add(item.getProductPrice());
+			grandTotal = grandTotal.add(item.getProductPrice().multiply(new BigDecimal(itemMap.get(item.getProductCode()))));
 		}
 		Date nowDate = new Date();
 		// 新增未支付的订单记录
-		ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getClientUserCode());
 		String clientOrderCode = randomSequenceService.getClientPersonalOrderCodeNumber();
 		ClientOrderPersonal  clientOrderRecord = ClientOrderPersonal.builder()
 				.clientOrderCode(clientOrderCode)

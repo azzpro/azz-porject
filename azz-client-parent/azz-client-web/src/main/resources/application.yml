@@ -40,6 +40,13 @@ azz-client-service:  #客户端服务
     OkToRetryOnAllOperations: false
     MaxAutoRetriesNextServer: 0
     MaxAutoRetries: 0
+azz-system-service:  #系统服务
+  ribbon:
+    ConnectTimeout: 2000
+    ReadTimeout: 6000
+    OkToRetryOnAllOperations: false
+    MaxAutoRetriesNextServer: 0
+    MaxAutoRetries: 0
 # shiro登录失效时间      
 shiro:
   session:

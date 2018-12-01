@@ -55,12 +55,14 @@
 		AND pgpp.params_choice = 1
 		AND	pgpp.params_id IN (
 				SELECT
-					pccp.params_id
+					pgpt.params_id
 				FROM
 					platform_case_classification_params pccp
 				JOIN platform_case pc ON pc.id = pccp.case_id
+				join platform_goods_params_term pgpt on pgpt.id = pccp.params_id
 				WHERE pc.case_status = 1
 				and	pc.case_code = #{caseCode}
+				group by pgpt.params_id
 			)
 		<if test="inputParams != null and inputParams.size() > 0">
 			<foreach collection="inputParams" item="inputParam">
@@ -81,7 +83,7 @@
 			pgpp.params_term_id
 	) t ON t.params_term_id = pgpp.params_term_id
 	<where>
-	AND	pgpp.params_id IN (
+	AND	pgpp.params_term_id IN (
 			SELECT
 				pccp.params_id
 			FROM

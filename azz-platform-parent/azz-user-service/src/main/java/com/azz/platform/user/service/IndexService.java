@@ -449,6 +449,8 @@ public class IndexService {
         record.setCreateTime(new Date());
         record.setCreator(param.getUserCode());
         record.setPrice(param.getPrice());
+        record.setRemark1(param.getRemark1());
+        record.setRemark2(param.getRemark2());
         
         platformIndexArticleMapper.insertSelective(record);
         return JsonResult.successJsonResult();
@@ -500,7 +502,12 @@ public class IndexService {
         }
         pii.setModifier(param.getUserCode());
         pii.setLastModifyTime(new Date());
-        
+        pii.setRemark1(param.getRemark1());
+        pii.setRemark2(param.getRemark2());
+        pii.setIndexColumnId(param.getIndexColumnId());
+        pii.setArticleContent(param.getArticleDetail());
+        pii.setPrice(param.getPrice());
+        pii.setArticleTitle(param.getArticleTitle());
         platformIndexArticleMapper.updateByPrimaryKeySelective(pii);
         return JsonResult.successJsonResult();
     }

@@ -45,6 +45,7 @@ public class ShiroConfig {
 	// 开放登陆接口
 	filterChainDefinitionMap.put("/azz/api/client/login", "anon");
 	filterChainDefinitionMap.put("/azz/api/client/regist", "anon");
+	filterChainDefinitionMap.put("/azz/api/client/sendVerificationCode", "anon");
 	
 	// 开放官网选型部分接口
 	filterChainDefinitionMap.put("/azz/api/client/selection/getSelectionCaseInfos", "anon");

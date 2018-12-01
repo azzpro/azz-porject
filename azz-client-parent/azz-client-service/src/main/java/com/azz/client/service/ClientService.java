@@ -623,6 +623,23 @@ public class ClientService {
 	return JsonResult.successJsonResult(info);
     }
     
+    /**
+     * 
+     * <p>
+     * 发送注册验证码
+     * </p>
+     * 
+     * @param phoneNumber
+     * @return
+     * @author 黄智聪 2018年10月22日 下午5:37:30
+     */
+    public JsonResult<String> sendVerificationCode(String phoneNumber) {
+    	SmsParams sms = new SmsParams();
+    	sms.setPhone(phoneNumber);
+    	sms.setMsgType(SmsConstants.CLIENT_REGISTER.getMsgType());
+    	return systemSmsSendService.sendSmsCode(sms);
+    }
+    
     // 发送短信通知成员
     private void sendPasswordMsg(String phoneNumber, String password) {
     	SmsParams sms = new SmsParams();

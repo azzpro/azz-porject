@@ -196,5 +196,10 @@ public class ClientController {
     public JsonResult<ClientCompanyInfo> getClientCompanyInfo(@RequestParam("clientUserCode") String clientUserCode) {
 	return clientService.getClientCompanyInfo(clientUserCode);
     }
+    
+    @RequestMapping("/sendVerificationCode")
+    public JsonResult<String> sendVerificationCode(@RequestParam("phoneNumber") String phoneNumber) {
+    	return clientService.sendVerificationCode(phoneNumber);
+    }
 }
 

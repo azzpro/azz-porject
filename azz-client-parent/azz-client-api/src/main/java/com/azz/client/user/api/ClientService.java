@@ -162,7 +162,10 @@ public interface ClientService {
      * @author 黄智聪  2018年10月30日 上午2:43:19
      */
     @RequestMapping("/azz/api/client/getClientCompanyInfo")
-    public JsonResult<ClientCompanyInfo> getClientCompanyInfo(@RequestParam("clientUserCode") String clientUserCode);
+    JsonResult<ClientCompanyInfo> getClientCompanyInfo(@RequestParam("clientUserCode") String clientUserCode);
 
+    @RequestMapping("/azz/api/client/sendVerificationCode")
+    JsonResult<String> sendVerificationCode(@RequestParam("phoneNumber") String phoneNumber);
+    
 }
 

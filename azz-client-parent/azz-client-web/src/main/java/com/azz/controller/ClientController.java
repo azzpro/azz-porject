@@ -305,5 +305,17 @@ public class ClientController {
     public JsonResult<ClientCompanyInfo> getClientCompanyInfo(@RequestParam("clientUserCode") String clientUserCode) {
 	return clientService.getClientCompanyInfo(clientUserCode);
     }
+    
+    /**
+     * 
+     * <p>发送验证码</p>
+     * @param clientUserCode
+     * @return
+     * @author 黄智聪  2018年10月30日 上午2:43:19
+     */
+    @RequestMapping("/sendVerificationCode")
+    public JsonResult<String> sendVerificationCode(String phoneNumber) {
+    	return clientService.sendVerificationCode(phoneNumber);
+    }
 
 }

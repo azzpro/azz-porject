@@ -214,12 +214,11 @@
 			<where>	
 				<if test="inputParams != null and inputParams.size() > 0">
 					<foreach collection="inputParams" item="inputParam">
-						AND	mgp.module_id IN (
+						AND	pgpp.product_id IN (
 							SELECT
-								DISTINCT mgp.module_id
+								distinct pgpp.product_id
 							FROM
 								merchant_goods_product_params pgpp
-								join merchant_goods_product mgp on mgp.id = pgpp.product_id
 							WHERE
 								pgpp.params_type = 2
 							AND pgpp.params_term_id = #{inputParam.paramsTermId}
@@ -229,12 +228,11 @@
 				</if>
 				<if test="selectParams != null and selectParams.size() > 0">
 					<foreach collection="selectParams" item="selectParam">
-						AND mgp.module_id IN (
+						AND	pgpp.product_id IN (
 							SELECT
-								DISTINCT mgp.module_id
+								distinct pgpp.product_id
 							FROM
 								merchant_goods_product_params pgpp
-								join merchant_goods_product mgp on mgp.id = pgpp.product_id
 							WHERE
 								pgpp.params_type = 1
 							AND pgpp.params_term_id = #{selectParam.paramsTermId}

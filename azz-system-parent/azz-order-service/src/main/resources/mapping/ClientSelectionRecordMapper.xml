@@ -233,4 +233,14 @@
 		</if>
   </select>
   
+  <select id="countSelectionRecordByProductCodeAndProductPriceId" resultType="int">
+  	SELECT
+  		count(1)
+	FROM
+		client_selection_record csr
+	where csr.product_code = #{productCode}
+	and csr.product_price_id = #{productPriceId}
+	and csr.status != 0 
+  </select>
+  
 </mapper>

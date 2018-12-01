@@ -28,7 +28,7 @@ public interface ClientShoppingCartMapper {
      * @return
      * @author 黄智聪  2018年11月26日 上午10:20:16
      */
-    ClientShoppingCart selectBySelectionRecordIdAndClientUserCode(@Param("selectionRecordId")Long selectionRecordId, @Param("clientUserCode")String clientUserCode);
+    ClientShoppingCart selectBySelectionRecordIdAndClientUserId(@Param("selectionRecordId")Long selectionRecordId, @Param("clientUserId")Long clientUserId);
 
     int updateByPrimaryKeySelective(ClientShoppingCart record);
 

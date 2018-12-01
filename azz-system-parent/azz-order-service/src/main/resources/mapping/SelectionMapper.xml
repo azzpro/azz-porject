@@ -55,12 +55,14 @@
 		AND pgpp.params_choice = 1
 		AND	pgpp.params_id IN (
 				SELECT
-					pccp.params_id
+					pgpt.params_id
 				FROM
 					platform_case_classification_params pccp
 				JOIN platform_case pc ON pc.id = pccp.case_id
+				join platform_goods_params_term pgpt on pgpt.id = pccp.params_id
 				WHERE pc.case_status = 1
 				and	pc.case_code = #{caseCode}
+				group by pgpt.params_id
 			)
 		<if test="inputParams != null and inputParams.size() > 0">
 			<foreach collection="inputParams" item="inputParam">
@@ -81,7 +83,7 @@
 			pgpp.params_term_id
 	) t ON t.params_term_id = pgpp.params_term_id
 	<where>
-	AND	pgpp.params_id IN (
+	AND	pgpp.params_term_id IN (
 			SELECT
 				pccp.params_id
 			FROM
@@ -356,59 +358,38 @@
   </select>
   
   <select id="getCombinationDetailInitParams" parameterType="com.azz.order.selection.bo.SearchCombinationInitParamsParam" resultMap="paramsInfo">
-  	SELECT
-		pgpp.params_term_id AS paramsTermId,
-		pgpp.params_type AS paramsType,
-		pgpp.params_name AS paramsName,
-		group_concat(DISTINCT pgpp.params_value) AS paramValues
-	FROM
-		merchant_goods_product_params pgpp
-	<where>
-		pgpp.params_id IN (
-			SELECT DISTINCT
-				pgpp.params_id
-			FROM
-				platform_combination pc
-			JOIN platform_combination_module pcm ON pcm.combination_id = pc.id
-			JOIN merchant_goods_product mgp ON mgp.module_id = pcm.module_id
-			JOIN merchant_goods_product_params pgpp ON pgpp.product_id = mgp.id
-			WHERE
+  		SELECT 
+			mgpp.params_term_id AS paramsTermId,
+			mgpp.params_type AS paramsType,
+			mgpp.params_name AS paramsName,
+			group_concat(DISTINCT mgpp.params_value) AS paramValues
+		FROM platform_combination pc
+		JOIN platform_combination_module pcm ON pcm.combination_id = pc.id
+		JOIN merchant_goods_product mgp ON mgp.module_id = pcm.module_id
+		JOIN merchant_goods_product_params mgpp ON mgpp.product_id = mgp.id
+		<where>
 				mgp.product_status != 0
-			AND pc.status = 1
-			AND	pc.combination_code = #{combinationCode}
-		)
-		<if test="inputParams != null and inputParams.size() > 0">
-			<foreach collection="inputParams" item="inputParam">
-				AND	pgpp.product_id IN (
-					SELECT
-						distinct pgpp.product_id
-					FROM
-						merchant_goods_product_params pgpp
-					JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status != 0
-					WHERE
-						pgpp.params_type = 2
-					AND pgpp.params_term_id = #{inputParam.paramsTermId}
-					AND pgpp.params_value = #{inputParam.paramsValue}
-				)
-			</foreach>
-		</if>
-		<if test="selectParams != null and selectParams.size() > 0">
-			<foreach collection="selectParams" item="selectParam">
-				AND pgpp.product_id IN (
-					SELECT
-						distinct pgpp.product_id
-					FROM
-						merchant_goods_product_params pgpp
-					WHERE
-						pgpp.params_type = 1
-					AND pgpp.params_term_id = #{selectParam.paramsTermId}
-					AND pgpp.params_value = #{selectParam.paramsValue}
-				)
-			</foreach>
-		</if>
-	</where>	
+			AND pc. STATUS = 1
+			AND pc.combination_code = #{combinationCode}
+			<if test="inputParams != null and inputParams.size() > 0">
+				<foreach collection="inputParams" item="inputParam">
+					AND ( mgpp.params_type = 2
+						AND mgpp.params_term_id = #{inputParam.paramsTermId}
+						AND mgpp.params_value = #{inputParam.paramsValue} 
+					)
+				</foreach>
+			</if>
+			<if test="selectParams != null and selectParams.size() > 0">
+				<foreach collection="selectParams" item="selectParam">
+					AND ( mgpp.params_type = 1
+						AND mgpp.params_term_id = #{selectParam.paramsTermId}
+						AND mgpp.params_value = #{selectParam.paramsValue}
+					)
+				</foreach>
+			</if>
+		</where>	
 	GROUP BY
-		pgpp.params_term_id
+		mgpp.params_term_id
   </select>
   
   <select id="getParamsNamesByCaseId" parameterType="java.lang.Long" resultType="com.azz.order.selection.vo.Params">
@@ -511,28 +492,29 @@
 			<foreach collection="selectParams" item="selectParam">
 				AND mgpp.product_id IN (
 					SELECT
-						mgpp.product_id
+						distinct mgpp.product_id
 					FROM
 						merchant_goods_product_params mgpp
+						JOIN merchant_goods_product mgp on mgp.id = mgpp.product_id and mgp.product_status != 0
 					WHERE
 						mgpp.params_type = 1
-					AND pgpp.params_term_id = #{selectParam.paramsTermId}
-					AND pgpp.params_value = #{selectParam.paramsValue}
+					AND mgpp.params_term_id = #{selectParam.paramsTermId}
+					AND mgpp.params_value = #{selectParam.paramsValue}
 				)
 			</foreach>
 		</if>
 		<if test="inputParams != null and inputParams.size() > 0">
 			<foreach collection="inputParams" item="inputParam">
-				AND	pgpp.product_id IN (
+				AND	mgpp.product_id IN (
 					SELECT
-						distinct pgpp.product_id
+						distinct mgpp.product_id
 					FROM
-						merchant_goods_product_params pgpp
-					JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status != 0
+						merchant_goods_product_params mgpp
+					JOIN merchant_goods_product mgp on mgp.id = mgpp.product_id and mgp.product_status != 0
 					WHERE
-						pgpp.params_type = 2
-					AND pgpp.params_term_id = #{inputParam.paramsTermId}
-					AND pgpp.params_value = #{inputParam.paramsValue}
+						mgpp.params_type = 2
+					AND mgpp.params_term_id = #{inputParam.paramsTermId}
+					AND mgpp.params_value = #{inputParam.paramsValue}
 				)
 			</foreach>
 		</if>
@@ -560,6 +542,7 @@
 	JOIN merchant_goods_product mgp ON mgp.id = mgpp.product_id
 	WHERE
 		mgp.product_code = #{productCode}
+	order by mgpp.delivery_date
   </select>
   
   <select id="getProductInfoByProductCode" resultType="com.azz.order.selection.vo.ProductInfomation">
@@ -583,7 +566,7 @@
   <select id="getConfirmOrderProductInfos" parameterType="string" resultType="com.azz.order.selection.vo.ProductInfomation">
 	  SELECT
 		csr.product_code AS productCode,
-		csr.params_value AS paramsValue,
+		csr.params_value AS paramValues,
 		mgpp.delivery_date AS deliveryDate,
 		mgpp.price AS price
 	FROM

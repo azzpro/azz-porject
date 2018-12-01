@@ -31,7 +31,6 @@ public class AddColumn {
     @NotNull(message = "栏目类型不能为空")
     private Integer columnType;
     private String userCode;
-    @NotNull(message = "请上传主图")
     private MainPicture mainPicture;
 }
 

@@ -23,4 +23,6 @@ public interface PlatformIndexColumnMapper {
     List<ColumnInfo> getColumnList();
     
     int countColumn(String columnName);
+    
+    int countColumnByCode(String columnCode);
 }

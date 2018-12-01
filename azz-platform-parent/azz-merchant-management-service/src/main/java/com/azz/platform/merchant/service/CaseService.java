@@ -245,7 +245,6 @@ public class CaseService {
         platformCaseMapper.updateByPrimaryKeySelective(pcObj);
         
         // 新增方案选型参数
-        // 新增方案选型参数
         if(null != param.getParamsId() && !"".equals(param.getParamsId())) {
             //  方案ID
             Long caseId = pcObj.getId();

@@ -180,4 +180,10 @@
    		count(1)
     from platform_index_column WHERE column_name = #{columnName,jdbcType=VARCHAR}
   </select>
+  
+  <select id="countColumnByCode" parameterType="java.lang.String" resultType="int">
+  	select 
+   		count(1)
+    from platform_index_column WHERE column_code = #{columnCode,jdbcType=VARCHAR}
+  </select>
 </mapper>

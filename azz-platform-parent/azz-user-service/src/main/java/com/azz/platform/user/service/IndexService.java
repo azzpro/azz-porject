@@ -75,47 +75,50 @@ public class IndexService {
     public JsonResult<String> addColumn(@RequestBody AddColumn param){
         JSR303ValidateUtils.validate(param);
         
-        int count = platformIndexColumnMapper.countColumn(param.getColumnName());
-        
-        if(count > 0) {
+        int countName = platformIndexColumnMapper.countColumn(param.getColumnName());
+        int countCode = platformIndexColumnMapper.countColumnByCode(param.getColumnCode());
+        if(countName > 0 || countCode > 0) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
                     "参数栏目名已经创建不允许重复创建");
         }
-        // 主图基础校验
-        MainPicture cp = param.getMainPicture();
-        String originalFileName = cp.getFileName();
-        
-        if (StringUtils.isBlank(originalFileName)) {
-            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
-                    "主图文件名为空");
-        }
-        if (cp.getFileSize() > PlatformConstants.INDEX_FILE_SIZE_LIMIT) {
-            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
-                    "主图文件大小不能超过5M");
-        }
-        String filedata = cp.getFileBase64Str();
-        if (StringUtils.isBlank(filedata)) {
-            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
-                    "主图文件内容为空");
-        }
-
-        int dotIndex = originalFileName.lastIndexOf(".");
-        String fileNameNoSufix = originalFileName.substring(0, dotIndex);
-        String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
-        // 新名称为文件名 + 文件后缀
-        String newFileName = fileNameNoSufix +"_"+ param.getColumnName();
-
-        // 图片url
-        JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_CLASSIFICATION_IMAGE_TYPE);
-        if (jr.getCode() != SystemErrorCode.SUCCESS.getCode()) {
-            throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "主图上传失败，请重试");
-        }
         
         PlatformIndexColumn record = new PlatformIndexColumn();
+        // 主图基础校验
+        MainPicture cp = param.getMainPicture();
+        if(ObjectUtils.isNotNull(cp)) {
+            String originalFileName = cp.getFileName();
+            if (StringUtils.isBlank(originalFileName)) {
+                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
+                        "主图文件名为空");
+            }
+            if (cp.getFileSize() > PlatformConstants.INDEX_FILE_SIZE_LIMIT) {
+                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
+                        "主图文件大小不能超过5M");
+            }
+            String filedata = cp.getFileBase64Str();
+            if (StringUtils.isBlank(filedata)) {
+                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
+                        "主图文件内容为空");
+            }
+            
+            int dotIndex = originalFileName.lastIndexOf(".");
+            String fileNameNoSufix = originalFileName.substring(0, dotIndex);
+            String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
+            // 新名称为文件名 + 文件后缀
+            String newFileName = fileNameNoSufix +"_"+ param.getColumnName();
+            
+            // 图片url
+            JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_CLASSIFICATION_IMAGE_TYPE);
+            if (jr.getCode() != SystemErrorCode.SUCCESS.getCode()) {
+                throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "主图上传失败，请重试");
+            }
+            record.setColumnPicName(originalFileName);
+            record.setColumnPicUrl(jr.getData());
+        }
+        
+       
         record.setColumnName(param.getColumnName());
         record.setColumnCode(param.getColumnCode());
-        record.setColumnPicName(originalFileName);
-        record.setColumnPicUrl(jr.getData());
         record.setColumnType(param.getColumnType());
         record.setCreateTime(new Date());
         record.setCreator(param.getUserCode());
@@ -148,8 +151,9 @@ public class IndexService {
         }
         
         if(!pic.getColumnName().equals(param.getColumnName().trim())) {
-            int count = platformIndexColumnMapper.countColumn(param.getColumnName().trim());
-            if(count > 0) {
+            int countName = platformIndexColumnMapper.countColumn(param.getColumnName());
+            int countCode = platformIndexColumnMapper.countColumnByCode(param.getColumnCode());
+            if(countName > 0 || countCode > 0) {
                 throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
                         "参数栏目名已经创建不允许重复创建");
             }

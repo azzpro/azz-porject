@@ -489,7 +489,8 @@ public class SelectionService {
 		}
 		// 前端传入的商品信息
 		List<OrderItem> orderItems = param.getOrderItems();
-		Map<String,Integer> itemMap = new HashMap<>();// key(productCode):value(productCode对应的数量)
+		// key(productCode):value(productCode对应的数量)
+		Map<String,Integer> itemMap = new HashMap<>();
 		for (int i = 0; i < orderItems.size(); i++) {
 			OrderItem item = orderItems.get(i);
 			String productCode = item.getProductCode();
@@ -511,6 +512,7 @@ public class SelectionService {
 		// 总金额
 		BigDecimal grandTotal = BigDecimal.ZERO; 
 		for (ShoppingCartItemInfo item : items) {
+			// 每个产品的小计 = 产品单价 * 数量（数量通过itemMap的key：productCode来获取）
 			grandTotal = grandTotal.add(item.getProductPrice().multiply(new BigDecimal(itemMap.get(item.getProductCode()))));
 		}
 		Date nowDate = new Date();

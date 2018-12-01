@@ -487,6 +487,14 @@
 									AND pc.status = 1	
 									AND	pc.combination_code = #{combinationCode}
 								)
+							and mgp.module_id in (
+									SELECT
+										pcm.module_id
+									FROM  platform_combination pc 
+									join platform_combination_module pcm on pc.id = pcm.combination_id
+									WHERE pc.status = 1	
+									AND	pc.combination_code = #{combinationCode}
+							)
 						)
 					ORDER BY
 						mgpp.price

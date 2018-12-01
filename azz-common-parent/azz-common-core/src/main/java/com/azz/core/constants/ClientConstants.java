@@ -56,7 +56,13 @@ public abstract class ClientConstants {
      */
     public static final int CLIENT_ORDER_DEAD_TIME_HOURS = 6;
     
-
+    //首页幻灯片：homeslide 
+    public static final String HOME_SLIDE = "homeslide";
+    // 首页导航1：homenav1 
+    public static final String HOME_NAV1 = "homenav1";
+    // 首页导航2：homenav2 
+    public static final String HOME_NAV2 = "homenav2";
+    
     /**
      * 
      * <P>资质申请状态（0：未申请 1：待审批 2：已通过 3：已拒绝）</P>

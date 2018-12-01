@@ -410,7 +410,7 @@
 		</if>
 	</where>	
 	GROUP BY
-		pgpp.params_term_id
+		mgpp.params_term_id
   </select>
   
   <select id="getParamsNamesByCaseId" parameterType="java.lang.Long" resultType="com.azz.order.selection.vo.Params">

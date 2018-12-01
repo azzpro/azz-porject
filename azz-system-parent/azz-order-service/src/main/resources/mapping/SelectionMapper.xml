@@ -359,16 +359,16 @@
   
   <select id="getCombinationDetailInitParams" parameterType="com.azz.order.selection.bo.SearchCombinationInitParamsParam" resultMap="paramsInfo">
   	SELECT
-		pgpp.params_term_id AS paramsTermId,
-		pgpp.params_type AS paramsType,
-		pgpp.params_name AS paramsName,
-		group_concat(DISTINCT pgpp.params_value) AS paramValues
+		mgpp.params_term_id AS paramsTermId,
+		mgpp.params_type AS paramsType,
+		mgpp.params_name AS paramsName,
+		group_concat(DISTINCT mgpp.params_value) AS paramValues
 	FROM
-		merchant_goods_product_params pgpp
+		merchant_goods_product_params mgpp
 	<where>
-		pgpp.params_id IN (
+		mgpp.product_id IN (
 			SELECT DISTINCT
-				pgpp.params_id
+				pgpp.product_id
 			FROM
 				platform_combination pc
 			JOIN platform_combination_module pcm ON pcm.combination_id = pc.id
@@ -381,7 +381,7 @@
 		)
 		<if test="inputParams != null and inputParams.size() > 0">
 			<foreach collection="inputParams" item="inputParam">
-				AND	pgpp.product_id IN (
+				AND	mgpp.product_id IN (
 					SELECT
 						distinct pgpp.product_id
 					FROM
@@ -396,7 +396,7 @@
 		</if>
 		<if test="selectParams != null and selectParams.size() > 0">
 			<foreach collection="selectParams" item="selectParam">
-				AND pgpp.product_id IN (
+				AND mgpp.product_id IN (
 					SELECT
 						distinct pgpp.product_id
 					FROM

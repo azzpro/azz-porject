@@ -124,12 +124,13 @@ private static final Logger LOG = LoggerFactory.getLogger(SystemSmsSendService.c
 			throw new SmsException(SmsErrorCode.SMS_ERROR_TYPE_NOT_EXIST);
 		SystemMsgLog sml = new SystemMsgLog();
 		sml.setMsgCode(RandomStringUtils.randomNumeric(6));
-		sml.setMsgContent(smsConstants.getMsgContent());
+		sml.setMsgContent(smsConstants.getMsgContent().replace("${code}", sml.getMsgCode()));
 		sml.setMsgPhone(Long.parseLong(sms.getPhone()));
 		sml.setMsgTitle(smsConstants.getName());
 		sml.setMsgType(sms.getMsgType());
 		sml.setMsgPlatform("阿里云短信平台");
 		sml.setMsgTime(new Date());
+		LOG.info("短信日志======>"+sml.toString());
 		int i = smlm.insertSelective(sml);
 		if(i == 1) {
 			JsonResult<SmsInfo> sms2 = sendSms(sml,smsConstants);

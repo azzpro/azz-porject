@@ -122,7 +122,7 @@ azz:
     -
      id: ClientInvoiceApplySequence
      type: ClientInvoiceApplyCodeSequence
-     args: {id: 'IRC1', maxSequenceValue: '99999999', length: '8', step: '5'}
+     args: {id: 'IR', maxSequenceValue: '99999999', length: '8', step: '5'}
     -
      id: MerchantInvoiceApplySequence
      type: MerchantInvoiceApplyCodeSequence

@@ -77,7 +77,8 @@ public enum SmsConstants {
 	
 	public enum SmsCode{
 		SUCCESS("成功","0000"),
-		FAILD("失败","1111");
+		FAILD("失败","1111"),
+		NO_EXIST("无此短信记录","9999");
 		
 		private String desc;
 		private String code;

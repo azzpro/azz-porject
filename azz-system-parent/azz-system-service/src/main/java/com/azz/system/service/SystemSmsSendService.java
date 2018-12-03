@@ -103,7 +103,7 @@ private static final Logger LOG = LoggerFactory.getLogger(SystemSmsSendService.c
 			}
 			return new JsonResult<>(new SmsInfo(SmsCode.FAILD.getCode(), SmsCode.FAILD.getDesc()));
 		}
-		throw new SmsException(SmsErrorCode.SMS_ERROR_MSG_NOT_EXIST);
+		return new JsonResult<>(new SmsInfo(SmsCode.NO_EXIST.getCode(), SmsCode.NO_EXIST.getDesc()));
 	}
 	
 	/**
@@ -174,7 +174,6 @@ private static final Logger LOG = LoggerFactory.getLogger(SystemSmsSendService.c
         	//短信验证码
         	request.setTemplateParam("{\"code\":"+sml.getMsgCode()+"}");
         }
-
         SendSmsResponse sendSmsResponse = null;
         try {
 			sendSmsResponse = acsClient.getAcsResponse(request);

@@ -123,7 +123,7 @@ private static final Logger LOG = LoggerFactory.getLogger(SystemSmsSendService.c
 		if(null == smsConstants)
 			throw new SmsException(SmsErrorCode.SMS_ERROR_TYPE_NOT_EXIST);
 		SystemMsgLog sml = new SystemMsgLog();
-		sml.setMsgCode(RandomStringUtils.randomNumeric(6));
+		sml.setMsgCode(RandomStringUtils.generNumCode(6));
 		sml.setMsgContent(smsConstants.getMsgContent().replace("${code}", sml.getMsgCode()));
 		sml.setMsgPhone(Long.parseLong(sms.getPhone()));
 		sml.setMsgTitle(smsConstants.getName());

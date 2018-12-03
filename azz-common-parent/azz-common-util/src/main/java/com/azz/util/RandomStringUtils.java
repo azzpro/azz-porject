@@ -6,6 +6,8 @@
  ******************************************************************************/
 package com.azz.util;
 
+import java.util.Random;
+
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
 
@@ -57,6 +59,36 @@ public class RandomStringUtils {
      */
     public static String randomLetters(final int count) {
         return LETTERS.generate(count);
+    }
+    
+    /**
+     *获取随机验证码
+     * @param len
+     * @return
+     */
+    public static String generNumCode(int len){
+        StringBuffer code = new StringBuffer();
+        code.append(getRandom());
+        for (int i = 0; i < len-1; i++) {
+            code.append(new Random().nextInt(10));
+        }
+        if(code.length() != 6){
+            return generNumCode(6);
+        }else {
+            return code.toString();
+        }
+    }
+
+    /**
+     * 使用递归算法，获取第一个随机数不为0
+     * @return int
+     */
+    public static int getRandom(){
+        int number = new Random().nextInt(10);
+        if(0 == number){
+            return getRandom();
+        }
+        return number;
     }
 
 }

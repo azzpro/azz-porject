@@ -7,8 +7,11 @@
  
 package com.azz.system.pay.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
+import com.azz.system.bo.PayList;
 import com.azz.system.pojo.PlatformPay;
 
 /**
@@ -25,5 +28,13 @@ public interface PlatformPayMapper {
 	 * @author 刘建麟  2018年11月26日 下午2:30:31
 	 */
 	int insertPay(PlatformPay pp);
+	
+	/**
+	 * <p>支付列表</p>
+	 * @param pl
+	 * @return
+	 * @author 刘建麟  2018年12月3日 下午2:58:46
+	 */
+	List<PlatformPay> selectPayList(PayList pl);
 }
 

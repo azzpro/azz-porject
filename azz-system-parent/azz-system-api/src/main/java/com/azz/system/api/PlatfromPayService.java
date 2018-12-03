@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.page.Pagination;
+import com.azz.system.bo.PayList;
 import com.azz.system.bo.SubmitPayParams;
+import com.azz.system.pojo.PlatformPay;
 
 /**
  * <P>TODO</P>
@@ -31,5 +34,14 @@ public interface PlatfromPayService {
 	 */
 	@RequestMapping(value="/azz/api/pay/submitOrderPay",method=RequestMethod.POST)
 	public JsonResult<String> submitOrderPay(@RequestBody SubmitPayParams spp);
+	
+	/**
+	 * <p>支付管理列表</p>
+	 * @param param
+	 * @return
+	 * @author 刘建麟  2018年12月3日 下午2:46:08
+	 */
+	@RequestMapping("/azz/api/pay/toPayList")
+	public JsonResult<Pagination<PlatformPay>> toPayList(@RequestBody PayList pl);
 }
 

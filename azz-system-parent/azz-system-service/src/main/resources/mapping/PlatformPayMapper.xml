@@ -15,6 +15,22 @@
   <result column="pay_method" property="payMethod"/> 
 </resultMap>
   
+  <select id="selectPayList" resultMap="BaseResultMap" parameterType="com.azz.system.bo.PayList">
+  	select id,pay_number,three_party_number,order_number,pay_status,pay_type,pay_money,
+  	channel_money,customer_phone,pay_time,pay_method
+  	from platform_pay
+  	<where>
+  		<if test="param != null and param != ''">
+  			pay_number like CONCAT('%', #{param}, '%')
+  			or
+  			three_party_number like CONCAT('%', #{param}, '%')
+  			or
+  			order_number like CONCAT('%', #{param}, '%')
+  		</if>
+  	</where>
+  	order by pay_time desc
+  </select>
+  
   <insert id="insertPay" parameterType="com.azz.system.pojo.PlatformPay">
     insert into platform_pay
     <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -48,7 +48,7 @@ public class SmsSendController {
 	 * @return
 	 * @author 刘建麟  2018年11月14日 上午11:24:14
 	 */
-	@RequestMapping("checkMsgCodeTime")
+	@RequestMapping("validationCode")
 	public JsonResult<SmsInfo> checkMsgCodeTime(@RequestBody SmsCodeValidation sms) {
 		return sendService.checkMsgCodeTime(sms);
 	}

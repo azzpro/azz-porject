@@ -18,6 +18,7 @@ import lombok.Data;
  */
 @Data
 public class HomeNavDetail {
+    private Long id;
     private String columnPicUrl;
     private List<HomeNav> homeNavs;
 }

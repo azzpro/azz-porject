@@ -86,7 +86,7 @@ public class OrderController {
     @RequestMapping("/editMerchantOrderStatus")
     JsonResult<String> editMerchantOrderStatus(EditOrderStatusWebParam param) throws IOException {
         param.setMerchantId(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantId());
-        param.setModifier(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantCode());
+        param.setModifier(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
         List<ShipmentFile> sf = new ArrayList<>();
         if (param.getStatus() == 2) {
             for (MultipartFile shipmentFiles : param.getShipmentFiles()) {

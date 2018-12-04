@@ -149,24 +149,32 @@
 	WHERE cs.case_status = 1
 	AND	pc.status = 1
 	AND	cs.case_code = #{caseCode}
+	<if test="inputParams != null and inputParams.size() > 0">
+		AND pgpp.params_term_id not in
+			<foreach collection="inputParams" item="inputParam" separator="," open="(" close=")">
+				#{inputParam.paramsTermId}
+			</foreach>
+	</if>
+	<if test="selectParams != null and selectParams.size() > 0">
+		AND pgpp.params_term_id not in
+			<foreach collection="selectParams" item="selectParam" separator="," open="(" close=")">
+				#{selectParam.paramsTermId}
+			</foreach>
+	</if>
 	AND pgpp.product_id IN (
 			SELECT 
 				DISTINCT pgpp.product_id
 			FROM
 				merchant_goods_product_params pgpp
 			JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status != 0
-			JOIN platform_combination_module pcm ON pcm.module_id = mgp.module_id	
 			<where>	
 				<if test="inputParams != null and inputParams.size() > 0">
 					<foreach collection="inputParams" item="inputParam">
-						AND	pcm.combination_id IN (
-							SELECT 
-								DISTINCT pc.id
+						AND pgpp.product_id IN (
+							SELECT
+								distinct pgpp.product_id
 							FROM
 								merchant_goods_product_params pgpp
-							JOIN merchant_goods_product mgp ON mgp.id = pgpp.product_id
-							JOIN platform_combination_module pcm ON pcm.module_id = mgp.module_id
-							JOIN platform_combination pc ON pc.id = pcm.combination_id
 							WHERE
 								pgpp.params_type = 2
 							AND pgpp.params_term_id = #{inputParam.paramsTermId}
@@ -176,14 +184,11 @@
 				</if>
 				<if test="selectParams != null and selectParams.size() > 0">
 					<foreach collection="selectParams" item="selectParam">
-						AND pcm.combination_id IN (
-							SELECT 
-								DISTINCT pc.id
+						AND pgpp.product_id IN (
+							SELECT
+								distinct pgpp.product_id
 							FROM
 								merchant_goods_product_params pgpp
-							JOIN merchant_goods_product mgp ON mgp.id = pgpp.product_id
-							JOIN platform_combination_module pcm ON pcm.module_id = mgp.module_id
-							JOIN platform_combination pc ON pc.id = pcm.combination_id
 							WHERE
 								pgpp.params_type = 1
 							AND pgpp.params_term_id = #{selectParam.paramsTermId}
@@ -212,6 +217,12 @@
 	WHERE cs.case_status = 1
 	AND	pc.status = 1
 	AND	cs.case_code = #{caseCode}
+	<if test="selectedParamTermIds != null and selectedParamTermIds.size() > 0">
+		AND pgpp.params_term_id not in
+			<foreach collection="selectedParamTermIds" item="selectedParamTermId" separator="," open="(" close=")">
+				#{selectedParamTermId}
+			</foreach>
+	</if>
 	AND pgpp.product_id IN (
 			SELECT 
 				DISTINCT pgpp.product_id

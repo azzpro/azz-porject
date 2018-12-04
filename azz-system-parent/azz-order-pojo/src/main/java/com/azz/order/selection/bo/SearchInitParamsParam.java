@@ -36,5 +36,8 @@ public class SearchInitParamsParam extends QueryPage{
 	// 选中的查询参数
 	private List<SelectParam> selectParams;
 	
+	// 完善页面所选参数的id
+	private List<Long> selectedParamTermIds;
+	
 }
 

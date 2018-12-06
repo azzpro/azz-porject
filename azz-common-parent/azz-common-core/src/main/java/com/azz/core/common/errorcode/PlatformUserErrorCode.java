@@ -53,7 +53,7 @@ public class PlatformUserErrorCode extends BaseErrorCode{
     public static final PlatformUserErrorCode PLATFORM_SAME_CLASSIFICATION_ID = new PlatformUserErrorCode(60001, "分类名称已存在！");
     public static final PlatformUserErrorCode PLATFORM_PRODUCT_CHILD_CLASSIFICATION_EXIST = new PlatformUserErrorCode(60002, "存在子分类，请移除后再删除！");
     public static final PlatformUserErrorCode PLATFORM_PRODUCT_THIRD_LEVEL_CLASSIFICATION = new PlatformUserErrorCode(60003, "已是三级分类");
-    public static final PlatformUserErrorCode PLATFORM_PRODUCT_CLASSIFICATION_EXIST = new PlatformUserErrorCode(60004, "分类下存在产品信息！");
+    public static final PlatformUserErrorCode PLATFORM_PRODUCT_CLASSIFICATION_EXIST = new PlatformUserErrorCode(60004, "分类下存在模组和参数项，请先处理后删除！");
     
     public PlatformUserErrorCode(int code, String message) {
 	super(code, message);

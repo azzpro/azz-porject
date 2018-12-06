@@ -246,4 +246,14 @@
  
   </select>
   
+  <select id="countDeptMerchantUser" parameterType="com.azz.merchant.pojo.bo.SearchMerchantDeptInfoParam" resultType="int">
+  	SELECT count(1) FROM merchant_dept md
+	JOIN merchant_user mu ON md.id = mu.dept_id
+	WHERE md.dept_code = #{deptCode} AND md.merchant_id = #{merchantId} AND md.`status` != 0
+  </select>
+  
+  <select id="countSubDept" parameterType="java.lang.String" resultType="int">
+  	SELECT count(1) FROM merchant_dept md 
+  	WHERE md.parent_code = #{deptCode} AND md.`status` != 0
+  </select>
 </mapper>

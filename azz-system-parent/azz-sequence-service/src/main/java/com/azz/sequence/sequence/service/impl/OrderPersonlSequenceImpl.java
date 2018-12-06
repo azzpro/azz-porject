@@ -708,6 +708,7 @@ public class OrderPersonlSequenceImpl implements OrderPersonlSequence{
 	private String getMonth() {
 		Calendar cal = Calendar.getInstance();
 		int month = cal.get(Calendar.MONTH);
+		month = month+1;
 		if(String.valueOf(month).length() == 1) {
 			return "0"+month;
 		}else {

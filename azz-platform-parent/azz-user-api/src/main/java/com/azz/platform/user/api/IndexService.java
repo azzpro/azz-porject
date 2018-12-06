@@ -26,11 +26,14 @@ import com.azz.platform.user.pojo.bo.AddImage;
 import com.azz.platform.user.pojo.bo.EditArticle;
 import com.azz.platform.user.pojo.bo.EditColumn;
 import com.azz.platform.user.pojo.bo.EditImage;
+import com.azz.platform.user.pojo.bo.EditSignUpCourseParam;
 import com.azz.platform.user.pojo.bo.SearchArticleParam;
+import com.azz.platform.user.pojo.bo.SearchCourseParam;
 import com.azz.platform.user.pojo.bo.SearchImageParam;
 import com.azz.platform.user.pojo.vo.ArticleInfo;
 import com.azz.platform.user.pojo.vo.ColumnInfo;
 import com.azz.platform.user.pojo.vo.ImageInfo;
+import com.azz.platform.user.pojo.vo.SignUpCourse;
 
 @FeignClient("azz-user-service")
 public interface IndexService {
@@ -169,5 +172,22 @@ public interface IndexService {
     @GetMapping("/azz/api/index/delArticle")
     JsonResult<String> delArticle(@RequestParam("articleId") Long articleId);
     
+    /**
+     * <p>获取报名管理列表</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年12月6日 上午11:28:54
+     */
+    @PostMapping("/azz/api/index/getClientSignUpList")
+    JsonResult<Pagination<SignUpCourse>> getClientSignUpList(@RequestBody SearchCourseParam param);
+    
+    /**
+     * <p>处理报名管理</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年12月6日 上午11:28:57
+     */
+    @PostMapping("/azz/api/index/editSignUp")
+    JsonResult<String> editSignUp(@RequestBody EditSignUpCourseParam param);
 }
 

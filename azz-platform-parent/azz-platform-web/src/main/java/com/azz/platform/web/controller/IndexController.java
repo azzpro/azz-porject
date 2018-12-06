@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,12 +35,15 @@ import com.azz.platform.user.pojo.bo.EditColumn;
 import com.azz.platform.user.pojo.bo.EditColumnWebParam;
 import com.azz.platform.user.pojo.bo.EditImage;
 import com.azz.platform.user.pojo.bo.EditImageWebParam;
+import com.azz.platform.user.pojo.bo.EditSignUpCourseParam;
 import com.azz.platform.user.pojo.bo.MainPicture;
 import com.azz.platform.user.pojo.bo.SearchArticleParam;
+import com.azz.platform.user.pojo.bo.SearchCourseParam;
 import com.azz.platform.user.pojo.bo.SearchImageParam;
 import com.azz.platform.user.pojo.vo.ArticleInfo;
 import com.azz.platform.user.pojo.vo.ColumnInfo;
 import com.azz.platform.user.pojo.vo.ImageInfo;
+import com.azz.platform.user.pojo.vo.SignUpCourse;
 import com.azz.util.Base64;
 import com.azz.utils.WebUtils;
 
@@ -246,5 +250,29 @@ public class IndexController {
 	public JsonResult<String> delArticle(@RequestParam("articleId") Long articleId){
 	    return indexService.delArticle(articleId);
 	}
+	
+	/**
+	 * <p>获取报名管理列表</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年12月6日 上午11:42:26
+	 */
+	@RequestMapping("/getClientSignUpList")
+	public JsonResult<Pagination<SignUpCourse>> getClientSignUpList(SearchCourseParam param){
+	    return indexService.getClientSignUpList(param);
+	}
+	
+	/**
+	 * <p>处理报名管理</p>
+	 * @param param
+	 * @return
+	 * @throws IOException
+	 * @author 彭斌  2018年12月6日 上午11:34:30
+	 */
+	@RequestMapping("/editSignUp")
+    public JsonResult<String> editSignUpCourse(EditSignUpCourseParam param) throws IOException{
+	    param.setClientUserCode(WebUtils.getLoginUser().getUserInfo().getUserCode());
+        return indexService.editSignUp(param);
+    }
 }
 

@@ -17,6 +17,8 @@ public class PlatformGoodsErrorCode extends BaseErrorCode{
     
     public static final PlatformGoodsErrorCode PLATFORM_GOODS_ERROR_INVALID_PARAMS = new PlatformGoodsErrorCode(20003, "参数名相同");
     
+    public static final PlatformGoodsErrorCode PLATFORM_GOODS_ERROR_INVALID_VALUES = new PlatformGoodsErrorCode(20009, "参数值相同");
+    
     public static final PlatformGoodsErrorCode PLATFORM_GOODS_ERROR_CODE_NOTEXIST = new PlatformGoodsErrorCode(20004, "CODE不存在");
     
     public static final PlatformGoodsErrorCode PLATFORM_GOODS_ERROR_UPDATE_ERROR = new PlatformGoodsErrorCode(20005, "更新失败");

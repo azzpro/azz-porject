@@ -199,11 +199,11 @@
 			dept.parent_code AS parentCode,
 			COUNT(u.dept_id) AS numberMembers,
 		 	dept.`status` AS status,
-			dept.creator AS creator,
+			u.user_name  AS creator,
 			dept.create_time AS createTime 
 		FROM
 			platform_dept dept
-		LEFT JOIN platform_user u ON dept.id = u.dept_id
+		LEFT JOIN platform_user u ON dept.creator = u.user_code
 		WHERE
 			dept.parent_code = #{deptParentCode}  AND dept.status != 0
 		GROUP BY dept.id

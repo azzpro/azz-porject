@@ -7,15 +7,16 @@
  
 package com.azz.sequence.sequence.service.impl;
 
+import java.util.Calendar;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.azz.core.sequence.core.ThreadLocalRandom;
 import com.azz.sequence.config.SequenceConfig;
-import com.azz.sequence.sequence.service.PayRandomSequenceService;
+import com.azz.sequence.sequence.service.OrderCompanySequence;
+import com.azz.sequence.sequence.service.OrderPersonlSequence;
 
 /**
  * <P>支付第三方编码随机十位</P>
@@ -23,7 +24,7 @@ import com.azz.sequence.sequence.service.PayRandomSequenceService;
  * @author 彭斌  2018年10月31日 上午11:12:58
  */
 @Service
-public class PayRandomSequenceServiceImpl implements PayRandomSequenceService{
+public class OrderCompanySequenceImpl implements OrderCompanySequence{
 	
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	/**
@@ -42,20 +43,18 @@ public class PayRandomSequenceServiceImpl implements PayRandomSequenceService{
 
 	@Override
 	public String getSequence() {
-		ThreadLocalRandom random = ThreadLocalRandom.current();
-        long minValue = getMinValue(length);
-        long maxValue = getMaxValue(length);
-        long segmentValue = random.nextLong(minValue, maxValue);
-        String segmentString = String.valueOf(segmentValue);
-        if (segmentString.length() != length) {
-            throw new RuntimeException("the length of " + segmentString + " is illegal!");
+		StringBuilder sb = new StringBuilder();
+		sb.append("CO")
+		.append(getYear()).append(getMonth()).append(getDay());
+        if (sb.toString().length() != length) {
+            throw new RuntimeException("the length of " + sb.toString() + " is illegal!");
         }
-        return segmentString;
+        return sb.toString();
 	}
 
 	@Override
 	public String getType() {
-		return "paySequence";
+		return "OrderCompanySequence";
 	}
 	
 	
@@ -68,35 +67,23 @@ public class PayRandomSequenceServiceImpl implements PayRandomSequenceService{
 		this.length = length;
 	}
 
-	/**
-     * 获取指定位数的数据最小值
-     *
-     * @param length
-     * @return
-     */
-    private long getMinValue(int length) {
-        long minValue = 1;
-        for (int i = 1; i < length; i++) {
-            minValue *= 10;
-        }
-        return minValue;
-    }
-
-    /**
-     * 获取指定位数的数据最大值
-     *
-     * @param length
-     * @return
-     */
-    private long getMaxValue(int length) {
-        long maxValue = 0;
-        long sumValue = 1;
-        for (int i = 0; i < length; i++) {
-            sumValue *= 10;
-            maxValue = sumValue - 1;
-        }
-        return maxValue;
-    }
-
+	private String getYear() {
+		Calendar cal = Calendar.getInstance();
+		int year = cal.get(Calendar.YEAR);
+		String years = year+"";
+		return years.substring(years.length()-1,years.length());
+	}
+	
+	private String getMonth() {
+		Calendar cal = Calendar.getInstance();
+		int month = cal.get(Calendar.MONTH);
+		return month+"";
+	}
+	
+	private String getDay() {
+		Calendar cal = Calendar.getInstance();
+		int day = cal.get(Calendar.DATE);
+		return day+"";
+	}
 }
 

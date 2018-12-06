@@ -39,7 +39,7 @@ import com.azz.merchant.pojo.bo.SearchGoodsModuleParam;
 import com.azz.merchant.pojo.vo.GoodsModuleInfo;
 import com.azz.merchant.pojo.vo.UploadFileInfo;
 import com.azz.system.api.SystemImageUploadService;
-import com.azz.system.sequence.api.RandomSequenceService;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
 import com.github.pagehelper.PageHelper;
@@ -66,7 +66,7 @@ public class GoodsModuleService {
     private SystemImageUploadService systemImageUploadService;
 	
 	@Autowired
-	private RandomSequenceService randomSequenceService;
+	private DbSequenceService dbSequenceService;
 	
 	/**
 	 * 
@@ -121,7 +121,7 @@ public class GoodsModuleService {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "已存在相同模组请修改模组名称");
 		}
 		GoodsModulePic pic = param.getGoodsModulePic();
-		String moduleCode = randomSequenceService.getModuleCodeNumber();
+		String moduleCode = dbSequenceService.getModuleCodeNumber();
 		// 上传模组图片
 		UploadFileInfo fileInfo = uploadModulePic(pic, moduleCode);
 		MerchantGoodsModule goodsModuleRecord = MerchantGoodsModule.builder()

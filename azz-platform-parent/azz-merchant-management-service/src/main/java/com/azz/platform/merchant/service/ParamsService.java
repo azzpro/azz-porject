@@ -39,7 +39,7 @@ import com.azz.platform.merchant.pojo.bo.ParamsData;
 import com.azz.platform.merchant.pojo.bo.SearchParams;
 import com.azz.platform.merchant.pojo.vo.Params;
 import com.azz.platform.merchant.pojo.vo.ParamsAll;
-import com.azz.system.sequence.api.RandomSequenceService;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.github.pagehelper.PageHelper;
 
@@ -61,7 +61,7 @@ public class ParamsService {
 	private PlatformGoodsParamsValueMapper goodsParamsValueMapper;
 	
 	@Autowired
-	private RandomSequenceService randomSequenceService;
+	private DbSequenceService dbSequenceService;
 	
 	@Autowired
 	private ProductService productService;
@@ -220,7 +220,7 @@ public class ParamsService {
 						goodsParamsTerm.setCreateTime(new Date());
 						goodsParamsTerm.setCreator(ppt.getCreator());
 						goodsParamsTerm.setParamsId(paramsByCode.getId());
-						goodsParamsTerm.setParamsCode(randomSequenceService.getParameterItemCodeNumber());
+						goodsParamsTerm.setParamsCode(dbSequenceService.getParameterItemCodeNumber());
 						goodsParamsTermMapper.insertSelective(goodsParamsTerm);
 						//获取主键
 						Long ids = goodsParamsTerm.getId();
@@ -270,7 +270,7 @@ public class ParamsService {
 				if(count > 1)
 					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_TOOMANY);
 				PlatformGoodsParams goodsParams = new PlatformGoodsParams();
-				goodsParams.setParamsCode(randomSequenceService.getProductParameterCodeNumber());
+				goodsParams.setParamsCode(dbSequenceService.getParameterCodeNumber());
 				goodsParams.setCreator(ppt.getCreator());
 				goodsParams.setCreateTime(new Date());
 				goodsParams.setAssortmentId(code.getId());
@@ -288,7 +288,7 @@ public class ParamsService {
 						goodsParamsTerm.setCreateTime(new Date());
 						goodsParamsTerm.setCreator(ppt.getCreator());
 						goodsParamsTerm.setParamsId(id2);
-						goodsParamsTerm.setParamsCode(randomSequenceService.getParameterItemCodeNumber());
+						goodsParamsTerm.setParamsCode(dbSequenceService.getParameterItemCodeNumber());
 						goodsParamsTermMapper.insertSelective(goodsParamsTerm);
 						//获取主键
 						Long id = goodsParamsTerm.getId();

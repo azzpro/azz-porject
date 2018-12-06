@@ -19,31 +19,207 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @FeignClient("azz-sequence-service")
 public interface DbSequenceService {
 	
+	
+	/**
+	 * <p>个人订单编号</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:36:33
+	 */
+	@RequestMapping(value="/azz/api/sequence/getPersonlOrderNumber",method=RequestMethod.GET)
+	public String getPersonlOrderNumber() ;
+	
+	/**
+	 * <p>企业订单编号</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:36:33
+	 */
+	@RequestMapping(value="/azz/api/sequence/getCompanyOrderNumber",method=RequestMethod.GET)
+	public String getCompanyOrderNumber() ;
+	
+	/**
+	 * <p>商户订单编号</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:36:33
+	 */
+	@RequestMapping(value="/azz/api/sequence/getMerchantOrderNumber",method=RequestMethod.GET)
+	public String getMerchantOrderNumber() ;
+	
+	/**
+	 * <p>客户端 客户编号</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:36:33
+	 */
+	@RequestMapping(value="/azz/api/sequence/getClientCustomerNumber",method=RequestMethod.GET)
+	public String getClientCustomerNumber() ;
+	
+	/**
+	 * <p>客户端 企业编号</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:37:16
+	 */
+	@RequestMapping(value="/azz/api/sequence/getClientCompanyNumber",method=RequestMethod.GET)
+	public String getClientCompanyNumber() ;
+	
+	/**
+	 * <p>客户端 员工编号</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:37:16
+	 */
+	@RequestMapping(value="/azz/api/sequence/getClientEmployeeNumber",method=RequestMethod.GET)
+	public String getClientEmployeeNumber() ;
+	
+	/**
+	 * <p>客户端 部门编号</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:37:16
+	 */
+	@RequestMapping(value="/azz/api/sequence/getClientDepartmentNumber",method=RequestMethod.GET)
+	public String getClientDepartmentNumber() ;
+	
+	/**
+	 * <p>客户端 权限编号</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:37:16
+	 */
+	@RequestMapping(value="/azz/api/sequence/getClientPowerNumber",method=RequestMethod.GET)
+	public String getClientPowerNumber() ;
+	
+	/**
+	 * <p>平台端  员工编号</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:37:16
+	 */
 	@RequestMapping(value="/azz/api/sequence/getPlatEmployeeNumber",method=RequestMethod.GET)
-	String getPlatEmployeeNumber();
+	public String getPlatEmployeeNumber() ;
 	
+	/**
+	 * <p>平台端  部门编号</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:37:16
+	 */
 	@RequestMapping(value="/azz/api/sequence/getPlatDepartmentNumber",method=RequestMethod.GET)
-	String getPlatDepartmentNumber();
+	public String getPlatDepartmentNumber() ;
 	
+	/**
+	 * <p>平台端  部门编号</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:37:16
+	 */
 	@RequestMapping(value="/azz/api/sequence/getPlatPowerNumber",method=RequestMethod.GET)
-	String getPlatPowerNumber();
+	public String getPlatPowerNumber() ;
 	
+	
+	/**
+	 * <p>商户端  员工编号</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:37:16
+	 */
 	@RequestMapping(value="/azz/api/sequence/getMerchantTenantNumber",method=RequestMethod.GET)
-	String getMerchantTenantNumber();
+	public String getMerchantTenantNumber() ;
 	
+	/**
+	 * <p>商户端  员工编号</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:37:16
+	 */
 	@RequestMapping(value="/azz/api/sequence/getMerchantEmployeeNumber",method=RequestMethod.GET)
-	String getMerchantEmployeeNumber();
+	public String getMerchantEmployeeNumber() ;
 	
+	/**
+	 * <p>商户端  部门编号</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:37:16
+	 */
 	@RequestMapping(value="/azz/api/sequence/getMerchantDepartmentNumber",method=RequestMethod.GET)
-	String getMerchantDepartmentNumber();
+	public String getMerchantDepartmentNumber() ;
 	
+	/**
+	 * <p>商户端  权限编号</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:37:16
+	 */
 	@RequestMapping(value="/azz/api/sequence/getMerchantPowerNumber",method=RequestMethod.GET)
-    String getMerchantPowerNumber();
+	public String getMerchantPowerNumber() ;
 	
-	@RequestMapping(value="/azz/api/sequence/getClientInvoiceApplyNumber",method=RequestMethod.GET)
-	String getClientInvoiceApplyNumber();
+	/**
+	 * <p>分类编码</p>
+	 * @return
+	 * @author 彭斌  2018年10月31日 上午11:26:01
+	 */
+	@RequestMapping(value="/azz/api/sequence/getClassificationNumber",method=RequestMethod.GET)
+    public String getClassificationNumber() ;
 	
-	@RequestMapping(value="/azz/api/sequence/getMerchantInvoiceApplyNumber",method=RequestMethod.GET)
-    String getMerchantInvoiceApplyNumber();
+	/**
+	 * <p>品牌编号</p>
+	 * @return
+	 * @author 彭斌  2018年10月31日 上午11:35:35
+	 */
+	@RequestMapping(value="/azz/api/sequence/getBrandCodeNumber",method=RequestMethod.GET)
+    public String getBrandCodeNumber() ;
+	
+	/**
+	 * <p>参数项编号</p>
+	 * @return
+	 * @author 彭斌  2018年10月31日 上午11:35:56
+	 */
+	@RequestMapping(value="/azz/api/sequence/getParameterItemCodeNumber",method=RequestMethod.GET)
+    public String getParameterItemCodeNumber() ;
+	
+	/**
+	 * <p>参数编号</p>
+	 * @return
+	 * @author 彭斌  2018年10月31日 上午11:35:56
+	 */
+	@RequestMapping(value="/azz/api/sequence/getParameterCodeNumber",method=RequestMethod.GET)
+    public String getParameterCodeNumber() ;
+	
+    /**
+     * <p>产品编码</p>
+     * @return
+     * @author 彭斌  2018年10月31日 上午11:41:18
+     */
+    @RequestMapping(value="/azz/api/sequence/getProductCodeNumber",method=RequestMethod.GET)
+    public String getProductCodeNumber() ;
+    
+    /**
+     * <p>模组编号</p>
+     * @return
+     * @author 彭斌  2018年10月31日 上午11:41:33
+     */
+    @RequestMapping(value="/azz/api/sequence/getModuleCodeNumber",method=RequestMethod.GET)
+    public String getModuleCodeNumber() ;
+    
+    /**
+     * <p>方案编码</p>
+     * @return
+     * @author 彭斌  2018年11月7日 下午4:18:30
+     */
+    @RequestMapping(value="/azz/api/sequence/getCaseCodeNumber",method=RequestMethod.GET)
+    public String getCaseCodeNumber() ;
+    
+    /**
+     * <p>推荐组合编码</p>
+     * @return
+     * @author 彭斌  2018年11月7日 下午4:18:33
+     */
+    @RequestMapping(value="/azz/api/sequence/getCombinationCodeNumber",method=RequestMethod.GET)
+    public String getCombinationCodeNumber() ;
+    
+    /**
+     * <p>获取客户端发票申请编码</p>
+     * @return
+     * @author 彭斌  2018年11月20日 上午10:01:31
+     */
+    @RequestMapping(value="/azz/api/sequence/getClientInvoiceApplyNumber",method=RequestMethod.GET)
+    public String getClientInvoiceApplyNumber() ;
+    
+    /**
+     * <p>获取商户端发票申请编码</p>
+     * @return
+     * @author 彭斌  2018年11月20日 上午10:01:34
+     */
+    @RequestMapping(value="/azz/api/sequence/getMerchantInvoiceApplyNumber",method=RequestMethod.GET)
+    public String getMerchantInvoiceApplyNumber() ;
+	
 }
 

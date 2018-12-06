@@ -38,7 +38,7 @@ import com.azz.system.bo.PayList;
 import com.azz.system.bo.SubmitPayParams;
 import com.azz.system.pay.mapper.PlatformPayMapper;
 import com.azz.system.pojo.PlatformPay;
-import com.azz.system.sequence.api.RandomSequenceService;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.DateUtils;
 import com.azz.util.DecimalUtil;
 import com.azz.util.JSR303ValidateUtils;
@@ -54,7 +54,7 @@ public class PlatfromPayService {
 	private ClientOrderService cos;
 
 	@Autowired
-	private RandomSequenceService rss;
+	private DbSequenceService rss;
 
 	@Autowired
 	private SelectionService selectService;
@@ -89,7 +89,7 @@ public class PlatfromPayService {
 		pfp.setPayType(spp.getOrderPayType());
 		pfp.setPayStatus((byte) PayStatus.NOT_PAID.getValue());// 支付状态 默认待支付
 		// pfp.setThreePartyNumber(); //
-		pfp.setPayNumber(rss.getPayCodeNumber());
+		pfp.setPayNumber(rss.getPersonlOrderNumber());
 		ppm.insertPay(pfp);
 
 		// 更新订单状态

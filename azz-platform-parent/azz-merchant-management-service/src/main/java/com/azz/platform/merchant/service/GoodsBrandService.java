@@ -35,7 +35,7 @@ import com.azz.platform.merchant.pojo.bo.GoodsBrandPic;
 import com.azz.platform.merchant.pojo.bo.SearchGoodsBrandParam;
 import com.azz.platform.merchant.pojo.vo.GoodsBrandInfo;
 import com.azz.system.api.SystemImageUploadService;
-import com.azz.system.sequence.api.RandomSequenceService;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
 import com.github.pagehelper.PageHelper;
@@ -53,7 +53,7 @@ public class GoodsBrandService {
 	private PlatformGoodsBrandMapper platformGoodsBrandMapper;
 	
 	@Autowired
-	private RandomSequenceService randomSequenceService;
+	private DbSequenceService dbSequenceService;
 	
 	@Autowired
     private SystemImageUploadService systemImageUploadService;
@@ -102,7 +102,7 @@ public class GoodsBrandService {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "品牌英文名称已存在");
 		}
 		GoodsBrandPic pic = param.getGoodsBrandPic();
-		String brandCode = randomSequenceService.getBrandCodeNumber();
+		String brandCode = dbSequenceService.getBrandCodeNumber();
 		// 上传模组图片
 		UploadFileInfo fileInfo = this.uploadBrandPic(pic, brandCode);
 		

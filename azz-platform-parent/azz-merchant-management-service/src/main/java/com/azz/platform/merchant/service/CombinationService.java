@@ -48,7 +48,7 @@ import com.azz.platform.merchant.pojo.vo.CombinationInfo;
 import com.azz.platform.merchant.pojo.vo.GoodsModuleInfo;
 import com.azz.platform.merchant.pojo.vo.ProdInfo;
 import com.azz.system.api.SystemImageUploadService;
-import com.azz.system.sequence.api.RandomSequenceService;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
 import com.github.pagehelper.PageHelper;
@@ -63,7 +63,7 @@ import com.github.pagehelper.PageHelper;
 public class CombinationService {
 	
 	@Autowired
-	private RandomSequenceService randomSequenceService;
+	private DbSequenceService dbSequenceService;
 	
 	@Autowired
     private SystemImageUploadService systemImageUploadService;
@@ -150,7 +150,7 @@ public class CombinationService {
 			}
 		}
 		CombinationPic pic = param.getCombinationPic();
-		String combinationCode = randomSequenceService.getCombinationCodeNumber();
+		String combinationCode = dbSequenceService.getCombinationCodeNumber();
 		// 上传模组图片
 		UploadFileInfo fileInfo = this.uploadCombinationPic(pic, combinationCode);
 		// 插入推荐组合记录

@@ -198,11 +198,11 @@ public class ParamsService {
 			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_ASSORTMENT_EXIST);	
 		
 		//一个分类只能被选中一次
-		int count = goodsParamsMapper.selectAssortCountByCode(key.getId());
+		/*int count = goodsParamsMapper.selectAssortCountByCode(key.getId());
 		LOG.info("新增参数分类存在次数------------>"+count);
 		if(count >= 1) {
 			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_TOOMANY);
-		}
+		}*/
 		List<PlatformGoodsParamsTerm> termByCode = goodsParamsTermMapper.selectParamsTermByCode(paramsByCode.getId());
 		StringBuilder sb = new StringBuilder();
 		if(null == termByCode || termByCode.size() <=0)

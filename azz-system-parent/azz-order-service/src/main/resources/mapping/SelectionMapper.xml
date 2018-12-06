@@ -613,9 +613,7 @@
 	JOIN client_selection_record csr ON csr.id = csc.selection_record_id
 	LEFT JOIN merchant_goods_product_price mgpp ON csr.product_price_id = mgpp.id 
 	LEFT JOIN client_user cu ON cu.id = csc.client_user_id
-	WHERE
-		csr.STATUS != 0
-	AND cu.client_user_code = #{clientUserCode}
+	WHERE cu.client_user_code = #{clientUserCode}
   </select>
   
   

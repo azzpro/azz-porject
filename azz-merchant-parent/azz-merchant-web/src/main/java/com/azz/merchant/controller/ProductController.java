@@ -28,6 +28,8 @@ import com.azz.merchant.pojo.vo.Module;
 import com.azz.merchant.pojo.vo.ProductParamsBrands;
 import com.azz.merchant.utils.WebUtils;
 
+import javafx.scene.web.WebEngineBuilder;
+
 /**
  * <P>TODO</P>
  * @version 1.0
@@ -48,6 +50,7 @@ public class ProductController {
 	 */
 	@RequestMapping(value="selectProductList",method=RequestMethod.GET)
 	JsonResult<Pagination<MerchantProductList>> selectProductList(MerchantProductParam param){
+		param.setMerchantId(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantId());
 		return productService.selectProductList(param);
 	}
 	

@@ -134,6 +134,8 @@ public class CombinationService {
 		if(count > 0) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "方案下推荐组合名称已存在");
 		}
+		
+		
 		List<String> moduleCodes = param.getModuleCodes();
 		List<Long> moduleIds = null;
 		if(moduleCodes != null && moduleCodes.size() != 0) {
@@ -142,13 +144,19 @@ public class CombinationService {
 			if(moduleIds.size() == 0) {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "所选模组不存在");
 			}
+			
 			// 同方案下关联商家模组是否完全一致
+			/* TODO
 			count = platformCombinationMapper.countCombinationModuleByCaseIdAndModuleIds(null, moduleIds, c.getId());
 			int moduleSize = moduleCodes.size();
 			if(count == moduleSize) {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "方案下存在商家模组配置一致的推荐组合");
 			}
+			*/
 		}
+		
+		
+		
 		CombinationPic pic = param.getCombinationPic();
 		String combinationCode = dbSequenceService.getCombinationCodeNumber();
 		// 上传模组图片
@@ -220,12 +228,15 @@ public class CombinationService {
 			if(moduleIds.size() == 0) {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "所选模组不存在");
 			}
+			
 			// 除本身的推荐组合以外的，同方案下关联商家模组是否完全一致
+			/* TODO
 			count = platformCombinationMapper.countCombinationModuleByCaseIdAndModuleIds(combinationCode, moduleIds, c.getId());
 			int moduleSize = moduleCodes.size();
 			if(count == moduleSize) {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "方案下存在商家模组配置一致的推荐组合");
 			}
+			*/
 		}
 		Date nowDate = new Date();
 		PlatformCombination combinationRecord = PlatformCombination.builder()

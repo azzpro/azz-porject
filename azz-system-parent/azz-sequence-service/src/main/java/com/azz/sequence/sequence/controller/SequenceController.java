@@ -12,19 +12,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.azz.sequence.sequence.service.ClientCompanySequence;
+import com.azz.sequence.sequence.service.ClientDeptSequenceService;
+import com.azz.sequence.sequence.service.ClientEmployeeSequence;
+import com.azz.sequence.sequence.service.ClientGuestSequence;
 import com.azz.sequence.sequence.service.ClientInvoiceApplySequenceService;
+import com.azz.sequence.sequence.service.ClientPowerSequence;
 import com.azz.sequence.sequence.service.MerchantDeptSequenceService;
 import com.azz.sequence.sequence.service.MerchantEmployeeSequenceService;
 import com.azz.sequence.sequence.service.MerchantInvoiceApplySequenceService;
 import com.azz.sequence.sequence.service.MerchantPowerSequenceService;
 import com.azz.sequence.sequence.service.MerchantTenantSequenceService;
-import com.azz.sequence.sequence.service.PayRandomSequenceService;
+import com.azz.sequence.sequence.service.OptionGroupSequence;
+import com.azz.sequence.sequence.service.OptionPlanSequence;
+import com.azz.sequence.sequence.service.OrderCompanySequence;
+import com.azz.sequence.sequence.service.OrderMerchantSequence;
+import com.azz.sequence.sequence.service.OrderPersonlSequence;
 import com.azz.sequence.sequence.service.PlatDeptSequenceService;
 import com.azz.sequence.sequence.service.PlatEmployeeSequenceService;
 import com.azz.sequence.sequence.service.PlatPowerSequenceService;
-import com.azz.sequence.sequence.service.RandomSequenceService;
-import com.azz.sequence.sequence.service.SevenRandomSequenceService;
-import com.azz.sequence.sequence.service.TenRandomSequenceService;
+import com.azz.sequence.sequence.service.ProductBrandSequence;
+import com.azz.sequence.sequence.service.ProductClassSequence;
+import com.azz.sequence.sequence.service.ProductMoudleSequence;
+import com.azz.sequence.sequence.service.ProductParamSequence;
+import com.azz.sequence.sequence.service.ProductParamTermSequence;
+import com.azz.sequence.sequence.service.ProductSequence;
 
 /**
  * <P>TODO</P>
@@ -37,7 +49,13 @@ public class SequenceController {
 
 	
 	@Autowired
-	private RandomSequenceService randomSequenceService;
+	private OrderCompanySequence orderCompanySequence;
+	
+	@Autowired
+	private OrderPersonlSequence orderPersonlSequence;
+	
+	@Autowired
+	private OrderMerchantSequence orderMerchantSequence;
 	
 	@Autowired
 	private PlatDeptSequenceService platDeptSequenceService;
@@ -61,28 +79,77 @@ public class SequenceController {
 	private MerchantEmployeeSequenceService merchantEmployeeSequenceService;
 	
 	@Autowired
-    private TenRandomSequenceService tenRandomSequenceService;
-	
-	@Autowired
-    private PayRandomSequenceService payRandomSequenceService;
-	
-	@Autowired
     private ClientInvoiceApplySequenceService clientInvoiceApplySequenceService;
 	
 	@Autowired
     private MerchantInvoiceApplySequenceService merchantInvoiceApplySequenceService;
 	
 	@Autowired
-    private SevenRandomSequenceService sevenRandomSequenceService;
+	private ClientCompanySequence clientCompanySequence;
 	
+	@Autowired
+	private ClientDeptSequenceService clientDeptSequenceService;
+	
+	@Autowired
+	private ClientEmployeeSequence clientEmployeeSequence;
+	
+	@Autowired
+	private ClientGuestSequence clientGuestSequence;
+	
+	@Autowired
+	private ClientPowerSequence clientPowerSequence;
+	
+	@Autowired
+	private OptionGroupSequence optionGroupSequence;
+	
+	@Autowired
+	private OptionPlanSequence optionPlanSequence;
+	
+	@Autowired
+	private ProductBrandSequence productBrandSequence;
+	
+	@Autowired
+	private ProductClassSequence productClassSequence;
+	
+	@Autowired
+	private ProductMoudleSequence productMoudleSequence;
+	
+	@Autowired
+	private ProductParamTermSequence productParamTermSequence;
+	
+	@Autowired
+	private ProductParamSequence productParamSequence;
+	
+	@Autowired
+	private ProductSequence productSequence;
 	/**
-	 * <p>支付流水号</p>
+	 * <p>个人订单编号</p>
 	 * @return
 	 * @author 刘建麟  2018年10月24日 下午4:36:33
 	 */
-	@RequestMapping(value="getPayCodeNumber",method=RequestMethod.GET)
-	public String getPayCodeNumber() {
-		return "IORP1"+payRandomSequenceService.getSequence();
+	@RequestMapping(value="getPersonlOrderNumber",method=RequestMethod.GET)
+	public String getPersonlOrderNumber() {
+		return orderPersonlSequence.getSequence();
+	}
+	
+	/**
+	 * <p>企业订单编号</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:36:33
+	 */
+	@RequestMapping(value="getCompanyOrderNumber",method=RequestMethod.GET)
+	public String getCompanyOrderNumber() {
+		return orderCompanySequence.getSequence();
+	}
+	
+	/**
+	 * <p>商户订单编号</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:36:33
+	 */
+	@RequestMapping(value="getMerchantOrderNumber",method=RequestMethod.GET)
+	public String getMerchantOrderNumber() {
+		return orderMerchantSequence.getSequence();
 	}
 	
 	/**
@@ -92,7 +159,7 @@ public class SequenceController {
 	 */
 	@RequestMapping(value="getClientCustomerNumber",method=RequestMethod.GET)
 	public String getClientCustomerNumber() {
-		return "IF"+randomSequenceService.getSequence();
+		return clientGuestSequence.getSequence();
 	}
 	
 	/**
@@ -102,7 +169,7 @@ public class SequenceController {
 	 */
 	@RequestMapping(value="getClientCompanyNumber",method=RequestMethod.GET)
 	public String getClientCompanyNumber() {
-		return "IG"+randomSequenceService.getSequence();
+		return clientCompanySequence.getSequence();
 	}
 	
 	/**
@@ -112,7 +179,7 @@ public class SequenceController {
 	 */
 	@RequestMapping(value="getClientEmployeeNumber",method=RequestMethod.GET)
 	public String getClientEmployeeNumber() {
-		return "IJ"+randomSequenceService.getSequence();
+		return clientEmployeeSequence.getSequence();
 	}
 	
 	/**
@@ -122,7 +189,7 @@ public class SequenceController {
 	 */
 	@RequestMapping(value="getClientDepartmentNumber",method=RequestMethod.GET)
 	public String getClientDepartmentNumber() {
-		return "IK"+randomSequenceService.getSequence();
+		return clientDeptSequenceService.getSequence();
 	}
 	
 	/**
@@ -132,7 +199,7 @@ public class SequenceController {
 	 */
 	@RequestMapping(value="getClientPowerNumber",method=RequestMethod.GET)
 	public String getClientPowerNumber() {
-		return "IM"+randomSequenceService.getSequence();
+		return clientPowerSequence.getSequence();
 	}
 	
 	/**
@@ -213,7 +280,7 @@ public class SequenceController {
 	 */
 	@RequestMapping(value="getClassificationNumber",method=RequestMethod.GET)
     public String getClassificationNumber() {
-        return "IGA" + tenRandomSequenceService.getSequence();
+        return productClassSequence.getSequence();
     }
 	
 	/**
@@ -223,7 +290,7 @@ public class SequenceController {
 	 */
 	@RequestMapping(value="getBrandCodeNumber",method=RequestMethod.GET)
     public String getBrandCodeNumber() {
-        return "IGB" + tenRandomSequenceService.getSequence();
+        return productBrandSequence.getSequence();
     }
 	
 	/**
@@ -233,19 +300,19 @@ public class SequenceController {
 	 */
 	@RequestMapping(value="getParameterItemCodeNumber",method=RequestMethod.GET)
     public String getParameterItemCodeNumber() {
-        return "IGC" + tenRandomSequenceService.getSequence();
+        return productParamTermSequence.getSequence();
     }
 	
-    /**
-     * <p>产品参数编号</p>
-     * @return
-     * @author 彭斌  2018年10月31日 上午11:38:14
-     */
-    @RequestMapping(value="getProductParameterCodeNumber",method=RequestMethod.GET)
-    public String getProductParameterCodeNumber() {
-        return "IGD" + tenRandomSequenceService.getSequence();
+	/**
+	 * <p>参数编号</p>
+	 * @return
+	 * @author 彭斌  2018年10月31日 上午11:35:56
+	 */
+	@RequestMapping(value="getParameterCodeNumber",method=RequestMethod.GET)
+    public String getParameterCodeNumber() {
+        return productParamSequence.getSequence();
     }
-    
+	
     /**
      * <p>产品编码</p>
      * @return
@@ -253,7 +320,7 @@ public class SequenceController {
      */
     @RequestMapping(value="getProductCodeNumber",method=RequestMethod.GET)
     public String getProductCodeNumber() {
-        return "IGF" + tenRandomSequenceService.getSequence();
+        return productSequence.getSequence();
     }
     
     /**
@@ -263,7 +330,7 @@ public class SequenceController {
      */
     @RequestMapping(value="getModuleCodeNumber",method=RequestMethod.GET)
     public String getModuleCodeNumber() {
-        return "IGG" + tenRandomSequenceService.getSequence();
+        return productMoudleSequence.getSequence();
     }
     
     /**
@@ -273,7 +340,7 @@ public class SequenceController {
      */
     @RequestMapping(value="getCaseCodeNumber",method=RequestMethod.GET)
     public String getCaseCodeNumber() {
-        return "IRA" + randomSequenceService.getSequence();
+        return optionPlanSequence.getSequence();
     }
     
     /**
@@ -283,7 +350,7 @@ public class SequenceController {
      */
     @RequestMapping(value="getCombinationCodeNumber",method=RequestMethod.GET)
     public String getCombinationCodeNumber() {
-        return "IRB" + randomSequenceService.getSequence();
+        return optionGroupSequence.getSequence();
     }
     
     /**
@@ -304,26 +371,6 @@ public class SequenceController {
     @RequestMapping(value="getMerchantInvoiceApplyNumber",method=RequestMethod.GET)
     public String getMerchantInvoiceApplyNumber() {
         return merchantInvoiceApplySequenceService.getSequence();
-    }
-    
-    /**
-     * <p>获取客户个人订单编号</p>
-     * @return
-     * @author 彭斌  2018年11月26日 下午3:49:49
-     */
-    @RequestMapping(value="getClientPersonalOrderCodeNumber",method=RequestMethod.GET)
-    public String getClientPersonalOrderCodeNumber() {
-        return "IOR1" + sevenRandomSequenceService.getSequence();
-    }
-    
-    /**
-     * <p>获取商户订单编号</p>
-     * @return
-     * @author 彭斌  2018年11月26日 下午3:49:49
-     */
-    @RequestMapping(value="getMerchantOrderCodeNumber",method=RequestMethod.GET)
-    public String getMerchantOrderCodeNumber() {
-        return "IOR3" + sevenRandomSequenceService.getSequence();
     }
     
 }

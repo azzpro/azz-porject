@@ -53,7 +53,7 @@ import com.azz.order.platform.vo.MerchantOrderInfo;
 import com.azz.order.platform.vo.MerchantOrderItemInfo;
 import com.azz.order.platform.vo.OrderOperationRecord;
 import com.azz.order.platform.vo.PlatformClientOrderInfo;
-import com.azz.system.sequence.api.RandomSequenceService;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
 import com.github.pagehelper.PageHelper;
@@ -85,8 +85,7 @@ public class PlatformClientOrderService {
 	@Autowired
 	private MerchantOrderItemMapper merchantOrderItemMapper;
 	
-	@Autowired
-	private RandomSequenceService randomSequenceService;
+	private DbSequenceService dbSequenceService;
 	
 	/**
 	 * 
@@ -226,7 +225,7 @@ public class PlatformClientOrderService {
 					.createTime(nowDate)
 					.grandTotal(merchantOrderInfo.getEachMerchantGrandTotal())
 					.merchantId(merchant.getId())
-					.merchantOrderCode(randomSequenceService.getMerchantOrderCodeNumber())
+					.merchantOrderCode(dbSequenceService.getMerchantOrderNumber())
 					.orderStatusId(MerchantOrderStatusEnum.NOT_CONFIRMED.getValue())
 					.orderType(MerchantOrderType.PERSON.getValue())
 					.remark(info.getRemark())

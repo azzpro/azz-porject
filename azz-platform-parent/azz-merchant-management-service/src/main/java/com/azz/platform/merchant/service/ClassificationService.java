@@ -31,7 +31,7 @@ import com.azz.platform.merchant.pojo.vo.Classification;
 import com.azz.platform.merchant.pojo.vo.ClassificationList;
 import com.azz.platform.merchant.pojo.vo.ClassificationParams;
 import com.azz.system.api.SystemImageUploadService;
-import com.azz.system.sequence.api.RandomSequenceService;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
 import com.azz.util.StringUtils;
@@ -55,7 +55,7 @@ public class ClassificationService {
     PlatformGoodsParamsMapper platformGoodsParamsMapper;
 
     @Autowired
-    private RandomSequenceService randomSequenceService;
+    private DbSequenceService dbSequenceService;
 
     @Autowired
     private SystemImageUploadService systemImageUploadService;
@@ -76,7 +76,7 @@ public class ClassificationService {
         ClassificationPic cp = param.getClassificationPic();
         String originalFileName = cp.getFileName();
         // 分类编码
-        String classificationCode = randomSequenceService.getClassificationNumber();
+        String classificationCode = dbSequenceService.getClassificationNumber();
         
         if (StringUtils.isBlank(originalFileName)) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,

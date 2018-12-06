@@ -57,9 +57,9 @@ import com.azz.core.constants.ClientConstants;
 import com.azz.core.constants.ClientConstants.IsEnterpriseAuthenticator;
 import com.azz.core.constants.ClientConstants.QualificationApplyStatus;
 import com.azz.core.constants.ClientConstants.UserStatus;
-import com.azz.core.constants.SmsConstants.SmsCode;
 import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.SmsConstants;
+import com.azz.core.constants.SmsConstants.SmsCode;
 import com.azz.core.constants.UserConstants.ClientType;
 import com.azz.core.exception.BaseException;
 import com.azz.core.exception.ShiroAuthException;
@@ -70,7 +70,7 @@ import com.azz.system.api.SystemSmsSendService;
 import com.azz.system.bo.SmsCheck;
 import com.azz.system.bo.SmsCodeValidation;
 import com.azz.system.bo.SmsParams;
-import com.azz.system.sequence.api.RandomSequenceService;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.system.vo.SmsInfo;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.PasswordHelper;
@@ -116,7 +116,7 @@ public class ClientService {
     private SystemImageUploadService systemImageUploadService;
     
     @Autowired
-    private RandomSequenceService randomSequenceService;
+    private DbSequenceService dbSequenceService;
     
     @Autowired
     private SystemSmsSendService systemSmsSendService;
@@ -200,7 +200,7 @@ public class ClientService {
 	// 校验验证码
 	this.checkVerificationCode(phoneNumber, param.getVerificationCode());
 
-	String clientUserCode = randomSequenceService.getClientNumber();
+	String clientUserCode = dbSequenceService.getClientCustomerNumber();
 	// 生成盐值加密的密码
 	Password pwd = PasswordHelper.encryptPasswordByModel(password);
 	ClientUser clientUserRecord = ClientUser.builder()
@@ -300,7 +300,7 @@ public class ClientService {
 	    }
 	}
 	
-	String companyCode = randomSequenceService.getCompanyNumber();
+	String companyCode = dbSequenceService.getClientCompanyNumber();
 	Date nowDate = new Date();
 	ClientUserCompany clientUserCompanyRecord = ClientUserCompany.builder()
 		.clientUserCode(clientUserCode)
@@ -409,7 +409,7 @@ public class ClientService {
 	    Password pwd = PasswordHelper.encryptPasswordByModel(password + "");
 	    Date nowDate = new Date();
 	    String creator = param.getCreator();
-	    String clientUserCode = randomSequenceService.getClientNumber();
+	    String clientUserCode = dbSequenceService.getClientCustomerNumber();
 	    ClientUser userRecord = ClientUser.builder().createTime(nowDate).creator(creator)
 		    .clientDeptId(dept.getId()).email(param.getEmail()).password(pwd.getPassword()).phoneNumber(phoneNumber)
 		    .postName(param.getPostName()).clientUserCode(clientUserCode)

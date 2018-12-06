@@ -1,48 +1,30 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2018年10月24日 上午11:50:22
+ * Create on 2018年10月24日 上午11:50:38
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
 package com.azz.sequence.sequence.service.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 
-import javax.sql.DataSource;
-
-import org.quartz.CronExpression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
-import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
-import com.azz.sequence.config.DbSequenceConfig;
 import com.azz.sequence.config.SequenceConfig;
-import com.azz.sequence.sequence.service.ClientInvoiceApplySequenceService;
+import com.azz.sequence.sequence.service.OrderPersonlSequence;
 
 /**
- * <P>TODO</P>
+ * <P>支付第三方编码随机十位</P>
  * @version 1.0
- * @author 彭斌  2018年11月20日 上午9:54:11
+ * @author 彭斌  2018年10月31日 上午11:12:58
  */
 @Service
-public class ClientInvoiceApplySequenceServiceImpl implements ClientInvoiceApplySequenceService{
-
+public class OrderPersonlSequenceImpl implements OrderPersonlSequence{
+	
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	/**
      * 序列哈片段长度
@@ -61,7 +43,7 @@ public class ClientInvoiceApplySequenceServiceImpl implements ClientInvoiceApply
 	@Override
 	public String getSequence() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("CB")
+		sb.append("PO")
 		.append(getYear()).append(getMonth()).append(getDay());
         if (sb.toString().length() != length) {
             throw new RuntimeException("the length of " + sb.toString() + " is illegal!");
@@ -71,7 +53,7 @@ public class ClientInvoiceApplySequenceServiceImpl implements ClientInvoiceApply
 
 	@Override
 	public String getType() {
-		return "ClientInvoiceApplyCodeSequence";
+		return "OrderPersonlSequence";
 	}
 	
 	

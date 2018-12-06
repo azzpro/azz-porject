@@ -33,7 +33,7 @@ import com.azz.platform.client.pojo.ClientUserCompany;
 import com.azz.platform.client.pojo.ClientUserRole;
 import com.azz.platform.client.pojo.bo.AuditParam;
 import com.azz.platform.client.pojo.vo.Permission;
-import com.azz.system.sequence.api.RandomSequenceService;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
 
@@ -71,7 +71,7 @@ public class AuditService {
     ClientUserRoleMapper clientUserRoleMapper;
     
     @Autowired
-    private RandomSequenceService randomSequenceService;
+    private DbSequenceService dbSequenceService;
     
     public JsonResult<String> auditClient(@RequestBody AuditParam param) {
         JSR303ValidateUtils.validate(param);
@@ -127,7 +127,7 @@ public class AuditService {
                     .companyCode(param.getCompanyCode())
                     .remark("审核通过，新增客户的管理员角色")
                     .roleName("管理员")
-                    .roleCode(randomSequenceService.getPowermentNumber())
+                    .roleCode(dbSequenceService.getPlatPowerNumber())
                     .build();
             clientRoleMapper.insertSelective(roleRecord);
             

@@ -14,6 +14,6 @@ import com.azz.sequence.base.service.SystemSequenceService;
  * @version 1.0
  * @author 刘建麟  2018年10月24日 上午11:33:37
  */
-public interface SevenRandomSequenceService extends SystemSequenceService{
+public interface OrderMerchantSequence extends SystemSequenceService{
 }
 

@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +55,7 @@ import com.azz.merchant.pojo.vo.MerchantProductList;
 import com.azz.merchant.pojo.vo.Module;
 import com.azz.merchant.pojo.vo.ParamsValue;
 import com.azz.merchant.pojo.vo.ProductParamsBrands;
-import com.azz.system.sequence.api.RandomSequenceService;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.github.pagehelper.PageHelper;
 
@@ -80,7 +79,7 @@ public class ProductService {
 	private MerchantGoodsModuleMapper goodsModuleMapper;
 	
 	@Autowired
-	private RandomSequenceService randomSequenceService;
+	private DbSequenceService dbSequenceService;
 	
 	@Autowired
 	private MerchantGoodsProductPriceMapper goodsProductPriceMapper;
@@ -334,7 +333,7 @@ public class ProductService {
 				mgp.setCreator(params.getCreator());
 				mgp.setModuleId(goodsModule.getId());
 				mgp.setProductCode(params.getProductCode());
-				mgp.setProductSystemCode(randomSequenceService.getProductCodeNumber());
+				mgp.setProductSystemCode(dbSequenceService.getProductCodeNumber());
 				mgp.setProductStatus(params.getStatus());
 				mgp.setBrandId(brandId);
 				mgp.setMerchantId(params.getMerchantId());

@@ -32,7 +32,7 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.ClientErrorCode;
 import com.azz.core.constants.ClientConstants;
 import com.azz.core.exception.BaseException;
-import com.azz.system.sequence.api.RandomSequenceService;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
 
@@ -51,7 +51,7 @@ public class ClientDeptService {
     private ClientDeptMapper clientDeptMapper;
     
     @Autowired
-    private RandomSequenceService randomSequenceService;
+    private DbSequenceService dbSequenceService;
     
     public JsonResult<List<ClientDeptList>> searchClientDeptList(@RequestBody SearchClientDeptParam param){
         JSR303ValidateUtils.validate(param);
@@ -170,7 +170,7 @@ public class ClientDeptService {
             throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_EXIST);
         }
         ClientDept clientDept = new ClientDept();
-        clientDept.setDeptCode(randomSequenceService.getDepartmentNumber());
+        clientDept.setDeptCode(dbSequenceService.getClientDepartmentNumber());
         clientDept.setCompanyCode(param.getCompanyCode());
         clientDept.setCreateTime(new Date());
         clientDept.setDeptName(param.getDeptName());
@@ -221,7 +221,7 @@ public class ClientDeptService {
             }
         }
         
-        clientDept.setDeptCode(randomSequenceService.getDepartmentNumber());
+        clientDept.setDeptCode(dbSequenceService.getClientDepartmentNumber());
         clientDept.setCompanyCode(param.getCompanyCode());
         clientDept.setCreateTime(new Date());
         clientDept.setDeptName(param.getDeptName());

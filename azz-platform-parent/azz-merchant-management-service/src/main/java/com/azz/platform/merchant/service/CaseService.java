@@ -37,7 +37,7 @@ import com.azz.platform.merchant.pojo.vo.CaseList;
 import com.azz.platform.merchant.pojo.vo.CaseParams;
 import com.azz.platform.merchant.pojo.vo.CaseParamsList;
 import com.azz.system.api.SystemImageUploadService;
-import com.azz.system.sequence.api.RandomSequenceService;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
 import com.azz.util.StringUtils;
@@ -63,7 +63,7 @@ public class CaseService {
     PlatformCaseClassificationParamsMapper platformCaseClassificationParamsMapper;
     
     @Autowired
-    private RandomSequenceService randomSequenceService;
+    private DbSequenceService dbSequenceService;
    
     @Autowired
     PlatformGoodsClassificationMapper platformGoodsClassificationMapper;
@@ -113,7 +113,7 @@ public class CaseService {
         }
         
         // 新增方案编码
-        String caseCode = randomSequenceService.getCaseCodeNumber();
+        String caseCode = dbSequenceService.getCaseCodeNumber();
         
         if (StringUtils.isBlank(originalFileName)) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,

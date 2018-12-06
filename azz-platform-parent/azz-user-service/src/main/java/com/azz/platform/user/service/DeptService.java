@@ -95,9 +95,14 @@ public class DeptService{
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
         }
         String parentCode = param.getParentCode();
-        if("".equals(parentCode)) {
-            parentCode = "0";
+        
+        if(!parentCode.equals("0")) {
+            PlatformDept deptObjCode = deptMapper.selectByDeptCode(parentCode);
+            if(ObjectUtils.isNull(deptObjCode)) {
+                throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
+            }
         }
+        
         if (!dept.getDeptName().equals(param.getDeptName().trim())) {
             int count = deptMapper.selectCountByParam(parentCode, param.getDeptName().trim());
             if(count>0) {

@@ -14,6 +14,7 @@ import java.util.Objects;
 import java.util.TreeSet;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +40,7 @@ import com.azz.platform.merchant.pojo.bo.ParamsData;
 import com.azz.platform.merchant.pojo.bo.SearchParams;
 import com.azz.platform.merchant.pojo.vo.Params;
 import com.azz.platform.merchant.pojo.vo.ParamsAll;
-import com.azz.system.sequence.api.RandomSequenceService;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.github.pagehelper.PageHelper;
 
@@ -50,6 +51,8 @@ import com.github.pagehelper.PageHelper;
  */
 @Service
 public class ParamsService {
+	
+	private final Logger LOG = org.slf4j.LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private PlatformGoodsParamsMapper goodsParamsMapper;
@@ -61,7 +64,7 @@ public class ParamsService {
 	private PlatformGoodsParamsValueMapper goodsParamsValueMapper;
 	
 	@Autowired
-	private RandomSequenceService randomSequenceService;
+	private DbSequenceService dbSequenceService;
 	
 	@Autowired
 	private ProductService productService;
@@ -173,9 +176,10 @@ public class ParamsService {
 		
 		//一个分类只能被选中一次
 		int count = goodsParamsMapper.selectAssortCountByCode(key.getId());
-		if(count > 1)
+		LOG.info("新增参数分类存在次数------------>"+count);
+		if(count > 1) {
 			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_TOOMANY);
-		
+		}
 		List<PlatformGoodsParamsTerm> termByCode = goodsParamsTermMapper.selectParamsTermByCode(paramsByCode.getId());
 		StringBuilder sb = new StringBuilder();
 		if(null == termByCode || termByCode.size() <=0)
@@ -220,7 +224,7 @@ public class ParamsService {
 						goodsParamsTerm.setCreateTime(new Date());
 						goodsParamsTerm.setCreator(ppt.getCreator());
 						goodsParamsTerm.setParamsId(paramsByCode.getId());
-						goodsParamsTerm.setParamsCode(randomSequenceService.getParameterItemCodeNumber());
+						goodsParamsTerm.setParamsCode(dbSequenceService.getParameterItemCodeNumber());
 						goodsParamsTermMapper.insertSelective(goodsParamsTerm);
 						//获取主键
 						Long ids = goodsParamsTerm.getId();
@@ -267,10 +271,12 @@ public class ParamsService {
 					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_CODE_NOTEXIST);
 				//当前分类只能存在一次
 				int count = goodsParamsMapper.selectAssortCountByCode(code.getId());
-				if(count > 1)
+				LOG.info("新增参数分类存在次数------------>"+count);
+				if(count > 1) {
 					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_TOOMANY);
+				}
 				PlatformGoodsParams goodsParams = new PlatformGoodsParams();
-				goodsParams.setParamsCode(randomSequenceService.getProductParameterCodeNumber());
+				goodsParams.setParamsCode(dbSequenceService.getParameterCodeNumber());
 				goodsParams.setCreator(ppt.getCreator());
 				goodsParams.setCreateTime(new Date());
 				goodsParams.setAssortmentId(code.getId());
@@ -288,7 +294,7 @@ public class ParamsService {
 						goodsParamsTerm.setCreateTime(new Date());
 						goodsParamsTerm.setCreator(ppt.getCreator());
 						goodsParamsTerm.setParamsId(id2);
-						goodsParamsTerm.setParamsCode(randomSequenceService.getParameterItemCodeNumber());
+						goodsParamsTerm.setParamsCode(dbSequenceService.getParameterItemCodeNumber());
 						goodsParamsTermMapper.insertSelective(goodsParamsTerm);
 						//获取主键
 						Long id = goodsParamsTerm.getId();

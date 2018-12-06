@@ -14,6 +14,7 @@ import java.util.Objects;
 import java.util.TreeSet;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +51,8 @@ import com.github.pagehelper.PageHelper;
  */
 @Service
 public class ParamsService {
+	
+	private final Logger LOG = org.slf4j.LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private PlatformGoodsParamsMapper goodsParamsMapper;
@@ -173,9 +176,10 @@ public class ParamsService {
 		
 		//一个分类只能被选中一次
 		int count = goodsParamsMapper.selectAssortCountByCode(key.getId());
-		if(count > 1)
+		LOG.info("新增参数分类存在次数------------>"+count);
+		if(count > 1) {
 			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_TOOMANY);
-		
+		}
 		List<PlatformGoodsParamsTerm> termByCode = goodsParamsTermMapper.selectParamsTermByCode(paramsByCode.getId());
 		StringBuilder sb = new StringBuilder();
 		if(null == termByCode || termByCode.size() <=0)
@@ -267,8 +271,10 @@ public class ParamsService {
 					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_CODE_NOTEXIST);
 				//当前分类只能存在一次
 				int count = goodsParamsMapper.selectAssortCountByCode(code.getId());
-				if(count > 1)
+				LOG.info("新增参数分类存在次数------------>"+count);
+				if(count > 1) {
 					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_TOOMANY);
+				}
 				PlatformGoodsParams goodsParams = new PlatformGoodsParams();
 				goodsParams.setParamsCode(dbSequenceService.getParameterCodeNumber());
 				goodsParams.setCreator(ppt.getCreator());

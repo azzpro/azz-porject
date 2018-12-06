@@ -37,5 +37,7 @@ public interface MerchantDeptMapper {
     
     MerchantDept selectByDeptCode(SearchMerchantDeptInfoParam param);
     
+    int countDeptMerchantUser(SearchMerchantDeptInfoParam param);
     
+    int countSubDept(String deptCode);
 }

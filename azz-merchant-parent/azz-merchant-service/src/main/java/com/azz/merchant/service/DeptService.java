@@ -198,9 +198,21 @@ public class DeptService {
     
     public JsonResult<String> delDept(@RequestBody DelDeptParam param){
         JSR303ValidateUtils.validate(param);
+        
+        // 校验部门是否存在用户
         SearchMerchantDeptInfoParam deptParam = new SearchMerchantDeptInfoParam();
         deptParam.setMerchantId(param.getMerchantId());
         deptParam.setDeptCode(param.getDeptCode());
+        
+        int size = merchantDeptMapper.countDeptMerchantUser(deptParam);
+        if(size > 0) {
+            throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_USER_EXIST);
+        }
+        
+        int subDept = merchantDeptMapper.countSubDept(param.getDeptCode());
+        if(subDept > 0) {
+            throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_EXIST);
+        }
         
         MerchantDept record = merchantDeptMapper.selectByDeptCode(deptParam);
         record.setStatus(MerchantConstants.DeptStatus.INVALID.getValue());

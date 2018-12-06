@@ -50,7 +50,7 @@ public class PlatformUserErrorCode extends BaseErrorCode{
     
     // 商品管理错误代码
     public static final PlatformUserErrorCode PLATFORM_PRODUCT_CLASSIFICATION_NO_EXIST = new PlatformUserErrorCode(60000, "分类不存在");
-    public static final PlatformUserErrorCode PLATFORM_SAME_CLASSIFICATION_ID = new PlatformUserErrorCode(60001, "上级分类ID相同");
+    public static final PlatformUserErrorCode PLATFORM_SAME_CLASSIFICATION_ID = new PlatformUserErrorCode(60001, "分类名称已存在！");
     public static final PlatformUserErrorCode PLATFORM_PRODUCT_CHILD_CLASSIFICATION_EXIST = new PlatformUserErrorCode(60002, "存在子分类，请移除后再删除！");
     public static final PlatformUserErrorCode PLATFORM_PRODUCT_THIRD_LEVEL_CLASSIFICATION = new PlatformUserErrorCode(60003, "已是三级分类");
     public static final PlatformUserErrorCode PLATFORM_PRODUCT_CLASSIFICATION_EXIST = new PlatformUserErrorCode(60004, "分类下存在产品信息！");

@@ -132,6 +132,7 @@ public class ClassificationService {
         SearchSameLevelClassification searchSameLevelClassification = new SearchSameLevelClassification();
         searchSameLevelClassification.setAssortmentName(param.getAssortmentName());
         searchSameLevelClassification.setAssortmentTop(record.getAssortmentTop());
+        searchSameLevelClassification.setAssortmentParentCode(param.getAssortmentParentCode());
         int count = platformGoodsClassificationMapper.selectSameLevelClassification(searchSameLevelClassification);
         
         if (count > 0) {
@@ -237,6 +238,7 @@ public class ClassificationService {
             SearchSameLevelClassification searchSameLevelClassification = new SearchSameLevelClassification();
             searchSameLevelClassification.setAssortmentName(param.getAssortmentName());
             searchSameLevelClassification.setAssortmentTop(pgcObj.getAssortmentTop());
+            searchSameLevelClassification.setAssortmentParentCode(param.getAssortmentParentCode());
             int count = platformGoodsClassificationMapper.selectSameLevelClassification(searchSameLevelClassification);
             
             if (count > 0) {

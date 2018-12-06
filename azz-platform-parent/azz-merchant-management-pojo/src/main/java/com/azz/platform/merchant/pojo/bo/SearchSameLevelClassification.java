@@ -18,5 +18,6 @@ import lombok.Data;
 public class SearchSameLevelClassification {
     private String assortmentName;
     private Byte assortmentTop;
+    private String assortmentParentCode;
 }
 

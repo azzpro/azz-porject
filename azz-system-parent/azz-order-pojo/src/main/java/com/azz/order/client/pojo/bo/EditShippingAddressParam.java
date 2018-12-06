@@ -42,10 +42,8 @@ public class EditShippingAddressParam {
 	@NotBlank(message = "请选择市")
 	private String cityName;
 
-	@NotBlank(message = "请选择区")
 	private String areaCode;
 
-	@NotBlank(message = "请选择区")
 	private String areaName;
 
 	@NotBlank(message = "请填写详细地址	")

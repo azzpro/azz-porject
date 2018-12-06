@@ -264,7 +264,7 @@
   <select id="selectSameLevelClassification" parameterType="com.azz.platform.merchant.pojo.bo.SearchSameLevelClassification" resultType="int">
   	SELECT count(1) FROM platform_goods_classification pgc 
   	WHERE pgc.assortment_name = #{assortmentName} 
-  	AND pgc.assortment_top = #{assortmentTop}
+  	AND pgc.assortment_top = #{assortmentTop} AND pgc.status != 0
   </select>
   
   <select id="selectParentByAssortmentName" parameterType="com.azz.platform.merchant.pojo.bo.SearchClassificationListParam" resultType="com.azz.platform.merchant.pojo.vo.ClassificationParams">

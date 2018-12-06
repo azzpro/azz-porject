@@ -607,6 +607,9 @@
 		<if test="null != clientOrderCode and '' != clientOrderCode">
 			AND cop.client_order_code = #{clientOrderCode}
 		</if>
+		<if test="null == clientOrderCode or '' == clientOrderCode">
+			AND (cop.order_status_id = 4 or cop.invoice_status = 0)
+		</if>
 	ORDER BY cop.create_time DESC
   </select>
   

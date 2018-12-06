@@ -135,7 +135,7 @@ public class ClassificationService {
         int count = platformGoodsClassificationMapper.selectSameLevelClassification(searchSameLevelClassification);
         
         if (count > 0) {
-            throw new BaseException(PlatformUserErrorCode.PLATFORM_PRODUCT_CLASSIFICATION_EXIST);
+            throw new BaseException(PlatformUserErrorCode.PLATFORM_SAME_CLASSIFICATION_ID);
         }
        
         record.setAssortmentCode(classificationCode);
@@ -240,7 +240,7 @@ public class ClassificationService {
             int count = platformGoodsClassificationMapper.selectSameLevelClassification(searchSameLevelClassification);
             
             if (count > 0) {
-                throw new BaseException(PlatformUserErrorCode.PLATFORM_PRODUCT_CLASSIFICATION_EXIST);
+                throw new BaseException(PlatformUserErrorCode.PLATFORM_SAME_CLASSIFICATION_ID);
             }
             pgcObj.setAssortmentName(param.getAssortmentName());
         }

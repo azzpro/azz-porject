@@ -26,11 +26,13 @@ public class PlatformUserErrorCode extends BaseErrorCode{
     
     public static final PlatformUserErrorCode PLATFORM_DEPT_STATUS_ERROR_NO_EXIST = new PlatformUserErrorCode(30002, "部门状态不存在");
     
-    public static final PlatformUserErrorCode PLATFORM_DEPT_USER_EXIST = new PlatformUserErrorCode(30003, "部门下存在子部门，请处理后删除");
+    public static final PlatformUserErrorCode PLATFORM_DEPT_USER_EXIST = new PlatformUserErrorCode(30003, "部门下绑定成员信息，请处理后删除");
     
     public static final PlatformUserErrorCode PLATFORM_DEPT_LEVEL_ERROR = new PlatformUserErrorCode(30004, "已是三级部门");
     
     public static final PlatformUserErrorCode PLATFORM_DEPT_CODE_ERROR = new PlatformUserErrorCode(30005, "不许绑定自身编码");
+    
+    public static final PlatformUserErrorCode PLATFORM_DEPT_EXIST = new PlatformUserErrorCode(30006, "部门下存在子部门，请处理后删除");
     
     // 商户审核错误码
     public static final PlatformUserErrorCode PLATFORM_MERCHANT_ERROR_NO_EXIST = new PlatformUserErrorCode(40000, "商户不存在");

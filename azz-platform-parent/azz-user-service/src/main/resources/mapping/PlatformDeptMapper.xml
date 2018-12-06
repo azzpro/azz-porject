@@ -226,7 +226,7 @@
   
   <select id="selectCountDeptUser" parameterType="java.lang.String" resultType="int">
   	SELECT count(1) FROM platform_dept dept 
-	LEFT JOIN platform_user pu ON dept.id = pu.dept_id
+	JOIN platform_user pu ON dept.id = pu.dept_id
 	WHERE dept.dept_code = #{deptCode,jdbcType=VARCHAR} AND dept.status != 0
   </select>
 </mapper>

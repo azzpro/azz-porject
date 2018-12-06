@@ -22,7 +22,7 @@ public class PlatformUserErrorCode extends BaseErrorCode{
     // 关于部门错误码
     public static final PlatformUserErrorCode PLATFORM_DEPT_ERROR_EXIST = new PlatformUserErrorCode(30000, "部门已存在");
     
-    public static final PlatformUserErrorCode PLATFORM_DEPT_ERROR_NO_EXIST = new PlatformUserErrorCode(30001, "部门不存在");
+    public static final PlatformUserErrorCode PLATFORM_DEPT_ERROR_NO_EXIST = new PlatformUserErrorCode(30001, "部门编码不存在");
     
     public static final PlatformUserErrorCode PLATFORM_DEPT_STATUS_ERROR_NO_EXIST = new PlatformUserErrorCode(30002, "部门状态不存在");
     

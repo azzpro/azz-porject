@@ -26,7 +26,7 @@
     module_info
   </sql>
   <select id="selectModuleByAssorId" resultType="com.azz.merchant.pojo.vo.Module" parameterType="com.azz.merchant.pojo.bo.ModuleParams">
-  select id moduleId,module_code moduleCode, module_name moduleName,module_status moduleStatus from merchant_goods_module where 1=1
+  select id moduleId,module_code moduleCode, module_name moduleName,module_status moduleStatus from merchant_goods_module where 1=1 and module_status != 0
   <if test="assortmentId != null">
   and classification_id = #{assortmentId}
   </if>

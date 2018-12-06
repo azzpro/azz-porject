@@ -151,21 +151,21 @@ azz:
     -
      id: OrderPersonlSequence #个人订单
      type: OrderPersonlSequence
-     args: {length: '5'}
+     args: {id: 'PO', maxSequenceValue: '99999', length: '5', step: '5'}
     -
      id: OrderCompanySequence #企业订单
      type: OrderCompanySequence
-     args: {length: '5'}
+     args: {id: 'CO', maxSequenceValue: '99999', length: '5', step: '5'}
     -
      id: OrderMerchantSequence #商户订单
      type: OrderMerchantSequence
-     args: {length: '5'}
+     args: {id: 'MO', maxSequenceValue: '99999', length: '5', step: '5'}
     -
      id: ClientInvoiceApplySequence #客户开票
      type: ClientInvoiceApplyCodeSequence
-     args: {length: '5'}
+     args: {id: 'CB', maxSequenceValue: '99999', length: '5', step: '5'}
     -
      id: MerchantInvoiceApplySequence #商户开票
      type: MerchantInvoiceApplyCodeSequence
-     args: {length: '5'}
+     args: {id: 'MB', maxSequenceValue: '99999', length: '5', step: '5'}
   

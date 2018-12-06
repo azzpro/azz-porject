@@ -22,6 +22,8 @@ import lombok.EqualsAndHashCode;
 public class SearchGoodsModuleParam extends QueryPage{
 
 	private static final long serialVersionUID = -1543422342458159183L;
+	
+	private String caseCode;
 
 	private Byte moduleStatus;
 	

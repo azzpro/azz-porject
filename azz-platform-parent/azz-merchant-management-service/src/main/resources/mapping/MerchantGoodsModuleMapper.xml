@@ -282,6 +282,7 @@
 	LEFT JOIN platform_goods_classification pgc3 ON mgd.classification_id = pgc3.id
 	LEFT JOIN platform_goods_classification pgc2 ON pgc3.assortment_parent_code = pgc2.assortment_code
 	LEFT JOIN platform_goods_classification pgc1 ON pgc2.assortment_parent_code = pgc1.assortment_code
+	JOIN platform_case pc on pc.classification_id = pgc3.id and pc.case_code = #{caseCode}
 	<where>
 		mgd.module_status != 0
 		<if test="moduleStatus != null">

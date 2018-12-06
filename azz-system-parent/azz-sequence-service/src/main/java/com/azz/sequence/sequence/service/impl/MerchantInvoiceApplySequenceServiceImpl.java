@@ -53,7 +53,7 @@ public class MerchantInvoiceApplySequenceServiceImpl implements MerchantInvoiceA
 
 	@Override
 	public String getType() {
-		return "ClientInvoiceApplyCodeSequence";
+		return "MerchantInvoiceApplyCodeSequence";
 	}
 	
 	

@@ -233,6 +233,7 @@
 		pcsu.qq as qq,
 		pcsu.post as post,
 		pcsu.remark as remark,
+		pcsu.company as company,
 		pu.user_name as modifier,
 		pcsu.modify_time as modifierTime,
 		pcsu.id as id

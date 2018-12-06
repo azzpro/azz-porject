@@ -173,7 +173,7 @@
   	FROM merchant_dept 
   	WHERE merchant_id = #{merchantId,jdbcType=BIGINT} 
   	AND dept_name = #{deptName,jdbcType=VARCHAR}
-  	<if test="parentCode != null and parentCode'' "> 
+  	<if test="parentCode != null and parentCode != '' "> 
 			AND parent_code = #{parentCode,jdbcType=VARCHAR}
 	</if> 
   	AND status != 0

@@ -518,11 +518,14 @@ public class SelectionService {
 		Date nowDate = new Date();
 		// 新增未支付的订单记录
 		String clientOrderCode = randomSequenceService.getClientPersonalOrderCodeNumber();
+		// 若姓名为空，取手机号
+		String orderCreator = StringUtils.isBlank(user.getClientUserName()) ? user.getPhoneNumber() : user.getClientUserName();
 		ClientOrderPersonal  clientOrderRecord = ClientOrderPersonal.builder()
 				.clientOrderCode(clientOrderCode)
 				.clientUserId(user.getId())
 				.createTime(nowDate)
 				.creator(param.getClientUserCode())
+				.orderCreator(orderCreator)
 				.grandTotal(grandTotal)
 				.orderShippingId(param.getShippingId())
 				.orderStatusId(ClientOrderStatus.NOT_PAID.getValue())

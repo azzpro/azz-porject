@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.azz.order.client.pojo.ClientOrderPersonal">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="client_order_code" jdbcType="VARCHAR" property="clientOrderCode" />
+    <result column="order_creator" jdbcType="VARCHAR" property="orderCreator" />
     <result column="client_user_id" jdbcType="BIGINT" property="clientUserId" />
     <result column="grand_total" jdbcType="DECIMAL" property="grandTotal" />
     <result column="order_status_id" jdbcType="INTEGER" property="orderStatusId" />
@@ -22,7 +23,7 @@
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, client_order_code, client_user_id, grand_total, order_status_id, payment_method, 
+    id, client_order_code, order_creator, client_user_id, grand_total, order_status_id, payment_method, 
     payment_status, payment_type, invoice_status, order_shipping_id, remark, status, 
     handler, handler_time, creator, create_time, modifier, modify_time
   </sql>
@@ -37,14 +38,14 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.azz.order.client.pojo.ClientOrderPersonal">
-    insert into client_order_personal (id, client_order_code, client_user_id, 
+    insert into client_order_personal (id, client_order_code, order_creator, client_user_id, 
       grand_total, order_status_id, payment_method, 
       payment_status, payment_type, invoice_status, 
       order_shipping_id, remark, status, 
       handler, handler_time, creator, 
       create_time, modifier, modify_time
       )
-    values (#{id,jdbcType=BIGINT}, #{clientOrderCode,jdbcType=VARCHAR}, #{clientUserId,jdbcType=BIGINT}, 
+    values (#{id,jdbcType=BIGINT}, #{clientOrderCode,jdbcType=VARCHAR}, #{orderCreator,jdbcType=VARCHAR}, #{clientUserId,jdbcType=BIGINT}, 
       #{grandTotal,jdbcType=DECIMAL}, #{orderStatusId,jdbcType=INTEGER}, #{paymentMethod,jdbcType=INTEGER}, 
       #{paymentStatus,jdbcType=INTEGER}, #{paymentType,jdbcType=INTEGER}, #{invoiceStatus,jdbcType=INTEGER}, 
       #{orderShippingId,jdbcType=BIGINT}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
@@ -60,6 +61,9 @@
       </if>
       <if test="clientOrderCode != null">
         client_order_code,
+      </if>
+      <if test="orderCreator != null">
+        order_creator,
       </if>
       <if test="clientUserId != null">
         client_user_id,
@@ -117,6 +121,9 @@
       <if test="clientOrderCode != null">
         #{clientOrderCode,jdbcType=VARCHAR},
       </if>
+      <if test="orderCreator != null">
+        #{orderCreator,jdbcType=VARCHAR},
+      </if>
       <if test="clientUserId != null">
         #{clientUserId,jdbcType=BIGINT},
       </if>
@@ -173,6 +180,9 @@
       <if test="clientOrderCode != null">
         client_order_code = #{clientOrderCode,jdbcType=VARCHAR},
       </if>
+      <if test="orderCreator != null">
+        order_creator = #{orderCreator,jdbcType=VARCHAR},
+      </if>
       <if test="clientUserId != null">
         client_user_id = #{clientUserId,jdbcType=BIGINT},
       </if>
@@ -227,6 +237,7 @@
   <update id="updateByPrimaryKey" parameterType="com.azz.order.client.pojo.ClientOrderPersonal">
     update client_order_personal
     set client_order_code = #{clientOrderCode,jdbcType=VARCHAR},
+      order_creator = #{orderCreator,jdbcType=VARCHAR},
       client_user_id = #{clientUserId,jdbcType=BIGINT},
       grand_total = #{grandTotal,jdbcType=DECIMAL},
       order_status_id = #{orderStatusId,jdbcType=INTEGER},
@@ -287,7 +298,7 @@
 		cop.create_time AS orderTime,
 		cop.payment_method AS paymentMethod,
 		cop.invoice_status as invoiceStatus,
-		cus.client_user_name as orderCreator,
+		cop.order_creator as orderCreator,
 		cop.order_status_id as orderStatusId,
 		cop.grand_total AS grandTotal,
 		cop.remark as remark,
@@ -310,7 +321,6 @@
 	LEFT JOIN merchant m on m.id = mgp.merchant_id
 	LEFT JOIN client_order_shipping_address cosa ON cosa.id = cop.order_shipping_id
 	LEFT JOIN client_user cu ON cu.id = cosa.client_user_id
-	LEFT JOIN client_user cus ON cus.client_user_code = cop.creator
 	<where>
 		cop.status != 0
 		<if test="orderStatus != null">
@@ -336,7 +346,7 @@
 		cop.create_time AS orderTime,
 		cop.payment_method AS paymentMethod,
 		cop.invoice_status as invoiceStatus,
-		cu.client_user_name as orderCreator,
+		cop.order_creator as orderCreator,
 		cu.phone_number as clientPhoneNumber,
 		cop.order_status_id as orderStatusId,
 		cop.grand_total AS grandTotal,
@@ -420,7 +430,7 @@
   <select id="getPlatformClientOrderInfoList" parameterType="com.azz.order.platform.bo.SearchPlatformClientOrderParam" resultType="com.azz.order.platform.vo.PlatformClientOrderInfo">
     SELECT
 		cop.client_order_code AS clientOrderCode,
-		cu.client_user_name as orderCreator,
+		cop.order_creator as orderCreator,
 		cop.grand_total AS grandTotal,
 		cop.create_time AS orderTime,
 		cop.order_status_id AS orderStatus,
@@ -428,7 +438,6 @@
 		cop.handler_time AS handlerTime
 	FROM
 		client_order_personal cop
-	LEFT JOIN client_user cu ON cu.client_user_code = cop.creator
 	LEFT JOIN platform_user pu on pu.user_code = cop.handler
 	<where>
 		cop.status != 0
@@ -437,7 +446,7 @@
 		</if>
 		<if test="searchInput != null and searchInput != ''">
 			AND (
-				cu.client_user_name LIKE CONCAT('%', #{searchInput}, '%')
+				cop.order_creator LIKE CONCAT('%', #{searchInput}, '%')
 			OR cop.client_order_code LIKE CONCAT('%', #{searchInput}, '%') 
 			)
 		</if>
@@ -620,7 +629,7 @@
 		cop.create_time AS orderTime,
 		cop.payment_method AS paymentMethod,
 		cop.invoice_status as invoiceStatus,
-		cu.client_user_name as orderCreator,
+		cop.order_creator as orderCreator,
 		cop.order_status_id as orderStatusId,
 		cop.grand_total AS grandTotal,
 		cop.remark as remark,

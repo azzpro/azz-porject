@@ -25,6 +25,8 @@ public class ClientOrderPersonal implements Serializable {
      * @mbg.generated
      */
     private String clientOrderCode;
+    
+    private String orderCreator;
 
     /**
      * 客户id
@@ -657,4 +659,14 @@ public class ClientOrderPersonal implements Serializable {
         sb.append("]");
         return sb.toString();
     }
+
+	public String getOrderCreator() {
+		return orderCreator;
+	}
+
+	public void setOrderCreator(String orderCreator) {
+		this.orderCreator = orderCreator;
+	}
+    
+    
 }

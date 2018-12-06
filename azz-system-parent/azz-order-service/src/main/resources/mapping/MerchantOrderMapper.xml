@@ -234,7 +234,7 @@
 		mo.merchant_order_code as orderCode,
 		os.status_name as statusName,
 		mo.grand_total as grandTotal,
-		cu.client_user_name as userName,
+		cop.order_creator as userName,
 		cop.create_time as orderTime,
 		mu.merchant_user_name as receiver,
 		mos.create_time as processingTime
@@ -249,7 +249,7 @@
 	<where>
 		AND mo.merchant_id = #{merchantId}
 		<if test="null != orderStatus">AND mo.order_status_id = #{orderStatus}</if>
-		<if test="null != param and '' != param">AND (mo.merchant_order_code LIKE CONCAT('%',#{param},'%') OR cu.client_user_name LIKE CONCAT('%',#{param},'%') OR cop.creator LIKE CONCAT('%',#{param},'%'))</if>
+		<if test="null != param and '' != param">AND (mo.merchant_order_code LIKE CONCAT('%',#{param},'%') OR cop.order_creator LIKE CONCAT('%',#{param},'%') OR cop.creator LIKE CONCAT('%',#{param},'%'))</if>
 	</where>
 	GROUP BY mo.merchant_order_code
 	ORDER BY mo.create_time DESC

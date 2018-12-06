@@ -177,7 +177,7 @@ public class ParamsService {
 		//一个分类只能被选中一次
 		int count = goodsParamsMapper.selectAssortCountByCode(key.getId());
 		LOG.info("新增参数分类存在次数------------>"+count);
-		if(count > 1) {
+		if(count >= 1) {
 			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_TOOMANY);
 		}
 		List<PlatformGoodsParamsTerm> termByCode = goodsParamsTermMapper.selectParamsTermByCode(paramsByCode.getId());
@@ -272,7 +272,7 @@ public class ParamsService {
 				//当前分类只能存在一次
 				int count = goodsParamsMapper.selectAssortCountByCode(code.getId());
 				LOG.info("新增参数分类存在次数------------>"+count);
-				if(count > 1) {
+				if(count >= 1) {
 					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_TOOMANY);
 				}
 				PlatformGoodsParams goodsParams = new PlatformGoodsParams();

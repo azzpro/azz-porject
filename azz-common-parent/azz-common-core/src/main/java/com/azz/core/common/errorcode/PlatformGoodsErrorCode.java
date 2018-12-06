@@ -23,7 +23,7 @@ public class PlatformGoodsErrorCode extends BaseErrorCode{
     
     public static final PlatformGoodsErrorCode PLATFORM_GOODS_ERROR_UPDATE_ERROR = new PlatformGoodsErrorCode(20005, "更新失败");
     
-    public static final PlatformGoodsErrorCode PLATFORM_GOODS_ERROR_TOOMANY = new PlatformGoodsErrorCode(20005, "分类已存在");
+    public static final PlatformGoodsErrorCode PLATFORM_GOODS_ERROR_TOOMANY = new PlatformGoodsErrorCode(20005, "分类已关联参数项，不可再次选择此分类！");
     
     public static final PlatformGoodsErrorCode PLATFORM_GOODS_BRAND_NOT_EXIST = new PlatformGoodsErrorCode(20008, "品牌不存在");
     

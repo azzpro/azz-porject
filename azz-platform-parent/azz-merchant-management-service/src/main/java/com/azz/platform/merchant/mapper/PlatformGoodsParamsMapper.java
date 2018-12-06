@@ -58,5 +58,5 @@ public interface PlatformGoodsParamsMapper {
      * @return
      * @author 彭斌  2018年11月1日 下午9:11:43
      */
-    int selectCountByParams(String paramsCode);
+    int selectCountByParams(Long assortmentId);
 }

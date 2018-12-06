@@ -275,7 +275,7 @@ public class ClassificationService {
         }
         // 校验 分类删除前判断分类下是否存在模组和参数项被关联使用，存在报错“分类下存在模组和参数项，请先处理后删除！
         int countGoodsParam =
-                platformGoodsParamsMapper.selectCountByParams(pgcObj.getAssortmentCode());
+                platformGoodsParamsMapper.selectCountByParams(pgcObj.getId());
         int countModuleParam = platformGoodsClassificationMapper.selectCountById(pgcObj.getId());
         if (countGoodsParam > 0 || countModuleParam > 0) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_PRODUCT_CLASSIFICATION_EXIST);

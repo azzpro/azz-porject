@@ -100,7 +100,7 @@
   select id,assortment_id from platform_goods_params where params_code=#{code}
   </select>
   
-  <select id="selectAssortCountByCode" resultType="int">
+  <select id="selectAssortCountByCode" parameterType="java.lang.Long" resultType="int">
   select count(1) from platform_goods_params where assortment_id = #{id}
   </select>
   
@@ -109,8 +109,8 @@
     where params_code = #{code,jdbcType=VARCHAR}
   </delete>
   
-   <select id="selectCountByParams" parameterType="java.lang.String" resultType="int">
-  	SELECT count(1) FROM platform_goods_params WHERE params_code = #{paramsCode,jdbcType=VARCHAR}
+   <select id="selectCountByParams" parameterType="java.lang.Long" resultType="int">
+  	SELECT count(1) FROM platform_goods_params WHERE assortment_id = #{assortmentId}
   </select>
   
 </mapper>

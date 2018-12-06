@@ -21,4 +21,5 @@ com.azz.sequence.sequence.service.impl.ProductBrandSequenceImpl
 com.azz.sequence.sequence.service.impl.ProductClassSequenceImpl
 com.azz.sequence.sequence.service.impl.ProductMoudleSequenceImpl
 com.azz.sequence.sequence.service.impl.ProductParamTermSequenceImpl
+com.azz.sequence.sequence.service.impl.ProductParamSequenceImpl
 com.azz.sequence.sequence.service.impl.ProductSequenceImpl

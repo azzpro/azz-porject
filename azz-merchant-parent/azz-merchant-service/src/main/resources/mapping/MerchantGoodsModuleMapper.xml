@@ -294,6 +294,7 @@
 	LEFT JOIN platform_goods_classification pgc1 ON pgc2.assortment_parent_code = pgc1.assortment_code
 	<where>
 		mgd.module_status != 0
+	and mgd.merchant_id = #{merchantId}
 		<if test="moduleStatus != null">
 			AND mgd.module_status = #{moduleStatus}
 		</if>

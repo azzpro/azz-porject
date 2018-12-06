@@ -56,6 +56,7 @@ public class GoodsModuleController {
 	 */
 	@RequestMapping("/getGoodModuleInfoList")
 	public JsonResult<Pagination<GoodsModuleInfo>> getGoodModuleInfoList(SearchGoodsModuleParam param){
+		param.setMerchantId(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantId());
 		return goodsModuleService.getGoodModuleInfoList(param);
 	}
 	

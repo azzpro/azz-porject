@@ -347,16 +347,16 @@
 		order by pc.create_time desc
 	</if>
 	<if test="isDeliveryDateAsc == null and isPriceAsc != null and isPriceAsc == 1">
-		order by pc.create_time desc, t.price asc
+		order by t.price asc, pc.create_time desc 
 	</if>
 	<if test="isDeliveryDateAsc == null and isPriceAsc != null and isPriceAsc == 0">
-		order by pc.create_time desc, t.price desc
+		order by t.price desc ,pc.create_time desc
 	</if>
 	<if test="isPriceAsc == null and isDeliveryDateAsc != null and isDeliveryDateAsc == 1">
-		order by pc.create_time desc, t.delivery_date asc
+		order by t.delivery_date asc, pc.create_time desc
 	</if>
 	<if test="isPriceAsc == null and isDeliveryDateAsc != null and isDeliveryDateAsc == 0">
-		order by pc.create_time desc, t.delivery_date desc
+		order by t.delivery_date desc, pc.create_time desc
 	</if>
   </select>
   

@@ -86,6 +86,7 @@ public class PlatformClientOrderService {
 	@Autowired
 	private MerchantOrderItemMapper merchantOrderItemMapper;
 	
+	@Autowired
 	private DbSequenceService dbSequenceService;
 	
 	/**

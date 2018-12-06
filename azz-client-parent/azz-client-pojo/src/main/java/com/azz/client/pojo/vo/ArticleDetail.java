@@ -21,6 +21,7 @@ public class ArticleDetail {
     private Long articleId;
     private String articleContent;
     private String articleTitle;
+    private String articlePicUrl;
     private BigDecimal price;
 }
 

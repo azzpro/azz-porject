@@ -31,13 +31,10 @@ public class EditArticle {
     private Long indexColumnId;
     @NotBlank(message = "参数不许为空")
     private String articleTitle;
-    @NotNull(message = "参数不许为空")
     private BigDecimal price;
     @NotBlank(message = "参数不许为空")
     private String articleDetail;
-    @NotBlank(message = "参数不许为空")
     private String remark1;
-    @NotBlank(message = "参数不许为空")
     private String remark2;
     private String userCode;
     // 0未 1修改过

@@ -39,6 +39,7 @@
 		pia.id as articleId,
 		pia.article_content as articleContent,
 		pia.article_title as articleTitle,
+		pia.article_pic_url as articlePicUrl,
 		pia.price as price
 	FROM
 		platform_index_article pia

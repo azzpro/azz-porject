@@ -39,6 +39,7 @@
   
   <select id="getNavListByColumnCode" parameterType="java.lang.String" resultType="com.azz.client.pojo.vo.HomeNav">
   	SELECT
+  		pia.id as articleId,
   		pic.column_code as columnCode,
 		pia.article_title as articleTitle,
 		pia.create_time as createTime,
@@ -56,14 +57,13 @@
   </select>
   
   <resultMap id="BaseResultMapColumn" type="com.azz.client.pojo.vo.HomeNavDetail">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="column_pic_url" jdbcType="VARCHAR" property="columnPicUrl" />
+  	<id column="id" jdbcType="BIGINT" property="id" />
+    <result column="columnPicUrl" jdbcType="VARCHAR" property="columnPicUrl" />
     <collection property="homeNavs" ofType="com.azz.client.pojo.vo.HomeNav">
-    	<result column="id" jdbcType="BIGINT" property="articleId" />
-	    <result column="article_title" jdbcType="VARCHAR" property="articleTitle" />
-	    <result column="article_pic_name" jdbcType="VARCHAR" property="articlePicName" />
-	    <result column="article_pic_url" jdbcType="VARCHAR" property="articlePicUrl" />
-	    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    	<id column="articleId" jdbcType="BIGINT" property="articleId" />
+	    <result column="articleTitle" jdbcType="VARCHAR" property="articleTitle" />
+	    <result column="articlePicUrl" jdbcType="VARCHAR" property="articlePicUrl" />
+	    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
 	    <result column="price" jdbcType="DECIMAL" property="price" />
 	    <result column="remark1" jdbcType="VARCHAR" property="remark1" />
     	<result column="remark2" jdbcType="VARCHAR" property="remark2" />
@@ -72,6 +72,7 @@
   
   <select id="getColumnList" parameterType="java.lang.String" resultMap="BaseResultMapColumn">
   	SELECT
+  		pic.id as id,
 		pic.column_pic_url as columnPicUrl,
 		pia.article_title as articleTitle,
 		pia.create_time as createTime,

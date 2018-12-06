@@ -27,11 +27,14 @@ import com.azz.platform.user.pojo.bo.AddImage;
 import com.azz.platform.user.pojo.bo.EditArticle;
 import com.azz.platform.user.pojo.bo.EditColumn;
 import com.azz.platform.user.pojo.bo.EditImage;
+import com.azz.platform.user.pojo.bo.EditSignUpCourseParam;
 import com.azz.platform.user.pojo.bo.SearchArticleParam;
+import com.azz.platform.user.pojo.bo.SearchCourseParam;
 import com.azz.platform.user.pojo.bo.SearchImageParam;
 import com.azz.platform.user.pojo.vo.ArticleInfo;
 import com.azz.platform.user.pojo.vo.ColumnInfo;
 import com.azz.platform.user.pojo.vo.ImageInfo;
+import com.azz.platform.user.pojo.vo.SignUpCourse;
 import com.azz.platform.user.service.IndexService;
 
 @RestController
@@ -204,6 +207,28 @@ public class IndexController {
     @RequestMapping(value="delArticle",method=RequestMethod.GET)
     JsonResult<String> delArticle(@RequestParam("articleId") Long articleId){
         return indexService.delArticle(articleId);
+    }
+    
+    /**
+     * <p>获取报名管理列表</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年12月6日 上午11:28:54
+     */
+    @RequestMapping(value="getClientSignUpList",method=RequestMethod.POST)
+    JsonResult<Pagination<SignUpCourse>> getClientSignUpList(@RequestBody SearchCourseParam param){
+        return indexService.getClientSignUpList(param);
+    }
+    
+    /**
+     * <p>处理报名管理</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年12月6日 上午11:28:57
+     */
+    @RequestMapping(value="editSignUp",method=RequestMethod.POST)
+    JsonResult<String> editSignUp(@RequestBody EditSignUpCourseParam param){
+        return indexService.editSignUp(param);
     }
 }
 

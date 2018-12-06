@@ -7,19 +7,28 @@
  
 package com.azz.client.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import com.azz.client.mapper.PlatformClientSignUpMapper;
 import com.azz.client.mapper.PlatformIndexArticleMapper;
 import com.azz.client.mapper.PlatformIndexColumnMapper;
+import com.azz.client.pojo.PlatformClientSignUp;
+import com.azz.client.pojo.bo.AddSignUpCourseParam;
+import com.azz.client.pojo.bo.SearchCountClientSignUpParam;
 import com.azz.client.pojo.vo.ArticleDetail;
 import com.azz.client.pojo.vo.HomeNav;
 import com.azz.client.pojo.vo.HomeNavDetail;
 import com.azz.client.pojo.vo.HomeSlide;
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.constants.ClientConstants;
+import com.azz.exception.JSR303ValidationException;
+import com.azz.util.JSR303ValidateUtils;
 
 
 @Service
@@ -32,6 +41,8 @@ public class ClientIndexService {
     @Autowired
     private PlatformIndexColumnMapper platformIndexColumnMapper;
     
+    @Autowired
+    private PlatformClientSignUpMapper platformClientSignUpMapper;
     
     /**
      * <p>查询首页轮播图片</p>
@@ -83,6 +94,41 @@ public class ClientIndexService {
     public JsonResult<ArticleDetail> searchNavDetail(Long articleId){
         ArticleDetail adObj = platformIndexArticleMapper.getArticleDetail(articleId);
         return JsonResult.successJsonResult(adObj);
+    }
+    
+    /**
+     * <p>添加课程报名</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年12月6日 上午11:56:45
+     */
+    public JsonResult<String> addSignUpCourse(@RequestBody AddSignUpCourseParam param){
+        JSR303ValidateUtils.validate(param);
+        if(null == param.getClientUserCode()) {
+            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "提交课程报名请先登录");
+        }
+        SearchCountClientSignUpParam validateObj = new SearchCountClientSignUpParam();
+        validateObj.setArticleId(param.getArticleId());
+        validateObj.setClientUserCode(param.getClientUserCode());
+        int size = platformClientSignUpMapper.countClientSignUp(validateObj);
+        if(size > 0) {
+            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "您已提交过了课程报名信息");
+        }
+        
+        PlatformClientSignUp record = new PlatformClientSignUp();
+        record.setArticleId(param.getArticleId());
+        record.setClientUserCode(param.getClientUserCode());
+        record.setCompany(param.getCompany());
+        record.setCreateTime(new Date());
+        record.setEmail(param.getEmail());
+        record.setCreator(param.getClientUserCode());
+        record.setGender(param.getGender());
+        record.setMobilePhone(param.getMobilePhone());
+        record.setName(param.getName());
+        record.setPost(param.getPost());
+        record.setQq(param.getQq());
+        platformClientSignUpMapper.insertSelective(record);
+        return JsonResult.successJsonResult();
     }
 }
 

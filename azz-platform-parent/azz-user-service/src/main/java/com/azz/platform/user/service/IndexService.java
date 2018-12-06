@@ -22,9 +22,11 @@ import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.PlatformConstants;
 import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
+import com.azz.platform.user.mapper.PlatformClientSignUpMapper;
 import com.azz.platform.user.mapper.PlatformIndexArticleMapper;
 import com.azz.platform.user.mapper.PlatformIndexColumnMapper;
 import com.azz.platform.user.mapper.PlatformIndexImageMapper;
+import com.azz.platform.user.pojo.PlatformClientSignUp;
 import com.azz.platform.user.pojo.PlatformIndexArticle;
 import com.azz.platform.user.pojo.PlatformIndexColumn;
 import com.azz.platform.user.pojo.PlatformIndexImage;
@@ -34,12 +36,15 @@ import com.azz.platform.user.pojo.bo.AddImage;
 import com.azz.platform.user.pojo.bo.EditArticle;
 import com.azz.platform.user.pojo.bo.EditColumn;
 import com.azz.platform.user.pojo.bo.EditImage;
+import com.azz.platform.user.pojo.bo.EditSignUpCourseParam;
 import com.azz.platform.user.pojo.bo.MainPicture;
 import com.azz.platform.user.pojo.bo.SearchArticleParam;
+import com.azz.platform.user.pojo.bo.SearchCourseParam;
 import com.azz.platform.user.pojo.bo.SearchImageParam;
 import com.azz.platform.user.pojo.vo.ArticleInfo;
 import com.azz.platform.user.pojo.vo.ColumnInfo;
 import com.azz.platform.user.pojo.vo.ImageInfo;
+import com.azz.platform.user.pojo.vo.SignUpCourse;
 import com.azz.system.api.SystemImageUploadService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
@@ -62,6 +67,9 @@ public class IndexService {
     
     @Autowired
     PlatformIndexImageMapper platformIndexImageMapper;
+    
+    @Autowired
+    PlatformClientSignUpMapper platformClientSignUpMapper;
     
     @Autowired
     private SystemImageUploadService systemImageUploadService;
@@ -520,6 +528,42 @@ public class IndexService {
      */
     public JsonResult<String> delArticle(Long articleId){
         platformIndexArticleMapper.deleteByPrimaryKey(articleId);
+        return JsonResult.successJsonResult();
+    }
+    
+    /**
+     * <p>获取报名管理列表</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年12月6日 上午11:17:24
+     */
+    public JsonResult<Pagination<SignUpCourse>> getClientSignUpList(@RequestBody SearchCourseParam param){
+        PageHelper.startPage(param.getPageNum(), param.getPageSize());
+        List<SignUpCourse> list = platformClientSignUpMapper.getClientSignUpList(param);
+        return JsonResult.successJsonResult(new Pagination<>(list));
+    }
+    
+    /**
+     * <p>处理报名管理</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年12月6日 上午11:20:58
+     */
+    public JsonResult<String> editSignUp(@RequestBody EditSignUpCourseParam param){
+        if(null == param.getId()) {
+            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "参数异常");
+        }
+        PlatformClientSignUp pcs = platformClientSignUpMapper.selectByPrimaryKey(param.getId());
+        if(ObjectUtils.isNotNull(pcs)) {
+            if(1 != pcs.getStatus()) {
+                throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "已处理过不允许再次处理");
+            } 
+            pcs.setModifier(param.getClientUserCode());
+            pcs.setModifyTime(new Date());
+            pcs.setRemark(param.getRemark());
+            pcs.setStatus(1);
+            platformClientSignUpMapper.updateByPrimaryKeySelective(pcs);
+        }
         return JsonResult.successJsonResult();
     }
 }

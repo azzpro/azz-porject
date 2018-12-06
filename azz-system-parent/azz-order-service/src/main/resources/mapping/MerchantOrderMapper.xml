@@ -236,7 +236,7 @@
 		mo.grand_total as grandTotal,
 		cu.client_user_name as userName,
 		cop.create_time as orderTime,
-		cop.creator as receiver,
+		mu.merchant_user_name as receiver,
 		mos.create_time as processingTime
 	FROM
 		merchant_order mo
@@ -244,6 +244,7 @@
 	JOIN client_user cu ON cop.client_user_id = cu.id
 	JOIN order_status os ON mo.order_status_id = os.id
 	LEFT JOIN merchant_order_status mos ON mo.id = mos.merchant_order_id
+	LEFT JOIN merchant_user mu ON mo.modifier = mu.merchant_user_code
 	AND mos.merchant_status_id = 1
 	<where>
 		AND mo.merchant_id = #{merchantId}

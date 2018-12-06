@@ -56,6 +56,8 @@ public class ShiroConfig {
 	filterChainDefinitionMap.put("/azz/api/client/selection/getCombinationDetail", "anon");
 	filterChainDefinitionMap.put("/azz/api/client/selection/getProductInfos", "anon");
 	filterChainDefinitionMap.put("/azz/api/client/selection/getProductPrice", "anon");
+	// 官网首页数据
+	filterChainDefinitionMap.put("/azz/api/index/*", "anon");
 	
 	// 其余接口一律拦截
 	// 主要这行代码必须放在所有权限设置的最后，不然会导致所有 url 都被拦截

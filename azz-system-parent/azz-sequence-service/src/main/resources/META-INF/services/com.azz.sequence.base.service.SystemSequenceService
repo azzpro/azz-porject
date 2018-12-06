@@ -8,9 +8,9 @@ com.azz.sequence.sequence.service.impl.MerchantDeptSequenceServiceImpl
 com.azz.sequence.sequence.service.impl.MerchantEmployeeSequenceServiceImpl
 com.azz.sequence.sequence.service.impl.MerchantInvoiceApplySequenceServiceImpl
 com.azz.sequence.sequence.service.impl.MerchantPowerSequenceServiceImpl
-com.azz.sequence.sequence.service.impl.MerchantInvoiceApplySequenceServiceImpl
 com.azz.sequence.sequence.service.impl.MerchantTenantSequenceServiceImpl
 com.azz.sequence.sequence.service.impl.OptionGroupSequenceImpl
+com.azz.sequence.sequence.service.impl.OptionPlanSequenceImpl
 com.azz.sequence.sequence.service.impl.OrderCompanySequenceImpl
 com.azz.sequence.sequence.service.impl.OrderMerchantSequenceImpl
 com.azz.sequence.sequence.service.impl.OrderPersonlSequenceImpl

@@ -90,7 +90,6 @@ public class ClientIndexController {
      */
     @RequestMapping("/addSignUpCourse")
     public JsonResult<String> addSignUpCourse(AddSignUpCourseParam param){
-        param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
         return clientIndexService.addSignUpCourse(param);
     }
 }

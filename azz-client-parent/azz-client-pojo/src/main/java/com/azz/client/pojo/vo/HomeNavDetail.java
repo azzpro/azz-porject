@@ -20,6 +20,7 @@ import lombok.Data;
 public class HomeNavDetail {
     private Long id;
     private String columnPicUrl;
+    private String columnName;
     private List<HomeNav> homeNavs;
 }
 

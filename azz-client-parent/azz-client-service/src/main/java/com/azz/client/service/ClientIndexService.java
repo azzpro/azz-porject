@@ -104,12 +104,9 @@ public class ClientIndexService {
      */
     public JsonResult<String> addSignUpCourse(@RequestBody AddSignUpCourseParam param){
         JSR303ValidateUtils.validate(param);
-        if(null == param.getClientUserCode()) {
-            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "提交课程报名请先登录");
-        }
         SearchCountClientSignUpParam validateObj = new SearchCountClientSignUpParam();
         validateObj.setArticleId(param.getArticleId());
-        validateObj.setClientUserCode(param.getClientUserCode());
+        validateObj.setName(param.getName());
         int size = platformClientSignUpMapper.countClientSignUp(validateObj);
         if(size > 0) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "您已提交过了课程报名信息");
@@ -117,11 +114,10 @@ public class ClientIndexService {
         
         PlatformClientSignUp record = new PlatformClientSignUp();
         record.setArticleId(param.getArticleId());
-        record.setClientUserCode(param.getClientUserCode());
         record.setCompany(param.getCompany());
         record.setCreateTime(new Date());
         record.setEmail(param.getEmail());
-        record.setCreator(param.getClientUserCode());
+        record.setCreator(param.getName());
         record.setGender(param.getGender());
         record.setMobilePhone(param.getMobilePhone());
         record.setName(param.getName());

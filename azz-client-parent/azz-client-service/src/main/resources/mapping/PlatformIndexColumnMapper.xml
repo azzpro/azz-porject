@@ -59,6 +59,7 @@
   <resultMap id="BaseResultMapColumn" type="com.azz.client.pojo.vo.HomeNavDetail">
   	<id column="id" jdbcType="BIGINT" property="id" />
     <result column="columnPicUrl" jdbcType="VARCHAR" property="columnPicUrl" />
+    <result column="columnName" jdbcType="VARCHAR" property="columnName" />
     <collection property="homeNavs" ofType="com.azz.client.pojo.vo.HomeNav">
     	<id column="articleId" jdbcType="BIGINT" property="articleId" />
 	    <result column="articleTitle" jdbcType="VARCHAR" property="articleTitle" />
@@ -80,7 +81,8 @@
 		pia.price as price,
 		pia.remark1 as remark1,
 		pia.remark2 as remark2,
-		pia.id as articleId
+		pia.id as articleId,
+		pic.column_name as columnName
 	FROM
 		platform_index_column pic
 	LEFT JOIN platform_index_article pia ON pic.id = pia.index_column_id

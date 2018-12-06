@@ -555,7 +555,7 @@ public class IndexService {
         }
         PlatformClientSignUp pcs = platformClientSignUpMapper.selectByPrimaryKey(param.getId());
         if(ObjectUtils.isNotNull(pcs)) {
-            if(1 != pcs.getStatus()) {
+            if(1 == pcs.getStatus()) {
                 throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "已处理过不允许再次处理");
             } 
             pcs.setModifier(param.getClientUserCode());

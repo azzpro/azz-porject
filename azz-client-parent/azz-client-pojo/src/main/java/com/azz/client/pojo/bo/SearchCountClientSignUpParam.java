@@ -16,7 +16,7 @@ import lombok.Data;
  */
 @Data
 public class SearchCountClientSignUpParam {
-    private String clientUserCode;
+    private String name;
     private Long articleId;
 }
 

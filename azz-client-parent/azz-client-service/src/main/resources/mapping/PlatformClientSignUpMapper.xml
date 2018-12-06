@@ -227,7 +227,7 @@
 	FROM
 		platform_client_sign_up pcsu
 	WHERE
-		pcsu.client_user_code = #{clientUserCode,jdbcType=VARCHAR}
+		pcsu.name = #{name,jdbcType=VARCHAR}
 	AND pcsu.article_id = #{articleId,jdbcType=BIGINT}
   </select>
 </mapper>

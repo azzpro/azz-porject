@@ -20,7 +20,6 @@ import lombok.Data;
  */
 @Data
 public class AddSignUpCourseParam {
-    private String clientUserCode;
     @NotBlank(message = "姓名不允许为空")
     private String name;
     // 性别(0 男 1 女)

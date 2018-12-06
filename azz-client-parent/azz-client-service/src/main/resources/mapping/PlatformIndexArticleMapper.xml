@@ -40,7 +40,8 @@
 		pia.article_content as articleContent,
 		pia.article_title as articleTitle,
 		pia.article_pic_url as articlePicUrl,
-		pia.price as price
+		pia.price as price,
+		pia.remark1 as remark
 	FROM
 		platform_index_article pia
 	WHERE

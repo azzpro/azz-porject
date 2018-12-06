@@ -24,6 +24,7 @@ public class OrderDetail {
     private String orderCode;
     private String orderStatus;
     private Integer orderStatusId;
+    private Integer invoiceStatus;
     private Date orderTime;
     private BigDecimal grandTotal;
     private String remark;

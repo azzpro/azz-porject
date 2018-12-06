@@ -262,6 +262,8 @@
     <result column="grandTotal" jdbcType="DECIMAL" property="grandTotal" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="orderStatusId" jdbcType="INTEGER" property="orderStatusId" />
+    <result column="invoiceStatus" jdbcType="INTEGER" property="invoiceStatus" />
+    
   	<collection property="orderItems" ofType="com.azz.order.merchant.pojo.vo.OrderItem">
         <result column="productCode" property="productCode" jdbcType="VARCHAR"/>
         <result column="modulePicUrl" property="modulePicUrl" jdbcType="VARCHAR"/>
@@ -281,6 +283,7 @@
 		mo.grand_total as grandTotal,
 		mo.remark as remark,
 		mo.order_status_id as orderStatusId,
+		mo.invoice_status as invoiceStatus,
 		moi.module_name as moduleName,
 		moi.module_pic_url as modulePicUrl,
 		moi.product_code as productCode,

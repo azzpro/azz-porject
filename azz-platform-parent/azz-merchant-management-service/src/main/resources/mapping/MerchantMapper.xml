@@ -402,21 +402,24 @@
   
   <!-- 商户管理列表 -->
   <select id="selectMerchantInfoList" parameterType="com.azz.platform.merchant.pojo.bo.SearchMerchantListParam" resultType="com.azz.platform.merchant.pojo.vo.MerchantListInfo">
-  		select
-  		  merchant_code merchantCode,
-  		  registered_person registeredPerson,
-  		  registered_person createName,
-  		  contact_phone contactPhone,
-  		  company_name companyName,
-  		  status status,
-  		  create_time createTime
-  		from merchant
+  		SELECT
+			m.merchant_code merchantCode,
+			m.registered_person registeredPerson,
+			m.registered_person createName,
+			m.contact_phone contactPhone,
+			m.company_name companyName,
+			m. STATUS STATUS,
+			m.create_time createTime,
+			ma.`status`
+		FROM
+			merchant m
+		JOIN merchant_apply ma ON ma.merchant_code = m.merchant_code and ma.status = 2
   		<where>
   			<if test="param != null and param != ''">
-  				and merchant_code like CONCAT('%',#{param},'%') or company_name like CONCAT('%',#{param},'%') or registered_person like CONCAT('%',#{param},'%')
+  				m.merchant_code like CONCAT('%',#{param},'%') or m.company_name like CONCAT('%',#{param},'%') or m.registered_person like CONCAT('%',#{param},'%')
   			</if>
   		</where>
-  		 ORDER BY create_time DESC
+  		 ORDER BY m.create_time DESC
   </select>
   
    <!-- 商户管理列表   -->

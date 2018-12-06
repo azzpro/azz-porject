@@ -40,6 +40,7 @@ public class EditDeptParam {
     /**
      * 上级部门编码
      */
+    @NotBlank(message = "上级编码不允许为空")
     private String parentCode;
     
     /**

@@ -176,9 +176,7 @@
 	LEFT JOIN platform_goods_classification pgc ON pgc.id = mgp.assortment_id
 	LEFT JOIN merchant_goods_module mgm ON mgm.id = mgp.module_id
 	LEFT JOIN client_user cu ON cu.id = csc.client_user_id
-	WHERE
-		csr. STATUS != 0
-	AND mgp.product_status != 2
+	WHERE mgp.product_status != 2
 	AND cu.client_user_code = #{clientUserCode}
 	AND csr.product_code in
 	<foreach collection="orderItems" item="orderItem" open="(" close=")" separator=",">

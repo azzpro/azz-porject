@@ -165,6 +165,29 @@ public class ParamsService {
 	public JsonResult<String> updateParams(ParamsData ppt){
 		//校验参数
 		JSR303ValidateUtils.validate(ppt);
+		if(null != ppt) {
+			List<com.azz.platform.merchant.pojo.bo.Param> list = ppt.getParams();
+			if(null != list && list.size() > 0) {
+				TreeSet<String> set = new TreeSet<>();
+				TreeSet<String> set2 = new TreeSet<>();
+				for(Param paramsData1 : list) {
+					set.add(paramsData1.getParamName());
+				}
+				if(set.size() != list.size()) {
+					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_PARAMS);
+				}
+				List<Param> params = ppt.getParams();
+				for (Param param : params) {
+					String[] param2 = param.getParam();
+					for (int i = 0; i < param2.length; i++) {
+						set2.add(param2[i]);
+					}
+					if(set2.size() != param2.length) {
+						throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_VALUES);
+					}
+				}
+			}
+		}
 		//根据父参数编码 查询父参数
 		PlatformGoodsParams paramsByCode = goodsParamsMapper.selectParamsByCode(ppt.getParentCode());
 		if(null == paramsByCode)
@@ -175,11 +198,11 @@ public class ParamsService {
 			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_ASSORTMENT_EXIST);	
 		
 		//一个分类只能被选中一次
-		int count = goodsParamsMapper.selectAssortCountByCode(key.getId());
+		/*int count = goodsParamsMapper.selectAssortCountByCode(key.getId());
 		LOG.info("新增参数分类存在次数------------>"+count);
 		if(count >= 1) {
 			throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_TOOMANY);
-		}
+		}*/
 		List<PlatformGoodsParamsTerm> termByCode = goodsParamsTermMapper.selectParamsTermByCode(paramsByCode.getId());
 		StringBuilder sb = new StringBuilder();
 		if(null == termByCode || termByCode.size() <=0)
@@ -259,11 +282,22 @@ public class ParamsService {
 			List<com.azz.platform.merchant.pojo.bo.Param> list = ppt.getParams();
 			if(null != list && list.size() > 0) {
 				TreeSet<String> set = new TreeSet<>();
+				TreeSet<String> set2 = new TreeSet<>();
 				for(Param paramsData1 : list) {
 					set.add(paramsData1.getParamName());
 				}
 				if(set.size() != list.size()) {
 					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_PARAMS);
+				}
+				List<Param> params = ppt.getParams();
+				for (Param param : params) {
+					String[] param2 = param.getParam();
+					for (int i = 0; i < param2.length; i++) {
+						set2.add(param2[i]);
+					}
+					if(set2.size() != param2.length) {
+						throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_VALUES);
+					}
 				}
 				//查询分类
 				PlatformGoodsClassification code = goodsClassificationMapper.selectByAssortmentCode(ppt.getAssortmentCode());

@@ -123,12 +123,27 @@ public class AuditService{
         // 审批流程走完需要覆盖商户表数据作为最新的商户信息
         merchantMapper.updateByPrimaryKeySelective(merchant);
         
-        // 查询出该商户的注册人信息
+        //审核通过需要初始化用户权限
+        if(param.getStatus().equals(AuditConstants.AuditStatus.PASSED.getValue())) {
+        	this.initUserPermission(param, merchant);
+        }
+        
+        return JsonResult.successJsonResult();
+    }
+
+    /**
+     * 
+     * <p>初始化用户权限</p>
+     * @param param
+     * @param merchant
+     * @author 黄智聪  2018年12月6日 下午3:45:41
+     */
+	public void initUserPermission(AuditParam param, Merchant merchant) {
+		// 查询出该商户的注册人信息
         MerchantUser merchantUser = merchantUserMapper.getRegistMerchantUserByMerchantCode(param.getMerchantCode());
         if(merchantUser == null) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户注册人不存在");
         }
-        
         
         // 为商户新增管理员角色
         MerchantRole roleRecord = MerchantRole.builder()
@@ -163,9 +178,7 @@ public class AuditService{
                 .roleId(roleRecord.getId())
                 .build();
         merchantUserRoleMapper.insertSelective(userRoleRecord);
-        
-        return JsonResult.successJsonResult();
-    }
+	}
 
 
 }

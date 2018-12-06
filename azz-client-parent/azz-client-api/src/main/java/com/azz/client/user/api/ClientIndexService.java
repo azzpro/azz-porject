@@ -9,9 +9,11 @@ package com.azz.client.user.api;
 import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.azz.client.pojo.bo.AddSignUpCourseParam;
 import com.azz.client.pojo.vo.ArticleDetail;
 import com.azz.client.pojo.vo.HomeNav;
 import com.azz.client.pojo.vo.HomeNavDetail;
@@ -68,5 +70,15 @@ public interface ClientIndexService {
      */
     @RequestMapping("/azz/api/index/searchNavDetail")
     JsonResult<ArticleDetail> searchNavDetail(@RequestParam("articleId") Long articleId);
+    
+    /**
+     * <p>提交报名信息</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年12月6日 下午12:34:15
+     */
+    @RequestMapping("/azz/api/index/addSignUpCourse")
+    JsonResult<String> addSignUpCourse(@RequestBody AddSignUpCourseParam param);
+    
 }
 

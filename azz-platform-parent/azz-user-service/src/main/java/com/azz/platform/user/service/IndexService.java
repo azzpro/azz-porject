@@ -561,6 +561,7 @@ public class IndexService {
             pcs.setModifier(param.getClientUserCode());
             pcs.setModifyTime(new Date());
             pcs.setRemark(param.getRemark());
+            pcs.setStatus(1);
             platformClientSignUpMapper.updateByPrimaryKeySelective(pcs);
         }
         return JsonResult.successJsonResult();

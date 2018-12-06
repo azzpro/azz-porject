@@ -10,10 +10,12 @@ package com.azz.client.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.azz.client.pojo.bo.AddSignUpCourseParam;
 import com.azz.client.pojo.vo.ArticleDetail;
 import com.azz.client.pojo.vo.HomeNav;
 import com.azz.client.pojo.vo.HomeNavDetail;
@@ -85,5 +87,15 @@ public class ClientIndexController {
         return clientIndexService.searchNavDetail(articleId);
     }
     
+    /**
+     * <p>提交报名信息</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年12月6日 下午12:32:04
+     */
+    @RequestMapping("/addSignUpCourse")
+    public JsonResult<String> addSignUpCourse(@RequestBody AddSignUpCourseParam param){
+        return clientIndexService.addSignUpCourse(param);
+    }
 }
 

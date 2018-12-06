@@ -147,6 +147,12 @@ public class DeptService{
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_USER_EXIST);
         }
         
+        // 校验是否有子级部门
+        List<PlatformDept> list = deptMapper.selectByParentDeptCode(deptCode);
+        if(list.size() > 0) {
+            throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_EXIST);
+        }
+        
         dept.setStatus(0);
         dept.setModifier(modifier);
         dept.setLastModifyTime(new Date());

@@ -199,7 +199,7 @@
   </select>
   <!-- 根据分类ID查询 -->
   <select id="selectProductByAssortmentId" resultType="int" parameterType="long">
-  	select count(1) from merchant_goods_product where assortment_id = #{id}
+  	select count(1) from merchant_goods_product where assortment_id = #{id} and product_status != 0
   </select>
   
   <update id="updateProductById">

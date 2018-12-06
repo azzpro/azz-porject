@@ -19,17 +19,6 @@ spring:
     port: 5672
     username: admin
     password: 123456
-  datasource:
-    username: root
-    password: azz2025
-    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://120.78.162.226:3306/azz_dev?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
-    driver-class-name: com.mysql.jdbc.Driver
-    dbcp2:
-      min-idle: 5
-      initial-size: 5
-      max-total: 5
-      max-wait-millis: 200
 feign:
   httpclient: 
     enabled: true #feign原生是调用java.url 去发起HTTP请求，此配置是将请求客户端更换成apahce http

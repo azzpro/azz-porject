@@ -51,6 +51,7 @@ import com.azz.system.api.SystemImageUploadService;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
+import com.azz.util.SystemSeqUtils;
 import com.github.pagehelper.PageHelper;
 
 /**
@@ -160,12 +161,12 @@ public class CombinationService {
 		CombinationPic pic = param.getCombinationPic();
 		String combinationCode = dbSequenceService.getCombinationCodeNumber();
 		// 上传模组图片
-		UploadFileInfo fileInfo = this.uploadCombinationPic(pic, combinationCode);
+		UploadFileInfo fileInfo = this.uploadCombinationPic(pic, SystemSeqUtils.getSeq(combinationCode));
 		// 插入推荐组合记录
 		Date nowDate = new Date();
 		PlatformCombination combinationRecord = PlatformCombination.builder()
 				.caseId(c.getId())
-				.combinationCode(combinationCode)
+				.combinationCode(SystemSeqUtils.getSeq(combinationCode))
 				.combinationName(param.getCombinationName())
 				.combinationPicName(fileInfo.getOriginalFileName())
 				.combinationPicUrl(fileInfo.getImgUrl())

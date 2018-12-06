@@ -57,6 +57,7 @@ import com.azz.merchant.pojo.vo.ParamsValue;
 import com.azz.merchant.pojo.vo.ProductParamsBrands;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
+import com.azz.util.SystemSeqUtils;
 import com.github.pagehelper.PageHelper;
 
 /**
@@ -324,7 +325,7 @@ public class ProductService {
 				com.azz.merchant.pojo.PlatformGoodsParams goodsParams = platformGoodsParamsMapper.selectParamsByAssortmentId(assid);
 				if(null == goodsParams)
 					throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_VALUES_IS_NULL);
-				
+				String code= dbSequenceService.getProductCodeNumber();
 				//获取产品
 				MerchantGoodsProduct mgp = new MerchantGoodsProduct();
 				mgp.setAssortmentId(assid);
@@ -333,7 +334,7 @@ public class ProductService {
 				mgp.setCreator(params.getCreator());
 				mgp.setModuleId(goodsModule.getId());
 				mgp.setProductCode(params.getProductCode());
-				mgp.setProductSystemCode(dbSequenceService.getProductCodeNumber());
+				mgp.setProductSystemCode(SystemSeqUtils.getSeq(code));
 				mgp.setProductStatus(params.getStatus());
 				mgp.setBrandId(brandId);
 				mgp.setMerchantId(params.getMerchantId());

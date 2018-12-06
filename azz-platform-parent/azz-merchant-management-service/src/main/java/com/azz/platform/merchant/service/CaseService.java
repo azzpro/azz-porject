@@ -41,6 +41,7 @@ import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
 import com.azz.util.StringUtils;
+import com.azz.util.SystemSeqUtils;
 import com.github.pagehelper.PageHelper;
 
 /**
@@ -133,7 +134,7 @@ public class CaseService {
         String fileNameNoSufix = originalFileName.substring(0, dotIndex);
         String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
         // 新名称为文件名 + 文件后缀
-        String newFileName = fileNameNoSufix +"_"+ caseCode;
+        String newFileName = fileNameNoSufix +"_"+ SystemSeqUtils.getSeq(caseCode);
 
         // 图片url
         JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_CASE_IMAGE_TYPE);
@@ -141,7 +142,7 @@ public class CaseService {
             throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "主图上传失败，请重试");
         }
         
-        pcObj.setCaseCode(caseCode);
+        pcObj.setCaseCode(SystemSeqUtils.getSeq(caseCode));
         pcObj.setCaseName(param.getCaseName());
         pcObj.setCasePicName(originalFileName);
         pcObj.setCasePicUrl(jr.getData());

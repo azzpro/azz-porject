@@ -36,6 +36,7 @@ import com.azz.merchant.pojo.vo.RoleInfo;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
+import com.azz.util.SystemSeqUtils;
 
 /**
  * 
@@ -87,10 +88,11 @@ public class PermissionService {
 	// 参数校验
 	this.validateAddRoleParam(param);
 	Date nowDate = new Date();
+	String code = dbSequenceService.getMerchantPowerNumber();
 	String creator = param.getCreator();
 	Merchant merchant = merchantMapper.getMerchantByMerchantCode(param.getMerchantCode());
 	MerchantRole roleRecord = MerchantRole.builder().createTime(nowDate).creator(creator).remark(param.getRemark())
-		.roleCode(dbSequenceService.getMerchantPowerNumber())
+		.roleCode(SystemSeqUtils.getSeq(code))
 		.roleName(param.getRoleName())
 		.merchantId(merchant.getId())
 		.build();

@@ -42,6 +42,7 @@ import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.DateUtils;
 import com.azz.util.DecimalUtil;
 import com.azz.util.JSR303ValidateUtils;
+import com.azz.util.SystemSeqUtils;
 import com.github.pagehelper.PageHelper;
 
 @Service
@@ -78,7 +79,7 @@ public class PlatfromPayService {
 		if (DecimalUtil.lt(new BigDecimal(orderDeadTime.getTime()), new BigDecimal(System.currentTimeMillis()))) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单已失效，请重新下单");
 		}
-
+		String code = rss.getPersonlOrderNumber();
 		PlatformPay pfp = new PlatformPay();
 		// pfp.setChannelMoney(orderInfo.getGrandTotal());//渠道费
 		pfp.setCustomerPhone(Long.parseLong(orderInfo.getClientPhoneNumber()));
@@ -89,7 +90,7 @@ public class PlatfromPayService {
 		pfp.setPayType(spp.getOrderPayType());
 		pfp.setPayStatus((byte) PayStatus.NOT_PAID.getValue());// 支付状态 默认待支付
 		// pfp.setThreePartyNumber(); //
-		pfp.setPayNumber(rss.getPersonlOrderNumber());
+		pfp.setPayNumber(SystemSeqUtils.getSeq(code));
 		ppm.insertPay(pfp);
 
 		// 更新订单状态

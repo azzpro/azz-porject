@@ -34,6 +34,7 @@ import com.azz.exception.JSR303ValidationException;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
+import com.azz.util.SystemSeqUtils;
 
 /**
  * 
@@ -80,9 +81,10 @@ public class PermissionService {
 	this.validateAddRoleParam(param);
 	Date nowDate = new Date();
 	String creator = param.getCreator();
+	String code = dbSequenceService.getClientDepartmentNumber();
 	ClientRole roleRecord = ClientRole.builder().createTime(nowDate)
 		.creator(creator).remark(param.getRemark())
-		.roleCode(dbSequenceService.getClientDepartmentNumber())
+		.roleCode(SystemSeqUtils.getSeq(code))
 		.companyCode(param.getCompanyCode())
 		.roleName(param.getRoleName()).build();
 	clientRoleMapper.insertSelective(roleRecord);

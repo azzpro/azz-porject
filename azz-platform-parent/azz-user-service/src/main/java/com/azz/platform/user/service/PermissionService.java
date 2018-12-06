@@ -37,6 +37,7 @@ import com.azz.platform.user.pojo.vo.TreePermission;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
+import com.azz.util.SystemSeqUtils;
 
 /**
  * 
@@ -88,8 +89,9 @@ public class PermissionService{
 	this.validateAddRoleParam(param);
 	Date nowDate = new Date();
 	String creator = param.getCreator();
+	String code = dbSequenceService.getPlatPowerNumber();
 	PlatformRole roleRecord = PlatformRole.builder().createTime(nowDate).creator(creator).remark(param.getRemark())
-		.roleCode(dbSequenceService.getPlatPowerNumber())
+		.roleCode(SystemSeqUtils.getSeq(code))
 		.roleName(param.getRoleName()).build();
 	platformRoleMapper.insertSelective(roleRecord);
 	return JsonResult.successJsonResult();

@@ -13,8 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.BaseErrorCode;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
+import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.exception.BaseException;
 import com.azz.platform.client.common.constants.AuditConstants;
 import com.azz.platform.client.common.constants.ClientConstants;
@@ -36,6 +39,8 @@ import com.azz.platform.client.pojo.vo.Permission;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
+import com.azz.util.StringUtils;
+import com.azz.util.SystemSeqUtils;
 
 /**
  * <P>
@@ -119,6 +124,7 @@ public class AuditService {
             cucObj.setTradingCertificateThirdFileUrl(clientApplyObj.getTradingCertificateThirdFileUrl());
             cucObj.setLastModifyTime(new Date());
             clientUserCompanyMapper.updateByPrimaryKeySelective(cucObj);
+            String sequence = dbSequenceService.getPlatPowerNumber();
             
             // 为客户新增管理员角色
             ClientRole roleRecord = ClientRole.builder()
@@ -127,7 +133,7 @@ public class AuditService {
                     .companyCode(param.getCompanyCode())
                     .remark("审核通过，新增客户的管理员角色")
                     .roleName("管理员")
-                    .roleCode(dbSequenceService.getPlatPowerNumber())
+                    .roleCode(SystemSeqUtils.getSeq(sequence))
                     .build();
             clientRoleMapper.insertSelective(roleRecord);
             

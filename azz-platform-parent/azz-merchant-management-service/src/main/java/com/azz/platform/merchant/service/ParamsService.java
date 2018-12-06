@@ -42,6 +42,7 @@ import com.azz.platform.merchant.pojo.vo.Params;
 import com.azz.platform.merchant.pojo.vo.ParamsAll;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
+import com.azz.util.SystemSeqUtils;
 import com.github.pagehelper.PageHelper;
 
 /**
@@ -240,6 +241,7 @@ public class ParamsService {
 					if(null == paramsData) {
 						throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_NULL);
 					}else {
+						String code = dbSequenceService.getParameterItemCodeNumber();
 						PlatformGoodsParamsTerm goodsParamsTerm = new PlatformGoodsParamsTerm();
 						goodsParamsTerm.setParamsName(paramsData.getParamName());
 						goodsParamsTerm.setParamsChoice(paramsData.getParamsChoice());
@@ -247,7 +249,7 @@ public class ParamsService {
 						goodsParamsTerm.setCreateTime(new Date());
 						goodsParamsTerm.setCreator(ppt.getCreator());
 						goodsParamsTerm.setParamsId(paramsByCode.getId());
-						goodsParamsTerm.setParamsCode(dbSequenceService.getParameterItemCodeNumber());
+						goodsParamsTerm.setParamsCode(SystemSeqUtils.getSeq(code));
 						goodsParamsTermMapper.insertSelective(goodsParamsTerm);
 						//获取主键
 						Long ids = goodsParamsTerm.getId();
@@ -309,8 +311,9 @@ public class ParamsService {
 				if(count >= 1) {
 					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_TOOMANY);
 				}
+				String codes = dbSequenceService.getParameterCodeNumber();
 				PlatformGoodsParams goodsParams = new PlatformGoodsParams();
-				goodsParams.setParamsCode(dbSequenceService.getParameterCodeNumber());
+				goodsParams.setParamsCode(SystemSeqUtils.getSeq(codes));
 				goodsParams.setCreator(ppt.getCreator());
 				goodsParams.setCreateTime(new Date());
 				goodsParams.setAssortmentId(code.getId());
@@ -321,6 +324,7 @@ public class ParamsService {
 					if(null == paramsData) {
 						throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_NULL);
 					}else {
+						String codea = dbSequenceService.getParameterItemCodeNumber();
 						PlatformGoodsParamsTerm goodsParamsTerm = new PlatformGoodsParamsTerm();
 						goodsParamsTerm.setParamsName(paramsData.getParamName());
 						goodsParamsTerm.setParamsChoice(paramsData.getParamsChoice());
@@ -328,7 +332,7 @@ public class ParamsService {
 						goodsParamsTerm.setCreateTime(new Date());
 						goodsParamsTerm.setCreator(ppt.getCreator());
 						goodsParamsTerm.setParamsId(id2);
-						goodsParamsTerm.setParamsCode(dbSequenceService.getParameterItemCodeNumber());
+						goodsParamsTerm.setParamsCode(SystemSeqUtils.getSeq(codea));
 						goodsParamsTermMapper.insertSelective(goodsParamsTerm);
 						//获取主键
 						Long id = goodsParamsTerm.getId();

@@ -24,6 +24,7 @@ import com.azz.platform.user.pojo.vo.Dept;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
+import com.azz.util.SystemSeqUtils;
 
 /**
  * <P>
@@ -76,8 +77,8 @@ public class DeptService{
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_EXIST);
         }
         
-        
-        dept.setDeptCode(dbSequenceService.getPlatDepartmentNumber());
+        String code = dbSequenceService.getPlatDepartmentNumber();
+        dept.setDeptCode(SystemSeqUtils.getSeq(code));
         dept.setDeptName(param.getDeptName());
         dept.setStatus(param.getStatus());
         dept.setCreator(param.getCreator());

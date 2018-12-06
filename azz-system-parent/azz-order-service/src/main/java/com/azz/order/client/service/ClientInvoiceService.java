@@ -53,6 +53,7 @@ import com.azz.order.merchant.pojo.MerchantOrder;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
+import com.azz.util.SystemSeqUtils;
 import com.github.pagehelper.PageHelper;
 
 /**
@@ -147,9 +148,9 @@ public class ClientInvoiceService {
         if(ObjectUtils.isNull(user)) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "客户信息未找到");
         }
-        
+        String code = dbSequenceService.getClientInvoiceApplyNumber();
         ClientInvoice ciObj = new ClientInvoice();
-        ciObj.setClientApplyCode(dbSequenceService.getClientInvoiceApplyNumber());
+        ciObj.setClientApplyCode(SystemSeqUtils.getSeq(code));
         ciObj.setAmount(param.getAmount());
         ciObj.setClientOrderId(cop.getId());
         ciObj.setClientUserId(user.getId());

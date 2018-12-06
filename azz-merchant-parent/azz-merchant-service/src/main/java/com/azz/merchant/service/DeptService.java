@@ -34,6 +34,7 @@ import com.azz.merchant.pojo.vo.MerchantDeptList;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
+import com.azz.util.SystemSeqUtils;
 
 /**
  * <P>部门服务类</P>
@@ -61,7 +62,7 @@ public class DeptService {
         if(mdiObj>0) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_EXIST);
         }
-        
+        String code= dbSequenceService.getMerchantDepartmentNumber();
         MerchantDept md = new MerchantDept();
         md.setDeptName(param.getDeptName());
         md.setCreateTime(new Date());
@@ -69,7 +70,7 @@ public class DeptService {
         md.setParentCode("0");
         md.setCreator(param.getCreator());
         md.setStatus(param.getStatus());
-        md.setDeptCode(dbSequenceService.getMerchantDepartmentNumber());
+        md.setDeptCode(SystemSeqUtils.getSeq(code));
         md.setDescription("0"); // 部门等级  0 一级为 1 二级  2三级
         merchantDeptMapper.insertSelective(md);
         
@@ -104,14 +105,14 @@ public class DeptService {
         } else if(mdObj.getDescription().equals("2")) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_LEVEL_ERROR);
         }
-        
+        String code =dbSequenceService.getMerchantDepartmentNumber(); 
         md.setDeptName(param.getDeptName());
         md.setCreateTime(new Date());
         md.setCreator(param.getCreator());
         md.setMerchantId(param.getMerchantId());
         md.setParentCode(param.getParentCode());
         md.setStatus(param.getStatus());
-        md.setDeptCode(dbSequenceService.getMerchantDepartmentNumber()); 
+        md.setDeptCode(SystemSeqUtils.getSeq(code)); 
         merchantDeptMapper.insertSelective(md);
         return JsonResult.successJsonResult();
     }

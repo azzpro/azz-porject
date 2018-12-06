@@ -75,6 +75,7 @@ import com.azz.system.vo.SmsInfo;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.PasswordHelper;
 import com.azz.util.StringUtils;
+import com.azz.util.SystemSeqUtils;
 import com.github.pagehelper.PageHelper;
 
 /**
@@ -241,7 +242,7 @@ public class MerchantService {
 	String merchantCode = dbSequenceService.getMerchantTenantNumber();
 	String registerName = param.getRegisterName();
 	Merchant merchantRecord = Merchant.builder()
-		.merchantCode(merchantCode)
+		.merchantCode(SystemSeqUtils.getSeq(merchantCode))
 		.createTime(nowDate).contactPhone(phoneNumber)
 		.registeredPerson(registerName).build();
 	merchantMapper.insertSelective(merchantRecord);
@@ -251,9 +252,9 @@ public class MerchantService {
 	Password pwd = PasswordHelper.encryptPasswordByModel(password);
 	MerchantUser merchantUserRecord = MerchantUser.builder()
 		.createTime(nowDate)
-		.merchantCode(merchantCode)
+		.merchantCode(SystemSeqUtils.getSeq(merchantUserCode))
 		.merchantUserName(registerName)
-		.merchantUserCode(merchantUserCode)
+		.merchantUserCode(SystemSeqUtils.getSeq(merchantUserCode))
 		.password(pwd.getPassword())
 		.phoneNumber(phoneNumber)
 		.salt(pwd.getSalt())
@@ -480,10 +481,11 @@ public class MerchantService {
 	Password pwd = PasswordHelper.encryptPasswordByModel(password);
 	Date nowDate = new Date();
 	String creator = param.getCreator();
+	String code = dbSequenceService.getMerchantEmployeeNumber();
 	MerchantUser userRecord = MerchantUser.builder().createTime(nowDate).creator(creator)
 		.deptId(dept.getId())
 		.email(param.getEmail()).password(pwd.getPassword()).phoneNumber(phoneNumber)
-		.postName(param.getPostName()).merchantUserCode(dbSequenceService.getMerchantEmployeeNumber())
+		.postName(param.getPostName()).merchantUserCode(SystemSeqUtils.getSeq(code))
 		.merchantUserName(param.getMerchantUserName()).merchantCode(param.getMerchantCode()).salt(pwd.getSalt()).build();
 	merchantUserMapper.insertSelective(userRecord);
 	// 用户与角色绑定

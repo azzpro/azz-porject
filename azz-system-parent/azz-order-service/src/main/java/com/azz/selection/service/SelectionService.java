@@ -69,6 +69,7 @@ import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.DateUtils;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
+import com.azz.util.SystemSeqUtils;
 import com.github.pagehelper.PageHelper;
 
 /**
@@ -521,7 +522,7 @@ public class SelectionService {
 		// 若姓名为空，取手机号
 		String orderCreator = StringUtils.isBlank(user.getClientUserName()) ? user.getPhoneNumber() : user.getClientUserName();
 		ClientOrderPersonal  clientOrderRecord = ClientOrderPersonal.builder()
-				.clientOrderCode(clientOrderCode)
+				.clientOrderCode(SystemSeqUtils.getSeq(clientOrderCode))
 				.clientUserId(user.getId())
 				.createTime(nowDate)
 				.creator(param.getClientUserCode())
@@ -568,7 +569,7 @@ public class SelectionService {
 		
 		// 清空客户的购物车信息
 		clientShoppingCartMapper.deleteShoppingCartByClientUserId(user.getId());
-		return JsonResult.successJsonResult(clientOrderCode);
+		return JsonResult.successJsonResult(SystemSeqUtils.getSeq(clientOrderCode));
 	}
 	
 	/**

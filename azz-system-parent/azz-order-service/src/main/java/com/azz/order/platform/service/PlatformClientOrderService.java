@@ -56,6 +56,7 @@ import com.azz.order.platform.vo.PlatformClientOrderInfo;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
+import com.azz.util.SystemSeqUtils;
 import com.github.pagehelper.PageHelper;
 
 /**
@@ -220,12 +221,13 @@ public class PlatformClientOrderService {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户不存在"); 
 			}
 			// 新增一个待确认的商户订单
+			String code = dbSequenceService.getMerchantOrderNumber();
 			MerchantOrder merchantOrderRecord = MerchantOrder.builder()
 					.clientOrderId(clientOrder.getId())
 					.createTime(nowDate)
 					.grandTotal(merchantOrderInfo.getEachMerchantGrandTotal())
 					.merchantId(merchant.getId())
-					.merchantOrderCode(dbSequenceService.getMerchantOrderNumber())
+					.merchantOrderCode(SystemSeqUtils.getSeq(code))
 					.orderStatusId(MerchantOrderStatusEnum.NOT_CONFIRMED.getValue())
 					.orderType(MerchantOrderType.PERSON.getValue())
 					.remark(info.getRemark())

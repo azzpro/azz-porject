@@ -76,6 +76,7 @@ import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.PasswordHelper;
 import com.azz.util.RandomStringUtils;
 import com.azz.util.StringUtils;
+import com.azz.util.SystemSeqUtils;
 import com.github.pagehelper.PageHelper;
 
 
@@ -205,7 +206,7 @@ public class ClientService {
 	Password pwd = PasswordHelper.encryptPasswordByModel(password);
 	ClientUser clientUserRecord = ClientUser.builder()
 		.createTime(nowDate)
-		.clientUserCode(clientUserCode)
+		.clientUserCode(SystemSeqUtils.getSeq(clientUserCode))
 		.password(pwd.getPassword())
 		.phoneNumber(phoneNumber)
 		.salt(pwd.getSalt())
@@ -304,7 +305,7 @@ public class ClientService {
 	Date nowDate = new Date();
 	ClientUserCompany clientUserCompanyRecord = ClientUserCompany.builder()
 		.clientUserCode(clientUserCode)
-		.companyCode(companyCode)
+		.companyCode(SystemSeqUtils.getSeq(companyCode))
 		.companyName(param.getCompanyName())
 		.companyTel(param.getCompanyTel())
 		.creditCode(creditCode)
@@ -412,7 +413,7 @@ public class ClientService {
 	    String clientUserCode = dbSequenceService.getClientCustomerNumber();
 	    ClientUser userRecord = ClientUser.builder().createTime(nowDate).creator(creator)
 		    .clientDeptId(dept.getId()).email(param.getEmail()).password(pwd.getPassword()).phoneNumber(phoneNumber)
-		    .postName(param.getPostName()).clientUserCode(clientUserCode)
+		    .postName(param.getPostName()).clientUserCode(SystemSeqUtils.getSeq(clientUserCode))
 		    .clientUserName(param.getClientUserName()).salt(pwd.getSalt()).build();
 	    clientUserMapper.insertSelective(userRecord);
 	    

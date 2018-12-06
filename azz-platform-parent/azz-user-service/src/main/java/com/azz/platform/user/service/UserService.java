@@ -47,6 +47,7 @@ import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.PasswordHelper;
 import com.azz.util.StringUtils;
+import com.azz.util.SystemSeqUtils;
 import com.github.pagehelper.PageHelper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -208,9 +209,10 @@ public class UserService{
 	Password pwd = PasswordHelper.encryptPasswordByModel(password);
 	Date nowDate = new Date();
 	String creator = param.getCreator();
+	String code = dbSequenceService.getPlatEmployeeNumber();
 	PlatformUser userRecord = PlatformUser.builder().createTime(nowDate).creator(creator).deptId(dept.getId())
 		.email(param.getEmail()).password(pwd.getPassword()).phoneNumber(param.getPhoneNumber())
-		.postName(param.getPostName()).userCode(dbSequenceService.getPlatEmployeeNumber())
+		.postName(param.getPostName()).userCode(SystemSeqUtils.getSeq(code))
 		.userName(param.getUserName()).salt(pwd.getSalt()).build();
 	platformUserMapper.insertSelective(userRecord);
 	// 用户与角色绑定

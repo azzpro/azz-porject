@@ -38,6 +38,7 @@ import com.azz.system.api.SystemImageUploadService;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
+import com.azz.util.SystemSeqUtils;
 import com.github.pagehelper.PageHelper;
 
 /**
@@ -104,10 +105,10 @@ public class GoodsBrandService {
 		GoodsBrandPic pic = param.getGoodsBrandPic();
 		String brandCode = dbSequenceService.getBrandCodeNumber();
 		// 上传模组图片
-		UploadFileInfo fileInfo = this.uploadBrandPic(pic, brandCode);
+		UploadFileInfo fileInfo = this.uploadBrandPic(pic, SystemSeqUtils.getSeq(brandCode));
 		
 		PlatformGoodsBrand goodsBrandRecord = PlatformGoodsBrand.builder()
-				.brandCode(brandCode)
+				.brandCode(SystemSeqUtils.getSeq(brandCode))
 				.brandDescription(param.getBrandDescription())
 				.brandEnglishName(param.getBrandEnglishName())
 				.brandName(param.getBrandName())

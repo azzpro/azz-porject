@@ -32,6 +32,7 @@ import com.azz.platform.merchant.pojo.vo.Permission;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
+import com.azz.util.SystemSeqUtils;
 
 /**
  * <P>
@@ -144,7 +145,7 @@ public class AuditService{
         if(merchantUser == null) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户注册人不存在");
         }
-        
+        String code = dbSequenceService.getMerchantPowerNumber();
         // 为商户新增管理员角色
         MerchantRole roleRecord = MerchantRole.builder()
                 .createTime(new Date())
@@ -152,7 +153,7 @@ public class AuditService{
                 .merchantId(merchant.getId())
                 .remark("审核通过，新增商户的管理员角色")
                 .roleName("管理员")
-                .roleCode(dbSequenceService.getMerchantPowerNumber())
+                .roleCode(SystemSeqUtils.getSeq(code))
                 .build();
         merchantRoleMapper.insertSelective(roleRecord);
         

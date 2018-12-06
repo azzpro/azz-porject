@@ -42,6 +42,7 @@ import com.azz.system.api.SystemImageUploadService;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
+import com.azz.util.SystemSeqUtils;
 import com.github.pagehelper.PageHelper;
 
 /**
@@ -123,13 +124,13 @@ public class GoodsModuleService {
 		GoodsModulePic pic = param.getGoodsModulePic();
 		String moduleCode = dbSequenceService.getModuleCodeNumber();
 		// 上传模组图片
-		UploadFileInfo fileInfo = uploadModulePic(pic, moduleCode);
+		UploadFileInfo fileInfo = uploadModulePic(pic, SystemSeqUtils.getSeq(moduleCode));
 		MerchantGoodsModule goodsModuleRecord = MerchantGoodsModule.builder()
 				.creator(param.getCreator())
 				.createTime(new Date())
 				.classificationId(goodsClassification.getId())
 				.merchantId(merchant.getId())
-				.moduleCode(moduleCode)
+				.moduleCode(SystemSeqUtils.getSeq(moduleCode))
 				.moduleInfo(param.getModuleInfo())
 				.moduleName(param.getModuleName())
 				.modulePicName(fileInfo.getOriginalFileName())

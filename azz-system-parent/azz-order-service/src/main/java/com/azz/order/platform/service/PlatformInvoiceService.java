@@ -41,6 +41,7 @@ import com.azz.order.platform.vo.PlatformClientInvoiceList;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
+import com.azz.util.SystemSeqUtils;
 import com.github.pagehelper.PageHelper;
 
 /**
@@ -149,9 +150,10 @@ public class PlatformInvoiceService {
             ClientInvoiceTemplate cit = clientInvoiceTemplateMapper.selectByPrimaryKey(ci.getInvoiceTemplateId());
             List<MerchantOrder> list = merchantOrderMapper.selectMerchantOrderByClientOrderId(ci.getClientOrderId());
             for (int i = 0; i < list.size(); i++) {
-                MerchantInvoice record = new MerchantInvoice();
+                String code = dbSequenceService.getMerchantInvoiceApplyNumber();
+            	MerchantInvoice record = new MerchantInvoice();
                 record.setInvoiceType(cit.getInvoiceType());
-                record.setMerchantApplyCode(dbSequenceService.getMerchantInvoiceApplyNumber());
+                record.setMerchantApplyCode(SystemSeqUtils.getSeq(code));
                 record.setApplyAmount(list.get(i).getGrandTotal());
                 record.setCreateTime(new Date());
                 record.setCreator(param.getPlatformUserCode());

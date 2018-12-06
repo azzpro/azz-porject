@@ -35,6 +35,7 @@ import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
 import com.azz.util.StringUtils;
+import com.azz.util.SystemSeqUtils;
 
 /**
  * <P>
@@ -96,7 +97,7 @@ public class ClassificationService {
         String fileNameNoSufix = originalFileName.substring(0, dotIndex);
         String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
         // 新名称为文件名 + 文件后缀
-        String newFileName = fileNameNoSufix +"_"+ classificationCode;
+        String newFileName = fileNameNoSufix +"_"+ SystemSeqUtils.getSeq(classificationCode);
 
         // 图片url
         JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_CLASSIFICATION_IMAGE_TYPE);
@@ -139,7 +140,7 @@ public class ClassificationService {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_SAME_CLASSIFICATION_ID);
         }
        
-        record.setAssortmentCode(classificationCode);
+        record.setAssortmentCode(SystemSeqUtils.getSeq(classificationCode));
         record.setAssortmentParentCode(
                 null == param.getAssortmentParentCode() ? "0" : param.getAssortmentParentCode());
         record.setAssortmentName(param.getAssortmentName());

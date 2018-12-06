@@ -35,6 +35,7 @@ import com.azz.core.exception.BaseException;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
+import com.azz.util.SystemSeqUtils;
 
 
 /**
@@ -169,8 +170,9 @@ public class ClientDeptService {
         if(isExist>0) {
             throw new BaseException(ClientErrorCode.CLIENT_DEPT_ERROR_EXIST);
         }
+        String sequence = dbSequenceService.getClientDepartmentNumber();
         ClientDept clientDept = new ClientDept();
-        clientDept.setDeptCode(dbSequenceService.getClientDepartmentNumber());
+        clientDept.setDeptCode(SystemSeqUtils.getSeq(sequence));
         clientDept.setCompanyCode(param.getCompanyCode());
         clientDept.setCreateTime(new Date());
         clientDept.setDeptName(param.getDeptName());
@@ -220,8 +222,8 @@ public class ClientDeptService {
                 throw new BaseException(ClientErrorCode.CLIENT_DEPT_CLIENT_LEVEL_ERROR_EXIST);
             }
         }
-        
-        clientDept.setDeptCode(dbSequenceService.getClientDepartmentNumber());
+        String sequence = dbSequenceService.getClientDepartmentNumber();
+        clientDept.setDeptCode(SystemSeqUtils.getSeq(sequence));
         clientDept.setCompanyCode(param.getCompanyCode());
         clientDept.setCreateTime(new Date());
         clientDept.setDeptName(param.getDeptName());

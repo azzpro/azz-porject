@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -70,7 +69,10 @@ public class IndexController {
 	public JsonResult<String> addColumn(AddColumnWebParam param)  throws IOException{
 	    String userCode = WebUtils.getLoginUser().getUserInfo().getUserCode();
 	    MultipartFile classificationFile = param.getMainPicture();
-	    MainPicture mp = new MainPicture(classificationFile.getOriginalFilename(), classificationFile.getSize(),Base64.encode(classificationFile.getBytes()));
+	    MainPicture mp = null;
+	    if(null != classificationFile) {
+	        mp = new MainPicture(classificationFile.getOriginalFilename(), classificationFile.getSize(),Base64.encode(classificationFile.getBytes()));
+	    }
 	    return indexService.addColumn(new AddColumn(param.getColumnName(), param.getColumnCode(), param.getColumnType(),userCode,mp));
 	}
 	

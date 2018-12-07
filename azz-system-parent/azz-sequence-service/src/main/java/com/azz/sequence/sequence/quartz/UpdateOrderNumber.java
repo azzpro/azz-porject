@@ -52,6 +52,7 @@ public class UpdateOrderNumber {
 	 */
 	@Scheduled(cron = "0 0 0 * * ?")
 	public void updateOrderNumber() {
+		LOG.info("重置订单序列自动任务开始.................");
 		List<String> st = new ArrayList<String>();
 		st.add(CLIENTINVOICEAPPLYSEQUENCE);
 		st.add(MERCHANTINVOICEAPPLYCODESEQUENCE);

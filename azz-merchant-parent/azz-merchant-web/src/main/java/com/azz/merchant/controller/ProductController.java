@@ -7,8 +7,6 @@
  
 package com.azz.merchant.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,13 +20,10 @@ import com.azz.merchant.pojo.bo.MerchantProductParam;
 import com.azz.merchant.pojo.bo.ModulePrams;
 import com.azz.merchant.pojo.bo.ProductParams;
 import com.azz.merchant.pojo.bo.Products;
-import com.azz.merchant.pojo.vo.Brand;
 import com.azz.merchant.pojo.vo.MerchantProductList;
 import com.azz.merchant.pojo.vo.Module;
 import com.azz.merchant.pojo.vo.ProductParamsBrands;
 import com.azz.merchant.utils.WebUtils;
-
-import javafx.scene.web.WebEngineBuilder;
 
 /**
  * <P>TODO</P>

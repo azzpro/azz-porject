@@ -32,56 +32,10 @@
 		pgpp.params_term_id AS paramsTermId,
 		pgpp.params_type AS paramsType,
 		pgpp.params_name AS paramsName,
-		group_concat(DISTINCT pgpp.params_value) AS paramValues,
-		t.minVal AS minVal,
-		t.maxVal AS maxVal
+		group_concat(DISTINCT pgpp.params_value) AS paramValues
 	FROM
 		merchant_goods_product_params pgpp
 	JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status != 0
-	LEFT JOIN (
-		SELECT
-			pgpp.params_term_id AS params_term_id,
-			MIN(
-				cast(pgpp.params_value AS DECIMAL)
-			) AS minVal,
-			MAX(
-				cast(pgpp.params_value AS DECIMAL)
-			) AS maxVal
-		FROM
-			merchant_goods_product_params pgpp
-		JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status != 0
-		<where>
-			pgpp.params_type = 2
-		AND pgpp.params_choice = 1
-		AND	pgpp.params_id IN (
-				SELECT
-					pgpt.params_id
-				FROM
-					platform_case_classification_params pccp
-				JOIN platform_case pc ON pc.id = pccp.case_id
-				join platform_goods_params_term pgpt on pgpt.id = pccp.params_id
-				WHERE pc.case_status = 1
-				and	pc.case_code = #{caseCode}
-				group by pgpt.params_id
-			)
-		<if test="inputParams != null and inputParams.size() > 0">
-			<foreach collection="inputParams" item="inputParam">
-				AND	pgpp.product_id IN (
-					SELECT
-						distinct pgpp.product_id
-					FROM
-						merchant_goods_product_params pgpp
-					WHERE
-						pgpp.params_type = 2
-					AND pgpp.params_term_id = #{inputParam.paramsTermId}
-					AND pgpp.params_value = #{inputParam.paramsValue}
-				)
-			</foreach>
-		</if>
-		</where>
-		GROUP BY
-			pgpp.params_term_id
-	) t ON t.params_term_id = pgpp.params_term_id
 	<where>
 	AND	pgpp.params_term_id IN (
 			SELECT
@@ -91,6 +45,18 @@
 			JOIN platform_case pc ON pc.id = pccp.case_id
 			WHERE pc.case_status = 1
 			and	pc.case_code = #{caseCode}
+		)
+		AND pgpp.product_id IN (
+			SELECT
+				mgp.id
+			FROM
+				platform_combination pc
+			JOIN platform_combination_module pcm ON pc.id = pcm.combination_id
+			JOIN platform_case pcase ON pcase.id = pc.case_id
+			JOIN merchant_goods_module mgm ON mgm.id = pcm.module_id
+			JOIN merchant_goods_product mgp ON mgp.module_id = mgm.id AND mgp.product_status != 0
+			WHERE
+				pcase.case_code = #{caseCode}
 		)
 		<if test="inputParams != null and inputParams.size() > 0">
 			<foreach collection="inputParams" item="inputParam">

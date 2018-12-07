@@ -284,7 +284,6 @@ public class ParamsService {
 			List<com.azz.platform.merchant.pojo.bo.Param> list = ppt.getParams();
 			if(null != list && list.size() > 0) {
 				TreeSet<String> set = new TreeSet<>();
-				TreeSet<String> set2 = new TreeSet<>();
 				for(Param paramsData1 : list) {
 					set.add(paramsData1.getParamName());
 				}
@@ -293,6 +292,7 @@ public class ParamsService {
 				}
 				List<Param> params = ppt.getParams();
 				for (Param param : params) {
+					TreeSet<String> set2 = new TreeSet<>();
 					String[] param2 = param.getParam();
 					for (int i = 0; i < param2.length; i++) {
 						set2.add(param2[i]);
@@ -300,6 +300,7 @@ public class ParamsService {
 					if(set2.size() != param2.length) {
 						throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_VALUES);
 					}
+					set2 = null;
 				}
 				//查询分类
 				PlatformGoodsClassification code = goodsClassificationMapper.selectByAssortmentCode(ppt.getAssortmentCode());

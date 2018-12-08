@@ -149,9 +149,7 @@
       <if test="articlePicUrl != null">
         article_pic_url = #{articlePicUrl,jdbcType=VARCHAR},
       </if>
-      <if test="price != null">
-        price = #{price,jdbcType=DECIMAL},
-      </if>
+       price = #{price,jdbcType=DECIMAL},
       <if test="creator != null">
         creator = #{creator,jdbcType=VARCHAR},
       </if>

@@ -7,6 +7,7 @@
  
 package com.azz.platform.user.service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -514,7 +515,11 @@ public class IndexService {
         pii.setRemark2(param.getRemark2());
         pii.setIndexColumnId(param.getIndexColumnId());
         pii.setArticleContent(param.getArticleDetail());
-        pii.setPrice(param.getPrice());
+        if(StringUtils.isNotBlank(param.getPrice())) {
+            pii.setPrice(new BigDecimal(param.getPrice()));
+        } else {
+            pii.setPrice(null);
+        }
         pii.setArticleTitle(param.getArticleTitle());
         platformIndexArticleMapper.updateByPrimaryKeySelective(pii);
         return JsonResult.successJsonResult();

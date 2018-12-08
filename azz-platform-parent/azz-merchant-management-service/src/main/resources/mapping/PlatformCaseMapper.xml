@@ -277,6 +277,6 @@
   </select>
   
   <select id="countCombination" parameterType="java.lang.Long" resultType="int">
-  	SELECT count(1) FROM platform_combination pc WHERE pc.id = #{id} AND pc.status != 0
+  	SELECT count(1) FROM platform_combination pc WHERE pc.case_id = #{caseId} AND pc.status != 0
   </select>
 </mapper>

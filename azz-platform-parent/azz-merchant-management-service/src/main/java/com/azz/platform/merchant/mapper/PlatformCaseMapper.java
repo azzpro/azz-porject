@@ -41,5 +41,5 @@ public interface PlatformCaseMapper {
     
     List<CaseList> selectCaseListByParam(SearchCaseListParam param);
     
-    int countCombination(Long id);
+    int countCombination(Long caseId);
 }

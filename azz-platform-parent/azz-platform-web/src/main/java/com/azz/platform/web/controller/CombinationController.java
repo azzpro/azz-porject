@@ -39,6 +39,7 @@ import com.azz.platform.merchant.pojo.vo.GoodsModuleInfo;
 import com.azz.platform.merchant.pojo.vo.ProdInfo;
 import com.azz.util.Base64;
 import com.azz.util.JSR303ValidateUtils;
+import com.azz.util.StringUtils;
 import com.azz.utils.WebUtils;
 
 /**
@@ -92,16 +93,15 @@ public class CombinationController {
 		AddCombinationParam param = new AddCombinationParam();
 		BeanUtils.copyProperties(webParam, param, "moduleCodes");
 		String moduleCodes = webParam.getModuleCodes();
-		String[] moduleCodesArray = null;
-		if(moduleCodes != null) {
-			moduleCodesArray = moduleCodes.split(",");
+		if(StringUtils.isNotBlank(moduleCodes)) {
+			String[] moduleCodesArray = moduleCodes.split(",");
+			List<String> codes = new ArrayList<>();
+			CollectionUtils.addAll(codes, moduleCodesArray);
+			param.setModuleCodes(codes);
 		}
 		MultipartFile combinationPicFile = webParam.getCombinationPicFile();
 		CombinationPic combinationPic = new CombinationPic(combinationPicFile.getOriginalFilename(),
 				combinationPicFile.getSize(), Base64.encode(combinationPicFile.getBytes()));
-		List<String> codes = new ArrayList<>();
-		CollectionUtils.addAll(codes, moduleCodesArray);
-		param.setModuleCodes(codes);
 		param.setCombinationPic(combinationPic);
 		param.setCreator(WebUtils.getLoginUser().getUserInfo().getUserCode());
 		return combinationService.addCombination(param);
@@ -121,19 +121,19 @@ public class CombinationController {
 		EditCombinationParam param = new EditCombinationParam();
 		BeanUtils.copyProperties(webParam, param, "moduleCodes");
 		String moduleCodes = webParam.getModuleCodes();
-		String[] moduleCodesArray = null;
-		if(moduleCodes != null) {
-			moduleCodesArray = moduleCodes.split(",");
+		if(StringUtils.isNotBlank(moduleCodes)) {
+			String[] moduleCodesArray = moduleCodes.split(",");
+			List<String> codes = new ArrayList<>();
+			CollectionUtils.addAll(codes, moduleCodesArray);
+			param.setModuleCodes(codes);
 		}
+		
 		MultipartFile combinationPicFile = webParam.getCombinationPicFile();
 		if (webParam.getIsChangeCombinationPic() == IsChangeCombinationPic.Y.getValue() && combinationPicFile != null) {
 			CombinationPic combinationPic = new CombinationPic(combinationPicFile.getOriginalFilename(),
 					combinationPicFile.getSize(), Base64.encode(combinationPicFile.getBytes()));
 			param.setCombinationPic(combinationPic);
 		}
-		List<String> codes = new ArrayList<>();
-		CollectionUtils.addAll(codes, moduleCodesArray);
-		param.setModuleCodes(codes);
 		param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
 		return combinationService.editCombination(param);
 	}

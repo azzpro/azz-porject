@@ -337,6 +337,12 @@ public class CaseService {
     public JsonResult<String> delCase(@RequestBody DelCaseParams param){
         JSR303ValidateUtils.validate(param);
         PlatformCase pc = platformCaseMapper.selectByCaseCode(param.getCaseCode());
+        
+        int countCombination = platformCaseMapper.countCombination(pc.getId());
+        if(countCombination > 0) {
+            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "方案下存在推荐组合，请移除后删除");
+        }
+        
         if(ObjectUtils.isNotNull(pc)) {
             // 删除方案基本信息
             pc.setCaseStatus(0);

@@ -275,4 +275,8 @@
   	</where>
   	ORDER BY pc.create_time desc
   </select>
+  
+  <select id="countCombination" parameterType="java.lang.Long" resultType="int">
+  	SELECT count(1) FROM platform_combination pc WHERE pc.id = #{id}
+  </select>
 </mapper>

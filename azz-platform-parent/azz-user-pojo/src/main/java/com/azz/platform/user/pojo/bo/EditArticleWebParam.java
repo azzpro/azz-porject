@@ -7,8 +7,6 @@
  
 package com.azz.platform.user.pojo.bo;
 
-import java.math.BigDecimal;
-
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -28,8 +26,7 @@ public class EditArticleWebParam {
     private Long indexColumnId;
     @NotBlank(message = "参数不许为空")
     private String articleTitle;
-    @NotBlank(message = "参数不许为空")
-    private BigDecimal price;
+    private String price;
     @NotBlank(message = "参数不许为空")
     private String articleDetail;
     @NotBlank(message = "参数不许为空")

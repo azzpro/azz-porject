@@ -7,13 +7,20 @@
 
 package com.azz.merchant.service;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -72,11 +79,17 @@ import com.azz.system.bo.SmsCodeValidation;
 import com.azz.system.bo.SmsParams;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.system.vo.SmsInfo;
+import com.azz.util.ExcelUtils;
 import com.azz.util.JSR303ValidateUtils;
+import com.azz.util.ObjectUtils;
 import com.azz.util.PasswordHelper;
 import com.azz.util.StringUtils;
 import com.azz.util.SystemSeqUtils;
 import com.github.pagehelper.PageHelper;
+import com.google.common.collect.Lists;
+import com.microsoft.schemas.office.visio.x2012.main.CellType;
+
+import lombok.Cleanup;
 
 /**
  * <P>
@@ -611,7 +624,36 @@ public class MerchantService {
 	}
 	return JsonResult.successJsonResult(info);
     }
+    
+    
 
+    public JsonResult<String> importMerchantUser(InputStream in, String creator){
+    	// 记录出错行数
+        int rowNum = 1;
+        try {
+            @Cleanup
+            XSSFWorkbook workbook = new XSSFWorkbook(in);
+            XSSFSheet sheet = workbook.getSheetAt(0);
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                XSSFRow excelDetail = sheet.getRow(i);
+                rowNum++;
+                if (ObjectUtils.isNotNull(excelDetail)) {
+                    // 获取当前行的元素信息
+                    ArrayList<Cell> cellList = Lists.newArrayList(excelDetail.cellIterator());
+                    boolean isBlank = (Cell.CELL_TYPE_BLANK == cellList.get(0).getCellType());
+                    if (!isBlank) { // 商品编号不能为空
+                        String skuCode = ExcelUtils.getStringValue(excelDetail.getCell(0));
+                        if (StringUtils.isNotBlank(skuCode)) {
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + rowNum + "行" + e.getLocalizedMessage());
+        }
+    	return JsonResult.successJsonResult();
+    }
+    
     /**
      * 
      * <p>
@@ -666,5 +708,5 @@ public class MerchantService {
 	}
 	return oneLevelMenus;
     }
-
+    
 }

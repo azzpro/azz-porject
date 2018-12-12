@@ -20,6 +20,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.azz.core.common.JsonResult;
@@ -79,6 +80,7 @@ import sun.misc.BASE64Decoder;
  * @version 1.0
  * @author 刘建麟 2018年10月14日 上午9:27:50
  */
+@Transactional(rollbackFor = Exception.class)
 @Service
 @Slf4j
 public class UserService{

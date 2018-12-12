@@ -129,7 +129,7 @@ public interface UserService {
      * @throws IOException
      * @author 黄智聪  2018年12月12日 上午11:03:15
      */
-    @RequestMapping("/azz/api/user/importPlatformUser")
+    @PostMapping("/azz/api/user/importPlatformUser")
     JsonResult<String> importPlatformUser(@RequestBody ImportPlatformUserParam param) throws IOException;
     
     

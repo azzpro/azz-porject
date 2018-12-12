@@ -7,6 +7,7 @@
  
 package com.azz.platform.user.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -30,6 +31,7 @@ import com.azz.platform.user.pojo.bo.EditPasswordParam;
 import com.azz.platform.user.pojo.bo.EditRoleParam;
 import com.azz.platform.user.pojo.bo.EditUserParam;
 import com.azz.platform.user.pojo.bo.EnableOrDisableOrDelUserParam;
+import com.azz.platform.user.pojo.bo.ImportPlatformUserParam;
 import com.azz.platform.user.pojo.bo.LoginParam;
 import com.azz.platform.user.pojo.bo.SearchDeptParam;
 import com.azz.platform.user.pojo.bo.SearchRoleParam;
@@ -349,6 +351,18 @@ public class UserController {
     @RequestMapping(value="getUserInfo",method=RequestMethod.GET)
     JsonResult<UserInfo> getUserInfo(@RequestParam("userCode") String userCode){
     	return userService.getUserInfo(userCode);
+    }
+    
+    /**
+     * 
+     * <p>导入平台端成员</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年10月20日 上午10:31:52
+     */
+    @RequestMapping(value="importPlatformUser",method=RequestMethod.POST)
+    JsonResult<String> importPlatformUser(@RequestBody ImportPlatformUserParam param) throws IOException{
+    	return userService.importPlatformUser(param);
     }
     
 }

@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.azz.core.common.JsonResult;
@@ -57,6 +58,7 @@ import com.github.pagehelper.PageHelper;
  * @version 1.0
  * @author 彭斌  2018年11月27日 下午7:03:29
  */
+@Transactional(rollbackFor = Exception.class)
 @Service
 public class IndexService {
     

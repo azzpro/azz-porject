@@ -22,8 +22,10 @@ public interface MerchantRoleMapper {
     int updateByPrimaryKeySelective(MerchantRole record);
 
     int updateByPrimaryKey(MerchantRole record);
-    
+
     MerchantRole selectByRoleCode(String roleCode);
+    
+    MerchantRole selectMerchantRole(@Param("roleCode")String roleCode, @Param("merchantId")Long merchantId);
     
     int updateByRoleCode(MerchantRole record);
     

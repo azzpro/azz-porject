@@ -7,6 +7,8 @@
  
 package com.azz.merchant.api;
 
+import java.io.IOException;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +22,7 @@ import com.azz.merchant.pojo.bo.AddMerchantUserParam;
 import com.azz.merchant.pojo.bo.CompleteMerchantInfoParam;
 import com.azz.merchant.pojo.bo.EditMerchantUserParam;
 import com.azz.merchant.pojo.bo.EnableOrDisableOrDelMerchantUserParam;
+import com.azz.merchant.pojo.bo.ImportMerchantUserParam;
 import com.azz.merchant.pojo.bo.LoginParam;
 import com.azz.merchant.pojo.bo.MerchantRegistParam;
 import com.azz.merchant.pojo.bo.SearchMerchantUserParam;
@@ -155,6 +158,17 @@ public interface MerchantService {
      */
     @RequestMapping("/azz/api/merchant/getMerchantInfo")
     public JsonResult<MerchantInfo> getMerchantInfo(@RequestParam("merchantCode") String merchantCode);
+    
+    /**
+     * 
+     * <p>导入商户成员</p>
+     * @param param
+     * @return
+     * @throws IOException
+     * @author 黄智聪  2018年12月11日 下午4:22:31
+     */
+    @RequestMapping("/azz/api/merchant/importMerchantUser")
+    JsonResult<String> importMerchantUser(@RequestBody ImportMerchantUserParam param) throws IOException;
     
 }
 

@@ -23,11 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.ShiroAuthErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.MerchantConstants;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.core.exception.SuppressedException;
+import com.azz.exception.JSR303ValidationException;
 import com.azz.merchant.api.MerchantService;
 import com.azz.merchant.pojo.bo.AddMerchantUserParam;
 import com.azz.merchant.pojo.bo.BusinessLicense;
@@ -35,6 +37,8 @@ import com.azz.merchant.pojo.bo.CompleteMerchantInfoParam;
 import com.azz.merchant.pojo.bo.CompleteMerchantInfoWebParam;
 import com.azz.merchant.pojo.bo.EditMerchantUserParam;
 import com.azz.merchant.pojo.bo.EnableOrDisableOrDelMerchantUserParam;
+import com.azz.merchant.pojo.bo.ImportMerchantUserParam;
+import com.azz.merchant.pojo.bo.ImportMerchantUserWebParam;
 import com.azz.merchant.pojo.bo.LoginParam;
 import com.azz.merchant.pojo.bo.MerchantRegistParam;
 import com.azz.merchant.pojo.bo.SearchMerchantUserParam;
@@ -251,6 +255,21 @@ public class MerchantController {
     @RequestMapping("/sendVerificationCode")
     public JsonResult<String> sendVerificationCode(String phoneNumber) {
     	return merchantService.sendVerificationCode(phoneNumber);
+    }
+    
+    @RequestMapping("/importMerchantUser")
+    public JsonResult<String> importMerchantUser(ImportMerchantUserWebParam webParam) throws IOException {
+    	JSR303ValidateUtils.validate(webParam);
+    	MultipartFile file = webParam.getFile();
+    	String fileName = file.getOriginalFilename();
+    	if(!fileName.endsWith(".xls") && !fileName.endsWith(".xlsx")) {
+    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "文件格式有误");
+    	}
+    	ImportMerchantUserParam param = new ImportMerchantUserParam();
+    	param.setMerchantCode(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantCode());
+    	param.setCreator(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+    	param.setBase64Str(Base64.encode(file.getBytes()));
+    	return merchantService.importMerchantUser(param);
     }
     
 }

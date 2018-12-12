@@ -7,6 +7,8 @@
  
 package com.azz.merchant.controller;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,7 @@ import com.azz.merchant.pojo.bo.AddMerchantUserParam;
 import com.azz.merchant.pojo.bo.CompleteMerchantInfoParam;
 import com.azz.merchant.pojo.bo.EditMerchantUserParam;
 import com.azz.merchant.pojo.bo.EnableOrDisableOrDelMerchantUserParam;
+import com.azz.merchant.pojo.bo.ImportMerchantUserParam;
 import com.azz.merchant.pojo.bo.LoginParam;
 import com.azz.merchant.pojo.bo.MerchantRegistParam;
 import com.azz.merchant.pojo.bo.SearchMerchantUserParam;
@@ -98,6 +101,11 @@ public class MerchantController {
     @RequestMapping("/getMerchantInfo")
     public JsonResult<MerchantInfo> getMerchantInfo(@RequestParam("merchantCode") String merchantCode) {
 	return merchantService.getMerchantInfo(merchantCode);
+    }
+    
+    @RequestMapping("/importMerchantUser")
+    public JsonResult<String> importMerchantUser(@RequestBody ImportMerchantUserParam param) throws IOException{
+    	return merchantService.importMerchantUser(param);
     }
 }
 

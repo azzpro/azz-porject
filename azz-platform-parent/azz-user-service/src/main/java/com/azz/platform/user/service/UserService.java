@@ -5,10 +5,19 @@
 
 package com.azz.platform.user.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +27,7 @@ import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
 import com.azz.core.common.errorcode.ShiroAuthErrorCode;
 import com.azz.core.common.page.Pagination;
+import com.azz.core.constants.SmsConstants;
 import com.azz.core.constants.UserConstants;
 import com.azz.core.constants.UserConstants.UserStatus;
 import com.azz.core.exception.BaseException;
@@ -37,20 +47,29 @@ import com.azz.platform.user.pojo.bo.AddUserParam;
 import com.azz.platform.user.pojo.bo.EditPasswordParam;
 import com.azz.platform.user.pojo.bo.EditUserParam;
 import com.azz.platform.user.pojo.bo.EnableOrDisableOrDelUserParam;
+import com.azz.platform.user.pojo.bo.ImportPlatformUserParam;
 import com.azz.platform.user.pojo.bo.LoginParam;
 import com.azz.platform.user.pojo.bo.SearchUserParam;
 import com.azz.platform.user.pojo.vo.LoginUserInfo;
 import com.azz.platform.user.pojo.vo.Menu;
 import com.azz.platform.user.pojo.vo.UserInfo;
 import com.azz.platform.user.pojo.vo.UserPermission;
+import com.azz.system.api.SystemSmsSendService;
+import com.azz.system.bo.SmsParams;
 import com.azz.system.sequence.api.DbSequenceService;
+import com.azz.util.ExcelUtils;
 import com.azz.util.JSR303ValidateUtils;
+import com.azz.util.ObjectUtils;
 import com.azz.util.PasswordHelper;
+import com.azz.util.RandomStringUtils;
 import com.azz.util.StringUtils;
 import com.azz.util.SystemSeqUtils;
 import com.github.pagehelper.PageHelper;
+import com.google.common.collect.Lists;
 
+import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
+import sun.misc.BASE64Decoder;
 
 /**
  * <P>
@@ -81,6 +100,9 @@ public class UserService{
     
     @Autowired
     private DbSequenceService dbSequenceService;
+    
+    @Autowired
+    private SystemSmsSendService systemSmsSendService;
 
     public JsonResult<String> loginAuth(@RequestBody LoginParam param) {
 	log.debug("————身份认证方法————");
@@ -109,7 +131,184 @@ public class UserService{
 	info.setMenus(generateMenuTree(phoneNumber));
 	return JsonResult.successJsonResult(info);
     }
+    
+    /**
+     * 
+     * <p>导入商户成员</p>
+     * @param in
+     * @param merchantCode
+     * @param creator
+     * @return
+     * @throws IOException
+     * @author 黄智聪  2018年12月11日 下午3:16:08
+     */
+    public JsonResult<String> importMerchantUser(@RequestBody ImportPlatformUserParam param) throws IOException{
+    	// 记录出错行数
+        int errorRowNum = 1;
+        String creator = param.getCreator();
+        
+        String base64Str = param.getBase64Str();
+        //将字符串转换为byte数组
+        byte[] bytes = new BASE64Decoder().decodeBuffer(base64Str);
+        //转化为输入流
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+        
+        @Cleanup
+        HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
+        HSSFSheet sheet = workbook.getSheetAt(0);
+		// 手机号码以及对应的密码
+		Map<String, String> phoneNumbers = new HashMap<>();
+		int lastRowNum = sheet.getLastRowNum();
+		if(lastRowNum == 0) {// 未填写数据
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "导入数据不可为空");
+		}
+        for (int i = 1; i <= lastRowNum; i++) {
+        	HSSFRow row = sheet.getRow(i);
+        	errorRowNum++;
+        	if (ObjectUtils.isNotNull(row)) {
+        		// 获取当前行的元素信息
+        		ArrayList<Cell> rowCells = Lists.newArrayList(row.cellIterator());
+        		String userName = null;
+        		String phoneNumber = null;
+        		String email = null;
+        		String postName = null;
+        		Long roleId = null;
+        		Long deptId = null;
+        		String randomPwd = null;
+        		
+        		// 成员姓名校验
+        		if (Cell.CELL_TYPE_BLANK != rowCells.get(0).getCellType()) {
+        			String cell_1 = ExcelUtils.getStringValue(row.getCell(0));
+        			if (StringUtils.isNotBlank(cell_1)) {
+        				userName = cell_1;
+        			}else {
+        				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行成员姓名不允许为空");
+        			}
+        		}else {
+        			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行成员姓名不允许为空");
+        		}
+        		
+        		// 手机号校验
+        		if (Cell.CELL_TYPE_BLANK != rowCells.get(1).getCellType()) { 
+        			String cell_2 = ExcelUtils.getStringValue(row.getCell(1));
+        			if (StringUtils.isNotBlank(cell_2)) {
+        				phoneNumber = cell_2;
+        				if(!StringUtils.isPhoneNumber(phoneNumber)) {
+        					throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行手机号格式不正确");
+        				}
+        				PlatformUser u = platformUserMapper.getUserByPhoneNumber(phoneNumber, null);
+        				if (u != null) {
+        				    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行手机号已存在");
+        				}
+        			}else {
+        				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行手机号不允许为空");
+        			}
+        		}else {
+        			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行手机号不允许为空");
+        		}
+        		
+        		//　邮箱校验
+        		if (Cell.CELL_TYPE_BLANK != rowCells.get(2).getCellType()) {
+        			String cell_3 = ExcelUtils.getStringValue(row.getCell(2));
+        			if (StringUtils.isNotBlank(cell_3)) {
+        				email = cell_3;
+        				if(!StringUtils.isEmail(email)) {
+        					throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行邮箱格式不正确");
+        				}
+        				PlatformUser u = platformUserMapper.getUserByEmail(email, null);
+        			    if (u != null) {
+        			    	throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行邮箱已存在");
+        			    }
+        			}
+        		}
 
+        		//　岗位名称校验
+        		if (Cell.CELL_TYPE_BLANK != rowCells.get(3).getCellType()) {
+        			String cell_4 = ExcelUtils.getStringValue(row.getCell(3));
+        			if (StringUtils.isNotBlank(cell_4)) {
+        				postName = cell_4;
+        			}
+        		}
+        		
+        		//　部门编码校验
+        		if (Cell.CELL_TYPE_BLANK != rowCells.get(4).getCellType()) {
+        			String cell_5 = ExcelUtils.getStringValue(row.getCell(4));
+        			if (StringUtils.isNotBlank(cell_5)) {
+        				String deptCode = cell_5;
+        				PlatformDept dept = platformDeptMapper.selectByDeptCode(deptCode);
+                		if (dept == null) {
+                		    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行部门编码不存在");
+                		}
+                		deptId = dept.getId();
+        			}else {
+        				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行部门编码不允许为空");
+        			}
+        		}else {
+        			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行部门编码不允许为空");
+        		}
+
+        		//　角色编码校验
+        		if (Cell.CELL_TYPE_BLANK != rowCells.get(5).getCellType()) {
+        			String cell_6 = ExcelUtils.getStringValue(row.getCell(5));
+        			if (StringUtils.isNotBlank(cell_6)) {
+        				String roleCode = cell_6;
+        				PlatformRole role = platformRoleMapper.selectByRoleCode(roleCode);
+        				if (role == null) {
+        					throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行角色编码不存在");
+        				}
+        				roleId = role.getId();
+        			}else {
+        				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行角色编码不允许为空");
+        			}
+        		}else {
+        			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行角色编码不允许为空");
+        		}
+        		
+        		// 随机6位数字密码
+        		randomPwd = RandomStringUtils.randomNumeric(6);
+        		// 生成盐值加密的密码
+        		Password pwd = PasswordHelper.encryptPasswordByModel(randomPwd);
+        		// 将手机号和密码存起来
+        		phoneNumbers.put(phoneNumber, randomPwd);
+        		
+        		Date nowDate = new Date();
+        		String code = dbSequenceService.getPlatEmployeeNumber();
+        		PlatformUser userRecord = PlatformUser.builder().createTime(nowDate).creator(creator).deptId(deptId)
+        			.email(email).password(pwd.getPassword()).phoneNumber(phoneNumber)
+        			.postName(postName).userCode(SystemSeqUtils.getSeq(code))
+        			.userName(userName).salt(pwd.getSalt()).build();
+        		platformUserMapper.insertSelective(userRecord);
+        		// 用户与角色绑定
+        		PlatformUserRole userRoleRecord = PlatformUserRole.builder().createTime(nowDate).creator(creator)
+        			.userId(userRecord.getId()).roleId(roleId).build();
+        		platformUserRoleMapper.insertSelective(userRoleRecord);
+        		
+        	}
+        }
+        
+        // 向成员发送密码
+        Set<String> set = phoneNumbers.keySet();
+        for (String phoneNumber : set) {
+        	String pwd = phoneNumbers.get(phoneNumber);
+        	System.out.println(pwd);
+        	try {
+        		// 发送短信  TODO
+        		this.sendPasswordMsg(phoneNumber, pwd);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+    	return JsonResult.successJsonResult();
+    }
+    
+    // 发送短信通知成员
+    private void sendPasswordMsg(String phoneNumber, String password) {
+    	SmsParams sms = new SmsParams();
+    	sms.setPhone(phoneNumber);
+    	sms.setMsgType(SmsConstants.ACCOUNT_CREATE_SUCCESS.getMsgType());
+    	systemSmsSendService.sendSmsCode(sms);
+    }
+    
     /**
      * 
      * <p>

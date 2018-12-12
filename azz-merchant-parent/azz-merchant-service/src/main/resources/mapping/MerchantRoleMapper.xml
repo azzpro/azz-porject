@@ -159,6 +159,15 @@
     and status = 1
   </select>
   
+  <select id="selectMerchantRole" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_role
+    where role_code = #{roleCode}
+    and merchant_id = #{merchantId}
+    and status = 1
+  </select>
+  
   <update id="updateByRoleCode" parameterType="com.azz.merchant.pojo.MerchantRole">
     update merchant_role
     <set>

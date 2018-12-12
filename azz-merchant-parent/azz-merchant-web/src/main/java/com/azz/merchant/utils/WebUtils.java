@@ -24,7 +24,7 @@ public class WebUtils {
 	getShiroSession().setAttribute(key, value);
     }
     
-    public static LoginMerchantUserInfo getLoginMerchanUser() {
+    public static LoginMerchantUserInfo getLoginMerchantUser() {
 	return (LoginMerchantUserInfo)getShiroSession().getAttribute(MerchantConstants.LOGIN_MERCHANT_USER);
     }
     

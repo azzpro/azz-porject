@@ -7,10 +7,13 @@
 
 package com.azz.platform.user.api;
 
+import java.io.IOException;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
@@ -19,6 +22,7 @@ import com.azz.platform.user.pojo.bo.AddUserParam;
 import com.azz.platform.user.pojo.bo.EditPasswordParam;
 import com.azz.platform.user.pojo.bo.EditUserParam;
 import com.azz.platform.user.pojo.bo.EnableOrDisableOrDelUserParam;
+import com.azz.platform.user.pojo.bo.ImportPlatformUserParam;
 import com.azz.platform.user.pojo.bo.LoginParam;
 import com.azz.platform.user.pojo.bo.SearchUserParam;
 import com.azz.platform.user.pojo.vo.LoginUserInfo;
@@ -116,6 +120,17 @@ public interface UserService {
      */
     @GetMapping("/azz/api/user/getUserInfo")
     JsonResult<UserInfo> getUserInfo(@RequestParam("userCode") String userCode);
+    
+    /**
+     * 
+     * <p>导入平台成员</p>
+     * @param param
+     * @return
+     * @throws IOException
+     * @author 黄智聪  2018年12月12日 上午11:03:15
+     */
+    @RequestMapping("/azz/api/user/importPlatformUser")
+    JsonResult<String> importPlatformUser(@RequestBody ImportPlatformUserParam param) throws IOException;
     
     
 }

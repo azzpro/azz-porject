@@ -45,7 +45,7 @@ public class ProductController {
 	 */
 	@RequestMapping(value="selectProductList",method=RequestMethod.GET)
 	JsonResult<Pagination<MerchantProductList>> selectProductList(MerchantProductParam param){
-		param.setMerchantId(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantId());
+		param.setMerchantId(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantId());
 		return productService.selectProductList(param);
 	}
 	
@@ -92,7 +92,7 @@ public class ProductController {
 	 */
 	@RequestMapping(value="addProduct",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
 	public JsonResult<String> addProduct(@RequestBody ProductParams param){
-		param.setCreator(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+		param.setCreator(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
 		return productService.addProduct(param);
 	}
 	
@@ -115,7 +115,7 @@ public class ProductController {
 	 */
 	@RequestMapping(value="updateProduct",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
 	public JsonResult<String> updateProduct(@RequestBody ProductParams param){
-		param.setModify(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+		param.setModify(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
 		return productService.updateProduct(param);
 	}
 	

@@ -43,43 +43,43 @@ public class PermissionController {
     
     @RequestMapping("/getPermissionList")
     public JsonResult<List<Permission>> getPermissionList(String roleCode) {
-	return permissionService.getPermissionList(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantCode(), roleCode);
+	return permissionService.getPermissionList(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantCode(), roleCode);
     }
     
     @RequestMapping("/addRole")
     public JsonResult<String> addRole(AddRoleParam param) {
-	param.setMerchantCode(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantCode());
-	param.setCreator(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+	param.setMerchantCode(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantCode());
+	param.setCreator(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
 	return permissionService.addRole(param);
     }
     
     @RequestMapping("/editRole")
     public JsonResult<String> editRole(EditRoleParam param) {
-	param.setMerchantCode(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantCode());
-	param.setModifier(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+	param.setMerchantCode(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantCode());
+	param.setModifier(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
 	return permissionService.editRole(param);
     }
     
     @RequestMapping("/delRole")
     public JsonResult<String> delRole(DelRoleParam param) {
-	param.setModifier(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+	param.setModifier(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
 	return permissionService.delRole(param);
     }
     
     @RequestMapping("/getRoleList")
     public JsonResult<List<RoleInfo>> getRoleList(SearchRoleParam param) {
-	param.setMerchantCode(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantCode());
+	param.setMerchantCode(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantCode());
 	return permissionService.getRoleList(param);
     }
     
     @RequestMapping("/getRolePermissions")
     public JsonResult<List<String>> getRolePermissions(@RequestParam("roleCode")String roleCode) {
-	return permissionService.getRolePermissions(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantCode(), roleCode);
+	return permissionService.getRolePermissions(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantCode(), roleCode);
     }
     
     @RequestMapping("/setRolePermissions")
     public JsonResult<String> setRolePermissions(SetRolePermissionParam param) {
-	param.setCreator(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+	param.setCreator(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
 	return permissionService.setRolePermissions(param);
     }
 

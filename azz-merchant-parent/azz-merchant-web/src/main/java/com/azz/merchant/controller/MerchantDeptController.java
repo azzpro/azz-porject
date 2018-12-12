@@ -42,54 +42,54 @@ public class MerchantDeptController {
     
     @RequestMapping("/addFirstLevelDept")
     public JsonResult<String> addFirstLevelDept(AddMerchantDeptParam param){
-        param.setMerchantId(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantId());
-        param.setCreator(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+        param.setMerchantId(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantId());
+        param.setCreator(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
         return deptService.addFirstLevelDept(param);
     }
 
     @RequestMapping("/addChildDept")
     public JsonResult<String> addChildDept(AddMerchantDeptParam param){
-        param.setMerchantId(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantId());
-        param.setCreator(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+        param.setMerchantId(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantId());
+        param.setCreator(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
         return deptService.addChildDept(param);
     }
     
     @RequestMapping("/getDeptInfo")
     public JsonResult<MerchantDept> getDeptInfo(SearchMerchantDeptInfoParam param){
-        param.setMerchantId(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantId());
+        param.setMerchantId(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantId());
         return deptService.getDeptInfo(param);
     }
     
     @RequestMapping("/editDept")
     public JsonResult<String> editDept(EditMerchantDeptParam param){
-        param.setMerchantId(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantId());
-        param.setModifier(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+        param.setMerchantId(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantId());
+        param.setModifier(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
         return deptService.editDept(param);
     }
     
     @RequestMapping("/searchDeptList")
     public JsonResult<List<MerchantDeptList>> searchDeptList(SearchMerchantDeptListParam param){
-        param.setMerchantCode(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantCode());
+        param.setMerchantCode(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantCode());
         return deptService.searchDeptList(param);
     }
     
     @RequestMapping("/searchChildDeptList")
     public JsonResult<List<MerchantDeptList>> searchChildDeptList(SearchMerchantChildDeptParam param){
-        param.setMerchantCode(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantCode());
+        param.setMerchantCode(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantCode());
         return deptService.searchChildDeptList(param);
     }
     
     @RequestMapping("/isEnableDept")
     public JsonResult<String> isEnableDept(EditDeptIsEnableParam param){
-        param.setMerchantId(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantId());
-        param.setModifier(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+        param.setMerchantId(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantId());
+        param.setModifier(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
         return deptService.isEnableDept(param);
     }
     
     @RequestMapping("/delDept")
     public JsonResult<String> delDept(DelDeptParam param){
-        param.setMerchantId(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantId());
-        param.setModifier(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+        param.setMerchantId(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantId());
+        param.setModifier(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
         return deptService.delDept(param);
     }
 }

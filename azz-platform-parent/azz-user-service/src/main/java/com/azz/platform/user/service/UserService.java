@@ -134,15 +134,13 @@ public class UserService{
     
     /**
      * 
-     * <p>导入商户成员</p>
-     * @param in
-     * @param merchantCode
-     * @param creator
+     * <p>导入平台端成员</p>
+     * @param param
      * @return
      * @throws IOException
      * @author 黄智聪  2018年12月11日 下午3:16:08
      */
-    public JsonResult<String> importMerchantUser(@RequestBody ImportPlatformUserParam param) throws IOException{
+    public JsonResult<String> importPlatformUser(@RequestBody ImportPlatformUserParam param) throws IOException{
     	// 记录出错行数
         int errorRowNum = 1;
         String creator = param.getCreator();

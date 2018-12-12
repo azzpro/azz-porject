@@ -56,7 +56,7 @@ public class GoodsModuleController {
 	 */
 	@RequestMapping("/getGoodModuleInfoList")
 	public JsonResult<Pagination<GoodsModuleInfo>> getGoodModuleInfoList(SearchGoodsModuleParam param){
-		param.setMerchantId(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantId());
+		param.setMerchantId(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantId());
 		return goodsModuleService.getGoodModuleInfoList(param);
 	}
 	
@@ -89,7 +89,7 @@ public class GoodsModuleController {
 		GoodsModulePic goodsModulePic = new GoodsModulePic(goodsModulePicFile.getOriginalFilename(),
 		    		goodsModulePicFile.getSize(), Base64.encode(goodsModulePicFile.getBytes()));
 		param.setGoodsModulePic(goodsModulePic);
-		param.setCreator(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+		param.setCreator(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
 		return goodsModuleService.addGoodsModule(param);
 	}
 	
@@ -112,7 +112,7 @@ public class GoodsModuleController {
 					goodsModulePicFile.getSize(), Base64.encode(goodsModulePicFile.getBytes()));
 			param.setGoodsModulePic(goodsModulePic);
 		}
-		param.setModifier(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+		param.setModifier(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
 		return goodsModuleService.editGoodsModule(param);
 	}
 	
@@ -125,7 +125,7 @@ public class GoodsModuleController {
 	 */
 	@RequestMapping("/putOnOrPutOffOrDelGoodsModule")
 	public JsonResult<String> putOnOrPutOffOrDelGoodsModule(PutOnOrPutOffOrDelGoodsModuleParam param){
-		param.setModifier(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+		param.setModifier(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
 		return goodsModuleService.putOnOrPutOffOrDelGoodsModule(param);
 	}
 	

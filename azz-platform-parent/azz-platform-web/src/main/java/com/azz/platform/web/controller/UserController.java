@@ -7,6 +7,8 @@
 
 package com.azz.platform.web.controller;
 
+import java.io.IOException;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -15,22 +17,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.ShiroAuthErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.UserConstants;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.core.exception.SuppressedException;
+import com.azz.exception.JSR303ValidationException;
 import com.azz.platform.user.api.UserService;
 import com.azz.platform.user.pojo.bo.AddUserParam;
 import com.azz.platform.user.pojo.bo.EditPasswordParam;
 import com.azz.platform.user.pojo.bo.EditUserParam;
 import com.azz.platform.user.pojo.bo.EnableOrDisableOrDelUserParam;
+import com.azz.platform.user.pojo.bo.ImportPlatformUserParam;
+import com.azz.platform.user.pojo.bo.ImportPlatformUserWebParam;
 import com.azz.platform.user.pojo.bo.LoginParam;
 import com.azz.platform.user.pojo.bo.SearchUserParam;
 import com.azz.platform.user.pojo.vo.LoginUserInfo;
 import com.azz.platform.user.pojo.vo.UserInfo;
+import com.azz.util.Base64;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.utils.WebUtils;
 
@@ -237,6 +245,28 @@ public class UserController {
 	return userService.getUserInfo(userCode);
     }
     
-    
+    /**
+     * <p>
+     * 导入平台成员
+     * </p>
+     * 
+     * @param param
+     * @return
+     * @author 黄智聪 2018年10月18日 下午3:02:23
+     * @throws IOException 
+     */
+    @RequestMapping(value = "/importPlatformUser")
+    public JsonResult<String> importPlatformUser(ImportPlatformUserWebParam webParam) throws IOException{
+    	JSR303ValidateUtils.validate(webParam);
+    	MultipartFile file = webParam.getFile();
+    	String fileName = file.getOriginalFilename();
+    	if(!fileName.endsWith(".xls") && !fileName.endsWith(".xlsx")) {
+    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "文件格式有误");
+    	}
+    	ImportPlatformUserParam param = new ImportPlatformUserParam();
+    	param.setCreator(WebUtils.getLoginUser().getUserInfo().getUserCode());
+    	param.setBase64Str(Base64.encode(file.getBytes()));
+    	return userService.importPlatformUser(param);
+    }
     
 }

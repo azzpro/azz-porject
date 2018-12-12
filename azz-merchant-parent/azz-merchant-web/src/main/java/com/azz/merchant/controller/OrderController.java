@@ -55,7 +55,7 @@ public class OrderController {
      */
     @RequestMapping("/getMerchantOrderList")
     public JsonResult<Pagination<OrderList>> getMerchantOrderList(SearchOrderListParam param) {
-        param.setMerchantId(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantId());
+        param.setMerchantId(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantId());
         return orderService.getMerchantOrderList(param);
     }
 
@@ -70,7 +70,7 @@ public class OrderController {
      */
     @RequestMapping("/getMerchantOrderDetail")
     public JsonResult<OrderDetail> getMerchantOrderDetail(SearchOrderDetailParam param) {
-        param.setMerchantId(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantId());
+        param.setMerchantId(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantId());
         return orderService.getMerchantOrderDetail(param);
     }
 
@@ -85,8 +85,8 @@ public class OrderController {
      */
     @RequestMapping("/editMerchantOrderStatus")
     JsonResult<String> editMerchantOrderStatus(EditOrderStatusWebParam param) throws IOException {
-        param.setMerchantId(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantId());
-        param.setModifier(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+        param.setMerchantId(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantId());
+        param.setModifier(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
         List<ShipmentFile> sf = new ArrayList<>();
         if (param.getStatus() == 2) {
             for (MultipartFile shipmentFiles : param.getShipmentFiles()) {

@@ -40,7 +40,7 @@ public class InvoiceController {
      */
     @RequestMapping("/getMerchantInvoiceList")
     public JsonResult<Pagination<MerchantInvoiceList>> getMerchantInvoiceList(SearchInvoiceListParam param) {
-        param.setMerchantId(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantId());
+        param.setMerchantId(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantId());
         return merchantInvoiceService.getMerchantInvoiceList(param);
     }
 
@@ -64,7 +64,7 @@ public class InvoiceController {
      */
     @RequestMapping("/confirmBillingApplication")
     public JsonResult<String> confirmBillingApplication(ConfirmBillingParam param){
-        param.setMerchantUserCode(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+        param.setMerchantUserCode(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
         return merchantInvoiceService.confirmBillingApplication(param);
     }
     
@@ -76,7 +76,7 @@ public class InvoiceController {
      */
     @RequestMapping("/orderInvoice")
     public JsonResult<String> orderInvoice(OrderInvoiceParam param){
-        param.setMerchantUserCode(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+        param.setMerchantUserCode(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
         return merchantInvoiceService.orderInvoice(param);
     }
 }

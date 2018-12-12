@@ -219,21 +219,21 @@ public class MerchantController {
     
     @RequestMapping("/addMerchantUser")
     public JsonResult<String> addMerchantUser(AddMerchantUserParam param){
-	param.setMerchantCode(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantCode());
-	param.setCreator(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+	param.setMerchantCode(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantCode());
+	param.setCreator(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
 	return merchantService.addMerchantUser(param);
     }
     
     @RequestMapping("/editMerchantUser")
     public JsonResult<String> editMerchantUser(EditMerchantUserParam param) {
-	param.setMerchantCode(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantCode());
-	param.setModifier(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+	param.setMerchantCode(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantCode());
+	param.setModifier(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
 	return merchantService.editMerchantUser(param);
     }
     
     @RequestMapping("/getMerchantUserList")
     public JsonResult<Pagination<MerchantUserInfo>> getMerchantUserList(SearchMerchantUserParam param) {
-	param.setMerchantCode(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantCode());
+	param.setMerchantCode(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantCode());
 	return merchantService.getMerchantUserList(param);
     }
     
@@ -266,8 +266,8 @@ public class MerchantController {
     		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "文件格式有误");
     	}
     	ImportMerchantUserParam param = new ImportMerchantUserParam();
-    	param.setMerchantCode(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantCode());
-    	param.setCreator(WebUtils.getLoginMerchanUser().getMerchantUserInfo().getMerchantUserCode());
+    	param.setMerchantCode(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantCode());
+    	param.setCreator(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
     	param.setBase64Str(Base64.encode(file.getBytes()));
     	return merchantService.importMerchantUser(param);
     }

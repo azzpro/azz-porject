@@ -35,6 +35,7 @@ import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.MerchantConstants;
 import com.azz.core.constants.MerchantConstants.IsMerchantRegister;
+import com.azz.core.constants.MerchantConstants.PersonalEditType;
 import com.azz.core.constants.MerchantConstants.QualificationApplyStatus;
 import com.azz.core.constants.MerchantConstants.UserStatus;
 import com.azz.core.constants.SmsConstants;
@@ -59,8 +60,10 @@ import com.azz.merchant.pojo.MerchantUser;
 import com.azz.merchant.pojo.MerchantUserRole;
 import com.azz.merchant.pojo.bo.AddMerchantUserParam;
 import com.azz.merchant.pojo.bo.BusinessLicense;
+import com.azz.merchant.pojo.bo.CheckVerificationCodeParam;
 import com.azz.merchant.pojo.bo.CompleteMerchantInfoParam;
 import com.azz.merchant.pojo.bo.EditMerchantUserParam;
+import com.azz.merchant.pojo.bo.EditPersonalInfoParam;
 import com.azz.merchant.pojo.bo.EnableOrDisableOrDelMerchantUserParam;
 import com.azz.merchant.pojo.bo.ImportMerchantUserParam;
 import com.azz.merchant.pojo.bo.LoginParam;
@@ -825,6 +828,174 @@ public class MerchantService {
 		sms.setPhone(phoneNumber);
 		sms.setMsgType(SmsConstants.ACCOUNT_CREATE_SUCCESS.getMsgType());
 		systemSmsSendService.sendSmsCode(sms);
+	}
+	
+	/**
+	 * 
+	 * <p>
+	 * 发送修改个人信息的验证码
+	 * </p>
+	 * 
+	 * @param phoneNumber
+	 * @return
+	 * @author 黄智聪 2018年10月22日 下午5:37:30
+	 */
+	public JsonResult<String> sendEditVerificationCode(String phoneNumber) {
+		SmsParams sms = new SmsParams();
+		sms.setPhone(phoneNumber);
+		sms.setMsgType(SmsConstants.MERCHANT_REGISTER.getMsgType());
+		// TODO
+		return systemSmsSendService.sendSmsCode(sms);
+	}
+	
+	/**
+	 * 
+	 * <p>校验编辑个人信息的验证码</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年12月12日 下午3:53:25
+	 */
+	public JsonResult<String> checkEditVerificationCode(@RequestBody CheckVerificationCodeParam param) {
+		JSR303ValidateUtils.validate(param);
+		String phoneNumber = param.getPhoneNumber();
+		String verificationCode = param.getVerificationCode();
+		// 先校验验证码是否已失效
+		SmsCodeValidation sv = new SmsCodeValidation();
+		sv.setPhone(phoneNumber);
+		// TODO
+		sv.setSec(MerchantConstants.MERCHANT_REGIST_SMS_TIME_OUT);
+		JsonResult<SmsInfo> jr = systemSmsSendService.checkMsgCodeTime(sv);
+		if (!jr.getData().getCode().equals(SmsCode.SUCCESS.getCode())) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "短信验证码已失效，请重新获取");
+		}
+		// 再校验验证码是否正确
+		SmsCheck sc = new SmsCheck();
+		sc.setCode(verificationCode);
+		sc.setPhone(phoneNumber);
+		jr = systemSmsSendService.checkMsgCode(sc);
+		if (!jr.getData().getCode().equals(SmsCode.SUCCESS.getCode())) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "验证码错误");
+		}
+		return JsonResult.successJsonResult();
+	}
+	
+	
+	
+	/**
+	 * 
+	 * <p>修改个人资料</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年12月12日 下午2:56:38
+	 */
+	public JsonResult<String> editPersonalInfo(@RequestBody EditPersonalInfoParam param){
+		JSR303ValidateUtils.validate(param);
+		MerchantUser merchantUserRecord = null;
+		MerchantUser u = null;
+		Date nowDate = new Date();
+		switch (param.getEditType()) {
+		case PersonalEditType.NAME:
+			String merchantUserName = param.getUserName();
+			if(StringUtils.isBlank(merchantUserName)) {
+				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "姓名不允许为空");
+			}
+			merchantUserRecord = MerchantUser.builder()
+					.merchantUserCode(param.getModifier())
+					.merchantUserName(merchantUserName)
+					.modifier(param.getModifier())
+					.lastModifyTime(nowDate)
+					.build();
+			break;
+		case PersonalEditType.PHONE_NUMBER:
+			String phoneNumber = param.getPhoneNumber();
+			// 手机格式校验
+			if(StringUtils.isBlank(phoneNumber)) {
+				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "手机号不允许为空");
+			}
+			if (!StringUtils.isPhoneNumber(phoneNumber)) {
+				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "请输入正确的手机号");
+			}
+			// 手机是否已被商户成员所使用
+			u = merchantUserMapper.getMerchantUserByPhoneNumberAndMerchantUserCode(phoneNumber, param.getModifier());
+			if (u != null) {
+				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "手机号已被使用，请更改");
+			}
+			
+			// 校验验证码
+			CheckVerificationCodeParam checkParam = new CheckVerificationCodeParam();
+			checkParam.setPhoneNumber(phoneNumber);
+			checkParam.setVerificationCode(param.getVerificationCode());
+			this.checkEditVerificationCode(checkParam);
+
+			merchantUserRecord = MerchantUser.builder()
+					.merchantUserCode(param.getModifier())
+					.phoneNumber(phoneNumber)
+					.modifier(param.getModifier())
+					.lastModifyTime(nowDate)
+					.build();
+			break;
+		case PersonalEditType.EMAIL:
+			String email = param.getEmail();
+			// 邮箱格式校验
+			if(StringUtils.isBlank(email)) {
+				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "邮箱不允许为空");
+			}
+			if (!StringUtils.isEmail(email)) {
+				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "请输入正确的邮箱");
+			}
+			// 邮箱是否已被商户成员所使用
+			u = merchantUserMapper.getMerchantUserByEmail(email, param.getModifier());
+			if (u != null) {
+				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "邮箱已被使用，请更改");
+			}
+			
+			// 校验邮箱验证码
+			this.checkEditEmailVerificationCode(param.getVerificationCode(), email);
+
+			merchantUserRecord = MerchantUser.builder()
+					.merchantUserCode(param.getModifier())
+					.email(email)
+					.modifier(param.getModifier())
+					.lastModifyTime(nowDate)
+					.build();
+			break;
+		case PersonalEditType.PASSWORD:
+			String password = param.getPassword();
+			String confirmPassword = param.getConfirmPassword();
+			if(StringUtils.isBlank(password) || StringUtils.isBlank(confirmPassword)) {
+				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "密码或确认密码不允许为空");
+			}
+			// 密码与确认密码一致性校验
+			if (!password.equals(confirmPassword)) {
+			    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "密码与确认密码不一致");
+			}
+			
+			// 生成盐值加密的密码
+			Password pwd = PasswordHelper.encryptPasswordByModel(password);
+			merchantUserRecord = MerchantUser.builder()
+					.merchantUserCode(param.getModifier())
+					.password(pwd.getPassword())
+					.salt(pwd.getSalt())
+					.modifier(param.getModifier())
+					.lastModifyTime(nowDate)
+					.build();
+			break;
+		default:
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "修改类型不存在");
+		}
+		merchantUserMapper.updateByMerchantUserCode(merchantUserRecord);
+		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
+	 * <p>校验邮箱验证码  TODO</p>
+	 * @param verificationCode
+	 * @param email
+	 * @author 黄智聪  2018年12月12日 下午4:27:39
+	 */
+	public void checkEditEmailVerificationCode(String verificationCode, String email) {
+		
 	}
 
 	/**

@@ -370,25 +370,25 @@ public class ClientService {
 				.companyName(param.getCompanyName()).companyTel(param.getCompanyTel()).creditCode(creditCode)
 				.clientUserId(user.getId()).clientUserName(param.getClientUserName()).createTime(nowDate)
 				.status(QualificationApplyStatus.PENDING.getValue())
-				.tradingCertificateFirstFileName(uploadTradingCertificateFileInfos.size() == 1
-						? uploadTradingCertificateFileInfos.get(0).getOriginalFileName()
-						: null)
-				.tradingCertificateFirstFileUrl(uploadTradingCertificateFileInfos.size() == 1
-						? uploadTradingCertificateFileInfos.get(0).getImgUrl()
-						: null)
-				.tradingCertificateSecondFileName(uploadTradingCertificateFileInfos.size() == 2
-						? uploadTradingCertificateFileInfos.get(1).getOriginalFileName()
-						: null)
-				.tradingCertificateSecondFileUrl(uploadTradingCertificateFileInfos.size() == 2
-						? uploadTradingCertificateFileInfos.get(1).getImgUrl()
-						: null)
-				.tradingCertificateThirdFileName(uploadTradingCertificateFileInfos.size() == 3
-						? uploadTradingCertificateFileInfos.get(2).getOriginalFileName()
-						: null)
-				.tradingCertificateThirdFileUrl(uploadTradingCertificateFileInfos.size() == 3
-						? uploadTradingCertificateFileInfos.get(2).getImgUrl()
-						: null)
 				.build();
+		if (uploadTradingCertificateFileInfos.size() == 1) {
+			clientApplyRecord.setTradingCertificateFirstFileName(uploadTradingCertificateFileInfos.get(0).getOriginalFileName());
+			clientApplyRecord.setTradingCertificateFirstFileUrl(uploadTradingCertificateFileInfos.get(0).getImgUrl());
+		}
+		if (uploadTradingCertificateFileInfos.size() == 2) {
+			clientApplyRecord.setTradingCertificateFirstFileName(uploadTradingCertificateFileInfos.get(0).getOriginalFileName());
+			clientApplyRecord.setTradingCertificateFirstFileUrl(uploadTradingCertificateFileInfos.get(0).getImgUrl());
+			clientApplyRecord.setTradingCertificateSecondFileName(uploadTradingCertificateFileInfos.get(1).getOriginalFileName());
+			clientApplyRecord.setTradingCertificateSecondFileUrl(uploadTradingCertificateFileInfos.get(1).getImgUrl());
+		}
+		if (uploadTradingCertificateFileInfos.size() == 3) {
+			clientApplyRecord.setTradingCertificateFirstFileName(uploadTradingCertificateFileInfos.get(0).getOriginalFileName());
+			clientApplyRecord.setTradingCertificateFirstFileUrl(uploadTradingCertificateFileInfos.get(0).getImgUrl());
+			clientApplyRecord.setTradingCertificateSecondFileName(uploadTradingCertificateFileInfos.get(1).getOriginalFileName());
+			clientApplyRecord.setTradingCertificateSecondFileUrl(uploadTradingCertificateFileInfos.get(1).getImgUrl());
+			clientApplyRecord.setTradingCertificateThirdFileName(uploadTradingCertificateFileInfos.get(2).getOriginalFileName());
+			clientApplyRecord.setTradingCertificateThirdFileUrl(uploadTradingCertificateFileInfos.get(2).getImgUrl());
+		}
 		clientApplyMapper.insertSelective(clientApplyRecord);
 		return this.getLoginClientUserInfoByPhoneNumber(user.getPhoneNumber());
 	}

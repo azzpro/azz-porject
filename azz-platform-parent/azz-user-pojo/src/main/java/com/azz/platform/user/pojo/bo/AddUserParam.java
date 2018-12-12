@@ -27,12 +27,6 @@ public class AddUserParam {
     
     private String email;
     
-    @NotBlank(message = "密码不允许为空")
-    private String password;
-    
-    @NotBlank(message = "确认密码不允许为空")
-    private String confirmPassword;
-    
     private String postName;
 
     @NotBlank(message = "部门编码不允许为空")

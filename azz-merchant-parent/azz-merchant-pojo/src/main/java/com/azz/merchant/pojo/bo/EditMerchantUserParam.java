@@ -30,10 +30,6 @@ public class EditMerchantUserParam {
     
     private String email;
     
-    private String password;
-    
-    private String confirmPassword;
-    
     private String postName;
 
     @NotBlank(message = "部门编码不允许为空")

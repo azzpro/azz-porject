@@ -31,6 +31,7 @@ import com.azz.platform.user.pojo.bo.EditPasswordParam;
 import com.azz.platform.user.pojo.bo.EditRoleParam;
 import com.azz.platform.user.pojo.bo.EditUserParam;
 import com.azz.platform.user.pojo.bo.EnableOrDisableOrDelUserParam;
+import com.azz.platform.user.pojo.bo.ImportPlatformDeptParam;
 import com.azz.platform.user.pojo.bo.ImportPlatformUserParam;
 import com.azz.platform.user.pojo.bo.LoginParam;
 import com.azz.platform.user.pojo.bo.SearchDeptParam;
@@ -365,5 +366,16 @@ public class UserController {
     	return userService.importPlatformUser(param);
     }
     
+    /**
+     * <p>导入平台端部门信息</p>
+     * @param param
+     * @return
+     * @throws IOException
+     * @author 彭斌  2018年12月12日 下午2:01:45
+     */
+    @RequestMapping(value="importPlatformDept",method=RequestMethod.POST)
+    JsonResult<String> importPlatformDept(@RequestBody ImportPlatformDeptParam param) throws IOException{
+        return deptService.importPlatformDept(param);
+    }
 }
 

@@ -40,6 +40,7 @@ import com.github.pagehelper.PageHelper;
  * @version 1.0
  * @author 彭斌 2018年10月22日 下午8:31:02
  */
+@Transactional(rollbackFor = Exception.class)
 @Service
 public class ClientService {
     

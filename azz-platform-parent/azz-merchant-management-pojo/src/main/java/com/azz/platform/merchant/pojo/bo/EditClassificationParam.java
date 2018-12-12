@@ -7,8 +7,6 @@
  
 package com.azz.platform.merchant.pojo.bo;
 
-import javax.validation.constraints.NotNull;
-
 import org.hibernate.validator.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
@@ -63,7 +61,6 @@ public class EditClassificationParam {
     /**
      * 分类主图
      */
-    @NotNull(message = "分类主图")
     private ClassificationPic classificationPic;
     
     /**

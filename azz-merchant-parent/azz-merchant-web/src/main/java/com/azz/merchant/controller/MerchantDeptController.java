@@ -7,24 +7,32 @@
 
 package com.azz.merchant.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.JSR303ErrorCode;
+import com.azz.exception.JSR303ValidationException;
 import com.azz.merchant.api.DeptService;
 import com.azz.merchant.pojo.MerchantDept;
 import com.azz.merchant.pojo.bo.AddMerchantDeptParam;
 import com.azz.merchant.pojo.bo.DelDeptParam;
 import com.azz.merchant.pojo.bo.EditDeptIsEnableParam;
 import com.azz.merchant.pojo.bo.EditMerchantDeptParam;
+import com.azz.merchant.pojo.bo.ImportMerchantDeptParam;
+import com.azz.merchant.pojo.bo.ImportMerchantDeptWebParam;
 import com.azz.merchant.pojo.bo.SearchMerchantChildDeptParam;
 import com.azz.merchant.pojo.bo.SearchMerchantDeptInfoParam;
 import com.azz.merchant.pojo.bo.SearchMerchantDeptListParam;
 import com.azz.merchant.pojo.vo.MerchantDeptList;
 import com.azz.merchant.utils.WebUtils;
+import com.azz.util.Base64;
+import com.azz.util.JSR303ValidateUtils;
 
 /**
  * <P>部门维护</P>
@@ -92,4 +100,20 @@ public class MerchantDeptController {
         param.setModifier(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
         return deptService.delDept(param);
     }
+    
+    @RequestMapping("/importMerchantDept")
+    public JsonResult<String> importMerchantDept(ImportMerchantDeptWebParam webParam) throws IOException {
+        JSR303ValidateUtils.validate(webParam);
+        MultipartFile file = webParam.getFile();
+        String fileName = file.getOriginalFilename();
+        if(!fileName.endsWith(".xls") && !fileName.endsWith(".xlsx")) {
+            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "文件格式有误");
+        }
+        ImportMerchantDeptParam param = new ImportMerchantDeptParam();
+        param.setMerchantId(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantId());
+        param.setCreator(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
+        param.setBase64Str(Base64.encode(file.getBytes()));
+        return deptService.importMerchantDept(param);
+    }
+    
 }

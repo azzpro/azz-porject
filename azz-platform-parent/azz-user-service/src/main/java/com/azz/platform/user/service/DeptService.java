@@ -318,7 +318,6 @@ public class DeptService{
                     if(ObjectUtils.isNull(deptObjCode)) {
                         throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "部门编码不存在");
                     }
-                    dept.setParentCode(parentDeptCode);
                     
                     if(deptObjCode.getDescription().equals("0")) {
                         dept.setDescription("1");
@@ -327,7 +326,7 @@ public class DeptService{
                     } else if(deptObjCode.getDescription().equals("2")) {
                         throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "已是三级部门");
                     }
-                    
+                    dept.setParentCode(parentDeptCode);
                 } else {
                     // 系统自动生成部门编码
                     dept.setParentCode("0");

@@ -7,6 +7,7 @@
  
 package com.azz.merchant.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import com.azz.merchant.pojo.bo.AddMerchantDeptParam;
 import com.azz.merchant.pojo.bo.DelDeptParam;
 import com.azz.merchant.pojo.bo.EditDeptIsEnableParam;
 import com.azz.merchant.pojo.bo.EditMerchantDeptParam;
+import com.azz.merchant.pojo.bo.ImportMerchantDeptParam;
 import com.azz.merchant.pojo.bo.SearchMerchantChildDeptParam;
 import com.azz.merchant.pojo.bo.SearchMerchantDeptInfoParam;
 import com.azz.merchant.pojo.bo.SearchMerchantDeptListParam;
@@ -79,5 +81,9 @@ public class DeptController {
         return deptService.delDept(param);
     }
     
+    @RequestMapping("/importMerchantDept")
+    public JsonResult<String> importMerchantDept(@RequestBody ImportMerchantDeptParam param) throws IOException{
+        return deptService.importMerchantDept(param);
+    }
 }
 

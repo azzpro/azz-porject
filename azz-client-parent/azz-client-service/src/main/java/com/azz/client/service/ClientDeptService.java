@@ -7,9 +7,16 @@
  
 package com.azz.client.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +28,7 @@ import com.azz.client.pojo.bo.AddClientDeptParam;
 import com.azz.client.pojo.bo.DelDeptParam;
 import com.azz.client.pojo.bo.EditClientDeptParam;
 import com.azz.client.pojo.bo.EditDeptIsEnableParam;
+import com.azz.client.pojo.bo.ImportClientDeptParam;
 import com.azz.client.pojo.bo.SearchClientChildDeptParam;
 import com.azz.client.pojo.bo.SearchClientDeptInfoByCodeParam;
 import com.azz.client.pojo.bo.SearchClientDeptInfoParam;
@@ -30,12 +38,20 @@ import com.azz.client.pojo.vo.ClientDeptInfo;
 import com.azz.client.pojo.vo.ClientDeptList;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.ClientErrorCode;
+import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.constants.ClientConstants;
 import com.azz.core.exception.BaseException;
+import com.azz.exception.JSR303ValidationException;
 import com.azz.system.sequence.api.DbSequenceService;
+import com.azz.util.ExcelUtils;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
+import com.azz.util.StringUtils;
 import com.azz.util.SystemSeqUtils;
+import com.google.common.collect.Lists;
+
+import lombok.Cleanup;
+import sun.misc.BASE64Decoder;
 
 
 /**
@@ -238,5 +254,120 @@ public class ClientDeptService {
         ClientDeptInfo cdObj = clientDeptMapper.selectClientByCode(param);
         return JsonResult.successJsonResult(cdObj);
     }
+    
+    
+    public JsonResult<String> importClientDept(@RequestBody ImportClientDeptParam param) throws IOException{
+        // 记录出错行数
+       int errorRowNum = 1;
+       String creator = param.getCreator();
+       String companyCode = param.getCompanyCode();
+       String base64Str = param.getBase64Str();
+       //将字符串转换为byte数组
+       byte[] bytes = new BASE64Decoder().decodeBuffer(base64Str);
+       //转化为输入流
+       ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+       
+       @Cleanup
+       HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
+       HSSFSheet sheet = workbook.getSheetAt(0);
+       int lastRowNum = sheet.getLastRowNum();
+       if(lastRowNum == 0) {// 未填写数据
+           throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "导入数据不可为空");
+       }
+       
+       for (int i = 1; i <= lastRowNum; i++) {
+           HSSFRow row = sheet.getRow(i);
+           errorRowNum++;
+           if (ObjectUtils.isNotNull(row)) {
+               // 获取当前行的元素信息
+               ArrayList<Cell> rowCells = Lists.newArrayList(row.cellIterator());
+               String deptName = null;
+               String parentDeptCode = null;
+               String deptStatus = null;
+               
+               // 部门名称校验
+               if (Cell.CELL_TYPE_BLANK != rowCells.get(0).getCellType()) {
+                   String cell_1 = ExcelUtils.getStringValue(row.getCell(0));
+                   if (StringUtils.isNotBlank(cell_1)) {
+                       deptName = cell_1;
+                   }else {
+                       throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "部门名称不允许为空");
+                   }
+               }else {
+                   throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "部门名称不允许为空");
+               }
+               
+               // 上级部门编码校验
+               if (Cell.CELL_TYPE_BLANK != rowCells.get(1).getCellType()) {
+                   String cell_2 = ExcelUtils.getStringValue(row.getCell(1));
+                   if (StringUtils.isNotBlank(cell_2)) {
+                       parentDeptCode = cell_2;
+                   }else {
+                       throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "上级部门编码不允许为空");
+                   }
+               }else {
+                   throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "上级部门编码不允许为空");
+               }
+               
+               // 部门状态校验
+               if (Cell.CELL_TYPE_BLANK != rowCells.get(2).getCellType()) {
+                   String cell_3 = ExcelUtils.getStringValue(row.getCell(2));
+                   if (StringUtils.isNotBlank(cell_3)) {
+                       deptStatus = cell_3;
+                   }else {
+                       throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "上级部门编码不允许为空");
+                   }
+               }else {
+                   throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "上级部门编码不允许为空");
+               }
+               
+               ClientDept clientDept = new ClientDept();
+               if(!"0".equals(parentDeptCode)) {
+                   // 校验父级部门编码是否存在
+                   SearchClientDeptInfoByCodeParam scd = new SearchClientDeptInfoByCodeParam();
+                   scd.setCompanyCode(companyCode);
+                   scd.setDeptCode(parentDeptCode);
+                   ClientDept parentClientDept = clientDeptMapper.selectClientDeptInfoByCode(scd);
+                   if(ObjectUtils.isNull(parentClientDept)) {
+                       throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "部门编码不存在");
+                   }
+                   // 校验部门名称是否唯一
+                   SearchClientDeptInfoParam record = new SearchClientDeptInfoParam();
+                   record.setCompanyCode(companyCode);
+                   record.setDeptName(deptName);
+                   ClientDept cdObj = clientDeptMapper.selectClientDeptInfoByName(record);
+                   if(ObjectUtils.isNotNull(cdObj)) {
+                       throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "部门已存在");
+                   }
+                   
+                   if(parentClientDept.getDescription().equals("0")) {
+                       clientDept.setDescription("1");
+                   } else if(parentClientDept.getDescription().equals("1")) {
+                       clientDept.setDescription("2");
+                   } else if(parentClientDept.getDescription().equals("2")) {
+                       throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "已是三级部门");
+                   }
+                   
+                   clientDept.setParentCode(parentDeptCode);
+               } else {
+                   // 系统自动生成部门编码
+                   clientDept.setParentCode("0");
+                   // 部门等级 0 一级 1 二级 2 三级
+                   clientDept.setDescription("0");
+               }
+               String sequence = dbSequenceService.getClientDepartmentNumber();
+               clientDept.setDeptCode(SystemSeqUtils.getSeq(sequence));
+               clientDept.setCompanyCode(param.getCompanyCode());
+               clientDept.setCreateTime(new Date());
+               clientDept.setDeptName(deptName);
+               clientDept.setParentCode(parentDeptCode);
+               clientDept.setCreator(creator);
+               clientDept.setStatus(Integer.parseInt(deptStatus));
+               clientDeptMapper.insertSelective(clientDept);
+               
+           }
+       }
+           return JsonResult.successJsonResult();
+   } 
 }
 

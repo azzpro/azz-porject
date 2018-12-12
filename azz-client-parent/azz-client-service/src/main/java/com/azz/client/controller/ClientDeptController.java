@@ -7,6 +7,7 @@
  
 package com.azz.client.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import com.azz.client.pojo.bo.AddClientDeptParam;
 import com.azz.client.pojo.bo.DelDeptParam;
 import com.azz.client.pojo.bo.EditClientDeptParam;
 import com.azz.client.pojo.bo.EditDeptIsEnableParam;
+import com.azz.client.pojo.bo.ImportClientDeptParam;
 import com.azz.client.pojo.bo.SearchClientChildDeptParam;
 import com.azz.client.pojo.bo.SearchClientDeptInfoByCodeParam;
 import com.azz.client.pojo.bo.SearchClientDeptParam;
@@ -125,6 +127,18 @@ public class ClientDeptController {
     @RequestMapping("/getDeptInfo")
     public JsonResult<ClientDeptInfo> getDeptInfo(@RequestBody SearchClientDeptInfoByCodeParam param){
         return clientDeptService.getDeptInfo(param);
+    }
+    
+    /**
+     * <p>批量导入客户部门</p>
+     * @param param
+     * @return
+     * @throws IOException
+     * @author 彭斌  2018年12月12日 下午4:03:39
+     */
+    @RequestMapping("/importClientDept")
+    public JsonResult<String> importClientDept(@RequestBody ImportClientDeptParam param) throws IOException{
+        return clientDeptService.importClientDept(param);
     }
 }
 

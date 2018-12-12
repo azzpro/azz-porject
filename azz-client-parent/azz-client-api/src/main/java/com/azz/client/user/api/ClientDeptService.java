@@ -6,6 +6,7 @@
  ******************************************************************************/
  
 package com.azz.client.user.api;
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -16,6 +17,7 @@ import com.azz.client.pojo.bo.AddClientDeptParam;
 import com.azz.client.pojo.bo.DelDeptParam;
 import com.azz.client.pojo.bo.EditClientDeptParam;
 import com.azz.client.pojo.bo.EditDeptIsEnableParam;
+import com.azz.client.pojo.bo.ImportClientDeptParam;
 import com.azz.client.pojo.bo.SearchClientChildDeptParam;
 import com.azz.client.pojo.bo.SearchClientDeptInfoByCodeParam;
 import com.azz.client.pojo.bo.SearchClientDeptParam;
@@ -55,5 +57,8 @@ public interface ClientDeptService {
     
     @RequestMapping("/azz/api/client/dept/getDeptInfo")
     public JsonResult<ClientDeptInfo> getDeptInfo(@RequestBody SearchClientDeptInfoByCodeParam param);
+
+    @RequestMapping("/azz/api/client/dept/importClientDept")
+    public JsonResult<String> importClientDept(@RequestBody ImportClientDeptParam param) throws IOException;
 }
 

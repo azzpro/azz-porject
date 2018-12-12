@@ -7,6 +7,7 @@
  
 package com.azz.platform.user.api;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.azz.core.common.JsonResult;
 import com.azz.platform.user.pojo.bo.AddDeptParam;
 import com.azz.platform.user.pojo.bo.EditDeptParam;
+import com.azz.platform.user.pojo.bo.ImportPlatformDeptParam;
 import com.azz.platform.user.pojo.bo.SearchDeptParam;
 import com.azz.platform.user.pojo.vo.Dept;
 
@@ -93,5 +95,15 @@ public interface DeptService {
      */
     @GetMapping("/azz/api/user/enableDeptInfo")
     JsonResult<String> enableDeptInfo(@RequestParam("deptCode") String deptCode, @RequestParam("modifier") String modifier);
+
+    /**
+     * <p>平台端导入部门信息</p>
+     * @param param
+     * @return
+     * @throws IOException
+     * @author 彭斌  2018年12月12日 下午2:05:17
+     */
+    @PostMapping("/azz/api/user/importPlatformDept")
+    JsonResult<String> importPlatformDept(@RequestBody ImportPlatformDeptParam param) throws IOException;
 }
 

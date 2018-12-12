@@ -114,7 +114,7 @@ public class AuditService {
             cucObj.setCompanyTel(clientApplyObj.getCompanyTel());
             cucObj.setTradingCertificateFirstFileName(clientApplyObj.getTradingCertificateFirstFileName());
             cucObj.setTradingCertificateFirstFileUrl(clientApplyObj.getTradingCertificateFirstFileUrl());
-            cucObj.setTradingCertificateSecondFileName(clientApplyObj.getTradingCertificateSecondFileUrl());
+            cucObj.setTradingCertificateSecondFileName(clientApplyObj.getTradingCertificateSecondFileName());
             cucObj.setTradingCertificateSecondFileUrl(clientApplyObj.getTradingCertificateSecondFileUrl());
             cucObj.setTradingCertificateThirdFileName(clientApplyObj.getTradingCertificateThirdFileName());
             cucObj.setTradingCertificateThirdFileUrl(clientApplyObj.getTradingCertificateThirdFileUrl());

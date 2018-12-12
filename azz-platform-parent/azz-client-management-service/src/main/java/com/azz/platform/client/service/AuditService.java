@@ -13,11 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.alibaba.fastjson.JSONObject;
 import com.azz.core.common.JsonResult;
-import com.azz.core.common.errorcode.BaseErrorCode;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
-import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.exception.BaseException;
 import com.azz.platform.client.common.constants.AuditConstants;
 import com.azz.platform.client.common.constants.ClientConstants;
@@ -39,7 +36,6 @@ import com.azz.platform.client.pojo.vo.Permission;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
-import com.azz.util.StringUtils;
 import com.azz.util.SystemSeqUtils;
 
 /**

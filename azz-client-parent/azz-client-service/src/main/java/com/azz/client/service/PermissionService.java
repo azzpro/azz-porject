@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.azz.client.mapper.ClientPermissionMapper;
@@ -42,6 +43,7 @@ import com.azz.util.SystemSeqUtils;
  * @version 1.0
  * @author 黄智聪  2018年10月22日 下午4:06:22
  */
+@Transactional(rollbackFor = Exception.class)
 @Service
 public class PermissionService {
 

@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.azz.client.mapper.PlatformClientSignUpMapper;
@@ -30,7 +31,7 @@ import com.azz.core.constants.ClientConstants;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.util.JSR303ValidateUtils;
 
-
+@Transactional(rollbackFor = Exception.class)
 @Service
 public class ClientIndexService {
 

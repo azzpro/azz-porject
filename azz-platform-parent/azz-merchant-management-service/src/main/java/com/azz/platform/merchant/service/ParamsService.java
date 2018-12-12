@@ -51,6 +51,7 @@ import com.github.pagehelper.PageHelper;
  * @author 刘建麟  2018年10月31日 上午11:26:14
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class ParamsService {
 	
 	private final Logger LOG = org.slf4j.LoggerFactory.getLogger(getClass());

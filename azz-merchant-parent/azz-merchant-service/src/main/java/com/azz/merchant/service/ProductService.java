@@ -65,6 +65,7 @@ import com.github.pagehelper.PageHelper;
  * @version 1.0
  * @author 刘建麟  2018年11月1日 下午2:04:46
  */
+@Transactional(rollbackFor = Exception.class)
 @Service
 public class ProductService {
 	

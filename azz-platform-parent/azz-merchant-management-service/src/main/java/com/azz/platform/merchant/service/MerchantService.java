@@ -38,6 +38,7 @@ import com.github.pagehelper.PageHelper;
  * @author 彭斌 2018年10月22日 下午8:31:02
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class MerchantService{
 
     @Autowired

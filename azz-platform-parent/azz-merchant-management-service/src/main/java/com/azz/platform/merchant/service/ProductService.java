@@ -13,6 +13,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,6 +41,7 @@ import com.github.pagehelper.PageHelper;
  * @author 刘建麟  2018年11月5日 下午2:38:43
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class ProductService {
 
 	

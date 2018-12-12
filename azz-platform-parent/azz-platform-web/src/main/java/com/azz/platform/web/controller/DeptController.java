@@ -7,6 +7,7 @@
 
 package com.azz.platform.web.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -15,13 +16,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.JSR303ErrorCode;
+import com.azz.exception.JSR303ValidationException;
 import com.azz.platform.user.api.DeptService;
 import com.azz.platform.user.pojo.bo.AddDeptParam;
 import com.azz.platform.user.pojo.bo.EditDeptParam;
+import com.azz.platform.user.pojo.bo.ImportPlatformDeptParam;
+import com.azz.platform.user.pojo.bo.ImportPlatformDeptWebParam;
 import com.azz.platform.user.pojo.bo.SearchDeptParam;
 import com.azz.platform.user.pojo.vo.Dept;
+import com.azz.util.Base64;
+import com.azz.util.JSR303ValidateUtils;
 import com.azz.utils.WebUtils;
 
 /**
@@ -125,5 +133,26 @@ public class DeptController {
         LOG.info("###########启用部门信息###########");
         String modifier = WebUtils.getLoginUser().getUserInfo().getUserCode();
         return deptService.enableDeptInfo(deptCode, modifier);
+    }
+    
+    /**
+     * <p>导入平台部门信息</p>
+     * @param webParam
+     * @return
+     * @throws IOException
+     * @author 彭斌  2018年12月12日 下午2:17:31
+     */
+    @RequestMapping(value = "/importPlatformDept")
+    public JsonResult<String> importPlatformDept(ImportPlatformDeptWebParam webParam) throws IOException{
+        JSR303ValidateUtils.validate(webParam);
+        MultipartFile file = webParam.getFile();
+        String fileName = file.getOriginalFilename();
+        if(!fileName.endsWith(".xls") && !fileName.endsWith(".xlsx")) {
+            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "文件格式有误");
+        }
+        ImportPlatformDeptParam param = new ImportPlatformDeptParam();
+        param.setCreator(WebUtils.getLoginUser().getUserInfo().getUserCode());
+        param.setBase64Str(Base64.encode(file.getBytes()));
+        return deptService.importPlatformDept(param);
     }
 }

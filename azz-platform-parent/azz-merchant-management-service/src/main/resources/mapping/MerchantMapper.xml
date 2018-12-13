@@ -453,7 +453,7 @@
   		  m.credit_code creditCode,
   		  m.company_tel companyTel,
   		  m.address address,
-  		  m.status status,
+  		  m.qualification_apply_status status,
   		  m.trading_certificate_first_file_name tradingCertificateFirstFileName,
   		  m.trading_certificate_first_file_url tradingCertificateFirstFileUrl,
   		  m.trading_certificate_second_file_name tradingCertificateSecondFileName,

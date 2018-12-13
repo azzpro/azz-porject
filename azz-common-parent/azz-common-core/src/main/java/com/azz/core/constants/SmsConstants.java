@@ -14,11 +14,13 @@ package com.azz.core.constants;
  */
 public enum SmsConstants {
 	
-	ACCOUNT_CREATE_SUCCESS("您的企业将您添加为企业成员，初始密码\"123456\"，请登陆平台后及时修改。","账号生成","SMS_150861367",1,1),
+	ACCOUNT_CREATE_SUCCESS("您的企业将您添加为企业成员，初始密码：${code}，请登陆平台后及时修改。","账号生成","SMS_152546358",2,1),
 	
 	CLIENT_REGISTER("您正在注册平台个人客户账户，验证码为：${code}，有效期十分钟，请及时输入。","客户注册","SMS_150861363",2,2),
 	
 	MERCHANT_REGISTER("您正在注册平台商户账号，验证码为：${code}，有效期十分钟，请及时输入。","商户注册","SMS_150866439",2,3),
+	
+	CHANGE_DATA("您的资料变更验证码为：${code}，有效期十分钟，请及时输入。","资料变更","SMS_152546363",2,9),
 	
 	CLIENT_COMPANY_VALIDATE("您正在进行企业客户验证，验证码为：${code}，有效期十分钟，请及时输入。","客户-企业验证","SMS_150866454",2,4),
 	

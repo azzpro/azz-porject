@@ -20,7 +20,7 @@ public class SystemMsgLog implements Serializable {
     private String msgTitle;
     
     private String msgCode;
-
+    private String msgMail;
     /**
      * 短信内容
      *
@@ -87,7 +87,17 @@ public class SystemMsgLog implements Serializable {
         return msgTitle;
     }
 
-    /**
+
+	public String getMsgMail() {
+		return msgMail;
+	}
+
+	public void setMsgMail(String msgMail) {
+		this.msgMail = msgMail;
+	}
+
+
+	/**
      * 短信标题<br/>
      * msg_log.msg_title
      *

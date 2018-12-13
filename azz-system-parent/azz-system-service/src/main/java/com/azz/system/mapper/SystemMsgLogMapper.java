@@ -26,9 +26,15 @@ public interface SystemMsgLogMapper {
 	
 	List<SystemMsgLog> findMsgLogByPhone(@Param("phone") Long phone,@Param("date") String date);
 	
+	List<SystemMsgLog> findMsgLogByMail(@Param("mail") String mail,@Param("date") String date);
+	
 	int updaetSmsStatus(@Param("status") Integer status,@Param("id") Long id);
 	
 	SystemMsgLog findMsgLog(Long phone );
+	
+	SystemMsgLog findMailLog(String mail );
+	
+	SystemMsgLog findMsgLogByMailAndCode(@Param("mail") Long mail,@Param("code") String code);
 	
 	SystemMsgLog findMsgLogByPhoneAndCode(@Param("phone") Long phone,@Param("code") String code);
 }

@@ -11,6 +11,7 @@
   <result column="msg_content" property="msgContent" jdbcType="LONGVARCHAR" /> 
   <result column="msg_type" property="msgType" jdbcType="INTEGER" /> 
   <result column="msg_code" property="msgCode" jdbcType="VARCHAR" /> 
+  <result column="msg_mail" property="msgMail" jdbcType="VARCHAR" /> 
 </resultMap>
   
   <select id="findMsgLogByPhone" resultMap="BaseResultMap">
@@ -20,6 +21,13 @@
   		system_msg_log where msg_phone=#{phone} and date_format(msg_time,'%Y-%m-%d') = #{date} order by msg_time
   </select> 
   
+  <select id="findMsgLogByMail" resultMap="BaseResultMap">
+  	select 
+  		id,msg_title,msg_mail,msg_time,msg_status,msg_platform,msg_content,msg_type ,msg_code
+  	from 
+  		system_msg_log where msg_mail=#{mail} and date_format(msg_time,'%Y-%m-%d') = #{date} order by msg_time
+  </select>
+  
    <select id="findMsgLog" resultMap="BaseResultMap">
   	select 
   		id,msg_title,msg_phone,msg_time,msg_status,msg_platform,msg_content,msg_type ,msg_code
@@ -27,11 +35,25 @@
   		system_msg_log where msg_phone=#{phone} and msg_status = 1 order by msg_time desc limit 1
   </select>
   
+   <select id="findMailLog" resultMap="BaseResultMap">
+  	select 
+  		id,msg_title,msg_mail,msg_time,msg_status,msg_platform,msg_content,msg_type ,msg_code
+  	from 
+  		system_msg_log where msg_mail=#{mail} and msg_status = 1 order by msg_time desc limit 1
+  </select>
+  
   <select id="findMsgLogByPhoneAndCode" resultMap="BaseResultMap">
   	select 
   		id,msg_title,msg_phone,msg_time,msg_status,msg_platform,msg_content,msg_type ,msg_code
   	from 
   		system_msg_log where msg_phone=#{phone} and msg_status = 1 and msg_code=#{code}
+  </select>
+  
+  <select id="findMsgLogByMailAndCode" resultMap="BaseResultMap">
+  	select 
+  		id,msg_title,msg_mail,msg_time,msg_status,msg_platform,msg_content,msg_type ,msg_code
+  	from 
+  		system_msg_log where msg_mail=#{mail} and msg_status = 1 and msg_code=#{code}
   </select>
   
   <update id="updaetSmsStatus">
@@ -67,6 +89,9 @@
       <if test="msgCode != null">
         msg_code,
       </if>
+      <if test="msgMail != null">
+        msg_mail,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -95,6 +120,9 @@
       </if>
       <if test="msgCode != null">
         #{msgCode,jdbcType=VARCHAR},
+      </if>
+       <if test="msgMail != null">
+        #{msgMail,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

@@ -28,5 +28,7 @@ public class SmsType {
 	public static final int MERCHANT_ENTER_EXAMINE_SUCCESS = 7;
 	
 	public static final int MERCHANT_ENTER_EXAMINE_FAIL = 8;
+	
+	public static final int CHANGE_DATA = 9;
 }
 

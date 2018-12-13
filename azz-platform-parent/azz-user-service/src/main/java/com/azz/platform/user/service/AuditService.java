@@ -7,8 +7,6 @@
  
 package com.azz.platform.user.service;
 
-import static org.assertj.core.api.Assertions.setAllowComparingPrivateFields;
-
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;

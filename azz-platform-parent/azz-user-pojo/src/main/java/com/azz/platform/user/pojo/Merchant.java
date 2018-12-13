@@ -4,6 +4,13 @@ package com.azz.platform.user.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Merchant implements Serializable {
     /**
      * 主键id
@@ -144,6 +151,48 @@ public class Merchant implements Serializable {
      * @mbg.generated
      */
     private String auditor;
+
+    /**
+     * 手机号码
+     *
+     * @mbg.generated
+     */
+    private String contactPhone;
+
+    /**
+     * 密码
+     *
+     * @mbg.generated
+     */
+    private String password;
+
+    /**
+     * 盐
+     *
+     * @mbg.generated
+     */
+    private String salt;
+
+    /**
+     * 注册人
+     *
+     * @mbg.generated
+     */
+    private String registeredPerson;
+
+    /**
+     * 商户状态（0：失效 1：有效）
+     *
+     * @mbg.generated
+     */
+    private Integer status;
+
+    /**
+     * 资质申请状态（0：未申请 1：待审批 2：已通过 3：已拒绝）
+     *
+     * @mbg.generated
+     */
+    private Integer qualificationApplyStatus;
 
     /**
      * 备注
@@ -642,6 +691,150 @@ public class Merchant implements Serializable {
     }
 
     /**
+     * 手机号码<br/>
+     * 返回值对应的表列名 merchant.contact_phone
+     *
+     * @return 返回值对应 merchant.contact_phone
+     *
+     * @mbg.generated
+     */
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    /**
+     * 手机号码<br/>
+     * merchant.contact_phone
+     *
+     * @param contactPhone 值对应 merchant.contact_phone
+     *
+     * @mbg.generated
+     */
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone == null ? null : contactPhone.trim();
+    }
+
+    /**
+     * 密码<br/>
+     * 返回值对应的表列名 merchant.password
+     *
+     * @return 返回值对应 merchant.password
+     *
+     * @mbg.generated
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * 密码<br/>
+     * merchant.password
+     *
+     * @param password 值对应 merchant.password
+     *
+     * @mbg.generated
+     */
+    public void setPassword(String password) {
+        this.password = password == null ? null : password.trim();
+    }
+
+    /**
+     * 盐<br/>
+     * 返回值对应的表列名 merchant.salt
+     *
+     * @return 返回值对应 merchant.salt
+     *
+     * @mbg.generated
+     */
+    public String getSalt() {
+        return salt;
+    }
+
+    /**
+     * 盐<br/>
+     * merchant.salt
+     *
+     * @param salt 值对应 merchant.salt
+     *
+     * @mbg.generated
+     */
+    public void setSalt(String salt) {
+        this.salt = salt == null ? null : salt.trim();
+    }
+
+    /**
+     * 注册人<br/>
+     * 返回值对应的表列名 merchant.registered_person
+     *
+     * @return 返回值对应 merchant.registered_person
+     *
+     * @mbg.generated
+     */
+    public String getRegisteredPerson() {
+        return registeredPerson;
+    }
+
+    /**
+     * 注册人<br/>
+     * merchant.registered_person
+     *
+     * @param registeredPerson 值对应 merchant.registered_person
+     *
+     * @mbg.generated
+     */
+    public void setRegisteredPerson(String registeredPerson) {
+        this.registeredPerson = registeredPerson == null ? null : registeredPerson.trim();
+    }
+
+    /**
+     * 商户状态（0：失效 1：有效）<br/>
+     * 返回值对应的表列名 merchant.status
+     *
+     * @return 返回值对应 merchant.status
+     *
+     * @mbg.generated
+     */
+    public Integer getStatus() {
+        return status;
+    }
+
+    /**
+     * 商户状态（0：失效 1：有效）<br/>
+     * merchant.status
+     *
+     * @param status 值对应 merchant.status
+     *
+     * @mbg.generated
+     */
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    /**
+     * 资质申请状态（0：未申请 1：待审批 2：已通过 3：已拒绝）<br/>
+     * 返回值对应的表列名 merchant.qualification_apply_status
+     *
+     * @return 返回值对应 merchant.qualification_apply_status
+     *
+     * @mbg.generated
+     */
+    public Integer getQualificationApplyStatus() {
+        return qualificationApplyStatus;
+    }
+
+    /**
+     * 资质申请状态（0：未申请 1：待审批 2：已通过 3：已拒绝）<br/>
+     * merchant.qualification_apply_status
+     *
+     * @param qualificationApplyStatus 值对应 merchant.qualification_apply_status
+     *
+     * @mbg.generated
+     */
+    public void setQualificationApplyStatus(Integer qualificationApplyStatus) {
+        this.qualificationApplyStatus = qualificationApplyStatus;
+    }
+
+    /**
      * 备注<br/>
      * 返回值对应的表列名 merchant.remark
      *
@@ -721,6 +914,12 @@ public class Merchant implements Serializable {
             && (this.getLegalPersonIdCardFileName() == null ? other.getLegalPersonIdCardFileName() == null : this.getLegalPersonIdCardFileName().equals(other.getLegalPersonIdCardFileName()))
             && (this.getLegalPersonIdCardFileUrl() == null ? other.getLegalPersonIdCardFileUrl() == null : this.getLegalPersonIdCardFileUrl().equals(other.getLegalPersonIdCardFileUrl()))
             && (this.getAuditor() == null ? other.getAuditor() == null : this.getAuditor().equals(other.getAuditor()))
+            && (this.getContactPhone() == null ? other.getContactPhone() == null : this.getContactPhone().equals(other.getContactPhone()))
+            && (this.getPassword() == null ? other.getPassword() == null : this.getPassword().equals(other.getPassword()))
+            && (this.getSalt() == null ? other.getSalt() == null : this.getSalt().equals(other.getSalt()))
+            && (this.getRegisteredPerson() == null ? other.getRegisteredPerson() == null : this.getRegisteredPerson().equals(other.getRegisteredPerson()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getQualificationApplyStatus() == null ? other.getQualificationApplyStatus() == null : this.getQualificationApplyStatus().equals(other.getQualificationApplyStatus()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
     }
@@ -749,6 +948,12 @@ public class Merchant implements Serializable {
         result = prime * result + ((getLegalPersonIdCardFileName() == null) ? 0 : getLegalPersonIdCardFileName().hashCode());
         result = prime * result + ((getLegalPersonIdCardFileUrl() == null) ? 0 : getLegalPersonIdCardFileUrl().hashCode());
         result = prime * result + ((getAuditor() == null) ? 0 : getAuditor().hashCode());
+        result = prime * result + ((getContactPhone() == null) ? 0 : getContactPhone().hashCode());
+        result = prime * result + ((getPassword() == null) ? 0 : getPassword().hashCode());
+        result = prime * result + ((getSalt() == null) ? 0 : getSalt().hashCode());
+        result = prime * result + ((getRegisteredPerson() == null) ? 0 : getRegisteredPerson().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getQualificationApplyStatus() == null) ? 0 : getQualificationApplyStatus().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         return result;
@@ -780,6 +985,12 @@ public class Merchant implements Serializable {
         sb.append(", legalPersonIdCardFileName=").append(legalPersonIdCardFileName);
         sb.append(", legalPersonIdCardFileUrl=").append(legalPersonIdCardFileUrl);
         sb.append(", auditor=").append(auditor);
+        sb.append(", contactPhone=").append(contactPhone);
+        sb.append(", password=").append(password);
+        sb.append(", salt=").append(salt);
+        sb.append(", registeredPerson=").append(registeredPerson);
+        sb.append(", status=").append(status);
+        sb.append(", qualificationApplyStatus=").append(qualificationApplyStatus);
         sb.append(", remark=").append(remark);
         sb.append(", createTime=").append(createTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);

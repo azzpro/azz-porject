@@ -12,10 +12,13 @@ public interface MerchantMapper {
     int insertSelective(Merchant record);
 
     Merchant selectByPrimaryKey(Long id);
+    
+    Merchant selectByMerchantCode(String merchantCode);
 
     int updateByPrimaryKeySelective(Merchant record);
 
     int updateByPrimaryKey(Merchant record);
     
-    Merchant selectByCode(String merchantCode);
+    int updateByMerchantCode(Merchant record);
+
 }

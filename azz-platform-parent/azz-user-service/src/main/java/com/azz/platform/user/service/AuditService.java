@@ -7,6 +7,8 @@
  
 package com.azz.platform.user.service;
 
+import static org.assertj.core.api.Assertions.setAllowComparingPrivateFields;
+
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
+import com.azz.core.constants.MerchantConstants.QualificationApplyStatus;
 import com.azz.core.exception.BaseException;
+import com.azz.exception.JSR303ValidationException;
 import com.azz.platform.user.common.constants.AuditConstants;
 import com.azz.platform.user.mapper.MerchantApplyMapper;
 import com.azz.platform.user.mapper.MerchantMapper;
@@ -59,7 +64,6 @@ public class AuditService{
         if(!object.getStatus().equals(AuditConstants.AuditStatus.PENDING.getValue())) {
             // 该公司信息不在待审核阶段
             throw new BaseException(PlatformUserErrorCode.PLATFORM_MERCHANT_AUDIT_ERROR);
-            
         }
         
         object.setStatus(param.getStatus());
@@ -67,23 +71,21 @@ public class AuditService{
         object.setAuditorTime(new Date());
         merchantApplyMapper.updateByPrimaryKeySelective(object);
         
-        
-        // 审核通过该企业信息注册到商户表中,拒绝的商户信息将不注册到商户表中依旧保留在申请表中状态为拒绝
-        if(object.getStatus().equals(AuditConstants.AuditStatus.PASSED.getValue())) {
-            Merchant record = new Merchant();
-           /* record.setMerchantCode(object.getMerchantCode());
-            record.setMerchantName(merchantName);
-            record.setLegalPersonName(legalPersonName);
-            record.setLegalPersonIdCard(legalPersonIdCard);
-            record.setCreditCode(creditCode);
-            record.setCompanyTel(companyTel);
-            record.setAddress(address);
-            record.settr*/
-            
-            
-            merchantMapper.insertSelective(record);
+        Merchant record = merchantMapper.selectByMerchantCode(param.getMerchantCode());
+        if(ObjectUtils.isNull(record)) {
+            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户编码信息不存在");
         }
         
+        // 审核通过该企业信息注册到商户表中,拒绝的商户信息将不注册到商户表中依旧保留在申请表中状态为拒绝
+        if(param.getStatus().equals(AuditConstants.AuditStatus.PASSED.getValue())) {
+            record.setQualificationApplyStatus(QualificationApplyStatus.PASSED.getValue());
+        } else if(param.getStatus().equals(AuditConstants.AuditStatus.REFUSED.getValue())){
+            record.setQualificationApplyStatus(QualificationApplyStatus.REFUSED.getValue());
+        } else {
+            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "审核状态异常");
+        }
+        record.setAuditor(param.getAuditor());
+        merchantMapper.updateByPrimaryKeySelective(record);
         
         return JsonResult.successJsonResult();
     }

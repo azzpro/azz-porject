@@ -27,8 +27,10 @@ import com.azz.client.pojo.bo.AddClientUserParam;
 import com.azz.client.pojo.bo.Avatar;
 import com.azz.client.pojo.bo.ChangeAvatarParam;
 import com.azz.client.pojo.bo.ChangeAvatarWebParam;
+import com.azz.client.pojo.bo.CheckVerificationCodeParam;
 import com.azz.client.pojo.bo.ClientRegistParam;
 import com.azz.client.pojo.bo.EditClientUserParam;
+import com.azz.client.pojo.bo.EditPersonalInfoParam;
 import com.azz.client.pojo.bo.EnterpriseAuthParam;
 import com.azz.client.pojo.bo.EnterpriseAuthWebParam;
 import com.azz.client.pojo.bo.LoginParam;
@@ -316,6 +318,43 @@ public class ClientController {
     @RequestMapping("/sendVerificationCode")
     public JsonResult<String> sendVerificationCode(String phoneNumber) {
     	return clientService.sendVerificationCode(phoneNumber);
+    }
+    
+    /**
+     * 
+     * <p>修改个人资料</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年12月12日 下午6:00:41
+     */
+    @RequestMapping(value = "/editPersonalInfo")
+    public JsonResult<String> editPersonalInfo(EditPersonalInfoParam param) {
+    	param.setModifier(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
+    	return clientService.editPersonalInfo(param);
+    }
+    
+    /**
+     * 
+     * <p>发送修改个人信息的验证码 </p>
+     * @param phoneNumber
+     * @return
+     * @author 黄智聪  2018年12月12日 下午5:45:42
+     */
+    @RequestMapping("/sendEditVerificationCode")
+    JsonResult<String> sendEditVerificationCode(String phoneNumber){
+    	return clientService.sendEditVerificationCode(phoneNumber);
+    }
+    
+    /**
+     * 
+     * <p>校验验证码</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年12月12日 下午5:45:46
+     */
+    @RequestMapping("/checkEditVerificationCode")
+    JsonResult<String> checkEditVerificationCode(CheckVerificationCodeParam param){
+    	return clientService.checkEditVerificationCode(param);
     }
 
 }

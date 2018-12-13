@@ -879,8 +879,6 @@ public class MerchantService {
 		return JsonResult.successJsonResult();
 	}
 	
-	
-	
 	/**
 	 * 
 	 * <p>修改个人资料</p>

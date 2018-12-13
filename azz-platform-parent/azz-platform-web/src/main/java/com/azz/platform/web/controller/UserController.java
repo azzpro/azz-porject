@@ -29,7 +29,9 @@ import com.azz.core.exception.SuppressedException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.platform.user.api.UserService;
 import com.azz.platform.user.pojo.bo.AddUserParam;
+import com.azz.platform.user.pojo.bo.CheckVerificationCodeParam;
 import com.azz.platform.user.pojo.bo.EditPasswordParam;
+import com.azz.platform.user.pojo.bo.EditPersonalInfoParam;
 import com.azz.platform.user.pojo.bo.EditUserParam;
 import com.azz.platform.user.pojo.bo.EnableOrDisableOrDelUserParam;
 import com.azz.platform.user.pojo.bo.ImportPlatformUserParam;
@@ -267,6 +269,43 @@ public class UserController {
     	param.setCreator(WebUtils.getLoginUser().getUserInfo().getUserCode());
     	param.setBase64Str(Base64.encode(file.getBytes()));
     	return userService.importPlatformUser(param);
+    }
+    
+    /**
+     * 
+     * <p>修改个人资料</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年12月12日 下午6:00:41
+     */
+    @RequestMapping(value = "/editPersonalInfo")
+    public JsonResult<String> editPersonalInfo(EditPersonalInfoParam param) {
+    	param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
+    	return userService.editPersonalInfo(param);
+    }
+    
+    /**
+     * 
+     * <p>发送修改个人信息的验证码 </p>
+     * @param phoneNumber
+     * @return
+     * @author 黄智聪  2018年12月12日 下午5:45:42
+     */
+    @RequestMapping("/sendEditVerificationCode")
+    JsonResult<String> sendEditVerificationCode(String phoneNumber){
+    	return userService.sendEditVerificationCode(phoneNumber);
+    }
+    
+    /**
+     * 
+     * <p>校验验证码</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年12月12日 下午5:45:46
+     */
+    @RequestMapping("/checkEditVerificationCode")
+    JsonResult<String> checkEditVerificationCode(CheckVerificationCodeParam param){
+    	return userService.checkEditVerificationCode(param);
     }
     
 }

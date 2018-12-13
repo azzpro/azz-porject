@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.merchant.pojo.bo.AddMerchantUserParam;
+import com.azz.merchant.pojo.bo.CheckVerificationCodeParam;
 import com.azz.merchant.pojo.bo.CompleteMerchantInfoParam;
 import com.azz.merchant.pojo.bo.EditMerchantUserParam;
+import com.azz.merchant.pojo.bo.EditPersonalInfoParam;
 import com.azz.merchant.pojo.bo.EnableOrDisableOrDelMerchantUserParam;
 import com.azz.merchant.pojo.bo.ImportMerchantUserParam;
 import com.azz.merchant.pojo.bo.LoginParam;
@@ -106,6 +108,42 @@ public class MerchantController {
     @RequestMapping("/importMerchantUser")
     public JsonResult<String> importMerchantUser(@RequestBody ImportMerchantUserParam param) throws IOException{
     	return merchantService.importMerchantUser(param);
+    }
+    
+    /**
+     * 
+     * <p>修改个人资料</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年12月12日 下午5:43:40
+     */
+    @RequestMapping(value="editPersonalInfo")
+    JsonResult<String> editPersonalInfo(@RequestBody EditPersonalInfoParam param){
+    	return merchantService.editPersonalInfo(param);
+    }
+    
+    /**
+     * 
+     * <p>发送修改个人信息的验证码 </p>
+     * @param phoneNumber
+     * @return
+     * @author 黄智聪  2018年12月12日 下午5:45:42
+     */
+    @RequestMapping(value="sendEditVerificationCode")
+    JsonResult<String> sendEditVerificationCode(@RequestParam("phoneNumber")String phoneNumber){
+    	return merchantService.sendEditVerificationCode(phoneNumber);
+    }
+    
+    /**
+     * 
+     * <p>校验验证码</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年12月12日 下午5:45:46
+     */
+    @RequestMapping(value="checkEditVerificationCode")
+    public JsonResult<String> checkEditVerificationCode(@RequestBody CheckVerificationCodeParam param) {
+    	return merchantService.checkEditVerificationCode(param);
     }
 }
 

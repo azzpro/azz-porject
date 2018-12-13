@@ -10,8 +10,6 @@ package com.azz.platform.user.controller;
 import java.io.IOException;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +23,11 @@ import com.azz.platform.user.pojo.bo.AddDeptParam;
 import com.azz.platform.user.pojo.bo.AddRoleParam;
 import com.azz.platform.user.pojo.bo.AddUserParam;
 import com.azz.platform.user.pojo.bo.AuditParam;
+import com.azz.platform.user.pojo.bo.CheckVerificationCodeParam;
 import com.azz.platform.user.pojo.bo.DelRoleParam;
 import com.azz.platform.user.pojo.bo.EditDeptParam;
 import com.azz.platform.user.pojo.bo.EditPasswordParam;
+import com.azz.platform.user.pojo.bo.EditPersonalInfoParam;
 import com.azz.platform.user.pojo.bo.EditRoleParam;
 import com.azz.platform.user.pojo.bo.EditUserParam;
 import com.azz.platform.user.pojo.bo.EnableOrDisableOrDelUserParam;
@@ -58,7 +58,7 @@ import com.azz.platform.user.service.UserService;
 @RequestMapping("/azz/api/user")
 public class UserController {
 
-	private final Logger LOG = LoggerFactory.getLogger(getClass());
+	// private final Logger LOG = LoggerFactory.getLogger(getClass());
 	
 	@Autowired
 	private AuditService auditService;
@@ -376,6 +376,42 @@ public class UserController {
     @RequestMapping(value="importPlatformDept",method=RequestMethod.POST)
     JsonResult<String> importPlatformDept(@RequestBody ImportPlatformDeptParam param) throws IOException{
         return deptService.importPlatformDept(param);
+    }
+    
+    /**
+     * 
+     * <p>修改个人资料</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年12月12日 下午5:43:40
+     */
+    @RequestMapping(value="editPersonalInfo")
+    JsonResult<String> editPersonalInfo(@RequestBody EditPersonalInfoParam param){
+    	return userService.editPersonalInfo(param);
+    }
+    
+    /**
+     * 
+     * <p>发送修改个人信息的验证码 </p>
+     * @param phoneNumber
+     * @return
+     * @author 黄智聪  2018年12月12日 下午5:45:42
+     */
+    @RequestMapping(value="sendEditVerificationCode")
+    JsonResult<String> sendEditVerificationCode(@RequestParam("phoneNumber")String phoneNumber){
+    	return userService.sendEditVerificationCode(phoneNumber);
+    }
+    
+    /**
+     * 
+     * <p>校验验证码</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2018年12月12日 下午5:45:46
+     */
+    @RequestMapping(value="checkEditVerificationCode")
+    public JsonResult<String> checkEditVerificationCode(@RequestBody CheckVerificationCodeParam param) {
+    	return userService.checkEditVerificationCode(param);
     }
 }
 

@@ -346,14 +346,19 @@
   
   <select id="getMerchantUserInfoByPhoneNumber" parameterType="string" resultType="com.azz.merchant.pojo.vo.MerchantUserInfo">
     SELECT
-    	mu.merchant_user_code as merchantUserCode,
+		mu.merchant_user_code AS merchantUserCode,
 		mu.merchant_code AS merchantCode,
-		m.id as merchantId,
+		m.id AS merchantId,
 		m.company_name AS companyName,
 		mu.phone_number AS phoneNumber,
 		mu.merchant_user_name AS merchantUserName,
 		mu.create_time AS createTime,
-		m.qualification_apply_status as qualificationApplyStatus,
+		mu.post_name AS postName,
+		md.dept_code AS deptCode,
+		md.dept_name AS deptName,
+		mr.role_code AS roleCode,
+		mr.role_name AS roleName,
+		m.qualification_apply_status AS qualificationApplyStatus,
 		CASE m. STATUS
 	WHEN 0 THEN
 		'删除'
@@ -365,9 +370,12 @@
 	FROM
 		merchant_user mu
 	JOIN merchant m ON m.merchant_code = mu.merchant_code
+	LEFT JOIN merchant_user_role mur ON mur.merchant_user_id = mu.id
+	LEFT JOIN merchant_role mr ON mr.id = mur.role_id
+	LEFT JOIN merchant_dept md ON md.id = mu.dept_id
 	WHERE
 		mu. STATUS != 0
-	and mu.phone_number = #{phoneNumber}
+	AND mu.phone_number = #{phoneNumber}
   </select>
   
   <select id="getMerchantUserByEmail" resultMap="BaseResultMap">

@@ -56,20 +56,26 @@ import com.azz.core.common.errorcode.ShiroAuthErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.ClientConstants;
+import com.azz.core.constants.EmailConstants;
 import com.azz.core.constants.ClientConstants.IsEnterpriseAuthenticator;
 import com.azz.core.constants.ClientConstants.QualificationApplyStatus;
 import com.azz.core.constants.ClientConstants.UserStatus;
 import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.ClientConstants.PersonalEditType;
 import com.azz.core.constants.SmsConstants;
+import com.azz.core.constants.UserConstants;
 import com.azz.core.constants.SmsConstants.SmsCode;
 import com.azz.core.constants.UserConstants.ClientType;
 import com.azz.core.exception.BaseException;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.model.Password;
+import com.azz.system.api.SystemEmailService;
 import com.azz.system.api.SystemImageUploadService;
 import com.azz.system.api.SystemSmsSendService;
+import com.azz.system.bo.MailCheck;
+import com.azz.system.bo.MailCodeValidation;
+import com.azz.system.bo.MailParam;
 import com.azz.system.bo.SmsCheck;
 import com.azz.system.bo.SmsCodeValidation;
 import com.azz.system.bo.SmsParams;
@@ -126,6 +132,9 @@ public class ClientService {
 
 	@Autowired
 	private SystemSmsSendService systemSmsSendService;
+	
+	@Autowired
+	private SystemEmailService systemEmailService;
 
 	/**
 	 * 
@@ -734,13 +743,29 @@ public class ClientService {
 	
 	/**
 	 * 
-	 * <p>校验邮箱验证码  TODO</p>
+	 * <p>校验邮箱验证码</p>
 	 * @param verificationCode
 	 * @param email
 	 * @author 黄智聪  2018年12月12日 下午4:27:39
 	 */
 	public void checkEditEmailVerificationCode(String verificationCode, String email) {
-		
+		// 先校验验证码是否已失效
+		JsonResult<SmsInfo> jr = null;
+		MailCodeValidation mcv = new MailCodeValidation();
+		mcv.setMail(email);
+		mcv.setSec(UserConstants.CHANGE_DATA_EMAIL_TIME_OUT);
+		jr = systemEmailService.validationMailCodeTime(mcv);
+		if (!jr.getData().getCode().equals(EmailConstants.EMAIL_SEND_SUCCESS)) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "邮箱验证码已失效，请重新获取");
+		}
+		// 再校验邮箱验证码是否正确
+		MailCheck mailCheck = new MailCheck();
+		mailCheck.setCode(verificationCode);
+		mailCheck.setMail(email);
+		jr = systemEmailService.checkMailCode(mailCheck);
+		if (!jr.getData().getCode().equals(EmailConstants.EMAIL_SEND_SUCCESS)) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "验证码错误");
+		}
 	}
 	
 	/**
@@ -756,8 +781,7 @@ public class ClientService {
 	public JsonResult<String> sendEditVerificationCode(String phoneNumber) {
 		SmsParams sms = new SmsParams();
 		sms.setPhone(phoneNumber);
-		sms.setMsgType(SmsConstants.MERCHANT_REGISTER.getMsgType());
-		// TODO
+		sms.setMsgType(SmsConstants.CHANGE_DATA.getMsgType());
 		return systemSmsSendService.sendSmsCode(sms);
 	}
 	
@@ -778,8 +802,7 @@ public class ClientService {
 		// 先校验验证码是否已失效
 		SmsCodeValidation sv = new SmsCodeValidation();
 		sv.setPhone(phoneNumber);
-		// TODO
-		sv.setSec(ClientConstants.CLIENT_REGIST_SMS_TIME_OUT);
+		sv.setSec(UserConstants.CHANGE_DATA_SMS_TIME_OUT);
 		JsonResult<SmsInfo> jr = systemSmsSendService.checkMsgCodeTime(sv);
 		if (!jr.getData().getCode().equals(SmsCode.SUCCESS.getCode())) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "短信验证码已失效，请重新获取");
@@ -791,6 +814,26 @@ public class ClientService {
 		jr = systemSmsSendService.checkMsgCode(sc);
 		if (!jr.getData().getCode().equals(SmsCode.SUCCESS.getCode())) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "验证码错误");
+		}
+		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
+	 * <p>
+	 * 发送修改个人信息的邮箱验证码
+	 * </p>
+	 * 
+	 * @param phoneNumber
+	 * @return
+	 * @author 黄智聪 2018年10月22日 下午5:37:30
+	 */
+	public JsonResult<String> sendEditEmailVerificationCode(String email) {
+		MailParam m = new MailParam();
+		m.setTo(email);
+		JsonResult<SmsInfo> jr = systemEmailService.sendMail(m);
+		if (!jr.getData().getCode().equals(EmailConstants.EMAIL_SEND_SUCCESS)) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "邮箱验证码发送失败，请重试");
 		}
 		return JsonResult.successJsonResult();
 	}

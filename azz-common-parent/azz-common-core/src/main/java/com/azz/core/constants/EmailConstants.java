@@ -13,7 +13,7 @@ package com.azz.core.constants;
  */
 public class EmailConstants {
 	
-	public static final String EMAIL_SUBJECT = "爱智造平台短信验证码邮件";
+	public static final String EMAIL_SUBJECT = "爱智造平台验证码邮件";
 	
 	public static final String EMAIL_SEND_SUCCESS = "0000";
 	

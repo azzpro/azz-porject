@@ -392,6 +392,18 @@ public class UserController {
     
     /**
      * 
+     * <p>发送修改个人信息的邮箱验证码 </p>
+     * @param email
+     * @return
+     * @author 黄智聪  2018年12月14日 上午11:37:14
+     */
+    @RequestMapping(value="sendEditEmailVerificationCode")
+    public JsonResult<String> sendEditEmailVerificationCode(@RequestParam("email")String email){
+    	return userService.sendEditEmailVerificationCode(email);
+    }
+    
+    /**
+     * 
      * <p>发送修改个人信息的验证码 </p>
      * @param phoneNumber
      * @return

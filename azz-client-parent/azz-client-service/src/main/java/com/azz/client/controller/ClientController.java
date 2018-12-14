@@ -70,11 +70,6 @@ public class ClientController {
 	return clientService.getLoginClientUserInfoByPhoneNumber(phoneNumber);
     }
     
-/*    @RequestMapping("/sendVerificationCode")
-    public JsonResult<Long> sendVerificationCode(String phoneNumber) {
-	return clientService.sendVerificationCode(phoneNumber);
-    }*/
-    
     /**
      * 
      * <p>
@@ -214,6 +209,18 @@ public class ClientController {
     @RequestMapping(value="editPersonalInfo")
     JsonResult<String> editPersonalInfo(@RequestBody EditPersonalInfoParam param){
     	return clientService.editPersonalInfo(param);
+    }
+    
+    /**
+     * 
+     * <p>发送修改个人信息的邮箱验证码 </p>
+     * @param email
+     * @return
+     * @author 黄智聪  2018年12月14日 上午11:37:14
+     */
+    @RequestMapping(value="sendEditEmailVerificationCode")
+    public JsonResult<String> sendEditEmailVerificationCode(@RequestParam("email")String email){
+    	return clientService.sendEditEmailVerificationCode(email);
     }
     
     /**

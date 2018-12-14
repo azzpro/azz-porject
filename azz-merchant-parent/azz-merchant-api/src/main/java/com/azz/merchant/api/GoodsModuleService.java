@@ -15,10 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.merchant.pojo.bo.AddGoodsModuleParam;
+import com.azz.merchant.pojo.bo.AddModuleProductParam;
 import com.azz.merchant.pojo.bo.EditGoodsModuleParam;
 import com.azz.merchant.pojo.bo.PutOnOrPutOffOrDelGoodsModuleParam;
 import com.azz.merchant.pojo.bo.SearchGoodsModuleParam;
+import com.azz.merchant.pojo.bo.SearchProductForImportParam;
 import com.azz.merchant.pojo.vo.GoodsModuleInfo;
+import com.azz.merchant.pojo.vo.ImportedProductInfo;
+import com.azz.merchant.pojo.vo.ProductForImport;
 
 /**
  * <P>模组业务</P>
@@ -78,6 +82,36 @@ public interface GoodsModuleService {
 	 */
 	@RequestMapping("/azz/api/merchant/goodsModule/putOnOrPutOffOrDelGoodsModule")
 	public JsonResult<String> putOnOrPutOffOrDelGoodsModule(@RequestBody PutOnOrPutOffOrDelGoodsModuleParam param);
+	
+	/**
+	 * 
+	 * <p>查询模组已导入的产品信息</p>
+	 * @param moduleCode
+	 * @return
+	 * @author 黄智聪  2018年12月13日 下午2:45:42
+	 */
+	@RequestMapping("/azz/api/merchant/goodsModule/getImportedProductInfos")
+	public JsonResult<ImportedProductInfo> getImportedProductInfos(@RequestParam("moduleCode") String moduleCode);
+	
+	/**
+	 * 
+	 * <p>查询当前模组能导入的产品信息</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年12月13日 下午4:16:39
+	 */
+	@RequestMapping("/azz/api/merchant/goodsModule/getProductsForImport")
+	public JsonResult<Pagination<ProductForImport>> getProductsForImport(@RequestBody SearchProductForImportParam param);
+	
+	/**
+	 * 
+	 * <p>保存模组产品</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年12月13日 下午4:19:46
+	 */
+	@RequestMapping("/azz/api/merchant/goodsModule/saveModuleProducts")
+	public JsonResult<String> saveModuleProducts(@RequestBody AddModuleProductParam param);
 	
 }
 

@@ -26,17 +26,23 @@ import com.azz.core.constants.MerchantConstants.IsChangeGoodsModulePic;
 import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.merchant.mapper.MerchantGoodsModuleMapper;
+import com.azz.merchant.mapper.MerchantGoodsProductMapper;
 import com.azz.merchant.mapper.MerchantMapper;
 import com.azz.merchant.mapper.PlatformGoodsClassificationMapper;
 import com.azz.merchant.pojo.Merchant;
 import com.azz.merchant.pojo.MerchantGoodsModule;
 import com.azz.merchant.pojo.PlatformGoodsClassification;
 import com.azz.merchant.pojo.bo.AddGoodsModuleParam;
+import com.azz.merchant.pojo.bo.AddModuleProductParam;
 import com.azz.merchant.pojo.bo.EditGoodsModuleParam;
 import com.azz.merchant.pojo.bo.GoodsModulePic;
 import com.azz.merchant.pojo.bo.PutOnOrPutOffOrDelGoodsModuleParam;
 import com.azz.merchant.pojo.bo.SearchGoodsModuleParam;
+import com.azz.merchant.pojo.bo.SearchProductForImportParam;
 import com.azz.merchant.pojo.vo.GoodsModuleInfo;
+import com.azz.merchant.pojo.vo.ImportedProductInfo;
+import com.azz.merchant.pojo.vo.ModuleProduct;
+import com.azz.merchant.pojo.vo.ProductForImport;
 import com.azz.merchant.pojo.vo.UploadFileInfo;
 import com.azz.system.api.SystemImageUploadService;
 import com.azz.system.sequence.api.DbSequenceService;
@@ -68,6 +74,9 @@ public class GoodsModuleService {
 	
 	@Autowired
 	private DbSequenceService dbSequenceService;
+	
+	@Autowired
+	private MerchantGoodsProductMapper merchantGoodsProductMapper;
 	
 	/**
 	 * 
@@ -223,6 +232,66 @@ public class GoodsModuleService {
 				.build();
 		merchantGoodsModuleMapper.updateByModuleCode(merchantGoodsModuleRecord);
 		
+		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
+	 * <p>查询模组已导入的产品信息</p>
+	 * @param moduleCode
+	 * @return
+	 * @author 黄智聪  2018年12月13日 下午2:45:42
+	 */
+	public JsonResult<ImportedProductInfo> getImportedProductInfos(String moduleCode){
+		if(StringUtils.isBlank(moduleCode)) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "模组编码不允许为空");
+		}
+		// 查询模组详情
+		GoodsModuleInfo moduleInfo = merchantGoodsModuleMapper.getGoodsModuleInfo(moduleCode);
+		// 查询模组下的产品列表
+		List<ModuleProduct> moduleProducts = merchantGoodsModuleMapper.getModuleProducts(moduleCode);
+		return JsonResult.successJsonResult(new ImportedProductInfo(moduleInfo, moduleProducts));
+	}
+	
+	/**
+	 * 
+	 * <p>查询当前模组能导入的产品信息</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年12月13日 下午4:16:39
+	 */
+	public JsonResult<Pagination<ProductForImport>> getProductsForImport(@RequestBody SearchProductForImportParam param){
+		JSR303ValidateUtils.validate(param);
+		PageHelper.startPage(param.getPageNum(), param.getPageSize());
+		List<ProductForImport> products = merchantGoodsModuleMapper.getProductsForImport(param);
+		return JsonResult.successJsonResult(new Pagination<>(products));
+	}
+	
+	/**
+	 * 
+	 * <p>保存模组产品</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年12月13日 下午4:19:46
+	 */
+	public JsonResult<String> saveModuleProducts(@RequestBody AddModuleProductParam param){
+		JSR303ValidateUtils.validate(param);
+		List<String> productCodes = param.getProductCodes();
+		List<String> invalidProductCodes = merchantGoodsModuleMapper.getInvalidImportProductCodes(productCodes);
+		if(invalidProductCodes.size() > 0) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, 
+					"产品编码[" + StringUtils.join(invalidProductCodes, ",") + "]的产品已被删除或已关联模组，请移除后保存");
+		}
+		String moduleCode = param.getModuleCode();
+		MerchantGoodsModule module = merchantGoodsModuleMapper.selectByModuleCode(moduleCode);
+		if(module == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "所选模组不存在");
+		}
+		Long moduleId = module.getId();
+		// 先解除原先产品所绑定的模组
+		merchantGoodsProductMapper.setNullModule(moduleId);
+		// 再重新为产品绑定模组
+		merchantGoodsProductMapper.updateProductModule(productCodes, moduleId);
 		return JsonResult.successJsonResult();
 	}
 	

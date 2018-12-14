@@ -356,4 +356,70 @@
   <select id="selectModuleById" resultMap="BaseResultMap">
   	select <include refid="Base_Column_List"></include> from merchant_goods_module where id = #{id}
   </select>
+  
+  <select id="getModuleProducts" parameterType="string" resultType="com.azz.merchant.pojo.vo.ModuleProduct">
+  	SELECT
+		mgp.product_code AS productCode,
+		GROUP_CONCAT(mgpp.params_value) AS paramValues
+	FROM
+		merchant_goods_product mgp
+	JOIN merchant_goods_product_params mgpp ON mgp.id = mgpp.product_id
+	WHERE
+		mgp.product_status != 0
+	AND mgp.module_id = (
+		SELECT
+			mgm.id
+		FROM
+			merchant_goods_module mgm
+		WHERE
+			mgm.module_code = #{moduleCode}
+	)
+	GROUP BY
+		mgp.product_code
+	ORDER BY mgp.create_time desc
+  </select>
+  
+  <select id="getProductsForImport" parameterType="com.azz.merchant.pojo.bo.SearchProductForImportParam" resultType="com.azz.merchant.pojo.vo.ProductForImport">
+  	SELECT
+		mgp.product_code AS productCode,
+		GROUP_CONCAT(mgpp.params_value) AS paramValues
+	FROM
+		merchant_goods_product mgp
+	JOIN merchant_goods_product_params mgpp ON mgp.id = mgpp.product_id
+	<where>
+			mgp.module_id IS NULL
+		AND mgp.product_status != 0
+		<if test="productCode != null and productCode != ''">
+			AND mgp.product_code = #{productCode}
+		</if>
+		AND mgp.assortment_id = (
+			SELECT
+				mgm.classification_id
+			FROM
+				merchant_goods_module mgm
+			WHERE
+				mgm.module_code = #{moduleCode}
+		)
+	</where>
+	GROUP BY
+		mgp.product_code
+	ORDER BY mgp.create_time desc
+  </select>
+  
+  <select id="getInvalidImportProductCodes" resultType="string">
+  	SELECT
+		mgp.product_code
+	FROM
+		merchant_goods_product mgp
+	WHERE
+		mgp.product_code IN 
+	<foreach collection="productCodes" item="productCode" separator="," open="(" close=")" >
+		#{productCode}
+	</foreach>
+	AND (
+		mgp.product_status = 0
+		OR mgp.module_id IS NOT NULL
+	)
+  </select>
+  
 </mapper>

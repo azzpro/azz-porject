@@ -369,17 +369,22 @@
   </select>
   
   <select id="getClientUserInfoByPhoneNumber" parameterType="string" resultType="com.azz.client.pojo.vo.ClientUserInfo">
-    SELECT
-		c.client_user_code AS clientUserCode,
-		uc.company_code as companyCode,
-		uc.company_name AS companyName,
-		uc.id as clientUserCompanyId,
-		c.phone_number AS phoneNumber,
-		c.client_user_name AS clientUserName,
-		c.create_time AS createTime,
-		c.client_type AS clientType,
-		c.is_enterprise_authenticator as isEnterpriseAuthenticator,
-		CASE c. STATUS
+	   SELECT
+			c.client_user_code AS clientUserCode,
+			uc.company_code AS companyCode,
+			uc.company_name AS companyName,
+			uc.id AS clientUserCompanyId,
+			c.phone_number AS phoneNumber,
+			c.client_user_name AS clientUserName,
+			c.create_time AS createTime,
+			c.client_type AS clientType,
+			c.post_name AS postName,
+			cd.dept_code AS deptCode,
+			cd.dept_name AS deptName,
+			cr.role_code AS roleCode,
+			cr.role_name AS roleName,
+			c.is_enterprise_authenticator AS isEnterpriseAuthenticator,
+			CASE c. STATUS
 		WHEN 0 THEN
 			'删除'
 		WHEN 1 THEN
@@ -387,12 +392,15 @@
 		WHEN 2 THEN
 			'禁用'
 		END AS STATUS
-	FROM
-		client_user c
-	LEFT JOIN client_user_company uc on uc.client_user_code = c.client_user_code
-	WHERE
-		c. STATUS != 0
-	and c.phone_number = #{phoneNumber}
+		FROM
+			client_user c
+		LEFT JOIN client_user_company uc ON uc.client_user_code = c.client_user_code
+		LEFT JOIN client_user_role cur ON cur.client_user_id = c.id
+		LEFT JOIN client_role cr ON cr.id = cur.role_id
+		LEFT JOIN client_dept cd ON cd.id = c.client_dept_id
+		WHERE
+			c. STATUS != 0
+		and c.phone_number = #{phoneNumber}
   </select>
   
   <select id="getClientUserInfoBySearchParam" resultType="com.azz.client.pojo.vo.ClientUserInfo">

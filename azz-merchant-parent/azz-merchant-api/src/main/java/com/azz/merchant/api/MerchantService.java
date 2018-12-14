@@ -184,6 +184,16 @@ public interface MerchantService {
     
     /**
      * 
+     * <p>发送修改个人信息的邮箱验证码</p>
+     * @param email
+     * @return
+     * @author 黄智聪  2018年12月14日 上午11:39:01
+     */
+    @GetMapping("/azz/api/user/sendEditEmailVerificationCode")
+    JsonResult<String> sendEditEmailVerificationCode(@RequestParam("email")String email);
+    
+    /**
+     * 
      * <p>发送修改个人信息的验证码 </p>
      * @param phoneNumber
      * @return

@@ -24,6 +24,17 @@ public abstract class UserConstants {
     // 平台端管理员角色名称
     public static final String PLATFORM_ADMIN_ROLE_NAME = "管理员"; 
 
+    /**
+	 * 修改个人资料短信验证码有效时间 10分钟
+	 */
+	public static final long CHANGE_DATA_SMS_TIME_OUT = 10 * 60L;
+	
+
+    /**
+	 * 修改个人资料邮箱验证码有效时间 10分钟
+	 */
+	public static final long CHANGE_DATA_EMAIL_TIME_OUT = 10 * 60L;
+
     public enum UserStatus {
 
 	DISABLE(0, "注销"),

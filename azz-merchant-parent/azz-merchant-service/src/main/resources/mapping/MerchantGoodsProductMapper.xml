@@ -207,4 +207,19 @@
   	update merchant_goods_product set product_status = #{status} where id = #{id}
   </update>
   
+  <update id="setNullModule" parameterType="java.lang.Long">
+    update merchant_goods_product 
+    set module_id = null
+    where module_id = #{moduleId}
+  </update>
+  
+  <update id="updateProductModule">
+    update merchant_goods_product 
+    set module_id = #{moduleId} 
+    where product_code in 
+    <foreach collection="productCodes" item="productCode" separator="," open="(" close=")" >
+		#{productCode}
+	</foreach>
+  </update>
+  
 </mapper>

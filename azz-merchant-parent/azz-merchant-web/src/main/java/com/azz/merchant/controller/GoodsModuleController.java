@@ -21,12 +21,16 @@ import com.azz.core.constants.MerchantConstants.IsChangeGoodsModulePic;
 import com.azz.merchant.api.GoodsModuleService;
 import com.azz.merchant.pojo.bo.AddGoodsModuleParam;
 import com.azz.merchant.pojo.bo.AddGoodsModuleWebParam;
+import com.azz.merchant.pojo.bo.AddModuleProductParam;
 import com.azz.merchant.pojo.bo.EditGoodsModuleParam;
 import com.azz.merchant.pojo.bo.EditGoodsModuleWebParam;
 import com.azz.merchant.pojo.bo.GoodsModulePic;
 import com.azz.merchant.pojo.bo.PutOnOrPutOffOrDelGoodsModuleParam;
 import com.azz.merchant.pojo.bo.SearchGoodsModuleParam;
+import com.azz.merchant.pojo.bo.SearchProductForImportParam;
 import com.azz.merchant.pojo.vo.GoodsModuleInfo;
+import com.azz.merchant.pojo.vo.ImportedProductInfo;
+import com.azz.merchant.pojo.vo.ProductForImport;
 import com.azz.merchant.utils.WebUtils;
 import com.azz.util.Base64;
 import com.azz.util.JSR303ValidateUtils;
@@ -129,5 +133,41 @@ public class GoodsModuleController {
 		return goodsModuleService.putOnOrPutOffOrDelGoodsModule(param);
 	}
 	
-
+	/**
+	 * 
+	 * <p>查询模组已导入的产品信息</p>
+	 * @param moduleCode
+	 * @return
+	 * @author 黄智聪  2018年12月13日 下午2:45:42
+	 */
+	@RequestMapping("/getImportedProductInfos")
+	public JsonResult<ImportedProductInfo> getImportedProductInfos(String moduleCode){
+		return goodsModuleService.getImportedProductInfos(moduleCode);
+	}
+	
+	/**
+	 * 
+	 * <p>查询当前模组能导入的产品信息</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年12月13日 下午4:16:39
+	 */
+	@RequestMapping("/getProductsForImport")
+	public JsonResult<Pagination<ProductForImport>> getProductsForImport(SearchProductForImportParam param){
+		return goodsModuleService.getProductsForImport(param);
+	}
+	
+	/**
+	 * 
+	 * <p>保存模组产品</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年12月13日 下午4:19:46
+	 */
+	@RequestMapping("/saveModuleProducts")
+	public JsonResult<String> saveModuleProducts(AddModuleProductParam param){
+		param.setModifier(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
+		return goodsModuleService.saveModuleProducts(param);
+	}
+	
 }

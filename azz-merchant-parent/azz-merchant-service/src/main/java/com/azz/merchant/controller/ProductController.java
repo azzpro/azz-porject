@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
+import com.azz.merchant.pojo.bo.BatchAddProduct;
 import com.azz.merchant.pojo.bo.MerchantProductParam;
 import com.azz.merchant.pojo.bo.ModulePrams;
 import com.azz.merchant.pojo.bo.ProductParams;
@@ -135,5 +136,16 @@ public class ProductController {
 	public JsonResult<String> deleteOrDownProduct(@RequestParam("id") Long id,@RequestParam("type") Byte type){
 		return productService.deleteOrDownProduct(id, type);
 	}
+	
+	/**
+	 * <p>批量新增产品信息</p>
+	 * @param params
+	 * @return
+	 * @author 彭斌  2018年12月14日 下午1:57:53
+	 */
+	@RequestMapping(value="batchAddProduct",method=RequestMethod.POST)
+    public JsonResult<String> batchAddProduct(@RequestBody BatchAddProduct params){
+        return productService.batchAddProduct(params);
+    }
 }
 

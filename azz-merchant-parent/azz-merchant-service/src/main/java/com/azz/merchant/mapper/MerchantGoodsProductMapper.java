@@ -51,6 +51,7 @@ public interface MerchantGoodsProductMapper {
     List<MerchantProductList> selectProductList(MerchantProductParam param);
     
     /**
+<<<<<<< HEAD
      * 
      * <p>解除产品绑定的模组</p>
      * @param moduleId
@@ -68,5 +69,14 @@ public interface MerchantGoodsProductMapper {
      * @author 黄智聪  2018年12月13日 下午6:26:08
      */
 	int updateProductModule(@Param("productCodes")List<String> productCodes, @Param("moduleId")Long moduleId);
+    
+	/**
+	 * 
+	 * <p>商品编码唯一校验</p>
+	 * @param code
+	 * @return
+	 * @author 黄智聪  2018年12月14日 下午2:56:18
+	 */
+    MerchantGoodsProduct selectProductByProductCode(String code);
     
 }

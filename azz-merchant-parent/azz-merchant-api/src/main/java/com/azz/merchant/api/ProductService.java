@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
+import com.azz.merchant.pojo.bo.BatchAddProduct;
 import com.azz.merchant.pojo.bo.MerchantProductParam;
 import com.azz.merchant.pojo.bo.ModulePrams;
 import com.azz.merchant.pojo.bo.ProductParams;
@@ -58,5 +59,8 @@ public interface ProductService {
 	
 	@RequestMapping(value="/azz/api/merchant/product/getPrams",method=RequestMethod.POST)
 	public JsonResult<com.azz.merchant.pojo.vo.ProductParams> getPrams(@RequestParam("assortmentId") Long assortmentId);
+
+	@RequestMapping(value="/azz/api/merchant/product/batchAddProduct",method=RequestMethod.POST)
+	public JsonResult<String> batchAddProduct(@RequestBody BatchAddProduct params);
 }
 

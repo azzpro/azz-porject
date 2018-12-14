@@ -318,11 +318,10 @@ public class ProductService {
 				
 				//获取模组CODE
 				Long moduleId = params.getModuleId();
-				if(null == moduleId)
-					throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"模组ID不能为空");
-				MerchantGoodsModule goodsModule = goodsModuleMapper.selectModuleById(moduleId);
-				if(null == goodsModule)
-					throw new BaseException(MerchantProductErrorCode.MERCHANT_MODULE_ERROR_NOT_EXIST);
+				MerchantGoodsModule goodsModule = null;
+				if(null != moduleId) {
+					 goodsModule = goodsModuleMapper.selectModuleById(moduleId);
+				}
 				com.azz.merchant.pojo.PlatformGoodsParams goodsParams = platformGoodsParamsMapper.selectParamsByAssortmentId(assid);
 				if(null == goodsParams)
 					throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_VALUES_IS_NULL);
@@ -333,7 +332,9 @@ public class ProductService {
 				mgp.setBrandId(brandId);
 				mgp.setCreateTime(new Date());
 				mgp.setCreator(params.getCreator());
-				mgp.setModuleId(goodsModule.getId());
+				if(goodsModule != null) {
+					mgp.setModuleId(goodsModule.getId());
+				}
 				mgp.setProductCode(params.getProductCode());
 				mgp.setProductSystemCode(SystemSeqUtils.getSeq(code));
 				mgp.setProductStatus(params.getStatus());
@@ -404,11 +405,10 @@ public class ProductService {
 				
 				//获取模组CODE
 				Long moduleId = params.getModuleId();
-				if(null == moduleId)
-					throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"模组ID不能为空");
-				MerchantGoodsModule goodsModule = goodsModuleMapper.selectModuleById(moduleId);
-				if(null == goodsModule)
-					throw new BaseException(MerchantProductErrorCode.MERCHANT_MODULE_ERROR_NOT_EXIST);
+				MerchantGoodsModule goodsModule = null;
+				if(null != moduleId) {
+				 goodsModule = goodsModuleMapper.selectModuleById(moduleId);
+				}
 				com.azz.merchant.pojo.PlatformGoodsParams goodsParams = platformGoodsParamsMapper.selectParamsByAssortmentId(assid);
 				if(null == goodsParams)
 					throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_VALUES_IS_NULL);
@@ -420,7 +420,9 @@ public class ProductService {
 				mgp.setBrandId(brandId);
 				mgp.setModifier(params.getModify());
 				mgp.setModifyTime(new Date());
-				mgp.setModuleId(goodsModule.getId());
+				if(goodsModule != null) {
+					mgp.setModuleId(goodsModule.getId());
+				}
 				mgp.setProductCode(params.getProductCode());
 				//编辑不需要修改系统编码
 				//mgp.setProductSystemCode(randomSequenceService.getProductCodeNumber());

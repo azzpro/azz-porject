@@ -207,4 +207,7 @@
   	update merchant_goods_product set product_status = #{status} where id = #{id}
   </update>
   
+  <select id="selectProductByProductCode" resultMap="BaseResultMap" parameterType="string">
+  select <include refid="Base_Column_List"></include> from merchant_goods_product where product_code = #{code}
+  </select>
 </mapper>

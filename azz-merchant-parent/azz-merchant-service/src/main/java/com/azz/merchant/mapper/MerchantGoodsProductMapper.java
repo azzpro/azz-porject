@@ -50,4 +50,12 @@ public interface MerchantGoodsProductMapper {
      */
     List<MerchantProductList> selectProductList(MerchantProductParam param);
     
+    /**
+     * <p>商品编码唯一校验</p>
+     * @param code
+     * @return
+     * @author 彭斌  2018年12月14日 下午1:52:18
+     */
+    MerchantGoodsProduct selectProductByProductCode(String code);
+    
 }

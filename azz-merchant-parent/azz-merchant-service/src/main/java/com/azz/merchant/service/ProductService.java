@@ -43,6 +43,8 @@ import com.azz.merchant.pojo.MerchantGoodsProductPrice;
 import com.azz.merchant.pojo.PlatformGoodsBrand;
 import com.azz.merchant.pojo.PlatformGoodsParamsTerm;
 import com.azz.merchant.pojo.PlatformGoodsParamsValue;
+import com.azz.merchant.pojo.bo.BatchAddProduct;
+import com.azz.merchant.pojo.bo.BatchAddProductItem;
 import com.azz.merchant.pojo.bo.MerchantProductParam;
 import com.azz.merchant.pojo.bo.ModulePrams;
 import com.azz.merchant.pojo.bo.ProductParam;
@@ -57,6 +59,7 @@ import com.azz.merchant.pojo.vo.ParamsValue;
 import com.azz.merchant.pojo.vo.ProductParamsBrands;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
+import com.azz.util.ObjectUtils;
 import com.azz.util.SystemSeqUtils;
 import com.github.pagehelper.PageHelper;
 
@@ -325,6 +328,14 @@ public class ProductService {
 				com.azz.merchant.pojo.PlatformGoodsParams goodsParams = platformGoodsParamsMapper.selectParamsByAssortmentId(assid);
 				if(null == goodsParams)
 					throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_VALUES_IS_NULL);
+				
+				// 产品编码唯一校验
+				MerchantGoodsProduct countPro = goodsProductMapper.selectProductByProductCode(params.getProductCode());
+                if(ObjectUtils.isNotNull(countPro)) {
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
+                            "产品编码已存在不许重复");
+                }
+				
 				String code= dbSequenceService.getProductCodeNumber();
 				//获取产品
 				MerchantGoodsProduct mgp = new MerchantGoodsProduct();
@@ -489,5 +500,90 @@ public class ProductService {
 		return JsonResult.successJsonResult();
 	}
 	
+	/**
+	 * <p>批量新增产品
+	 * 说明：此功能批量录入产品信息是在某个分类下录入统一参数的产品，录入的交期目前只录入一个即可。</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年12月14日 上午11:50:39
+	 */
+    @Transactional(rollbackFor=Exception.class)
+	public JsonResult<String> batchAddProduct(@RequestBody BatchAddProduct param){
+	    JSR303ValidateUtils.validate(param);
+	    // 所属分类id
+	    Long assortmentId = param.getAssortmentId();
+	    // 所属商户id
+	    Long merchantId = param.getMerchantId();
+	    // 创建人
+	    String creator = param.getCreator();
+	    
+	    // 校验所属分类id存在
+        com.azz.merchant.pojo.PlatformGoodsClassification assortmentById = platformGoodsClassificationMapper.selectAssortmentById(assortmentId);
+        if(null == assortmentById) {
+            throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_ASSORTMENT_EXIST);
+        }
+        
+	    List<BatchAddProductItem> items = param.getItems();
+	    if(items.size() > 0) {
+	        for (int i = 0; i < items.size(); i++) {
+	            // 处理录入的产品信息
+	            BatchAddProductItem productItem = items.get(i);
+	            
+	            com.azz.merchant.pojo.PlatformGoodsBrand goodsBrand = platformGoodsBrandMapper.selectBrandById(productItem.getBrandId());
+                if(null == goodsBrand) 
+                    throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_BRAND_NOT_EXIST);
+                com.azz.merchant.pojo.PlatformGoodsParams goodsParams = platformGoodsParamsMapper.selectParamsByAssortmentId(assortmentId);
+                if(null == goodsParams)
+                    throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_VALUES_IS_NULL);
+                
+                // 产品编码唯一校验
+                MerchantGoodsProduct countPro = goodsProductMapper.selectProductByProductCode(productItem.getProductCode());
+                if(ObjectUtils.isNotNull(countPro)) {
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
+                            "产品编码已存在不许重复");
+                }
+                
+                String code= dbSequenceService.getProductCodeNumber();
+                //获取产品
+                MerchantGoodsProduct mgp = new MerchantGoodsProduct();
+                mgp.setAssortmentId(assortmentId);
+                mgp.setBrandId(productItem.getBrandId());
+                mgp.setCreateTime(new Date());
+                mgp.setCreator(creator);
+                mgp.setProductCode(productItem.getProductCode());
+                mgp.setProductSystemCode(SystemSeqUtils.getSeq(code));
+                mgp.setMerchantId(merchantId);
+                goodsProductMapper.insertSelective(mgp);
+                
+                //插入价格
+                MerchantGoodsProductPrice mpp = new MerchantGoodsProductPrice();
+                mpp.setDeliveryDate(productItem.getDeliveryDate());
+                mpp.setPrice(productItem.getPrice());
+                mpp.setProductId(mgp.getId());
+                goodsProductPriceMapper.insertSelective(mpp);
+                
+                //插入产品参数
+                List<ProductParam> pp = productItem.getParams();
+                if(null != pp && pp.size() > 0) {
+                    for (ProductParam productParam : pp) {
+                        MerchantGoodsProductParams obj = new MerchantGoodsProductParams();
+                        obj.setParamsId(goodsParams.getId());
+                        obj.setParamsTermId(productParam.getTermId());
+                        obj.setParamsName(productParam.getParamName());
+                        obj.setParamsValue(productParam.getValues());
+                        obj.setProductId(mgp.getId());
+                        obj.setParamsType(productParam.getType());
+                        obj.setParamsChoice(productParam.getChoice());
+                        goodsProductParamsMapper.insertSelective(obj);
+                    }
+                }
+	        }
+	        
+	    } else {
+	        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
+                    "未录入产品信息");
+	    }
+	    return JsonResult.successJsonResult();
+	}
 }
 

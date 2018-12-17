@@ -201,18 +201,20 @@ public class DeptService {
         if(ObjectUtils.isNull(record)) {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_ERROR_NO_EXIST);
         }
+        MerchantDept editDept = new MerchantDept();
+        editDept.setId(record.getId());
         if(param.getStatus().equals(MerchantConstants.DeptStatus.DISABLE.getValue())) {
             // 禁用
-            record.setStatus(MerchantConstants.DeptStatus.DISABLE.getValue());
+            editDept.setStatus(MerchantConstants.DeptStatus.DISABLE.getValue());
         } else if(param.getStatus().equals(MerchantConstants.DeptStatus.ENABLE.getValue())) {
             // 启用
-            record.setStatus(MerchantConstants.DeptStatus.ENABLE.getValue());
+            editDept.setStatus(MerchantConstants.DeptStatus.ENABLE.getValue());
         } else {
             throw new BaseException(PlatformUserErrorCode.PLATFORM_DEPT_STATUS_ERROR_NO_EXIST);
         }
-        record.setModifier(param.getModifier());
-        record.setLastModifyTime(new Date());
-        merchantDeptMapper.updateByPrimaryKeySelective(record);
+        editDept.setModifier(param.getModifier());
+        editDept.setLastModifyTime(new Date());
+        merchantDeptMapper.updateByPrimaryKeySelective(editDept);
         return JsonResult.successJsonResult();
     }
     

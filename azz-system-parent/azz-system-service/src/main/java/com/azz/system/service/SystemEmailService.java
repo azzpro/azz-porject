@@ -30,8 +30,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.SmsErrorCode;
 import com.azz.core.constants.EmailConstants;
 import com.azz.core.constants.SmsConstants.SmsCode;
+import com.azz.exception.SmsException;
 import com.azz.system.bo.MailCheck;
 import com.azz.system.bo.MailCodeValidation;
 import com.azz.system.bo.MailParam;
@@ -123,9 +125,9 @@ public class SystemEmailService {
 		//发送频率校验
 		String today = CalendarUtil.getFormatDateTime(new Date(), "yyyy-MM-dd");
 		List<SystemMsgLog> logs = smlm.findMsgLogByMail(m.getTo(), today);
-		/* TODO if (!emailSendRole(logs))
-				throw new SmsException(SmsErrorCode.SMS_ERROR_TOO_QUICK);
-		*/
+		if (!emailSendRole(logs)) {
+			throw new SmsException(SmsErrorCode.SMS_ERROR_TOO_QUICK);
+		}
 		SystemMsgLog sml = new SystemMsgLog();
 		sml.setMsgCode(RandomStringUtils.generNumCode(6));
 		sml.setMsgContent(EmailConstants.EMAIL_CONTENT_PERFIX.replace("${code}", sml.getMsgCode()));

@@ -164,7 +164,7 @@ public class ClientDeptController {
         JSR303ValidateUtils.validate(webParam);
         MultipartFile file = webParam.getFile();
         String fileName = file.getOriginalFilename();
-        if(!fileName.endsWith(".xls") && !fileName.endsWith(".xlsx")) {
+        if(!fileName.endsWith(".xls")) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "文件格式有误");
         }
         ImportClientDeptParam param = new ImportClientDeptParam();

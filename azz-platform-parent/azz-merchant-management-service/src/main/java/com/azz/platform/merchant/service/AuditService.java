@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
+import com.azz.core.constants.SmsType;
 import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.platform.merchant.common.constants.AuditConstants;
@@ -29,6 +30,8 @@ import com.azz.platform.merchant.pojo.MerchantUser;
 import com.azz.platform.merchant.pojo.MerchantUserRole;
 import com.azz.platform.merchant.pojo.bo.AuditParam;
 import com.azz.platform.merchant.pojo.vo.Permission;
+import com.azz.system.api.SystemSmsSendService;
+import com.azz.system.bo.SmsParams;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
@@ -69,6 +72,9 @@ public class AuditService{
     
     @Autowired
     private DbSequenceService dbSequenceService;
+    
+    @Autowired
+    private SystemSmsSendService systemSmsSendService;
 
     public JsonResult<String> auditEnterprise(@RequestBody AuditParam param) {
         JSR303ValidateUtils.validate(param);
@@ -129,6 +135,20 @@ public class AuditService{
         	this.initUserPermission(param, merchant);
         }
         
+        // 发送审批短信
+        SmsParams sms = new SmsParams();
+        if(param.getStatus().equals(AuditConstants.AuditStatus.PASSED.getValue())) {
+            sms.setMsgType(SmsType.MERCHANT_ENTER_EXAMINE_SUCCESS);
+        }else if(param.getStatus().equals(AuditConstants.AuditStatus.REFUSED.getValue())){
+            sms.setMsgType(SmsType.MERCHANT_ENTER_EXAMINE_FAIL);
+        }
+        // try-catch起来，防止事务回滚
+        try {
+            sms.setPhone(merchant.getContactPhone());
+            systemSmsSendService.sendSmsCode(sms);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return JsonResult.successJsonResult();
     }
 

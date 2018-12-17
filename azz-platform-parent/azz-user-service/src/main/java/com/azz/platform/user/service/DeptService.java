@@ -281,10 +281,10 @@ public class DeptService{
                     if (StringUtils.isNotBlank(cell_1)) {
                         deptName = cell_1;
                     }else {
-                        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "部门名称不允许为空");
+                        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行数据部门名称不允许为空");
                     }
                 }else {
-                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "部门名称不允许为空");
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行数据部门名称不允许为空");
                 }
                 
                 // 上级部门编码校验
@@ -293,10 +293,10 @@ public class DeptService{
                     if (StringUtils.isNotBlank(cell_2)) {
                         parentDeptCode = cell_2;
                     }else {
-                        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "上级部门编码不允许为空");
+                        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行数据上级部门编码不允许为空");
                     }
                 }else {
-                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "上级部门编码不允许为空");
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行数据上级部门编码不允许为空");
                 }
                 
                 // 部门状态校验
@@ -305,10 +305,10 @@ public class DeptService{
                     if (StringUtils.isNotBlank(cell_3)) {
                         deptStatus = cell_3;
                     }else {
-                        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "上级部门编码不允许为空");
+                        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行数据上级部门编码不允许为空");
                     }
                 }else {
-                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "上级部门编码不允许为空");
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行数据上级部门编码不允许为空");
                 }
                 
                 PlatformDept dept = new PlatformDept();
@@ -316,7 +316,7 @@ public class DeptService{
                 if(!"0".equals(parentDeptCode)) {
                     PlatformDept deptObjCode = deptMapper.selectByDeptCode(parentDeptCode);
                     if(ObjectUtils.isNull(deptObjCode)) {
-                        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "部门编码不存在");
+                        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行数据部门编码不存在");
                     }
                     
                     if(deptObjCode.getDescription().equals("0")) {
@@ -324,7 +324,7 @@ public class DeptService{
                     } else if(deptObjCode.getDescription().equals("1")) {
                         dept.setDescription("2");
                     } else if(deptObjCode.getDescription().equals("2")) {
-                        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "已是三级部门");
+                        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行数据已是三级部门");
                     }
                     dept.setParentCode(parentDeptCode);
                 } else {
@@ -336,7 +336,7 @@ public class DeptService{
                 
                 int count = deptMapper.selectCountByParam(parentDeptCode, deptName);
                 if(count>0) {
-                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "部门已存在");
+                    throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行数据部门已存在");
                 }
                 
                 String code = dbSequenceService.getPlatDepartmentNumber();

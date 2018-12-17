@@ -7,27 +7,8 @@
  
 package com.azz.platform.user.service;
 
-import java.util.Date;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import com.azz.core.common.JsonResult;
-import com.azz.core.common.errorcode.JSR303ErrorCode;
-import com.azz.core.common.errorcode.PlatformUserErrorCode;
-import com.azz.core.constants.MerchantConstants.QualificationApplyStatus;
-import com.azz.core.exception.BaseException;
-import com.azz.exception.JSR303ValidationException;
-import com.azz.platform.user.common.constants.AuditConstants;
-import com.azz.platform.user.mapper.MerchantApplyMapper;
-import com.azz.platform.user.mapper.MerchantMapper;
-import com.azz.platform.user.pojo.Merchant;
-import com.azz.platform.user.pojo.MerchantApply;
-import com.azz.platform.user.pojo.bo.AuditParam;
-import com.azz.util.JSR303ValidateUtils;
-import com.azz.util.ObjectUtils;
 
 /**
  * <P>审核企业信息</P>
@@ -38,11 +19,14 @@ import com.azz.util.ObjectUtils;
 @Service
 public class AuditService{
     
-    @Autowired
+   /* @Autowired
     MerchantApplyMapper merchantApplyMapper;
     
     @Autowired
     MerchantMapper merchantMapper;
+    
+    @Autowired
+    private SystemSmsSendService systemSmsSendService;
     
     public JsonResult<String> auditEnterprise(@RequestBody AuditParam param) {
         JSR303ValidateUtils.validate(param);
@@ -85,8 +69,23 @@ public class AuditService{
         record.setAuditor(param.getAuditor());
         merchantMapper.updateByPrimaryKeySelective(record);
         
+        // 发送审批短信
+        SmsParams sms = new SmsParams();
+        if(param.getStatus().equals(AuditConstants.AuditStatus.PASSED.getValue())) {
+            sms.setMsgType(SmsType.MERCHANT_ENTER_EXAMINE_SUCCESS);
+        }else if(param.getStatus().equals(AuditConstants.AuditStatus.REFUSED.getValue())){
+            sms.setMsgType(SmsType.MERCHANT_ENTER_EXAMINE_FAIL);
+        }
+        // try-catch起来，防止事务回滚
+        try {
+            sms.setPhone(record.getContactPhone());
+            systemSmsSendService.sendSmsCode(sms);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         return JsonResult.successJsonResult();
-    }
+    }*/
 
 }
 

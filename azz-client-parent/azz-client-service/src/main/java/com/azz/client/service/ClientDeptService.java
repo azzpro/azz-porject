@@ -291,10 +291,10 @@ public class ClientDeptService {
                    if (StringUtils.isNotBlank(cell_1)) {
                        deptName = cell_1;
                    }else {
-                       throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "部门名称不允许为空");
+                       throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行数据部门名称不允许为空");
                    }
                }else {
-                   throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "部门名称不允许为空");
+                   throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行数据部门名称不允许为空");
                }
                
                // 上级部门编码校验
@@ -303,10 +303,10 @@ public class ClientDeptService {
                    if (StringUtils.isNotBlank(cell_2)) {
                        parentDeptCode = cell_2;
                    }else {
-                       throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "上级部门编码不允许为空");
+                       throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行数据上级部门编码不允许为空");
                    }
                }else {
-                   throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "上级部门编码不允许为空");
+                   throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行数据上级部门编码不允许为空");
                }
                
                // 部门状态校验
@@ -315,10 +315,10 @@ public class ClientDeptService {
                    if (StringUtils.isNotBlank(cell_3)) {
                        deptStatus = cell_3;
                    }else {
-                       throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "上级部门编码不允许为空");
+                       throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行数据上级部门编码不允许为空");
                    }
                }else {
-                   throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "上级部门编码不允许为空");
+                   throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行数据上级部门编码不允许为空");
                }
                
                ClientDept clientDept = new ClientDept();
@@ -329,7 +329,7 @@ public class ClientDeptService {
                    scd.setDeptCode(parentDeptCode);
                    ClientDept parentClientDept = clientDeptMapper.selectClientDeptInfoByCode(scd);
                    if(ObjectUtils.isNull(parentClientDept)) {
-                       throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "部门编码不存在");
+                       throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行数据部门编码不存在");
                    }
                    // 校验部门名称是否唯一
                    SearchClientDeptInfoParam record = new SearchClientDeptInfoParam();
@@ -337,7 +337,7 @@ public class ClientDeptService {
                    record.setDeptName(deptName);
                    ClientDept cdObj = clientDeptMapper.selectClientDeptInfoByName(record);
                    if(ObjectUtils.isNotNull(cdObj)) {
-                       throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "部门已存在");
+                       throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行数据部门已存在");
                    }
                    
                    if(parentClientDept.getDescription().equals("0")) {
@@ -345,7 +345,7 @@ public class ClientDeptService {
                    } else if(parentClientDept.getDescription().equals("1")) {
                        clientDept.setDescription("2");
                    } else if(parentClientDept.getDescription().equals("2")) {
-                       throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "已是三级部门");
+                       throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "第" + errorRowNum + "行数据已是三级部门");
                    }
                    
                    clientDept.setParentCode(parentDeptCode);

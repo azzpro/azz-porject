@@ -22,7 +22,6 @@ import com.azz.core.common.page.Pagination;
 import com.azz.platform.user.pojo.bo.AddDeptParam;
 import com.azz.platform.user.pojo.bo.AddRoleParam;
 import com.azz.platform.user.pojo.bo.AddUserParam;
-import com.azz.platform.user.pojo.bo.AuditParam;
 import com.azz.platform.user.pojo.bo.CheckVerificationCodeParam;
 import com.azz.platform.user.pojo.bo.DelRoleParam;
 import com.azz.platform.user.pojo.bo.EditDeptParam;
@@ -78,10 +77,10 @@ public class UserController {
      * @return
      * @author 彭斌  2018年10月20日 下午2:53:27
      */
-	@RequestMapping(value="auditEnterprise",method=RequestMethod.POST)
+	/*@RequestMapping(value="auditEnterprise",method=RequestMethod.POST)
 	JsonResult<String> auditEnterprise(@RequestBody AuditParam param){
 		return auditService.auditEnterprise(param);
-	}
+	}*/
 	
 	/**
      * <p>新增部门信息</p>

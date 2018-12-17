@@ -189,7 +189,7 @@ public interface MerchantService {
      * @return
      * @author 黄智聪  2018年12月14日 上午11:39:01
      */
-    @GetMapping("/azz/api/user/sendEditEmailVerificationCode")
+    @GetMapping("/azz/api/merchant/sendEditEmailVerificationCode")
     JsonResult<String> sendEditEmailVerificationCode(@RequestParam("email")String email);
     
     /**

@@ -439,6 +439,7 @@
 					or u.post_name like CONCAT('%', #{searchInput}, '%')
 				)
 			</if>
+			order by u.create_time desc
   </select>
   
   <select id="getClientPersonalInfoByClientUserCode" parameterType="string" resultType="com.azz.client.pojo.vo.ClientPersonalInfo">

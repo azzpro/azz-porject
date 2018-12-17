@@ -424,7 +424,7 @@
 				or mu.post_name like CONCAT('%', #{searchInput}, '%')
 	  		)
       	</if>
-		
+		order by mu.create_time desc
   </select>
   
   <select id="getMerchantUserInfoByMerchantUserCode" parameterType="string" resultType="com.azz.merchant.pojo.vo.MerchantUserInfo">

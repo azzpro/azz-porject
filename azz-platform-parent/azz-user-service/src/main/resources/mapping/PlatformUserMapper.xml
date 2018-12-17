@@ -447,7 +447,7 @@
 				or u.post_name like CONCAT('%', #{searchInput}, '%')
 	  		)
       	</if>
-		
+		order by u.create_time desc
   </select>
   
   <select id="getUserByEmail" resultMap="BaseResultMap">

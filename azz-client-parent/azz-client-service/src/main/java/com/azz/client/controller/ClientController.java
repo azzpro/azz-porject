@@ -206,7 +206,7 @@ public class ClientController {
      * @return
      * @author 黄智聪  2018年12月12日 下午5:43:40
      */
-    @RequestMapping(value="editPersonalInfo")
+    @RequestMapping(value="/editPersonalInfo")
     JsonResult<String> editPersonalInfo(@RequestBody EditPersonalInfoParam param){
     	return clientService.editPersonalInfo(param);
     }
@@ -218,7 +218,7 @@ public class ClientController {
      * @return
      * @author 黄智聪  2018年12月14日 上午11:37:14
      */
-    @RequestMapping(value="sendEditEmailVerificationCode")
+    @RequestMapping(value="/sendEditEmailVerificationCode")
     public JsonResult<String> sendEditEmailVerificationCode(@RequestParam("email")String email){
     	return clientService.sendEditEmailVerificationCode(email);
     }
@@ -230,7 +230,7 @@ public class ClientController {
      * @return
      * @author 黄智聪  2018年12月12日 下午5:45:42
      */
-    @RequestMapping(value="sendEditVerificationCode")
+    @RequestMapping(value="/sendEditVerificationCode")
     JsonResult<String> sendEditVerificationCode(@RequestParam("phoneNumber")String phoneNumber){
     	return clientService.sendEditVerificationCode(phoneNumber);
     }
@@ -242,7 +242,7 @@ public class ClientController {
      * @return
      * @author 黄智聪  2018年12月12日 下午5:45:46
      */
-    @RequestMapping(value="checkEditVerificationCode")
+    @RequestMapping(value="/checkEditVerificationCode")
     public JsonResult<String> checkEditVerificationCode(@RequestBody CheckVerificationCodeParam param) {
     	return clientService.checkEditVerificationCode(param);
     }

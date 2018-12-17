@@ -422,4 +422,16 @@
 	)
   </select>
   
+  <select id="countProducts" resultType="int">
+  	SELECT
+		count(1)
+	FROM
+		merchant_goods_product mgp
+	WHERE
+		mgp.product_code IN 
+	<foreach collection="productCodes" item="productCode" separator="," open="(" close=")" >
+		#{productCode}
+	</foreach>
+  </select>
+  
 </mapper>

@@ -248,6 +248,9 @@ public class GoodsModuleService {
 		}
 		// 查询模组详情
 		GoodsModuleInfo moduleInfo = merchantGoodsModuleMapper.getGoodsModuleInfo(moduleCode);
+		if(moduleInfo == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "模组不存在");
+		}
 		// 查询模组下的产品列表
 		List<ModuleProduct> moduleProducts = merchantGoodsModuleMapper.getModuleProducts(moduleCode);
 		return JsonResult.successJsonResult(new ImportedProductInfo(moduleInfo, moduleProducts));
@@ -281,6 +284,10 @@ public class GoodsModuleService {
 		if(invalidProductCodes.size() > 0) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, 
 					"产品编码[" + StringUtils.join(invalidProductCodes, ",") + "]的产品已被删除或已关联模组，请移除后保存");
+		}
+		int count = merchantGoodsModuleMapper.countProducts(productCodes);
+		if(count != productCodes.size()) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "所选商品编码中存在错误数据");
 		}
 		String moduleCode = param.getModuleCode();
 		MerchantGoodsModule module = merchantGoodsModuleMapper.selectByModuleCode(moduleCode);

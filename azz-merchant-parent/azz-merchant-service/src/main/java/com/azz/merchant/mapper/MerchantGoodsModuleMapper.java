@@ -91,4 +91,13 @@ public interface MerchantGoodsModuleMapper {
      */
     List<String> getInvalidImportProductCodes(@Param("productCodes") List<String> productCodes);
     
+    /**
+     * 
+     * <p>计算商品数量</p>
+     * @param productCodes
+     * @return
+     * @author 黄智聪  2018年12月14日 下午4:04:21
+     */
+    int countProducts(@Param("productCodes") List<String> productCodes);
+    
 }

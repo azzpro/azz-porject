@@ -34,7 +34,7 @@ public interface SystemMsgLogMapper {
 	
 	SystemMsgLog findMailLog(String mail );
 	
-	SystemMsgLog findMsgLogByMailAndCode(@Param("mail") Long mail,@Param("code") String code);
+	SystemMsgLog findMsgLogByMailAndCode(@Param("mail") String mail,@Param("code") String code);
 	
 	SystemMsgLog findMsgLogByPhoneAndCode(@Param("phone") Long phone,@Param("code") String code);
 }

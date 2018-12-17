@@ -80,7 +80,7 @@ aliyun:
 
 email:
   account: mail@izz2025.com
-  pass: Izz@123
+  pass: CWrd5JeH5FXEqHR5
   host: smtp.exmail.qq.com
   port: 465
   protocol: smtp

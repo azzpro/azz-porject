@@ -236,7 +236,7 @@ public class MerchantService {
 		sv.setPhone(phoneNumber);
 		sv.setSec(MerchantConstants.MERCHANT_REGIST_SMS_TIME_OUT);
 		JsonResult<SmsInfo> jr = systemSmsSendService.checkMsgCodeTime(sv);
-		if (!jr.getData().getCode().equals(SmsCode.SUCCESS.getCode())) {
+		if (jr.getData() == null || !jr.getData().getCode().equals(SmsCode.SUCCESS.getCode())) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "短信验证码已失效，请重新获取");
 		}
 		// 再校验验证码是否正确
@@ -244,7 +244,7 @@ public class MerchantService {
 		sc.setCode(verificationCode);
 		sc.setPhone(phoneNumber);
 		jr = systemSmsSendService.checkMsgCode(sc);
-		if (!jr.getData().getCode().equals(SmsCode.SUCCESS.getCode())) {
+		if (jr.getData() == null || !jr.getData().getCode().equals(SmsCode.SUCCESS.getCode())) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "验证码错误");
 		}
 	}
@@ -869,7 +869,7 @@ public class MerchantService {
 		sv.setPhone(phoneNumber);
 		sv.setSec(UserConstants.CHANGE_DATA_SMS_TIME_OUT);
 		JsonResult<SmsInfo> jr = systemSmsSendService.checkMsgCodeTime(sv);
-		if (!jr.getData().getCode().equals(SmsCode.SUCCESS.getCode())) {
+		if (jr.getData() == null || !jr.getData().getCode().equals(SmsCode.SUCCESS.getCode())) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "短信验证码已失效，请重新获取");
 		}
 		// 再校验验证码是否正确
@@ -877,7 +877,7 @@ public class MerchantService {
 		sc.setCode(verificationCode);
 		sc.setPhone(phoneNumber);
 		jr = systemSmsSendService.checkMsgCode(sc);
-		if (!jr.getData().getCode().equals(SmsCode.SUCCESS.getCode())) {
+		if (jr.getData() == null || !jr.getData().getCode().equals(SmsCode.SUCCESS.getCode())) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "验证码错误");
 		}
 		return JsonResult.successJsonResult();
@@ -1003,7 +1003,7 @@ public class MerchantService {
 		MailParam m = new MailParam();
 		m.setTo(email);
 		JsonResult<SmsInfo> jr = systemEmailService.sendMail(m);
-		if (!jr.getData().getCode().equals(EmailConstants.EMAIL_SEND_SUCCESS)) {
+		if (jr.getData() == null || !jr.getData().getCode().equals(EmailConstants.EMAIL_SEND_SUCCESS)) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "邮箱验证码发送失败，请重试");
 		}
 		return JsonResult.successJsonResult();
@@ -1023,7 +1023,7 @@ public class MerchantService {
 		mcv.setMail(email);
 		mcv.setSec(UserConstants.CHANGE_DATA_EMAIL_TIME_OUT);
 		jr = systemEmailService.validationMailCodeTime(mcv);
-		if (!jr.getData().getCode().equals(EmailConstants.EMAIL_SEND_SUCCESS)) {
+		if (jr.getData() == null || !jr.getData().getCode().equals(EmailConstants.EMAIL_SEND_SUCCESS)) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "邮箱验证码已失效，请重新获取");
 		}
 		// 再校验邮箱验证码是否正确
@@ -1031,7 +1031,7 @@ public class MerchantService {
 		mailCheck.setCode(verificationCode);
 		mailCheck.setMail(email);
 		jr = systemEmailService.checkMailCode(mailCheck);
-		if (!jr.getData().getCode().equals(EmailConstants.EMAIL_SEND_SUCCESS)) {
+		if (jr.getData() == null || !jr.getData().getCode().equals(EmailConstants.EMAIL_SEND_SUCCESS)) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "验证码错误");
 		}
 	}

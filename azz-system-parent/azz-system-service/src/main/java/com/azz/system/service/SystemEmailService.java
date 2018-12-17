@@ -30,10 +30,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.azz.core.common.JsonResult;
-import com.azz.core.common.errorcode.SmsErrorCode;
 import com.azz.core.constants.EmailConstants;
 import com.azz.core.constants.SmsConstants.SmsCode;
-import com.azz.exception.SmsException;
 import com.azz.system.bo.MailCheck;
 import com.azz.system.bo.MailCodeValidation;
 import com.azz.system.bo.MailParam;
@@ -91,7 +89,7 @@ public class SystemEmailService {
 	 */
 	public JsonResult<SmsInfo> checkMailCode(@RequestBody MailCheck sc){
 		JSR303ValidateUtils.validate(sc);
-		SystemMsgLog code = smlm.findMsgLogByMailAndCode(Long.parseLong(sc.getMail()), sc.getCode());
+		SystemMsgLog code = smlm.findMsgLogByMailAndCode(sc.getMail(), sc.getCode());
 		if(null == code) {
 			return new JsonResult<>(new SmsInfo(SmsCode.FAILD.getCode(), SmsCode.FAILD.getDesc()));
 		}else {
@@ -125,9 +123,9 @@ public class SystemEmailService {
 		//发送频率校验
 		String today = CalendarUtil.getFormatDateTime(new Date(), "yyyy-MM-dd");
 		List<SystemMsgLog> logs = smlm.findMsgLogByMail(m.getTo(), today);
-		if (!emailSendRole(logs))
+		/* TODO if (!emailSendRole(logs))
 				throw new SmsException(SmsErrorCode.SMS_ERROR_TOO_QUICK);
-		
+		*/
 		SystemMsgLog sml = new SystemMsgLog();
 		sml.setMsgCode(RandomStringUtils.generNumCode(6));
 		sml.setMsgContent(EmailConstants.EMAIL_CONTENT_PERFIX.replace("${code}", sml.getMsgCode()));
@@ -166,7 +164,6 @@ public class SystemEmailService {
         prop.setProperty("mail.smtp.auth", "true");
         //使用SSL，企业邮箱必需！
         //开启安全协议
-        SmsInfo sm = new SmsInfo();
         MailSSLSocketFactory sf = null;
         try {
             sf = new MailSSLSocketFactory();
@@ -177,7 +174,7 @@ public class SystemEmailService {
         prop.put("mail.smtp.ssl.enable", "true");
         prop.put("mail.smtp.ssl.socketFactory", sf);
         
-        Session session = Session.getDefaultInstance(prop, new MyAuthenricator(account, pass));
+        Session session = Session.getInstance(prop, new MyAuthenricator(account, pass));
         session.setDebug(true);
         MimeMessage mimeMessage = new MimeMessage(session);
         try {

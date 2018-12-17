@@ -38,7 +38,7 @@ public class EmailSendController {
 	 * @author 刘建麟  2018年12月13日 下午2:01:35
 	 */
 	@RequestMapping("sendMail")
-	public JsonResult<SmsInfo> sendMail( MailParam m){
+	public JsonResult<SmsInfo> sendMail(@RequestBody MailParam m){
 		return ses.sendMail(m);
 	}
     

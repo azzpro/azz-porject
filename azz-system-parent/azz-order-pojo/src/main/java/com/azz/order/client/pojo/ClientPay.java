@@ -5,7 +5,7 @@
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
-package com.azz.system.pojo;
+package com.azz.order.client.pojo;
 /**
  * <P>TODO</P>
  * @version 1.0
@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class PlatformPay implements Serializable{
+public class ClientPay implements Serializable{
 	/**
 	 * TODO
 	 */
@@ -26,12 +26,12 @@ public class PlatformPay implements Serializable{
 	private String threePartyNumber;//三方流水号
 	private String orderNumber;//订单编号
 	private Byte payStatus;//支付状态 1待支付 2支付成功 3关闭支付
-	private Byte payType;//支付类型 1支付 2 微信 3第三方
+	private String payInstitution;//支付类型 1支付 2 微信 3第三方
 	private BigDecimal payMoney;//支付金额
 	private BigDecimal channelMoney;//渠道费用
 	private Long customerPhone;//客户联系方式
 	private Byte payMethod;//支付类型 1在线 2线下
-	private Date payTime; //支付时间
+	private String payTime; //支付时间
 	public Long getId() {
 		return id;
 	}
@@ -62,11 +62,11 @@ public class PlatformPay implements Serializable{
 	public void setPayStatus(Byte payStatus) {
 		this.payStatus = payStatus;
 	}
-	public Byte getPayType() {
-		return payType;
+	public String getPayInstitution() {
+		return payInstitution;
 	}
-	public void setPayType(Byte payType) {
-		this.payType = payType;
+	public void setPayInstitution(String payInstitution) {
+		this.payInstitution = payInstitution;
 	}
 	public BigDecimal getPayMoney() {
 		return payMoney;
@@ -92,16 +92,16 @@ public class PlatformPay implements Serializable{
 	public void setPayMethod(Byte payMethod) {
 		this.payMethod = payMethod;
 	}
-	public Date getPayTime() {
+	public String getPayTime() {
 		return payTime;
 	}
-	public void setPayTime(Date payTime) {
+	public void setPayTime(String payTime) {
 		this.payTime = payTime;
 	}
 	@Override
 	public String toString() {
 		return "PlatformPay [id=" + id + ", payNumber=" + payNumber + ", threePartyNumber=" + threePartyNumber
-				+ ", orderNumber=" + orderNumber + ", payStatus=" + payStatus + ", payType=" + payType + ", payMoney="
+				+ ", orderNumber=" + orderNumber + ", payStatus=" + payStatus + ", payInstitution=" + payInstitution + ", payMoney="
 				+ payMoney + ", channelMoney=" + channelMoney + ", customerPhone=" + customerPhone + ", payMethod="
 				+ payMethod + ", payTime=" + payTime + "]";
 	}

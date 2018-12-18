@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.azz.system.pay.mapper.PlatformPayMapper">
-  <resultMap id="BaseResultMap" type="com.azz.system.pojo.PlatformPay">
+<mapper namespace="com.azz.order.client.mapper.ClientPayMapper">
+  <resultMap id="BaseResultMap" type="com.azz.order.client.pojo.ClientPay">
     <id column="id" property="id" jdbcType="BIGINT" /> 
   <result column="pay_number" property="payNumber"/> 
   <result column="three_party_number" property="threePartyNumber"/> 
   <result column="order_number" property="orderNumber"/> 
   <result column="pay_status" property="payStatus"/> 
-  <result column="pay_type" property="payType"/> 
+  <result column="pay_institution" property="payInstitution"/> 
   <result column="pay_money" property="payMoney"/> 
   <result column="channel_money" property="channelMoney"/> 
   <result column="customer_phone" property="customerPhone"/> 
@@ -15,8 +15,8 @@
   <result column="pay_method" property="payMethod"/> 
 </resultMap>
   
-  <select id="selectPayList" resultMap="BaseResultMap" parameterType="com.azz.system.bo.PayList">
-  	select id,pay_number,three_party_number,order_number,pay_status,pay_type,pay_money,
+  <select id="selectPayList" resultMap="BaseResultMap" parameterType="com.azz.order.client.pojo.bo.PayList">
+  	select id,pay_number,three_party_number,order_number,pay_status,pay_institution,pay_money,
   	channel_money,customer_phone,pay_time,pay_method
   	from platform_pay
   	<where>
@@ -31,7 +31,7 @@
   	order by pay_time desc
   </select>
   
-  <insert id="insertPay" parameterType="com.azz.system.pojo.PlatformPay">
+  <insert id="insertPay" parameterType="com.azz.order.client.pojo.ClientPay">
     insert into platform_pay
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -49,8 +49,8 @@
       <if test="payStatus != null">
         pay_status,
       </if>
-      <if test="payType != null">
-        pay_type,
+      <if test="payInstitution != null">
+        pay_institution,
       </if>
       <if test="payMoney != null">
         pay_money,
@@ -84,8 +84,8 @@
       <if test="payStatus != null">
         #{payStatus},
       </if>
-      <if test="payType != null">
-        #{payType},
+      <if test="payInstitution != null">
+        #{payInstitution},
       </if>
       <if test="payMoney != null">
         #{payMoney},

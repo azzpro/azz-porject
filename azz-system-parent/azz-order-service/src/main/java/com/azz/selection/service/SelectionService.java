@@ -35,6 +35,7 @@ import com.azz.order.client.pojo.ClientOrderItemPersonal;
 import com.azz.order.client.pojo.ClientOrderPersonal;
 import com.azz.order.client.pojo.ClientOrderShippingAddress;
 import com.azz.order.client.pojo.ClientOrderStatusPersonal;
+import com.azz.order.client.pojo.bo.SearchClientOrderParam;
 import com.azz.order.merchant.mapper.ClientUserMapper;
 import com.azz.order.merchant.pojo.ClientUser;
 import com.azz.order.selection.ClientSelectionRecord;
@@ -49,6 +50,7 @@ import com.azz.order.selection.bo.SearchCombinationInitParamsParam;
 import com.azz.order.selection.bo.SearchInitParamsParam;
 import com.azz.order.selection.bo.SearchInitParamsParamWithSort;
 import com.azz.order.selection.bo.SearchSelectionRecordParam;
+import com.azz.order.selection.vo.ClassificationInfo;
 import com.azz.order.selection.vo.CombinationDetail;
 import com.azz.order.selection.vo.CombinationInfo;
 import com.azz.order.selection.vo.CombinationInitParams;
@@ -59,6 +61,7 @@ import com.azz.order.selection.vo.ProductInfomation;
 import com.azz.order.selection.vo.ProductParams;
 import com.azz.order.selection.vo.ProductPrice;
 import com.azz.order.selection.vo.SelectionCaseInfo;
+import com.azz.order.selection.vo.SelectionIndexData;
 import com.azz.order.selection.vo.SelectionRecord;
 import com.azz.order.selection.vo.ShoppingCartItemInfo;
 import com.azz.order.selection.vo.ShoppingCartProductInfo;
@@ -612,6 +615,52 @@ public class SelectionService {
 		
 		return JsonResult.successJsonResult();
 	}
+	
+	/********************************************* 选型二期 **********************************************/
+	
+	/**
+	 * 
+	 * <p>查询个人中心首页选型记录数据</p>
+	 * @param clientUserCode
+	 * @return
+	 * @author 黄智聪  2018年12月18日 下午3:38:50
+	 */
+	public JsonResult<SelectionIndexData> getSelectionIndexData(String clientUserCode){
+		ClientUser user = clientUserMapper.getClientUserByClientUserCode(clientUserCode);
+		Long clientUserId = user.getId();
+		// 查询个人选型记录的数量
+		int selectionRecordCount = clientSelectionRecordMapper.countSelectionRecordByClientUserId(clientUserId);
+		SearchClientOrderParam param = new SearchClientOrderParam();
+		param.setClientUserCode(clientUserCode);
+		param.setOrderStatus(ClientOrderStatus.NOT_PAID.getValue());
+		// 待支付订单数量
+		int notPaidOrderCount = clientOrderPersonalMapper.getClientOrderInfoList(param).size();
+		param.setOrderStatus(ClientOrderStatus.NOT_SIGNED.getValue());
+		// 待签收订单数量
+		int notSignedOrderCount = clientOrderPersonalMapper.getClientOrderInfoList(param).size();
+		
+		PageHelper.startPage(1, 5);
+		List<SelectionCaseInfo> cases = selectionMapper.getSelectionCaseInfos();
+		Pagination<SelectionCaseInfo> casesPages = new Pagination<>(cases);
+		// 分页后的前5条方案
+		List<SelectionCaseInfo> caseInfos = casesPages.getRows();
+		
+		// 分页后的前5条一级分类
+		PageHelper.startPage(1, 5);
+		List<ClassificationInfo> classifications = selectionMapper.getClassificationInfos();
+		Pagination<ClassificationInfo> classificationsPages = new Pagination<>(classifications);
+		List<ClassificationInfo> classificationInfos = classificationsPages.getRows();
+		
+		return JsonResult.successJsonResult(new SelectionIndexData(selectionRecordCount, notPaidOrderCount, notSignedOrderCount, caseInfos, classificationInfos));
+	}
+	
+	
+	
+	
+	
+	/********************************************* 选型二期 **********************************************/
+	
+	
 	
 }
 

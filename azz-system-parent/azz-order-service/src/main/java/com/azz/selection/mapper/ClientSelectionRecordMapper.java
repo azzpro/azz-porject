@@ -44,4 +44,12 @@ public interface ClientSelectionRecordMapper {
      */
     int countSelectionRecordByProductCodeAndProductPriceId(@Param("productCode")String productCode, @Param("productPriceId")Long productPriceId);
     
+    /**
+     * 
+     * <p>查询个人选型记录的数量</p>
+     * @param clientUserId
+     * @return
+     * @author 黄智聪  2018年12月18日 下午2:48:55
+     */
+    int countSelectionRecordByClientUserId(Long clientUserId);
 }

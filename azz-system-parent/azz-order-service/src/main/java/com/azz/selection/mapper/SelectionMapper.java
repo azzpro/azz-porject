@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.azz.order.selection.bo.SearchCombinationInitParamsParam;
 import com.azz.order.selection.bo.SearchInitParamsParam;
+import com.azz.order.selection.vo.ClassificationInfo;
 import com.azz.order.selection.vo.CombinationDetail;
 import com.azz.order.selection.vo.CombinationInfo;
 import com.azz.order.selection.vo.CombinationInitParams;
@@ -28,6 +29,14 @@ public interface SelectionMapper {
 	 * @author 黄智聪  2018年11月19日 下午5:05:32
 	 */
 	List<SelectionCaseInfo> getSelectionCaseInfos();
+	
+	/**
+	 * 
+	 * <p>查询选型的一级分类列表</p>
+	 * @return
+	 * @author 黄智聪  2018年12月18日 下午3:35:30
+	 */
+	List<ClassificationInfo> getClassificationInfos();
 	
 	/**
 	 * 

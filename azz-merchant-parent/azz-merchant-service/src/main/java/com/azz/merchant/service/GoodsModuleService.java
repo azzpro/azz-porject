@@ -7,6 +7,7 @@
  
 package com.azz.merchant.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -293,6 +294,15 @@ public class GoodsModuleService {
 		MerchantGoodsModule module = merchantGoodsModuleMapper.selectByModuleCode(moduleCode);
 		if(module == null) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "所选模组不存在");
+		}
+		List<ModuleProduct> orginalProducts = merchantGoodsModuleMapper.getModuleProducts(moduleCode);
+		List<String> orginalProductCodes = new ArrayList<>();
+		if(orginalProducts.size() > 0) {
+			for (ModuleProduct moduleProduct : orginalProducts) {
+				orginalProductCodes.add(moduleProduct.getProductCode());
+			}
+			// 要把原来模组下的产品也加入
+			productCodes.addAll(orginalProductCodes);
 		}
 		Long moduleId = module.getId();
 		// 先解除原先产品所绑定的模组

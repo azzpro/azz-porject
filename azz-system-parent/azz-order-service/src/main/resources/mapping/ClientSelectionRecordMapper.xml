@@ -243,4 +243,13 @@
 	and csr.status != 0 
   </select>
   
+  <select id="countSelectionRecordByClientUserId" resultType="int">
+  	SELECT
+  		count(1)
+	FROM
+		client_selection_record csr
+	where csr.client_user_id = #{clientUserId}
+	and csr.status != 0 
+  </select>
+  
 </mapper>

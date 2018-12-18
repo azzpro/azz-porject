@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -164,8 +165,8 @@ public class GoodsModuleController {
 	 * @return
 	 * @author 黄智聪  2018年12月13日 下午4:19:46
 	 */
-	@RequestMapping("/saveModuleProducts")
-	public JsonResult<String> saveModuleProducts(AddModuleProductParam param){
+	@RequestMapping(value = "/saveModuleProducts" , produces="application/json;charset=UTF-8")
+	public JsonResult<String> saveModuleProducts(@RequestBody AddModuleProductParam param){
 		param.setModifier(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
 		return goodsModuleService.saveModuleProducts(param);
 	}

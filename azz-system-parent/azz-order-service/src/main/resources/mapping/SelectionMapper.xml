@@ -15,6 +15,20 @@
 		pc.create_time DESC
   </select> 
   
+  <select id="getClassificationInfos" resultType="com.azz.order.selection.vo.ClassificationInfo">
+  	SELECT
+		pgc.assortment_code AS assortmentCode,
+		pgc.assortment_name AS assortmentName,
+		pgc.assortment_pic_url AS assortmentPicUrl
+	FROM
+		platform_goods_classification pgc
+	WHERE
+		pgc.`status` = 1
+	AND pgc.assortment_top = 0
+	ORDER BY
+		pgc.assortment_sort ASC
+  </select>
+  
   
   <resultMap id="paramsInfo" type="com.azz.order.selection.vo.InitParams">
   	<result column="paramsType" jdbcType="INTEGER" property="paramsType" />

@@ -307,7 +307,7 @@ public class GoodsModuleService {
 		Long moduleId = module.getId();
 		// 先解除原先产品所绑定的模组
 		merchantGoodsProductMapper.setNullModule(moduleId);
-		// 再重新为产品绑定模组
+		// 再重新为产品绑定模组/
 		merchantGoodsProductMapper.updateProductModule(productCodes, moduleId);
 		return JsonResult.successJsonResult();
 	}

@@ -103,6 +103,10 @@ public interface ClientOrderPersonalMapper {
      * @author 彭斌  2018年11月22日 下午3:29:44
      */
     List<ClientOrderInfo> getClientOrderInfoListByParam(@Param("orderCode") String orderCode, @Param("clientUserCode") String clientUserCode);
+    
+    
+    
+    
     /***************************************************************************************/
     /************************************以上为客户端sql***************************************/
     /***************************************************************************************/

@@ -8,15 +8,14 @@
 package com.azz.platform.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
-import com.azz.system.api.PlatfromPayService;
-import com.azz.system.bo.PayList;
-import com.azz.system.pojo.PlatformPay;
+import com.azz.order.api.client.ClientPayService;
+import com.azz.order.client.pojo.ClientPay;
+import com.azz.order.client.pojo.bo.PayList;
 
 /**
  * <P>TODO</P>
@@ -28,7 +27,7 @@ import com.azz.system.pojo.PlatformPay;
 public class PayController {
 	
 	@Autowired
-	private PlatfromPayService pps;
+	private ClientPayService pps;
 	
 	/**
 	 * <p>支付列表</p>
@@ -37,7 +36,7 @@ public class PayController {
 	 * @author 刘建麟  2018年12月3日 下午3:04:26
 	 */
 	@RequestMapping("toPayList")
-	public JsonResult<Pagination<PlatformPay>> toPayList(PayList pl){
+	public JsonResult<Pagination<ClientPay>> toPayList(PayList pl){
 		return pps.toPayList(pl);
 	}
 }

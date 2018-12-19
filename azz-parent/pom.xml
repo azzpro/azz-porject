@@ -146,14 +146,14 @@
 				<version>1.16.16</version>
 			</dependency>
 			<dependency>
-    			<groupId>io.github.openfeign</groupId>
-    			<artifactId>feign-httpclient</artifactId>
-    			<version>9.4.0</version>
+				<groupId>io.github.openfeign</groupId>
+				<artifactId>feign-httpclient</artifactId>
+				<version>9.4.0</version>
 			</dependency>
 			<dependency>
-    			<groupId>org.apache.httpcomponents</groupId>
-    			<artifactId>httpclient</artifactId>
-    			<version>4.5.3</version>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpclient</artifactId>
+				<version>4.5.3</version>
 			</dependency>
 			<dependency>
 				<groupId>org.jeecg</groupId>
@@ -176,10 +176,10 @@
 				<version>2.2</version>
 			</dependency>
 			<dependency>
-           	 	<groupId>org.quartz-scheduler</groupId>
-            	<artifactId>quartz</artifactId>
-            	<version>2.2.3</version>
-        	</dependency>
+				<groupId>org.quartz-scheduler</groupId>
+				<artifactId>quartz</artifactId>
+				<version>2.2.3</version>
+			</dependency>
 			<dependency>
 				<groupId>com.squareup.okhttp3</groupId>
 				<artifactId>okhttp</artifactId>
@@ -199,6 +199,21 @@
 				<groupId>org.mybatis.generator</groupId>
 				<artifactId>mybatis-generator-core</artifactId>
 				<version>1.3.2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpclient-cache</artifactId>
+				<version>4.5.3</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpcore</artifactId>
+				<version>4.4.6</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpmime</artifactId>
+				<version>4.5.3</version>
 			</dependency>
 
 			<dependency>
@@ -266,9 +281,9 @@
 				<version>5.4.0.Final</version>
 			</dependency>
 			<dependency>
-    			<groupId>net.logstash.logback</groupId>
-    			<artifactId>logstash-logback-encoder</artifactId>
-    			<version>4.9</version>
+				<groupId>net.logstash.logback</groupId>
+				<artifactId>logstash-logback-encoder</artifactId>
+				<version>4.9</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -281,14 +296,14 @@
 				<version>1.3.2</version>
 			</dependency>
 			<dependency>
-			    <groupId>org.apache.poi</groupId>
-			    <artifactId>poi</artifactId>
-			    <version>3.16</version>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi</artifactId>
+				<version>3.16</version>
 			</dependency>
 			<dependency>
-			    <groupId>org.apache.poi</groupId>
-			    <artifactId>poi-ooxml</artifactId>
-			    <version>3.16</version>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml</artifactId>
+				<version>3.16</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

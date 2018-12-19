@@ -21,6 +21,8 @@ import lombok.Data;
 @Data
 public class ClientOrderInfo {
 
+	private String clientUserCode;
+	
 	private String clientOrderCode;
 	
 	private String clientPhoneNumber;

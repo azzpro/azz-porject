@@ -362,7 +362,8 @@
 		coip.quantity AS quantity,
 		coip.product_price as productPrice,
 		coip.product_price *  coip.quantity as productPriceSum,
-		coip.delivery_time as deliveryTime
+		coip.delivery_time as deliveryTime,
+		cu.client_user_code as clientUserCode
 	FROM
 		client_order_personal cop
 	LEFT JOIN order_status os ON os.status_type = 1 AND os.id = cop.order_status_id

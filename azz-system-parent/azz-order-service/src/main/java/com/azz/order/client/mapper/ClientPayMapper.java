@@ -5,14 +5,14 @@
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
-package com.azz.system.pay.mapper;
+package com.azz.order.client.mapper;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.azz.system.bo.PayList;
-import com.azz.system.pojo.PlatformPay;
+import com.azz.order.client.pojo.ClientPay;
+import com.azz.order.client.pojo.bo.PayList;
 
 /**
  * <P>TODO</P>
@@ -20,14 +20,14 @@ import com.azz.system.pojo.PlatformPay;
  * @author 刘建麟  2018年11月26日 下午2:18:55
  */
 @Mapper
-public interface PlatformPayMapper {
+public interface ClientPayMapper {
 	/**
 	 * <p>插入支付</p>
 	 * @param pp
 	 * @return
 	 * @author 刘建麟  2018年11月26日 下午2:30:31
 	 */
-	int insertPay(PlatformPay pp);
+	int insertPay(ClientPay pp);
 	
 	/**
 	 * <p>支付列表</p>
@@ -35,6 +35,6 @@ public interface PlatformPayMapper {
 	 * @return
 	 * @author 刘建麟  2018年12月3日 下午2:58:46
 	 */
-	List<PlatformPay> selectPayList(PayList pl);
+	List<ClientPay> selectPayList(PayList pl);
 }
 

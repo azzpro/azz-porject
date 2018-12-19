@@ -55,7 +55,7 @@ azz:
 
 feign:
   httpclient: 
-    enabled: false #feign原生是调用java.url 去发起HTTP请求，此配置是将请求客户端更换成apahce http
+    enabled: true #feign原生是调用java.url 去发起HTTP请求，此配置是将请求客户端更换成apahce http
   hystrix: 
     enabled: false
     

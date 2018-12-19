@@ -139,8 +139,8 @@ public class ProductController {
 	 * @return
 	 * @author 彭斌  2018年12月14日 下午2:02:11
 	 */
-	@RequestMapping(value="batchAddProduct",method=RequestMethod.POST)
-    public JsonResult<String> batchAddProduct(BatchAddProduct param){
+	@RequestMapping(value="batchAddProduct", method=RequestMethod.POST, produces="application/json;charset=UTF-8")
+    public JsonResult<String> batchAddProduct(@RequestBody BatchAddProduct param){
         param.setCreator(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
         param.setMerchantId(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantId());
         return productService.batchAddProduct(param);

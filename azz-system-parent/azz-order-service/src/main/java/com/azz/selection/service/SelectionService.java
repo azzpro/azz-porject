@@ -49,12 +49,15 @@ import com.azz.order.selection.bo.OrderParam;
 import com.azz.order.selection.bo.SearchCombinationInitParamsParam;
 import com.azz.order.selection.bo.SearchInitParamsParam;
 import com.azz.order.selection.bo.SearchInitParamsParamWithSort;
+import com.azz.order.selection.bo.SearchSelectionModuleParam;
 import com.azz.order.selection.bo.SearchSelectionRecordParam;
 import com.azz.order.selection.vo.ClassificationInfo;
 import com.azz.order.selection.vo.CombinationDetail;
 import com.azz.order.selection.vo.CombinationInfo;
 import com.azz.order.selection.vo.CombinationInitParams;
 import com.azz.order.selection.vo.InitParams;
+import com.azz.order.selection.vo.ModuleDetail;
+import com.azz.order.selection.vo.ModuleInfo;
 import com.azz.order.selection.vo.Params;
 import com.azz.order.selection.vo.ProductInfo;
 import com.azz.order.selection.vo.ProductInfomation;
@@ -62,6 +65,7 @@ import com.azz.order.selection.vo.ProductParams;
 import com.azz.order.selection.vo.ProductPrice;
 import com.azz.order.selection.vo.SelectionCaseInfo;
 import com.azz.order.selection.vo.SelectionIndexData;
+import com.azz.order.selection.vo.SelectionModuleInfo;
 import com.azz.order.selection.vo.SelectionRecord;
 import com.azz.order.selection.vo.ShoppingCartItemInfo;
 import com.azz.order.selection.vo.ShoppingCartProductInfo;
@@ -620,7 +624,7 @@ public class SelectionService {
 	
 	/**
 	 * 
-	 * <p>查询个人中心首页选型记录数据</p>
+	 * <p>查询个人中心首页选型记录数据   1</p>
 	 * @param clientUserCode
 	 * @return
 	 * @author 黄智聪  2018年12月18日 下午3:38:50
@@ -654,10 +658,58 @@ public class SelectionService {
 		return JsonResult.successJsonResult(new SelectionIndexData(selectionRecordCount, notPaidOrderCount, notSignedOrderCount, caseInfos, classificationInfos));
 	}
 	
+	/**
+	 * 
+	 * <p>根据分类编码查询模组列表  2</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年12月18日 下午6:13:27
+	 */
+	public JsonResult<Pagination<SelectionModuleInfo>> getSelectionModuleInfos(@RequestBody SearchSelectionModuleParam param){
+		JSR303ValidateUtils.validate(param);
+		PageHelper.startPage(param.getPageNum(), param.getPageSize());
+		List<SelectionModuleInfo> infos = selectionMapper.getSelectionModuleInfos(param);
+		return JsonResult.successJsonResult(new Pagination<>(infos));
+	}
 	
+	/**
+	 * 
+	 * <p>查询选择三级分类后的初始化参数 3</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年12月19日 上午10:50:02
+	 */
+	public JsonResult<List<InitParams>> getSelectionModuleParams(@RequestBody SearchSelectionModuleParam param) {
+		JSR303ValidateUtils.validate(param);
+		return JsonResult.successJsonResult(selectionMapper.getSelectionModuleParams(param));
+	}
 	
+	/**
+	 * 
+	 * <p>查询模组详情 4</p>
+	 * @param moduleCode
+	 * @return
+	 * @author 黄智聪  2018年12月19日 上午11:40:58
+	 */
+	public JsonResult<ModuleDetail> getModuleDetail(String moduleCode){
+		if(StringUtils.isBlank(moduleCode)) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "模组编码不允许为空");
+		}
+		// 模组详情
+		ModuleInfo moduleInfo = selectionMapper.getGoodsModuleInfo(moduleCode);
+		if(moduleInfo == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "模组不存在");
+		}
+		
+		List<InitParams> params = null;
+		
+		List<List<Object>> productInfos = null;
+		
+		
+		return JsonResult.successJsonResult(new ModuleDetail(moduleInfo, params, productInfos));
+	}
 	
-	
+ 	
 	/********************************************* 选型二期 **********************************************/
 	
 	

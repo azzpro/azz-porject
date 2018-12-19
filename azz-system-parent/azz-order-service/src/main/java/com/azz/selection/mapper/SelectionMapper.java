@@ -8,16 +8,19 @@ import org.apache.ibatis.annotations.Param;
 
 import com.azz.order.selection.bo.SearchCombinationInitParamsParam;
 import com.azz.order.selection.bo.SearchInitParamsParam;
+import com.azz.order.selection.bo.SearchSelectionModuleParam;
 import com.azz.order.selection.vo.ClassificationInfo;
 import com.azz.order.selection.vo.CombinationDetail;
 import com.azz.order.selection.vo.CombinationInfo;
 import com.azz.order.selection.vo.CombinationInitParams;
 import com.azz.order.selection.vo.InitParams;
+import com.azz.order.selection.vo.ModuleInfo;
 import com.azz.order.selection.vo.Params;
 import com.azz.order.selection.vo.ProductInfo;
 import com.azz.order.selection.vo.ProductInfomation;
 import com.azz.order.selection.vo.ProductPrice;
 import com.azz.order.selection.vo.SelectionCaseInfo;
+import com.azz.order.selection.vo.SelectionModuleInfo;
 
 @Mapper
 public interface SelectionMapper {
@@ -145,5 +148,31 @@ public interface SelectionMapper {
 	 * @author 黄智聪  2018年11月24日 下午3:01:19
 	 */
 	List<ProductInfomation> getConfirmOrderProductInfos(String clientUserCode);
+	
+	/**
+	 * 
+	 * <p>根据分类编码查询模组列表</p>
+	 * @return
+	 * @author 黄智聪  2018年12月18日 下午5:51:13
+	 */
+	List<SelectionModuleInfo> getSelectionModuleInfos(SearchSelectionModuleParam param);
+	
+	/**
+	 * 
+	 * <p>查询选择三级分类后的初始化参数</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年12月19日 上午10:46:42
+	 */
+	List<InitParams> getSelectionModuleParams(SearchSelectionModuleParam param);
+	
+	/**
+	 * 	
+	 * <p>查询模组详情</p>
+	 * @param moduleCode
+	 * @return
+	 * @author 黄智聪  2018年12月19日 上午11:20:48
+	 */
+	ModuleInfo getGoodsModuleInfo(String moduleCode);
 	
 }

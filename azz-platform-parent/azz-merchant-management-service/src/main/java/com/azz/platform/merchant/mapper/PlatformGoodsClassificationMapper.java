@@ -7,8 +7,10 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.azz.platform.merchant.pojo.PlatformGoodsClassification;
+import com.azz.platform.merchant.pojo.bo.SearchChildClassificationParam;
 import com.azz.platform.merchant.pojo.bo.SearchClassificationListParam;
 import com.azz.platform.merchant.pojo.bo.SearchSameLevelClassification;
+import com.azz.platform.merchant.pojo.vo.ChildClassification;
 import com.azz.platform.merchant.pojo.vo.Classification;
 import com.azz.platform.merchant.pojo.vo.ClassificationList;
 import com.azz.platform.merchant.pojo.vo.ClassificationParams;
@@ -74,4 +76,12 @@ public interface PlatformGoodsClassificationMapper {
      * @author 彭斌  2018年11月6日 上午10:46:09
      */
     List<ClassificationParams> selectChild(String parentCode);
+    
+    /**
+     * <p>客户端选型获取当前分类下的所有子级分类</p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年12月20日 上午11:27:27
+     */
+    List<ChildClassification> getChildClassification(SearchChildClassificationParam param);
 }

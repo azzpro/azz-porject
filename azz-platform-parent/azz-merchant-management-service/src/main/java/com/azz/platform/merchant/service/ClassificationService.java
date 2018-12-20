@@ -14,6 +14,7 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.PlatformUserErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
+import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.PlatformConstants;
 import com.azz.core.exception.BaseException;
@@ -25,8 +26,10 @@ import com.azz.platform.merchant.pojo.bo.AddClassificationParam;
 import com.azz.platform.merchant.pojo.bo.ClassificationPic;
 import com.azz.platform.merchant.pojo.bo.DelClassificationParam;
 import com.azz.platform.merchant.pojo.bo.EditClassificationParam;
+import com.azz.platform.merchant.pojo.bo.SearchChildClassificationParam;
 import com.azz.platform.merchant.pojo.bo.SearchClassificationListParam;
 import com.azz.platform.merchant.pojo.bo.SearchSameLevelClassification;
+import com.azz.platform.merchant.pojo.vo.ChildClassification;
 import com.azz.platform.merchant.pojo.vo.Classification;
 import com.azz.platform.merchant.pojo.vo.ClassificationList;
 import com.azz.platform.merchant.pojo.vo.ClassificationParams;
@@ -36,6 +39,7 @@ import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
 import com.azz.util.StringUtils;
 import com.azz.util.SystemSeqUtils;
+import com.github.pagehelper.PageHelper;
 
 /**
  * <P>
@@ -398,6 +402,22 @@ public class ClassificationService {
         }
         List<ClassificationParams> list = platformGoodsClassificationMapper.selectChild(parentCode);
         return JsonResult.successJsonResult(list);
+    }
+    
+    /**
+     * <p>客户端选型获取当前分类下的子级分类信息 </p>
+     * @param param
+     * @return
+     * @author 彭斌  2018年12月20日 上午11:28:53
+     */
+    public JsonResult<Pagination<ChildClassification>> getClassificationChildPagination(@RequestBody SearchChildClassificationParam param){
+        PageHelper.startPage(param.getPageNum(), param.getPageSize());
+        if(ObjectUtils.isNull(param.getAssortmentCode())) {
+            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
+                    "参数异常");
+        }
+        List<ChildClassification> list = platformGoodsClassificationMapper.getChildClassification(param);
+        return JsonResult.successJsonResult(new Pagination<>(list));
     }
 }
 

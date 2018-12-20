@@ -44,6 +44,7 @@ import com.azz.order.selection.bo.AddSelectionRecordParam;
 import com.azz.order.selection.bo.AddToShoppingCartParam;
 import com.azz.order.selection.bo.CallBackParam;
 import com.azz.order.selection.bo.DelSelectionRecordParam;
+import com.azz.order.selection.bo.ModuleInitParamsParam;
 import com.azz.order.selection.bo.OrderItem;
 import com.azz.order.selection.bo.OrderParam;
 import com.azz.order.selection.bo.SearchCombinationInitParamsParam;
@@ -58,6 +59,7 @@ import com.azz.order.selection.vo.CombinationInitParams;
 import com.azz.order.selection.vo.InitParams;
 import com.azz.order.selection.vo.ModuleDetail;
 import com.azz.order.selection.vo.ModuleInfo;
+import com.azz.order.selection.vo.ModuleProductInfo;
 import com.azz.order.selection.vo.Params;
 import com.azz.order.selection.vo.ProductInfo;
 import com.azz.order.selection.vo.ProductInfomation;
@@ -691,28 +693,59 @@ public class SelectionService {
 	 * @return
 	 * @author 黄智聪  2018年12月19日 上午11:40:58
 	 */
-	public JsonResult<ModuleDetail> getModuleDetail(String moduleCode){
-		if(StringUtils.isBlank(moduleCode)) {
-			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "模组编码不允许为空");
-		}
+	public JsonResult<ModuleDetail> getModuleDetail(@RequestBody ModuleInitParamsParam param){
+		JSR303ValidateUtils.validate(param);
 		// 模组详情
-		ModuleInfo moduleInfo = selectionMapper.getGoodsModuleInfo(moduleCode);
+		ModuleInfo moduleInfo = selectionMapper.getModuleInfo(param.getModuleCode());
 		if(moduleInfo == null) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "模组不存在");
 		}
+		// 查询模组详情的初始化参数
+		List<InitParams> params = selectionMapper.getModuleInitParams(param);
 		
-		List<InitParams> params = null;
-		
-		List<List<Object>> productInfos = null;
-		
-		
-		return JsonResult.successJsonResult(new ModuleDetail(moduleInfo, params, productInfos));
+		List<List<Object>> results = new ArrayList<>();// 返回给前端的一个产品集合
+		List<Object> title = new ArrayList<>();
+		title.add("产品编码");
+		title.add("单价（起）");
+		title.add("交期（起）");
+		title.add("品牌");
+		// 查询方案下所有产品的公共参数
+		List<Params> allProductParams = selectionMapper.getParamsNamesByModuleCode(param.getModuleCode());
+		for (Params eachProductParams : allProductParams) {
+			title.add(eachProductParams.getParamsName());
+		}
+		results.add(title);// 此时第一条数据格式类似如：  产品编码、单价（起）、交期（起）、品牌、颜色、尺寸...
+		// 产品列表
+		List<ModuleProductInfo> productInfos = selectionMapper.getModuleProductInfos(param);
+		//　处理每一条数据
+		for (ModuleProductInfo productInfo : productInfos) {
+			List<Object> eachResult = new ArrayList<>();
+			eachResult.add(productInfo.getProductCode());// 产品编码
+			eachResult.add(productInfo.getPrice().setScale(2).toString());//单价
+			eachResult.add(productInfo.getDeliveryDate());//交期
+			eachResult.add(productInfo.getBrandName());//品牌
+			for (int i = 0; i < allProductParams.size(); i++) {
+				Long paramsTermId = allProductParams.get(i).getParamsTermId();
+				boolean hasParamsTermId = false;
+				Object value = null;
+				for (ProductParams productParams : productInfo.getProductParams()) {
+					if(productParams.getParamsTermId().equals(paramsTermId)) {
+						value = productParams.getParamsValue();
+						hasParamsTermId = true;
+						break;
+					}
+				}
+				if(hasParamsTermId) {
+					eachResult.add(value);
+				}else {
+					eachResult.add("-");
+				}
+			}
+			results.add(eachResult);
+		}
+		return JsonResult.successJsonResult(new ModuleDetail(moduleInfo, params, results));
 	}
 	
- 	
 	/********************************************* 选型二期 **********************************************/
-	
-	
-	
 }
 

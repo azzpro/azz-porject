@@ -22,18 +22,23 @@ import com.azz.order.api.client.SelectionService;
 import com.azz.order.selection.bo.AddSelectionRecordParam;
 import com.azz.order.selection.bo.AddToShoppingCartParam;
 import com.azz.order.selection.bo.DelSelectionRecordParam;
+import com.azz.order.selection.bo.ModuleInitParamsParam;
 import com.azz.order.selection.bo.OrderParam;
 import com.azz.order.selection.bo.SearchCombinationInitParamsParam;
 import com.azz.order.selection.bo.SearchInitParamsParam;
 import com.azz.order.selection.bo.SearchInitParamsParamWithSort;
+import com.azz.order.selection.bo.SearchSelectionModuleParam;
 import com.azz.order.selection.bo.SearchSelectionRecordParam;
 import com.azz.order.selection.vo.CombinationDetail;
 import com.azz.order.selection.vo.CombinationInfo;
 import com.azz.order.selection.vo.CombinationInitParams;
 import com.azz.order.selection.vo.InitParams;
+import com.azz.order.selection.vo.ModuleDetail;
 import com.azz.order.selection.vo.ProductInfomation;
 import com.azz.order.selection.vo.ProductPrice;
 import com.azz.order.selection.vo.SelectionCaseInfo;
+import com.azz.order.selection.vo.SelectionIndexData;
+import com.azz.order.selection.vo.SelectionModuleInfo;
 import com.azz.order.selection.vo.SelectionRecord;
 import com.azz.order.selection.vo.ShoppingCartProductInfo;
 
@@ -257,6 +262,58 @@ public class SelectionController {
 		param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 		return selectionService.addOrder(param);
 	}
+	
+	/********************************************* 选型二期 **********************************************/
+	
+	/**
+	 * 
+	 * <p>查询个人中心首页选型记录数据   1</p>
+	 * @param clientUserCode
+	 * @return
+	 * @author 黄智聪  2018年12月18日 下午3:38:50
+	 */
+	@RequestMapping("/getSelectionIndexData")
+	public JsonResult<SelectionIndexData> getSelectionIndexData(){
+		return selectionService.getSelectionIndexData(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
+	}
+	
+	/**
+	 * 
+	 * <p>根据分类编码查询模组列表  2</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年12月18日 下午6:13:27
+	 */
+	@RequestMapping("/getSelectionModuleInfos")
+	public JsonResult<Pagination<SelectionModuleInfo>> getSelectionModuleInfos(SearchSelectionModuleParam param){
+		return selectionService.getSelectionModuleInfos(param);
+	}
+	
+	/**
+	 * 
+	 * <p>查询选择三级分类后的初始化参数 3</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年12月19日 上午10:50:02
+	 */
+	@RequestMapping("/getSelectionModuleParams")
+	public JsonResult<List<InitParams>> getSelectionModuleParams(SearchSelectionModuleParam param) {
+		return selectionService.getSelectionModuleParams(param);
+	}
+	
+	/**
+	 * 
+	 * <p>查询模组详情 4</p>
+	 * @param moduleCode
+	 * @return
+	 * @author 黄智聪  2018年12月19日 上午11:40:58
+	 */
+	@RequestMapping("/getModuleDetail")
+	public JsonResult<ModuleDetail> getModuleDetail(ModuleInitParamsParam param){
+		return selectionService.getModuleDetail(param);
+	}
+	
+	/********************************************* 选型二期 **********************************************/
 
 }
 

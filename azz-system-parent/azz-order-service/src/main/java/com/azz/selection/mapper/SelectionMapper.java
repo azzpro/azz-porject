@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.azz.order.selection.bo.ModuleInitParamsParam;
 import com.azz.order.selection.bo.SearchCombinationInitParamsParam;
 import com.azz.order.selection.bo.SearchInitParamsParam;
 import com.azz.order.selection.bo.SearchSelectionModuleParam;
@@ -15,6 +16,7 @@ import com.azz.order.selection.vo.CombinationInfo;
 import com.azz.order.selection.vo.CombinationInitParams;
 import com.azz.order.selection.vo.InitParams;
 import com.azz.order.selection.vo.ModuleInfo;
+import com.azz.order.selection.vo.ModuleProductInfo;
 import com.azz.order.selection.vo.Params;
 import com.azz.order.selection.vo.ProductInfo;
 import com.azz.order.selection.vo.ProductInfomation;
@@ -173,6 +175,33 @@ public interface SelectionMapper {
 	 * @return
 	 * @author 黄智聪  2018年12月19日 上午11:20:48
 	 */
-	ModuleInfo getGoodsModuleInfo(String moduleCode);
+	ModuleInfo getModuleInfo(String moduleCode);
+	
+	/**
+	 * 
+	 * <p>查询模组详情的初始化参数</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年12月19日 下午2:08:29
+	 */
+	List<InitParams> getModuleInitParams(ModuleInitParamsParam param);
+	
+	/**
+	 * 
+	 * <p>查询模组下产品所有公共的参数名称</p>
+	 * @param moduleCode
+	 * @return
+	 * @author 黄智聪  2018年12月19日 下午2:31:27
+	 */
+	List<Params> getParamsNamesByModuleCode(String moduleCode);
+	
+	/**
+	 * 
+	 * <p>查询模组产品信息</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年12月19日 下午3:48:29
+	 */
+	List<ModuleProductInfo> getModuleProductInfos(ModuleInitParamsParam param);
 	
 }

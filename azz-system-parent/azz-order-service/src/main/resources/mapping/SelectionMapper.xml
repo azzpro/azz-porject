@@ -634,7 +634,7 @@
 	<where>
 		mgm.module_status = 1
 		<if test="level != null">
-			<if test="level = 1">
+			<if test="level == 1">
 				AND pgc1.assortment_code = #{assortmentCode}
 			</if>
 			<if test="level == 2">
@@ -646,7 +646,7 @@
 		</if>
 		<if test="selectParams != null and selectParams.size() > 0">
 			<foreach collection="selectParams" item="selectParam">
-				AND mgp.module_id IN (
+				AND mgm.id IN (
 					SELECT
 						distinct mgp.module_id
 					FROM
@@ -661,7 +661,7 @@
 		</if>
 		<if test="inputParams != null and inputParams.size() > 0">
 			<foreach collection="inputParams" item="inputParam">
-				AND mgp.module_id IN (
+				AND mgm.id IN (
 					SELECT
 						distinct mgp.module_id
 					FROM
@@ -695,13 +695,13 @@
   
   <select id="getSelectionModuleParams" parameterType="com.azz.order.selection.bo.SearchSelectionModuleParam" resultMap="paramsInfo">
   	SELECT
-		pgpp.params_term_id AS paramsTermId,
-		pgpp.params_name AS paramsName,
-		pgpp.params_type AS paramsType,
-		group_concat(DISTINCT pgpp.params_value) AS paramValues
+		mgpp.params_term_id AS paramsTermId,
+		mgpp.params_name AS paramsName,
+		mgpp.params_type AS paramsType,
+		group_concat(DISTINCT mgpp.params_value) AS paramValues
 	FROM
-		merchant_goods_product_params pgpp
-	JOIN merchant_goods_product mgp ON mgp.id = pgpp.product_id AND mgp.product_status = 1
+		merchant_goods_product_params mgpp
+	JOIN merchant_goods_product mgp ON mgp.id = mgpp.product_id AND mgp.product_status = 1
 	<where>
 		mgp.assortment_id = (
 			SELECT
@@ -713,7 +713,7 @@
 		)
 		<if test="selectParams != null and selectParams.size() > 0">
 			<foreach collection="selectParams" item="selectParam">
-				AND pgpp.product_id IN (
+				AND mgpp.product_id IN (
 					SELECT
 						distinct mgpp.product_id
 					FROM
@@ -728,7 +728,7 @@
 		</if>
 		<if test="inputParams != null and inputParams.size() > 0">
 			<foreach collection="inputParams" item="inputParam">
-				AND	pgpp.product_id IN (
+				AND	mgpp.product_id IN (
 					SELECT
 						distinct mgpp.product_id
 					FROM
@@ -743,10 +743,10 @@
 		</if>
 	</where>
 	GROUP BY
-		pgpp.params_term_id
+		mgpp.params_term_id
   </select>
   
-  <select id="getGoodsModuleInfo" parameterType="string"  resultType="com.azz.order.selection.vo.ModuleInfo">
+  <select id="getModuleInfo" parameterType="string"  resultType="com.azz.order.selection.vo.ModuleInfo">
 	  SELECT
 		mgd.module_code AS moduleCode,
 		mgd.module_name AS moduleName,
@@ -757,6 +757,162 @@
 		merchant_goods_module mgd
 	WHERE
 		mgd.module_code = #{moduleCode}
+  </select>
+  
+  <select id="getModuleInitParams" parameterType="com.azz.order.selection.bo.ModuleInitParamsParam" resultMap="paramsInfo">
+	SELECT
+		mgpp.params_term_id AS paramsTermId,
+		mgpp.params_type AS paramsType,
+		mgpp.params_name AS paramsName,
+		group_concat(DISTINCT mgpp.params_value) AS paramValues
+	FROM
+		merchant_goods_product mgp
+	JOIN merchant_goods_product_params mgpp ON mgpp.product_id = mgp.id
+	JOIN merchant_goods_module mgm ON mgm.id = mgp.module_id
+	<where>
+			mgp.product_status = 1
+		AND mgm.module_code = #{moduleCode}
+		<if test="inputParams != null and inputParams.size() > 0">
+			<foreach collection="inputParams" item="inputParam">
+					AND	mgpp.product_id IN (
+						SELECT
+							distinct pgpp.product_id
+						FROM
+							merchant_goods_product_params pgpp
+						JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status = 1
+						WHERE
+							pgpp.params_type = 2
+						AND pgpp.params_term_id = #{inputParam.paramsTermId}
+						AND pgpp.params_value = #{inputParam.paramsValue}
+					)
+			</foreach>
+		</if>
+		<if test="selectParams != null and selectParams.size() > 0">
+			<foreach collection="selectParams" item="selectParam">
+					AND mgpp.product_id IN (
+						SELECT
+							distinct pgpp.product_id
+						FROM
+							merchant_goods_product_params pgpp
+						WHERE
+							pgpp.params_type = 1
+						AND pgpp.params_term_id = #{selectParam.paramsTermId}
+						AND pgpp.params_value = #{selectParam.paramsValue}
+					)
+			</foreach>
+		</if>
+	</where>
+	GROUP BY
+		mgpp.params_term_id
+  </select>
+  
+  <select id="getParamsNamesByModuleCode" parameterType="java.lang.String" resultType="com.azz.order.selection.vo.Params">
+	SELECT
+		mgpp.params_term_id AS paramsTermId,
+		mgpp.params_name AS paramsName
+	FROM
+		merchant_goods_product_params mgpp
+	JOIN merchant_goods_product mgp ON mgp.id = mgpp.product_id AND mgp.product_status = 1
+	WHERE
+		mgp.module_id = (
+			SELECT
+				mgm.id
+			FROM
+				merchant_goods_module mgm
+			WHERE
+				mgm.module_code = #{moduleCode}
+		)
+	GROUP BY
+		mgpp.params_term_id
+  </select>
+  
+  <resultMap id="moduleProductInfo" type="com.azz.order.selection.vo.ModuleProductInfo">
+  	<result column="productCode" property="productCode" jdbcType="VARCHAR"/>
+    <result column="deliveryDate" property="deliveryDate" jdbcType="INTEGER"/>
+    <result column="price" property="price" jdbcType="DECIMAL"/>
+    <result column="brandName" property="brandName" jdbcType="DECIMAL"/>
+  	<collection property="productParams" ofType="com.azz.order.selection.vo.ProductParams">
+  		<result column="paramsTermId" property="paramsTermId" jdbcType="BIGINT"/>
+        <result column="paramsName" property="paramsName" jdbcType="VARCHAR"/>
+        <result column="paramsValue" property="paramsValue" jdbcType="VARCHAR"/>
+    </collection>
+  </resultMap>
+  
+   <select id="getModuleProductInfos" parameterType="com.azz.order.selection.bo.ModuleInitParamsParam" resultMap="moduleProductInfo">
+	SELECT
+		mgp.product_code AS productCode,
+		pgb.brand_name AS brandName,
+		t1.minPrice AS price,
+		t2.minDeliveryDate AS deliveryDate,
+		mgpp.params_term_id AS paramsTermId,
+		mgpp.params_name AS paramsName,
+		mgpp.params_value AS paramsValue
+	FROM
+		merchant_goods_product_params mgpp
+	JOIN merchant_goods_product mgp ON mgp.id = mgpp.product_id
+	JOIN platform_goods_brand pgb ON pgb.id = mgp.brand_id
+	LEFT JOIN (
+		SELECT
+			mgpp.product_id,
+			MIN(mgpp.price) AS minPrice
+		FROM
+			merchant_goods_product mgp
+		JOIN merchant_goods_product_price mgpp ON mgp.id = mgpp.product_id
+		AND mgp.product_status = 1
+		GROUP BY
+			mgpp.product_id
+	) t1 ON t1.product_id = mgp.id
+	LEFT JOIN (
+		SELECT
+			mgpp.product_id,
+			MIN(mgpp.delivery_date) AS minDeliveryDate
+		FROM
+			merchant_goods_product mgp
+		JOIN merchant_goods_product_price mgpp ON mgp.id = mgpp.product_id
+		AND mgp.product_status = 1
+		GROUP BY
+			mgpp.product_id
+	) t2 ON t2.product_id = mgp.id
+	<where>
+			mgp.product_status = 1
+		AND mgp.module_id = (
+			SELECT
+				mgm.id
+			FROM
+				merchant_goods_module mgm
+			WHERE
+				mgm.module_code = #{moduleCode}
+		)
+		<if test="inputParams != null and inputParams.size() > 0">
+			<foreach collection="inputParams" item="inputParam">
+					AND	mgpp.product_id IN (
+						SELECT
+							distinct mgpp.product_id
+						FROM
+							merchant_goods_product_params mgpp
+						JOIN merchant_goods_product mgp on mgp.id = mgpp.product_id and mgp.product_status = 1
+						WHERE
+							mgpp.params_type = 2
+						AND mgpp.params_term_id = #{inputParam.paramsTermId}
+						AND mgpp.params_value = #{inputParam.paramsValue}
+					)
+			</foreach>
+		</if>
+		<if test="selectParams != null and selectParams.size() > 0">
+			<foreach collection="selectParams" item="selectParam">
+					AND mgpp.product_id IN (
+						SELECT
+							distinct mgpp.product_id
+						FROM
+							merchant_goods_product_params mgpp
+						WHERE
+							mgpp.params_type = 1
+						AND mgpp.params_term_id = #{selectParam.paramsTermId}
+						AND mgpp.params_value = #{selectParam.paramsValue}
+					)
+			</foreach>
+		</if>
+	</where>
   </select>
   
 </mapper>

@@ -284,10 +284,11 @@ public class MerchantService {
 		merchantMapper.insertSelective(merchantRecord);
 
 		String merchantUserCode = dbSequenceService.getMerchantEmployeeNumber();
+		
 		// 生成盐值加密的密码
 		Password pwd = PasswordHelper.encryptPasswordByModel(password);
 		MerchantUser merchantUserRecord = MerchantUser.builder().createTime(nowDate)
-				.merchantCode(SystemSeqUtils.getSeq(merchantUserCode)).merchantUserName(registerName)
+				.merchantCode(SystemSeqUtils.getSeq(merchantCode)).merchantUserName(registerName)
 				.merchantUserCode(SystemSeqUtils.getSeq(merchantUserCode)).password(pwd.getPassword())
 				.phoneNumber(phoneNumber).salt(pwd.getSalt()).isMerchantRegister(IsMerchantRegister.Y.getValue())
 				.remark("来自商户注册").build();

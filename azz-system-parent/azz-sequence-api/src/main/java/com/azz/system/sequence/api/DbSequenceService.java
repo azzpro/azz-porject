@@ -110,7 +110,7 @@ public interface DbSequenceService {
 	
 	
 	/**
-	 * <p>商户端  员工编号</p>
+	 * <p>商户端  商户编号</p>
 	 * @return
 	 * @author 刘建麟  2018年10月24日 下午4:37:16
 	 */

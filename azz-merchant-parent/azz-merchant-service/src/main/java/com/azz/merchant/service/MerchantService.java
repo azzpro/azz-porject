@@ -277,19 +277,19 @@ public class MerchantService {
 		// 校验
 		this.checkVerificationCode(phoneNumber, param.getVerificationCode());
 
-		String merchantCode = dbSequenceService.getMerchantTenantNumber();
+		String merchantCode = SystemSeqUtils.getSeq(dbSequenceService.getMerchantTenantNumber());
 		String registerName = param.getRegisterName();
-		Merchant merchantRecord = Merchant.builder().merchantCode(SystemSeqUtils.getSeq(merchantCode))
+		Merchant merchantRecord = Merchant.builder().merchantCode(merchantCode)
 				.createTime(nowDate).contactPhone(phoneNumber).registeredPerson(registerName).build();
 		merchantMapper.insertSelective(merchantRecord);
 
-		String merchantUserCode = dbSequenceService.getMerchantEmployeeNumber();
+		String merchantUserCode = SystemSeqUtils.getSeq(dbSequenceService.getMerchantEmployeeNumber());
 		
 		// 生成盐值加密的密码
 		Password pwd = PasswordHelper.encryptPasswordByModel(password);
 		MerchantUser merchantUserRecord = MerchantUser.builder().createTime(nowDate)
-				.merchantCode(SystemSeqUtils.getSeq(merchantCode)).merchantUserName(registerName)
-				.merchantUserCode(SystemSeqUtils.getSeq(merchantUserCode)).password(pwd.getPassword())
+				.merchantCode(merchantCode).merchantUserName(registerName)
+				.merchantUserCode(merchantUserCode).password(pwd.getPassword())
 				.phoneNumber(phoneNumber).salt(pwd.getSalt()).isMerchantRegister(IsMerchantRegister.Y.getValue())
 				.remark("来自商户注册").build();
 		merchantUserMapper.insertSelective(merchantUserRecord);

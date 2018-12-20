@@ -146,6 +146,7 @@ public class GoodsModuleService {
 				.modulePicName(fileInfo.getOriginalFileName())
 				.modulePicUrl(fileInfo.getImgUrl())
 				.moduleStatus(param.getModuleStatus())
+				.moduleRemark(param.getModuleRemark())
 				.build();
 		merchantGoodsModuleMapper.insertSelective(goodsModuleRecord);
 		return JsonResult.successJsonResult();

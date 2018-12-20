@@ -8,6 +8,7 @@
     <result column="module_status" jdbcType="TINYINT" property="moduleStatus" />
     <result column="module_pic_url" jdbcType="VARCHAR" property="modulePicUrl" />
     <result column="module_pic_name" jdbcType="VARCHAR" property="modulePicName" />
+    <result column="module_remark" jdbcType="VARCHAR" property="moduleRemark" />
     <result column="merchant_id" jdbcType="BIGINT" property="merchantId" />
     <result column="classification_id" jdbcType="BIGINT" property="classificationId" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
@@ -19,7 +20,7 @@
     <result column="module_info" jdbcType="LONGVARCHAR" property="moduleInfo" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, module_code, module_name, module_status, module_pic_url, module_pic_name, merchant_id, 
+    id, module_code, module_name, module_status, module_pic_url, module_pic_name, module_remark,merchant_id, 
     classification_id, creator, create_time, modifier, modify_time
   </sql>
   <sql id="Blob_Column_List">
@@ -61,12 +62,12 @@
   </delete>
   <insert id="insert" parameterType="com.azz.merchant.pojo.MerchantGoodsModule" useGeneratedKeys="true" keyProperty="id">
     insert into merchant_goods_module (id, module_code, module_name, 
-      module_status, module_pic_url, module_pic_name, 
+      module_status, module_pic_url, module_pic_name, module_remark,
       merchant_id, classification_id, creator, 
       create_time, modifier, modify_time, 
       module_info)
     values (#{id,jdbcType=BIGINT}, #{moduleCode,jdbcType=VARCHAR}, #{moduleName,jdbcType=VARCHAR}, 
-      #{moduleStatus,jdbcType=TINYINT}, #{modulePicUrl,jdbcType=VARCHAR}, #{modulePicName,jdbcType=VARCHAR}, 
+      #{moduleStatus,jdbcType=TINYINT}, #{modulePicUrl,jdbcType=VARCHAR}, #{modulePicName,jdbcType=VARCHAR}, #{moduleRemark,jdbcType=VARCHAR}, 
       #{merchantId,jdbcType=BIGINT}, #{classificationId,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, 
       #{moduleInfo,jdbcType=LONGVARCHAR})
@@ -91,6 +92,9 @@
       </if>
       <if test="modulePicName != null">
         module_pic_name,
+      </if>
+      <if test="moduleRemark != null">
+        module_remark,
       </if>
       <if test="merchantId != null">
         merchant_id,
@@ -129,6 +133,9 @@
       </if>
       <if test="modulePicUrl != null">
         #{modulePicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleRemark != null">
+        #{moduleRemark,jdbcType=VARCHAR},
       </if>
       <if test="modulePicName != null">
         #{modulePicName,jdbcType=VARCHAR},
@@ -174,6 +181,9 @@
       <if test="modulePicName != null">
         module_pic_name = #{modulePicName,jdbcType=VARCHAR},
       </if>
+      <if test="moduleRemark != null">
+        module_remark = #{moduleRemark,jdbcType=VARCHAR},
+      </if>
       <if test="merchantId != null">
         merchant_id = #{merchantId,jdbcType=BIGINT},
       </if>
@@ -205,6 +215,7 @@
       module_status = #{moduleStatus,jdbcType=TINYINT},
       module_pic_url = #{modulePicUrl,jdbcType=VARCHAR},
       module_pic_name = #{modulePicName,jdbcType=VARCHAR},
+      module_remark = #{moduleRemark,jdbcType=VARCHAR},
       merchant_id = #{merchantId,jdbcType=BIGINT},
       classification_id = #{classificationId,jdbcType=BIGINT},
       creator = #{creator,jdbcType=VARCHAR},
@@ -221,6 +232,7 @@
       module_status = #{moduleStatus,jdbcType=TINYINT},
       module_pic_url = #{modulePicUrl,jdbcType=VARCHAR},
       module_pic_name = #{modulePicName,jdbcType=VARCHAR},
+      module_remark = #{moduleRemark,jdbcType=VARCHAR},
       merchant_id = #{merchantId,jdbcType=BIGINT},
       classification_id = #{classificationId,jdbcType=BIGINT},
       creator = #{creator,jdbcType=VARCHAR},
@@ -244,6 +256,9 @@
       </if>
       <if test="modulePicName != null">
         module_pic_name = #{modulePicName,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleRemark != null">
+        module_remark = #{moduleRemark,jdbcType=VARCHAR},
       </if>
       <if test="merchantId != null">
         merchant_id = #{merchantId,jdbcType=BIGINT},

@@ -35,9 +35,11 @@ public class AddGoodsModuleParam {
 
 	@NotBlank(message = "请编辑模组详情")
 	private String moduleInfo;
-	
+
 	@NotBlank(message = "商户编码不允许为空")
 	private String merchantCode;
+	
+	private String moduleRemark;
 	
 	private String creator;
 	

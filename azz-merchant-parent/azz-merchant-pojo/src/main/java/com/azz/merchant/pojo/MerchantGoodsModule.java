@@ -96,7 +96,9 @@ public class MerchantGoodsModule implements Serializable {
      * @mbg.generated
      */
     private String moduleInfo;
-
+    
+    private String moduleRemark;
+    
     private static final long serialVersionUID = 1L;
 
     /**
@@ -481,4 +483,16 @@ public class MerchantGoodsModule implements Serializable {
         sb.append("]");
         return sb.toString();
     }
+
+	public String getModuleRemark() {
+		return moduleRemark;
+	}
+
+	public void setModuleRemark(String moduleRemark) {
+		this.moduleRemark = moduleRemark;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 }

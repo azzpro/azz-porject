@@ -291,4 +291,15 @@
 		platform_goods_classification
 	WHERE status = 1 and assortment_parent_code = #{parentCode}
   </select>
+  <!-- 客户端选型所用 -->
+  <select id="getChildClassification" parameterType="com.azz.platform.merchant.pojo.bo.SearchChildClassificationParam" resultType="com.azz.platform.merchant.pojo.vo.ChildClassification">
+  	SELECT
+		assortment_code as assortmentCode,
+		assortment_name as assortmentName,
+		assortment_parent_code as assortmentParentCode,
+		assortment_top as assortmentTop
+	FROM
+		platform_goods_classification
+	WHERE status = 1 and assortment_parent_code = #{assortmentCode}
+  </select>
 </mapper>

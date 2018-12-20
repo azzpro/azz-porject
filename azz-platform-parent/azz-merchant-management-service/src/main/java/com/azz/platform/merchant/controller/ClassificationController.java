@@ -16,11 +16,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.page.Pagination;
 import com.azz.platform.merchant.pojo.PlatformGoodsClassification;
 import com.azz.platform.merchant.pojo.bo.AddClassificationParam;
 import com.azz.platform.merchant.pojo.bo.DelClassificationParam;
 import com.azz.platform.merchant.pojo.bo.EditClassificationParam;
+import com.azz.platform.merchant.pojo.bo.SearchChildClassificationParam;
 import com.azz.platform.merchant.pojo.bo.SearchClassificationListParam;
+import com.azz.platform.merchant.pojo.vo.ChildClassification;
 import com.azz.platform.merchant.pojo.vo.Classification;
 import com.azz.platform.merchant.pojo.vo.ClassificationList;
 import com.azz.platform.merchant.pojo.vo.ClassificationParams;
@@ -78,5 +81,10 @@ public class ClassificationController {
     public JsonResult<List<ClassificationParams>> getClassificationChild(String parentCode){
         return classificationService.getClassificationChild(parentCode);
     }
+
+	@RequestMapping(value="getClassificationChildPagination",method=RequestMethod.POST)
+	public JsonResult<Pagination<ChildClassification>> getClassificationChildPagination(@RequestBody SearchChildClassificationParam param){
+	    return classificationService.getClassificationChildPagination(param);
+	}
 }
 

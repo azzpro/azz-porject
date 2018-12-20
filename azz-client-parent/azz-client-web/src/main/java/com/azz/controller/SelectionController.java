@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.controller.utils.WebUtils;
@@ -43,7 +44,9 @@ import com.azz.order.selection.vo.SelectionRecord;
 import com.azz.order.selection.vo.ShoppingCartProductInfo;
 import com.azz.platform.merchant.api.ClassificationService;
 import com.azz.platform.merchant.pojo.bo.SearchChildClassificationParam;
+import com.azz.platform.merchant.pojo.bo.SearchClassificationListParam;
 import com.azz.platform.merchant.pojo.vo.ChildClassification;
+import com.azz.platform.merchant.pojo.vo.ClassificationList;
 
 /**
  * <P>选型</P>
@@ -329,6 +332,17 @@ public class SelectionController {
 	public JsonResult<Pagination<ChildClassification>> getClassificationChildPagination(SearchChildClassificationParam param){
 	    return classificationService.getClassificationChildPagination(param);
 	}
+	
+	/**
+	 * <p>获取一级二级三级分类信息</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年12月20日 下午1:56:00
+	 */
+	@RequestMapping(value="getClassificationList")
+    public JsonResult<List<ClassificationList>> getClassificationList(SearchClassificationListParam param){
+        return classificationService.getClassificationList(param);
+    }
 	
 	/********************************************* 选型二期 **********************************************/
 

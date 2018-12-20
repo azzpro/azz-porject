@@ -41,6 +41,9 @@ import com.azz.order.selection.vo.SelectionIndexData;
 import com.azz.order.selection.vo.SelectionModuleInfo;
 import com.azz.order.selection.vo.SelectionRecord;
 import com.azz.order.selection.vo.ShoppingCartProductInfo;
+import com.azz.platform.merchant.api.ClassificationService;
+import com.azz.platform.merchant.pojo.bo.SearchChildClassificationParam;
+import com.azz.platform.merchant.pojo.vo.ChildClassification;
 
 /**
  * <P>选型</P>
@@ -53,6 +56,9 @@ public class SelectionController {
 	
 	@Autowired
 	private SelectionService selectionService;
+	
+	@Autowired
+    private ClassificationService classificationService;
 	
 	/**
 	 * <p>查询选型的所有方案列表 1</p>
@@ -311,6 +317,17 @@ public class SelectionController {
 	@RequestMapping("/getModuleDetail")
 	public JsonResult<ModuleDetail> getModuleDetail(ModuleInitParamsParam param){
 		return selectionService.getModuleDetail(param);
+	}
+	
+	/**
+	 * <p>获取分类下级的子级分类信息</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2018年12月20日 下午1:35:40
+	 */
+	@RequestMapping("/getClassificationChildPagination")
+	public JsonResult<Pagination<ChildClassification>> getClassificationChildPagination(SearchChildClassificationParam param){
+	    return classificationService.getClassificationChildPagination(param);
 	}
 	
 	/********************************************* 选型二期 **********************************************/

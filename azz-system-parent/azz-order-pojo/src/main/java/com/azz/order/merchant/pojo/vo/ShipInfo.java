@@ -35,6 +35,8 @@ public class ShipInfo {
     private String deliveryPhoneNumber;
     // 出货文件信息
     private String shipmentFileInfo;
+    // 送货类型
+    private Integer deliveryType;
     
     List<SignFileInfo> shipmentFileInfos;
     

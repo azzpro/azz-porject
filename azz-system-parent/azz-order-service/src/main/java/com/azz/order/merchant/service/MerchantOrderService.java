@@ -197,10 +197,10 @@ public class MerchantOrderService {
         mos.setMerchantStatusId(param.getStatus());
         mos.setCreator(param.getModifier());
         mos.setCreateTime(new Date());
-        mos.setRemark("商户端订单变更记录");
+        mos.setRemark("商户端订单变更记录【待确认-待发货】");
         
 	    merchantOrderMapper.updateByPrimaryKeySelective(mo);
-	    merchantOrderStatusMapper.insertSelective(mos);
+	    
 	    
 	    // 变更客户订单状态
 	    clientOrderObj.setModifier(param.getModifier());
@@ -294,14 +294,18 @@ public class MerchantOrderService {
 	    	}
 	    }
 	    
-	    String shipmentInfoUrl = JSON.toJSONString(uploadFileInfos);
-	    record.setMerchantOrderId(mo.getId());
-	    record.setDeliveryType(param.getDeliveryType());
-	    record.setShipmentFileInfo(shipmentInfoUrl);
-	    record.setCreateTime(new Date());
-	    record.setCreator(param.getModifier());
-	    merchantOrderLogisticsMapper.insertSelective(record);
+    	    String shipmentInfoUrl = JSON.toJSONString(uploadFileInfos);
+    	    record.setMerchantOrderId(mo.getId());
+    	    record.setDeliveryType(param.getDeliveryType());
+    	    record.setShipmentFileInfo(shipmentInfoUrl);
+    	    record.setCreateTime(new Date());
+    	    record.setCreator(param.getModifier());
+    	    merchantOrderLogisticsMapper.insertSelective(record);
+    	    mos.setRemark("商户端订单变更记录【待发货-待签收】");
 	    }
+	    
+	    merchantOrderStatusMapper.insertSelective(mos);
+	    
 	    return JsonResult.successJsonResult();
 	}
 	

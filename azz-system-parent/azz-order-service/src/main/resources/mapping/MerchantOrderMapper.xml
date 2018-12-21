@@ -323,7 +323,8 @@
 		mol.number as number,
 		mol.delivery_person as deliveryPerson,
 		mol.delivery_phone_number as deliveryPhoneNumber,
-		mol.shipment_file_info as shipmentFileInfo
+		mol.shipment_file_info as shipmentFileInfo,
+		mol.delivery_type as deliveryType
 	FROM
 		merchant_order_status mos
 	JOIN merchant_order mo ON mos.merchant_order_id = mo.id AND mos.merchant_status_id = 2

@@ -194,7 +194,11 @@ public class MerchantOrderService {
 	    // 新增商户订单状态信息
 	    MerchantOrderStatus mos = new MerchantOrderStatus();
         mos.setMerchantOrderId(mo.getId());
-        mos.setMerchantStatusId(param.getStatus());
+        if(param.getStatus() == MerchantOrderStatusEnum.NOT_CONFIRMED.getValue()) {
+            mos.setMerchantStatusId(MerchantOrderStatusEnum.NOT_SENT_OUT.getValue());
+        } else if(param.getStatus() == MerchantOrderStatusEnum.NOT_SENT_OUT.getValue()) {
+            mos.setMerchantStatusId(MerchantOrderStatusEnum.NOT_SIGNED.getValue());
+        }
         mos.setCreator(param.getModifier());
         mos.setCreateTime(new Date());
         mos.setRemark("商户端订单变更记录【待确认-待发货】");

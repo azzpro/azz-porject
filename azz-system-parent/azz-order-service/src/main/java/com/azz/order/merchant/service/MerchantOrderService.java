@@ -164,7 +164,11 @@ public class MerchantOrderService {
 	    
 	    SearchOrderStatusParam sosp = new SearchOrderStatusParam();
         sosp.setMerchantOrderId(mo.getId());
-        sosp.setMerchantStatusId(param.getStatus());
+        if(param.getStatus() == MerchantOrderStatusEnum.NOT_CONFIRMED.getValue()) {
+            sosp.setMerchantStatusId(MerchantOrderStatusEnum.NOT_SENT_OUT.getValue());
+        } else if(param.getStatus() == MerchantOrderStatusEnum.NOT_SENT_OUT.getValue()) {
+            sosp.setMerchantStatusId(MerchantOrderStatusEnum.NOT_SIGNED.getValue());
+        }
         MerchantOrderStatus mosIsChange = merchantOrderStatusMapper.selectOrderStatus(sosp);
         if(ObjectUtils.isNotNull(mosIsChange)) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单状态已变更");

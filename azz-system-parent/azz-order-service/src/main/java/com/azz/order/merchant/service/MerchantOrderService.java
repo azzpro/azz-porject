@@ -166,7 +166,7 @@ public class MerchantOrderService {
         sosp.setMerchantOrderId(mo.getId());
         sosp.setMerchantStatusId(param.getStatus());
         MerchantOrderStatus mosIsChange = merchantOrderStatusMapper.selectOrderStatus(sosp);
-        if(ObjectUtils.isNull(mosIsChange)) {
+        if(ObjectUtils.isNotNull(mosIsChange)) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单状态已变更");
         }
         

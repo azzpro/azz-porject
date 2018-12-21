@@ -42,6 +42,7 @@ import com.azz.order.merchant.pojo.MerchantOrderStatus;
 import com.azz.order.merchant.pojo.bo.EditOrderStatus;
 import com.azz.order.merchant.pojo.bo.SearchOrderDetailParam;
 import com.azz.order.merchant.pojo.bo.SearchOrderListParam;
+import com.azz.order.merchant.pojo.bo.SearchOrderStatusParam;
 import com.azz.order.merchant.pojo.bo.ShipmentFile;
 import com.azz.order.merchant.pojo.vo.ExpressCompanyInfo;
 import com.azz.order.merchant.pojo.vo.OrderDetail;
@@ -161,13 +162,13 @@ public class MerchantOrderService {
 	        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单状态超出变更范围");
 	    }
 	    
-	    /*SearchOrderStatusParam sosp = new SearchOrderStatusParam();
+	    SearchOrderStatusParam sosp = new SearchOrderStatusParam();
         sosp.setMerchantOrderId(mo.getId());
         sosp.setMerchantStatusId(param.getStatus());
-        MerchantOrderStatus mos = merchantOrderStatusMapper.selectOrderStatus(sosp);
-        if(ObjectUtils.isNull(mos)) {
+        MerchantOrderStatus mosIsChange = merchantOrderStatusMapper.selectOrderStatus(sosp);
+        if(ObjectUtils.isNull(mosIsChange)) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单状态已变更");
-        }*/
+        }
         
         // 查询客户订单信息
         ClientOrderPersonal clientOrderObj = clientOrderPersonalMapper.selectByPrimaryKey(mo.getClientOrderId());

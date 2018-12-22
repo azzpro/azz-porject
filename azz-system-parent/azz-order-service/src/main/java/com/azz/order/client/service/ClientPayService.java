@@ -163,6 +163,7 @@ public class ClientPayService {
         payInfo.setReq_url(payUrl);
         log.info("连连支付请求参数["+payInfo+"]");
 		ClientPay clientPay = new ClientPay();
+		clientPay.setUserId(orderInfo.getClientUserCode());
 		clientPay.setOrderMoney(orderInfo.getGrandTotal().toPlainString());
 		clientPay.setUserreqIp(payInfo.getUserreq_ip());
 		clientPay.setGoodsName(payInfo.getName_goods());

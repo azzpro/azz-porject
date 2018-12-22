@@ -11,6 +11,7 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
@@ -33,7 +34,7 @@ public interface ClientPayService {
 	 * @author 刘建麟  2018年12月17日 下午6:27:10
 	 */
 	@RequestMapping(value="/azz/api/pay/payNotify",method=RequestMethod.POST)
-	public JsonResult<RetBean> payNotify(String reqStr);
+	public JsonResult<RetBean> payNotify(@RequestParam("reqStr") String reqStr);
 	
 	/**
 	 * <p>提交支付</p>

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
@@ -65,7 +66,7 @@ public class ClientPayController {
 	 * @return
 	 */
 	@RequestMapping("payNotify")
-	public JsonResult<RetBean> payNotify(String reqStr) {
+	public JsonResult<RetBean> payNotify(@RequestParam("reqStr") String reqStr) {
 		return pps.payNotify(reqStr);
 	}
 }

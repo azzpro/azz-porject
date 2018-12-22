@@ -221,6 +221,7 @@ public class ClientPayService {
             	map1.put("order_type", PayConstants.PayType.getDesc(payDataBean.getPay_type()));
             	map1.put("order_settle_date", payDataBean.getSettle_date());
             	map1.put("three_party_number", payDataBean.getOid_paybill());
+            	map1.put("pay_number", payDataBean.getNo_order());
             	int number = ppm.updateOrderByNumber(map1);
             	if(number != 1) {
             		retBean.setRet_code(PayCode.FAILD.getCode());

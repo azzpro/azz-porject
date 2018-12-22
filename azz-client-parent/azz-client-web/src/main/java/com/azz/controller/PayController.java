@@ -46,6 +46,7 @@ public class PayController {
 	public JsonResult<RetBean> payNotify(HttpServletRequest request) {
 		log.info("进入支付回调接口");
 		String reqStr = LLPayUtil.readReqStr(request);
+		log.info("回调参数["+reqStr+"]");
 		return pfps.payNotify(reqStr);
 	}
 	

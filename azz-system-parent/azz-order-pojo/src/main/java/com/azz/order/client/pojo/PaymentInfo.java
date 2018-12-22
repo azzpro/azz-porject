@@ -318,5 +318,18 @@ public class PaymentInfo implements Serializable{
 	public void setReq_url(String req_url) {
 		this.req_url = req_url;
 	}
+
+	@Override
+	public String toString() {
+		return "PaymentInfo [version=" + version + ", oid_partner=" + oid_partner + ", user_id=" + user_id
+				+ ", sign_type=" + sign_type + ", sign=" + sign + ", busi_partner=" + busi_partner + ", no_order="
+				+ no_order + ", dt_order=" + dt_order + ", name_goods=" + name_goods + ", info_order=" + info_order
+				+ ", money_order=" + money_order + ", notify_url=" + notify_url + ", url_return=" + url_return
+				+ ", userreq_ip=" + userreq_ip + ", url_order=" + url_order + ", valid_order=" + valid_order
+				+ ", bank_code=" + bank_code + ", pay_type=" + pay_type + ", timestamp=" + timestamp + ", risk_item="
+				+ risk_item + ", no_agree=" + no_agree + ", id_type=" + id_type + ", id_no=" + id_no + ", acct_name="
+				+ acct_name + ", flag_modify=" + flag_modify + ", card_no=" + card_no + ", back_url=" + back_url
+				+ ", req_url=" + req_url + "]";
+	}
     
 }

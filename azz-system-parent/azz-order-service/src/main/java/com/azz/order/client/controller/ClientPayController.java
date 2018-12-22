@@ -59,6 +59,11 @@ public class ClientPayController {
 		return pps.searchParamsList(pl);
 	}
 	
+	/**
+	 * 支付回调
+	 * @param reqStr
+	 * @return
+	 */
 	@RequestMapping("payNotify")
 	public JsonResult<RetBean> payNotify(String reqStr) {
 		return pps.payNotify(reqStr);

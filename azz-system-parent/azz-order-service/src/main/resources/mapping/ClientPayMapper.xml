@@ -124,7 +124,7 @@
         #{id},
       </if>
        <if test="userId != null">
-        userId,
+        #{userId},
       </if>
       <if test="payNumber != null">
         #{payNumber},

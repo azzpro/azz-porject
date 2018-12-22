@@ -21,7 +21,7 @@
   <result column="busi_partner" property="busiPartner"/>
 </resultMap>
   
-  <select id="selectOrderStatus">
+  <select id="selectOrderStatus" parameterType="map" resultType="int">
   	select count(*) from client_pay
   	where  order_status != 1
   	and pay_number = #{no_order}  and order_money = #{money_order}
@@ -37,7 +37,7 @@
   	where order_number = #{order_number}
   </select>
   
-  <update id="updateOrderByNumber">
+  <update id="updateOrderByNumber" parameterType="map">
     update client_pay
       set order_status = #{order_status},
       order_info = #{order_info},

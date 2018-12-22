@@ -13,6 +13,7 @@ package com.azz.order.client.service;
  */
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -111,10 +112,10 @@ public class ClientPayService {
 	@Transactional
 	public JsonResult<PaymentInfo> submitOrderPay(@RequestBody PageOrder po) {
 		List<ClientPay> selectOrder = ppm.selectOrder(po.getOrderCode());
-		if(selectOrder != null && selectOrder.size() > 1) {
+		if(!selectOrder.isEmpty() && selectOrder.size() > 1) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "支付订单不唯一");
 		}
-		if(selectOrder != null && selectOrder.get(0).getOrderStatus() != PayStatus.NOT_PAID.getValue()) {
+		if(!selectOrder.isEmpty() && selectOrder.get(0).getOrderStatus() != PayStatus.NOT_PAID.getValue()) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "支付订单状态异常");
 		}
 		// 判断该订单是否处于待支付 并且未失效

@@ -22,21 +22,33 @@ public class ClientPay implements Serializable{
 	 */
 	private static final long serialVersionUID = 8646390552957634890L;
 	private Long id;
+	private String userId; //用户ID(支付发起人)
 	private String payNumber;//支付流水号
 	private String threePartyNumber;//三方流水号
 	private String orderNumber;//订单编号
-	private Byte payStatus;//支付状态 1待支付 2支付成功 3关闭支付
-	private String payInstitution;//支付类型 1支付 2 微信 3第三方
-	private BigDecimal payMoney;//支付金额
-	private BigDecimal channelMoney;//渠道费用
-	private Long customerPhone;//客户联系方式
-	private Byte payMethod;//支付类型 1在线 2线下
-	private String payTime; //支付时间
+	private Byte orderStatus;//支付状态 1待支付 2支付成功 3关闭支付
+	private String orderType;//支付类型 
+	private String orderMoney;//支付金额
+	private String orderChannelMoney;//渠道费用
+	private Long orderCustomerPhone;//客户联系方式
+	private Byte orderMethod;//支付类型 1在线 2线下
+	private Long orderTime; //支付时间
+	private String orderInfo; //订单描述
+	private String orderSettleDate; //清算日期
+	private String userreqIp;// 订单发起IP
+	private String goodsName;//商品名称
+	private Integer busiPartner;//业务类型
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	public String getPayNumber() {
 		return payNumber;
@@ -56,56 +68,87 @@ public class ClientPay implements Serializable{
 	public void setOrderNumber(String orderNumber) {
 		this.orderNumber = orderNumber;
 	}
-	public Byte getPayStatus() {
-		return payStatus;
+	public Byte getOrderStatus() {
+		return orderStatus;
 	}
-	public void setPayStatus(Byte payStatus) {
-		this.payStatus = payStatus;
+	public void setOrderStatus(Byte orderStatus) {
+		this.orderStatus = orderStatus;
 	}
-	public String getPayInstitution() {
-		return payInstitution;
+	public String getOrderType() {
+		return orderType;
 	}
-	public void setPayInstitution(String payInstitution) {
-		this.payInstitution = payInstitution;
+	public void setOrderType(String orderType) {
+		this.orderType = orderType;
 	}
-	public BigDecimal getPayMoney() {
-		return payMoney;
+	public String getOrderMoney() {
+		return orderMoney;
 	}
-	public void setPayMoney(BigDecimal payMoney) {
-		this.payMoney = payMoney;
+	public void setOrderMoney(String orderMoney) {
+		this.orderMoney = orderMoney;
 	}
-	public BigDecimal getChannelMoney() {
-		return channelMoney;
+	public String getOrderChannelMoney() {
+		return orderChannelMoney;
 	}
-	public void setChannelMoney(BigDecimal channelMoney) {
-		this.channelMoney = channelMoney;
+	public void setOrderChannelMoney(String orderChannelMoney) {
+		this.orderChannelMoney = orderChannelMoney;
 	}
-	public Long getCustomerPhone() {
-		return customerPhone;
+	public Long getOrderCustomerPhone() {
+		return orderCustomerPhone;
 	}
-	public void setCustomerPhone(Long customerPhone) {
-		this.customerPhone = customerPhone;
+	public void setOrderCustomerPhone(Long orderCustomerPhone) {
+		this.orderCustomerPhone = orderCustomerPhone;
 	}
-	public Byte getPayMethod() {
-		return payMethod;
+	public Byte getOrderMethod() {
+		return orderMethod;
 	}
-	public void setPayMethod(Byte payMethod) {
-		this.payMethod = payMethod;
+	public void setOrderMethod(Byte orderMethod) {
+		this.orderMethod = orderMethod;
 	}
-	public String getPayTime() {
-		return payTime;
+	public Long getOrderTime() {
+		return orderTime;
 	}
-	public void setPayTime(String payTime) {
-		this.payTime = payTime;
+	public void setOrderTime(Long orderTime) {
+		this.orderTime = orderTime;
+	}
+	public String getOrderInfo() {
+		return orderInfo;
+	}
+	public void setOrderInfo(String orderInfo) {
+		this.orderInfo = orderInfo;
+	}
+	public String getOrderSettleDate() {
+		return orderSettleDate;
+	}
+	public void setOrderSettleDate(String orderSettleDate) {
+		this.orderSettleDate = orderSettleDate;
+	}
+	public String getUserreqIp() {
+		return userreqIp;
+	}
+	public void setUserreqIp(String userreqIp) {
+		this.userreqIp = userreqIp;
+	}
+	public String getGoodsName() {
+		return goodsName;
+	}
+	public void setGoodsName(String goodsName) {
+		this.goodsName = goodsName;
+	}
+	public Integer getBusiPartner() {
+		return busiPartner;
+	}
+	public void setBusiPartner(Integer busiPartner) {
+		this.busiPartner = busiPartner;
 	}
 	@Override
 	public String toString() {
-		return "PlatformPay [id=" + id + ", payNumber=" + payNumber + ", threePartyNumber=" + threePartyNumber
-				+ ", orderNumber=" + orderNumber + ", payStatus=" + payStatus + ", payInstitution=" + payInstitution + ", payMoney="
-				+ payMoney + ", channelMoney=" + channelMoney + ", customerPhone=" + customerPhone + ", payMethod="
-				+ payMethod + ", payTime=" + payTime + "]";
+		return "ClientPay [id=" + id + ", userId=" + userId + ", payNumber=" + payNumber + ", threePartyNumber="
+				+ threePartyNumber + ", orderNumber=" + orderNumber + ", orderStatus=" + orderStatus + ", orderType="
+				+ orderType + ", orderMoney=" + orderMoney + ", orderChannelMoney=" + orderChannelMoney
+				+ ", orderCustomerPhone=" + orderCustomerPhone + ", orderMethod=" + orderMethod + ", orderTime="
+				+ orderTime + ", orderInfo=" + orderInfo + ", orderSettleDate=" + orderSettleDate + ", userreqIp="
+				+ userreqIp + ", goodsName=" + goodsName + ", busiPartner=" + busiPartner + "]";
 	}
-	
 	
 }
 

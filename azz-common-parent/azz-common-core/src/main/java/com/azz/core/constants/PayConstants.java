@@ -39,5 +39,67 @@ public interface PayConstants {
 		}
 		
 	}
+	
+	public enum PayType{
+		BALANCEPAY("0","余额支付" ,1),
+		IDEBITCARDPAY("1","网银借记卡支付",2),
+		ICREDITCARDPAY("8","网银信用卡支付",3),
+		CCREDITCARDPAY("9","企业网银信用卡支付",4),
+		QUICKPAYDEBITCARDPAY("2","快捷支付(借记卡)",5),
+		QUICKPAYCREDITCARDPAY("2","快捷支付(信用卡)",6),
+		AUTHPAY("D","认证支付",7),
+		WEIXINPAY("I","微信主扫",8),
+		ZHIFUBAOPAY("L","支付宝主扫",9);
+		
+		private String code;
+		private String desc;
+		private Integer num;
+		public String getDesc() {
+			return desc;
+		}
+		public void setDesc(String desc) {
+			this.desc = desc;
+		}
+		private PayType(String desc) {
+			this.desc = desc;
+		}
+		public String getCode() {
+			return code;
+		}
+		public void setCode(String code) {
+			this.code = code;
+		}
+		private PayType(String code, String desc,Integer num) {
+			this.code = code;
+			this.desc = desc;
+			this.num = num;
+		}
+		
+		public Integer getNum() {
+			return num;
+		}
+		public void setNum(Integer num) {
+			this.num = num;
+		}
+		public static String getDesc(String code) {
+			PayType[] values = PayType.values();
+			for (PayType payType : values) {
+				if(code.equals(payType.getCode())) {
+					return payType.getDesc();
+				}
+			}
+			return "";
+		}
+		
+		public static Integer getNum(String code) {
+			PayType[] values = PayType.values();
+			for (PayType payType : values) {
+				if(code.equals(payType.getCode())) {
+					return payType.getNum();
+				}
+			}
+			return 0;
+		}
+	}
 }
 

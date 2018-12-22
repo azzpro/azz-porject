@@ -7,7 +7,10 @@
  
 package com.azz.controller;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSON;
 import com.azz.core.common.JsonResult;
+import com.azz.core.constants.PayConstants.PayCode;
 import com.azz.order.api.client.ClientPayService;
 import com.azz.order.client.pojo.PaymentInfo;
 import com.azz.order.client.pojo.RetBean;
@@ -43,11 +48,15 @@ public class PayController {
 	}
 	
 	@RequestMapping("payNotify")
-	public JsonResult<RetBean> payNotify(HttpServletRequest request) {
+	public void payNotify(HttpServletRequest request,HttpServletResponse response) throws Exception {
+		response.setCharacterEncoding("UTF-8");
 		log.info("进入支付回调接口");
 		String reqStr = LLPayUtil.readReqStr(request);
 		log.info("回调参数["+reqStr+"]");
-		return pfps.payNotify(reqStr);
+		JsonResult<RetBean> payNotify = pfps.payNotify(reqStr);
+		response.getWriter().write(JSON.toJSONString(payNotify.getData()));
+		response.getWriter().flush();
+			
 	}
 	
 }

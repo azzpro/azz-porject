@@ -14,7 +14,9 @@ package com.azz.order.client.service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +50,7 @@ import com.azz.order.client.pojo.bo.PageOrder;
 import com.azz.order.client.pojo.bo.PayList;
 import com.azz.order.client.pojo.vo.ClientOrderDetail;
 import com.azz.order.client.pojo.vo.ClientOrderInfo;
+import com.azz.order.selection.bo.CallBackParam;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.DateUtils;
 import com.azz.util.DecimalUtil;
@@ -107,6 +110,13 @@ public class ClientPayService {
 
 	@Transactional
 	public JsonResult<PaymentInfo> submitOrderPay(@RequestBody PageOrder po) {
+		List<ClientPay> selectOrder = ppm.selectOrder(po.getOrderCode());
+		if(selectOrder != null && selectOrder.size() > 1) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "支付订单不唯一");
+		}
+		if(selectOrder != null && selectOrder.get(0).getOrderStatus() != PayStatus.NOT_PAID.getValue()) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "支付订单状态异常");
+		}
 		// 判断该订单是否处于待支付 并且未失效
 		JsonResult<ClientOrderDetail> detail = cos.getClientOrderDetail(po.getOrderCode());
 		ClientOrderInfo orderInfo = detail.getData().getOrderInfo();
@@ -151,21 +161,22 @@ public class ClientPayService {
         payInfo.setSign(sign);
         payInfo.setReq_url(payUrl);
         log.info("连连支付请求参数["+payInfo+"]");
-		ClientPay pfp = new ClientPay();
-		// pfp.setChannelMoney(orderInfo.getGrandTotal());//渠道费
-		//pfp.setCustomerPhone(Long.parseLong(orderInfo.getClientPhoneNumber()));
-		//pfp.setOrderNumber(orderInfo.getClientOrderCode());
-		//pfp.setPayMethod((byte) PayMethod.ONLINE.getValue());// 默认线上
-		//pfp.setPayMoney(orderInfo.getGrandTotal());
-		//pfp.setPayTime(payInfo.getDt_order());
-		//pfp.setPayInstitution(PayConstants.PAYMENT_INSTITUTION);
-		//pfp.setPayStatus((byte) PayStatus.NOT_PAID.getValue());// 支付状态 默认待支付
-		// pfp.setThreePartyNumber(); // 支付机构流水号
-		//pfp.setPayNumber(payInfo.getDt_order()); //订单流水号
-		//int i = ppm.insertPay(pfp);
-		//if(i != 1) {
-		//	return null;
-		//}
+		ClientPay clientPay = new ClientPay();
+		clientPay.setOrderMoney(orderInfo.getGrandTotal().toPlainString());
+		clientPay.setUserreqIp(payInfo.getUserreq_ip());
+		clientPay.setGoodsName(payInfo.getName_goods());
+		clientPay.setBusiPartner(Integer.parseInt(payInfo.getBusi_partner()));
+		clientPay.setOrderCustomerPhone(Long.parseLong(orderInfo.getClientPhoneNumber()));
+		//clientPay.setOrderChannelMoney();//渠道费
+		clientPay.setOrderNumber(orderInfo.getClientOrderCode());
+		clientPay.setOrderMethod((byte) PayMethod.ONLINE.getValue());// 默认线上
+		clientPay.setOrderTime(Long.parseLong(payInfo.getDt_order()));
+		clientPay.setOrderStatus((byte) PayStatus.NOT_PAID.getValue());// 支付状态 默认待支付
+		clientPay.setOrderNumber(payInfo.getNo_order()); //订单流水号
+		int i = ppm.insertPay(clientPay);
+		if(i != 1) {
+			return null;
+		}
 		return new JsonResult<>(payInfo);
 	}
 
@@ -192,19 +203,47 @@ public class ClientPayService {
             retBean.setRet_msg(PayCode.FAILD.getDesc());
             return new JsonResult<>(retBean);
         }
-        retBean.setRet_code(PayCode.SUCCESS.getCode());
-        retBean.setRet_msg(PayCode.SUCCESS.getDesc());
         log.info("支付异步通知数据接收处理成功");
         // 解析异步通知对象
         PayDataBean payDataBean = JSON.parseObject(reqStr, PayDataBean.class);
         log.info("异步通知结果解析----------->"+payDataBean);
-        //更新订单，发货等后续处理
-     		/*CallBackParam cbp = new CallBackParam();
-     		cbp.setClientOrderCode(pfp.getOrderNumber());
-     		cbp.setPaymentMethod((int) pfp.getPayMethod());
-     		cbp.setPaymentType((int) pfp.getPayType());
-     		selectService.clientOrderPaySuccessOpt(cbp);*/
-        return null;
+        if(null != payDataBean && payDataBean.getResult_pay().equals("SUCCESS")) {
+        	 //校验订单是否支付成功
+            Map<String,Object> map = new HashMap<String,Object>();
+            map.put("no_order", payDataBean.getNo_order());
+            map.put("money_order", payDataBean.getMoney_order());
+            if(getOrderStatus(map)) {
+            	Map<String,Object> map1 = new HashMap<String,Object>();
+            	map1.put("order_status", (byte) PayStatus.NOT_PAID.getValue());
+            	map1.put("order_info", payDataBean.getInfo_order());
+            	map1.put("order_type", PayConstants.PayType.getDesc(payDataBean.getPay_type()));
+            	map1.put("order_settle_date", payDataBean.getSettle_date());
+            	map1.put("three_party_number", payDataBean.getOid_paybill());
+            	int number = ppm.updateOrderByNumber(map1);
+            	if(number != 1) {
+            		retBean.setRet_code(PayCode.FAILD.getCode());
+                    retBean.setRet_msg(PayCode.FAILD.getDesc());
+                    return new JsonResult<>(retBean);
+            	}
+            	String orderCode = ppm.selectOrderCode(payDataBean.getNo_order());
+            	CallBackParam cbp = new CallBackParam();
+         		cbp.setClientOrderCode(orderCode);
+         		cbp.setPayMethod(PayMethod.ONLINE.getValue());
+         		cbp.setOrderType(PayConstants.PayType.getNum(payDataBean.getPay_type()));
+         		selectService.clientOrderPaySuccessOpt(cbp);
+         		retBean.setRet_code(PayCode.SUCCESS.getCode());
+                retBean.setRet_msg(PayCode.SUCCESS.getDesc());
+                return new JsonResult<>(retBean);
+            }else {
+            	retBean.setRet_code(PayCode.FAILD.getCode());
+                retBean.setRet_msg(PayCode.FAILD.getDesc());
+                return new JsonResult<>(retBean);
+            }
+        }else {
+        	retBean.setRet_code(PayCode.FAILD.getCode());
+            retBean.setRet_msg(PayCode.FAILD.getDesc());
+            return new JsonResult<>(retBean);
+        }
 	}
 	/**
 	 * <p>
@@ -221,6 +260,18 @@ public class ClientPayService {
 		return JsonResult.successJsonResult(new Pagination<>(selectPayList));
 	}
 	
+	/**
+	 * 获取订单状态
+	 * @param map
+	 * @return
+	 */
+	public boolean getOrderStatus(Map<String,Object> map) {
+		int i = ppm.selectOrderStatus(map);
+		if(i > 0) {
+			return false;
+		}
+		return true;
+	}
 	
 	/**
 	 * <p>创建订单</p>

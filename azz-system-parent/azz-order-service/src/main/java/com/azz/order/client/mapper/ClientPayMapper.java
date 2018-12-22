@@ -8,8 +8,10 @@
 package com.azz.order.client.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.azz.order.client.pojo.ClientPay;
 import com.azz.order.client.pojo.bo.PayList;
@@ -36,5 +38,32 @@ public interface ClientPayMapper {
 	 * @author 刘建麟  2018年12月3日 下午2:58:46
 	 */
 	List<ClientPay> selectPayList(PayList pl);
+	
+	/**
+	 * 查询订单是否已支付
+	 * @param map
+	 * @return
+	 */
+	int selectOrderStatus(Map<String,Object> map);
+	
+	/**
+	 * 更新订单状态
+	 * @param map
+	 * @return
+	 */
+	int updateOrderByNumber(Map<String,Object> map);
+	
+	/**
+	 * 查询订单号
+	 * @param no_order
+	 * @return
+	 */
+	String selectOrderCode(String no_order);
+	
+	/**
+	 * @param order_number
+	 * @return
+	 */
+	List<ClientPay> selectOrder(String order_number);
 }
 

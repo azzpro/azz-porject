@@ -2,23 +2,55 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.azz.order.client.mapper.ClientPayMapper">
   <resultMap id="BaseResultMap" type="com.azz.order.client.pojo.ClientPay">
-    <id column="id" property="id" jdbcType="BIGINT" /> 
+    <id column="id" property="id" jdbcType="BIGINT" />
+  <result column="user_id" property="userId"/>  
   <result column="pay_number" property="payNumber"/> 
   <result column="three_party_number" property="threePartyNumber"/> 
   <result column="order_number" property="orderNumber"/> 
-  <result column="pay_status" property="payStatus"/> 
-  <result column="pay_institution" property="payInstitution"/> 
-  <result column="pay_money" property="payMoney"/> 
-  <result column="channel_money" property="channelMoney"/> 
-  <result column="customer_phone" property="customerPhone"/> 
-  <result column="pay_time" property="payTime" /> 
-  <result column="pay_method" property="payMethod"/> 
+  <result column="order_status" property="orderStatus"/> 
+  <result column="order_type" property="orderType"/> 
+  <result column="order_money" property="orderMoney"/> 
+  <result column="order_channel_money" property="orderChannelMoney"/> 
+  <result column="order_customer_phone" property="orderCustomerPhone"/> 
+  <result column="order_time" property="orderTime" /> 
+  <result column="order_method" property="orderMethod"/> 
+  <result column="order_info" property="orderInfo"/>
+  <result column="order_settle_date" property="orderSettleDate"/>
+  <result column="userreq_ip" property="userreqIp"/>
+  <result column="goods_name" property="goodsName"/>
+  <result column="busi_partner" property="busiPartner"/>
 </resultMap>
   
+  <select id="selectOrderStatus">
+  	select count(*) from client_pay
+  	where  order_status != 1
+  	and pay_number = #{no_order}  and order_money = #{money_order}
+  </select>
+  
+  <select id="selectOrderCode" resultType="string">
+  	select order_number from client_pay
+  	where pay_number = #{no_order}
+  </select>
+  
+  <select id="selectOrder" resultMap="BaseResultMap">
+  	select order_status from client_pay
+  	where order_number = #{order_number}
+  </select>
+  
+  <update id="updateOrderByNumber">
+    update client_pay
+      set order_status = #{order_status},
+      order_info = #{order_info},
+      order_type = #{order_type},
+      order_settle_date = #{order_settle_date},
+      three_party_number = #{three_party_number}
+    where pay_number = #{pay_number}
+  </update>
+  
   <select id="selectPayList" resultMap="BaseResultMap" parameterType="com.azz.order.client.pojo.bo.PayList">
-  	select id,pay_number,three_party_number,order_number,pay_status,pay_institution,pay_money,
-  	channel_money,customer_phone,pay_time,pay_method
-  	from platform_pay
+  	select id,pay_number,three_party_number,order_number,order_status,order_type,order_money,
+  	order_channel_money,order_customer_phone,order_time,order_method
+  	from client_pay
   	<where>
   		<if test="param != null and param != ''">
   			pay_number like CONCAT('%', #{param}, '%')
@@ -28,14 +60,17 @@
   			order_number like CONCAT('%', #{param}, '%')
   		</if>
   	</where>
-  	order by pay_time desc
+  	order by order_time desc
   </select>
   
   <insert id="insertPay" parameterType="com.azz.order.client.pojo.ClientPay">
-    insert into platform_pay
+    insert into client_pay
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="userId != null">
+        user_id,
       </if>
       <if test="payNumber != null">
         pay_number,
@@ -46,27 +81,43 @@
       <if test="orderNumber != null">
         order_number,
       </if>
-      <if test="payStatus != null">
-        pay_status,
+      <if test="orderStatus != null">
+        order_status,
       </if>
-      <if test="payInstitution != null">
-        pay_institution,
+      <if test="orderType != null">
+        order_type,
       </if>
-      <if test="payMoney != null">
-        pay_money,
+      <if test="orderMoney != null">
+        order_money,
       </if>
-      <if test="channelMoney != null">
-        channel_money,
+      <if test="orderChannelMoney != null">
+        order_channel_money,
       </if>
-      <if test="customerPhone != null">
-        customer_phone,
+      <if test="orderCustomerPhone != null">
+        order_customer_phone,
       </if>
-      <if test="payTime != null">
-        pay_time,
+      <if test="orderTime != null">
+        order_time,
       </if>
-       <if test="payMethod != null">
-        pay_method,
+       <if test="orderMethod != null">
+        order_method,
       </if>
+      <if test="orderInfo != null">
+        order_info,
+      </if>
+      <if test="orderSettleDate != null">
+        order_settle_date,
+      </if>
+      <if test="userreqIp != null">
+        userreq_ip,
+      </if>
+      <if test="goodsName != null">
+        goods_name,
+      </if>
+      <if test="busiPartner != null">
+        busi_partner,
+      </if>
+      
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -81,26 +132,41 @@
       <if test="orderNumber != null">
         #{orderNumber},
       </if>
-      <if test="payStatus != null">
-        #{payStatus},
+      <if test="orderStatus != null">
+        #{orderStatus},
       </if>
-      <if test="payInstitution != null">
-        #{payInstitution},
+      <if test="orderType != null">
+        #{orderType},
       </if>
-      <if test="payMoney != null">
-        #{payMoney},
+      <if test="orderMoney != null">
+        #{orderMoney},
       </if>
-      <if test="channelMoney != null">
-        #{channelMoney},
+      <if test="orderChannelMoney != null">
+        #{orderChannelMoney},
       </if>
-      <if test="customerPhone != null">
-        #{customerPhone},
+      <if test="orderCustomerPhone != null">
+        #{orderCustomerPhone},
       </if>
-      <if test="payTime != null">
-        #{payTime},
+      <if test="orderTime != null">
+        #{orderTime},
       </if>
-      <if test="payMethod != null">
-        #{payMethod},
+      <if test="orderMethod != null">
+        #{orderMethod},
+      </if>
+      <if test="orderInfo != null">
+        #{orderInfo},
+      </if>
+      <if test="orderSettleDate != null">
+        #{orderSettleDate},
+      </if>
+      <if test="userreqIp != null">
+        #{userreqIp},
+      </if>
+      <if test="goodsName != null">
+        #{goodsName},
+      </if>
+       <if test="busiPartner != null">
+        #{busiPartner},
       </if>
     </trim>
   </insert>

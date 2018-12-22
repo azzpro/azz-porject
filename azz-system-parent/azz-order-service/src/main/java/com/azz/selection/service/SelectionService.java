@@ -603,8 +603,8 @@ public class SelectionService {
 		ClientOrderPersonal clientOrderRecord = ClientOrderPersonal.builder()
 				.id(order.getId())
 				.orderStatusId(ClientOrderStatus.NOT_CONFIRMED.getValue())
-				.paymentMethod(param.getPaymentMethod())
-				.paymentType(param.getPaymentType())
+				.paymentMethod(param.getPayMethod())
+				.paymentType(param.getOrderType())
 				.paymentStatus(PayStatus.PAY_SUCCESS.getValue())
 				.modifyTime(nowDate)
 				.build();

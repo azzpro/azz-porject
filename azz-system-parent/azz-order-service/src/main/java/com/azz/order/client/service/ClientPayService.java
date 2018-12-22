@@ -174,7 +174,7 @@ public class ClientPayService {
 		clientPay.setOrderMethod((byte) PayMethod.ONLINE.getValue());// 默认线上
 		clientPay.setOrderTime(Long.parseLong(payInfo.getDt_order()));
 		clientPay.setOrderStatus((byte) PayStatus.NOT_PAID.getValue());// 支付状态 默认待支付
-		clientPay.setOrderNumber(payInfo.getNo_order()); //订单流水号
+		clientPay.setPayNumber(payInfo.getNo_order()); //订单流水号
 		int i = ppm.insertPay(clientPay);
 		if(i != 1) {
 			return null;

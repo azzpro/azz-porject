@@ -259,8 +259,10 @@ public class ProductService {
 		pps.setParams(list2);
 		pps.setAssortmentCode(assortmentById.getAssortmentCode());
 		pps.setAssortmentId(assortmentById.getId());
-		pps.setModuleId(module.getId());
-		pps.setModuleName(module.getModuleName());
+		if(null != module) {
+			pps.setModuleId(module.getId());
+			pps.setModuleName(module.getModuleName());
+		}
 		return new JsonResult<>(pps);
 	}
 	

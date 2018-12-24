@@ -373,7 +373,7 @@ public class ProductService {
 				List<ProductParam> pp = params.getParams();
 				if(null != pp && pp.size() > 0) {
 					for (ProductParam productParam : pp) {
-						if(StringUtils.isBlank(productParam.getValues()) && productParam.getType() == 2) {
+						if(StringUtils.isBlank(productParam.getValues()) && productParam.getChoice() == 2) {
 							break;
 						}
 						MerchantGoodsProductParams mpp = new MerchantGoodsProductParams();

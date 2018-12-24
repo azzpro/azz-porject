@@ -216,7 +216,7 @@ public class ClientPayService {
             map.put("money_order", payDataBean.getMoney_order());
             if(getOrderStatus(map)) {
             	Map<String,Object> map1 = new HashMap<String,Object>();
-            	map1.put("order_status", (byte) PayStatus.NOT_PAID.getValue());
+            	map1.put("order_status", (byte) PayStatus.PAY_SUCCESS.getValue());
             	map1.put("order_info", payDataBean.getInfo_order());
             	map1.put("order_type", PayConstants.PayType.getDesc(payDataBean.getPay_type()));
             	map1.put("order_settle_date", payDataBean.getSettle_date());

@@ -12,7 +12,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.controller.utils.WebUtils;
@@ -293,8 +292,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年12月18日 下午6:13:27
 	 */
-	@RequestMapping("/getSelectionModuleInfos")
-	public JsonResult<Pagination<SelectionModuleInfo>> getSelectionModuleInfos(SearchSelectionModuleParam param){
+	@RequestMapping(value = "/getSelectionModuleInfos" ,produces="application/json;charset=UTF-8")
+	public JsonResult<Pagination<SelectionModuleInfo>> getSelectionModuleInfos(@RequestBody SearchSelectionModuleParam param){
 		return selectionService.getSelectionModuleInfos(param);
 	}
 	
@@ -305,8 +304,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年12月19日 上午10:50:02
 	 */
-	@RequestMapping("/getSelectionModuleParams")
-	public JsonResult<List<InitParams>> getSelectionModuleParams(SearchSelectionModuleParam param) {
+	@RequestMapping(value= "/getSelectionModuleParams",produces="application/json;charset=UTF-8")
+	public JsonResult<List<InitParams>> getSelectionModuleParams(@RequestBody SearchSelectionModuleParam param) {
 		return selectionService.getSelectionModuleParams(param);
 	}
 	
@@ -317,8 +316,8 @@ public class SelectionController {
 	 * @return
 	 * @author 黄智聪  2018年12月19日 上午11:40:58
 	 */
-	@RequestMapping("/getModuleDetail")
-	public JsonResult<ModuleDetail> getModuleDetail(ModuleInitParamsParam param){
+	@RequestMapping(value = "/getModuleDetail",produces="application/json;charset=UTF-8")
+	public JsonResult<ModuleDetail> getModuleDetail(@RequestBody ModuleInitParamsParam param){
 		return selectionService.getModuleDetail(param);
 	}
 	

@@ -633,6 +633,8 @@
 	) t2 ON t2.module_id = mgm.id
 	<where>
 		mgm.module_status = 1
+		and t1.minPrice is not null 
+		and t2.minDeliveryDate is not null
 		<if test="level != null">
 			<if test="level == 1">
 				AND pgc1.assortment_code = #{assortmentCode}

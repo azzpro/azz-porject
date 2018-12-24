@@ -645,14 +645,14 @@ public class SelectionService {
 		// 待签收订单数量
 		int notSignedOrderCount = clientOrderPersonalMapper.getClientOrderInfoList(param).size();
 		
-		PageHelper.startPage(1, 5);
+		PageHelper.startPage(1, 4);
 		List<SelectionCaseInfo> cases = selectionMapper.getSelectionCaseInfos();
 		Pagination<SelectionCaseInfo> casesPages = new Pagination<>(cases);
-		// 分页后的前5条方案
+		// 分页后的前4条方案
 		List<SelectionCaseInfo> caseInfos = casesPages.getRows();
 		
-		// 分页后的前5条一级分类
-		PageHelper.startPage(1, 5);
+		// 分页后的前4条一级分类
+		PageHelper.startPage(1, 4);
 		List<ClassificationInfo> classifications = selectionMapper.getClassificationInfos();
 		Pagination<ClassificationInfo> classificationsPages = new Pagination<>(classifications);
 		List<ClassificationInfo> classificationInfos = classificationsPages.getRows();

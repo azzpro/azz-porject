@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -370,6 +371,9 @@ public class ProductService {
 				List<ProductParam> pp = params.getParams();
 				if(null != pp && pp.size() > 0) {
 					for (ProductParam productParam : pp) {
+						if(StringUtils.isBlank(productParam.getValues()) && productParam.getType() == 2) {
+							break;
+						}
 						MerchantGoodsProductParams mpp = new MerchantGoodsProductParams();
 						mpp.setParamsId(goodsParams.getId());
 						mpp.setParamsTermId(productParam.getTermId());

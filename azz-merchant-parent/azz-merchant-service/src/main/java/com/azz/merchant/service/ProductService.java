@@ -382,6 +382,10 @@ public class ProductService {
 						mpp.setParamsName(productParam.getParamName());
 						mpp.setParamsValue(productParam.getValues());
 						mpp.setProductId(mgp.getId());
+						/**
+						 * 参数新增时  type 含义为 1 下拉 2填写  choice 含义为 1必选2非必选
+						 * 产品选择参数是，此处含义有颠倒， type 为  1必选2非必选  choice为1 下拉 2填写 
+						 */
 						mpp.setParamsType(productParam.getType());
 						mpp.setParamsChoice(productParam.getChoice());
 						goodsProductParamsMapper.insertSelective(mpp);

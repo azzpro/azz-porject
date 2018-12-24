@@ -42,6 +42,7 @@ import com.azz.order.merchant.pojo.MerchantOrderStatus;
 import com.azz.order.merchant.pojo.bo.EditOrderStatus;
 import com.azz.order.merchant.pojo.bo.SearchOrderDetailParam;
 import com.azz.order.merchant.pojo.bo.SearchOrderListParam;
+import com.azz.order.merchant.pojo.bo.SearchOrderStatusParam;
 import com.azz.order.merchant.pojo.bo.ShipmentFile;
 import com.azz.order.merchant.pojo.vo.ExpressCompanyInfo;
 import com.azz.order.merchant.pojo.vo.OrderDetail;
@@ -161,13 +162,17 @@ public class MerchantOrderService {
 	        throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单状态超出变更范围");
 	    }
 	    
-	    /*SearchOrderStatusParam sosp = new SearchOrderStatusParam();
+	    SearchOrderStatusParam sosp = new SearchOrderStatusParam();
         sosp.setMerchantOrderId(mo.getId());
-        sosp.setMerchantStatusId(param.getStatus());
-        MerchantOrderStatus mos = merchantOrderStatusMapper.selectOrderStatus(sosp);
-        if(ObjectUtils.isNull(mos)) {
+        if(param.getStatus() == MerchantOrderStatusEnum.NOT_CONFIRMED.getValue()) {
+            sosp.setMerchantStatusId(MerchantOrderStatusEnum.NOT_SENT_OUT.getValue());
+        } else if(param.getStatus() == MerchantOrderStatusEnum.NOT_SENT_OUT.getValue()) {
+            sosp.setMerchantStatusId(MerchantOrderStatusEnum.NOT_SIGNED.getValue());
+        }
+        MerchantOrderStatus mosIsChange = merchantOrderStatusMapper.selectOrderStatus(sosp);
+        if(ObjectUtils.isNotNull(mosIsChange)) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单状态已变更");
-        }*/
+        }
         
         // 查询客户订单信息
         ClientOrderPersonal clientOrderObj = clientOrderPersonalMapper.selectByPrimaryKey(mo.getClientOrderId());
@@ -194,13 +199,17 @@ public class MerchantOrderService {
 	    // 新增商户订单状态信息
 	    MerchantOrderStatus mos = new MerchantOrderStatus();
         mos.setMerchantOrderId(mo.getId());
-        mos.setMerchantStatusId(param.getStatus());
+        if(param.getStatus() == MerchantOrderStatusEnum.NOT_CONFIRMED.getValue()) {
+            mos.setMerchantStatusId(MerchantOrderStatusEnum.NOT_SENT_OUT.getValue());
+        } else if(param.getStatus() == MerchantOrderStatusEnum.NOT_SENT_OUT.getValue()) {
+            mos.setMerchantStatusId(MerchantOrderStatusEnum.NOT_SIGNED.getValue());
+        }
         mos.setCreator(param.getModifier());
         mos.setCreateTime(new Date());
-        mos.setRemark("商户端订单变更记录");
+        mos.setRemark("商户端订单变更记录【待确认-待发货】");
         
 	    merchantOrderMapper.updateByPrimaryKeySelective(mo);
-	    merchantOrderStatusMapper.insertSelective(mos);
+	    
 	    
 	    // 变更客户订单状态
 	    clientOrderObj.setModifier(param.getModifier());
@@ -294,14 +303,18 @@ public class MerchantOrderService {
 	    	}
 	    }
 	    
-	    String shipmentInfoUrl = JSON.toJSONString(uploadFileInfos);
-	    record.setMerchantOrderId(mo.getId());
-	    record.setDeliveryType(param.getDeliveryType());
-	    record.setShipmentFileInfo(shipmentInfoUrl);
-	    record.setCreateTime(new Date());
-	    record.setCreator(param.getModifier());
-	    merchantOrderLogisticsMapper.insertSelective(record);
+    	    String shipmentInfoUrl = JSON.toJSONString(uploadFileInfos);
+    	    record.setMerchantOrderId(mo.getId());
+    	    record.setDeliveryType(param.getDeliveryType());
+    	    record.setShipmentFileInfo(shipmentInfoUrl);
+    	    record.setCreateTime(new Date());
+    	    record.setCreator(param.getModifier());
+    	    merchantOrderLogisticsMapper.insertSelective(record);
+    	    mos.setRemark("商户端订单变更记录【待发货-待签收】");
 	    }
+	    
+	    merchantOrderStatusMapper.insertSelective(mos);
+	    
 	    return JsonResult.successJsonResult();
 	}
 	

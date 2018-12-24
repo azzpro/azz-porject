@@ -24,11 +24,11 @@ public class CallBackParam {
 	@NotBlank(message = "订单编码不允许为空")
 	private String clientOrderCode;
 	
-	@NotNull(message = "支付方式不允许为空")
-	private Integer paymentMethod;
-	
 	@NotNull(message = "支付类型不允许为空")
-	private Integer paymentType;
+	private Integer orderType;
+	
+	@NotNull(message = "支付方式不允许为空")
+	private Integer payMethod;
 	
 }
 

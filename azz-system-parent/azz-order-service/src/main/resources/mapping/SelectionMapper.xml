@@ -705,7 +705,8 @@
 		merchant_goods_product_params mgpp
 	JOIN merchant_goods_product mgp ON mgp.id = mgpp.product_id AND mgp.product_status = 1
 	<where>
-		mgp.assortment_id = (
+		mgp.module_id is not null
+	and	mgp.assortment_id = (
 			SELECT
 				id
 			FROM

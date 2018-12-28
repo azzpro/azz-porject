@@ -150,7 +150,7 @@ public class GoodsModuleController {
 	
 	/**
 	 * 
-	 * <p>批量导入模组</p>
+	 * <p>批量导入参数</p>
 	 * @param param
 	 * @return
 	 * @author 黄智聪  2018年12月13日 下午4:19:46
@@ -159,5 +159,6 @@ public class GoodsModuleController {
 	public JsonResult<String> batchAddParam(@RequestParam("creator") String creator) {
 		return goodsModuleService.batchAddParam(creator);
 	}
+	
 }
 

@@ -63,6 +63,7 @@ import com.azz.merchant.pojo.vo.ImportedProductInfo;
 import com.azz.merchant.pojo.vo.ModuleProduct;
 import com.azz.merchant.pojo.vo.ProductForImport;
 import com.azz.merchant.pojo.vo.UploadFileInfo;
+import com.azz.platform.merchant.pojo.PlatformGoodsParamsValue;
 import com.azz.system.api.SystemImageUploadService;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
@@ -381,6 +382,7 @@ public class GoodsModuleService {
 		
 		//batchAddModule(0L,"");
 		//batchAddParam("");
+		
 	}
 	
 	public JsonResult<String> batchAddParam(String creator) {
@@ -671,14 +673,47 @@ public class GoodsModuleService {
 	}
 	
 	/**
-	 * <p>TODO</p>
+	 * 
+	 * <p>新增参数项对应的值</p>
 	 * @param json
 	 * @return
-	 * @author 彭斌  2018年12月28日 下午4:55:33
+	 * @author 黄智聪  2018年12月28日 下午5:47:48
 	 */
-	public JsonResult<String> batchAddGoodsParamValue(JSONObject json){
-	    
+	public JsonResult<String> batchAddParamValue(JSONObject json){
+		Set<String> keys = json.keySet();
+		for (String key : keys) {// key 即参数项编码
+			if(isParamTermKey(key)) {
+				String value = json.getString(key);
+				//System.out.println("key:"+ key + "  value:"+value);
+				// 查询是否已经存在相同的参数项值了
+				int count = goodsParamsMapper.countParamsValue(value, key);
+				if(count > 0) { // 已存在参数项对应的值，跳过次数据
+					continue;
+				}
+				Long paramTermId = goodsParamsMapper.selectParamTermId(key);
+				if(paramTermId != null) {
+					PlatformGoodsParamsValue ppv = new PlatformGoodsParamsValue();
+					ppv.setParamsValue(value);
+					ppv.setParamsParentId(paramTermId);
+					//System.out.println("参数项值：" + JSONObject.toJSONString(ppv));
+					goodsParamsMapper.insertTermValueSelective(ppv);
+				}
+			}
+		}
 	    return JsonResult.successJsonResult();
+	}
+	
+	private static boolean isParamTermKey(String key) {
+		if ("goodfhr".equals(key) 
+				|| "goodcpprice".equals(key) 
+				|| "goodfenl".equals(key) 
+				|| "goodpinp".equals(key)
+				|| "goodmzname".equals(key) 
+				|| "goodstatus".equals(key) 
+				|| "goodcpxh".equals(key)) {
+			return false;
+		}
+		return true;
 	}
 }
 

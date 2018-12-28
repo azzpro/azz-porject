@@ -16,7 +16,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +43,14 @@ import com.azz.merchant.mapper.MerchantGoodsProductMapper;
 import com.azz.merchant.mapper.MerchantMapper;
 import com.azz.merchant.mapper.PlatformGoodsBrandMapper;
 import com.azz.merchant.mapper.PlatformGoodsClassificationMapper;
+import com.azz.merchant.mapper.PlatformGoodsParamsMapper;
 import com.azz.merchant.pojo.Merchant;
 import com.azz.merchant.pojo.MerchantGoodsModule;
 import com.azz.merchant.pojo.MerchantGoodsProduct;
 import com.azz.merchant.pojo.PlatformGoodsBrand;
 import com.azz.merchant.pojo.PlatformGoodsClassification;
+import com.azz.merchant.pojo.PlatformGoodsParams;
+import com.azz.merchant.pojo.PlatformGoodsParamsTerm;
 import com.azz.merchant.pojo.bo.AddGoodsModuleParam;
 import com.azz.merchant.pojo.bo.AddModuleProductParam;
 import com.azz.merchant.pojo.bo.EditGoodsModuleParam;
@@ -94,6 +100,9 @@ public class GoodsModuleService {
 	
 	@Autowired
 	PlatformGoodsBrandMapper platformGoodsBrandMapper;
+	
+	@Autowired
+	private PlatformGoodsParamsMapper goodsParamsMapper;
 	
 	/**
 	 * 
@@ -371,9 +380,110 @@ public class GoodsModuleService {
 	public static void main(String[] args) {
 		
 		//batchAddModule(0L,"");
-		
+		//batchAddParam("");
 	}
 	
+	public JsonResult<String> batchAddParam(String creator) {
+		File file = new File("D:\\param.json");
+		BufferedReader reader = null;
+		Date nowDate = new Date();
+		Map<String,Map<String,String>> results = new HashMap<>();
+		try {
+			reader = new BufferedReader(new FileReader(file));
+			String eachLine = null;
+			int line = 1;
+			// 一次读一行，读入null时文件结束
+			while ((eachLine = reader.readLine()) != null) {
+				try {
+					JSONObject json = JSONObject.parseObject(eachLine);
+					// 分类名称
+					String classificationName = json.getString("goodfenlid");
+					//System.out.println("classificationName:"+classificationName);
+					Map<String, String> params = null;
+					if(results.get(classificationName) != null) {// 分类已存在
+						params = results.get(classificationName);
+					}else {
+						params = new HashMap<>();
+						results.put(classificationName, params);
+					}
+					Set<String> keys = json.keySet();
+					for (String key : keys) {
+						if(isParamKey(key)) {
+							String value = json.getString(key);
+							params.put(key, value);
+							//System.out.println("key:"+ key + "  value:"+value);
+						}
+					}
+				} catch (Exception e) {
+					System.out.println("第"+line+"行出错:"+e.getMessage());
+				}
+				line++;
+			}
+			System.out.println("最后结果："+JSONObject.toJSONString(results));
+			Set<String> resultsKeySet = results.keySet();
+			for (String eachKey : resultsKeySet) {
+				String c = eachKey;// key 即分类名称
+				try {
+					int strIndex = c.lastIndexOf(":");
+					String classificationName = c.substring(strIndex + 1);
+					PlatformGoodsClassification classification = platformGoodsClassificationMapper.selectLevel2AssortmentByName(classificationName);
+					//PlatformGoodsClassification classification = new PlatformGoodsClassification();
+					//classification.setId(10000L);
+					if(classification == null) {
+						throw new BaseException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"分类不存在");
+					}
+					Long classificationId = classification.getId();
+					PlatformGoodsParams goodsParams = new PlatformGoodsParams();
+					goodsParams.setParamsCode(SystemSeqUtils.getSeq(dbSequenceService.getParameterCodeNumber()));
+					//goodsParams.setParamsCode(System.currentTimeMillis()+"");
+					goodsParams.setCreator(creator);
+					goodsParams.setCreateTime(nowDate);
+					goodsParams.setAssortmentId(classificationId);
+					goodsParamsMapper.insertSelective(goodsParams);
+					//Long id = System.currentTimeMillis(); //TODO
+					//goodsParams.setId(id); //TODO
+					System.out.println("StepOne,新增参数："+JSONObject.toJSONString(goodsParams));
+					Map<String, String> params = results.get(eachKey);
+					Set<String> paramsKeySet = params.keySet();
+					for (String paramKey : paramsKeySet) {// paramKey为参数code
+						PlatformGoodsParamsTerm goodsParamsTerm = new PlatformGoodsParamsTerm();
+						goodsParamsTerm.setParamsName(params.get(paramKey));
+						goodsParamsTerm.setParamsChoice((byte)2);
+						goodsParamsTerm.setParamsType((byte)1);
+						goodsParamsTerm.setCreateTime(nowDate);
+						goodsParamsTerm.setCreator(creator);
+						goodsParamsTerm.setParamsId(goodsParams.getId());
+						goodsParamsTerm.setParamsCode(paramKey);
+						goodsParamsMapper.insertTermSelective(goodsParamsTerm);
+						System.out.println("StepTwo,新增参数项："+JSONObject.toJSONString(goodsParamsTerm));
+					}
+					System.out.println("--------------------------");
+				} catch (Exception e) {
+					System.out.println("新增参数出错:" + e.getMessage());
+				}
+			}
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+		return JsonResult.successJsonResult();
+	}
+	
+	private static boolean isParamKey(String key) {
+		if("goodname".equals(key) || "goodfenlid".equals(key) || "goodpinp".equals(key)) {
+			return false;
+		}
+		return true;
+	}
+
 	public JsonResult<String> batchAddModule(Long merchantId,String creator) {
 		File file = new File("D:\\json.json");
 		BufferedReader reader = null;
@@ -404,7 +514,7 @@ public class GoodsModuleService {
 					String classificationName = c.substring(strIndex + 1);
 					PlatformGoodsClassification classification = platformGoodsClassificationMapper.selectLevel2AssortmentByName(classificationName);
 					if(classification == null) {
-						throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE,"分类不存在");
+						throw new BaseException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"分类不存在");
 					}
 					Long classificationId = classification.getId();
 					String moduleName = json.getString("goodname");

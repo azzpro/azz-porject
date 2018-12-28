@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.azz.merchant.pojo.PlatformGoodsParams;
+import com.azz.merchant.pojo.PlatformGoodsParamsTerm;
 
 @Mapper
 public interface PlatformGoodsParamsMapper {
@@ -15,4 +16,8 @@ public interface PlatformGoodsParamsMapper {
 	 * @author 刘建麟  2018年11月3日 下午1:14:40
 	 */
 	PlatformGoodsParams selectParamsByAssortmentId(@Param("assortmentId") Long assortmentId);
+	
+	int insertSelective(PlatformGoodsParams record);
+	
+	int insertTermSelective(PlatformGoodsParamsTerm record);
 }

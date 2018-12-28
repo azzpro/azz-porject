@@ -147,6 +147,17 @@ public class GoodsModuleController {
 	public JsonResult<String> batchAddModule(@RequestParam("merchantId") Long merchantId, @RequestParam("creator") String creator) {
 		return goodsModuleService.batchAddModule(merchantId, creator);
 	}
-   
+	
+	/**
+	 * 
+	 * <p>批量导入模组</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年12月13日 下午4:19:46
+	 */
+	@RequestMapping("/batchAddParam")
+	public JsonResult<String> batchAddParam(@RequestParam("creator") String creator) {
+		return goodsModuleService.batchAddParam(creator);
+	}
 }
 

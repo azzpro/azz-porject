@@ -16,6 +16,112 @@
  		from platform_goods_params
  		where assortment_id = #{assortmentId}
  	</select>
+ 	
+ 	<insert id="insertSelective" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsParams" useGeneratedKeys="true" keyProperty="id">
+    insert into platform_goods_params
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="paramsCode != null">
+        params_code,
+      </if>
+       <if test="assortmentId != null">
+        assortment_id,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="paramsCode != null">
+        #{paramsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="assortmentId != null">
+        #{assortmentId,jdbcType=BIGINT},
+      </if>
+       <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+       <if test="createTime != null">
+        #{createTime}
+      </if>
+    </trim>
+  </insert>
+  
+  <insert id="insertTermSelective" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsParamsTerm" useGeneratedKeys="true" keyProperty="id">
+    insert into platform_goods_params_term
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="paramsCode != null">
+        params_code,
+      </if>
+      <if test="paramsName != null">
+        params_name,
+      </if>
+      <if test="paramsId != null">
+        params_id,
+      </if>
+      <if test="paramsType != null">
+        params_type,
+      </if>
+      <if test="paramsChoice != null">
+        params_choice,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="paramsCode != null">
+        #{paramsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="paramsName != null">
+        #{paramsName,jdbcType=VARCHAR},
+      </if>
+      <if test="paramsId != null">
+        #{paramsId,jdbcType=BIGINT},
+      </if>
+      <if test="paramsType != null">
+        #{paramsType,jdbcType=BIT},
+      </if>
+      <if test="paramsChoice != null">
+        #{paramsChoice,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
   
   
 </mapper>

@@ -23,4 +23,6 @@ public interface PlatformGoodsClassificationMapper {
     
     PlatformGoodsClassification selectAssortmentById(Long id);
     
+    PlatformGoodsClassification selectLevel2AssortmentByName(String assortmentName);
+    
 }

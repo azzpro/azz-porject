@@ -34,4 +34,14 @@
    from platform_goods_classification where id = #{id} and status != 0
    </select>
    
+   <select id="selectLevel2AssortmentByName" resultMap="BaseResultMap">
+   select 
+   		<include refid="Base_Column_List"></include>
+   from 
+   		platform_goods_classification 
+   where assortment_name = #{assortmentName} 
+	   and status != 0 
+	   and assortment_top = 2
+   </select>
+   
 </mapper>

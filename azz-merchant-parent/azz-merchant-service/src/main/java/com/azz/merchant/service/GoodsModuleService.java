@@ -7,15 +7,25 @@
  
 package com.azz.merchant.service;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
@@ -350,5 +360,117 @@ public class GoodsModuleService {
 	    }
 	    return file;
 	}
+	
+	
+	public static void main(String[] args) {
+		
+		//batchAddModule(0L,"");
+		
+	}
+	
+	public JsonResult<String> batchAddModule(Long merchantId,String creator) {
+		File file = new File("D:\\json.json");
+		BufferedReader reader = null;
+		Date nowDate = new Date();
+		try {
+			reader = new BufferedReader(new FileReader(file));
+			String eachLine = null;
+			int line = 1;
+			// 一次读一行，读入null时文件结束
+			while ((eachLine = reader.readLine()) != null) {
+				try {
+					JSONObject json = JSONObject.parseObject(eachLine);
+					String modulePicUrl = json.getString("goodmzzt");
+					URL url = new URL(modulePicUrl);
+					String base64Str = getBase64FromInputStream(url.openStream());
+					System.out.println("size:"+imageSize(base64Str)+"   line " + line + ": "+base64Str);
+					GoodsModulePic pic = new GoodsModulePic();
+					pic.setFileBase64Str(base64Str);
+					pic.setFileName(line +"_"+System.currentTimeMillis()+".jpg");
+					pic.setFileSize(imageSize(base64Str));
+					String moduleCode = SystemSeqUtils.getSeq(dbSequenceService.getModuleCodeNumber());// TODO
+					//String moduleCode = System.currentTimeMillis()+"";
+					// 上传模组图片
+					UploadFileInfo fileInfo = uploadModulePic(pic, moduleCode); // TODO
+					//UploadFileInfo fileInfo = new UploadFileInfo("XXX", "YYYY");
+					String c = json.getString("goodfenlid");
+					int strIndex = c.lastIndexOf(":");
+					String classificationName = c.substring(strIndex + 1);
+					PlatformGoodsClassification classification = platformGoodsClassificationMapper.selectLevel2AssortmentByName(classificationName);
+					if(classification == null) {
+						throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE,"分类不存在");
+					}
+					Long classificationId = classification.getId();
+					String moduleName = json.getString("goodname");
+					MerchantGoodsModule goodsModuleRecord = MerchantGoodsModule.builder()
+							.creator(creator)
+							.createTime(nowDate)
+							.classificationId(classificationId)
+							.merchantId(merchantId)
+							.moduleCode(SystemSeqUtils.getSeq(moduleCode))
+							.moduleName(moduleName)
+							.modulePicName(fileInfo.getOriginalFileName())
+							.modulePicUrl(fileInfo.getImgUrl())
+							.moduleStatus((byte) 1)
+							.build();
+					merchantGoodsModuleMapper.insertSelective(goodsModuleRecord);
+					//System.out.println("对象:"+JSON.toJSONString(goodsModuleRecord));
+				} catch (Exception e) {
+					System.out.println("第"+line+"行出错:"+e.getMessage());
+				}
+				line++;
+			}
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+		return JsonResult.successJsonResult();
+	}
+	
+	public static String getBase64FromInputStream(InputStream in) {
+        // 将图片文件转化为字节数组字符串，并对其进行Base64编码处理
+        byte[] data = null;
+        // 读取图片字节数组
+        try {
+            ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
+            byte[] buff = new byte[100];
+            int rc = 0;
+            while ((rc = in.read(buff, 0, 100)) > 0) {
+                swapStream.write(buff, 0, rc);
+            }
+            data = swapStream.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return new String(Base64.encodeBase64(data));
+    }
+	
+	public static Integer imageSize(String image){
+        String str = image; 
+        Integer equalIndex= str.indexOf("=");//2.找到等号，把等号也去掉
+        if(str.indexOf("=")>0) {
+            str=str.substring(0, equalIndex);
+        }
+        Integer strLength=str.length();//3.原来的字符流大小，单位为字节
+        Integer size=strLength-(strLength/8)*2;//4.计算后得到的文件流大小，单位为字节
+        return size;
+    }
+
 }
 

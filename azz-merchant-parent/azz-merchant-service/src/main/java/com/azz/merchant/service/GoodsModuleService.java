@@ -669,5 +669,16 @@ public class GoodsModuleService {
         }
 	    return brandId;
 	}
+	
+	/**
+	 * <p>TODO</p>
+	 * @param json
+	 * @return
+	 * @author 彭斌  2018年12月28日 下午4:55:33
+	 */
+	public JsonResult<String> batchAddGoodsParamValue(JSONObject json){
+	    
+	    return JsonResult.successJsonResult();
+	}
 }
 

@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
@@ -39,9 +38,12 @@ import com.azz.exception.JSR303ValidationException;
 import com.azz.merchant.mapper.MerchantGoodsModuleMapper;
 import com.azz.merchant.mapper.MerchantGoodsProductMapper;
 import com.azz.merchant.mapper.MerchantMapper;
+import com.azz.merchant.mapper.PlatformGoodsBrandMapper;
 import com.azz.merchant.mapper.PlatformGoodsClassificationMapper;
 import com.azz.merchant.pojo.Merchant;
 import com.azz.merchant.pojo.MerchantGoodsModule;
+import com.azz.merchant.pojo.MerchantGoodsProduct;
+import com.azz.merchant.pojo.PlatformGoodsBrand;
 import com.azz.merchant.pojo.PlatformGoodsClassification;
 import com.azz.merchant.pojo.bo.AddGoodsModuleParam;
 import com.azz.merchant.pojo.bo.AddModuleProductParam;
@@ -58,6 +60,7 @@ import com.azz.merchant.pojo.vo.UploadFileInfo;
 import com.azz.system.api.SystemImageUploadService;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
+import com.azz.util.ObjectUtils;
 import com.azz.util.StringUtils;
 import com.azz.util.SystemSeqUtils;
 import com.github.pagehelper.PageHelper;
@@ -88,6 +91,9 @@ public class GoodsModuleService {
 	
 	@Autowired
 	private MerchantGoodsProductMapper merchantGoodsProductMapper;
+	
+	@Autowired
+	PlatformGoodsBrandMapper platformGoodsBrandMapper;
 	
 	/**
 	 * 
@@ -472,5 +478,86 @@ public class GoodsModuleService {
         return size;
     }
 
+	
+	public JsonResult<String> batchAddPrduct(Long merchantId,String creator) {
+        File file = new File("D:\\productInfo.json");
+        BufferedReader reader = null;
+        Date nowDate = new Date();
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            String eachLine = null;
+            int line = 1;
+            // 一次读一行，读入null时文件结束
+            while ((eachLine = reader.readLine()) != null) {
+                try {
+                    JSONObject json = JSONObject.parseObject(eachLine);
+                    String goodfenl = json.getString("goodfenl");
+                    // product_system_code
+                    String productSystemCode = SystemSeqUtils.getSeq(dbSequenceService.getProductCodeNumber());
+                    int strIndex = goodfenl.lastIndexOf(":");
+                    String classificationName = goodfenl.substring(strIndex + 1);
+                    PlatformGoodsClassification classification = platformGoodsClassificationMapper.selectLevel2AssortmentByName(classificationName);
+                    if(classification == null) {
+                        throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE,"分类不存在");
+                    }
+                    Long classificationId = classification.getId();
+                    String productCode = json.getString("goodcpxh");
+                    String brandName = json.getString("goodpinp");
+                    Long brandId = this.addBrand(brandName, creator);
+                   
+                    
+                    // 商品数据整理
+                    MerchantGoodsProduct goods = new MerchantGoodsProduct();
+                    goods.setAssortmentId(classificationId);
+                    goods.setProductCode(productCode);
+                    goods.setBrandId(brandId);
+                    goods.setProductSystemCode(productSystemCode);
+                    goods.setCreator(creator);
+                    goods.setMerchantId(merchantId);
+                    goods.setCreateTime(new Date());
+                    goods.setMerchantId(merchantId);
+                    
+                    merchantGoodsProductMapper.insertSelective(goods);
+                    
+                } catch (Exception e) {
+                    System.out.println("第"+line+"行出错:"+e.getMessage());
+                }
+                line++;
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+        return JsonResult.successJsonResult();
+    }
+	
+	public Long addBrand(String brandName, String creator) {
+	    PlatformGoodsBrand isBrand = platformGoodsBrandMapper.countGoodsBrandByBrandName(brandName);
+        Long brandId = null;
+        if(ObjectUtils.isNull(isBrand)) {
+            // 品牌库中未找到品牌信息需先添加品牌信息，品牌图片暂时先默认
+            PlatformGoodsBrand record = new PlatformGoodsBrand();
+            record.setBrandCode(dbSequenceService.getBrandCodeNumber());
+            record.setBrandName(brandName);
+            record.setBrandPicUrl("http://azz-image.oss-cn-shenzhen.aliyuncs.com/plat-image/brand_pic/ico1_BD00000281.png");
+            record.setCreateTime(new Date());
+            record.setBrandPicName("ico1.png");
+            record.setStatus(1);
+            record.setCreator(creator);
+            platformGoodsBrandMapper.insertSelective(record);
+            brandId = record.getId();
+        } else {
+            brandId = isBrand.getId();
+        }
+	    return brandId;
+	}
 }
 

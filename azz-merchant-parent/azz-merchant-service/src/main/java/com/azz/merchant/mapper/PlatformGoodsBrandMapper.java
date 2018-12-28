@@ -4,6 +4,7 @@ package com.azz.merchant.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.azz.merchant.pojo.PlatformGoodsBrand;
 import com.azz.merchant.pojo.bo.SearchGoodsBrandParam;
@@ -36,4 +37,5 @@ public interface PlatformGoodsBrandMapper {
     
     PlatformGoodsBrand selectBrandById(Long id);
     
+    PlatformGoodsBrand countGoodsBrandByBrandName(@Param("brandName")String brandName);
 }

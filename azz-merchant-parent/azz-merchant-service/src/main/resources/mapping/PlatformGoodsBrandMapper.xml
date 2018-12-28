@@ -43,7 +43,7 @@
       #{brandDescription,jdbcType=VARCHAR},#{status,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.azz.merchant.pojo.PlatformGoodsBrand">
+  <insert id="insertSelective" parameterType="com.azz.merchant.pojo.PlatformGoodsBrand"  useGeneratedKeys="true" keyProperty="id" >
     insert into platform_goods_brand
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -200,5 +200,18 @@
   </select>
    <select id="selectBrandById" resultMap="BaseResultMap">
   select <include refid="Base_Column_List"></include> from platform_goods_brand where id = #{id} and status = 1
+  </select>
+  
+  <select id="countGoodsBrandByBrandName" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	SELECT
+		<include refid="Base_Column_List" />
+	FROM 
+		platform_goods_brand pgb
+	<where>
+		pgb.status != 0
+		<if test="brandName != null and brandName != ''">
+			AND pgb.brand_name = #{brandName}
+		</if>
+	</where>
   </select>
 </mapper>

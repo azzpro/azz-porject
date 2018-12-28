@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,6 +41,7 @@ import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.merchant.mapper.MerchantGoodsModuleMapper;
 import com.azz.merchant.mapper.MerchantGoodsProductMapper;
+import com.azz.merchant.mapper.MerchantGoodsProductPriceMapper;
 import com.azz.merchant.mapper.MerchantMapper;
 import com.azz.merchant.mapper.PlatformGoodsBrandMapper;
 import com.azz.merchant.mapper.PlatformGoodsClassificationMapper;
@@ -47,6 +49,7 @@ import com.azz.merchant.mapper.PlatformGoodsParamsMapper;
 import com.azz.merchant.pojo.Merchant;
 import com.azz.merchant.pojo.MerchantGoodsModule;
 import com.azz.merchant.pojo.MerchantGoodsProduct;
+import com.azz.merchant.pojo.MerchantGoodsProductPrice;
 import com.azz.merchant.pojo.PlatformGoodsBrand;
 import com.azz.merchant.pojo.PlatformGoodsClassification;
 import com.azz.merchant.pojo.PlatformGoodsParams;
@@ -99,11 +102,13 @@ public class GoodsModuleService {
 	private MerchantGoodsProductMapper merchantGoodsProductMapper;
 	
 	@Autowired
-	PlatformGoodsBrandMapper platformGoodsBrandMapper;
+	private PlatformGoodsBrandMapper platformGoodsBrandMapper;
 	
 	@Autowired
 	private PlatformGoodsParamsMapper goodsParamsMapper;
 	
+	@Autowired
+	private MerchantGoodsProductPriceMapper merchantGoodsProductPriceMapper;
 	/**
 	 * 
 	 * <p>查询模组列表</p>
@@ -613,8 +618,9 @@ public class GoodsModuleService {
                     Long classificationId = classification.getId();
                     String productCode = json.getString("goodcpxh");
                     String brandName = json.getString("goodpinp");
+                    String price = json.getString("goodcpprice");
+                    
                     Long brandId = this.addBrand(brandName, creator);
-                   
                     
                     // 商品数据整理
                     MerchantGoodsProduct goods = new MerchantGoodsProduct();
@@ -624,11 +630,22 @@ public class GoodsModuleService {
                     goods.setProductSystemCode(productSystemCode);
                     goods.setCreator(creator);
                     goods.setMerchantId(merchantId);
-                    goods.setCreateTime(new Date());
+                    goods.setCreateTime(nowDate);
                     goods.setMerchantId(merchantId);
-                    
                     merchantGoodsProductMapper.insertSelective(goods);
+                    this.batchAddGoodsParamValue(json);
                     
+                    
+                    // 产品价格表插入
+                    MerchantGoodsProductPrice mgpp = new MerchantGoodsProductPrice();
+                    mgpp.setDeliveryDate(1);
+                    mgpp.setPrice(new BigDecimal(price));
+                    mgpp.setProductId(goods.getId());
+                    merchantGoodsProductPriceMapper.insertSelective(mgpp);
+                    
+                    
+                    // 产品参数
+                        
                 } catch (Exception e) {
                     System.out.println("第"+line+"行出错:"+e.getMessage());
                 }

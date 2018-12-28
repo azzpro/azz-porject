@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.azz.merchant.pojo.PlatformGoodsParams;
 import com.azz.merchant.pojo.PlatformGoodsParamsTerm;
+import com.azz.platform.merchant.pojo.PlatformGoodsParamsValue;
 
 @Mapper
 public interface PlatformGoodsParamsMapper {
@@ -20,4 +21,10 @@ public interface PlatformGoodsParamsMapper {
 	int insertSelective(PlatformGoodsParams record);
 	
 	int insertTermSelective(PlatformGoodsParamsTerm record);
+	
+	int insertTermValueSelective(PlatformGoodsParamsValue record);
+	
+	int countParamsValue(@Param("paramsValue")String paramsValue, @Param("paramsCode")String paramsCode);
+	
+	Long selectParamTermId(String paramsCode);
 }

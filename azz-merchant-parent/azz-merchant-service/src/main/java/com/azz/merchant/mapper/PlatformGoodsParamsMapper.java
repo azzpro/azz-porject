@@ -27,4 +27,6 @@ public interface PlatformGoodsParamsMapper {
 	int countParamsValue(@Param("paramsValue")String paramsValue, @Param("paramsCode")String paramsCode);
 	
 	Long selectParamTermId(String paramsCode);
+	
+	PlatformGoodsParamsTerm selectParamTerm(String paramsCode);
 }

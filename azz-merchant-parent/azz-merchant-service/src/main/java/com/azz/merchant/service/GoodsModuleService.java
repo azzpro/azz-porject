@@ -41,14 +41,17 @@ import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.merchant.mapper.MerchantGoodsModuleMapper;
 import com.azz.merchant.mapper.MerchantGoodsProductMapper;
+import com.azz.merchant.mapper.MerchantGoodsProductParamsMapper;
 import com.azz.merchant.mapper.MerchantGoodsProductPriceMapper;
 import com.azz.merchant.mapper.MerchantMapper;
 import com.azz.merchant.mapper.PlatformGoodsBrandMapper;
 import com.azz.merchant.mapper.PlatformGoodsClassificationMapper;
 import com.azz.merchant.mapper.PlatformGoodsParamsMapper;
+import com.azz.merchant.mapper.PlatformGoodsParamsValueMapper;
 import com.azz.merchant.pojo.Merchant;
 import com.azz.merchant.pojo.MerchantGoodsModule;
 import com.azz.merchant.pojo.MerchantGoodsProduct;
+import com.azz.merchant.pojo.MerchantGoodsProductParams;
 import com.azz.merchant.pojo.MerchantGoodsProductPrice;
 import com.azz.merchant.pojo.PlatformGoodsBrand;
 import com.azz.merchant.pojo.PlatformGoodsClassification;
@@ -110,6 +113,12 @@ public class GoodsModuleService {
 	
 	@Autowired
 	private MerchantGoodsProductPriceMapper merchantGoodsProductPriceMapper;
+	
+	@Autowired
+	private MerchantGoodsProductParamsMapper merchantGoodsProductParamsMapper;
+	
+	@Autowired
+	private PlatformGoodsParamsValueMapper platformGoodsParamsValueMapper;
 	/**
 	 * 
 	 * <p>查询模组列表</p>
@@ -621,6 +630,7 @@ public class GoodsModuleService {
                     String productCode = json.getString("goodcpxh");
                     String brandName = json.getString("goodpinp");
                     String price = json.getString("goodcpprice");
+                    Integer deliveryDate = json.getInteger("goodfhr");
                     
                     Long brandId = this.addBrand(brandName, creator);
                     
@@ -635,19 +645,50 @@ public class GoodsModuleService {
                     goods.setCreateTime(nowDate);
                     goods.setMerchantId(merchantId);
                     merchantGoodsProductMapper.insertSelective(goods);
-                    this.batchAddGoodsParamValue(json);
                     
                     
                     // 产品价格表插入
                     MerchantGoodsProductPrice mgpp = new MerchantGoodsProductPrice();
-                    mgpp.setDeliveryDate(1);
+                    mgpp.setDeliveryDate(deliveryDate);
                     mgpp.setPrice(new BigDecimal(price));
                     mgpp.setProductId(goods.getId());
                     merchantGoodsProductPriceMapper.insertSelective(mgpp);
                     
                     
                     // 产品参数
-                        
+                    MerchantGoodsProductParams obj = new MerchantGoodsProductParams();
+                    
+                    Set<String> keys = json.keySet();
+                    for (String key : keys) {// key 即参数项编码
+                        if(isParamTermKey(key)) {
+                            String value = json.getString(key);
+                            // 查询是否已经存在相同的参数项值了
+                            int count = goodsParamsMapper.countParamsValue(value, key);
+                            if(count == 0) { // 不存在此参数值才新增平台参数值
+                                Long paramTermId = goodsParamsMapper.selectParamTermId(key);
+                                if(paramTermId != null) {
+                                    PlatformGoodsParamsValue ppv = new PlatformGoodsParamsValue();
+                                    ppv.setParamsValue(value);
+                                    ppv.setParamsParentId(paramTermId);
+                                    //System.out.println("参数项值：" + JSONObject.toJSONString(ppv));
+                                    goodsParamsMapper.insertTermValueSelective(ppv);
+                                }
+                            }
+                            PlatformGoodsParamsTerm paramTerm = goodsParamsMapper.selectParamTerm(key);
+                            if(paramTerm != null) {
+                                obj.setParamsChoice((byte)2);
+                                obj.setParamsChoice((byte)2);
+                                obj.setParamsType((byte)1);
+                                obj.setProductId(goods.getId());
+                                obj.setParamsId(paramTerm.getParamsId());
+                                obj.setParamsName(paramTerm.getParamsName());
+                                obj.setParamsTermId(paramTerm.getId());
+                                obj.setParamsValue(value);
+                                merchantGoodsProductParamsMapper.insertSelective(obj);
+                            }
+                        }
+                    }
+                    
                 } catch (Exception e) {
                     System.out.println("第"+line+"行出错:"+e.getMessage());
                 }
@@ -689,36 +730,6 @@ public class GoodsModuleService {
 	    return brandId;
 	}
 	
-	/**
-	 * 
-	 * <p>新增参数项对应的值</p>
-	 * @param json
-	 * @return
-	 * @author 黄智聪  2018年12月28日 下午5:47:48
-	 */
-	public JsonResult<String> batchAddParamValue(JSONObject json){
-		Set<String> keys = json.keySet();
-		for (String key : keys) {// key 即参数项编码
-			if(isParamTermKey(key)) {
-				String value = json.getString(key);
-				//System.out.println("key:"+ key + "  value:"+value);
-				// 查询是否已经存在相同的参数项值了
-				int count = goodsParamsMapper.countParamsValue(value, key);
-				if(count > 0) { // 已存在参数项对应的值，跳过次数据
-					continue;
-				}
-				Long paramTermId = goodsParamsMapper.selectParamTermId(key);
-				if(paramTermId != null) {
-					PlatformGoodsParamsValue ppv = new PlatformGoodsParamsValue();
-					ppv.setParamsValue(value);
-					ppv.setParamsParentId(paramTermId);
-					//System.out.println("参数项值：" + JSONObject.toJSONString(ppv));
-					goodsParamsMapper.insertTermValueSelective(ppv);
-				}
-			}
-		}
-	    return JsonResult.successJsonResult();
-	}
 	
 	private static boolean isParamTermKey(String key) {
 		if ("goodfhr".equals(key) 

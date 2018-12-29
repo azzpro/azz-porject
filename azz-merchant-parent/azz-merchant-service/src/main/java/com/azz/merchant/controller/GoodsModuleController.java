@@ -160,5 +160,16 @@ public class GoodsModuleController {
 		return goodsModuleService.batchAddParam(creator);
 	}
 	
+	/**
+	 * <p>批量添加产品</p>
+	 * @param merchantId
+	 * @param creator
+	 * @return
+	 * @author 彭斌  2018年12月29日 上午9:56:12
+	 */
+	@RequestMapping("/batchAddPrduct")
+    public JsonResult<String> batchAddPrduct(@RequestParam("merchantId") Long merchantId, @RequestParam("creator") String creator) {
+        return goodsModuleService.batchAddPrduct(merchantId, creator);
+    }
 }
 

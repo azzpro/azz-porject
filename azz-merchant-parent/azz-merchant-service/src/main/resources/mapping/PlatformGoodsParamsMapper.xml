@@ -8,9 +8,29 @@
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time"  property="createTime" />
   </resultMap>
+  
+  <resultMap id="BaseResultMapTerm" type="com.azz.merchant.pojo.PlatformGoodsParamsTerm">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="params_code" jdbcType="VARCHAR" property="paramsCode" />
+    <result column="params_name" jdbcType="VARCHAR" property="paramsName" />
+    <result column="params_id" jdbcType="BIGINT" property="paramsId" />
+    <result column="params_type" jdbcType="BIT" property="paramsType" />
+    <result column="params_choice" jdbcType="BIT" property="paramsChoice" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  
   <sql id="Base_Column_List">
     id, params_code,assortment_id,creator,create_time
   </sql>
+  
+  <sql id="Base_Column_Term_List">
+    id, params_code, params_name, params_id, params_type, params_choice, creator, create_time, 
+    modifier, modify_time
+  </sql>
+  
  	<select id="selectParamsByAssortmentId" resultMap="BaseResultMap" parameterType="long">
  		select <include refid="Base_Column_List"></include>
  		from platform_goods_params
@@ -174,4 +194,12 @@
 	WHERE pt.params_code = #{paramsCode}
   </select>
   
+  
+  <select id="selectParamTerm" parameterType="java.lang.String" resultMap="BaseResultMapTerm">
+  	SELECT
+		<include refid="Base_Column_Term_List"></include>
+	FROM
+		platform_goods_params_term pt
+	WHERE pt.params_code = #{paramsCode}
+  </select>
 </mapper>

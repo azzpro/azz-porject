@@ -17,4 +17,6 @@ public interface PlatformGoodsParamsValueMapper {
 	 * @author 刘建麟  2018年11月3日 下午1:22:19
 	 */
 	List<PlatformGoodsParamsValue> selectValueByTermId(Long id);
+	
+	
 }

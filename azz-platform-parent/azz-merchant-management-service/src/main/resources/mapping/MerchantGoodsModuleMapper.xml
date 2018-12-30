@@ -313,6 +313,7 @@
 		) AS classificationName,
 		mgd.module_pic_url AS modulePicUrl,
 		mgd.module_status AS moduleStatus,
+		mgd.module_info AS moduleInfo,
 		mgd.create_time AS createTime,
 		mu.merchant_user_name AS creator
 	FROM

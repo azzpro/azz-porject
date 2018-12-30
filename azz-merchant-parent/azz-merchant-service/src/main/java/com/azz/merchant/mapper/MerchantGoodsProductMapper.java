@@ -24,6 +24,8 @@ public interface MerchantGoodsProductMapper {
 
     int updateByPrimaryKey(MerchantGoodsProduct record);
     
+    int updateModuleIdByProductCode(@Param("moduleId") Long moduleId, @Param("productCode")String productCode);
+    
     int updateProductById(@Param("status") Byte status,@Param("id") Long id);
     
     /**

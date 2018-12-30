@@ -171,5 +171,10 @@ public class GoodsModuleController {
     public JsonResult<String> batchAddPrduct(@RequestParam("merchantId") Long merchantId, @RequestParam("creator") String creator) {
         return goodsModuleService.batchAddPrduct(merchantId, creator);
     }
+	
+	@RequestMapping("/batchUpdateProductModule")
+	public JsonResult<String> batchUpdateProductModule(){
+	    return goodsModuleService.batchUpdateProductModule();
+	}
 }
 

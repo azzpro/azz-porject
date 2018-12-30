@@ -100,4 +100,5 @@ public interface MerchantGoodsModuleMapper {
      */
     int countProducts(@Param("productCodes") List<String> productCodes);
     
+    Long selectIdByModuleName(String moduleName);
 }

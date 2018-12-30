@@ -634,6 +634,9 @@ public class GoodsModuleService {
                     
                     Long brandId = this.addBrand(brandName, creator);
                     
+                    String moduleName = json.getString("goodmzname");
+                    
+                    
                     // 商品数据整理
                     MerchantGoodsProduct goods = new MerchantGoodsProduct();
                     goods.setAssortmentId(classificationId);
@@ -641,9 +644,12 @@ public class GoodsModuleService {
                     goods.setBrandId(brandId);
                     goods.setProductSystemCode(productSystemCode);
                     goods.setCreator(creator);
-                    goods.setMerchantId(merchantId);
                     goods.setCreateTime(nowDate);
                     goods.setMerchantId(merchantId);
+                    Long moduleId = merchantGoodsModuleMapper.selectIdByModuleName(moduleName);
+                    if(moduleId != null) {
+                        goods.setModuleId(moduleId);
+                    }
                     merchantGoodsProductMapper.insertSelective(goods);
                     
                     
@@ -743,5 +749,43 @@ public class GoodsModuleService {
 		}
 		return true;
 	}
+	
+	public JsonResult<String> batchUpdateProductModule() {
+        File file = new File("D:\\productInfo.json");
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            String eachLine = null;
+            int line = 1;
+            // 一次读一行，读入null时文件结束
+            while ((eachLine = reader.readLine()) != null) {
+                try {
+                    JSONObject json = JSONObject.parseObject(eachLine);
+                    String productCode = json.getString("goodcpxh");
+                    String moduleName = json.getString("goodmzname");
+                    Long moduleId = merchantGoodsModuleMapper.selectIdByModuleName(moduleName);
+                    if(moduleId != null) {
+                        merchantGoodsProductMapper.updateModuleIdByProductCode(moduleId, productCode);
+                    }
+                } catch (Exception e) {
+                    System.out.println("第"+line+"行出错:"+e.getMessage());
+                }
+                line++;
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+        return JsonResult.successJsonResult();
+    }
+
 }
 

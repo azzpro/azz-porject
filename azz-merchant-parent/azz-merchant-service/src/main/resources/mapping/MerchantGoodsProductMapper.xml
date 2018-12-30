@@ -173,6 +173,16 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
+  
+  <update id="updateModuleIdByProductCode" parameterType="com.azz.merchant.pojo.MerchantGoodsProduct">
+    update 
+    	merchant_goods_product
+    set
+    	module_id = #{moduleId}
+    where product_code = #{productCode}
+  </update>
+  
+  
   <!-- 根据系统CODE 查询产品 -->
   <select id="selectProductBySystemCode" resultMap="BaseResultMap" parameterType="string">
   select <include refid="Base_Column_List"></include> from merchant_goods_product where product_system_code = #{code}

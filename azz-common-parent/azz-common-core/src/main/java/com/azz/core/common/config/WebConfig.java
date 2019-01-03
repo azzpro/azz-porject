@@ -17,6 +17,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -31,6 +33,11 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
+	@Bean
+    public BadSqlInterceptor getBadSqlInterceptor() {
+        return new BadSqlInterceptor();
+    }
+	
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
@@ -38,6 +45,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
                 .allowedMethods(CorsConfiguration.ALL)
                 .allowedOrigins(CorsConfiguration.ALL);
         super.addCorsMappings(registry);
+    }
+    
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        InterceptorRegistration interceptor = registry.addInterceptor(getBadSqlInterceptor());
+        interceptor.addPathPatterns("/**");
     }
     
     @Bean

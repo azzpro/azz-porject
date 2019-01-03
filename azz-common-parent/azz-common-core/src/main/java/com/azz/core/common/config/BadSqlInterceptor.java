@@ -1,4 +1,4 @@
-package com.azz.interceptor;
+package com.azz.core.common.config;
 
 import java.util.Enumeration;
 
@@ -9,7 +9,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.alibaba.fastjson.JSONObject;
-import com.azz.util.CharUtils;
 
 
 public class BadSqlInterceptor extends HandlerInterceptorAdapter {
@@ -31,7 +30,7 @@ public class BadSqlInterceptor extends HandlerInterceptorAdapter {
 		while(names.hasMoreElements()){
 			String name = (String)names.nextElement();
 			String param = request.getParameter(name);
-			if( CharUtils.contains(SQL_KEY_WORD, param) ){
+			if( contains(SQL_KEY_WORD, param) ){
 				JSONObject obj = new  JSONObject();
 				obj.put("msg", "非法链接");
 				obj.put("code", "9999");
@@ -39,7 +38,7 @@ public class BadSqlInterceptor extends HandlerInterceptorAdapter {
 				response.getWriter().write(obj.toString());
 				return false;
 			}
-			if( CharUtils.exists(SPECIAL_SYMBOL, param) ){
+			if( exists(SPECIAL_SYMBOL, param) ){
 				
 				JSONObject obj = new  JSONObject();
 				obj.put("msg", "非法链接");
@@ -58,5 +57,23 @@ public class BadSqlInterceptor extends HandlerInterceptorAdapter {
 			HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 		super.postHandle(request, response, handler, modelAndView);
+	}
+	
+	private static boolean contains(String[] strs,String str){
+		for(String s : strs){
+			if(str.equals(s)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private static boolean exists(String[] strs,String str){
+		for(String s : strs){
+			if(str.contains(s)){
+				return true ;
+			}
+		}
+		return false;
 	}
 }

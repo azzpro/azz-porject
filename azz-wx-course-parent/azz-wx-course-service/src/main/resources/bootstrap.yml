@@ -1,0 +1,5 @@
+server:
+  port: 7204
+spring:
+  application:
+    name: azz-wx-course-service

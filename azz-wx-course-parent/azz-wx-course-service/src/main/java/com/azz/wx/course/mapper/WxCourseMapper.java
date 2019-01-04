@@ -57,11 +57,11 @@ public interface WxCourseMapper {
     
     /**
      * 
-     * <p>查询分类所有绑定的参数</p>
+     * <p>查询课程绑定的参数</p>
      * @param classificationCode
      * @return
      * @author 黄智聪  2019年1月4日 下午4:41:01
      */
-    List<Param> getCourseParamsByCourseCode(String classificationCode);
+    List<Param> getCourseParamsByCourseCode(String courseCode);
     
 }

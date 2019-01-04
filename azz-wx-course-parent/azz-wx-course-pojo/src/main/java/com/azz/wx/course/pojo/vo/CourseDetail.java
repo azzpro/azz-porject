@@ -24,6 +24,8 @@ public class CourseDetail {
 	private String courseCode;
 
     private String courseName;
+    
+    private String brandName;
 
     private String coursePicName;
 

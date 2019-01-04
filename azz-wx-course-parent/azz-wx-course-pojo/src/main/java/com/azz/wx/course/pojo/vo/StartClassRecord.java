@@ -1,12 +1,13 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2019年1月4日 上午10:50:50
+ * Create on 2019年1月4日 下午5:22:15
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
 package com.azz.wx.course.pojo.vo;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import lombok.Data;
@@ -14,32 +15,24 @@ import lombok.Data;
 /**
  * <P>TODO</P>
  * @version 1.0
- * @author 黄智聪  2019年1月4日 上午10:50:50
+ * @author 黄智聪  2019年1月4日 下午5:22:15
  */
 @Data
-public class CourseInfo {
+public class StartClassRecord {
 
-    private String courseCode;
+    private String startClassCode;
 
-    private String courseName;
-
-    private String brandName;
-    
-    private String coursePicName;
-    
-    private String coursePicUrl;
-    
-    private Date latelyStartClassTime;
-    
-    private String latelyStartClassLocation;
-    
-    private Integer peopleNumber;
+    private Date startClassTime;
 
     private Integer hours;
 
-    private Byte status;
+    private Integer peopleNumber;
 
-    private Date createTime;
+    private BigDecimal price;
+
+    private String location;
+
+    private Byte status;
 
 }
 

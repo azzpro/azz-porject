@@ -91,18 +91,19 @@ public class CourseService {
 	 * @return
 	 * @author 黄智聪  2019年1月4日 下午3:20:59
 	 */
-	public JsonResult<CourseDetail> getCourseInfo(String courseCode){
+	public JsonResult<CourseDetail> getCourseDetail(String courseCode){
 		if(StringUtils.isBlank(courseCode)) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "请选择课程");
 		}
+		// 查询课程信息
 		CourseDetail detail = wxCourseMapper.getCourseDetail(courseCode);
 		if(detail == null) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "所选课程不存在");
 		}
-		// 分类所有参数
+		// 查询分类所有参数
 		List<Param> allParams = wxCourseMapper.getAllParamsByClassificationCode(detail.getClassificationCode());
-		// 课程所选参数
-		List<Param> courseParams = null;
+		// 查询课程所选参数
+		List<Param> courseParams = wxCourseMapper.getCourseParamsByCourseCode(courseCode);
 		detail.setCourseParams(courseParams);
 		detail.setAllParams(allParams);
 		return JsonResult.successJsonResult(detail);
@@ -130,6 +131,7 @@ public class CourseService {
 		UploadFileInfo fileInfo = uploadCoursePic(param.getCoursePic(), courseCode);
 		// 新增课程信息
 		WxCourse wxCourseRecord = WxCourse.builder()
+				.brandCode(param.getBrandCode())
 				.classificationCode(param.getClassificationCode())
 				.courseCode(courseCode)
 				.courseDescription(param.getCourseDescription())
@@ -188,6 +190,7 @@ public class CourseService {
 		// 课程信息
 		WxCourse wxCourseRecord = WxCourse.builder()
 				.id(course.getId())
+				.brandCode(param.getBrandCode())
 				.classificationCode(param.getClassificationCode())
 				.courseDescription(param.getCourseDescription())
 				.courseInfo(param.getCourseInfo())

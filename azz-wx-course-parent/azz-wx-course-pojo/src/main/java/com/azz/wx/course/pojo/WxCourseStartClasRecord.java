@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import lombok.Builder;
+
+@Builder
 public class WxCourseStartClasRecord implements Serializable {
     /**
      * 主键id

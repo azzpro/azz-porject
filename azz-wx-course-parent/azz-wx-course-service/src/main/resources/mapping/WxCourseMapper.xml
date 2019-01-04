@@ -248,8 +248,9 @@
 		wc.course_code AS courseCode,
 		wc.course_name AS courseName,
 		wc.course_pic_name AS coursePicName,
+		wcb.brand_name AS brandName,
 		wc.course_pic_url AS coursePicUrl,
-		wc. STATUS AS status,
+		wc. STATUS AS STATUS,
 		wc.create_time AS createTime,
 		t.start_class_time AS latelyStartClassTime,
 		t.location AS latelyStartClassLocation,
@@ -257,6 +258,7 @@
 		t.hours AS hours
 	FROM
 		wx_course wc
+	JOIN wx_course_brand wcb ON wc.brand_code = wcb.brand_code
 	LEFT JOIN (
 		SELECT
 			descStartClassRecord.course_code,
@@ -279,7 +281,8 @@
 			) descStartClassRecord
 		GROUP BY
 			descStartClassRecord.course_code
-	) t ON t.course_code = wc.course_code AND wc. STATUS != 0
+	) t ON t.course_code = wc.course_code
+	AND wc. STATUS != 0
 	<where>
 		<if test="status != null">
 			wc.status = #{status}
@@ -295,6 +298,7 @@
 	SELECT
 		wc.course_code AS courseCode,
 		wc.course_name AS courseName,
+		wcb.brand_name AS brandName,
 		wc.course_description AS courseDescription,
 		wc.course_pic_name AS coursePicName,
 		wc.course_pic_url AS coursePicUrl,
@@ -304,6 +308,7 @@
 		wcc.classification_name AS classificationName
 	FROM
 		wx_course wc
+	JOIN wx_course_brand wcb ON wc.brand_code = wcb.brand_code	
 	LEFT JOIN wx_course_classification wcc ON wc.classification_code = wcc.classification_code
 	WHERE
 		wc.status != 0

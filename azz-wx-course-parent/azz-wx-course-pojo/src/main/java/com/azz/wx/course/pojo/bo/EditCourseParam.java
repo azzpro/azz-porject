@@ -31,6 +31,9 @@ public class EditCourseParam {
 
 	@NotBlank(message = "请输入课程名称")
     private String courseName;
+	
+	@NotBlank(message = "请选择品牌")
+	private String brandCode;
 
 	@NotBlank(message = "请输入课程简介")
     private String courseDescription;

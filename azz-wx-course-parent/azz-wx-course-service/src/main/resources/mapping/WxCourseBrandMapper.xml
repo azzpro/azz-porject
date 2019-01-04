@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.wx.course.mapper.WxCourseBrandMapper">
+  <resultMap id="BaseResultMap" type="com.azz.wx.course.pojo.WxCourseBrand">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="brand_code" jdbcType="VARCHAR" property="brandCode" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
+    <result column="brand_pic_name" jdbcType="VARCHAR" property="brandPicName" />
+    <result column="brand_pic_url" jdbcType="VARCHAR" property="brandPicUrl" />
+    <result column="brand_description" jdbcType="VARCHAR" property="brandDescription" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.azz.wx.course.pojo.WxCourseBrand">
+    <result column="brand_info" jdbcType="LONGVARCHAR" property="brandInfo" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, brand_code, brand_name, brand_pic_name, brand_pic_url, brand_description, status, 
+    creator, create_time, modifier, modify_time
+  </sql>
+  <sql id="Blob_Column_List">
+    brand_info
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from wx_course_brand
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from wx_course_brand
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.wx.course.pojo.WxCourseBrand">
+    insert into wx_course_brand (id, brand_code, brand_name, 
+      brand_pic_name, brand_pic_url, brand_description, 
+      status, creator, create_time, 
+      modifier, modify_time, brand_info
+      )
+    values (#{id,jdbcType=BIGINT}, #{brandCode,jdbcType=VARCHAR}, #{brandName,jdbcType=VARCHAR}, 
+      #{brandPicName,jdbcType=VARCHAR}, #{brandPicUrl,jdbcType=VARCHAR}, #{brandDescription,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{brandInfo,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.wx.course.pojo.WxCourseBrand">
+    insert into wx_course_brand
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="brandCode != null">
+        brand_code,
+      </if>
+      <if test="brandName != null">
+        brand_name,
+      </if>
+      <if test="brandPicName != null">
+        brand_pic_name,
+      </if>
+      <if test="brandPicUrl != null">
+        brand_pic_url,
+      </if>
+      <if test="brandDescription != null">
+        brand_description,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="brandInfo != null">
+        brand_info,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="brandCode != null">
+        #{brandCode,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null">
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandPicName != null">
+        #{brandPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandPicUrl != null">
+        #{brandPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="brandDescription != null">
+        #{brandDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="brandInfo != null">
+        #{brandInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.wx.course.pojo.WxCourseBrand">
+    update wx_course_brand
+    <set>
+      <if test="brandCode != null">
+        brand_code = #{brandCode,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null">
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandPicName != null">
+        brand_pic_name = #{brandPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandPicUrl != null">
+        brand_pic_url = #{brandPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="brandDescription != null">
+        brand_description = #{brandDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="brandInfo != null">
+        brand_info = #{brandInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.azz.wx.course.pojo.WxCourseBrand">
+    update wx_course_brand
+    set brand_code = #{brandCode,jdbcType=VARCHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      brand_pic_name = #{brandPicName,jdbcType=VARCHAR},
+      brand_pic_url = #{brandPicUrl,jdbcType=VARCHAR},
+      brand_description = #{brandDescription,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      brand_info = #{brandInfo,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.wx.course.pojo.WxCourseBrand">
+    update wx_course_brand
+    set brand_code = #{brandCode,jdbcType=VARCHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      brand_pic_name = #{brandPicName,jdbcType=VARCHAR},
+      brand_pic_url = #{brandPicUrl,jdbcType=VARCHAR},
+      brand_description = #{brandDescription,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.wx.course.mapper.WxCourseStartClasRecordMapper">
+  <resultMap id="BaseResultMap" type="com.azz.wx.course.pojo.WxCourseStartClasRecord">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="course_code" jdbcType="VARCHAR" property="courseCode" />
+    <result column="start_class_code" jdbcType="VARCHAR" property="startClassCode" />
+    <result column="start_class_name" jdbcType="VARCHAR" property="startClassName" />
+    <result column="start_class_time" jdbcType="TIMESTAMP" property="startClassTime" />
+    <result column="hours" jdbcType="INTEGER" property="hours" />
+    <result column="people_number" jdbcType="INTEGER" property="peopleNumber" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="room" jdbcType="VARCHAR" property="room" />
+    <result column="location" jdbcType="VARCHAR" property="location" />
+    <result column="longitude" jdbcType="DECIMAL" property="longitude" />
+    <result column="latitude" jdbcType="DECIMAL" property="latitude" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, course_code, start_class_code, start_class_name, start_class_time, hours, people_number, 
+    price, room, location, longitude, latitude, status, creator, create_time, modifier, 
+    modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wx_course_start_class_record
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from wx_course_start_class_record
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.wx.course.pojo.WxCourseStartClasRecord">
+    insert into wx_course_start_class_record (id, course_code, start_class_code, 
+      start_class_name, start_class_time, hours, 
+      people_number, price, room, 
+      location, longitude, latitude, 
+      status, creator, create_time, 
+      modifier, modify_time)
+    values (#{id,jdbcType=BIGINT}, #{courseCode,jdbcType=VARCHAR}, #{startClassCode,jdbcType=VARCHAR}, 
+      #{startClassName,jdbcType=VARCHAR}, #{startClassTime,jdbcType=TIMESTAMP}, #{hours,jdbcType=INTEGER}, 
+      #{peopleNumber,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, #{room,jdbcType=VARCHAR}, 
+      #{location,jdbcType=VARCHAR}, #{longitude,jdbcType=DECIMAL}, #{latitude,jdbcType=DECIMAL}, 
+      #{status,jdbcType=TINYINT}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.wx.course.pojo.WxCourseStartClasRecord">
+    insert into wx_course_start_class_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="courseCode != null">
+        course_code,
+      </if>
+      <if test="startClassCode != null">
+        start_class_code,
+      </if>
+      <if test="startClassName != null">
+        start_class_name,
+      </if>
+      <if test="startClassTime != null">
+        start_class_time,
+      </if>
+      <if test="hours != null">
+        hours,
+      </if>
+      <if test="peopleNumber != null">
+        people_number,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="room != null">
+        room,
+      </if>
+      <if test="location != null">
+        location,
+      </if>
+      <if test="longitude != null">
+        longitude,
+      </if>
+      <if test="latitude != null">
+        latitude,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="courseCode != null">
+        #{courseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="startClassCode != null">
+        #{startClassCode,jdbcType=VARCHAR},
+      </if>
+      <if test="startClassName != null">
+        #{startClassName,jdbcType=VARCHAR},
+      </if>
+      <if test="startClassTime != null">
+        #{startClassTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hours != null">
+        #{hours,jdbcType=INTEGER},
+      </if>
+      <if test="peopleNumber != null">
+        #{peopleNumber,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="room != null">
+        #{room,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null">
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null">
+        #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null">
+        #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.wx.course.pojo.WxCourseStartClasRecord">
+    update wx_course_start_class_record
+    <set>
+      <if test="courseCode != null">
+        course_code = #{courseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="startClassCode != null">
+        start_class_code = #{startClassCode,jdbcType=VARCHAR},
+      </if>
+      <if test="startClassName != null">
+        start_class_name = #{startClassName,jdbcType=VARCHAR},
+      </if>
+      <if test="startClassTime != null">
+        start_class_time = #{startClassTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hours != null">
+        hours = #{hours,jdbcType=INTEGER},
+      </if>
+      <if test="peopleNumber != null">
+        people_number = #{peopleNumber,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="room != null">
+        room = #{room,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null">
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null">
+        longitude = #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null">
+        latitude = #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.wx.course.pojo.WxCourseStartClasRecord">
+    update wx_course_start_class_record
+    set course_code = #{courseCode,jdbcType=VARCHAR},
+      start_class_code = #{startClassCode,jdbcType=VARCHAR},
+      start_class_name = #{startClassName,jdbcType=VARCHAR},
+      start_class_time = #{startClassTime,jdbcType=TIMESTAMP},
+      hours = #{hours,jdbcType=INTEGER},
+      people_number = #{peopleNumber,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL},
+      room = #{room,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=DECIMAL},
+      latitude = #{latitude,jdbcType=DECIMAL},
+      status = #{status,jdbcType=TINYINT},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

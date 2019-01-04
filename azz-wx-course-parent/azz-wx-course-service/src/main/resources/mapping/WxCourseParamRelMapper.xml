@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.wx.course.mapper.WxCourseParamRelMapper">
+  <resultMap id="BaseResultMap" type="com.azz.wx.course.pojo.WxCourseParamRel">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="course_code" jdbcType="VARCHAR" property="courseCode" />
+    <result column="param_code" jdbcType="VARCHAR" property="paramCode" />
+    <result column="param_name" jdbcType="VARCHAR" property="paramName" />
+    <result column="param_term_code" jdbcType="VARCHAR" property="paramTermCode" />
+    <result column="param_term_value" jdbcType="VARCHAR" property="paramTermValue" />
+    <result column="param_type" jdbcType="BIT" property="paramType" />
+    <result column="param_choice" jdbcType="BIT" property="paramChoice" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, course_code, param_code, param_name, param_term_code, param_term_value, param_type, 
+    param_choice, creator, create_time, modifier, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wx_course_param_rel
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from wx_course_param_rel
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.wx.course.pojo.WxCourseParamRel">
+    insert into wx_course_param_rel (id, course_code, param_code, 
+      param_name, param_term_code, param_term_value, 
+      param_type, param_choice, creator, 
+      create_time, modifier, modify_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{courseCode,jdbcType=VARCHAR}, #{paramCode,jdbcType=VARCHAR}, 
+      #{paramName,jdbcType=VARCHAR}, #{paramTermCode,jdbcType=VARCHAR}, #{paramTermValue,jdbcType=VARCHAR}, 
+      #{paramType,jdbcType=BIT}, #{paramChoice,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.wx.course.pojo.WxCourseParamRel">
+    insert into wx_course_param_rel
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="courseCode != null">
+        course_code,
+      </if>
+      <if test="paramCode != null">
+        param_code,
+      </if>
+      <if test="paramName != null">
+        param_name,
+      </if>
+      <if test="paramTermCode != null">
+        param_term_code,
+      </if>
+      <if test="paramTermValue != null">
+        param_term_value,
+      </if>
+      <if test="paramType != null">
+        param_type,
+      </if>
+      <if test="paramChoice != null">
+        param_choice,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="courseCode != null">
+        #{courseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="paramCode != null">
+        #{paramCode,jdbcType=VARCHAR},
+      </if>
+      <if test="paramName != null">
+        #{paramName,jdbcType=VARCHAR},
+      </if>
+      <if test="paramTermCode != null">
+        #{paramTermCode,jdbcType=VARCHAR},
+      </if>
+      <if test="paramTermValue != null">
+        #{paramTermValue,jdbcType=VARCHAR},
+      </if>
+      <if test="paramType != null">
+        #{paramType,jdbcType=BIT},
+      </if>
+      <if test="paramChoice != null">
+        #{paramChoice,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.wx.course.pojo.WxCourseParamRel">
+    update wx_course_param_rel
+    <set>
+      <if test="courseCode != null">
+        course_code = #{courseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="paramCode != null">
+        param_code = #{paramCode,jdbcType=VARCHAR},
+      </if>
+      <if test="paramName != null">
+        param_name = #{paramName,jdbcType=VARCHAR},
+      </if>
+      <if test="paramTermCode != null">
+        param_term_code = #{paramTermCode,jdbcType=VARCHAR},
+      </if>
+      <if test="paramTermValue != null">
+        param_term_value = #{paramTermValue,jdbcType=VARCHAR},
+      </if>
+      <if test="paramType != null">
+        param_type = #{paramType,jdbcType=BIT},
+      </if>
+      <if test="paramChoice != null">
+        param_choice = #{paramChoice,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.wx.course.pojo.WxCourseParamRel">
+    update wx_course_param_rel
+    set course_code = #{courseCode,jdbcType=VARCHAR},
+      param_code = #{paramCode,jdbcType=VARCHAR},
+      param_name = #{paramName,jdbcType=VARCHAR},
+      param_term_code = #{paramTermCode,jdbcType=VARCHAR},
+      param_term_value = #{paramTermValue,jdbcType=VARCHAR},
+      param_type = #{paramType,jdbcType=BIT},
+      param_choice = #{paramChoice,jdbcType=BIT},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

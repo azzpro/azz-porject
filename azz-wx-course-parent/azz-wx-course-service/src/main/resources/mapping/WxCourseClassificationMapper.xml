@@ -210,6 +210,8 @@
 	<if test="param != null and param != ''">
 		and (classification_code = #{param} or classification_name = #{param})
 	</if>
+	ORDER BY
+		create_time DESC
   </select>
   
   <select id="selectSameLevelClassification" parameterType="com.azz.wx.course.pojo.bo.SearchSameLevelClassification" resultType="int">
@@ -246,6 +248,8 @@
 	<if test="param != null and param != ''">
 		and (classification_parent_code = #{param} or classification_name = #{param})
   	</if>
+  	ORDER BY
+		create_time DESC
   </select>
   
   <select id="selectParentByAssortmentName" parameterType="com.azz.wx.course.pojo.bo.SearchClassificationListParam" resultType="com.azz.wx.course.pojo.vo.ClassificationParams">

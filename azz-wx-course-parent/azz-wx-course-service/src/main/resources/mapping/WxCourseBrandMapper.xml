@@ -195,4 +195,108 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="getBrandInfoList" parameterType="com.azz.wx.course.pojo.bo.SearchBrandParam" resultType="com.azz.wx.course.pojo.vo.BrandInfo">
+    SELECT
+		wcb.brand_name AS brandName,
+		wcb.brand_pic_url AS brandPicUrl,
+		wcb.brand_code AS brandCode,
+		wcb.brand_description AS brandDescription,
+		wcb.create_time AS createTime
+	FROM
+		wx_course_brand wcb
+	<where> wcb.status != 0
+		<if test="searchInput != null and searchInput != ''">
+			AND (
+				wcb.brand_code LIKE CONCAT('%', #{searchInput}, '%')
+			OR wcb.brand_name LIKE CONCAT('%', #{searchInput}, '%') 
+			)
+		</if>
+	</where>	
+	ORDER BY
+		wcb.create_time DESC
+  </select>
+  
+  <select id="getBrandInfo" parameterType="string" resultType="com.azz.wx.course.pojo.vo.BrandInfo">
+    SELECT
+		wcb.brand_name AS brandName,
+		wcb.brand_pic_url AS brandPicUrl,
+		wcb.brand_code AS brandCode,
+		wcb.brand_description AS brandDescription,
+		wcb.create_time AS createTime
+	FROM
+		wx_course_brand wcb
+	WHERE wcb.brand_code = #{brandCode}
+  </select>
+  
+  <select id="countGoodsBrandByBrandName" resultType="int">
+  	SELECT
+		count(1)
+	FROM 
+		wx_course_brand wcb
+	<where>
+		wcb.status != 0
+		<if test="brandName != null and brandName != ''">
+			AND wcb.brand_name = #{brandName}
+		</if>
+		<if test="brandCode != null and brandCode != ''">
+			AND wcb.brand_code != #{brandCode}
+		</if>
+	</where>
+  </select>
+  
+  
+  <select id="selectByBrandCode" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wx_course_brand
+    where status !=0 and brand_code = #{brandCode}
+  </select>
+  
+  <update id="updateByBrandCode" parameterType="com.azz.wx.course.pojo.WxCourseBrand">
+    update wx_course_brand
+    <set>
+      <if test="brandName != null">
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandInfo != null">
+        brand_info = #{brandInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="brandPicUrl != null">
+        brand_pic_url = #{brandPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="brandPicName != null">
+        brand_pic_name = #{brandPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandDescription != null">
+        brand_description = #{brandDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where brand_code = #{brandCode,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="countBindingCourse" parameterType="java.lang.String" resultType="int">
+    SELECT
+		count(1)
+	FROM
+		wx_course
+	WHERE
+		status != 0 and
+		brand_code = #{brandCode}
+  </select>
 </mapper>

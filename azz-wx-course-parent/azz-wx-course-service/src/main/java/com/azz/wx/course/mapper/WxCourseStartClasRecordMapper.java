@@ -17,7 +17,9 @@ public interface WxCourseStartClasRecordMapper {
     int insertSelective(WxCourseStartClasRecord record);
 
     WxCourseStartClasRecord selectByPrimaryKey(Long id);
-
+    
+    WxCourseStartClasRecord selectByStartClassCode(String startClassCode);
+    
     int updateByPrimaryKeySelective(WxCourseStartClasRecord record);
 
     int updateByPrimaryKey(WxCourseStartClasRecord record);
@@ -39,4 +41,13 @@ public interface WxCourseStartClasRecordMapper {
      * @author 黄智聪  2019年1月4日 下午5:36:34
      */
     List<StartClassRecord> getStartClassRecords(SearchStartClassRecordParam param);
+    
+    /**
+     * 
+     * <p>查询开课信息详情</p>
+     * @param startClassCode
+     * @return
+     * @author 黄智聪  2019年1月4日 下午6:21:47
+     */
+    StartClassRecord getStartClassRecordDetail(String startClassCode);
 }

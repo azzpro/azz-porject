@@ -31,6 +31,12 @@
     from wx_course_start_class_record
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="selectByStartClassCode" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wx_course_start_class_record
+    where start_class_code = #{startClassCode}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from wx_course_start_class_record
     where id = #{id,jdbcType=BIGINT}
@@ -266,5 +272,22 @@
 		</if>
 	</where>
 	ORDER BY wcscr.create_time DESC
+  </select>
+  
+  <select id="getStartClassRecordDetail" resultType="com.azz.wx.course.pojo.vo.StartClassRecord" parameterType="string">
+	SELECT
+		wcscr.start_class_code AS startClassCode,
+		wcscr.start_class_time AS startClassTime,
+		wcscr.hours AS hours,
+		wcscr.people_number AS peopleNumber,
+		wcscr.price AS price,
+		wcscr.longitude as longitude,
+		wcscr.latitude as latitude,
+		wcscr.room as room,
+		wcscr.location AS location,
+		wcscr.status AS status
+	FROM
+		wx_course_start_class_record wcscr
+	where wcscr.start_class_code = #{startClassCode}
   </select>
 </mapper>

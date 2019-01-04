@@ -7,8 +7,6 @@
  
 package com.azz.core.constants;
 
-import com.azz.core.constants.MerchantConstants.GoodsModuleStatus;
-
 import lombok.Getter;
 
 /**
@@ -46,8 +44,13 @@ public abstract class WxCourseConstants {
 		}
 	}
 
+	/**
+	 * 
+	 * <P>课程状态  0删除 1上架 2下架</P>
+	 * @version 1.0
+	 * @author 黄智聪  2019年1月4日 下午6:32:09
+	 */
 	public enum CourseStatus {
-		// 0删除 1上架 2下架
 		INVALID(0, "无效"),
 
 		PUT_ON(1, "有效"),
@@ -78,6 +81,51 @@ public abstract class WxCourseConstants {
 		public static boolean checkStatusExist(int value) {
 			CourseStatus[] values = CourseStatus.values();
 			for (CourseStatus status : values) {
+				if (status.getValue() == value) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+	
+	/**
+	 * 
+	 * <P>开课信息记录状态  0删除 1上架 2下架</P>
+	 * @version 1.0
+	 * @author 黄智聪  2019年1月4日 下午6:32:09
+	 */
+	public enum StartClassRecordStatus {
+		INVALID(0, "无效"),
+
+		PUT_ON(1, "有效"),
+
+		PUT_OFF(2, "下架");
+
+		@Getter
+		private int value;
+
+		@Getter
+		private String desc;
+
+		StartClassRecordStatus(int value, String desc) {
+			this.value = value;
+			this.desc = desc;
+		}
+		
+		/**
+		 * 
+		 * <p>
+		 * 校验是否存在该状态
+		 * </p>
+		 * 
+		 * @param value
+		 * @return
+		 * @author 黄智聪 2018年10月20日 上午11:29:37
+		 */
+		public static boolean checkStatusExist(int value) {
+			StartClassRecordStatus[] values = StartClassRecordStatus.values();
+			for (StartClassRecordStatus status : values) {
 				if (status.getValue() == value) {
 					return true;
 				}

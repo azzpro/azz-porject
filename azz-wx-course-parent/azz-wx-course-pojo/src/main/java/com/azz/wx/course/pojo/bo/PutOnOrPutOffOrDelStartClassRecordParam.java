@@ -19,12 +19,12 @@ import lombok.Data;
  * @author 黄智聪  2018年11月1日 下午7:45:21
  */
 @Data
-public class PutOnOrPutOffOrDelCourseParam {
+public class PutOnOrPutOffOrDelStartClassRecordParam {
 	
-	@NotBlank(message = "课程编码不能为空")
-	private String courseCode;
+	@NotBlank(message = "开课编码不能为空")
+	private String startClassCode;
 	
-	@NotNull(message = "课程状态不能为空")
+	@NotNull(message = "状态不能为空")
 	private Byte status;
 	
 	private String modifier;

@@ -29,6 +29,12 @@ public class StartClassRecord {
     private Integer peopleNumber;
 
     private BigDecimal price;
+    
+	private String room;
+	
+    private BigDecimal longitude;
+
+    private BigDecimal latitude;
 
     private String location;
 

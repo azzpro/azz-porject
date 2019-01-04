@@ -248,14 +248,17 @@ public class CourseService {
 		if(course == null) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "课程不存在");
 		}
-		boolean exist = CourseStatus.checkStatusExist(param.getStatus());
+		Byte status = param.getStatus();
+		boolean exist = CourseStatus.checkStatusExist(status);
 		if(!exist) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "课程状态不存在");
 		}
-		// 是否绑定了开课信息
-		int count = wxCourseStartClasRecordMapper.countStartClassRecordByCourseCode(courseCode);
-		if(count > 0) {
-			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "课程下已关联开课信息，请先移除后再进行删除！");
+		// 删除要判断是否绑定了开课信息
+		if(status.intValue() == CourseStatus.INVALID.getValue()) {
+			int count = wxCourseStartClasRecordMapper.countStartClassRecordByCourseCode(courseCode);
+			if(count > 0) {
+				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "课程下已关联开课信息，请先移除后再进行删除");
+			}
 		}
 		WxCourse courseRecord = WxCourse.builder()
 				.id(course.getId())

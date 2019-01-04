@@ -7,6 +7,8 @@ import com.azz.wx.course.pojo.WxCourseParamRel;
 @Mapper
 public interface WxCourseParamRelMapper {
     int deleteByPrimaryKey(Long id);
+    
+    int deleteByCourseCode(String courseCode);
 
     int insert(WxCourseParamRel record);
 

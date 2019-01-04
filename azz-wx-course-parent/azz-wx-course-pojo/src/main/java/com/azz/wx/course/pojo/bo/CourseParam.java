@@ -7,6 +7,10 @@
  
 package com.azz.wx.course.pojo.bo;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 import lombok.Data;
 
 /**
@@ -17,17 +21,23 @@ import lombok.Data;
 @Data
 public class CourseParam {
 	
+	@NotBlank(message = "存在空的参数编码")
 	private String paramCode;
 	
+	@NotBlank(message = "存在空的参数项编码")
 	private String paramTermCode;
 	
+	@NotBlank(message = "存在空的参数项名称")
 	private String paramName;
 	
+	@NotBlank(message = "存在空的参数值")
 	private String paramValue;
 	
-	private Integer paramType;
+	@NotNull(message = "存在空的参数类型")
+	private Byte paramType;
 	
-	private Integer paramChoice;
+	@NotNull(message = "请选中参数是否必选")
+	private Byte paramChoice;
 	
 }
 

@@ -3,6 +3,9 @@ package com.azz.wx.course.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
+import lombok.Builder;
+
+@Builder
 public class WxCourseParamRel implements Serializable {
     /**
      *  主键id

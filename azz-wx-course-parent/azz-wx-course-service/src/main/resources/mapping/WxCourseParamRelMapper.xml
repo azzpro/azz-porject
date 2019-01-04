@@ -29,6 +29,10 @@
     delete from wx_course_param_rel
     where id = #{id,jdbcType=BIGINT}
   </delete>
+  <delete id="deleteByCourseCode" parameterType="string">
+    delete from wx_course_param_rel
+    where course_code = #{courseCode}
+  </delete>
   <insert id="insert" parameterType="com.azz.wx.course.pojo.WxCourseParamRel">
     insert into wx_course_param_rel (id, course_code, param_code, 
       param_name, param_term_code, param_term_value, 

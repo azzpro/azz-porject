@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.azz.wx.course.pojo.WxCourse">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="classification_code" jdbcType="VARCHAR" property="classificationCode" />
+    <result column="brand_code" jdbcType="VARCHAR" property="brandCode" />
     <result column="course_code" jdbcType="VARCHAR" property="courseCode" />
     <result column="course_name" jdbcType="VARCHAR" property="courseName" />
     <result column="course_description" jdbcType="VARCHAR" property="courseDescription" />
@@ -20,7 +21,7 @@
     <result column="course_info" jdbcType="LONGVARCHAR" property="courseInfo" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, classification_code, course_code, course_name, course_description, course_pic_name, 
+    id, classification_code, brand_code, course_code, course_name, course_description, course_pic_name, 
     course_pic_url, status, remark, creator, create_time, modifier, modify_time
   </sql>
   <sql id="Blob_Column_List">
@@ -34,17 +35,28 @@
     from wx_course
     where id = #{id,jdbcType=BIGINT}
   </select>
+  
+  <select id="selectByCourseCode" parameterType="string" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from wx_course
+    where course_code = #{courseCode}
+    and status != 0
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from wx_course
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.azz.wx.course.pojo.WxCourse">
-    insert into wx_course (id, classification_code, course_code, 
+    insert into wx_course (id, classification_code, brand_code, course_code, 
       course_name, course_description, course_pic_name, 
       course_pic_url, status, remark, 
       creator, create_time, modifier, 
       modify_time, course_info)
-    values (#{id,jdbcType=BIGINT}, #{classificationCode,jdbcType=VARCHAR}, #{courseCode,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{classificationCode,jdbcType=VARCHAR}, #{brandCode,jdbcType=VARCHAR}, #{courseCode,jdbcType=VARCHAR}, 
       #{courseName,jdbcType=VARCHAR}, #{courseDescription,jdbcType=VARCHAR}, #{coursePicName,jdbcType=VARCHAR}, 
       #{coursePicUrl,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
@@ -58,6 +70,9 @@
       </if>
       <if test="classificationCode != null">
         classification_code,
+      </if>
+      <if test="brandCode != null">
+        brand_code,
       </if>
       <if test="courseCode != null">
         course_code,
@@ -103,6 +118,9 @@
       <if test="classificationCode != null">
         #{classificationCode,jdbcType=VARCHAR},
       </if>
+      <if test="brandCode != null">
+        #{brandCode,jdbcType=VARCHAR},
+      </if>
       <if test="courseCode != null">
         #{courseCode,jdbcType=VARCHAR},
       </if>
@@ -147,6 +165,9 @@
       <if test="classificationCode != null">
         classification_code = #{classificationCode,jdbcType=VARCHAR},
       </if>
+      <if test="brandCode != null">
+        brand_code = #{brandCode,jdbcType=VARCHAR},
+      </if>
       <if test="courseCode != null">
         course_code = #{courseCode,jdbcType=VARCHAR},
       </if>
@@ -189,6 +210,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.azz.wx.course.pojo.WxCourse">
     update wx_course
     set classification_code = #{classificationCode,jdbcType=VARCHAR},
+      brand_code = #{brandCode,jdbcType=VARCHAR},
       course_code = #{courseCode,jdbcType=VARCHAR},
       course_name = #{courseName,jdbcType=VARCHAR},
       course_description = #{courseDescription,jdbcType=VARCHAR},
@@ -206,6 +228,7 @@
   <update id="updateByPrimaryKey" parameterType="com.azz.wx.course.pojo.WxCourse">
     update wx_course
     set classification_code = #{classificationCode,jdbcType=VARCHAR},
+      brand_code = #{brandCode,jdbcType=VARCHAR},
       course_code = #{courseCode,jdbcType=VARCHAR},
       course_name = #{courseName,jdbcType=VARCHAR},
       course_description = #{courseDescription,jdbcType=VARCHAR},
@@ -266,5 +289,65 @@
 		</if>
 	</where>
 	ORDER BY wc.create_time DESC
+  </select>
+  
+  <select id="getCourseDetail" parameterType="string" resultType="com.azz.wx.course.pojo.vo.CourseDetail">
+	SELECT
+		wc.course_code AS courseCode,
+		wc.course_name AS courseName,
+		wc.course_description AS courseDescription,
+		wc.course_pic_name AS coursePicName,
+		wc.course_pic_url AS coursePicUrl,
+		wc.course_info AS courseInfo,
+		wc.`status` AS status,
+		wc.classification_code AS classificationCode,
+		wcc.classification_name AS classificationName
+	FROM
+		wx_course wc
+	LEFT JOIN wx_course_classification wcc ON wc.classification_code = wcc.classification_code
+	WHERE
+		wc.status != 0
+	AND wc.course_code = #{courseCode}
+  </select>
+  
+  <resultMap id="param" type="com.azz.wx.course.pojo.vo.Param">
+  	<result column="paramCode" jdbcType="VARCHAR" property="paramCode" />
+  	<collection property="paramTerms" ofType="com.azz.wx.course.pojo.vo.ParamTerm">
+  		<result column="paramTermCode" property="paramTermCode" jdbcType="VARCHAR"/>
+        <result column="paramName" property="paramName" jdbcType="VARCHAR"/>
+        <result column="paramType" property="paramType" jdbcType="TINYINT"/>
+        <result column="paramChoice" property="paramChoice" jdbcType="TINYINT"/>
+        <result column="paramValues" property="paramValues" jdbcType="VARCHAR"/>
+    </collection>
+  </resultMap>
+  
+  <select id="getAllParamsByClassificationCode" parameterType="string" resultMap="param">
+	SELECT
+		wcp.param_code AS paramCode,
+		wcpt.param_term_code AS paramTermCode,
+		wcpt.param_name AS paramName,
+		wcpt.param_type AS paramType,
+		wcpt.param_choice AS paramChoice,
+		GROUP_CONCAT(wcptv.param_value) AS paramValues
+	FROM
+		wx_course_param wcp
+	JOIN wx_course_param_term wcpt ON wcpt.param_code = wcp.param_code
+	JOIN wx_course_param_term_value wcptv ON wcptv.param_term_code = wcpt.param_term_code
+	where wcp.classification_code = #{classificationCode}
+	GROUP BY wcptv.param_term_code
+  </select>
+  
+  <select id="getCourseParamsByCourseCode" parameterType="string" resultMap="param">
+	SELECT
+		wcpr.param_code AS paramCode,
+		wcpr.param_term_code AS paramTermCode,
+		wcpr.param_name AS paramName,
+		wcpr.param_type AS paramType,
+		wcpr.param_choice AS paramChoice,
+		GROUP_CONCAT(wcpr.param_term_value) AS paramValues
+	FROM
+		wx_course_param_rel wcpr
+	where wcpr.course_code = #{courseCode}
+	GROUP BY wcpr.param_term_code 
   </select>
 </mapper>

@@ -20,7 +20,9 @@ public class WxCourse implements Serializable {
      * @mbg.generated
      */
     private String classificationCode;
-
+    
+    private String brandCode;
+    
     /**
      * 课程编码
      *
@@ -511,4 +513,12 @@ public class WxCourse implements Serializable {
         sb.append("]");
         return sb.toString();
     }
+
+	public String getBrandCode() {
+		return brandCode;
+	}
+
+	public void setBrandCode(String brandCode) {
+		this.brandCode = brandCode;
+	}
 }

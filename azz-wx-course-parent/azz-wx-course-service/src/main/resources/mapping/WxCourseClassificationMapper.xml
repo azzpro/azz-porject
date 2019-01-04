@@ -186,4 +186,90 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+   <select id="selectByClassificationCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+    	<include refid="Base_Column_List" />
+    from wx_course_classification
+    where status = 1 and classification_code = #{classificationCode,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByParam" parameterType="string" resultType="com.azz.wx.course.pojo.vo.CourseClassification" >
+  	SELECT
+  		id as id,
+		classification_code as classificationCode,
+		classification_name as classificationName,
+		sort as sort,
+		create_time as createTime,
+		classification_pic_url as classificationPicUrl,
+		classification_parent_code as classificationParentCode,
+		classification_top as classificationTop
+	FROM
+		wx_course_classification
+	WHERE status = 1
+	<if test="param != null and param != ''">
+		and (classification_code = #{param} or classification_name = #{param})
+	</if>
+  </select>
+  
+  <select id="selectSameLevelClassification" parameterType="com.azz.wx.course.pojo.bo.SearchSameLevelClassification" resultType="int">
+  	SELECT count(1) FROM wx_course_classification wcc 
+  	WHERE wcc.classification_name = #{assortmentName} 
+  	AND wcc.classification_top = #{assortmentTop} AND wcc.classification_parent_code = #{assortmentParentCode} AND wcc.status != 0
+  </select>
+  
+  <select id="countClassification" parameterType="java.lang.String" resultType="int">
+  	SELECT count(1) FROM wx_course_param
+  	WHERE classification_code = #{classificationCode} 
+  </select>
+  
+  <select id="selectByAssortmentParentCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+    	<include refid="Base_Column_List" />
+    from wx_course_classification
+    where classification_parent_code = #{classificationParentCode,jdbcType=VARCHAR} and status != 0
+  </select>
+  
+  <select id="selectParentByParam" parameterType="string" resultType="com.azz.wx.course.pojo.vo.CourseClassification" >
+  	SELECT
+  		id as id,
+		classification_code as classificationCode,
+		classification_name as classificationName,
+		sort as sort,
+		create_time as createTime,
+		classification_pic_url as classificationPicUrl,
+		classification_parent_code as classificationParentCode,
+		classification_top as classificationTop
+	FROM
+		wx_course_classification
+	WHERE status = 1
+	<if test="param != null and param != ''">
+		and (classification_parent_code = #{param} or classification_name = #{param})
+  	</if>
+  </select>
+  
+  <select id="selectParentByAssortmentName" parameterType="com.azz.wx.course.pojo.bo.SearchClassificationListParam" resultType="com.azz.wx.course.pojo.vo.ClassificationParams">
+  	SELECT
+  		id as id,
+		classification_code as assortmentCode,
+		classification_name as assortmentName,
+		classification_parent_code as assortmentParentCode
+	FROM
+		wx_course_classification
+	WHERE status = 1 and classification_top = 0
+	<if test="param != null and param != ''">
+		and classification_name = #{param}
+	</if>
+  </select>
+  
+  <select id="selectChild" parameterType="java.lang.String" resultType="com.azz.wx.course.pojo.vo.ClassificationParams">
+  	SELECT
+  		id as id,
+		classification_code as assortmentCode,
+		classification_name as assortmentName,
+		classification_parent_code as assortmentParentCode
+	FROM
+		wx_course_classification
+	WHERE status = 1 and classification_parent_code = #{parentCode}
+  </select>
 </mapper>

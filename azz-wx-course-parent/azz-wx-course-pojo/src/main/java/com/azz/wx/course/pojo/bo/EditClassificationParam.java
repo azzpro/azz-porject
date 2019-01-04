@@ -7,8 +7,6 @@
  
 package com.azz.wx.course.pojo.bo;
 
-import javax.validation.constraints.NotNull;
-
 import org.hibernate.validator.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
@@ -23,7 +21,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddClassificationParam {
+public class EditClassificationParam {
+    
+    /**
+     * 分类编码
+     */
+    @NotBlank(message = "分类编码不允许为空")
+    private String assortmentCode;
     
     /**
      * 上级分类编号，可为空
@@ -48,16 +52,20 @@ public class AddClassificationParam {
     private Byte assortmentSort;
     
     /**
-     * 创建人
+     * 修改人
      *
      * @mbg.generated
      */
-    private String creator;
+    private String modifier;
     
     /**
      * 分类主图
      */
-    @NotNull(message = "分类主图")
     private ClassificationPic classificationPic;
+    
+    /**
+     * 是否修改过主图 0 未修改 1修改过
+     */
+    private Integer isEditPic;
 }
 

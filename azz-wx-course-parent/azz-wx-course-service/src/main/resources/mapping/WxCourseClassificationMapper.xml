@@ -6,7 +6,7 @@
     <result column="classification_code" jdbcType="VARCHAR" property="classificationCode" />
     <result column="classification_parent_code" jdbcType="VARCHAR" property="classificationParentCode" />
     <result column="classification_name" jdbcType="VARCHAR" property="classificationName" />
-    <result column="classification_top" jdbcType="BIT" property="classificationTop" />
+    <result column="classification_top" jdbcType="TINYINT" property="classificationTop" />
     <result column="classification_pic_url" jdbcType="VARCHAR" property="classificationPicUrl" />
     <result column="classification_pic_name" jdbcType="VARCHAR" property="classificationPicName" />
     <result column="sort" jdbcType="TINYINT" property="sort" />
@@ -38,7 +38,7 @@
       creator, create_time, modifier, 
       modify_time)
     values (#{id,jdbcType=BIGINT}, #{classificationCode,jdbcType=VARCHAR}, #{classificationParentCode,jdbcType=VARCHAR}, 
-      #{classificationName,jdbcType=VARCHAR}, #{classificationTop,jdbcType=BIT}, #{classificationPicUrl,jdbcType=VARCHAR}, 
+      #{classificationName,jdbcType=VARCHAR}, #{classificationTop,jdbcType=TINYINT}, #{classificationPicUrl,jdbcType=VARCHAR}, 
       #{classificationPicName,jdbcType=VARCHAR}, #{sort,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
       #{modifyTime,jdbcType=TIMESTAMP})
@@ -100,7 +100,7 @@
         #{classificationName,jdbcType=VARCHAR},
       </if>
       <if test="classificationTop != null">
-        #{classificationTop,jdbcType=BIT},
+        #{classificationTop,jdbcType=TINYINT},
       </if>
       <if test="classificationPicUrl != null">
         #{classificationPicUrl,jdbcType=VARCHAR},
@@ -141,7 +141,7 @@
         classification_name = #{classificationName,jdbcType=VARCHAR},
       </if>
       <if test="classificationTop != null">
-        classification_top = #{classificationTop,jdbcType=BIT},
+        classification_top = #{classificationTop,jdbcType=TINYINT},
       </if>
       <if test="classificationPicUrl != null">
         classification_pic_url = #{classificationPicUrl,jdbcType=VARCHAR},
@@ -175,7 +175,7 @@
     set classification_code = #{classificationCode,jdbcType=VARCHAR},
       classification_parent_code = #{classificationParentCode,jdbcType=VARCHAR},
       classification_name = #{classificationName,jdbcType=VARCHAR},
-      classification_top = #{classificationTop,jdbcType=BIT},
+      classification_top = #{classificationTop,jdbcType=TINYINT},
       classification_pic_url = #{classificationPicUrl,jdbcType=VARCHAR},
       classification_pic_name = #{classificationPicName,jdbcType=VARCHAR},
       sort = #{sort,jdbcType=TINYINT},

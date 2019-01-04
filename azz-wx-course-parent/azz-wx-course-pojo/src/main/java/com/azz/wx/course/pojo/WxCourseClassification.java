@@ -37,7 +37,7 @@ public class WxCourseClassification implements Serializable {
      *
      * @mbg.generated
      */
-    private Boolean classificationTop;
+    private Byte classificationTop;
 
     /**
      * 分类图片URL
@@ -201,7 +201,7 @@ public class WxCourseClassification implements Serializable {
      *
      * @mbg.generated
      */
-    public Boolean getClassificationTop() {
+    public Byte getClassificationTop() {
         return classificationTop;
     }
 
@@ -213,7 +213,7 @@ public class WxCourseClassification implements Serializable {
      *
      * @mbg.generated
      */
-    public void setClassificationTop(Boolean classificationTop) {
+    public void setClassificationTop(Byte classificationTop) {
         this.classificationTop = classificationTop;
     }
 

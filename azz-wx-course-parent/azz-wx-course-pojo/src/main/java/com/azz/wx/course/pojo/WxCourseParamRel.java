@@ -51,14 +51,14 @@ public class WxCourseParamRel implements Serializable {
      *
      * @mbg.generated
      */
-    private Boolean paramType;
+    private Byte paramType;
 
     /**
      * 是否必选 1必选  2非必选
      *
      * @mbg.generated
      */
-    private Boolean paramChoice;
+    private Byte paramChoice;
 
     /**
      * 创建人
@@ -242,7 +242,7 @@ public class WxCourseParamRel implements Serializable {
      *
      * @mbg.generated
      */
-    public Boolean getParamType() {
+    public Byte getParamType() {
         return paramType;
     }
 
@@ -254,7 +254,7 @@ public class WxCourseParamRel implements Serializable {
      *
      * @mbg.generated
      */
-    public void setParamType(Boolean paramType) {
+    public void setParamType(Byte paramType) {
         this.paramType = paramType;
     }
 
@@ -266,7 +266,7 @@ public class WxCourseParamRel implements Serializable {
      *
      * @mbg.generated
      */
-    public Boolean getParamChoice() {
+    public Byte getParamChoice() {
         return paramChoice;
     }
 
@@ -278,7 +278,7 @@ public class WxCourseParamRel implements Serializable {
      *
      * @mbg.generated
      */
-    public void setParamChoice(Boolean paramChoice) {
+    public void setParamChoice(Byte paramChoice) {
         this.paramChoice = paramChoice;
     }
 

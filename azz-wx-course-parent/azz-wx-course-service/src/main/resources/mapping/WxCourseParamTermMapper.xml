@@ -6,8 +6,8 @@
     <result column="param_term_code" jdbcType="VARCHAR" property="paramTermCode" />
     <result column="param_code" jdbcType="VARCHAR" property="paramCode" />
     <result column="param_name" jdbcType="VARCHAR" property="paramName" />
-    <result column="param_type" jdbcType="BIT" property="paramType" />
-    <result column="param_choice" jdbcType="BIT" property="paramChoice" />
+    <result column="param_type" jdbcType="TINYINT" property="paramType" />
+    <result column="param_choice" jdbcType="TINYINT" property="paramChoice" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
@@ -33,7 +33,7 @@
       creator, create_time, modifier, 
       modify_time)
     values (#{id,jdbcType=BIGINT}, #{paramTermCode,jdbcType=VARCHAR}, #{paramCode,jdbcType=VARCHAR}, 
-      #{paramName,jdbcType=VARCHAR}, #{paramType,jdbcType=BIT}, #{paramChoice,jdbcType=BIT}, 
+      #{paramName,jdbcType=VARCHAR}, #{paramType,jdbcType=TINYINT}, #{paramChoice,jdbcType=TINYINT}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
       #{modifyTime,jdbcType=TIMESTAMP})
   </insert>
@@ -85,10 +85,10 @@
         #{paramName,jdbcType=VARCHAR},
       </if>
       <if test="paramType != null">
-        #{paramType,jdbcType=BIT},
+        #{paramType,jdbcType=TINYINT},
       </if>
       <if test="paramChoice != null">
-        #{paramChoice,jdbcType=BIT},
+        #{paramChoice,jdbcType=TINYINT},
       </if>
       <if test="creator != null">
         #{creator,jdbcType=VARCHAR},
@@ -117,10 +117,10 @@
         param_name = #{paramName,jdbcType=VARCHAR},
       </if>
       <if test="paramType != null">
-        param_type = #{paramType,jdbcType=BIT},
+        param_type = #{paramType,jdbcType=TINYINT},
       </if>
       <if test="paramChoice != null">
-        param_choice = #{paramChoice,jdbcType=BIT},
+        param_choice = #{paramChoice,jdbcType=TINYINT},
       </if>
       <if test="creator != null">
         creator = #{creator,jdbcType=VARCHAR},
@@ -142,8 +142,8 @@
     set param_term_code = #{paramTermCode,jdbcType=VARCHAR},
       param_code = #{paramCode,jdbcType=VARCHAR},
       param_name = #{paramName,jdbcType=VARCHAR},
-      param_type = #{paramType,jdbcType=BIT},
-      param_choice = #{paramChoice,jdbcType=BIT},
+      param_type = #{paramType,jdbcType=TINYINT},
+      param_choice = #{paramChoice,jdbcType=TINYINT},
       creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modifier = #{modifier,jdbcType=VARCHAR},

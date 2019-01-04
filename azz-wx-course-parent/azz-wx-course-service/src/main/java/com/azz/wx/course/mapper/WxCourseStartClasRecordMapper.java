@@ -1,7 +1,10 @@
 package com.azz.wx.course.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.azz.wx.course.pojo.WxCourseStartClasRecord;
 
+@Mapper
 public interface WxCourseStartClasRecordMapper {
     int deleteByPrimaryKey(Long id);
 

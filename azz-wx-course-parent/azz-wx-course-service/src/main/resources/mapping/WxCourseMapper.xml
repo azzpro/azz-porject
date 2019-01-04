@@ -219,4 +219,52 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="getCourseInfos" parameterType="com.azz.wx.course.pojo.bo.SearchCourseInfoParam" resultType="com.azz.wx.course.pojo.vo.CourseInfo">
+  	SELECT
+		wc.course_code AS courseCode,
+		wc.course_name AS courseName,
+		wc.course_pic_name AS coursePicName,
+		wc.course_pic_url AS coursePicUrl,
+		wc. STATUS AS status,
+		wc.create_time AS createTime,
+		t.start_class_time AS latelyStartClassTime,
+		t.location AS latelyStartClassLocation,
+		t.people_number AS peopleNumber,
+		t.hours AS hours
+	FROM
+		wx_course wc
+	LEFT JOIN (
+		SELECT
+			descStartClassRecord.course_code,
+			descStartClassRecord.start_class_time,
+			descStartClassRecord.location,
+			descStartClassRecord.people_number,
+			descStartClassRecord.hours
+		FROM
+			(
+				SELECT
+					wscr.course_code,
+					wscr.start_class_time,
+					wscr.location,
+					wscr.people_number,
+					wscr.hours
+				FROM
+					wx_course_start_class_record wscr
+				ORDER BY
+					wscr.create_time DESC
+			) descStartClassRecord
+		GROUP BY
+			descStartClassRecord.course_code
+	) t ON t.course_code = wc.course_code AND wc. STATUS != 0
+	<where>
+		<if test="status != null">
+			wc.status = #{status}
+		</if>
+		<if test="courseName != null and courseName != ''">
+			AND wc.course_name LIKE CONCAT('%', #{courseName}, '%') 
+		</if>
+	</where>
+	ORDER BY wc.create_time DESC
+  </select>
 </mapper>

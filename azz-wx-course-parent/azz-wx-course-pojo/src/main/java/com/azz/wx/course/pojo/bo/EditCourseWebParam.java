@@ -44,7 +44,7 @@ public class EditCourseWebParam {
 	private Integer isChangeCoursePic;
 
     @NotNull(message = "请上传课程主图")
-	private MultipartFile goodsModulePicFile;
+	private MultipartFile coursePicFile;
 
     @NotNull(message = "请选择课程状态")
     private Byte status;

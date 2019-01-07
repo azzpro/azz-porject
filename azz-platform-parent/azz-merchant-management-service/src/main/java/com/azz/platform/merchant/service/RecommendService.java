@@ -179,7 +179,7 @@ public class RecommendService {
 	 * @return
 	 * @author 黄智聪  2019年1月7日 下午2:52:04
 	 */
-	public JsonResult<String>  addOrRemoveModule(@RequestBody AddOrRemoveModuleParam param){
+	public JsonResult<String> addOrRemoveModule(@RequestBody AddOrRemoveModuleParam param){
 		JSR303ValidateUtils.validate(param);
 		switch (param.getAddOrRemove()) {
 			case 1: // 新增模组
@@ -229,7 +229,7 @@ public class RecommendService {
 	 * @return
 	 * @author 黄智聪  2019年1月7日 下午2:52:04
 	 */
-	public JsonResult<Pagination<RelatedModuleInfo>>  getSpecialPerformanceRelatedModuleInfos(@RequestBody SearchSpecialPerformanceRelatedModuleInfoParam param){
+	public JsonResult<Pagination<RelatedModuleInfo>> getSpecialPerformanceRelatedModuleInfos(@RequestBody SearchSpecialPerformanceRelatedModuleInfoParam param){
 		JSR303ValidateUtils.validate(param);
 		PageHelper.startPage(param.getPageNum(), param.getPageSize());
 		List<RelatedModuleInfo> infos = platformRecommendMapper.getSpecialPerformanceRelatedModuleInfos(param);
@@ -243,7 +243,7 @@ public class RecommendService {
 	 * @return
 	 * @author 黄智聪  2019年1月7日 下午2:52:04
 	 */
-	public JsonResult<Pagination<RecommentProductInfo>>  getRecommentProductInfos(@RequestBody SearchRecommendProductInfoParam param){
+	public JsonResult<Pagination<RecommentProductInfo>> getRecommentProductInfos(@RequestBody SearchRecommendProductInfoParam param){
 		JSR303ValidateUtils.validate(param);
 		PageHelper.startPage(param.getPageNum(), param.getPageSize());
 		List<RecommentProductInfo> infos = platformRecommendMapper.getRecommentProductInfos(param);

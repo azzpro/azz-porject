@@ -48,7 +48,7 @@
   	select 
     	<include refid="Base_Column_List" />
     from platform_goods_classification
-    where assortment_code = #{assortmentCode,jdbcType=VARCHAR}
+    where assortment_code = #{assortmentCode,jdbcType=VARCHAR} and status = 1
   </select>
   <insert id="insertSelective" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsClassification">
     insert into platform_goods_classification

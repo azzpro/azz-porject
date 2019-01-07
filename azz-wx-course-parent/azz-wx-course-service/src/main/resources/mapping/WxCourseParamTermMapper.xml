@@ -37,7 +37,7 @@
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
       #{modifyTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.azz.wx.course.pojo.WxCourseParamTerm">
+  <insert id="insertSelective" parameterType="com.azz.wx.course.pojo.WxCourseParamTerm" useGeneratedKeys="true" keyProperty="paramTermCode">
     insert into wx_course_param_term
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -150,4 +150,14 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="selectParamsTermByCode" resultMap="BaseResultMap" parameterType="long">
+  select <include refid="Base_Column_List"></include> from wx_course_param_term where param_code=#{code}
+  </select>
+  
+  <!-- 删除参数项 -->
+  <delete id="deleteByParamsCode" parameterType="java.lang.String">
+    delete from wx_course_param_term
+    where param_code = #{code}
+  </delete>
 </mapper>

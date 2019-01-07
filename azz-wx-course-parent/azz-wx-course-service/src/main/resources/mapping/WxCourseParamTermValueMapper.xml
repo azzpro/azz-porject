@@ -114,4 +114,16 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <delete id="deleteValue" parameterType="long[]">
+		delete from wx_course_param_term_value where param_term_code in
+		<foreach collection="array" item="arr" index="no" open="("
+			separator="," close=")">
+			#{arr}
+		</foreach>
+ </delete>
+ 
+  <select id="selectValueByCode" resultMap="BaseResultMap" parameterType="String">
+  select <include refid="Base_Column_List"></include> from wx_course_param_term_value where param_term_code = #{code}
+  </select>
 </mapper>

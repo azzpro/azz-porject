@@ -31,7 +31,7 @@
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
       #{modifyTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.azz.wx.course.pojo.WxCourseParam">
+  <insert id="insertSelective" parameterType="com.azz.wx.course.pojo.WxCourseParam" useGeneratedKeys="true" keyProperty="paramCode">
     insert into wx_course_param
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -113,5 +113,20 @@
       modifier = #{modifier,jdbcType=VARCHAR},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectParamsByCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+  select <include refid="Base_Column_List"></include> wx_course_param where params_code=#{code}
+  </select>
+  
+   <delete id="deleteByCode" parameterType="java.lang.String">
+    delete from wx_course_param
+    where params_code = #{code,jdbcType=VARCHAR}
+  </delete>
+  
+  <update id="updateAssormentIdById">
+    update wx_course_param
+    set classification_code = #{classCode}
+    where param_code = #{pCode}
   </update>
 </mapper>

@@ -1,5 +1,7 @@
 package com.azz.wx.course.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.wx.course.pojo.WxCourseParamTerm;
@@ -17,4 +19,8 @@ public interface WxCourseParamTermMapper {
     int updateByPrimaryKeySelective(WxCourseParamTerm record);
 
     int updateByPrimaryKey(WxCourseParamTerm record);
+    
+    List<WxCourseParamTerm> selectParamsTermByCode(String code);
+    
+    int deleteByParamsCode(String code);
 }

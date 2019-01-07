@@ -19,4 +19,11 @@ public interface WxCourseParamRelMapper {
     int updateByPrimaryKeySelective(WxCourseParamRel record);
 
     int updateByPrimaryKey(WxCourseParamRel record);
+    
+    /**
+     * 根据参数CODE查询是否被课程关联
+     * @param code
+     * @return
+     */
+    int selectCountByParamsCode(String code);
 }

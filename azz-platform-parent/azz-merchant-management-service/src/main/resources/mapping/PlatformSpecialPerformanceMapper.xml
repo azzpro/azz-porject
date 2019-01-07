@@ -224,4 +224,55 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="getSpecialList" parameterType="com.azz.platform.merchant.pojo.bo.SearchSpecialParam" resultType = "com.azz.platform.merchant.pojo.vo.SpecialInfo">
+  		SELECT
+			special_performance_code as specialPerformanceCode,
+			special_performance_name as specialPerformanceName,
+			special_performance_main_pic_url as specialPerformanceMainPicUrl,
+			special_performance_main_pic_name as specialPerformanceMainPicName,
+			special_performance_bg_pic_url as specialPerformanceBgPicUrl,
+			special_performance_bg_pic_name as specialPerformanceBgPicName,
+			special_performance_link as specialPerformanceLink,
+			module_number as moduleNumber,
+			product_number as productNumber,
+			interview_number as interviewNumber,
+			status as status
+		FROM
+			platform_special_performance
+			<where>
+				<if test="specialPerformanceName != null and specialPerformanceName != ''">and special_performance_name like CONCAT('%',#{specialPerformanceName},'%')</if>
+				<if test="status != null">and status = #{status}</if>
+			</where>
+		ORDER BY create_time DESC
+  </select>
+  
+  <select id="getSpecialInfo" parameterType="java.lang.String" resultType = "com.azz.platform.merchant.pojo.vo.SpecialInfo">
+  		SELECT
+  			id as id,
+			special_performance_code as specialPerformanceCode,
+			special_performance_name as specialPerformanceName,
+			special_performance_main_pic_url as specialPerformanceMainPicUrl,
+			special_performance_main_pic_name as specialPerformanceMainPicName,
+			special_performance_bg_pic_url as specialPerformanceBgPicUrl,
+			special_performance_bg_pic_name as specialPerformanceBgPicName,
+			special_performance_link as specialPerformanceLink,
+			module_number as moduleNumber,
+			product_number as productNumber,
+			interview_number as interviewNumber,
+			status as status
+		FROM
+			platform_special_performance
+		where status != 0 and
+			special_performance_code = #{code}	
+  </select>
+  
+   <select id="countSpecial" parameterType="java.lang.String" resultType = "int">
+  		SELECT
+			count(1)
+		FROM
+			platform_special_performance
+		where status != 0 and
+			special_performance_name = #{name}	
+  </select>
 </mapper>

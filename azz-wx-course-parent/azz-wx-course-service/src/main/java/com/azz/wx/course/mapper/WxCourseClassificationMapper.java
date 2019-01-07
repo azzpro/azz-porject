@@ -2,12 +2,15 @@ package com.azz.wx.course.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.azz.wx.course.pojo.WxCourseClassification;
 import com.azz.wx.course.pojo.bo.SearchClassificationListParam;
 import com.azz.wx.course.pojo.bo.SearchSameLevelClassification;
 import com.azz.wx.course.pojo.vo.ClassificationParams;
 import com.azz.wx.course.pojo.vo.CourseClassification;
 
+@Mapper
 public interface WxCourseClassificationMapper {
     int deleteByPrimaryKey(Long id);
 

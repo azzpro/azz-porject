@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.platform.merchant.mapper.PlatformSpecialPerformanceMapper">
+  <resultMap id="BaseResultMap" type="com.azz.platform.merchant.pojo.PlatformSpecialPerformance">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="special_performance_code" jdbcType="VARCHAR" property="specialPerformanceCode" />
+    <result column="special_performance_name" jdbcType="VARCHAR" property="specialPerformanceName" />
+    <result column="special_performance_main_pic_url" jdbcType="VARCHAR" property="specialPerformanceMainPicUrl" />
+    <result column="special_performance_main_pic_name" jdbcType="VARCHAR" property="specialPerformanceMainPicName" />
+    <result column="special_performance_bg_pic_url" jdbcType="VARCHAR" property="specialPerformanceBgPicUrl" />
+    <result column="special_performance_bg_pic_name" jdbcType="VARCHAR" property="specialPerformanceBgPicName" />
+    <result column="special_performance_link" jdbcType="VARCHAR" property="specialPerformanceLink" />
+    <result column="module_number" jdbcType="BIGINT" property="moduleNumber" />
+    <result column="product_number" jdbcType="BIGINT" property="productNumber" />
+    <result column="interview_number" jdbcType="BIGINT" property="interviewNumber" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, special_performance_code, special_performance_name, special_performance_main_pic_url, 
+    special_performance_main_pic_name, special_performance_bg_pic_url, special_performance_bg_pic_name, 
+    special_performance_link, module_number, product_number, interview_number, status, 
+    creator, create_time, modifier, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from platform_special_performance
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from platform_special_performance
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.platform.merchant.pojo.PlatformSpecialPerformance">
+    insert into platform_special_performance (id, special_performance_code, special_performance_name, 
+      special_performance_main_pic_url, special_performance_main_pic_name, 
+      special_performance_bg_pic_url, special_performance_bg_pic_name, 
+      special_performance_link, module_number, product_number, 
+      interview_number, status, creator, 
+      create_time, modifier, modify_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{specialPerformanceCode,jdbcType=VARCHAR}, #{specialPerformanceName,jdbcType=VARCHAR}, 
+      #{specialPerformanceMainPicUrl,jdbcType=VARCHAR}, #{specialPerformanceMainPicName,jdbcType=VARCHAR}, 
+      #{specialPerformanceBgPicUrl,jdbcType=VARCHAR}, #{specialPerformanceBgPicName,jdbcType=VARCHAR}, 
+      #{specialPerformanceLink,jdbcType=VARCHAR}, #{moduleNumber,jdbcType=BIGINT}, #{productNumber,jdbcType=BIGINT}, 
+      #{interviewNumber,jdbcType=BIGINT}, #{status,jdbcType=TINYINT}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.platform.merchant.pojo.PlatformSpecialPerformance">
+    insert into platform_special_performance
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="specialPerformanceCode != null">
+        special_performance_code,
+      </if>
+      <if test="specialPerformanceName != null">
+        special_performance_name,
+      </if>
+      <if test="specialPerformanceMainPicUrl != null">
+        special_performance_main_pic_url,
+      </if>
+      <if test="specialPerformanceMainPicName != null">
+        special_performance_main_pic_name,
+      </if>
+      <if test="specialPerformanceBgPicUrl != null">
+        special_performance_bg_pic_url,
+      </if>
+      <if test="specialPerformanceBgPicName != null">
+        special_performance_bg_pic_name,
+      </if>
+      <if test="specialPerformanceLink != null">
+        special_performance_link,
+      </if>
+      <if test="moduleNumber != null">
+        module_number,
+      </if>
+      <if test="productNumber != null">
+        product_number,
+      </if>
+      <if test="interviewNumber != null">
+        interview_number,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="specialPerformanceCode != null">
+        #{specialPerformanceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="specialPerformanceName != null">
+        #{specialPerformanceName,jdbcType=VARCHAR},
+      </if>
+      <if test="specialPerformanceMainPicUrl != null">
+        #{specialPerformanceMainPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="specialPerformanceMainPicName != null">
+        #{specialPerformanceMainPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="specialPerformanceBgPicUrl != null">
+        #{specialPerformanceBgPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="specialPerformanceBgPicName != null">
+        #{specialPerformanceBgPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="specialPerformanceLink != null">
+        #{specialPerformanceLink,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleNumber != null">
+        #{moduleNumber,jdbcType=BIGINT},
+      </if>
+      <if test="productNumber != null">
+        #{productNumber,jdbcType=BIGINT},
+      </if>
+      <if test="interviewNumber != null">
+        #{interviewNumber,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.platform.merchant.pojo.PlatformSpecialPerformance">
+    update platform_special_performance
+    <set>
+      <if test="specialPerformanceCode != null">
+        special_performance_code = #{specialPerformanceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="specialPerformanceName != null">
+        special_performance_name = #{specialPerformanceName,jdbcType=VARCHAR},
+      </if>
+      <if test="specialPerformanceMainPicUrl != null">
+        special_performance_main_pic_url = #{specialPerformanceMainPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="specialPerformanceMainPicName != null">
+        special_performance_main_pic_name = #{specialPerformanceMainPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="specialPerformanceBgPicUrl != null">
+        special_performance_bg_pic_url = #{specialPerformanceBgPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="specialPerformanceBgPicName != null">
+        special_performance_bg_pic_name = #{specialPerformanceBgPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="specialPerformanceLink != null">
+        special_performance_link = #{specialPerformanceLink,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleNumber != null">
+        module_number = #{moduleNumber,jdbcType=BIGINT},
+      </if>
+      <if test="productNumber != null">
+        product_number = #{productNumber,jdbcType=BIGINT},
+      </if>
+      <if test="interviewNumber != null">
+        interview_number = #{interviewNumber,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.platform.merchant.pojo.PlatformSpecialPerformance">
+    update platform_special_performance
+    set special_performance_code = #{specialPerformanceCode,jdbcType=VARCHAR},
+      special_performance_name = #{specialPerformanceName,jdbcType=VARCHAR},
+      special_performance_main_pic_url = #{specialPerformanceMainPicUrl,jdbcType=VARCHAR},
+      special_performance_main_pic_name = #{specialPerformanceMainPicName,jdbcType=VARCHAR},
+      special_performance_bg_pic_url = #{specialPerformanceBgPicUrl,jdbcType=VARCHAR},
+      special_performance_bg_pic_name = #{specialPerformanceBgPicName,jdbcType=VARCHAR},
+      special_performance_link = #{specialPerformanceLink,jdbcType=VARCHAR},
+      module_number = #{moduleNumber,jdbcType=BIGINT},
+      product_number = #{productNumber,jdbcType=BIGINT},
+      interview_number = #{interviewNumber,jdbcType=BIGINT},
+      status = #{status,jdbcType=TINYINT},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

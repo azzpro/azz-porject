@@ -53,7 +53,7 @@ public abstract class WxCourseConstants {
 	public enum CourseStatus {
 		INVALID(0, "无效"),
 
-		PUT_ON(1, "有效"),
+		PUT_ON(1, "上架"),
 
 		PUT_OFF(2, "下架");
 
@@ -98,7 +98,7 @@ public abstract class WxCourseConstants {
 	public enum StartClassRecordStatus {
 		INVALID(0, "无效"),
 
-		PUT_ON(1, "有效"),
+		PUT_ON(1, "上架"),
 
 		PUT_OFF(2, "下架");
 

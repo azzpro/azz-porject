@@ -22,6 +22,14 @@
     from platform_recommend
     where id = #{id,jdbcType=BIGINT}
   </select>
+  
+  <select id="selectByRecommendCode" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from platform_recommend
+    where recommend_code = #{recommendCode}
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from platform_recommend
     where id = #{id,jdbcType=BIGINT}
@@ -139,4 +147,203 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <resultMap id="recommendInfos" type="com.azz.platform.merchant.pojo.vo.RecommendInfo">
+    <result column="recommend_code" jdbcType="VARCHAR" property="recommendCode" />
+    <result column="recommend_name" jdbcType="VARCHAR" property="recommendName" />
+    <collection property="moduleInfos" ofType="com.azz.platform.merchant.pojo.vo.ModuleInfo">
+	    <result column="moduleCode" jdbcType="VARCHAR" property="moduleCode" />
+	    <result column="modulePicName" jdbcType="VARCHAR" property="modulePicName" />
+	    <result column="modulePicUrl" jdbcType="VARCHAR" property="modulePicUrl" />
+	    <result column="moduleName" jdbcType="VARCHAR" property="moduleName" />
+	    <result column="moduleStatus" jdbcType="TINYINT" property="moduleStatus" />
+	    <result column="moduleMinPrice" jdbcType="DECIMAL" property="moduleMinPrice" />
+    	<result column="moduleMinDeliveryDate" jdbcType="INTEGER" property="moduleMinDeliveryDate" />
+    </collection>
+  </resultMap>
+  
+  <select id="getRecommendInfos" parameterType="com.azz.platform.merchant.pojo.bo.SearchRecommendInfoParam" resultMap="recommendInfos">
+  	SELECT
+		pr.recommend_code AS recommendCode,
+		pr.recommend_name AS recommendName,
+		mgm.module_code AS moduleCode,
+		mgm.module_pic_name AS modulePicName,
+		mgm.module_pic_url AS modulePicUrl,
+		mgm.module_name AS moduleName,
+		mgm.module_status AS moduleStatus,
+		t1.minPrice AS moduleMinPrice,
+		t2.minDeliveryDate AS moduleMinDeliveryDate
+	FROM
+		platform_recommend pr
+	JOIN platform_special_performance psp ON psp.special_performance_code = pr.special_performance_code
+	LEFT JOIN platform_recommend_module_rel prmr ON prmr.recommend_code = pr.recommend_code
+	LEFT JOIN merchant_goods_module mgm ON mgm.module_code = prmr.module_code
+	LEFT JOIN (
+		SELECT
+			mgp.module_id,
+			MIN(mgpp.price) AS minPrice
+		FROM
+			merchant_goods_product mgp
+		JOIN merchant_goods_product_price mgpp ON mgp.id = mgpp.product_id
+		JOIN merchant_goods_module mgm ON mgp.module_id = mgm.id
+		JOIN platform_recommend_module_product_rel prmpr ON prmpr.product_code = mgp.product_code
+		WHERE
+			mgp.product_status != 0
+		AND mgm.module_status != 0
+		GROUP BY
+			mgp.module_id
+	) t1 ON t1.module_id = mgm.id
+	LEFT JOIN (
+		SELECT
+			mgp.module_id,
+			MIN(mgpp.delivery_date) AS minDeliveryDate
+		FROM
+			merchant_goods_product mgp
+		JOIN merchant_goods_product_price mgpp ON mgp.id = mgpp.product_id
+		JOIN merchant_goods_module mgm ON mgp.module_id = mgm.id
+		JOIN platform_recommend_module_product_rel prmpr ON prmpr.product_code = mgp.product_code
+		WHERE
+			mgp.product_status != 0
+		AND mgm.module_status != 0
+		GROUP BY
+			mgp.module_id
+	) t2 ON t2.module_id = mgm.id
+	<where>
+			pr.`status` != 0
+		AND mgm.module_status != 0
+		AND psp.special_performance_code = #{specialPerformanceCode}
+		<if test="recommendName != null and recommendName !='' ">
+			and pr.recommend_name LIKE CONCAT('%', #{recommendName}, '%') 
+		</if>
+	</where>
+	ORDER BY
+		pr.create_time DESC
+  </select>
+  
+  <select id="getRelatedModuleInfos" parameterType="com.azz.platform.merchant.pojo.bo.SearchRelatedModuleInfoParam" resultType="com.azz.platform.merchant.pojo.vo.ModuleInfo">
+  	SELECT
+		mgm.module_code AS moduleCode,
+		mgm.module_name AS moduleName,
+		mgm.module_status AS moduleStatus,
+		m.merchant_name AS merchantName,
+		pgc.assortment_name AS classificationName,
+		CASE
+	WHEN prmr.module_code IS NULL THEN
+		0
+	ELSE
+		1
+	END AS relatedStatus
+	FROM
+		merchant_goods_module mgm
+	JOIN merchant m ON mgm.merchant_id = m.id
+	JOIN platform_goods_classification pgc ON mgm.classification_id = pgc.id
+	LEFT JOIN platform_recommend_module_rel prmr ON prmr.module_code = mgm.module_code
+	<where>
+			mgm.module_status != 0
+		<if test="searchInput != null and searchInput !='' ">
+			AND (
+				mgm.module_code LIKE CONCAT('%', #{searchInput}, '%') 
+				OR mgm.module_name LIKE CONCAT('%', #{searchInput}, '%') 
+				OR m.merchant_name LIKE CONCAT('%', #{searchInput}, '%') 
+			)
+		</if>	
+		AND mgm.module_code NOT IN (
+			SELECT
+				module_code
+			FROM
+				platform_recommend_module_rel prmr
+			WHERE
+				prmr.recommend_code != #{recommendCode}
+		)
+	</where>
+	ORDER BY mgm.create_time DESC
+  </select>
+  
+  <select id="getSpecialPerformanceRelatedModuleInfos" parameterType="com.azz.platform.merchant.pojo.bo.SearchSpecialPerformanceRelatedModuleInfoParam" resultType="com.azz.platform.merchant.pojo.vo.RelatedModuleInfo">
+  	SELECT
+		mgm.module_code as moduleCode,
+		mgm.module_name AS moduleName,
+		mgm.module_status AS moduleStatus,
+		pr.recommend_code as recommendCode,
+		pr.recommend_name AS recommendName,
+		m.merchant_name AS merchantName,
+		prmr.product_number AS productNumber,
+		prmr.create_time AS relatedTime
+	FROM
+		merchant_goods_module mgm
+	JOIN platform_recommend_module_rel prmr ON mgm.module_code = prmr.module_code
+	JOIN platform_recommend pr ON pr.recommend_code = prmr.recommend_code
+	JOIN merchant m ON m.id = mgm.merchant_id
+	<where> 
+		pr.`status` != 0
+		<if test="searchInput != null and searchInput !='' ">
+			AND (
+				mgm.module_name LIKE CONCAT('%', #{searchInput}, '%') 
+				OR pr.recommend_name LIKE CONCAT('%', #{searchInput}, '%') 
+			)
+		</if>	
+	</where>
+  	ORDER BY prmr.create_time DESC
+  </select>
+  
+  <select id="getRecommentProductInfos" parameterType="com.azz.platform.merchant.pojo.bo.SearchRecommendProductInfoParam" resultType="com.azz.platform.merchant.pojo.vo.RecommentProductInfo">
+	SELECT
+		t1.product_code as productCode,
+		t1.product_status as productStatus,
+		t1.relatedStatus as relatedStatus,
+		t1.paramValues as paramValues,
+	  	t2.delivery_date as minDeliveryDate,
+		t2.price as minPrice
+	FROM
+		(
+			SELECT
+				mgp.id as product_id,
+				mgp.product_code,
+				mgp.product_status,
+				mgp.create_time,
+				GROUP_CONCAT(mgpp.params_value) AS paramValues,
+				CASE
+			WHEN prmpr.product_code IS NULL THEN
+				0
+			ELSE
+				1
+			END AS relatedStatus
+			FROM
+				merchant_goods_product mgp
+			JOIN merchant_goods_module mgm ON mgm.id = mgp.module_id
+			JOIN merchant_goods_product_params mgpp ON mgpp.product_id = mgp.id
+			LEFT JOIN platform_recommend_module_product_rel prmpr ON prmpr.product_code = mgp.product_code
+			AND mgm.module_code = prmpr.module_code
+			WHERE
+				mgm.module_code = #{moduleCode}
+			GROUP BY
+				mgp.product_code
+		) t1
+	JOIN (
+		SELECT
+			t.product_id,
+			t.price,
+			t.delivery_date
+		FROM
+			(
+				SELECT
+					mgpp.product_id,
+					mgpp.price,
+					mgpp.delivery_date
+				FROM
+					merchant_goods_product_price mgpp
+				ORDER BY
+					mgpp.price ASC
+			) t
+		GROUP BY
+			t.product_id
+	) t2 ON t2.product_id = t1.product_id
+	<where>
+		<if test="productCode != null and productCode !='' ">
+			t1.product_code like CONCAT('%', #{productCode}, '%') 
+		</if>	
+	</where> 
+	ORDER BY t1.create_time desc
+  </select>
+  
 </mapper>

@@ -45,7 +45,7 @@ public interface CourseService {
 	 * @return
 	 * @author 黄智聪 2019年1月4日 上午11:33:03
 	 */
-	@RequestMapping(value = "/azz/api/platform/course//azz/api/platform/course/getCourseInfos", method = RequestMethod.POST)
+	@RequestMapping(value = "/azz/api/platform/course/getCourseInfos", method = RequestMethod.POST)
 	public JsonResult<Pagination<CourseInfo>> getCourseInfos(@RequestBody SearchCourseInfoParam param);
 
 	/**

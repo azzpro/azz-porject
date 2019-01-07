@@ -22,6 +22,13 @@
     delete from platform_recommend_module_rel
     where id = #{id,jdbcType=BIGINT}
   </delete>
+  
+  <delete id="deleteRecommendModule">
+    delete from platform_recommend_module_rel
+    where module_code = #{moduleCode}
+    and recommend_code = #{recommendCode}
+  </delete>
+  
   <insert id="insert" parameterType="com.azz.platform.merchant.pojo.PlatformRecommendModuleRel">
     insert into platform_recommend_module_rel (id, recommend_code, module_code, 
       product_number, creator, create_time
@@ -103,4 +110,26 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="countRelatedModule" parameterType="string" resultType="int">
+  	SELECT
+		count(1)
+	FROM 
+		platform_recommend_module_rel
+	where
+		module_code = #{moduleCode}
+  </select>
+  
+  
+  <select id="getProductCodesByModuleCode" parameterType="string" resultType="string">
+  	SELECT
+		mgp.product_code
+	FROM
+		merchant_goods_module mgm
+	JOIN merchant_goods_product mgp ON mgm.id = mgp.module_id
+	WHERE
+		mgm.module_status != 0
+	AND mgp.product_status != 0
+	AND module_code = #{moduleCode}
+  </select>
 </mapper>

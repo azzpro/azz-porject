@@ -31,6 +31,14 @@
     from platform_special_performance
     where id = #{id,jdbcType=BIGINT}
   </select>
+  
+  <select id="selectBySpecialPerformanceCode" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from platform_special_performance
+    where special_performance_code = #{specialPerformanceCode}
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from platform_special_performance
     where id = #{id,jdbcType=BIGINT}

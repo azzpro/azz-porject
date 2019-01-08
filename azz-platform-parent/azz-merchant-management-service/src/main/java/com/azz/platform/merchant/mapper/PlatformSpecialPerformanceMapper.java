@@ -17,6 +17,8 @@ public interface PlatformSpecialPerformanceMapper {
     int insertSelective(PlatformSpecialPerformance record);
 
     PlatformSpecialPerformance selectByPrimaryKey(Long id);
+    
+    PlatformSpecialPerformance selectBySpecialPerformanceCode(String specialPerformanceCode);
 
     int updateByPrimaryKeySelective(PlatformSpecialPerformance record);
 

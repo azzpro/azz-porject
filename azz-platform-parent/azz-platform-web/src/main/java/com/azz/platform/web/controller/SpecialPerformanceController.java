@@ -10,7 +10,6 @@ package com.azz.platform.web.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -52,7 +51,7 @@ public class SpecialPerformanceController {
 	 * @author 黄智聪  2019年1月7日 上午11:27:04
 	 */
 	@RequestMapping("/getRecommendInfos")
-	public JsonResult<List<RecommendInfo>> getRecommendInfos(@RequestBody SearchRecommendInfoParam param){
+	public JsonResult<List<RecommendInfo>> getRecommendInfos(SearchRecommendInfoParam param){
 		return specialPerformanceService.getRecommendInfos(param);
 	}
 	
@@ -64,7 +63,7 @@ public class SpecialPerformanceController {
 	 * @author 黄智聪  2019年1月7日 上午11:56:09
 	 */
 	@RequestMapping("/addRecommend")
-	public JsonResult<String> addRecommend(@RequestBody AddRecommendParam param){
+	public JsonResult<String> addRecommend(AddRecommendParam param){
 		param.setCreator(WebUtils.getLoginUser().getUserInfo().getUserCode());
 		return specialPerformanceService.addRecommend(param);
 	}
@@ -77,7 +76,7 @@ public class SpecialPerformanceController {
 	 * @author 黄智聪  2019年1月7日 上午11:56:09
 	 */
 	@RequestMapping("/editRecommend")
-	public JsonResult<String> editRecommend(@RequestBody EditRecommendParam param){
+	public JsonResult<String> editRecommend(EditRecommendParam param){
 		param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
 		return specialPerformanceService.editRecommend(param);
 	}
@@ -90,7 +89,7 @@ public class SpecialPerformanceController {
 	 * @author 黄智聪  2019年1月7日 下午1:08:46
 	 */
 	@RequestMapping("/putOnOrPutOffRecommendParam")
-	public JsonResult<String> putOnOrPutOffRecommendParam(@RequestBody PutOnOrPutOffRecommendParam param){
+	public JsonResult<String> putOnOrPutOffRecommendParam(PutOnOrPutOffRecommendParam param){
 		param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
 		return specialPerformanceService.putOnOrPutOffRecommendParam(param);
 	}
@@ -103,7 +102,7 @@ public class SpecialPerformanceController {
 	 * @author 黄智聪  2019年1月7日 下午2:38:35
 	 */
 	@RequestMapping("/getRelatedModuleInfos")
-	public JsonResult<Pagination<ModuleInfo>> getRelatedModuleInfos(@RequestBody SearchRelatedModuleInfoParam param){
+	public JsonResult<Pagination<ModuleInfo>> getRelatedModuleInfos(SearchRelatedModuleInfoParam param){
 		return specialPerformanceService.getRelatedModuleInfos(param);
 	}
 	
@@ -115,7 +114,7 @@ public class SpecialPerformanceController {
 	 * @author 黄智聪  2019年1月7日 下午2:52:04
 	 */
 	@RequestMapping("/addOrRemoveModule")
-	public JsonResult<String> addOrRemoveModule(@RequestBody AddOrRemoveModuleParam param){
+	public JsonResult<String> addOrRemoveModule(AddOrRemoveModuleParam param){
 		param.setCreator(WebUtils.getLoginUser().getUserInfo().getUserCode());
 		return specialPerformanceService.addOrRemoveModule(param);
 	}
@@ -128,7 +127,7 @@ public class SpecialPerformanceController {
 	 * @author 黄智聪  2019年1月7日 下午2:52:04
 	 */
 	@RequestMapping("/getSpecialPerformanceRelatedModuleInfos")
-	public JsonResult<Pagination<RelatedModuleInfo>> getSpecialPerformanceRelatedModuleInfos(@RequestBody SearchSpecialPerformanceRelatedModuleInfoParam param){
+	public JsonResult<Pagination<RelatedModuleInfo>> getSpecialPerformanceRelatedModuleInfos(SearchSpecialPerformanceRelatedModuleInfoParam param){
 		return specialPerformanceService.getSpecialPerformanceRelatedModuleInfos(param);
 	}
 	
@@ -140,7 +139,7 @@ public class SpecialPerformanceController {
 	 * @author 黄智聪  2019年1月7日 下午2:52:04
 	 */
 	@RequestMapping("/getRecommentProductInfos")
-	public JsonResult<Pagination<RecommentProductInfo>> getRecommentProductInfos(@RequestBody SearchRecommendProductInfoParam param){
+	public JsonResult<Pagination<RecommentProductInfo>> getRecommentProductInfos(SearchRecommendProductInfoParam param){
 		return specialPerformanceService.getRecommentProductInfos(param);
 	}
 	
@@ -152,7 +151,7 @@ public class SpecialPerformanceController {
 	 * @author 黄智聪  2019年1月7日 下午2:52:04
 	 */
 	@RequestMapping("/addOrRemoveProduct")
-	public JsonResult<String>  addOrRemoveProduct(@RequestBody AddOrRemoveProductParam param){
+	public JsonResult<String>  addOrRemoveProduct(AddOrRemoveProductParam param){
 		param.setCreator(WebUtils.getLoginUser().getUserInfo().getUserCode());
 		return specialPerformanceService.addOrRemoveProduct(param);
 	}

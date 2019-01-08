@@ -24,9 +24,11 @@ import com.azz.exception.JSR303ValidationException;
 import com.azz.platform.merchant.mapper.PlatformRecommendMapper;
 import com.azz.platform.merchant.mapper.PlatformRecommendModuleProductRelMapper;
 import com.azz.platform.merchant.mapper.PlatformRecommendModuleRelMapper;
+import com.azz.platform.merchant.mapper.PlatformSpecialPerformanceMapper;
 import com.azz.platform.merchant.pojo.PlatformRecommend;
 import com.azz.platform.merchant.pojo.PlatformRecommendModuleProductRel;
 import com.azz.platform.merchant.pojo.PlatformRecommendModuleRel;
+import com.azz.platform.merchant.pojo.PlatformSpecialPerformance;
 import com.azz.platform.merchant.pojo.bo.AddOrRemoveModuleParam;
 import com.azz.platform.merchant.pojo.bo.AddOrRemoveProductParam;
 import com.azz.platform.merchant.pojo.bo.AddRecommendParam;
@@ -51,6 +53,9 @@ import com.github.pagehelper.PageHelper;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class RecommendService {
+	
+	@Autowired
+	private PlatformSpecialPerformanceMapper platformSpecialPerformanceMapper;
 	
 	@Autowired
 	private PlatformRecommendMapper platformRecommendMapper;
@@ -83,7 +88,12 @@ public class RecommendService {
 	 */
 	public JsonResult<String> addRecommend(@RequestBody AddRecommendParam param){
 		JSR303ValidateUtils.validate(param);
-		String recommendCode = System.currentTimeMillis() + "";
+		PlatformSpecialPerformance sp = platformSpecialPerformanceMapper.selectBySpecialPerformanceCode(param.getSpecialPerformanceCode());
+		if(sp == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "专场不存在");
+		}
+		
+		String recommendCode = System.currentTimeMillis() + "";// TODO
 		Byte status = param.getStatus();
 		boolean exist = CourseStatus.checkStatusExist(status);
 		if(!exist) {

@@ -210,7 +210,6 @@
 	) t2 ON t2.module_id = mgm.id
 	<where>
 			pr.`status` != 0
-		AND mgm.module_status != 0
 		AND psp.special_performance_code = #{specialPerformanceCode}
 		<if test="recommendName != null and recommendName !='' ">
 			and pr.recommend_name LIKE CONCAT('%', #{recommendName}, '%') 

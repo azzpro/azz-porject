@@ -7,11 +7,12 @@
  
 package com.azz.platform.merchant.pojo.bo;
 
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
-import lombok.AllArgsConstructor;
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * <P>TODO</P>
@@ -19,20 +20,18 @@ import lombok.NoArgsConstructor;
  * @author 彭斌  2019年1月7日 下午2:44:39
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class AddSpecialParam {
+public class AddSpecialWebParam {
     
     @NotBlank(message = "专场名称不允许为空")
     private String specialName;
     
     private String creator;
     
-    // 专场主图
-    private SpecialPic mainPic;
+    @NotNull(message = "请上传主图")
+    private MultipartFile mainFile;
     
-    // 专场背景图
-    private SpecialPic bgPic;
+    @NotNull(message = "请上传专场背景图")
+    private MultipartFile bgFile;
     
 }
 

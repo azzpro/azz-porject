@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2019年1月7日 下午2:44:39
+ * Create on 2019年1月8日 下午2:00:38
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
@@ -8,31 +8,37 @@
 package com.azz.platform.merchant.pojo.bo;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.web.multipart.MultipartFile;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * <P>TODO</P>
  * @version 1.0
- * @author 彭斌  2019年1月7日 下午2:44:39
+ * @author 彭斌  2019年1月8日 下午2:00:38
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class AddSpecialParam {
+public class EditSpecialWebParam {
     
     @NotBlank(message = "专场名称不允许为空")
     private String specialName;
     
-    private String creator;
+    private String specialCode;
     
-    // 专场主图
-    private SpecialPic mainPic;
+    private String modifier;
     
-    // 专场背景图
-    private SpecialPic bgPic;
+    /**
+     * 是否修改过主图 0 未修改 1修改过
+     */
+    private Integer isEditMainPic;
     
+    /**
+     * 是否修改过主图 0 未修改 1修改过
+     */
+    private Integer isEditBgPic;
+    
+    private MultipartFile mainFile;
+    
+    private MultipartFile bgFile;
 }
 

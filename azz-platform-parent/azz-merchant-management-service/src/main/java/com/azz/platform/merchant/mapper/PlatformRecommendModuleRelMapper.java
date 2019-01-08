@@ -23,6 +23,15 @@ public interface PlatformRecommendModuleRelMapper {
     
     /**
      * 
+     * <p>模组是否存在</p>
+     * @param moduleCode
+     * @return
+     * @author 黄智聪  2019年1月8日 上午11:52:33
+     */
+    int existModule(String moduleCode);
+    
+    /**
+     * 
      * <p>删除推荐活动所关联的模组</p>
      * @param moduleCode
      * @param recommendCode
@@ -48,4 +57,15 @@ public interface PlatformRecommendModuleRelMapper {
      * @author 黄智聪  2019年1月7日 下午3:10:55
      */
     List<String> getProductCodesByModuleCode(String moduleCode);
+
+    /**
+     * 
+     * <p>修改产品数量</p>
+     * @param moduleCode
+     * @param recommendCode
+     * @param number
+     * @return
+     * @author 黄智聪  2019年1月8日 下午1:43:26
+     */
+	int updateProductNumber(@Param("moduleCode")String moduleCode, @Param("number")Integer number);
 }

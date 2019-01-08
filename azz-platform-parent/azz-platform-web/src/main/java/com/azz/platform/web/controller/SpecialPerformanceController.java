@@ -88,10 +88,10 @@ public class SpecialPerformanceController {
 	 * @return
 	 * @author 黄智聪  2019年1月7日 下午1:08:46
 	 */
-	@RequestMapping("/putOnOrPutOffRecommendParam")
-	public JsonResult<String> putOnOrPutOffRecommendParam(PutOnOrPutOffRecommendParam param){
+	@RequestMapping("/putOnOrPutOffRecommend")
+	public JsonResult<String> putOnOrPutOffRecommend(PutOnOrPutOffRecommendParam param){
 		param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
-		return specialPerformanceService.putOnOrPutOffRecommendParam(param);
+		return specialPerformanceService.putOnOrPutOffRecommend(param);
 	}
 	
 	/**

@@ -147,7 +147,7 @@ public class RecommendService {
 	 * @return
 	 * @author 黄智聪  2019年1月7日 下午1:08:46
 	 */
-	public JsonResult<String> putOnOrPutOffRecommendParam(@RequestBody PutOnOrPutOffRecommendParam param){
+	public JsonResult<String> putOnOrPutOffRecommend(@RequestBody PutOnOrPutOffRecommendParam param){
 		JSR303ValidateUtils.validate(param);
 		PlatformRecommend recommend = platformRecommendMapper.selectByRecommendCode(param.getRecommendCode());
 		if(recommend == null) {
@@ -193,6 +193,10 @@ public class RecommendService {
 		JSR303ValidateUtils.validate(param);
 		switch (param.getAddOrRemove()) {
 			case 1: // 新增模组
+				if(platformRecommendModuleRelMapper.existModule(param.getModuleCode()) == 0) {
+					throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "所选模组不存在");
+				}
+				
 				// 计算该模组已被关联的数量
 				int count = platformRecommendModuleRelMapper.countRelatedModule(param.getModuleCode());
 				if(count > 0) {// 如果该模组已被其他推荐活动关联，啥也不做
@@ -208,18 +212,21 @@ public class RecommendService {
 						.productNumber(productCodes.size())
 						.build();
 				platformRecommendModuleRelMapper.insertSelective(record);
-				// 批量插入该模组下所有产品
-				List<PlatformRecommendModuleProductRel> records = new ArrayList<>();
-				for (String productCode : productCodes) {
-					PlatformRecommendModuleProductRel moduleProductRelRecord = PlatformRecommendModuleProductRel.builder()
-							.createTime(new Date())
-							.creator(param.getCreator())
-							.moduleCode(param.getModuleCode())
-							.productCode(productCode)
-							.build();
-					records.add(moduleProductRelRecord);
+				
+				if(productCodes.size() > 0) { // 该模组下存在产品
+					// 批量插入该模组下所有产品
+					List<PlatformRecommendModuleProductRel> records = new ArrayList<>();
+					for (String productCode : productCodes) {
+						PlatformRecommendModuleProductRel moduleProductRelRecord = PlatformRecommendModuleProductRel.builder()
+								.createTime(new Date())
+								.creator(param.getCreator())
+								.moduleCode(param.getModuleCode())
+								.productCode(productCode)
+								.build();
+						records.add(moduleProductRelRecord);
+					}
+					platformRecommendModuleProductRelMapper.batchInsert(records);	
 				}
-				platformRecommendModuleProductRelMapper.batchInsert(records);	
 				break;
 			case 2: //　移除模组
 				platformRecommendModuleRelMapper.deleteRecommendModule(param.getModuleCode(), param.getRecommendCode());
@@ -282,10 +289,16 @@ public class RecommendService {
 						.moduleCode(param.getModuleCode())
 						.productCode(param.getProductCode())
 						.build();
-				platformRecommendModuleProductRelMapper.insertSelective(record);		
+				platformRecommendModuleProductRelMapper.insertSelective(record);	
+				// 产品数量+1
+				platformRecommendModuleRelMapper.updateProductNumber(param.getModuleCode(), 1);
 				break;
-			case 2: //　移除产品
-				platformRecommendModuleProductRelMapper.deleteByModuleCodeAndProductCode(param.getModuleCode(), param.getProductCode());
+			case 2: //　移除产品 
+				int rows = platformRecommendModuleProductRelMapper.deleteByModuleCodeAndProductCode(param.getModuleCode(), param.getProductCode());
+				if(rows > 0) {// 如果有更新才产品数量才减1
+					// 产品数量-1
+					platformRecommendModuleRelMapper.updateProductNumber(param.getModuleCode(), -1);
+				}
 				break;
 			default:
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "操作不存在");

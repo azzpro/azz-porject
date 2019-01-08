@@ -111,6 +111,16 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
+  <select id="existModule" parameterType="string" resultType="int">
+  	SELECT
+		count(1)
+	FROM 
+		merchant_goods_module
+	where
+		module_code = #{moduleCode}
+	and module_status != 0
+  </select>
+  
   <select id="countRelatedModule" parameterType="string" resultType="int">
   	SELECT
 		count(1)
@@ -132,4 +142,13 @@
 	AND mgp.product_status != 0
 	AND module_code = #{moduleCode}
   </select>
+  
+  <update id="updateProductNumber">
+    update 
+    	platform_recommend_module_rel
+    set 
+      product_number = product_number + #{number}
+    where 
+    	module_code = #{moduleCode}
+  </update>
 </mapper>

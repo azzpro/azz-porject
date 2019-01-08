@@ -112,7 +112,7 @@
     and product_code = #{productCode}
   </delete>
   
-  <select id="countProduct">
+  <select id="countProduct" resultType="int" parameterType="string">
   	select count(1) from platform_recommend_module_product_rel where product_code = #{productCode}
   </select>
   

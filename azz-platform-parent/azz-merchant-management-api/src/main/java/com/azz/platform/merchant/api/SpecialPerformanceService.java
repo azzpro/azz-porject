@@ -74,8 +74,8 @@ public interface SpecialPerformanceService {
 	 * @return
 	 * @author 黄智聪  2019年1月7日 下午1:08:46
 	 */
-	@RequestMapping("/azz/api/platform/specialPerformance/putOnOrPutOffRecommendParam")
-	public JsonResult<String> putOnOrPutOffRecommendParam(@RequestBody PutOnOrPutOffRecommendParam param);
+	@RequestMapping("/azz/api/platform/specialPerformance/putOnOrPutOffRecommend")
+	public JsonResult<String> putOnOrPutOffRecommend(@RequestBody PutOnOrPutOffRecommendParam param);
 	
 	/**
 	 * 

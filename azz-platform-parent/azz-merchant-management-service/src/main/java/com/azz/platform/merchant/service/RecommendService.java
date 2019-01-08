@@ -92,7 +92,7 @@ public class RecommendService {
 		if(sp == null) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "专场不存在");
 		}
-		String recommendCode = System.currentTimeMillis() + "";// TODO
+		String recommendCode = "R" + System.currentTimeMillis();
 		Byte status = param.getStatus();
 		boolean exist = CourseStatus.checkStatusExist(status);
 		if(!exist) {

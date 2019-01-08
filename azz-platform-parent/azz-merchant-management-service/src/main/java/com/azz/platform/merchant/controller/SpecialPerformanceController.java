@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
@@ -19,17 +20,23 @@ import com.azz.core.common.page.Pagination;
 import com.azz.platform.merchant.pojo.bo.AddOrRemoveModuleParam;
 import com.azz.platform.merchant.pojo.bo.AddOrRemoveProductParam;
 import com.azz.platform.merchant.pojo.bo.AddRecommendParam;
+import com.azz.platform.merchant.pojo.bo.AddSpecialParam;
+import com.azz.platform.merchant.pojo.bo.ChangeSpecialStatus;
 import com.azz.platform.merchant.pojo.bo.EditRecommendParam;
+import com.azz.platform.merchant.pojo.bo.EditSpecialParam;
 import com.azz.platform.merchant.pojo.bo.PutOnOrPutOffRecommendParam;
 import com.azz.platform.merchant.pojo.bo.SearchRecommendInfoParam;
 import com.azz.platform.merchant.pojo.bo.SearchRecommendProductInfoParam;
 import com.azz.platform.merchant.pojo.bo.SearchRelatedModuleInfoParam;
+import com.azz.platform.merchant.pojo.bo.SearchSpecialParam;
 import com.azz.platform.merchant.pojo.bo.SearchSpecialPerformanceRelatedModuleInfoParam;
 import com.azz.platform.merchant.pojo.vo.ModuleInfo;
 import com.azz.platform.merchant.pojo.vo.RecommendInfo;
 import com.azz.platform.merchant.pojo.vo.RecommentProductInfo;
 import com.azz.platform.merchant.pojo.vo.RelatedModuleInfo;
+import com.azz.platform.merchant.pojo.vo.SpecialInfo;
 import com.azz.platform.merchant.service.RecommendService;
+import com.azz.platform.merchant.service.SpecialService;
 
 /**
  * <P>专场活动控制器</P>
@@ -42,6 +49,10 @@ public class SpecialPerformanceController {
 	
 	@Autowired
 	RecommendService recommendService;
+	
+	@Autowired
+	SpecialService specialService;
+    
 	
 	/**
 	 * 
@@ -151,5 +162,59 @@ public class SpecialPerformanceController {
 		return recommendService.addOrRemoveProduct(param);
 	}
 
+	/**
+	 * <p>查询专场列表</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2019年1月8日 上午11:19:29
+	 */
+	@RequestMapping("/searchSpecialList")
+	public JsonResult<Pagination<SpecialInfo>> searchSpecialList(@RequestBody SearchSpecialParam param){
+	    return specialService.searchSpecialList(param);
+	}
+	
+	/**
+	 * <p>获取专场详情</p>
+	 * @param code
+	 * @return
+	 * @author 彭斌  2019年1月8日 上午11:21:20
+	 */
+	@RequestMapping("/specialInfo")
+	public JsonResult<SpecialInfo> specialInfo(@RequestParam("code") String code){
+	    return specialService.specialInfo(code);
+	}
+
+	/**
+	 * <p>添加专场信息</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2019年1月8日 上午11:24:05
+	 */
+	@RequestMapping("/addSpecial")
+	public JsonResult<String> addSpecial(@RequestBody AddSpecialParam param){
+	    return specialService.addSpecial(param);
+	}
+	
+	/**
+	 * <p>编辑专场信息</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2019年1月8日 上午11:24:54
+	 */
+	@RequestMapping("/editSpecial")
+	public JsonResult<String> editSpecial(@RequestBody EditSpecialParam param){
+	    return specialService.editSpecial(param);
+	}
+	
+	/**
+	 * <p>上架下架</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2019年1月8日 上午11:25:46
+	 */
+	@RequestMapping("/changeStatus")
+	public JsonResult<String> changeStatus(@RequestBody ChangeSpecialStatus param){
+	    return specialService.changeStatus(param);
+	}
 }
 

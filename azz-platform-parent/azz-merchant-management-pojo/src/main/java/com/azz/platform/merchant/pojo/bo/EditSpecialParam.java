@@ -9,7 +9,9 @@ package com.azz.platform.merchant.pojo.bo;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * <P>TODO</P>
@@ -17,6 +19,8 @@ import lombok.Data;
  * @author 彭斌  2019年1月7日 下午4:35:11
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class EditSpecialParam {
     @NotBlank(message = "专场名称不允许为空")
     private String specialName;

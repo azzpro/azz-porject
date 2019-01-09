@@ -23,6 +23,8 @@ public class RecommendInfo {
 	
 	private String recommendName;
 	
+	private Byte status;
+	
 	private List<ModuleInfo> moduleInfos;
 
 }

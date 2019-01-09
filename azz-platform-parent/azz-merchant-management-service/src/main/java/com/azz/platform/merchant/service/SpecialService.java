@@ -73,7 +73,7 @@ public class SpecialService {
      */
     public JsonResult<SpecialInfo> specialInfo(@RequestParam("code") String code){
         // 产品数量
-        int productNumber = platformSpecialPerformanceMapper.getSumProductNumber(code);
+        Integer productNumber = platformSpecialPerformanceMapper.getSumProductNumber(code);
         // 产品数量
         int moduleNumber = platformSpecialPerformanceMapper.getSumModuleNumber(code);
         // 详情

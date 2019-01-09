@@ -286,9 +286,9 @@
 			special_performance_name = #{name}	
   </select>
   
-  <select id="getSumProductNumber" parameterType="java.lang.String" resultType = "int">
+  <select id="getSumProductNumber" parameterType="java.lang.String" resultType = "Integer">
   	SELECT 
-  		SUM(product_number) 
+  		IFNULL( SUM(product_number),0)
   	FROM platform_recommend pr 
 	LEFT JOIN platform_recommend_module_rel prmr ON pr.recommend_code = prmr.recommend_code
 	WHERE pr.special_performance_code = #{code}	

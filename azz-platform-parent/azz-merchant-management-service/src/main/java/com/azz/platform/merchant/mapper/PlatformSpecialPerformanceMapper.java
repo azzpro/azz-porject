@@ -30,7 +30,7 @@ public interface PlatformSpecialPerformanceMapper {
     
     int countSpecial(String name);
     
-    int getSumProductNumber(String code);
+    Integer getSumProductNumber(String code);
     
     int getSumModuleNumber(String code);
 }

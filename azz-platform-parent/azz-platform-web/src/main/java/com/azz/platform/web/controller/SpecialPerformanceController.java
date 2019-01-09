@@ -235,7 +235,7 @@ public class SpecialPerformanceController {
 	        MultipartFile mainFile = param.getMainFile();
 	        mainPic = new SpecialPic(mainFile.getOriginalFilename(), mainFile.getSize(), Base64.encode(mainFile.getBytes()));
 	    }
-	    if(1 == param.getIsEditMainPic()) {
+	    if(1 == param.getIsEditBgPic()) {
 	        MultipartFile bgFile = param.getBgFile();
 	        bgPic = new SpecialPic(bgFile.getOriginalFilename(), bgFile.getSize(), Base64.encode(bgFile.getBytes()));
 	    }

@@ -72,7 +72,19 @@ public class SpecialService {
      * @author 彭斌  2019年1月7日 下午2:29:00
      */
     public JsonResult<SpecialInfo> specialInfo(@RequestParam("code") String code){
+        // 产品数量
+        int productNumber = platformSpecialPerformanceMapper.getSumProductNumber(code);
+        // 产品数量
+        int moduleNumber = platformSpecialPerformanceMapper.getSumModuleNumber(code);
+        // 详情
         SpecialInfo si = platformSpecialPerformanceMapper.getSpecialInfo(code);
+        
+        si.setProductNumber((long)productNumber);
+        si.setModuleNumber((long)moduleNumber);
+        PlatformSpecialPerformance record = new PlatformSpecialPerformance();
+        record.setId(si.getId());
+        record.setInterviewNumber(si.getInterviewNumber()+1);
+        platformSpecialPerformanceMapper.updateByPrimaryKeySelective(record);
         return JsonResult.successJsonResult(si);
     }
     
@@ -95,8 +107,8 @@ public class SpecialService {
         SpecialPic bgPic = param.getBgPic();
         PlatformSpecialPerformance record = new PlatformSpecialPerformance();
         record.setSpecialPerformanceName(param.getSpecialName());
-        // TODO 专场编码暂为时间戳
-        record.setSpecialPerformanceCode(String.valueOf(System.currentTimeMillis()));
+        // SP+专场编码为时间戳
+        record.setSpecialPerformanceCode("SP" + String.valueOf(System.currentTimeMillis()));
         record.setCreateTime(new Date());
         record.setCreator(param.getCreator());
         /*****************************专场主图start******************************/

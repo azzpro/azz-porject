@@ -29,4 +29,8 @@ public interface PlatformSpecialPerformanceMapper {
     SpecialInfo getSpecialInfo(String code);
     
     int countSpecial(String name);
+    
+    int getSumProductNumber(String code);
+    
+    int getSumModuleNumber(String code);
 }

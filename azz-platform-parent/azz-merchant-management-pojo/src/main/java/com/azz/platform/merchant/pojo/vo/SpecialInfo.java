@@ -7,6 +7,8 @@
  
 package com.azz.platform.merchant.pojo.vo;
 
+import java.util.Date;
+
 import lombok.Data;
 
 /**
@@ -95,5 +97,12 @@ public class SpecialInfo {
      * @mbg.generated
      */
     private Byte status;
+    
+    /**
+     * 创建时间
+     *
+     * @mbg.generated
+     */
+    private Date createTime;
 }
 

@@ -43,7 +43,6 @@ public class EditCourseWebParam {
 	@NotNull(message = "缺少请求参数")
 	private Integer isChangeCoursePic;
 
-    @NotNull(message = "请上传课程主图")
 	private MultipartFile coursePicFile;
 
     @NotNull(message = "请选择课程状态")

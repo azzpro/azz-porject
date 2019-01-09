@@ -25,10 +25,10 @@ public class SearchRelatedModuleInfoParam extends QueryPage{
 	
 	private static final long serialVersionUID = 5609724001487875597L;
 
-	@NotBlank(message = "请选择专场")
+	@NotBlank(message = "请选择推荐")
 	private String recommendCode;
 	
-	private String recommendName;
+	private String searchInput;
 
 }
 

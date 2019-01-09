@@ -97,9 +97,9 @@ public class SpecialPerformanceController {
 	 * @return
 	 * @author 黄智聪  2019年1月7日 下午1:08:46
 	 */
-	@RequestMapping("/putOnOrPutOffRecommendParam")
-	public JsonResult<String> putOnOrPutOffRecommendParam(@RequestBody PutOnOrPutOffRecommendParam param){
-		return recommendService.putOnOrPutOffRecommendParam(param);
+	@RequestMapping("/putOnOrPutOffRecommend")
+	public JsonResult<String> putOnOrPutOffRecommend(@RequestBody PutOnOrPutOffRecommendParam param){
+		return recommendService.putOnOrPutOffRecommend(param);
 	}
 	
 	/**

@@ -149,8 +149,8 @@
   </update>
   
   <resultMap id="recommendInfos" type="com.azz.platform.merchant.pojo.vo.RecommendInfo">
-    <result column="recommend_code" jdbcType="VARCHAR" property="recommendCode" />
-    <result column="recommend_name" jdbcType="VARCHAR" property="recommendName" />
+    <result column="recommendCode" jdbcType="VARCHAR" property="recommendCode" />
+    <result column="recommendName" jdbcType="VARCHAR" property="recommendName" />
     <collection property="moduleInfos" ofType="com.azz.platform.merchant.pojo.vo.ModuleInfo">
 	    <result column="moduleCode" jdbcType="VARCHAR" property="moduleCode" />
 	    <result column="modulePicName" jdbcType="VARCHAR" property="modulePicName" />

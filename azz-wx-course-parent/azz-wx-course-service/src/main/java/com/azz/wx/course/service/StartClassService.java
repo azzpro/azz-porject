@@ -106,6 +106,7 @@ public class StartClassService {
 				.price(param.getPrice())
 				.room(param.getRoom())
 				.startClassCode(startClassCode)
+				.startClassName(param.getStartClassName())
 				.startClassTime(param.getStartClassTime())
 				.build();
 		wxCourseStartClasRecordMapper.insertSelective(startClassRecord);

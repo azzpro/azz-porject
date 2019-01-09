@@ -68,7 +68,7 @@ public class SpecialService {
     /**
      * <p>专场详情</p>
      * @param code
-     * @return
+     * @return 
      * @author 彭斌  2019年1月7日 下午2:29:00
      */
     public JsonResult<SpecialInfo> specialInfo(@RequestParam("code") String code){
@@ -305,6 +305,7 @@ public class SpecialService {
             // 下架
             record.setStatus((byte) 2);
         }
+        record.setId(si.getId());
         record.setModifier(param.getModifier());
         record.setModifyTime(new Date());
         platformSpecialPerformanceMapper.updateByPrimaryKeySelective(record);

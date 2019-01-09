@@ -216,5 +216,6 @@ public class SpecialPerformanceController {
 	public JsonResult<String> changeStatus(@RequestBody ChangeSpecialStatus param){
 	    return specialService.changeStatus(param);
 	}
+	
 }
 

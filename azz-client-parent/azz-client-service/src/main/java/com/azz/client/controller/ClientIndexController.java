@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.client.pojo.bo.AddSignUpCourseParam;
+import com.azz.client.pojo.bo.SearchSpecialPerformanceOfIndexParam;
 import com.azz.client.pojo.vo.ArticleDetail;
 import com.azz.client.pojo.vo.HomeNav;
 import com.azz.client.pojo.vo.HomeNavDetail;
 import com.azz.client.pojo.vo.HomeSlide;
+import com.azz.client.pojo.vo.SpecialPerformanceOfIndex;
 import com.azz.client.service.ClientIndexService;
 import com.azz.core.common.JsonResult;
 
@@ -96,6 +98,18 @@ public class ClientIndexController {
     @RequestMapping("/addSignUpCourse")
     public JsonResult<String> addSignUpCourse(@RequestBody AddSignUpCourseParam param){
         return clientIndexService.addSignUpCourse(param);
+    }
+    
+    /**
+     * 
+     * <p>查询首页专场详情</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2019年1月9日 下午7:04:08
+     */
+    @RequestMapping("/getSpecialPerformanceOfIndex")
+    public JsonResult<SpecialPerformanceOfIndex> getSpecialPerformanceOfIndex(@RequestBody SearchSpecialPerformanceOfIndexParam param){
+    	return clientIndexService.getSpecialPerformanceOfIndex(param);
     }
 }
 

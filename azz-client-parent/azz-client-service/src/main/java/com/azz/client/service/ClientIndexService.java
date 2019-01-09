@@ -15,21 +15,28 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.azz.client.mapper.IndexMapper;
 import com.azz.client.mapper.PlatformClientSignUpMapper;
 import com.azz.client.mapper.PlatformIndexArticleMapper;
 import com.azz.client.mapper.PlatformIndexColumnMapper;
 import com.azz.client.pojo.PlatformClientSignUp;
 import com.azz.client.pojo.bo.AddSignUpCourseParam;
 import com.azz.client.pojo.bo.SearchCountClientSignUpParam;
+import com.azz.client.pojo.bo.SearchSpecialPerformanceOfIndexParam;
 import com.azz.client.pojo.vo.ArticleDetail;
 import com.azz.client.pojo.vo.HomeNav;
 import com.azz.client.pojo.vo.HomeNavDetail;
 import com.azz.client.pojo.vo.HomeSlide;
+import com.azz.client.pojo.vo.ModuleInfo;
+import com.azz.client.pojo.vo.SpecialPerformanceOfIndex;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
+import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.ClientConstants;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.util.JSR303ValidateUtils;
+import com.azz.util.ObjectUtils;
+import com.github.pagehelper.PageHelper;
 
 @Transactional(rollbackFor = Exception.class)
 @Service
@@ -41,9 +48,12 @@ public class ClientIndexService {
     
     @Autowired
     private PlatformIndexColumnMapper platformIndexColumnMapper;
-    
+
     @Autowired
     private PlatformClientSignUpMapper platformClientSignUpMapper;
+    
+    @Autowired
+    private IndexMapper indexMapper;
     
     /**
      * <p>查询首页轮播图片</p>
@@ -126,6 +136,25 @@ public class ClientIndexService {
         record.setQq(param.getQq());
         platformClientSignUpMapper.insertSelective(record);
         return JsonResult.successJsonResult();
+    }
+    
+    /**
+     * 
+     * <p>查询首页专场详情</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2019年1月9日 下午6:31:57
+     */
+    public JsonResult<SpecialPerformanceOfIndex> getSpecialPerformanceOfIndex(@RequestBody SearchSpecialPerformanceOfIndexParam param){
+    	JSR303ValidateUtils.validate(param);
+    	SpecialPerformanceOfIndex sp = indexMapper.getSpecialPerformanceOfIndex(param.getSpecialPerformanceCode());
+    	if(ObjectUtils.isNull(sp)) {
+            throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "该专场不存在");
+        }
+    	PageHelper.startPage(param.getPageNum(), param.getPageSize());
+    	List<ModuleInfo> moduleInfos = indexMapper.getSpecialPerformanceModulesOfIndex(param);
+    	sp.setModuleInfos(new Pagination<>(moduleInfos));
+    	return JsonResult.successJsonResult(sp);
     }
 }
 

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.client.mapper.IndexMapper">
+ 
+  <resultMap id="specialPerformanceOfIndex" type="com.azz.client.pojo.vo.SpecialPerformanceOfIndex">
+    <result column="specialPerformanceCode" jdbcType="VARCHAR" property="specialPerformanceCode" />
+    <result column="specialPerformanceName" jdbcType="VARCHAR" property="specialPerformanceName" />
+    <result column="specialPerformanceMainPicName" jdbcType="VARCHAR" property="specialPerformanceMainPicName" />
+    <result column="specialPerformanceMainPicUrl" jdbcType="VARCHAR" property="specialPerformanceMainPicUrl" />
+    <collection property="recommends" ofType="com.azz.client.pojo.vo.RecommendInfo">
+	    <result column="recommend_code" jdbcType="VARCHAR" property="recommendCode" />
+    	<result column="recommend_name" jdbcType="VARCHAR" property="recommendName" />
+    </collection>
+  </resultMap>
+  
+  <select id="getSpecialPerformanceOfIndex" parameterType="string" resultMap="specialPerformanceOfIndex">
+  		SELECT
+			psp.special_performance_code as specialPerformanceCode,
+			psp.special_performance_name as specialPerformanceName,
+			psp.special_performance_main_pic_name as specialPerformanceMainPicName,
+			psp.special_performance_main_pic_url as specialPerformanceMainPicUrl,
+			pr.recommend_code,
+			pr.recommend_name
+		FROM
+			platform_special_performance psp
+		JOIN platform_recommend pr ON pr.special_performance_code = psp.special_performance_code
+		WHERE
+			psp.special_performance_code = #{specialPerformanceCode}
+  </select>
+  
+  <select id="getSpecialPerformanceModulesOfIndex" parameterType="com.azz.client.pojo.bo.SearchSpecialPerformanceOfIndexParam" resultType="com.azz.client.pojo.vo.ModuleInfo">
+  		SELECT
+			mgm.module_code as moduleCode,
+			mgm.module_name as moduleName,
+			mgm.module_pic_name as modulePicName,
+			mgm.module_pic_url as modulePicUrl,
+			t.minPrice as moduleMinPrice
+		FROM
+			platform_special_performance psp
+		JOIN platform_recommend pr ON pr.special_performance_code = psp.special_performance_code
+		JOIN platform_recommend_module_rel prmr ON prmr.recommend_code = pr.recommend_code
+		JOIN merchant_goods_module mgm ON mgm.module_code = prmr.module_code
+		LEFT JOIN (
+			SELECT
+				mgm.module_code,
+				min(mgpp.price) AS minPrice
+			FROM
+				merchant_goods_product mgp
+			JOIN merchant_goods_module mgm ON mgm.id = mgp.module_id
+			JOIN merchant_goods_product_price mgpp ON mgpp.product_id = mgp.id
+			WHERE
+				mgp.product_status = 1
+			GROUP BY
+				mgm.module_code
+		) t ON t.module_code = mgm.module_code
+		WHERE
+			psp.special_performance_code = #{specialPerformanceCode}
+			<if test="recommendCode != null and recommendCode != ''">
+				and pr.recommend_code = #{recommendCode}
+			</if>
+  </select>
+  
+</mapper>

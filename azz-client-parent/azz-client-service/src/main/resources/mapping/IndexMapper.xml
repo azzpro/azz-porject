@@ -59,6 +59,7 @@
 		<where>
 			psp.special_performance_code = #{specialPerformanceCode}
 			and mgm.module_status = 1
+			and pr.status = 1
 			<if test="recommendCode != null and recommendCode != ''">
 				and pr.recommend_code = #{recommendCode}
 			</if>

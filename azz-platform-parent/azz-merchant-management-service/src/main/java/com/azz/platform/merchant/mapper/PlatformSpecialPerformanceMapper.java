@@ -33,4 +33,5 @@ public interface PlatformSpecialPerformanceMapper {
     Integer getSumProductNumber(String code);
     
     int getSumModuleNumber(String code);
+    
 }

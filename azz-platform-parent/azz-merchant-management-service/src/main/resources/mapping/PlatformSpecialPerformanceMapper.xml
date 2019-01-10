@@ -301,4 +301,5 @@
 	JOIN platform_recommend_module_rel prmr ON pr.recommend_code = prmr.recommend_code
 	WHERE pr.special_performance_code = #{code}
   </select>
+  
 </mapper>

@@ -151,6 +151,7 @@
   <resultMap id="recommendInfos" type="com.azz.platform.merchant.pojo.vo.RecommendInfo">
     <result column="recommendCode" jdbcType="VARCHAR" property="recommendCode" />
     <result column="recommendName" jdbcType="VARCHAR" property="recommendName" />
+    <result column="status" jdbcType="TINYINT" property="status" />
     <collection property="moduleInfos" ofType="com.azz.platform.merchant.pojo.vo.ModuleInfo">
 	    <result column="moduleCode" jdbcType="VARCHAR" property="moduleCode" />
 	    <result column="modulePicName" jdbcType="VARCHAR" property="modulePicName" />
@@ -166,6 +167,7 @@
   	SELECT
 		pr.recommend_code AS recommendCode,
 		pr.recommend_name AS recommendName,
+		pr.status AS status,
 		mgm.module_code AS moduleCode,
 		mgm.module_pic_name AS modulePicName,
 		mgm.module_pic_url AS modulePicUrl,
@@ -275,6 +277,7 @@
 	JOIN merchant m ON m.id = mgm.merchant_id
 	<where> 
 		pr.`status` != 0
+		and pr.special_performance_code = #{specialPerformanceCode}
 		<if test="searchInput != null and searchInput !='' ">
 			AND (
 				mgm.module_name LIKE CONCAT('%', #{searchInput}, '%') 

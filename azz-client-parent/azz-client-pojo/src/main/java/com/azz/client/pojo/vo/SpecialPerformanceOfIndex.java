@@ -29,6 +29,8 @@ public class SpecialPerformanceOfIndex {
 	
 	private String specialPerformanceMainPicUrl;
 	
+	private String specialPerformanceBgPicUrl;
+	
 	private List<RecommendInfo> recommends;
 	
 	private Pagination<ModuleInfo> moduleInfos;

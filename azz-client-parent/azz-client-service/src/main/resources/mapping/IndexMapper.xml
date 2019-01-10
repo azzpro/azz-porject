@@ -7,6 +7,7 @@
     <result column="specialPerformanceName" jdbcType="VARCHAR" property="specialPerformanceName" />
     <result column="specialPerformanceMainPicName" jdbcType="VARCHAR" property="specialPerformanceMainPicName" />
     <result column="specialPerformanceMainPicUrl" jdbcType="VARCHAR" property="specialPerformanceMainPicUrl" />
+    <result column="specialPerformanceBgPicUrl" jdbcType="VARCHAR" property="specialPerformanceBgPicUrl" />
     <collection property="recommends" ofType="com.azz.client.pojo.vo.RecommendInfo">
 	    <result column="recommend_code" jdbcType="VARCHAR" property="recommendCode" />
     	<result column="recommend_name" jdbcType="VARCHAR" property="recommendName" />
@@ -19,6 +20,7 @@
 			psp.special_performance_name as specialPerformanceName,
 			psp.special_performance_main_pic_name as specialPerformanceMainPicName,
 			psp.special_performance_main_pic_url as specialPerformanceMainPicUrl,
+			psp.special_performance_bg_pic_url as specialPerformanceBgPicUrl,
 			pr.recommend_code,
 			pr.recommend_name
 		FROM

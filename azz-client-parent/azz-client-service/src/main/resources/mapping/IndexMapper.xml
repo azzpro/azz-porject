@@ -28,6 +28,7 @@
 		LEFT JOIN platform_recommend pr ON pr.special_performance_code = psp.special_performance_code
 		WHERE
 			psp.special_performance_code = #{specialPerformanceCode}
+		and pr.status = 1
   </select>
   
   <select id="getSpecialPerformanceModulesOfIndex" parameterType="com.azz.client.pojo.bo.SearchSpecialPerformanceOfIndexParam" resultType="com.azz.client.pojo.vo.ModuleInfo">

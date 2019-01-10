@@ -64,6 +64,12 @@ public class FileConstants {
 	//发货单图片
     public static final String AZZ_SHIPMENT_FORM_PATH = "shipment_form_pic";
 	
+    // 专场活动
+    public static final String AZZ_SPECIAL_PERFORMANCE_PATH = "special_performance";
+    
+    // 微信课程
+    public static final String AZZ_WX_COURSE_PATH = "wx_course_pic";
+    
 	//平台端
 	public static final int AZZ_PLATFORM = 1;
 	
@@ -108,6 +114,12 @@ public class FileConstants {
 	
 	// 发货单
     public static final int AZZ_SHIPMENT_FORM_IMAGE_TYPE = 12;
+    
+    // 专场活动
+    public static final int AZZ_SPECIAL_PERFORMANCE_IMAGE_TYPE = 13;
+    
+    // 微信课程
+    public static final int AZZ_WX_COURSE_IMAGE_TYPE = 14;
     
 	//支持的图片格式
 	public static final String AZZ_IMAGE_SUFFIX = "bmp|jpg|png|git|webp|tiff";

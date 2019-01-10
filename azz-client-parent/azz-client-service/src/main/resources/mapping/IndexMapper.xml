@@ -25,7 +25,7 @@
 			pr.recommend_name
 		FROM
 			platform_special_performance psp
-		JOIN platform_recommend pr ON pr.special_performance_code = psp.special_performance_code
+		LEFT JOIN platform_recommend pr ON pr.special_performance_code = psp.special_performance_code
 		WHERE
 			psp.special_performance_code = #{specialPerformanceCode}
   </select>

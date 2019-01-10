@@ -56,11 +56,13 @@
 			GROUP BY
 				mgm.module_code
 		) t ON t.module_code = mgm.module_code
-		WHERE
+		<where>
 			psp.special_performance_code = #{specialPerformanceCode}
+			and mgm.module_status = 1
 			<if test="recommendCode != null and recommendCode != ''">
 				and pr.recommend_code = #{recommendCode}
 			</if>
+		</where>
   </select>
   
   

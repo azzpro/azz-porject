@@ -81,10 +81,10 @@ public class SpecialService {
         
         si.setProductNumber((long)productNumber);
         si.setModuleNumber((long)moduleNumber);
-        PlatformSpecialPerformance record = new PlatformSpecialPerformance();
+        /*PlatformSpecialPerformance record = new PlatformSpecialPerformance();
         record.setId(si.getId());
         record.setInterviewNumber(si.getInterviewNumber()+1);
-        platformSpecialPerformanceMapper.updateByPrimaryKeySelective(record);
+        platformSpecialPerformanceMapper.updateByPrimaryKeySelective(record);*/
         return JsonResult.successJsonResult(si);
     }
     
@@ -108,7 +108,8 @@ public class SpecialService {
         PlatformSpecialPerformance record = new PlatformSpecialPerformance();
         record.setSpecialPerformanceName(param.getSpecialName());
         // SP+专场编码为时间戳
-        record.setSpecialPerformanceCode("SP" + String.valueOf(System.currentTimeMillis()));
+        String spfc = String.valueOf(System.currentTimeMillis());
+        record.setSpecialPerformanceCode("SP" + spfc);
         record.setCreateTime(new Date());
         record.setCreator(param.getCreator());
         /*****************************专场主图start******************************/
@@ -174,7 +175,7 @@ public class SpecialService {
         record.setSpecialPerformanceMainPicUrl(jr.getData());
         record.setSpecialPerformanceBgPicName(originalFileNameBgPic);
         record.setSpecialPerformanceBgPicUrl(jrBg.getData());
-        
+        record.setSpecialPerformanceLink("http://www.izz2025.com/special.html?specialCode=" + "SP" + spfc);
         platformSpecialPerformanceMapper.insertSelective(record);
         return JsonResult.successJsonResult();
     }

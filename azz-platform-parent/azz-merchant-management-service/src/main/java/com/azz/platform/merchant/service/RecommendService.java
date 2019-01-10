@@ -192,6 +192,10 @@ public class RecommendService {
 		JSR303ValidateUtils.validate(param);
 		switch (param.getAddOrRemove()) {
 			case 1: // 新增模组
+				if(platformRecommendMapper.selectByRecommendCode(param.getRecommendCode()) == null) {
+					throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "所选推荐活动不存在");
+				}
+				
 				if(platformRecommendModuleRelMapper.existModule(param.getModuleCode()) == 0) {
 					throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "所选模组不存在");
 				}
@@ -228,6 +232,9 @@ public class RecommendService {
 				}
 				break;
 			case 2: //　移除模组
+				if(platformRecommendMapper.selectByRecommendCode(param.getRecommendCode()) == null) {
+					throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "所选推荐活动不存在");
+				}
 				platformRecommendModuleRelMapper.deleteRecommendModule(param.getModuleCode(), param.getRecommendCode());
 				// 将关联的所有模组产品信息删除
 				platformRecommendModuleProductRelMapper.deleteByModuleCode(param.getModuleCode());

@@ -20,6 +20,7 @@ import com.azz.client.mapper.PlatformClientSignUpMapper;
 import com.azz.client.mapper.PlatformIndexArticleMapper;
 import com.azz.client.mapper.PlatformIndexColumnMapper;
 import com.azz.client.pojo.PlatformClientSignUp;
+import com.azz.client.pojo.PlatformSpecialPerformance;
 import com.azz.client.pojo.bo.AddSignUpCourseParam;
 import com.azz.client.pojo.bo.SearchCountClientSignUpParam;
 import com.azz.client.pojo.bo.SearchSpecialPerformanceOfIndexParam;
@@ -28,6 +29,7 @@ import com.azz.client.pojo.vo.HomeNav;
 import com.azz.client.pojo.vo.HomeNavDetail;
 import com.azz.client.pojo.vo.HomeSlide;
 import com.azz.client.pojo.vo.ModuleInfo;
+import com.azz.client.pojo.vo.SpecialInfo;
 import com.azz.client.pojo.vo.SpecialPerformanceOfIndex;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
@@ -54,6 +56,7 @@ public class ClientIndexService {
     
     @Autowired
     private IndexMapper indexMapper;
+    
     
     /**
      * <p>查询首页轮播图片</p>
@@ -154,6 +157,14 @@ public class ClientIndexService {
     	PageHelper.startPage(param.getPageNum(), param.getPageSize());
     	List<ModuleInfo> moduleInfos = indexMapper.getSpecialPerformanceModulesOfIndex(param);
     	sp.setModuleInfos(new Pagination<>(moduleInfos));
+    	
+    	// 递增访问数量
+    	SpecialInfo si = indexMapper.getSpecialInfo(param.getSpecialPerformanceCode());
+    	PlatformSpecialPerformance record = new PlatformSpecialPerformance();
+        record.setId(si.getId());
+        record.setInterviewNumber(si.getInterviewNumber()+1);
+        indexMapper.updateByPrimaryKey(record);
+    	    
     	return JsonResult.successJsonResult(sp);
     }
 }

@@ -62,4 +62,32 @@
 			</if>
   </select>
   
+  
+   <select id="getSpecialInfo" parameterType="java.lang.String" resultType = "com.azz.client.pojo.vo.SpecialInfo">
+  		SELECT
+  			id as id,
+			special_performance_code as specialPerformanceCode,
+			special_performance_name as specialPerformanceName,
+			special_performance_main_pic_url as specialPerformanceMainPicUrl,
+			special_performance_main_pic_name as specialPerformanceMainPicName,
+			special_performance_bg_pic_url as specialPerformanceBgPicUrl,
+			special_performance_bg_pic_name as specialPerformanceBgPicName,
+			special_performance_link as specialPerformanceLink,
+			module_number as moduleNumber,
+			product_number as productNumber,
+			interview_number as interviewNumber,
+			status as status,
+			create_time as createTime
+		FROM
+			platform_special_performance
+		WHERE status != 0 and
+			special_performance_code = #{code}	
+  </select>
+  
+  <update id="updateByPrimaryKey" parameterType="com.azz.client.pojo.PlatformSpecialPerformance">
+    update platform_special_performance
+    set 
+      interview_number = #{interviewNumber,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
 </mapper>

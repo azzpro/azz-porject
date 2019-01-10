@@ -81,10 +81,6 @@ public class SpecialService {
         
         si.setProductNumber((long)productNumber);
         si.setModuleNumber((long)moduleNumber);
-        /*PlatformSpecialPerformance record = new PlatformSpecialPerformance();
-        record.setId(si.getId());
-        record.setInterviewNumber(si.getInterviewNumber()+1);
-        platformSpecialPerformanceMapper.updateByPrimaryKeySelective(record);*/
         return JsonResult.successJsonResult(si);
     }
     

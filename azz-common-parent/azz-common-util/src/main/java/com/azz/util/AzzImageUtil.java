@@ -84,6 +84,12 @@ public class AzzImageUtil {
         if(FileConstants.AZZ_SHIPMENT_FORM_IMAGE_TYPE == imagetype) {
             return FileConstants.AZZ_SHIPMENT_FORM_PATH;
         }
+        if(FileConstants.AZZ_SPECIAL_PERFORMANCE_IMAGE_TYPE == imagetype) {
+            return FileConstants.AZZ_SPECIAL_PERFORMANCE_PATH;
+        }
+        if(FileConstants.AZZ_WX_COURSE_IMAGE_TYPE == imagetype) {
+            return FileConstants.AZZ_WX_COURSE_PATH;
+        }
 		return "";
 	}
 }	

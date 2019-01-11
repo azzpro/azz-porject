@@ -257,7 +257,7 @@
 				prmr.recommend_code != #{recommendCode}
 		)
 	</where>
-	ORDER BY mgm.create_time DESC
+	ORDER BY relatedStatus desc, mgm.create_time DESC
   </select>
   
   <select id="getSpecialPerformanceRelatedModuleInfos" parameterType="com.azz.platform.merchant.pojo.bo.SearchSpecialPerformanceRelatedModuleInfoParam" resultType="com.azz.platform.merchant.pojo.vo.RelatedModuleInfo">

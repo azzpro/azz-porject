@@ -51,6 +51,7 @@
 		merchant_goods_product_params pgpp
 	JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status = 1
 	<where>
+		pgpp.params_hidden = 1
 	AND	pgpp.params_term_id IN (
 			SELECT
 				pccp.params_id
@@ -128,6 +129,7 @@
 	JOIN platform_case cs ON pc.case_id = cs.id
 	WHERE cs.case_status = 1
 	AND	pc.status = 1
+	AND pgpp.params_hidden = 1
 	AND	cs.case_code = #{caseCode}
 	<if test="inputParams != null and inputParams.size() > 0">
 		AND pgpp.params_term_id not in
@@ -195,6 +197,7 @@
 	JOIN platform_combination pc ON pc.id = pcm.combination_id
 	JOIN platform_case cs ON pc.case_id = cs.id
 	WHERE cs.case_status = 1
+	AND pgpp.params_hidden = 1
 	AND	pc.status = 1
 	AND	cs.case_code = #{caseCode}
 	<if test="selectedParamTermIds != null and selectedParamTermIds.size() > 0">
@@ -288,6 +291,7 @@
 	<where>
 			cs.case_status = 1
 		AND mgp.product_status = 1
+		AND pgpp.params_hidden = 1
 		AND	pc.status = 1
 		AND cs.case_code = #{caseCode}
 		<if test="inputParams != null and inputParams.size() > 0">
@@ -367,6 +371,7 @@
 	JOIN merchant_goods_product_params mgpp ON mgpp.product_id = mgp.id
 	<where>
 			mgp.product_status = 1
+		AND mgpp.params_hidden = 1
 		AND pc. STATUS = 1
 		AND pc.combination_code = #{combinationCode}
 		<if test="inputParams != null and inputParams.size() > 0">
@@ -411,7 +416,8 @@
 		merchant_goods_product_params pgpp
 	JOIN merchant_goods_product mgp on mgp.id = pgpp.product_id and mgp.product_status = 1
 	WHERE
-		pgpp.product_id IN (
+		pgpp.params_hidden = 1
+	and	pgpp.product_id IN (
 			SELECT
 				mgp.id AS productId
 			FROM
@@ -505,6 +511,7 @@
 	JOIN platform_combination pc on pc.id = pcm.combination_id
   	<where>
   		pc.combination_code = #{combinationCode}
+  	AND mgpp.params_hidden = 1
   	AND pc.status = 1	
   	AND mgp.product_status = 1
   		<if test="selectParams != null and selectParams.size() > 0">
@@ -579,7 +586,8 @@
 	JOIN merchant_goods_product_price mgpp ON pgp.id = mgpp.product_id AND mgpp.id = #{productPriceId}
 	JOIN merchant_goods_product_params params ON params.product_id = pgp.id
 	WHERE
-		pgp.product_code = #{productCode}
+		params.params_hidden = 1
+	AND	pgp.product_code = #{productCode}
   </select>
   
   <select id="getConfirmOrderProductInfos" parameterType="string" resultType="com.azz.order.selection.vo.ProductInfomation">
@@ -706,6 +714,7 @@
 	JOIN merchant_goods_product mgp ON mgp.id = mgpp.product_id AND mgp.product_status = 1
 	<where>
 		mgp.module_id is not null
+	AND mgpp.params_hidden = 1
 	and	mgp.assortment_id = (
 			SELECT
 				id
@@ -774,6 +783,7 @@
 	JOIN merchant_goods_module mgm ON mgm.id = mgp.module_id
 	<where>
 			mgp.product_status = 1
+		AND mgpp.params_hidden = 1
 		AND mgm.module_code = #{moduleCode}
 		<if test="inputParams != null and inputParams.size() > 0">
 			<foreach collection="inputParams" item="inputParam">
@@ -817,7 +827,8 @@
 		merchant_goods_product_params mgpp
 	JOIN merchant_goods_product mgp ON mgp.id = mgpp.product_id AND mgp.product_status = 1
 	WHERE
-		mgp.module_id = (
+		mgpp.params_hidden = 1
+	AND	mgp.module_id = (
 			SELECT
 				mgm.id
 			FROM
@@ -878,6 +889,7 @@
 	) t2 ON t2.product_id = mgp.id
 	<where>
 			mgp.product_status = 1
+		AND	mgpp.params_hidden = 1
 		AND mgp.module_id = (
 			SELECT
 				mgm.id

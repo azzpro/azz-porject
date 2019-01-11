@@ -7,6 +7,8 @@
 
 package com.azz.wx.course.api;
 
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,10 +17,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
+import com.azz.wx.course.pojo.WxCourseClassification;
+import com.azz.wx.course.pojo.bo.AddBrandParam;
+import com.azz.wx.course.pojo.bo.AddClassificationParam;
 import com.azz.wx.course.pojo.bo.AddCourseParam;
+import com.azz.wx.course.pojo.bo.DelBrandParam;
+import com.azz.wx.course.pojo.bo.DelClassificationParam;
+import com.azz.wx.course.pojo.bo.EditBrandParam;
+import com.azz.wx.course.pojo.bo.EditClassificationParam;
 import com.azz.wx.course.pojo.bo.EditCourseParam;
 import com.azz.wx.course.pojo.bo.PutOnOrPutOffOrDelCourseParam;
+import com.azz.wx.course.pojo.bo.SearchBrandParam;
+import com.azz.wx.course.pojo.bo.SearchClassificationListParam;
 import com.azz.wx.course.pojo.bo.SearchCourseInfoParam;
+import com.azz.wx.course.pojo.vo.BrandInfo;
+import com.azz.wx.course.pojo.vo.ClassificationParams;
+import com.azz.wx.course.pojo.vo.CourseClassification;
 import com.azz.wx.course.pojo.vo.CourseDetail;
 import com.azz.wx.course.pojo.vo.CourseInfo;
 
@@ -100,4 +114,41 @@ public interface CourseService {
 	@RequestMapping(value = "/azz/api/platform/course/putOnOrPutOffOrDelCourse", method = RequestMethod.POST)
 	public JsonResult<String> putOnOrPutOffOrDelCourse(@RequestBody PutOnOrPutOffOrDelCourseParam param);
 
+	
+	@RequestMapping(value = "/azz/api/platform/course/addClassification", method = RequestMethod.POST)
+	public JsonResult<String> addClassification(@RequestBody AddClassificationParam param);
+	
+	@RequestMapping(value = "/azz/api/platform/course/editClassification", method = RequestMethod.POST)
+	public JsonResult<String> editClassification(@RequestBody EditClassificationParam param);
+	
+	@RequestMapping(value = "/azz/api/platform/course/delClassification", method = RequestMethod.POST)
+	public JsonResult<String> delClassification(@RequestBody DelClassificationParam param);
+	
+	@RequestMapping(value = "/azz/api/platform/course/getClassificationInfo", method = RequestMethod.POST)
+	public JsonResult<WxCourseClassification> getClassificationInfo(String assortmentCode);
+	
+	@RequestMapping(value = "/azz/api/platform/course/getClassificationParent", method = RequestMethod.POST)
+	public JsonResult<List<ClassificationParams>> getClassificationParent(@RequestBody SearchClassificationListParam param);
+	
+	@RequestMapping(value = "/azz/api/platform/course/getClassificationChild", method = RequestMethod.POST)
+	public JsonResult<List<ClassificationParams>> getClassificationChild(String parentCode);
+	
+	@RequestMapping(value = "/azz/api/platform/course/getClassificationList", method = RequestMethod.POST)
+	public JsonResult<List<CourseClassification>> getClassificationList(
+            @RequestBody SearchClassificationListParam param);
+	
+	@RequestMapping(value = "/azz/api/platform/course/addGoodsBrand", method = RequestMethod.POST)
+	public JsonResult<String> addGoodsBrand(@RequestBody AddBrandParam param);
+	
+	@RequestMapping(value = "/azz/api/platform/course/getBrandInfoList", method = RequestMethod.POST)
+	public JsonResult<Pagination<BrandInfo>> getBrandInfoList(@RequestBody SearchBrandParam param);
+	
+	@RequestMapping(value = "/azz/api/platform/course/getGoodsBrandInfo", method = RequestMethod.POST)
+	public JsonResult<BrandInfo> getGoodsBrandInfo(@RequestParam("brandCode") String brandCode);
+	
+	@RequestMapping(value = "/azz/api/platform/course/editGoodsBrand", method = RequestMethod.POST)
+	public JsonResult<String> editGoodsBrand(@RequestBody EditBrandParam param);
+	
+	@RequestMapping(value = "/azz/api/platform/course/delGoodsBrand", method = RequestMethod.POST)
+	public JsonResult<String> delGoodsBrand(@RequestBody DelBrandParam param);
 }

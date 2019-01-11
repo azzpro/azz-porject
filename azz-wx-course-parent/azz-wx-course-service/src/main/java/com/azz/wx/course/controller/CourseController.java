@@ -7,6 +7,8 @@
 
 package com.azz.wx.course.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,12 +18,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
+import com.azz.wx.course.pojo.WxCourseClassification;
+import com.azz.wx.course.pojo.bo.AddBrandParam;
+import com.azz.wx.course.pojo.bo.AddClassificationParam;
 import com.azz.wx.course.pojo.bo.AddCourseParam;
+import com.azz.wx.course.pojo.bo.DelBrandParam;
+import com.azz.wx.course.pojo.bo.DelClassificationParam;
+import com.azz.wx.course.pojo.bo.EditBrandParam;
+import com.azz.wx.course.pojo.bo.EditClassificationParam;
 import com.azz.wx.course.pojo.bo.EditCourseParam;
 import com.azz.wx.course.pojo.bo.PutOnOrPutOffOrDelCourseParam;
+import com.azz.wx.course.pojo.bo.SearchBrandParam;
+import com.azz.wx.course.pojo.bo.SearchClassificationListParam;
 import com.azz.wx.course.pojo.bo.SearchCourseInfoParam;
+import com.azz.wx.course.pojo.vo.BrandInfo;
+import com.azz.wx.course.pojo.vo.ClassificationParams;
+import com.azz.wx.course.pojo.vo.CourseClassification;
 import com.azz.wx.course.pojo.vo.CourseDetail;
 import com.azz.wx.course.pojo.vo.CourseInfo;
+import com.azz.wx.course.service.BrandService;
+import com.azz.wx.course.service.ClassificationService;
 import com.azz.wx.course.service.CourseService;
 
 /**
@@ -40,6 +56,12 @@ public class CourseController {
 	@Autowired
 	CourseService courseService;
 
+	@Autowired
+	ClassificationService classificationService;
+	
+	@Autowired
+	BrandService brandService;
+	
 	/**
 	 * 
 	 * <p>
@@ -115,4 +137,141 @@ public class CourseController {
 		return courseService.putOnOrPutOffOrDelCourse(param);
 	}
 
+	/**
+	 * <p>新增分类</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2019年1月11日 上午11:50:06
+	 */
+	@RequestMapping(value = "addClassification", method = RequestMethod.POST)
+	public JsonResult<String> addClassification(@RequestBody AddClassificationParam param){
+	    return classificationService.addClassification(param);
+	}
+	
+	/**
+	 * 
+	 * <p>修改分类</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2019年1月11日 上午11:50:15
+	 */
+	@RequestMapping(value="editClassification",method=RequestMethod.POST)
+    public JsonResult<String> editClassification(@RequestBody EditClassificationParam param){
+        return classificationService.editClassification(param);
+    }
+	
+	/**
+	 * 
+	 * <p>删除分类</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2019年1月11日 上午11:50:19
+	 */
+	@RequestMapping(value="delClassification",method=RequestMethod.POST)
+    public JsonResult<String> delClassification(@RequestBody DelClassificationParam param){
+        return classificationService.delClassification(param);
+    }
+	
+	/**
+	 * 
+	 * <p>获取分类详情</p>
+	 * @param assortmentCode
+	 * @return
+	 * @author 彭斌  2019年1月11日 上午11:50:23
+	 */
+	@RequestMapping(value="getClassificationInfo",method=RequestMethod.POST)
+    public JsonResult<WxCourseClassification> getClassificationInfo(String assortmentCode){
+        return classificationService.getClassificationInfo(assortmentCode);
+    }
+	
+	/**
+	 * 
+	 * <p>获取父级分类信息</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2019年1月11日 上午11:50:28
+	 */
+	@RequestMapping(value="getClassificationParent",method=RequestMethod.POST)
+    public JsonResult<List<ClassificationParams>> getClassificationParent(@RequestBody SearchClassificationListParam param){
+        return classificationService.getClassificationParent(param);
+    }
+	
+	/**
+	 * 
+	 * <p>获取子级分类</p>
+	 * @param parentCode
+	 * @return
+	 * @author 彭斌  2019年1月11日 上午11:50:33
+	 */
+	@RequestMapping(value="getClassificationChild",method=RequestMethod.POST)
+    public JsonResult<List<ClassificationParams>> getClassificationChild(String parentCode){
+        return classificationService.getClassificationChild(parentCode);
+    }
+	
+	/**
+	 * <p>获取分类列表</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2019年1月11日 上午11:50:36
+	 */
+	@RequestMapping(value="getClassificationList",method=RequestMethod.POST)
+	public JsonResult<List<CourseClassification>> getClassificationList(
+            @RequestBody SearchClassificationListParam param){
+	    return classificationService.getClassificationList(param);
+	}
+	
+	/**
+	 * <p>新增品牌</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2019年1月11日 上午11:59:16
+	 */
+	@RequestMapping(value="addGoodsBrand",method=RequestMethod.POST)
+	public JsonResult<String> addGoodsBrand(@RequestBody AddBrandParam param){
+	    return brandService.addGoodsBrand(param);
+	}
+	
+	/**
+	 * <p>品牌列表</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2019年1月11日 下午12:00:58
+	 */
+	@RequestMapping(value="getGoodsBrandInfoList",method=RequestMethod.POST)
+	public JsonResult<Pagination<BrandInfo>> getBrandInfoList(@RequestBody SearchBrandParam param){
+	    return brandService.getBrandInfoList(param);
+	}
+	
+	/**
+	 * <p>获取品牌详情</p>
+	 * @param brandCode
+	 * @return
+	 * @author 彭斌  2019年1月11日 下午12:03:07
+	 */
+	@RequestMapping(value="getGoodsBrandInfo", method = RequestMethod.POST)
+	public JsonResult<BrandInfo> getGoodsBrandInfo(@RequestParam("brandCode") String brandCode){
+	    return brandService.getGoodsBrandInfo(brandCode);
+	}
+	
+	/**
+	 * <p>修改品牌</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2019年1月11日 下午12:05:19
+	 */
+	@RequestMapping(value="editGoodsBrand",method=RequestMethod.POST)
+	public JsonResult<String> editGoodsBrand(@RequestBody EditBrandParam param) {
+	    return brandService.editBrand(param);
+	}
+	
+	/**
+	 * <p>删除品牌</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2019年1月11日 下午12:06:03
+	 */
+	@RequestMapping(value="delGoodsBrand",method=RequestMethod.POST)
+	public JsonResult<String> delGoodsBrand(@RequestBody DelBrandParam param){
+	    return brandService.delGoodsBrand(param);
+	}
 }

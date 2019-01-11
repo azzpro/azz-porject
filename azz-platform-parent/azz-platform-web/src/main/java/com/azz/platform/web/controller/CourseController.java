@@ -8,6 +8,7 @@
 package com.azz.platform.web.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,21 +20,39 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
+import com.azz.core.constants.MerchantConstants.IsChangeGoodsBrandPic;
 import com.azz.core.constants.WxCourseConstants.IsChangeCoursePic;
+import com.azz.platform.merchant.pojo.bo.AddGoodsBrandWebParam;
+import com.azz.platform.merchant.pojo.bo.EditClassificationWebParam;
+import com.azz.platform.merchant.pojo.bo.EditGoodsBrandWebParam;
 import com.azz.util.Base64;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.utils.WebUtils;
 import com.azz.wx.course.api.CourseService;
+import com.azz.wx.course.pojo.WxCourseClassification;
+import com.azz.wx.course.pojo.bo.AddBrandParam;
+import com.azz.wx.course.pojo.bo.AddClassificationParam;
+import com.azz.wx.course.pojo.bo.AddClassificationWebParam;
 import com.azz.wx.course.pojo.bo.AddCourseParam;
 import com.azz.wx.course.pojo.bo.AddCourseWebParam;
+import com.azz.wx.course.pojo.bo.ClassificationPic;
 import com.azz.wx.course.pojo.bo.CoursePic;
+import com.azz.wx.course.pojo.bo.DelBrandParam;
+import com.azz.wx.course.pojo.bo.DelClassificationParam;
+import com.azz.wx.course.pojo.bo.EditBrandParam;
+import com.azz.wx.course.pojo.bo.EditClassificationParam;
 import com.azz.wx.course.pojo.bo.EditCourseParam;
 import com.azz.wx.course.pojo.bo.EditCourseWebParam;
+import com.azz.wx.course.pojo.bo.GoodsBrandPic;
 import com.azz.wx.course.pojo.bo.PutOnOrPutOffOrDelCourseParam;
+import com.azz.wx.course.pojo.bo.SearchBrandParam;
+import com.azz.wx.course.pojo.bo.SearchClassificationListParam;
 import com.azz.wx.course.pojo.bo.SearchCourseInfoParam;
+import com.azz.wx.course.pojo.vo.BrandInfo;
+import com.azz.wx.course.pojo.vo.ClassificationParams;
+import com.azz.wx.course.pojo.vo.CourseClassification;
 import com.azz.wx.course.pojo.vo.CourseDetail;
 import com.azz.wx.course.pojo.vo.CourseInfo;
-
 /**
  * 
  * <P>
@@ -145,5 +164,172 @@ public class CourseController {
 		param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
 		return courseService.putOnOrPutOffOrDelCourse(param);
 	}
-
+	
+	/**
+	 * <p>新增分类</p>
+	 * @param param
+	 * @return
+	 * @throws IOException
+	 * @author 彭斌  2019年1月11日 下午2:23:57
+	 */
+	@RequestMapping(value = "addClassification", method = RequestMethod.POST)
+	public JsonResult<String> addClassification(AddClassificationWebParam param) throws IOException{
+	    MultipartFile classificationFile = param.getClassificationFile();
+        ClassificationPic cp = new ClassificationPic(classificationFile.getOriginalFilename(), classificationFile.getSize(), Base64.encode(classificationFile.getBytes()));
+        param.setCreator(WebUtils.getLoginUser().getUserInfo().getUserCode());
+        return courseService.addClassification(new AddClassificationParam(param.getAssortmentParentCode(),param.getAssortmentName(),param.getAssortmentSort(),param.getCreator(),cp));
+	}
+	
+	/**
+	 * <p>编辑分类</p>
+	 * @param param
+	 * @return
+	 * @throws IOException
+	 * @author 彭斌  2019年1月11日 下午2:57:57
+	 */
+	@RequestMapping(value = "editClassification", method = RequestMethod.POST)
+	public JsonResult<String> editClassification(EditClassificationWebParam param) throws IOException{
+	    ClassificationPic cp = null;
+        if(param.getIsEditPic() == 1) {
+            MultipartFile classificationFile = param.getClassificationFile();
+            cp = new ClassificationPic(classificationFile.getOriginalFilename(), classificationFile.getSize(), Base64.encode(classificationFile.getBytes()));
+        }
+        byte sort = 0;
+        if(null != param.getAssortmentSort()) {
+            Integer assortmentSort = param.getAssortmentSort();
+            sort = (byte)assortmentSort.intValue();
+        }
+        param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
+	    return courseService.editClassification(new EditClassificationParam(param.getAssortmentCode(),param.getAssortmentParentCode(),param.getAssortmentName(),sort,param.getModifier(),cp,param.getIsEditPic()));
+	}
+	
+	/**
+	 * <p>删除分类</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2019年1月11日 下午3:04:56
+	 */
+	@RequestMapping(value = "delClassification", method = RequestMethod.POST)
+	public JsonResult<String> delClassification(DelClassificationParam param){
+	    param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
+	    return courseService.delClassification(param);
+	}
+	
+	/**
+	 * <p>获取分类详细</p>
+	 * @param assortmentCode
+	 * @return
+	 * @author 彭斌  2019年1月11日 下午3:09:15
+	 */
+	@RequestMapping(value = "getClassificationInfo", method = RequestMethod.POST)
+	public JsonResult<WxCourseClassification> getClassificationInfo(@RequestParam("assortmentCode") String assortmentCode){
+	    return courseService.getClassificationInfo(assortmentCode);
+	}
+	
+	/**
+	 * <p>获取分类父级</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2019年1月11日 下午3:16:00
+	 */
+	@RequestMapping(value = "getClassificationParent", method = RequestMethod.POST)
+	public JsonResult<List<ClassificationParams>> getClassificationParent(SearchClassificationListParam param){
+	    return courseService.getClassificationParent(param);
+	}
+	
+	/**
+	 * <p>获取分类子级</p>
+	 * @param parentCode
+	 * @return
+	 * @author 彭斌  2019年1月11日 下午3:18:55
+	 */
+	@RequestMapping(value = "getClassificationChild", method = RequestMethod.POST)
+	public JsonResult<List<ClassificationParams>> getClassificationChild(@RequestParam("parentCode") String parentCode){
+	    return courseService.getClassificationChild(parentCode);
+	}
+	
+	/**
+	 * <p>分类列表</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2019年1月11日 下午3:22:05
+	 */
+	@RequestMapping(value = "getClassificationList", method = RequestMethod.POST)
+	public JsonResult<List<CourseClassification>> getClassificationList(SearchClassificationListParam param){
+	    return courseService.getClassificationList(param);
+	}
+	
+	/**
+	 * <p>新增品牌</p>
+	 * @param webParam
+	 * @return
+	 * @throws IOException
+	 * @author 彭斌  2019年1月11日 下午3:26:16
+	 */
+	@RequestMapping(value = "addGoodsBrand", method = RequestMethod.POST)
+	public JsonResult<String> addGoodsBrand(AddGoodsBrandWebParam webParam) throws IOException{
+	    AddBrandParam param = new AddBrandParam();
+        BeanUtils.copyProperties(webParam, param);
+        MultipartFile goodsBrandPicFile = webParam.getGoodsBrandPicFile();
+        GoodsBrandPic goodsBrandPic = new GoodsBrandPic(goodsBrandPicFile.getOriginalFilename(),
+                    goodsBrandPicFile.getSize(), Base64.encode(goodsBrandPicFile.getBytes()));
+        param.setGoodsBrandPic(goodsBrandPic);
+        param.setCreator(WebUtils.getLoginUser().getUserInfo().getUserCode());
+	    return courseService.addGoodsBrand(param);
+	}
+	
+	/**
+	 * <p>修改品牌</p>
+	 * @param webParam
+	 * @return
+	 * @throws IOException
+	 * @author 彭斌  2019年1月11日 下午3:50:02
+	 */
+	@RequestMapping(value = "editGoodsBrand", method = RequestMethod.POST)
+	public JsonResult<String> editGoodsBrand(EditGoodsBrandWebParam webParam) throws IOException{
+	    EditBrandParam param = new EditBrandParam();
+        BeanUtils.copyProperties(webParam, param);
+        MultipartFile goodsBrandPicFile = webParam.getGoodsBrandPicFile();
+        if (webParam.getIsChangeGoodsBrandPic() == IsChangeGoodsBrandPic.Y.getValue() && goodsBrandPicFile != null) {
+            GoodsBrandPic goodsBrandPic = new GoodsBrandPic(goodsBrandPicFile.getOriginalFilename(),
+                    goodsBrandPicFile.getSize(), Base64.encode(goodsBrandPicFile.getBytes()));
+            param.setGoodsBrandPic(goodsBrandPic);
+        }
+        param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
+	    return courseService.editGoodsBrand(param);
+	}
+	
+	/**
+	 * <p>删除品牌</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2019年1月11日 下午3:52:10
+	 */
+	@RequestMapping(value = "delGoodsBrand", method = RequestMethod.POST)
+	public JsonResult<String> delGoodsBrand(DelBrandParam param){
+	    param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
+	    return courseService.delGoodsBrand(param);
+	}
+	
+	/**
+	 * <p>品牌列表</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2019年1月11日 下午4:05:27
+	 */
+	@RequestMapping(value = "getBrandInfoList", method = RequestMethod.POST)
+	public JsonResult<Pagination<BrandInfo>> getBrandInfoList(SearchBrandParam param){
+	    return courseService.getBrandInfoList(param);
+	}
+    
+	/**
+	 * <p>获取品牌详情</p>
+	 * @param brandCode
+	 * @return
+	 * @author 彭斌  2019年1月11日 下午4:05:31
+	 */
+	@RequestMapping(value = "getGoodsBrandInfo", method = RequestMethod.POST)
+    public JsonResult<BrandInfo> getGoodsBrandInfo(@RequestParam("brandCode") String brandCode){
+        return courseService.getGoodsBrandInfo(brandCode);
+    }
 }

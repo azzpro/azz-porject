@@ -20,8 +20,10 @@ import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.WxCourseConstants.StartClassRecordStatus;
 import com.azz.exception.JSR303ValidationException;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
+import com.azz.util.SystemSeqUtils;
 import com.azz.wx.course.mapper.WxCourseMapper;
 import com.azz.wx.course.mapper.WxCourseStartClasRecordMapper;
 import com.azz.wx.course.pojo.WxCourse;
@@ -47,6 +49,9 @@ public class StartClassService {
 	
 	@Autowired
 	private WxCourseStartClasRecordMapper wxCourseStartClasRecordMapper;
+	
+	@Autowired
+    private DbSequenceService dbSequenceService; 
 	
 	/**
 	 * 
@@ -92,7 +97,7 @@ public class StartClassService {
 		if(course == null) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "所属课程不存在");
 		}
-		String startClassCode = System.currentTimeMillis() + ""; // TODO
+		String startClassCode = SystemSeqUtils.getSeq(dbSequenceService.getWxClassBeginNumber());
 		Date nowDate = new Date();
 		WxCourseStartClasRecord startClassRecord = WxCourseStartClasRecord.builder()
 				.courseCode(param.getCourseCode())
@@ -172,7 +177,7 @@ public class StartClassService {
 		
 		// 等订单模块出来，需要判断是否有订单绑定了该开课信息记录 TODO
 		if(status.intValue() == StartClassRecordStatus.INVALID.getValue()) {
-			int count = 0; // TODO
+			int count = 0;
 			if(count > 0) {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "课程已被购买，请先处理完订单后在进行删除");
 			}

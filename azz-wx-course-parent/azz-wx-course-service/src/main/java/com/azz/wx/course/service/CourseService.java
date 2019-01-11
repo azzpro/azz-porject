@@ -26,8 +26,10 @@ import com.azz.core.constants.WxCourseConstants.IsChangeCoursePic;
 import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.system.api.SystemImageUploadService;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
+import com.azz.util.SystemSeqUtils;
 import com.azz.wx.course.mapper.WxCourseClassificationMapper;
 import com.azz.wx.course.mapper.WxCourseMapper;
 import com.azz.wx.course.mapper.WxCourseParamRelMapper;
@@ -70,6 +72,9 @@ public class CourseService {
 	
 	@Autowired
     private SystemImageUploadService systemImageUploadService;
+	
+	@Autowired
+    private DbSequenceService dbSequenceService; 
 
 	/**
 	 * 
@@ -126,7 +131,8 @@ public class CourseService {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "只允许选择三级分类");
 		}
 		Date nowDate = new Date();
-		String courseCode = System.currentTimeMillis() + ""; // TODO
+		
+		String courseCode = SystemSeqUtils.getSeq(dbSequenceService.getWxCourseNumber());
 		// 上传课程主图
 		UploadFileInfo fileInfo = uploadCoursePic(param.getCoursePic(), courseCode);
 		// 新增课程信息
@@ -296,9 +302,9 @@ public class CourseService {
 	    String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
 	    // 新名称为文件名 + 课程编码
 	    String newFileName = fileNameNoSufix + "_" + courseCode;
-	    // 图片url  TODO
+	    // 图片url
 	    JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
-		    filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_MODULE_IMAGE_TYPE);
+		    filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_WX_COURSE_IMAGE_TYPE);
 	    UploadFileInfo file = new UploadFileInfo();
 	    if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 	    	file.setImgUrl(jr.getData());

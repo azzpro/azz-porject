@@ -133,6 +133,7 @@ public class ParamsService {
 					pa.setParamsType(platformGoodsParamsTerm.getParamsType());
 					pa.setParamsCode(platformGoodsParamsTerm.getParamsCode());
 					pa.setParamParentId(platformGoodsParamsTerm.getId());
+					pa.setParamsHidden(platformGoodsParamsTerm.getParamsHidden());
 					List<PlatformGoodsParamsValue> valueById = goodsParamsValueMapper.selectValueById(platformGoodsParamsTerm.getId());
 					if(null != valueById && valueById.size() > 0 && platformGoodsParamsTerm.getParamsType() == 1) {
 						for (PlatformGoodsParamsValue platformGoodsParamsTerm2 : valueById) {
@@ -251,6 +252,7 @@ public class ParamsService {
 						goodsParamsTerm.setCreator(ppt.getCreator());
 						goodsParamsTerm.setParamsId(paramsByCode.getId());
 						goodsParamsTerm.setParamsCode(SystemSeqUtils.getSeq(code));
+						goodsParamsTerm.setParamsHidden(paramsData.getParamsHidden());
 						goodsParamsTermMapper.insertSelective(goodsParamsTerm);
 						//获取主键
 						Long ids = goodsParamsTerm.getId();
@@ -335,6 +337,7 @@ public class ParamsService {
 						goodsParamsTerm.setCreator(ppt.getCreator());
 						goodsParamsTerm.setParamsId(id2);
 						goodsParamsTerm.setParamsCode(SystemSeqUtils.getSeq(codea));
+						goodsParamsTerm.setParamsHidden(paramsData.getParamsHidden());
 						goodsParamsTermMapper.insertSelective(goodsParamsTerm);
 						//获取主键
 						Long id = goodsParamsTerm.getId();

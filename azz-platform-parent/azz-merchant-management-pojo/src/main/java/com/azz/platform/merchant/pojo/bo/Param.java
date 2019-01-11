@@ -26,5 +26,6 @@ public class Param {
 	private String parentCode;
 	private String assortmentCode;
 	private Long paramParentId;
+	private Byte paramsHidden;
 }
 

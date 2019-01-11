@@ -27,5 +27,6 @@ public class ParamsAll {
 	private String assortName;
 	private String assortCode;
 	private Long paramParentId;
+	private Byte paramsHidden;
 }
 

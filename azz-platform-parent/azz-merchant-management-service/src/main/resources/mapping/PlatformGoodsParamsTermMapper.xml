@@ -176,6 +176,12 @@
     where params_id = #{id,jdbcType=BIGINT}
   </delete>
   
+  <update id="updateParamTremHidden">
+  	update platform_goods_params_term
+  	set params_hidden = #{status}
+  	where id = #{id}
+  </update>
+  
   <update id="updateBycode">
     update platform_goods_params_term
     <set>

@@ -10,9 +10,10 @@
     <result column="params_type" jdbcType="TINYINT" property="paramsType" />
     <result column="params_choice" jdbcType="TINYINT" property="paramsChoice" />
     <result column="params_term_id" jdbcType="BIGINT" property="paramsTermId" />
+     <result column="params_hidden" jdbcType="TINYINT" property="paramsHidden" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, params_name, params_id, params_value, product_id,params_type,params_choice,params_term_id
+    id, params_name, params_id, params_value, product_id,params_type,params_choice,params_term_id,params_hidden
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -32,10 +33,10 @@
   
   <insert id="insert" parameterType="com.azz.merchant.pojo.MerchantGoodsProductParams">
     insert into merchant_goods_product_params (id, params_name, params_id, 
-      params_value, product_id,params_type,params_choice,params_term_id)
+      params_value, product_id,params_type,params_choice,params_term_id,params_hidden)
     values (#{id,jdbcType=BIGINT}, #{paramsName,jdbcType=VARCHAR}, #{paramsId,jdbcType=BIGINT}, 
       #{paramsValue,jdbcType=VARCHAR}, #{productId,jdbcType=BIGINT},#{paramsType},#{paramsChoice}
-      ,#{paramsTermId,jdbcType=BIGINT})
+      ,#{paramsTermId,jdbcType=BIGINT},#{paramsHidden})
   </insert>
   <insert id="insertSelective" parameterType="com.azz.merchant.pojo.MerchantGoodsProductParams">
     insert into merchant_goods_product_params
@@ -62,7 +63,10 @@
         params_choice,
       </if>
       <if test="paramsTermId != null">
-        params_term_id
+        params_term_id,
+      </if>
+       <if test="paramsHidden != null">
+        params_hidden
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -90,6 +94,9 @@
       <if test="paramsTermId != null">
         #{paramsTermId,jdbcType=TINYINT}
       </if>
+       <if test="paramsHidden != null">
+        #{paramsHidden}
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.azz.merchant.pojo.MerchantGoodsProductParams">
@@ -116,6 +123,9 @@
       <if test="paramsTermId != null">
         params_term_id = #{paramsTermId,jdbcType=BIGINT},
       </if>
+      <if test="paramsHidden != null">
+        params_hidden = #{paramsHidden},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -127,7 +137,8 @@
       product_id = #{productId,jdbcType=BIGINT},
       params_type = #{paramsType,jdbcType=TINYINT},
       params_choice = #{paramsChoice,jdbcType=TINYINT},
-      params_term_id = #{paramsTermId,jdbcType=BIGINT}
+      params_term_id = #{paramsTermId,jdbcType=BIGINT},
+       params_hidden = #{paramsHidden}
     where id = #{id,jdbcType=BIGINT}
   </update>
   

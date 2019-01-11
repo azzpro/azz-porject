@@ -46,5 +46,9 @@ public interface ParamsService {
 	@RequestMapping(value="/azz/api/merchant/deleteParams",method=RequestMethod.POST)
 	public JsonResult<String> deleteParams(@RequestParam("code") String code);
 	
+	@RequestMapping(value="/azz/api/merchant/updateHidden",method=RequestMethod.POST)
+	public JsonResult<String> updateHidden(@RequestParam("id") Long id,@RequestParam("status") Integer status);
+	
+	
 }
 

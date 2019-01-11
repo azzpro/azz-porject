@@ -9,11 +9,17 @@
     <result column="product_id" jdbcType="BIGINT" property="productId" />
     <result column="params_type" jdbcType="TINYINT" property="paramsType" />
     <result column="params_choice" jdbcType="TINYINT" property="paramsChoice" />
+     <result column="params_hidden" jdbcType="TINYINT" property="paramsHidden" />
+  	<result column="params_term_id" jdbcType="BIGINT" property="paramsTermId" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, params_name, params_id, params_value, product_id,params_type,params_choice
+    id, params_name, params_id, params_value, product_id,params_type,params_choice,params_hidden,params_term_id
   </sql>
   <select id="selectParamsByProductId" resultMap="BaseResultMap">
   select <include refid="Base_Column_List"></include> from merchant_goods_product_params where product_id = #{id}
   </select>
+  
+  <update id="updateHidden">
+  update merchant_goods_product_params set params_hidden = #{status} and params_term_id = #{id}
+  </update>
 </mapper>

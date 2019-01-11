@@ -86,6 +86,17 @@ public class ParamsController {
 	}
 	
 	/**
+	 * <p>更新隐藏状态</p>
+	 * @param code
+	 * @return
+	 * @author 刘建麟  2018年10月31日 下午7:51:21
+	 */
+	@RequestMapping(value="updateHidden",method=RequestMethod.POST)
+	public JsonResult<String> updateHidden(Long id,Integer status){
+		return paramsService.updateHidden(id,status);
+	}
+	
+	/**
 	 * <p>删除参数</p>
 	 * @param params
 	 * @return

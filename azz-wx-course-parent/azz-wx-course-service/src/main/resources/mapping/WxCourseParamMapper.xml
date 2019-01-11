@@ -23,6 +23,19 @@
     delete from wx_course_param
     where id = #{id,jdbcType=BIGINT}
   </delete>
+  <select id="searchParamsList" resultType="com.azz.wx.course.pojo.vo.Params" parameterType="com.azz.wx.course.pojo.bo.SearchParams">
+  select a.param_code paramCode ,b.classification_name assortmentName ,a.classification_code aId, c.productUseCount,d.paramsCount ,a.create_time createTime from wx_course_param a
+	LEFT JOIN wx_course_classification b on b.classification_code = a.classification_code
+	LEFT JOIN (select classification_code ,count(1) as productUseCount from wx_course group by classification_code) c on 
+	a.classification_code = c.classification_code
+	LEFT JOIN (select param_code ,count(1) as paramsCount from wx_course_param_term group by param_code) d on
+	a.param_code = d.param_code
+	<where>
+		<if test="param != null and param != ''">
+			a.param_code LIKE CONCAT('%',#{param},'%') or b.assortment_name LIKE CONCAT('%',#{param},'%')
+		</if>
+	</where>
+  </select>
   <insert id="insert" parameterType="com.azz.wx.course.pojo.WxCourseParam">
     insert into wx_course_param (id, param_code, classification_code, 
       creator, create_time, modifier, 
@@ -31,7 +44,7 @@
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
       #{modifyTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.azz.wx.course.pojo.WxCourseParam" useGeneratedKeys="true" keyProperty="paramCode">
+  <insert id="insertSelective" parameterType="com.azz.wx.course.pojo.WxCourseParam">
     insert into wx_course_param
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -116,7 +129,7 @@
   </update>
   
   <select id="selectParamsByCode" resultMap="BaseResultMap" parameterType="java.lang.String">
-  select <include refid="Base_Column_List"></include> wx_course_param where params_code=#{code}
+  select <include refid="Base_Column_List"></include> from wx_course_param where param_code=#{code}
   </select>
   
    <delete id="deleteByCode" parameterType="java.lang.String">

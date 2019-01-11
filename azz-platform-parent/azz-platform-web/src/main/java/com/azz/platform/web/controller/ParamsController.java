@@ -98,5 +98,11 @@ public class ParamsController {
 		return paramsService.deleteParams(code);
 	}
 	
+
+	@RequestMapping(value="updateHidden",method=RequestMethod.POST)
+	public JsonResult<String> updateHidden(@RequestParam("id") Long id,@RequestParam("status") Integer status){
+		return paramsService.updateHidden(id, status);
+	}
+	
 }
 

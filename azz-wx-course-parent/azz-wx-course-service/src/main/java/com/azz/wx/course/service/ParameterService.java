@@ -27,6 +27,7 @@ import com.azz.core.common.errorcode.PlatformGoodsErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.SystemSeqUtils;
 import com.azz.wx.course.mapper.WxCourseClassificationMapper;
@@ -69,6 +70,9 @@ public class ParameterService {
 	
 	@Autowired
 	private WxCourseParamTermValueMapper courseParamTermValueMapper;
+	
+	@Autowired
+	private DbSequenceService dbSequenceService;
 	/**
 	 * <p>参数列表</p>
 	 * @param param
@@ -129,43 +133,35 @@ public class ParameterService {
 				if(count >= 1) {
 					throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_TOOMANY);
 				}
-				//TODO
-				//String codes = dbSequenceService.getParameterCodeNumber();
+				String codes = dbSequenceService.getWxParamValueNumber();
 				WxCourseParam wParam = new WxCourseParam();
 				wParam.setClassificationCode(classificationCode.getClassificationCode());
 				wParam.setCreateTime(new Date());
 				wParam.setCreator(ppt.getCreator());
-				wParam.setParamCode("222");
-				//goodsParams.setParamsCode(SystemSeqUtils.getSeq(codes));
+				wParam.setParamCode(SystemSeqUtils.getSeq(codes));
 				courseParamMapper.insertSelective(wParam);
-				String code = wParam.getParamCode();
 				for (Param paramsData : list) {
 					JSR303ValidateUtils.validate(paramsData);
 					if(null == paramsData) {
 						throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_NULL);
 					}else {
-						//TODO
-						//String codea = dbSequenceService.getParameterItemCodeNumber();
+						String codea = dbSequenceService.getWxParamTremNumber();
 						WxCourseParamTerm wParamTerm = new WxCourseParamTerm();
 						wParamTerm.setCreateTime(new Date());
 						wParamTerm.setCreator(ppt.getCreator());
 						wParamTerm.setParamChoice(paramsData.getParamsChoice());
-						wParamTerm.setParamCode(code);
+						wParamTerm.setParamCode(wParam.getParamCode());
 						wParamTerm.setParamName(paramsData.getParamName());
-						wParamTerm.setParamTermCode("11");
+						wParamTerm.setParamTermCode(SystemSeqUtils.getSeq(codea));
 						wParamTerm.setParamType(paramsData.getParamsType());
-						//goodsParamsTerm.setParamsCode(SystemSeqUtils.getSeq(codea));
 						courseParamTermMapper.insertSelective(wParamTerm);
-						//获取主键
-						String codeTerm = wParamTerm.getParamTermCode();
 						
 						String[] param = paramsData.getParam();
-						//String[] split = param.split(",");
 						for (String string : param) {
 							WxCourseParamTermValue ppv = new WxCourseParamTermValue();
 							ppv.setCreateTime(new Date());
 							ppv.setCreator(ppt.getCreator());
-							ppv.setParamTermCode(codeTerm);
+							ppv.setParamTermCode(wParamTerm.getParamTermCode());
 							ppv.setParamValue(string);
 							courseParamTermValueMapper.insertSelective(ppv);
 							ppv = null;
@@ -252,7 +248,7 @@ public class ParameterService {
 			List<Param> list = ppt.getParams();
 			if(null != list && list.size() > 0) {
 				TreeSet<String> set = new TreeSet<>();
-				TreeSet<String> set2 = new TreeSet<>();
+				
 				for(Param paramsData1 : list) {
 					set.add(paramsData1.getParamName());
 				}
@@ -261,6 +257,7 @@ public class ParameterService {
 				}
 				List<Param> params = ppt.getParams();
 				for (Param param : params) {
+					TreeSet<String> set2 = new TreeSet<>();
 					String[] param2 = param.getParam();
 					for (int i = 0; i < param2.length; i++) {
 						set2.add(param2[i]);
@@ -268,6 +265,7 @@ public class ParameterService {
 					if(set2.size() != param2.length) {
 						throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_VALUES);
 					}
+					set2 = null;
 				}
 			}
 		}
@@ -317,13 +315,12 @@ public class ParameterService {
 					if(null == paramsData) {
 						throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_NULL);
 					}else {
-						//TODO 序列编号
-						//String code = dbSequenceService.getParameterItemCodeNumber();
+						String codea = dbSequenceService.getWxParamTremNumber();
 						WxCourseParamTerm term = new WxCourseParamTerm();
 						term.setParamName(paramsData.getParamName());
 						term.setParamChoice(paramsData.getParamsChoice());
 						term.setParamType(paramsData.getParamsType());
-						term.setParamTermCode("1111");
+						term.setParamTermCode(SystemSeqUtils.getSeq(codea));
 						term.setCreateTime(new Date());
 						term.setCreator(ppt.getCreator());
 						term.setParamCode(paramsByCode.getParamCode());

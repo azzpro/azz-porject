@@ -31,7 +31,7 @@ import com.azz.wx.course.service.ParameterService;
  * @author 刘建麟  2018年10月31日 上午11:14:02
  */
 @RestController
-@RequestMapping("/azz/api/merchant")
+@RequestMapping("/azz/api/platform/course")
 public class ParamsController {
 
 	private final Logger LOG = LoggerFactory.getLogger(getClass());

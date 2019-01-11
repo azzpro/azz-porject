@@ -4,6 +4,7 @@ package com.azz.platform.merchant.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.azz.platform.merchant.pojo.PlatformGoodsParamsTerm;
 
@@ -20,6 +21,8 @@ public interface PlatformGoodsParamsTermMapper {
     int updateByPrimaryKeySelective(PlatformGoodsParamsTerm record);
 
     int updateByPrimaryKey(PlatformGoodsParamsTerm record);
+    
+    int updateParamTremHidden(@Param("id") Long id,@Param("status") Integer status);
     
     /**
      * <p>删除参数项</p>

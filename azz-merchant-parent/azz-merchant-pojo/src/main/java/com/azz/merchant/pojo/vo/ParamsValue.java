@@ -26,5 +26,6 @@ public class ParamsValue {
 	private Byte choice;
 	private List<String> values;
 	private Long termId;
+	private Byte paramsHidden;
 }
 

@@ -148,6 +148,7 @@ public class ProductService {
 				pv.setType(platformGoodsParamsTerm.getParamsType());
 				pv.setParamName(platformGoodsParamsTerm.getParamsName());
 				pv.setTermId(platformGoodsParamsTerm.getId());
+				pv.setParamsHidden(platformGoodsParamsTerm.getParamsHidden());
 				if(platformGoodsParamsTerm.getParamsType() == 1) {
 					List<PlatformGoodsParamsValue> termId = platformGoodsParamsValueMapper.selectValueByTermId(platformGoodsParamsTerm.getId());
 					for (PlatformGoodsParamsValue ppv : termId) {
@@ -381,6 +382,7 @@ public class ProductService {
 						mpp.setParamsTermId(productParam.getTermId());
 						mpp.setParamsName(productParam.getParamName());
 						mpp.setParamsValue(productParam.getValues());
+						mpp.setParamsHidden(productParam.getParamsHidden());
 						mpp.setProductId(mgp.getId());
 						/**
 						 * 参数新增时  type 含义为 1 下拉 2填写  choice 含义为 1必选2非必选
@@ -481,6 +483,7 @@ public class ProductService {
 						mpp.setParamsTermId(productParam.getTermId());
 						mpp.setParamsType(productParam.getType());
 						mpp.setParamsChoice(productParam.getChoice());
+						mpp.setParamsHidden(productParam.getParamsHidden());
 						goodsProductParamsMapper.insertSelective(mpp);
 						mpp = null;
 					}
@@ -584,6 +587,7 @@ public class ProductService {
                         obj.setProductId(mgp.getId());
                         obj.setParamsType(productParam.getType());
                         obj.setParamsChoice(productParam.getChoice());
+                        obj.setParamsHidden(productParam.getParamsHidden());
                         goodsProductParamsMapper.insertSelective(obj);
                     }
                 }

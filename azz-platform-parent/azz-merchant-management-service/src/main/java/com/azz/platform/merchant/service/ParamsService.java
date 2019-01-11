@@ -27,6 +27,7 @@ import com.azz.core.common.page.Pagination;
 import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.merchant.api.ProductService;
+import com.azz.platform.merchant.mapper.MerchantGoodsProductParamsMapper;
 import com.azz.platform.merchant.mapper.PlatformGoodsClassificationMapper;
 import com.azz.platform.merchant.mapper.PlatformGoodsParamsMapper;
 import com.azz.platform.merchant.mapper.PlatformGoodsParamsTermMapper;
@@ -74,6 +75,25 @@ public class ParamsService {
 	@Autowired
 	private PlatformGoodsClassificationMapper goodsClassificationMapper;
 	
+	@Autowired
+	private MerchantGoodsProductParamsMapper merchantGoodsProductParamsMapper;
+	
+	
+	/**
+	 *  更新参数 隐藏状态
+	 * @param code
+	 * @param status
+	 * @return
+	 */
+	public JsonResult<String> updateHidden(Long id,Integer status){
+		if(id == null || status == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"参数不能为空");
+		}
+		//更新参数 是否隐藏 或 使用状态，产品关联参数也要同步更新
+		goodsParamsTermMapper.updateParamTremHidden(id, status);
+		merchantGoodsProductParamsMapper.updateHidden(id, status);
+		return JsonResult.successJsonResult();
+	}
 	
 	 /**
 	 * <p>参数列表</p>
@@ -172,7 +192,7 @@ public class ParamsService {
 			List<com.azz.platform.merchant.pojo.bo.Param> list = ppt.getParams();
 			if(null != list && list.size() > 0) {
 				TreeSet<String> set = new TreeSet<>();
-				TreeSet<String> set2 = new TreeSet<>();
+				
 				for(Param paramsData1 : list) {
 					set.add(paramsData1.getParamName());
 				}
@@ -181,6 +201,7 @@ public class ParamsService {
 				}
 				List<Param> params = ppt.getParams();
 				for (Param param : params) {
+					TreeSet<String> set2 = new TreeSet<>();
 					String[] param2 = param.getParam();
 					for (int i = 0; i < param2.length; i++) {
 						set2.add(param2[i]);
@@ -188,6 +209,7 @@ public class ParamsService {
 					if(set2.size() != param2.length) {
 						throw new BaseException(PlatformGoodsErrorCode.PLATFORM_GOODS_ERROR_INVALID_VALUES);
 					}
+					set2 = null;
 				}
 			}
 		}

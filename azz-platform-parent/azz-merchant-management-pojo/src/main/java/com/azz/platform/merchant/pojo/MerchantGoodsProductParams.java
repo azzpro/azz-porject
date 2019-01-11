@@ -42,8 +42,29 @@ public class MerchantGoodsProductParams implements Serializable {
     private Byte paramsType;
     
     private Byte paramsChoice;
+    
+    private Byte paramsHidden;
+    
+    private Long paramsTermId;
+    
 
-    private static final long serialVersionUID = 1L;
+    public Long getParamsTermId() {
+		return paramsTermId;
+	}
+
+	public void setParamsTermId(Long paramsTermId) {
+		this.paramsTermId = paramsTermId;
+	}
+
+	public Byte getParamsHidden() {
+		return paramsHidden;
+	}
+
+	public void setParamsHidden(Byte paramsHidden) {
+		this.paramsHidden = paramsHidden;
+	}
+
+	private static final long serialVersionUID = 1L;
 
     /**
      * 主键<br/>

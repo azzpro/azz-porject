@@ -12,10 +12,11 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="params_hidden" jdbcType="BIT" property="paramsHidden" />
   </resultMap>
   <sql id="Base_Column_List">
     id, params_code, params_name, params_id, params_type, params_choice, creator, create_time, 
-    modifier, modify_time
+    modifier, modify_time,params_hidden
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -31,11 +32,11 @@
     insert into platform_goods_params_term (id, params_code, params_name, 
       params_id, params_type, params_choice, 
       creator, create_time, modifier, 
-      modify_time)
+      modify_time,params_hidden)
     values (#{id,jdbcType=BIGINT}, #{paramsCode,jdbcType=VARCHAR}, #{paramsName,jdbcType=VARCHAR}, 
       #{paramsId,jdbcType=BIGINT}, #{paramsType,jdbcType=BIT}, #{paramsChoice,jdbcType=BIT}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
-      #{modifyTime,jdbcType=TIMESTAMP})
+      #{modifyTime,jdbcType=TIMESTAMP},#{paramsHidden})
   </insert>
   <insert id="insertSelective" parameterType="com.azz.platform.merchant.pojo.PlatformGoodsParamsTerm" useGeneratedKeys="true" keyProperty="id">
     insert into platform_goods_params_term
@@ -70,6 +71,9 @@
       <if test="modifyTime != null">
         modify_time,
       </if>
+      <if test="paramsHidden != null">
+        params_hidden,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -101,6 +105,9 @@
       </if>
       <if test="modifyTime != null">
         #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paramsHidden != null">
+        #{paramsHidden},
       </if>
     </trim>
   </insert>
@@ -134,6 +141,9 @@
       <if test="modifyTime != null">
         modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       </if>
+       <if test="paramsHidden != null">
+        params_hidden = #{paramsHidden},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -147,7 +157,8 @@
       creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modifier = #{modifier,jdbcType=VARCHAR},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      params_hidden = #{paramsHidden}
     where id = #{id,jdbcType=BIGINT}
   </update>
   
@@ -194,6 +205,9 @@
       </if>
       <if test="modifyTime != null">
         modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paramsHidden != null">
+        params_hidden = #{paramsHidden},
       </if>
     </set>
     where params_code = #{paramsCode,jdbcType=VARCHAR}

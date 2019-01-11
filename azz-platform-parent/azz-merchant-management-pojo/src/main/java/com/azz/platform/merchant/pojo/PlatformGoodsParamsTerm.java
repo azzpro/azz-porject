@@ -74,10 +74,24 @@ public class PlatformGoodsParamsTerm implements Serializable {
      * @mbg.generated
      */
     private Date modifyTime;
+    
+    /**
+     * 是否隐藏 1显示 0隐藏
+     */
+    private Byte paramsHidden;
 
     private static final long serialVersionUID = 1L;
 
-    /**
+    
+    public Byte getParamsHidden() {
+		return paramsHidden;
+	}
+
+	public void setParamsHidden(Byte paramsHidden) {
+		this.paramsHidden = paramsHidden;
+	}
+
+	/**
      * 主键<br/>
      * 返回值对应的表列名 platform_goods_params_term.id
      *

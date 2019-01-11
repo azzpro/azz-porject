@@ -21,6 +21,55 @@ public interface DbSequenceService {
 	
 	
 	/**
+	 * <p>微信品牌</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:36:33
+	 */
+	@RequestMapping(value="/azz/api/sequence/getWxBrandNumber",method=RequestMethod.GET)
+	public String getWxBrandNumber() ;
+	
+	/**
+	 * <p>微信分类</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:36:33
+	 */
+	@RequestMapping(value="/azz/api/sequence/getWxClassificationNumber",method=RequestMethod.GET)
+	public String getWxClassificationNumber() ;
+	
+	/**
+	 * <p>微信开课</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:36:33
+	 */
+	@RequestMapping(value="/azz/api/sequence/getWxClassBeginNumber",method=RequestMethod.GET)
+	public String getWxClassBeginNumber() ;
+	
+	
+	/**
+	 * <p>微信参数项</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:36:33
+	 */
+	@RequestMapping(value="/azz/api/sequence/getWxParamTremNumber",method=RequestMethod.GET)
+	public String getWxParamTremNumber();
+	
+	/**
+	 * <p>微信参数值</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:36:33
+	 */
+	@RequestMapping(value="/azz/api/sequence/getWxParamValueNumber",method=RequestMethod.GET)
+	public String getWxParamValueNumber() ;
+	
+	/**
+	 * <p>微信课程</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:36:33
+	 */
+	@RequestMapping(value="/azz/api/sequence/getWxCourseNumber",method=RequestMethod.GET)
+	public String getWxCourseNumber() ;
+	
+	/**
 	 * <p>个人订单编号</p>
 	 * @return
 	 * @author 刘建麟  2018年10月24日 下午4:36:33

@@ -37,6 +37,12 @@ import com.azz.sequence.sequence.service.ProductMoudleSequence;
 import com.azz.sequence.sequence.service.ProductParamSequence;
 import com.azz.sequence.sequence.service.ProductParamTermSequence;
 import com.azz.sequence.sequence.service.ProductSequence;
+import com.azz.sequence.sequence.service.WxBrandSequence;
+import com.azz.sequence.sequence.service.WxClassBeginSequence;
+import com.azz.sequence.sequence.service.WxClassificationSequence;
+import com.azz.sequence.sequence.service.WxCourseSequence;
+import com.azz.sequence.sequence.service.WxParamTremSequence;
+import com.azz.sequence.sequence.service.WxParamValueSequence;
 
 /**
  * <P>TODO</P>
@@ -122,6 +128,88 @@ public class SequenceController {
 	
 	@Autowired
 	private ProductSequence productSequence;
+	
+	@Autowired
+	private WxBrandSequence wxBrandSequence;
+	
+	@Autowired
+	private WxClassBeginSequence wxClassBeginSequence;
+	
+	@Autowired
+	private WxClassificationSequence wxClassificationSequence;
+	
+	@Autowired
+	private WxCourseSequence wxCourseSequence;
+	
+	@Autowired
+	private WxParamTremSequence wxParamTremSequence;
+	
+	@Autowired
+	private WxParamValueSequence wxParamValueSequence;
+	
+	
+	/**
+	 * <p>微信品牌</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:36:33
+	 */
+	@RequestMapping(value="getWxBrandNumber",method=RequestMethod.GET)
+	public String getWxBrandNumber() {
+		return wxBrandSequence.getSequence();
+	}
+	
+	/**
+	 * <p>微信分类</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:36:33
+	 */
+	@RequestMapping(value="getWxClassificationNumber",method=RequestMethod.GET)
+	public String getWxClassificationNumber() {
+		return wxClassificationSequence.getSequence();
+	}
+	
+	/**
+	 * <p>微信开课</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:36:33
+	 */
+	@RequestMapping(value="getWxClassBeginNumber",method=RequestMethod.GET)
+	public String getWxClassBeginNumber() {
+		return wxClassBeginSequence.getSequence();
+	}
+	
+	
+	/**
+	 * <p>微信参数项</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:36:33
+	 */
+	@RequestMapping(value="getWxParamTremNumber",method=RequestMethod.GET)
+	public String getWxParamTremNumber() {
+		return wxParamTremSequence.getSequence();
+	}
+	
+	/**
+	 * <p>微信参数值</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:36:33
+	 */
+	@RequestMapping(value="getWxParamValueNumber",method=RequestMethod.GET)
+	public String getWxParamValueNumber() {
+		return wxParamValueSequence.getSequence();
+	}
+	
+	/**
+	 * <p>微信课程</p>
+	 * @return
+	 * @author 刘建麟  2018年10月24日 下午4:36:33
+	 */
+	@RequestMapping(value="getWxCourseNumber",method=RequestMethod.GET)
+	public String getWxCourseNumber() {
+		return wxCourseSequence.getSequence();
+	}
+	
+	
 	/**
 	 * <p>个人订单编号</p>
 	 * @return

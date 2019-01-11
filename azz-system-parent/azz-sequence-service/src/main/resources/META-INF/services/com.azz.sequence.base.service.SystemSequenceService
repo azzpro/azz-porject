@@ -23,3 +23,9 @@ com.azz.sequence.sequence.service.impl.ProductMoudleSequenceImpl
 com.azz.sequence.sequence.service.impl.ProductParamTermSequenceImpl
 com.azz.sequence.sequence.service.impl.ProductParamSequenceImpl
 com.azz.sequence.sequence.service.impl.ProductSequenceImpl
+com.azz.sequence.sequence.service.impl.WxBrandSequenceImpl
+com.azz.sequence.sequence.service.impl.WxClassBeginSequenceImpl
+com.azz.sequence.sequence.service.impl.WxClassificationSequenceImpl
+com.azz.sequence.sequence.service.impl.WxCourseSequenceImpl
+com.azz.sequence.sequence.service.impl.WxParamTremSequenceImpl
+com.azz.sequence.sequence.service.impl.WxParamValueSequenceImpl

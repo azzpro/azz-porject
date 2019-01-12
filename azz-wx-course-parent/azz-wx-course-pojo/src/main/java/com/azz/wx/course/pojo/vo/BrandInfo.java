@@ -30,5 +30,6 @@ public class BrandInfo {
 	
 	private Date createTime;
 
+	private Integer courseNumber;
 }
 

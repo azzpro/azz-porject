@@ -274,4 +274,16 @@ public class CourseController {
 	public JsonResult<String> delBrand(@RequestBody DelBrandParam param){
 	    return brandService.delBrand(param);
 	}
+	
+	/**
+     * <p>获取所有下拉品牌</p>
+     * @param param
+     * @return
+     * @author 彭斌  2019年1月11日 下午12:06:03
+     */
+	@RequestMapping(value="getAllBrand",method=RequestMethod.POST)
+    public JsonResult<List<BrandInfo>> getAllBrand(){
+        return brandService.getAllBrand();
+    }
+	
 }

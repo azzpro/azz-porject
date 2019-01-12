@@ -333,4 +333,14 @@ public class CourseController {
     public JsonResult<BrandInfo> getBrandInfo(@RequestParam("brandCode") String brandCode){
         return courseService.getBrandInfo(brandCode);
     }
+	
+	/**
+	 * <p>获取所有品牌下拉列</p>
+	 * @return
+	 * @author 彭斌  2019年1月12日 下午3:50:28
+	 */
+	@RequestMapping(value = "getAllBrand", method = RequestMethod.POST)
+	public JsonResult<List<BrandInfo>> getAllBrand(){
+	    return courseService.getAllBrand();
+	}
 }

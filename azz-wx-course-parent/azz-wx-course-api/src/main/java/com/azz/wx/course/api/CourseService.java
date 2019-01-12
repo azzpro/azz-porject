@@ -151,4 +151,7 @@ public interface CourseService {
 	
 	@RequestMapping(value = "/azz/api/platform/course/delBrand", method = RequestMethod.POST)
 	public JsonResult<String> delBrand(@RequestBody DelBrandParam param);
+	
+	@RequestMapping(value = "/azz/api/platform/course/getAllBrand", method = RequestMethod.POST)
+	public JsonResult<List<BrandInfo>> getAllBrand();
 }

@@ -68,6 +68,16 @@ public class BrandService {
     }
     
     /**
+     * <p>获取所有有效的品牌下拉列</p>
+     * @return
+     * @author 彭斌  2019年1月12日 下午3:46:40
+     */
+    public JsonResult<List<BrandInfo>> getAllBrand(){
+        List<BrandInfo> infos = wxCourseBrandMapper.getBrandInfoList(null);
+        return JsonResult.successJsonResult(infos);
+    }
+    
+    /**
      * <p>查询品牌详情</p>
      * @param brandCode
      * @return

@@ -134,7 +134,7 @@
   
    <delete id="deleteByCode" parameterType="java.lang.String">
     delete from wx_course_param
-    where params_code = #{code,jdbcType=VARCHAR}
+    where param_code = #{code,jdbcType=VARCHAR}
   </delete>
   
   <update id="updateAssormentIdById">

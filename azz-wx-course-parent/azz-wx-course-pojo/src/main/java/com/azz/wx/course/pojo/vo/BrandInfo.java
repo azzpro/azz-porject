@@ -26,6 +26,8 @@ public class BrandInfo {
 	
 	private String brandDescription;
 	
+	private String brandInfo;
+	
 	private Date createTime;
 
 }

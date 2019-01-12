@@ -223,6 +223,7 @@
 		wcb.brand_pic_url AS brandPicUrl,
 		wcb.brand_code AS brandCode,
 		wcb.brand_description AS brandDescription,
+		wcb.brand_info as brandInfo,
 		wcb.create_time AS createTime
 	FROM
 		wx_course_brand wcb

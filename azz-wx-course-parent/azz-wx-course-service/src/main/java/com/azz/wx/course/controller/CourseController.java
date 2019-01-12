@@ -226,9 +226,9 @@ public class CourseController {
 	 * @return
 	 * @author 彭斌  2019年1月11日 上午11:59:16
 	 */
-	@RequestMapping(value="addGoodsBrand",method=RequestMethod.POST)
-	public JsonResult<String> addGoodsBrand(@RequestBody AddBrandParam param){
-	    return brandService.addGoodsBrand(param);
+	@RequestMapping(value="addBrand",method=RequestMethod.POST)
+	public JsonResult<String> addBrand(@RequestBody AddBrandParam param){
+	    return brandService.addBrand(param);
 	}
 	
 	/**
@@ -237,7 +237,7 @@ public class CourseController {
 	 * @return
 	 * @author 彭斌  2019年1月11日 下午12:00:58
 	 */
-	@RequestMapping(value="getGoodsBrandInfoList",method=RequestMethod.POST)
+	@RequestMapping(value="getBrandInfoList",method=RequestMethod.POST)
 	public JsonResult<Pagination<BrandInfo>> getBrandInfoList(@RequestBody SearchBrandParam param){
 	    return brandService.getBrandInfoList(param);
 	}
@@ -248,9 +248,9 @@ public class CourseController {
 	 * @return
 	 * @author 彭斌  2019年1月11日 下午12:03:07
 	 */
-	@RequestMapping(value="getGoodsBrandInfo", method = RequestMethod.POST)
-	public JsonResult<BrandInfo> getGoodsBrandInfo(@RequestParam("brandCode") String brandCode){
-	    return brandService.getGoodsBrandInfo(brandCode);
+	@RequestMapping(value="getBrandInfo", method = RequestMethod.POST)
+	public JsonResult<BrandInfo> getBrandInfo(@RequestParam("brandCode") String brandCode){
+	    return brandService.getBrandInfo(brandCode);
 	}
 	
 	/**
@@ -259,8 +259,8 @@ public class CourseController {
 	 * @return
 	 * @author 彭斌  2019年1月11日 下午12:05:19
 	 */
-	@RequestMapping(value="editGoodsBrand",method=RequestMethod.POST)
-	public JsonResult<String> editGoodsBrand(@RequestBody EditBrandParam param) {
+	@RequestMapping(value="editBrand",method=RequestMethod.POST)
+	public JsonResult<String> editBrand(@RequestBody EditBrandParam param) {
 	    return brandService.editBrand(param);
 	}
 	
@@ -270,8 +270,8 @@ public class CourseController {
 	 * @return
 	 * @author 彭斌  2019年1月11日 下午12:06:03
 	 */
-	@RequestMapping(value="delGoodsBrand",method=RequestMethod.POST)
-	public JsonResult<String> delGoodsBrand(@RequestBody DelBrandParam param){
-	    return brandService.delGoodsBrand(param);
+	@RequestMapping(value="delBrand",method=RequestMethod.POST)
+	public JsonResult<String> delBrand(@RequestBody DelBrandParam param){
+	    return brandService.delBrand(param);
 	}
 }

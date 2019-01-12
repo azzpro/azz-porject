@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
@@ -289,8 +288,7 @@ public class ClassificationService {
      * @return
      * @author 彭斌 2018年10月31日 下午5:17:08
      */
-    public JsonResult<WxCourseClassification> getClassificationInfo(
-            @RequestParam("assortmentCode") String assortmentCode) {
+    public JsonResult<WxCourseClassification> getClassificationInfo(String assortmentCode) {
         if (null == assortmentCode) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
                     "分类编码不存在");
@@ -374,7 +372,7 @@ public class ClassificationService {
      * @return
      * @author 彭斌  2018年11月6日 上午10:49:44
      */
-    public JsonResult<List<ClassificationParams>> getClassificationChild(@RequestParam("parentCode") String parentCode){
+    public JsonResult<List<ClassificationParams>> getClassificationChild(String parentCode){
         if(null == parentCode || "".equals(parentCode)) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
                     "分类编码不存在");

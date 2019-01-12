@@ -155,6 +155,12 @@
   select <include refid="Base_Column_List"></include> from wx_course_param_term where param_code=#{code}
   </select>
   
+  <select id="selectParamsByParamsCode" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include>
+  	from wx_course_param_term
+  	where param_code = #{code}
+  </select>
+  
   <!-- 删除参数项 -->
   <delete id="deleteByParamsCode" parameterType="java.lang.String">
     delete from wx_course_param_term

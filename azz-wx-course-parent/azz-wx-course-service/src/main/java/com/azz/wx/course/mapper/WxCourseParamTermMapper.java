@@ -23,4 +23,6 @@ public interface WxCourseParamTermMapper {
     List<WxCourseParamTerm> selectParamsTermByCode(String code);
     
     int deleteByParamsCode(String code);
+    
+    List<WxCourseParamTerm> selectParamsByParamsCode(String code);
 }

@@ -7,16 +7,22 @@
  
 package com.azz.wx.course.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
+import com.azz.core.common.errorcode.MerchantProductErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.FileConstants;
@@ -32,11 +38,17 @@ import com.azz.util.StringUtils;
 import com.azz.util.SystemSeqUtils;
 import com.azz.wx.course.mapper.WxCourseClassificationMapper;
 import com.azz.wx.course.mapper.WxCourseMapper;
+import com.azz.wx.course.mapper.WxCourseParamMapper;
 import com.azz.wx.course.mapper.WxCourseParamRelMapper;
+import com.azz.wx.course.mapper.WxCourseParamTermMapper;
+import com.azz.wx.course.mapper.WxCourseParamTermValueMapper;
 import com.azz.wx.course.mapper.WxCourseStartClasRecordMapper;
 import com.azz.wx.course.pojo.WxCourse;
 import com.azz.wx.course.pojo.WxCourseClassification;
+import com.azz.wx.course.pojo.WxCourseParam;
 import com.azz.wx.course.pojo.WxCourseParamRel;
+import com.azz.wx.course.pojo.WxCourseParamTerm;
+import com.azz.wx.course.pojo.WxCourseParamTermValue;
 import com.azz.wx.course.pojo.bo.AddCourseParam;
 import com.azz.wx.course.pojo.bo.CourseParam;
 import com.azz.wx.course.pojo.bo.CoursePic;
@@ -46,6 +58,8 @@ import com.azz.wx.course.pojo.bo.SearchCourseInfoParam;
 import com.azz.wx.course.pojo.vo.CourseDetail;
 import com.azz.wx.course.pojo.vo.CourseInfo;
 import com.azz.wx.course.pojo.vo.Param;
+import com.azz.wx.course.pojo.vo.ParamsValue;
+import com.azz.wx.course.pojo.vo.ProductParams;
 import com.azz.wx.course.pojo.vo.UploadFileInfo;
 import com.github.pagehelper.PageHelper;
 
@@ -75,6 +89,15 @@ public class CourseService {
 	
 	@Autowired
     private DbSequenceService dbSequenceService; 
+	
+	@Autowired
+	private WxCourseParamMapper wxCourseParamMapper;
+	
+	@Autowired
+	private WxCourseParamTermMapper wxCourseParamTermMapper;
+	
+	@Autowired
+	private WxCourseParamTermValueMapper wxCourseParamTermValueMapper;
 
 	/**
 	 * 
@@ -315,6 +338,55 @@ public class CourseService {
 	    return file;
 	}
 	
-	
+	/**
+	 * <p>新增课程页面获取参数</p>
+	 * @param params
+	 * @return
+	 * @author 刘建麟  2018年10月31日 下午7:47:30
+	 */
+	@RequestMapping(value="getPrams",method=RequestMethod.POST)
+	public JsonResult<ProductParams> getPrams(String code){
+		if(org.apache.commons.lang3.StringUtils.isBlank(code))
+			throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_ASSORTMENT_IS_NULL);
+		WxCourseParam assortmentCode = wxCourseParamMapper.selectParamsByAssortmentCode(code);
+		/*if(null == goodsParams)
+			throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_VALUES_IS_NULL);*/
+		//根据参数ID 查询参数项类型
+		List<WxCourseParamTerm> paramsId = null;
+		if(null != assortmentCode) {
+			paramsId = wxCourseParamTermMapper.selectParamsByParamsCode(assortmentCode.getParamCode());
+		}
+		ProductParams pp = new ProductParams();
+		if(null !=  paramsId && paramsId.size() > 0) {
+			List<ParamsValue> pvs = new ArrayList<>();
+			List<String> values = new ArrayList<>();
+			StringBuilder sb = new StringBuilder();
+			//根据参数项ID 查询值
+			for (WxCourseParamTerm platformGoodsParamsTerm : paramsId) {
+				ParamsValue pv = new ParamsValue();
+				pv.setChoice(platformGoodsParamsTerm.getParamChoice());
+				pv.setType(platformGoodsParamsTerm.getParamType());
+				pv.setParamName(platformGoodsParamsTerm.getParamName());
+				pv.setTermCode(platformGoodsParamsTerm.getParamTermCode());
+				if(platformGoodsParamsTerm.getParamType() == 1) {
+					List<WxCourseParamTermValue> termId = wxCourseParamTermValueMapper.selectValueByCode(platformGoodsParamsTerm.getParamTermCode());
+					for (WxCourseParamTermValue ppv : termId) {
+						sb.append(ppv.getParamValue());
+						if(ppv != termId.get(termId.size()-1)) {
+							sb.append(",");
+						}
+						
+					}
+					values = Arrays.asList(sb.toString().split(",")).stream().map(s -> s.trim()).collect(Collectors.toList());
+					pv.setValues(values);
+					sb = new StringBuilder();
+				}
+				pvs.add(pv);
+				pv = null;
+			}
+			pp.setPvs(pvs);
+		}
+		return new JsonResult<>(pp);
+	}
 }
 

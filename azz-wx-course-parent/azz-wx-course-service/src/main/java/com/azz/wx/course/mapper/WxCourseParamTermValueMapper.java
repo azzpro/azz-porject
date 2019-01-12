@@ -23,4 +23,5 @@ public interface WxCourseParamTermValueMapper {
     int deleteValue(String[] array);
     
     List<WxCourseParamTermValue> selectValueByCode(String code);
+    
 }

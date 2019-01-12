@@ -128,6 +128,12 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
+  <select id="selectParamsByAssortmentCode" resultMap="BaseResultMap" parameterType="string">
+ 		select <include refid="Base_Column_List"></include>
+ 		from wx_course_param
+ 		where classification_code = #{code}
+ 	</select>
+  
   <select id="selectParamsByCode" resultMap="BaseResultMap" parameterType="java.lang.String">
   select <include refid="Base_Column_List"></include> from wx_course_param where param_code=#{code}
   </select>

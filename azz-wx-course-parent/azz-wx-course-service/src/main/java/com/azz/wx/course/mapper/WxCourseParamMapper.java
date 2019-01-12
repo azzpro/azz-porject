@@ -31,6 +31,8 @@ public interface WxCourseParamMapper {
      */
     List<Params> searchParamsList(SearchParams param);
     
+    WxCourseParam selectParamsByAssortmentCode(String code);
+    
     WxCourseParam selectParamsByCode(String code);
     
     int deleteByCode(String code);

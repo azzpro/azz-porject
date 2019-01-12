@@ -35,6 +35,7 @@ import com.azz.wx.course.pojo.vo.ClassificationParams;
 import com.azz.wx.course.pojo.vo.CourseClassification;
 import com.azz.wx.course.pojo.vo.CourseDetail;
 import com.azz.wx.course.pojo.vo.CourseInfo;
+import com.azz.wx.course.pojo.vo.ProductParams;
 
 /**
  * 
@@ -49,6 +50,8 @@ import com.azz.wx.course.pojo.vo.CourseInfo;
 public interface CourseService {
 
 
+	@RequestMapping(value="/azz/api/platform/course/getPrams",method=RequestMethod.POST)
+	public JsonResult<ProductParams> getPrams(@RequestParam("code") String code);
 	/**
 	 * 
 	 * <p>

@@ -202,9 +202,11 @@
 		wcb.brand_pic_url AS brandPicUrl,
 		wcb.brand_code AS brandCode,
 		wcb.brand_description AS brandDescription,
-		wcb.create_time AS createTime
+		wcb.create_time AS createTime,
+		count(wc.brand_code) AS courseNumber
 	FROM
 		wx_course_brand wcb
+	JOIN wx_course wc ON wcb.brand_code = wc.brand_code
 	<where> wcb.status != 0
 		<if test="searchInput != null and searchInput != ''">
 			AND (

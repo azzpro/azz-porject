@@ -54,6 +54,7 @@ import com.azz.wx.course.pojo.vo.ClassificationParams;
 import com.azz.wx.course.pojo.vo.CourseClassification;
 import com.azz.wx.course.pojo.vo.CourseDetail;
 import com.azz.wx.course.pojo.vo.CourseInfo;
+import com.azz.wx.course.pojo.vo.ProductParams;
 /**
  * 
  * <P>
@@ -70,6 +71,17 @@ public class CourseController {
 	@Autowired
 	CourseService courseService;
 
+	/**
+	 * <p>去新增课程页面</p>
+	 * @param params
+	 * @return
+	 * @author 刘建麟  2018年10月31日 下午7:47:30
+	 */
+	@RequestMapping(value="getPrams",method=RequestMethod.POST)
+	public JsonResult<ProductParams> getPrams(String code){
+		JsonResult<ProductParams> addProduct = courseService.getPrams(code);
+		return addProduct;
+	}
 	/**
 	 * 
 	 * <p>

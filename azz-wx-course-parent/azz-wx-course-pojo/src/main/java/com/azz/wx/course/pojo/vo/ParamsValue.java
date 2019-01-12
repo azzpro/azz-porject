@@ -28,5 +28,6 @@ public class ParamsValue {
 	private Long termId;
 	private Byte paramsHidden;
 	private String termCode;
+	private String paramCode;
 }
 

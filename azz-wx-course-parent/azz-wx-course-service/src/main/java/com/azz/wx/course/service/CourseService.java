@@ -368,6 +368,7 @@ public class CourseService {
 				pv.setType(platformGoodsParamsTerm.getParamType());
 				pv.setParamName(platformGoodsParamsTerm.getParamName());
 				pv.setTermCode(platformGoodsParamsTerm.getParamTermCode());
+				pv.setParamCode(assortmentCode.getParamCode());
 				if(platformGoodsParamsTerm.getParamType() == 1) {
 					List<WxCourseParamTermValue> termId = wxCourseParamTermValueMapper.selectValueByCode(platformGoodsParamsTerm.getParamTermCode());
 					for (WxCourseParamTermValue ppv : termId) {

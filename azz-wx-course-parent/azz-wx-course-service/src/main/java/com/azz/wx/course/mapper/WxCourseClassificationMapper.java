@@ -3,6 +3,7 @@ package com.azz.wx.course.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.azz.wx.course.pojo.WxCourseClassification;
 import com.azz.wx.course.pojo.bo.SearchClassificationListParam;
@@ -26,7 +27,7 @@ public interface WxCourseClassificationMapper {
     
     WxCourseClassification selectByClassificationCode(String classificationCode);
 
-    List<CourseClassification> selectByParam(String param);
+    List<CourseClassification> selectByParam(@Param("param") String param);
     
     int selectSameLevelClassification(SearchSameLevelClassification record);
     

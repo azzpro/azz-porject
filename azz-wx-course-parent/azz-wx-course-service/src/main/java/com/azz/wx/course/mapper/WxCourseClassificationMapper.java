@@ -35,7 +35,7 @@ public interface WxCourseClassificationMapper {
     
     List<WxCourseClassification> selectByAssortmentParentCode(String classificationParentCode);
     
-    List<CourseClassification> selectParentByParam(String param);
+    List<CourseClassification> selectParentByParam(@Param("param") String param);
     
     List<ClassificationParams> selectParentByAssortmentName(SearchClassificationListParam param);
     

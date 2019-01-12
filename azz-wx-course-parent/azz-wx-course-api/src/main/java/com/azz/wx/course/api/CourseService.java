@@ -128,30 +128,33 @@ public interface CourseService {
 	public JsonResult<String> delClassification(@RequestBody DelClassificationParam param);
 	
 	@RequestMapping(value = "/azz/api/platform/course/getClassificationInfo", method = RequestMethod.POST)
-	public JsonResult<WxCourseClassification> getClassificationInfo(String assortmentCode);
+	public JsonResult<WxCourseClassification> getClassificationInfo(@RequestParam("assortmentCode") String assortmentCode);
 	
 	@RequestMapping(value = "/azz/api/platform/course/getClassificationParent", method = RequestMethod.POST)
 	public JsonResult<List<ClassificationParams>> getClassificationParent(@RequestBody SearchClassificationListParam param);
 	
 	@RequestMapping(value = "/azz/api/platform/course/getClassificationChild", method = RequestMethod.POST)
-	public JsonResult<List<ClassificationParams>> getClassificationChild(String parentCode);
+	public JsonResult<List<ClassificationParams>> getClassificationChild(@RequestParam("parentCode") String parentCode);
 	
 	@RequestMapping(value = "/azz/api/platform/course/getClassificationList", method = RequestMethod.POST)
 	public JsonResult<List<CourseClassification>> getClassificationList(
             @RequestBody SearchClassificationListParam param);
 	
-	@RequestMapping(value = "/azz/api/platform/course/addGoodsBrand", method = RequestMethod.POST)
-	public JsonResult<String> addGoodsBrand(@RequestBody AddBrandParam param);
+	@RequestMapping(value = "/azz/api/platform/course/addBrand", method = RequestMethod.POST)
+	public JsonResult<String> addBrand(@RequestBody AddBrandParam param);
 	
 	@RequestMapping(value = "/azz/api/platform/course/getBrandInfoList", method = RequestMethod.POST)
 	public JsonResult<Pagination<BrandInfo>> getBrandInfoList(@RequestBody SearchBrandParam param);
 	
-	@RequestMapping(value = "/azz/api/platform/course/getGoodsBrandInfo", method = RequestMethod.POST)
-	public JsonResult<BrandInfo> getGoodsBrandInfo(@RequestParam("brandCode") String brandCode);
+	@RequestMapping(value = "/azz/api/platform/course/getBrandInfo", method = RequestMethod.POST)
+	public JsonResult<BrandInfo> getBrandInfo(@RequestParam("brandCode") String brandCode);
 	
-	@RequestMapping(value = "/azz/api/platform/course/editGoodsBrand", method = RequestMethod.POST)
-	public JsonResult<String> editGoodsBrand(@RequestBody EditBrandParam param);
+	@RequestMapping(value = "/azz/api/platform/course/editBrand", method = RequestMethod.POST)
+	public JsonResult<String> editBrand(@RequestBody EditBrandParam param);
 	
-	@RequestMapping(value = "/azz/api/platform/course/delGoodsBrand", method = RequestMethod.POST)
-	public JsonResult<String> delGoodsBrand(@RequestBody DelBrandParam param);
+	@RequestMapping(value = "/azz/api/platform/course/delBrand", method = RequestMethod.POST)
+	public JsonResult<String> delBrand(@RequestBody DelBrandParam param);
+	
+	@RequestMapping(value = "/azz/api/platform/course/getAllBrand", method = RequestMethod.POST)
+	public JsonResult<List<BrandInfo>> getAllBrand();
 }

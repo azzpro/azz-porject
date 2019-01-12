@@ -68,12 +68,22 @@ public class BrandService {
     }
     
     /**
+     * <p>获取所有有效的品牌下拉列</p>
+     * @return
+     * @author 彭斌  2019年1月12日 下午3:46:40
+     */
+    public JsonResult<List<BrandInfo>> getAllBrand(){
+        List<BrandInfo> infos = wxCourseBrandMapper.getBrandInfoList(null);
+        return JsonResult.successJsonResult(infos);
+    }
+    
+    /**
      * <p>查询品牌详情</p>
      * @param brandCode
      * @return
      * @author 彭斌  2019年1月4日 下午4:02:42
      */
-    public JsonResult<BrandInfo> getGoodsBrandInfo(String brandCode){
+    public JsonResult<BrandInfo> getBrandInfo(String brandCode){
         return JsonResult.successJsonResult(wxCourseBrandMapper.getBrandInfo(brandCode));
     }
     
@@ -83,7 +93,7 @@ public class BrandService {
     * @return
     * @author 彭斌  2019年1月4日 下午4:07:06
     */
-    public JsonResult<String> addGoodsBrand(@RequestBody AddBrandParam param) {
+    public JsonResult<String> addBrand(@RequestBody AddBrandParam param) {
         // 参数校验
         JSR303ValidateUtils.validate(param);
         int count = wxCourseBrandMapper.countGoodsBrandByBrandName(param.getBrandName(), null);
@@ -194,7 +204,7 @@ public class BrandService {
      * @return
      * @author 彭斌  2019年1月4日 下午4:53:06
      */
-    public JsonResult<String> delGoodsBrand(@RequestBody DelBrandParam param){
+    public JsonResult<String> delBrand(@RequestBody DelBrandParam param){
         // 参数校验
         JSR303ValidateUtils.validate(param);
         String brandCode = param.getBrandCode();

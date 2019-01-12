@@ -41,7 +41,7 @@ public class AddClassificationWebParam {
      *
      * @mbg.generated
      */
-    private byte assortmentSort;
+    private Byte assortmentSort;
     
     /**
      * 创建人

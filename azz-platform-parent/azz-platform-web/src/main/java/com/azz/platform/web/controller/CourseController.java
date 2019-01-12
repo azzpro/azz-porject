@@ -23,15 +23,14 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.MerchantConstants.IsChangeGoodsBrandPic;
 import com.azz.core.constants.WxCourseConstants.IsChangeCoursePic;
-import com.azz.platform.merchant.pojo.bo.AddGoodsBrandWebParam;
 import com.azz.platform.merchant.pojo.bo.EditClassificationWebParam;
-import com.azz.platform.merchant.pojo.bo.EditGoodsBrandWebParam;
 import com.azz.util.Base64;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.utils.WebUtils;
 import com.azz.wx.course.api.CourseService;
 import com.azz.wx.course.pojo.WxCourseClassification;
 import com.azz.wx.course.pojo.bo.AddBrandParam;
+import com.azz.wx.course.pojo.bo.AddBrandWebParam;
 import com.azz.wx.course.pojo.bo.AddClassificationParam;
 import com.azz.wx.course.pojo.bo.AddClassificationWebParam;
 import com.azz.wx.course.pojo.bo.AddCourseParam;
@@ -41,6 +40,7 @@ import com.azz.wx.course.pojo.bo.CoursePic;
 import com.azz.wx.course.pojo.bo.DelBrandParam;
 import com.azz.wx.course.pojo.bo.DelClassificationParam;
 import com.azz.wx.course.pojo.bo.EditBrandParam;
+import com.azz.wx.course.pojo.bo.EditBrandWebParam;
 import com.azz.wx.course.pojo.bo.EditClassificationParam;
 import com.azz.wx.course.pojo.bo.EditCourseParam;
 import com.azz.wx.course.pojo.bo.EditCourseWebParam;
@@ -267,16 +267,16 @@ public class CourseController {
 	 * @throws IOException
 	 * @author 彭斌  2019年1月11日 下午3:26:16
 	 */
-	@RequestMapping(value = "addGoodsBrand", method = RequestMethod.POST)
-	public JsonResult<String> addGoodsBrand(AddGoodsBrandWebParam webParam) throws IOException{
+	@RequestMapping(value = "addBrand", method = RequestMethod.POST)
+	public JsonResult<String> addGoodsBrand(AddBrandWebParam webParam) throws IOException{
 	    AddBrandParam param = new AddBrandParam();
         BeanUtils.copyProperties(webParam, param);
-        MultipartFile goodsBrandPicFile = webParam.getGoodsBrandPicFile();
+        MultipartFile goodsBrandPicFile = webParam.getBrandPicFile();
         GoodsBrandPic goodsBrandPic = new GoodsBrandPic(goodsBrandPicFile.getOriginalFilename(),
                     goodsBrandPicFile.getSize(), Base64.encode(goodsBrandPicFile.getBytes()));
         param.setGoodsBrandPic(goodsBrandPic);
         param.setCreator(WebUtils.getLoginUser().getUserInfo().getUserCode());
-	    return courseService.addGoodsBrand(param);
+	    return courseService.addBrand(param);
 	}
 	
 	/**
@@ -286,18 +286,18 @@ public class CourseController {
 	 * @throws IOException
 	 * @author 彭斌  2019年1月11日 下午3:50:02
 	 */
-	@RequestMapping(value = "editGoodsBrand", method = RequestMethod.POST)
-	public JsonResult<String> editGoodsBrand(EditGoodsBrandWebParam webParam) throws IOException{
+	@RequestMapping(value = "editBrand", method = RequestMethod.POST)
+	public JsonResult<String> editBrand(EditBrandWebParam webParam) throws IOException{
 	    EditBrandParam param = new EditBrandParam();
         BeanUtils.copyProperties(webParam, param);
-        MultipartFile goodsBrandPicFile = webParam.getGoodsBrandPicFile();
+        MultipartFile goodsBrandPicFile = webParam.getBrandPicFile();
         if (webParam.getIsChangeGoodsBrandPic() == IsChangeGoodsBrandPic.Y.getValue() && goodsBrandPicFile != null) {
             GoodsBrandPic goodsBrandPic = new GoodsBrandPic(goodsBrandPicFile.getOriginalFilename(),
                     goodsBrandPicFile.getSize(), Base64.encode(goodsBrandPicFile.getBytes()));
             param.setGoodsBrandPic(goodsBrandPic);
         }
         param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
-	    return courseService.editGoodsBrand(param);
+	    return courseService.editBrand(param);
 	}
 	
 	/**
@@ -306,10 +306,10 @@ public class CourseController {
 	 * @return
 	 * @author 彭斌  2019年1月11日 下午3:52:10
 	 */
-	@RequestMapping(value = "delGoodsBrand", method = RequestMethod.POST)
-	public JsonResult<String> delGoodsBrand(DelBrandParam param){
+	@RequestMapping(value = "delBrand", method = RequestMethod.POST)
+	public JsonResult<String> delBrand(DelBrandParam param){
 	    param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
-	    return courseService.delGoodsBrand(param);
+	    return courseService.delBrand(param);
 	}
 	
 	/**
@@ -329,8 +329,18 @@ public class CourseController {
 	 * @return
 	 * @author 彭斌  2019年1月11日 下午4:05:31
 	 */
-	@RequestMapping(value = "getGoodsBrandInfo", method = RequestMethod.POST)
-    public JsonResult<BrandInfo> getGoodsBrandInfo(@RequestParam("brandCode") String brandCode){
-        return courseService.getGoodsBrandInfo(brandCode);
+	@RequestMapping(value = "getBrandInfo", method = RequestMethod.POST)
+    public JsonResult<BrandInfo> getBrandInfo(@RequestParam("brandCode") String brandCode){
+        return courseService.getBrandInfo(brandCode);
     }
+	
+	/**
+	 * <p>获取所有品牌下拉列</p>
+	 * @return
+	 * @author 彭斌  2019年1月12日 下午3:50:28
+	 */
+	@RequestMapping(value = "getAllBrand", method = RequestMethod.POST)
+	public JsonResult<List<BrandInfo>> getAllBrand(){
+	    return courseService.getAllBrand();
+	}
 }

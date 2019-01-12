@@ -19,7 +19,7 @@ public class BadSqlInterceptor extends HandlerInterceptorAdapter {
 	"count","chr","mid","master","truncate"	,"char","declare","or","like","drop","alter"};
 	/****拦截器，防止sql注入*****/
 	/***特殊字符拦截***/
-	private static final String[] SPECIAL_SYMBOL = { "'", "*" , ";" , "--" , "<" , "/>"};
+	//private static final String[] SPECIAL_SYMBOL = { "'", "*" , ";" , "--" , "<" , "/>"};
 	/****拦截器，防止sql注入*****/
 	@Override
 	public boolean preHandle(HttpServletRequest request,
@@ -38,7 +38,7 @@ public class BadSqlInterceptor extends HandlerInterceptorAdapter {
 				response.getWriter().write(obj.toString());
 				return false;
 			}
-			if( exists(SPECIAL_SYMBOL, param) ){
+			/*if( exists(SPECIAL_SYMBOL, param) ){
 				
 				JSONObject obj = new  JSONObject();
 				obj.put("msg", "非法链接");
@@ -46,7 +46,7 @@ public class BadSqlInterceptor extends HandlerInterceptorAdapter {
 				response.setHeader("Content-type", "text/html;charset=UTF-8"); 
 				response.getWriter().write(obj.toString());
 				return false;
-			}
+			}*/
 			
 		}
 		return true;

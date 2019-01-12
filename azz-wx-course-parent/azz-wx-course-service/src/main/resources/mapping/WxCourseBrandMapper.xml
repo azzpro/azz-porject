@@ -247,9 +247,11 @@
   </select>
   
   
-  <select id="selectByBrandCode" parameterType="string" resultMap="BaseResultMap">
+  <select id="selectByBrandCode" parameterType="string" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
+     ,
+    <include refid="Blob_Column_List" />
     from wx_course_brand
     where status !=0 and brand_code = #{brandCode}
   </select>

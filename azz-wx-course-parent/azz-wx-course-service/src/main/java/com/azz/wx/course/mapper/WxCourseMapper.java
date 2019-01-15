@@ -53,7 +53,7 @@ public interface WxCourseMapper {
      * @return
      * @author 黄智聪  2019年1月4日 下午4:41:01
      */
-    List<Param> getAllParamsByClassificationCode(String classificationCode);
+    Param getAllParamsByClassificationCode(String classificationCode);
     
     /**
      * 
@@ -62,6 +62,6 @@ public interface WxCourseMapper {
      * @return
      * @author 黄智聪  2019年1月4日 下午4:41:01
      */
-    List<Param> getCourseParamsByCourseCode(String courseCode);
+    Param getCourseParamsByCourseCode(String courseCode);
     
 }

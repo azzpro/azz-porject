@@ -282,10 +282,10 @@
 		GROUP BY
 			descStartClassRecord.course_code
 	) t ON t.course_code = wc.course_code
-	AND wc. STATUS != 0
 	<where>
+		wc.status != 0
 		<if test="status != null">
-			wc.status = #{status}
+			AND wc.status = #{status}
 		</if>
 		<if test="courseName != null and courseName != ''">
 			AND wc.course_name LIKE CONCAT('%', #{courseName}, '%') 
@@ -298,6 +298,7 @@
 	SELECT
 		wc.course_code AS courseCode,
 		wc.course_name AS courseName,
+		wcb.brand_code AS brandCode,
 		wcb.brand_name AS brandName,
 		wc.course_description AS courseDescription,
 		wc.course_pic_name AS coursePicName,

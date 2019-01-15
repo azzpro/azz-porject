@@ -252,6 +252,7 @@
   <select id="getStartClassRecords" resultType="com.azz.wx.course.pojo.vo.StartClassRecord" parameterType="com.azz.wx.course.pojo.bo.SearchStartClassRecordParam">
 	SELECT
 		wcscr.start_class_code AS startClassCode,
+		wcscr.start_class_name AS startClassName,
 		wcscr.start_class_time AS startClassTime,
 		wcscr.hours AS hours,
 		wcscr.people_number AS peopleNumber,
@@ -260,13 +261,17 @@
 		wcscr.status AS status
 	FROM
 		wx_course_start_class_record wcscr
+	JOIN wx_course wc on wc.course_code = wcscr.course_code
 	<where>
+			wc.course_code = #{courseCode}
+		AND wcscr.status != 0
 		<if test="status != null">
-			wcscr.status = #{status}
+			AND wcscr.status = #{status}
 		</if>
 		<if test="searchInput != null and searchInput != ''">
 			AND (
 				wcscr.start_class_code LIKE CONCAT('%', #{searchInput}, '%')  
+				OR wcscr.start_class_name LIKE CONCAT('%', #{searchInput}, '%')  
 				OR wcscr.location LIKE CONCAT('%', #{searchInput}, '%') 
 			)
 		</if>
@@ -277,6 +282,7 @@
   <select id="getStartClassRecordDetail" resultType="com.azz.wx.course.pojo.vo.StartClassRecord" parameterType="string">
 	SELECT
 		wcscr.start_class_code AS startClassCode,
+		wcscr.start_class_name AS startClassName,
 		wcscr.start_class_time AS startClassTime,
 		wcscr.hours AS hours,
 		wcscr.people_number AS peopleNumber,

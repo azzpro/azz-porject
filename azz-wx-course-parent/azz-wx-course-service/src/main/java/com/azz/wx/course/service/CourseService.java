@@ -128,12 +128,9 @@ public class CourseService {
 		if(detail == null) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "所选课程不存在");
 		}
-		// 查询分类所有参数
-		List<Param> allParams = wxCourseMapper.getAllParamsByClassificationCode(detail.getClassificationCode());
 		// 查询课程所选参数
-		List<Param> courseParams = wxCourseMapper.getCourseParamsByCourseCode(courseCode);
-		detail.setCourseParams(courseParams);
-		detail.setAllParams(allParams);
+		Param courseParam = wxCourseMapper.getCourseParamsByCourseCode(courseCode);
+		detail.setCourseParams(courseParam);
 		return JsonResult.successJsonResult(detail);
 	}
 	

@@ -35,7 +35,7 @@ public class AddStartClassRecordParam {
 	private Integer peopleNumber;
 	
 	@NotNull(message = "请选择开课时间")
-	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startClassTime;
 
 	@NotNull(message = "请输入课程价格")

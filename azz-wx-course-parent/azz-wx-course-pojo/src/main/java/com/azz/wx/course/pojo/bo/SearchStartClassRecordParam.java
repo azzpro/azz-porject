@@ -7,6 +7,8 @@
  
 package com.azz.wx.course.pojo.bo;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.azz.core.common.QueryPage;
 
 import lombok.Data;
@@ -22,6 +24,9 @@ import lombok.EqualsAndHashCode;
 public class SearchStartClassRecordParam extends QueryPage{
 
 	private static final long serialVersionUID = 754959189102406643L;
+	
+	@NotBlank(message = "请选择课程")
+	private String courseCode;
 	
 	private Byte status;
 	

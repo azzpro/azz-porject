@@ -12,7 +12,6 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -123,8 +122,8 @@ public class CourseController {
 	 * @author 黄智聪 2019年1月4日 上午11:50:51
 	 * @throws IOException 
 	 */
-	@RequestMapping(value = "addCourse", method = RequestMethod.POST,produces="application/json;charset=UTF-8")
-	public JsonResult<String> addCourse(@RequestBody AddCourseWebParam webParam) throws IOException {
+	@RequestMapping(value = "addCourse", method = RequestMethod.POST)
+	public JsonResult<String> addCourse(AddCourseWebParam webParam) throws IOException {
 		JSR303ValidateUtils.validate(webParam);
 		AddCourseParam param = new AddCourseParam();
 		BeanUtils.copyProperties(webParam, param);
@@ -147,8 +146,8 @@ public class CourseController {
 	 * @author 黄智聪 2019年1月4日 上午11:50:51
 	 * @throws IOException 
 	 */
-	@RequestMapping(value = "editCourse", method = RequestMethod.POST,produces="application/json;charset=UTF-8")
-	public JsonResult<String> editCourse(@RequestBody EditCourseWebParam webParam) throws IOException {
+	@RequestMapping(value = "editCourse", method = RequestMethod.POST)
+	public JsonResult<String> editCourse(EditCourseWebParam webParam) throws IOException {
 		JSR303ValidateUtils.validate(webParam);
 		EditCourseParam param = new EditCourseParam();
 		BeanUtils.copyProperties(webParam, param);

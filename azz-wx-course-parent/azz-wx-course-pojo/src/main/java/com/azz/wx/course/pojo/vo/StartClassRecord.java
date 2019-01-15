@@ -21,6 +21,8 @@ import lombok.Data;
 public class StartClassRecord {
 
     private String startClassCode;
+    
+    private String startClassName;
 
     private Date startClassTime;
 

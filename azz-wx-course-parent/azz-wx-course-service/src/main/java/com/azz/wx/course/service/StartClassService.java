@@ -61,6 +61,7 @@ public class StartClassService {
 	 * @author 黄智聪  2019年1月4日 下午5:37:39
 	 */
 	public JsonResult<Pagination<StartClassRecord>> getStartClassRecords(@RequestBody SearchStartClassRecordParam param){
+		JSR303ValidateUtils.validate(param);
 		PageHelper.startPage(param.getPageNum(), param.getPageSize());
 		List<StartClassRecord> infos = wxCourseStartClasRecordMapper.getStartClassRecords(param);
 		return JsonResult.successJsonResult(new Pagination<>(infos));
@@ -147,6 +148,7 @@ public class StartClassService {
 				.price(param.getPrice())
 				.room(param.getRoom())
 				.startClassTime(param.getStartClassTime())
+				.startClassName(param.getStartClassName())
 				.modifier(param.getModifier())
 				.modifyTime(nowDate)
 				.build();
@@ -176,7 +178,7 @@ public class StartClassService {
 		}
 		
 		// 等订单模块出来，需要判断是否有订单绑定了该开课信息记录 TODO
-		if(status.intValue() == StartClassRecordStatus.INVALID.getValue()) {
+		if(status.intValue() == StartClassRecordStatus.INVALID.getValue()) {// 删除操作
 			int count = 0;
 			if(count > 0) {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "课程已被购买，请先处理完订单后在进行删除");

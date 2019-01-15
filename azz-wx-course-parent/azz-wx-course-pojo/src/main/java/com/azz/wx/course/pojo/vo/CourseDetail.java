@@ -7,10 +7,6 @@
  
 package com.azz.wx.course.pojo.vo;
 
-import java.util.List;
-
-import com.azz.wx.course.pojo.vo.Param;
-
 import lombok.Data;
 
 /**
@@ -24,6 +20,8 @@ public class CourseDetail {
 	private String courseCode;
 
     private String courseName;
+    
+    private String brandCode;
     
     private String brandName;
 
@@ -41,9 +39,7 @@ public class CourseDetail {
     
     private Byte status;
     
-    private List<Param> courseParams;
-    
-    private List<Param> allParams;
+    private Param courseParams;
     
 }
 

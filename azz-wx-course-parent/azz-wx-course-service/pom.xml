@@ -157,7 +157,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<version>1.5.4.RELEASE</version>
 				<configuration>
-					<mainClass>com.azz.Azzwx-courseServiceApplication</mainClass>
+					<mainClass>com.azz.AzzWxCourseServiceApplication</mainClass>
 					<layout>JAR</layout>
 				</configuration>
 				<executions>

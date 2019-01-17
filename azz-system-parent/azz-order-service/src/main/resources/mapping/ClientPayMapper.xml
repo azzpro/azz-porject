@@ -19,6 +19,7 @@
   <result column="userreq_ip" property="userreqIp"/>
   <result column="goods_name" property="goodsName"/>
   <result column="busi_partner" property="busiPartner"/>
+  <result column="pay_instruation" property="payInstruation"/>
 </resultMap>
   
   <select id="selectOrderStatus" parameterType="map" resultType="int">
@@ -47,9 +48,14 @@
     where pay_number = #{pay_number}
   </update>
   
+  <select id="selectPayInfoByPayNumber" resultMap="BaseResultMap" parameterType="String">
+  	select id,pay_number,three_party_number,order_number,order_status,order_type,order_money,
+  	order_channel_money,order_customer_phone,order_time,order_method,pay_instruation
+  	from client_pay where order_number = #{number}
+  </select>
   <select id="selectPayList" resultMap="BaseResultMap" parameterType="com.azz.order.client.pojo.bo.PayList">
   	select id,pay_number,three_party_number,order_number,order_status,order_type,order_money,
-  	order_channel_money,order_customer_phone,order_time,order_method
+  	order_channel_money,order_customer_phone,order_time,order_method,pay_instruation
   	from client_pay
   	<where>
   		<if test="param != null and param != ''">
@@ -117,6 +123,9 @@
       <if test="busiPartner != null">
         busi_partner,
       </if>
+      <if test="payInstruation != null">
+        pay_instruation,
+      </if>
       
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -170,6 +179,9 @@
       </if>
        <if test="busiPartner != null">
         #{busiPartner},
+      </if>
+      <if test="payInstruation != null">
+        #{payInstruation},
       </if>
     </trim>
   </insert>

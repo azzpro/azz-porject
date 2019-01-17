@@ -53,5 +53,17 @@ public interface ClientPayService {
 	 */
 	@RequestMapping("/azz/api/pay/toPayList")
 	public JsonResult<Pagination<ClientPay>> toPayList(@RequestBody PayList pl);
+	
+	/**
+	 * <p>
+	 * 支付订单详情
+	 * </p>
+	 * 
+	 * @param param
+	 * @return
+	 * @author 刘建麟 2018年10月31日 上午11:29:49
+	 */
+	@RequestMapping("/azz/api/pay/getOrderInfo")
+	public JsonResult<ClientPay> getOrderInfo(@RequestParam("number") String number) ;
 }
 

@@ -65,5 +65,11 @@ public interface ClientPayMapper {
 	 * @return
 	 */
 	List<ClientPay> selectOrder(String order_number);
+	
+	/**
+	 * @param number
+	 * @return
+	 */
+	ClientPay selectPayInfoByPayNumber(String number);
 }
 

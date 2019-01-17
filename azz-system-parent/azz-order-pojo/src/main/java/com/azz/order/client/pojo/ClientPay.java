@@ -16,6 +16,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.azz.order.client.pojo.vo.ClientOrderInfo;
+
 public class ClientPay implements Serializable{
 	/**
 	 * TODO
@@ -38,6 +40,21 @@ public class ClientPay implements Serializable{
 	private String userreqIp;// 订单发起IP
 	private String goodsName;//商品名称
 	private Integer busiPartner;//业务类型
+	private String payInstruation;
+	private ClientOrderInfo coi;
+	
+	public ClientOrderInfo getCoi() {
+		return coi;
+	}
+	public void setCoi(ClientOrderInfo coi) {
+		this.coi = coi;
+	}
+	public String getPayInstruation() {
+		return payInstruation;
+	}
+	public void setPayInstruation(String payInstruation) {
+		this.payInstruation = payInstruation;
+	}
 	public Long getId() {
 		return id;
 	}

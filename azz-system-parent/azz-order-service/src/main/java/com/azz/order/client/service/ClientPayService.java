@@ -13,7 +13,6 @@ package com.azz.order.client.service;
  */
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +54,6 @@ import com.azz.order.selection.bo.CallBackParam;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.DateUtils;
 import com.azz.util.DecimalUtil;
-import com.azz.util.HttpRequestSimple;
 import com.azz.util.LLPayUtil;
 import com.github.pagehelper.PageHelper;
 
@@ -145,7 +143,7 @@ public class ClientPayService {
 		payInfo.setNo_order(order.getNo_order());
 		payInfo.setDt_order(order.getDt_order());
 		//payInfo.setName_goods(order.getName_goods());
-		payInfo.setName_goods("test_goods");
+		payInfo.setName_goods("PLC零件");
 		payInfo.setInfo_order(order.getInfo_order());
 		payInfo.setMoney_order(order.getMoney_order());
 		payInfo.setNotify_url(notifyUrl);
@@ -175,6 +173,7 @@ public class ClientPayService {
 		clientPay.setOrderTime(Long.parseLong(payInfo.getDt_order()));
 		clientPay.setOrderStatus((byte) PayStatus.NOT_PAID.getValue());// 支付状态 默认待支付
 		clientPay.setPayNumber(payInfo.getNo_order()); //订单流水号
+		clientPay.setPayInstruation(PayConstants.PAYMENT_INSTITUTION);//支付机构
 		int i = ppm.insertPay(clientPay);
 		if(i != 1) {
 			return null;
@@ -224,8 +223,8 @@ public class ClientPayService {
             	map1.put("pay_number", payDataBean.getNo_order());
             	int number = ppm.updateOrderByNumber(map1);
             	if(number != 1) {
-            		retBean.setRet_code(PayCode.FAILD.getCode());
-                    retBean.setRet_msg(PayCode.FAILD.getDesc());
+            		retBean.setRet_code(PayCode.UPDATEFAILD.getCode());
+                    retBean.setRet_msg(PayCode.UPDATEFAILD.getDesc());
                     return new JsonResult<>(retBean);
             	}
             	String orderCode = ppm.selectOrderCode(payDataBean.getNo_order());
@@ -238,8 +237,8 @@ public class ClientPayService {
                 retBean.setRet_msg(PayCode.SUCCESS.getDesc());
                 return new JsonResult<>(retBean);
             }else {
-            	retBean.setRet_code(PayCode.FAILD.getCode());
-                retBean.setRet_msg(PayCode.FAILD.getDesc());
+            	retBean.setRet_code(PayCode.PAID.getCode());
+                retBean.setRet_msg(PayCode.PAID.getDesc());
                 return new JsonResult<>(retBean);
             }
         }else {
@@ -264,11 +263,29 @@ public class ClientPayService {
 	}
 	
 	/**
+	 * <p>
+	 * 支付订单详情
+	 * </p>
+	 * 
+	 * @param param
+	 * @return
+	 * @author 刘建麟 2018年10月31日 上午11:29:49
+	 */
+	public JsonResult<ClientPay> getOrderInfo(String number) {
+		ClientPay payNumber = ppm.selectPayInfoByPayNumber(number);
+		// 判断该订单是否处于待支付 并且未失效
+		JsonResult<ClientOrderDetail> detail = cos.getClientOrderDetail(number);
+		ClientOrderInfo orderInfo = detail.getData().getOrderInfo();
+		payNumber.setCoi(orderInfo);
+		return JsonResult.successJsonResult(payNumber);
+	}
+	
+	/**
 	 * 获取订单状态
 	 * @param map
 	 * @return
 	 */
-	public boolean getOrderStatus(Map<String,Object> map) {
+	private boolean getOrderStatus(Map<String,Object> map) {
 		int i = ppm.selectOrderStatus(map);
 		if(i > 0) {
 			return false;

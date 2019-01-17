@@ -34,8 +34,6 @@ import com.azz.order.client.service.ClientPayService;
 @RequestMapping("/azz/api/pay")
 public class ClientPayController {
 	
-	private final Logger LOG  =LoggerFactory.getLogger(getClass());
-	
 	@Autowired
 	private ClientPayService pps;
 	/**
@@ -68,6 +66,17 @@ public class ClientPayController {
 	@RequestMapping("payNotify")
 	public JsonResult<RetBean> payNotify(@RequestParam("reqStr") String reqStr) {
 		return pps.payNotify(reqStr);
+	}
+	
+	/**
+	 * <p>
+	 * 支付订单详情
+	 * </p>
+	 * 
+	 */
+	@RequestMapping("getOrderInfo")
+	public JsonResult<ClientPay> getOrderInfo(@RequestParam("number") String number) {
+		return pps.getOrderInfo(number);
 	}
 }
 

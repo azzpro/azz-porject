@@ -7,8 +7,6 @@
  
 package com.azz.controller;
 
-import java.io.IOException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.azz.core.common.JsonResult;
-import com.azz.core.constants.PayConstants.PayCode;
 import com.azz.order.api.client.ClientPayService;
 import com.azz.order.client.pojo.PaymentInfo;
 import com.azz.order.client.pojo.RetBean;

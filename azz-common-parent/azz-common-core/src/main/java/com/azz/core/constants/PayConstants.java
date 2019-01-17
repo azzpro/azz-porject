@@ -17,8 +17,9 @@ public interface PayConstants {
 	
 	public enum PayCode{
 		SUCCESS("交易成功","0000"),
-		FAILD("交易失败","9999");
-		
+		FAILD("交易失败","9999"),
+		UPDATEFAILD("订单更新失败","1111"),
+		PAID("订单已支付,请勿重复支付","2222");
 		private String desc;
 		private String code;
 		public String getDesc() {

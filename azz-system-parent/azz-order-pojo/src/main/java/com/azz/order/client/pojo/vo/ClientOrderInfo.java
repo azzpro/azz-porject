@@ -29,6 +29,8 @@ public class ClientOrderInfo {
 	
 	private Integer paymentMethod;
 	
+	private Integer paymentStatus;
+	
 	private Integer orderStatusId;
 	
 	private BigDecimal grandTotal;

@@ -197,24 +197,30 @@
   </update>
   
   <select id="getBrandInfoList" parameterType="com.azz.wx.course.pojo.bo.SearchBrandParam" resultType="com.azz.wx.course.pojo.vo.BrandInfo">
-    SELECT
-		wcb.brand_name AS brandName,
-		wcb.brand_pic_url AS brandPicUrl,
-		wcb.brand_code AS brandCode,
-		wcb.brand_description AS brandDescription,
-		wcb.create_time AS createTime,
-		count(wc.brand_code) AS courseNumber
-	FROM
-		wx_course_brand wcb
-	JOIN wx_course wc ON wcb.brand_code = wc.brand_code
+		SELECT
+			wcb.brand_name AS brandName,
+			wcb.brand_pic_url AS brandPicUrl,
+			wcb.brand_code AS brandCode,
+			wcb.brand_description AS brandDescription,
+			wcb.create_time AS createTime,
+			IFNULL(t.count,0) as courseNumber
+		FROM
+			wx_course_brand wcb
+	LEFT JOIN (
+		select wc.brand_code,count(1)  as count
+		FROM 
+			wx_course wc
+		where wc.status != 0
+		GROUP BY wc.brand_code
+	) t on t.brand_code = wcb.brand_code
 	<where> wcb.status != 0
-		<if test="searchInput != null and searchInput != ''">
-			AND (
-				wcb.brand_code LIKE CONCAT('%', #{searchInput}, '%')
-			OR wcb.brand_name LIKE CONCAT('%', #{searchInput}, '%') 
-			)
-		</if>
-	</where>	
+			<if test="searchInput != null and searchInput != ''">
+				AND (
+					wcb.brand_code LIKE CONCAT('%', #{searchInput}, '%')
+				OR wcb.brand_name LIKE CONCAT('%', #{searchInput}, '%') 
+				)
+			</if>
+	</where>
 	ORDER BY
 		wcb.create_time DESC
   </select>

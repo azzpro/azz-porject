@@ -110,7 +110,7 @@ public class WxLoginService {
 		String string = redis.opsForValue().get(state);
 		WxCallBackInfo wcbi = new WxCallBackInfo();
 		// 取缓存 state 防攻击
-		if (Objects.equals(state, string)) {
+		if (!Objects.equals(state, string)) {
 			wcbi.setCode(WxConstants.STATECODE);
 			wcbi.setMsg(WxConstants.STATEMSG);
 			return new JsonResult<>(wcbi);

@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.system.bo.WxClientRegistParam;
-import com.azz.system.bo.WxLoginParam;
 import com.azz.system.pojo.ClientWxUser;
 import com.azz.system.service.WxLoginService;
 import com.azz.system.vo.WxCallBackInfo;
@@ -52,6 +51,7 @@ public class WxLoginController {
 		return wxLoginService.goBindOrReg(wcbi);
 	}
 	
+	@RequestMapping("insert")
 	public Integer insert(@RequestBody ClientWxUser wsc) {
 		int i = wxLoginService.insert(wsc);
 		return i;

@@ -69,7 +69,7 @@ public class WxLoginController {
 	@RequestMapping(value="callback",method=RequestMethod.POST)
 	public Object callback(@RequestParam("code")String code,@RequestParam("state") String state) {
 		JsonResult<WxCallBackInfo> result = wxLoginService.callback(code, state);
-		if(Objects.equals(WxConstants.LOGINCODE, result.getCode())) {
+		if(Objects.equals(WxConstants.LOGINCODE, result.getData().getCode())) {
 			// 从SecurityUtils里边创建一个 subject
 			Subject subject = SecurityUtils.getSubject();
 			// 在认证提交前准备 token（令牌）

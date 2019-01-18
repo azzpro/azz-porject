@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.azz.core.common.JsonResult;
 import com.azz.system.bo.WxClientRegistParam;
 import com.azz.system.bo.WxLoginParam;
+import com.azz.system.pojo.ClientWxUser;
 import com.azz.system.service.WxLoginService;
 import com.azz.system.vo.WxCallBackInfo;
 import com.azz.system.vo.WxInfo;
@@ -51,13 +52,9 @@ public class WxLoginController {
 		return wxLoginService.goBindOrReg(wcbi);
 	}
 	
-	/**
-	 * 登录并绑定
-	 * @param param
-	 * @return
-	 */
-	public JsonResult<String> loginAndBind(@RequestBody WxLoginParam param) {
-		return wxLoginService.loginAndBind(param);
+	public Integer insert(@RequestBody ClientWxUser wsc) {
+		int i = wxLoginService.insert(wsc);
+		return i;
 	}
 	
 	/**

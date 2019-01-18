@@ -224,35 +224,14 @@ public class WxLoginService {
 	}
 
 	/**
-	 * 登录绑定
-	 * 
+	 * @param wsc
 	 * @return
 	 */
-	public JsonResult<String> loginAndBind(@RequestBody WxLoginParam param) {
-		String phoneNumber = param.getPhoneNumber();
-		String password = param.getPassword();
-		ClientUser clientUser = clientUserMapper.getClientUserByPhoneNumber(phoneNumber);
-		if (clientUser == null) {// 无效用户
-			throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "请输入正确的账号或密码");
-		}
-		if (clientUser.getStatus() == UserStatus.INVALID.getValue()) {
-			throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "账号已被禁用，请联系管理员解除");
-		}
-		boolean isRight = PasswordHelper.checkPassword(password, clientUser.getSalt(), clientUser.getPassword());
-		if (!isRight) {// 与盐值加密的密码不匹配
-			throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "请输入正确的账号或密码");
-		}
-		ClientWxUser wsc = new ClientWxUser();
-		wsc.setAccess_token(param.getAccessToken());
-		wsc.setExpires_in(Long.parseLong(param.getExpiresIn()));
-		wsc.setOpenid(param.getOpenid());
-		wsc.setScope(param.getScope());
-		wsc.setUnionid(param.getUnionid());
-		wsc.setRefresh_token(param.getRefreshToken());
-		wsc.setUserCode(clientUser.getClientUserCode());
-		clientWxUserMapper.insert(wsc);
-		return JsonResult.successJsonResult();
+	public Integer insert(@RequestBody ClientWxUser wsc) {
+		int i = clientWxUserMapper.insert(wsc);
+		return i;
 	}
+	
 
 	/**
 	 * 注册并绑定

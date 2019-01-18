@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.azz.core.common.JsonResult;
 import com.azz.system.bo.WxClientRegistParam;
 import com.azz.system.bo.WxLoginParam;
+import com.azz.system.pojo.ClientWxUser;
 import com.azz.system.vo.WxCallBackInfo;
 import com.azz.system.vo.WxInfo;
 
@@ -42,12 +43,11 @@ public interface WxLoginService {
 	public JsonResult<WxCallBackInfo> goBindOrReg(@RequestBody WxCallBackInfo wcbi) ;
 	
 	/**
-	 * 登录并绑定
-	 * @param param
+	 * @param wsc
 	 * @return
 	 */
-	@RequestMapping(value="/azz/api/wechat/loginAndBind",method=RequestMethod.POST)
-	public JsonResult<String> loginAndBind(@RequestBody WxLoginParam param) ;
+	@RequestMapping(value="/azz/api/wechat/insert",method=RequestMethod.POST)
+	public Integer insert(@RequestBody ClientWxUser wsc) ;
 	
 	/**
 	 * 注册并绑定

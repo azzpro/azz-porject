@@ -37,7 +37,7 @@
     where status != 0
     and phone_number = #{phoneNumber}
   </select>
-  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.azz.client.pojo.ClientUser">
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.azz.system.pojo.ClientUser">
     insert into client_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

@@ -8,4 +8,6 @@ import com.azz.system.pojo.ClientWxUser;
 public interface ClientWxUserMapper {
 	
 	int insert(ClientWxUser wu);
+	
+	ClientWxUser selectWxUserByOpenid(String openid);
 }

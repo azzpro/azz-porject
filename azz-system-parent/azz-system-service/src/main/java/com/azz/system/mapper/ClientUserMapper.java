@@ -12,4 +12,6 @@ public interface ClientUserMapper {
     ClientUser getClientUserByPhoneNumber(String phoneNumber);
     
     int insertSelective(ClientUser record);
+    
+    ClientUser getClientUserByClientUserCode(String clientUserCode);
 }

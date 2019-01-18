@@ -164,5 +164,11 @@
       </if>
     </trim>
   </insert>
- 
+ <select id="getClientUserByClientUserCode" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from client_user
+    where status != 0
+    and client_user_code = #{clientUserCode}
+  </select>
 </mapper>

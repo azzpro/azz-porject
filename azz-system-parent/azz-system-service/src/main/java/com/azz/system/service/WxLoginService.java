@@ -162,6 +162,19 @@ public class WxLoginService {
 							wcbi.setCode(WxConstants.ACCESSTOKENERRORCODE);
 							wcbi.setMsg(WxConstants.ACCESSTOKENERRORMSG);
 							return new JsonResult<>(wcbi);
+						}else {
+							//直接完成登录操作
+							ClientWxUser wxUser = clientWxUserMapper.selectWxUserByOpenid(openid);
+							if(wxUser != null && StringUtils.isNotBlank(wxUser.getUserCode())) {
+								ClientUser clientUser = clientUserMapper.getClientUserByClientUserCode(wxUser.getUserCode());
+								if(clientUser != null) {
+									wcbi.setPhone(clientUser.getPhoneNumber());
+									wcbi.setPassword(clientUser.getPassword());
+									wcbi.setCode(WxConstants.SUCCESSCODE);
+									wcbi.setMsg(WxConstants.SUCCESSMSG);
+									return new JsonResult<>(wcbi);
+								}
+							}
 						}
 					}
 					// 获取用户头像 用户昵称

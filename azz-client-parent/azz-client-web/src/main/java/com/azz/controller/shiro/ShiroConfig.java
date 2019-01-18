@@ -48,7 +48,7 @@ public class ShiroConfig {
 	filterChainDefinitionMap.put("/azz/api/client/sendVerificationCode", "anon");
 	
 	//开放微信回调接口
-	filterChainDefinitionMap.put("/azz/api/wechat/goWxScanPage", "anon");
+	filterChainDefinitionMap.put("/azz/api/wechat/*", "anon");
 	
 	// 开放官网选型部分接口
 	filterChainDefinitionMap.put("/azz/api/client/selection/getSelectionCaseInfos", "anon");

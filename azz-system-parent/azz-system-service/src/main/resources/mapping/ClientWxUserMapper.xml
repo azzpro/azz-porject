@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.WxScanUserMapper">
+	<resultMap id="BaseResultMap" type="com.azz.system.pojo.ClientWxUser">
+		<result column="id" property="id" />
+		<result column="openid" property="openid" />
+		<result column="unionid" property="unionid" />
+		<result column="access_token" property="access_token" />
+		<result column="expires_in" property="expires_in" />
+		<result column="refresh_token" property="refresh_token" />
+		<result column="scope" property="scope" />
+		<result column="user_code" property="userCode" />
+	</resultMap>
+	<insert id="insert" parameterType="com.azz.system.pojo.ClientWxUser">
+		insert into wx_scan_user (openid, unionid,access_token,expires_in,refresh_token,scope,user_code)
+		 values ( #{openid}, #{unionid}, #{access_token},#{expires_in},#{refresh_token},#{scope},#{userCode})
+	</insert>
+
+	
+</mapper>

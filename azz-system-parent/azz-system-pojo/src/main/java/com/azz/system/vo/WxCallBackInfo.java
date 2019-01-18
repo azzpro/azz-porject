@@ -14,6 +14,7 @@ public class WxCallBackInfo {
 	private String phone;
 	private String password;
 	
+	
 	public String getPhone() {
 		return phone;
 	}

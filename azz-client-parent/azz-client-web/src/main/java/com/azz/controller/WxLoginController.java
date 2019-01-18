@@ -1,9 +1,12 @@
 package com.azz.controller;
 
+import java.util.Objects;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +23,7 @@ import com.azz.core.common.errorcode.ShiroAuthErrorCode;
 import com.azz.core.constants.ClientConstants;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.core.exception.SuppressedException;
+import com.azz.core.wx.constants.WxConstants;
 import com.azz.system.api.WxLoginService;
 import com.azz.system.bo.WxClientRegistParam;
 import com.azz.system.bo.WxLoginParam;
@@ -63,8 +67,39 @@ public class WxLoginController {
 	 * @return
 	 */
 	@RequestMapping(value="callback",method=RequestMethod.POST)
-	public JsonResult<WxCallBackInfo> callback(@RequestParam("code")String code,@RequestParam("state") String state) {
-		return wxLoginService.callback(code, state);
+	public Object callback(@RequestParam("code")String code,@RequestParam("state") String state) {
+		JsonResult<WxCallBackInfo> result = wxLoginService.callback(code, state);
+		if(Objects.equals(WxConstants.LOGINCODE, result.getCode())) {
+			// 从SecurityUtils里边创建一个 subject
+			Subject subject = SecurityUtils.getSubject();
+			// 在认证提交前准备 token（令牌）
+			UsernamePasswordToken token = new UsernamePasswordToken(result.getData().getPhone(),"noUse");
+			try {
+			    // 执行认证登陆
+			    subject.login(token);
+			    // 设置登录超时时间
+			    subject.getSession().setTimeout(sessionTimeout);
+			} catch (AuthenticationException e) {
+			    Throwable[] throwables = e.getSuppressed();
+			    if(throwables != null && throwables.length != 0) {
+			    	int c = ((SuppressedException) throwables[0]).getCode();
+				    String msg = ((SuppressedException) throwables[0]).getMessage();
+				    JsonResult<LoginClientUserInfo> jr = new JsonResult<>();
+				    jr.setCode(c);
+				    jr.setMsg(msg);
+				    return jr;
+			    }
+			    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR,"登录失败,请重试");
+			}
+			JsonResult<LoginClientUserInfo> jsonResult = clientService.getLoginClientUserInfoByPhoneNumber(result.getData().getPhone());
+			LoginClientUserInfo loginClientUser = jsonResult.getData();
+			loginClientUser.setSessionId(subject.getSession().getId());
+			WebUtils.setShiroSessionAttr(ClientConstants.LOGIN_CLIENT_USER, loginClientUser);
+			return jsonResult;
+		}else {
+			throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR,"登录失败,请重新扫码");
+		}
+		
 	}
 	
 	/**

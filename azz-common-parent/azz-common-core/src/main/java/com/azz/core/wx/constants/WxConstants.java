@@ -33,4 +33,6 @@ public interface WxConstants {
 	public static final String SUCCESSMSG = "回调成功";
 	
 	public static final String SUCCESSCODE = "0000";
+	
+	public static final String LOGINCODE = "9999";
 }

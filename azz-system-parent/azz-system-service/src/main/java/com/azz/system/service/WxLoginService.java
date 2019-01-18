@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -169,10 +170,10 @@ public class WxLoginService {
 							if(wxUser != null && StringUtils.isNotBlank(wxUser.getUserCode())) {
 								ClientUser clientUser = clientUserMapper.getClientUserByClientUserCode(wxUser.getUserCode());
 								if(clientUser != null) {
+									wcbi.setCode(WxConstants.LOGINCODE);
 									wcbi.setPhone(clientUser.getPhoneNumber());
-									wcbi.setPassword(clientUser.getPassword());
-									wcbi.setCode(WxConstants.SUCCESSCODE);
-									wcbi.setMsg(WxConstants.SUCCESSMSG);
+									redis.opsForValue().set(clientUser.getPhoneNumber(), "wxScan");
+									redis.expire(clientUser.getPhoneNumber(), 30, TimeUnit.MINUTES);
 									return new JsonResult<>(wcbi);
 								}
 							}

@@ -6,7 +6,7 @@ public interface WxConstants {
 	
 	public static final String SCOPE = "snsapi_login";
 	
-	public static final String CALLBACKURL = "http://c.izz2025.com/azz/api/wechat/callback";
+	public static final String CALLBACKURL = "http://c.izz2025.com/callback.html";
 	
 	public static final String ACCESSTOKENURL = "https://api.weixin.qq.com/sns/oauth2/access_token";
 	

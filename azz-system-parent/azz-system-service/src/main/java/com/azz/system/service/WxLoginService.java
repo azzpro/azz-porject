@@ -81,8 +81,9 @@ public class WxLoginService {
 	 * @return
 	 */
 	public JsonResult<WxInfo> goWxScanPage() {
-		String state = MD5Encrypt.encryptMD5(UUID.randomUUID().toString());
-		String key = UUID.randomUUID().toString();
+		String hd = UUID.randomUUID().toString();
+		String state = MD5Encrypt.encryptMD5(hd);
+		String key = MD5Encrypt.encryptMD5(hd);
 		redis.opsForValue().set(key, state);
 		StringBuilder sb = new StringBuilder(WxConstants.WXURL);
 		sb.append("?").append("appid=").append(appid).append("&redirect_uri=")
@@ -105,8 +106,8 @@ public class WxLoginService {
 	 * @param key
 	 * @return
 	 */
-	public JsonResult<WxCallBackInfo> callback(String code, String state, String key) {
-		String string = redis.opsForValue().get(key);
+	public JsonResult<WxCallBackInfo> callback(String code, String state) {
+		String string = redis.opsForValue().get(state);
 		WxCallBackInfo wcbi = new WxCallBackInfo();
 		// 取缓存 state 防攻击
 		if (Objects.equals(state, string)) {

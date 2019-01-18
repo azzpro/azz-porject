@@ -37,8 +37,8 @@ public class WxLoginController {
 	 * @return
 	 */
 	@RequestMapping("callback")
-	public JsonResult<WxCallBackInfo> callback(@RequestParam("code")String code,@RequestParam("state") String state,@RequestParam("key") String key) {
-		return wxLoginService.callback(code, state, key);
+	public JsonResult<WxCallBackInfo> callback(@RequestParam("code")String code,@RequestParam("state") String state) {
+		return wxLoginService.callback(code, state);
 	}
 	
 	/**

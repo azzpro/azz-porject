@@ -31,7 +31,7 @@ public interface WxLoginService {
 	 * @return
 	 */
 	@RequestMapping(value="/azz/api/wechat/callback",method=RequestMethod.POST)
-	public JsonResult<WxCallBackInfo> callback(@RequestParam("code")String code,@RequestParam("state") String state,@RequestParam("key") String key) ;
+	public JsonResult<WxCallBackInfo> callback(@RequestParam("code")String code,@RequestParam("state") String state) ;
 	
 	/**
 	 * 绑定或者注册

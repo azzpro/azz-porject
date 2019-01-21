@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.wx.course.mapper.WxCourseEvaluationMapper">
+  <resultMap id="BaseResultMap" type="com.azz.wx.course.pojo.WxCourseEvaluation">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="evaluation_code" jdbcType="VARCHAR" property="evaluationCode" />
+    <result column="wx_user_code" jdbcType="VARCHAR" property="wxUserCode" />
+    <result column="course_code" jdbcType="VARCHAR" property="courseCode" />
+    <result column="grade" jdbcType="TINYINT" property="grade" />
+    <result column="evaluation_content" jdbcType="VARCHAR" property="evaluationContent" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, evaluation_code, wx_user_code, course_code, grade, evaluation_content, creator, 
+    create_time, modifier, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wx_course_evaluation
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from wx_course_evaluation
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.wx.course.pojo.WxCourseEvaluation">
+    insert into wx_course_evaluation (id, evaluation_code, wx_user_code, 
+      course_code, grade, evaluation_content, 
+      creator, create_time, modifier, 
+      modify_time)
+    values (#{id,jdbcType=BIGINT}, #{evaluationCode,jdbcType=VARCHAR}, #{wxUserCode,jdbcType=VARCHAR}, 
+      #{courseCode,jdbcType=VARCHAR}, #{grade,jdbcType=TINYINT}, #{evaluationContent,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.wx.course.pojo.WxCourseEvaluation">
+    insert into wx_course_evaluation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="evaluationCode != null">
+        evaluation_code,
+      </if>
+      <if test="wxUserCode != null">
+        wx_user_code,
+      </if>
+      <if test="courseCode != null">
+        course_code,
+      </if>
+      <if test="grade != null">
+        grade,
+      </if>
+      <if test="evaluationContent != null">
+        evaluation_content,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="evaluationCode != null">
+        #{evaluationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="wxUserCode != null">
+        #{wxUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="courseCode != null">
+        #{courseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null">
+        #{grade,jdbcType=TINYINT},
+      </if>
+      <if test="evaluationContent != null">
+        #{evaluationContent,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.wx.course.pojo.WxCourseEvaluation">
+    update wx_course_evaluation
+    <set>
+      <if test="evaluationCode != null">
+        evaluation_code = #{evaluationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="wxUserCode != null">
+        wx_user_code = #{wxUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="courseCode != null">
+        course_code = #{courseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null">
+        grade = #{grade,jdbcType=TINYINT},
+      </if>
+      <if test="evaluationContent != null">
+        evaluation_content = #{evaluationContent,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.wx.course.pojo.WxCourseEvaluation">
+    update wx_course_evaluation
+    set evaluation_code = #{evaluationCode,jdbcType=VARCHAR},
+      wx_user_code = #{wxUserCode,jdbcType=VARCHAR},
+      course_code = #{courseCode,jdbcType=VARCHAR},
+      grade = #{grade,jdbcType=TINYINT},
+      evaluation_content = #{evaluationContent,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

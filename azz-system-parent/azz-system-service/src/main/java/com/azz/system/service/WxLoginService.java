@@ -1,12 +1,9 @@
 package com.azz.system.service;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -15,18 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONObject;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
-import com.azz.core.common.errorcode.ShiroAuthErrorCode;
 import com.azz.core.constants.ClientConstants;
-import com.azz.core.constants.ClientConstants.UserStatus;
 import com.azz.core.constants.SmsConstants.SmsCode;
-import com.azz.core.exception.ShiroAuthException;
 import com.azz.core.wx.constants.WxConstants;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.model.Password;
@@ -34,7 +26,6 @@ import com.azz.system.api.SystemSmsSendService;
 import com.azz.system.bo.SmsCheck;
 import com.azz.system.bo.SmsCodeValidation;
 import com.azz.system.bo.WxClientRegistParam;
-import com.azz.system.bo.WxLoginParam;
 import com.azz.system.mapper.ClientUserMapper;
 import com.azz.system.mapper.ClientWxUserMapper;
 import com.azz.system.pojo.ClientUser;
@@ -43,6 +34,7 @@ import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.system.vo.SmsInfo;
 import com.azz.system.vo.WxCallBackInfo;
 import com.azz.system.vo.WxInfo;
+import com.azz.system.vo.WxLoginInfo;
 import com.azz.util.HttpClientUtil;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.MD5Encrypt;
@@ -239,7 +231,7 @@ public class WxLoginService {
 	 * 
 	 * @return
 	 */
-	public JsonResult<String> regAndBind(@RequestBody WxClientRegistParam wcrp) {
+	public JsonResult<WxLoginInfo> regAndBind(@RequestBody WxClientRegistParam wcrp) {
 		// 参数校验
 		JSR303ValidateUtils.validate(wcrp);
 		String password = wcrp.getPassword();
@@ -265,7 +257,6 @@ public class WxLoginService {
 				.clientUserCode(SystemSeqUtils.getSeq(clientUserCode)).password(pwd.getPassword())
 				.phoneNumber(phoneNumber).salt(pwd.getSalt()).remark("来自客户注册").creator(clientUserCode).build();
 		clientUserMapper.insertSelective(clientUserRecord);
-
 		ClientWxUser wsc = new ClientWxUser();
 		wsc.setAccess_token(wcrp.getAccessToken());
 		wsc.setExpires_in(Long.parseLong(wcrp.getExpiresIn()));
@@ -274,8 +265,22 @@ public class WxLoginService {
 		wsc.setUnionid(wcrp.getUnionid());
 		wsc.setRefresh_token(wcrp.getRefreshToken());
 		wsc.setUserCode(clientUserRecord.getClientUserCode());
-		clientWxUserMapper.insert(wsc);
-		return JsonResult.successJsonResult();
+		int i = clientWxUserMapper.insert(wsc);
+		if(1 == i) {
+			WxLoginInfo wi = new WxLoginInfo();
+			wi.setCode(WxConstants.REGSUCCESSCODE);
+			wi.setMsg(WxConstants.REGSUCCESSMSG);
+			wi.setPassword(confirmPassword);
+			wi.setPhone(phoneNumber);
+			return new JsonResult<>(wi);
+		}else {
+			WxLoginInfo wi = new WxLoginInfo();
+			wi.setCode(WxConstants.REGFAILDCODE);
+			wi.setMsg(WxConstants.REGFAILDMSG);
+			return new JsonResult<>(wi);
+		}
+		
+		
 	}
 
 	/**

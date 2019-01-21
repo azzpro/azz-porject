@@ -30,6 +30,7 @@ import com.azz.system.bo.WxLoginParam;
 import com.azz.system.pojo.ClientWxUser;
 import com.azz.system.vo.WxCallBackInfo;
 import com.azz.system.vo.WxInfo;
+import com.azz.system.vo.WxLoginInfo;
 import com.azz.util.JSR303ValidateUtils;
 
 /**
@@ -164,7 +165,37 @@ public class WxLoginController {
 	 * @return
 	 */
 	@RequestMapping(value="regAndBind",method=RequestMethod.POST)
-	public JsonResult<String> regAndBind( WxClientRegistParam wcrp) {
-		return wxLoginService.regAndBind(wcrp);
+	public JsonResult<LoginClientUserInfo> regAndBind( WxClientRegistParam wcrp) {
+		JsonResult<WxLoginInfo> bind = wxLoginService.regAndBind(wcrp);
+		if(bind.getData() != null && bind.getData().getCode().equals(WxConstants.REGSUCCESSCODE)) {
+			// 从SecurityUtils里边创建一个 subject
+			Subject subject = SecurityUtils.getSubject();
+			// 在认证提交前准备 token（令牌）
+			UsernamePasswordToken token = new UsernamePasswordToken(bind.getData().getPhone(), bind.getData().getPassword());
+			try {
+			    // 执行认证登陆
+			    subject.login(token);
+			    // 设置登录超时时间
+			    subject.getSession().setTimeout(sessionTimeout);
+			} catch (AuthenticationException e) {
+			    Throwable[] throwables = e.getSuppressed();
+			    if(throwables != null && throwables.length != 0) {
+			    	int code = ((SuppressedException) throwables[0]).getCode();
+				    String msg = ((SuppressedException) throwables[0]).getMessage();
+				    JsonResult<LoginClientUserInfo> jr = new JsonResult<>();
+				    jr.setCode(code);
+				    jr.setMsg(msg);
+				    return jr;
+			    }
+			    throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR,"登录失败,请重试");
+			}
+			JsonResult<LoginClientUserInfo> jr = clientService.getLoginClientUserInfoByPhoneNumber(bind.getData().getPhone());
+			LoginClientUserInfo loginClientUser = jr.getData();
+			loginClientUser.setSessionId(subject.getSession().getId());
+			WebUtils.setShiroSessionAttr(ClientConstants.LOGIN_CLIENT_USER, loginClientUser);
+			return jr;
+		}else {
+			throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR,"登录失败,请重试");
+		}
 	}
 }

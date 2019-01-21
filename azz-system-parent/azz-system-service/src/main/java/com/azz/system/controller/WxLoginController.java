@@ -12,6 +12,7 @@ import com.azz.system.pojo.ClientWxUser;
 import com.azz.system.service.WxLoginService;
 import com.azz.system.vo.WxCallBackInfo;
 import com.azz.system.vo.WxInfo;
+import com.azz.system.vo.WxLoginInfo;
 
 @RestController
 @RequestMapping("/azz/api/wechat")
@@ -63,7 +64,7 @@ public class WxLoginController {
 	 * @return
 	 */
 	@RequestMapping("regAndBind")
-	public JsonResult<String> regAndBind(@RequestBody WxClientRegistParam wcrp) {
+	public JsonResult<WxLoginInfo> regAndBind(@RequestBody WxClientRegistParam wcrp) {
 		return wxLoginService.regAndBind(wcrp);
 	}
 }

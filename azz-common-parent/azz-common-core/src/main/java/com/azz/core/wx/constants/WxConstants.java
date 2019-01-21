@@ -35,4 +35,12 @@ public interface WxConstants {
 	public static final String SUCCESSCODE = "0000";
 	
 	public static final String LOGINCODE = "9999";
+	
+	public static final String REGSUCCESSCODE = "0000";
+	
+	public static final String REGSUCCESSMSG = "微信关联成功";
+	
+	public static final String REGFAILDCODE = "1111";
+	
+	public static final String REGFAILDMSG = "微信关联失败";
 }

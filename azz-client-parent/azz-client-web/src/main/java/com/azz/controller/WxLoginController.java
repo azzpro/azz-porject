@@ -97,7 +97,8 @@ public class WxLoginController {
 			WebUtils.setShiroSessionAttr(ClientConstants.LOGIN_CLIENT_USER, loginClientUser);
 			return jsonResult;
 		}else {
-			throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR,"登录失败,请重新扫码");
+			return result;
+			//throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR,"登录失败,请重新扫码");
 		}
 		
 	}

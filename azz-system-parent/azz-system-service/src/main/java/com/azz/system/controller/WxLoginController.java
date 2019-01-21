@@ -62,6 +62,7 @@ public class WxLoginController {
 	 * @param wcrp
 	 * @return
 	 */
+	@RequestMapping("regAndBind")
 	public JsonResult<String> regAndBind(@RequestBody WxClientRegistParam wcrp) {
 		return wxLoginService.regAndBind(wcrp);
 	}

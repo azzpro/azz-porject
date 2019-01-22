@@ -176,6 +176,7 @@ public class WxLoginService {
 								if(userInfo != null) {
 									JSONObject cc = JSONObject.parseObject(userInfo);
 									int i = clientWxUserMapper.updateAvatarUrlAndNickname((String) cc.get("headimgurl"), (String) cc.get("nickname"), openid);
+									log.info("更新微信昵称 微信头像---->"+(String) cc.get("headimgurl")+"::"+(String) cc.get("nickname"));
 									if(i != 1) {
 										wcbi.setCode(WxConstants.UPDATEERRORCODE);
 										wcbi.setMsg(WxConstants.UPDATEERRORMSG);

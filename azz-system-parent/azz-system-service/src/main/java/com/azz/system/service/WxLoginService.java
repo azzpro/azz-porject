@@ -265,6 +265,8 @@ public class WxLoginService {
 		wsc.setUnionid(wcrp.getUnionid());
 		wsc.setRefresh_token(wcrp.getRefreshToken());
 		wsc.setUserCode(clientUserRecord.getClientUserCode());
+		wsc.setAvatarUrl(wcrp.getAvatarUrl());
+		wsc.setNickName(wcrp.getNickName());
 		int i = clientWxUserMapper.insert(wsc);
 		if(1 == i) {
 			WxLoginInfo wi = new WxLoginInfo();

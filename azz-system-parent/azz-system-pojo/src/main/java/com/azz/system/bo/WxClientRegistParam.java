@@ -26,4 +26,6 @@ public class WxClientRegistParam {
 	private String refreshToken;
 	private String scope;
 	private String unionid;
+	private String avatarUrl;
+	private String nickName;
 }

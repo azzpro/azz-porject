@@ -311,9 +311,7 @@
 		wx_course wc
 	JOIN wx_course_brand wcb ON wc.brand_code = wcb.brand_code	
 	LEFT JOIN wx_course_classification wcc ON wc.classification_code = wcc.classification_code
-	WHERE
-		wc.status != 0
-	AND wc.course_code = #{courseCode}
+	WHERE wc.course_code = #{courseCode}
   </select>
   
   <resultMap id="param" type="com.azz.wx.course.pojo.vo.Param">
@@ -356,4 +354,107 @@
 	where wcpr.course_code = #{courseCode}
 	GROUP BY wcpr.param_term_code 
   </select>
+  
+  <select id="getIndexCourseInfos" parameterType="com.azz.wx.course.pojo.bo.SearchCourseInfoParam" resultType="com.azz.wx.course.pojo.vo.CourseInfo">
+  	SELECT
+		wc.course_code AS courseCode,
+		wc.course_name AS courseName,
+		wc.course_pic_name AS coursePicName,
+		wc.course_pic_url AS coursePicUrl,
+		t.latelyStartClassTime AS latelyStartClassTime,
+		t1.minPrice AS minPrice
+	FROM
+		wx_course wc
+	LEFT JOIN (
+		SELECT
+			wscr.course_code,
+			max(wscr.start_class_time) AS latelyStartClassTime
+		FROM
+			wx_course_start_class_record wscr
+		GROUP BY
+			wscr.course_code
+	) t ON t.course_code = wc.course_code
+	LEFT JOIN (
+		SELECT
+			wscr.course_code,
+			min(wscr.price) AS minPrice
+		FROM
+			wx_course_start_class_record wscr
+		GROUP BY
+			wscr.course_code
+	) t1 ON t1.course_code = wc.course_code
+	<where>
+		wc.status != 0
+		<if test="status != null">
+			AND wc.status = #{status}
+		</if>
+		<if test="courseName != null and courseName != ''">
+			AND wc.course_name LIKE CONCAT('%', #{courseName}, '%') 
+		</if>
+	</where>
+	<if test="sortType == 1">
+		ORDER BY wc.create_time DESC
+	</if>
+	<if test="sortType == 2">
+		ORDER BY wc.create_time ASC
+	</if>
+	<if test="sortType == 3">
+		ORDER BY t.latelyStartClassTime DESC, wc.create_time DESC
+	</if>
+	<if test="sortType == 4">
+		ORDER BY t.latelyStartClassTime ASC, wc.create_time DESC
+	</if>
+	<if test="sortType == 5">
+		ORDER BY t1.minPrice DESC, wc.create_time DESC
+	</if>
+	<if test="sortType == 6">
+		ORDER BY t1.minPrice ASC, wc.create_time DESC
+	</if>
+  </select>
+  
+  <select id="getIndexCourseDetail" parameterType="string" resultType="com.azz.wx.course.pojo.vo.CourseDetail">
+	SELECT
+		wc.course_code AS courseCode,
+		wc.course_name AS courseName,
+		wc.course_pic_name AS coursePicName,
+		wc.course_pic_url AS coursePicUrl,
+		t.start_class_time AS latelyStartClassTime,
+		t.hours AS hours,
+		IFNULL(t1.buyCount, 0) AS buyCount
+	FROM
+		wx_course wc
+	LEFT JOIN (
+		SELECT
+			descStartClassRecord.course_code,
+			descStartClassRecord.start_class_time,
+			descStartClassRecord.hours
+		FROM
+			(
+				SELECT
+					wscr.course_code,
+					wscr.start_class_time,
+					wscr.hours
+				FROM
+					wx_course_start_class_record wscr
+				WHERE 
+					wscr.course_code = #{courseCode}
+				ORDER BY
+					wscr.create_time DESC
+			) descStartClassRecord
+		GROUP BY
+			descStartClassRecord.course_code
+	) t ON t.course_code = wc.course_code
+	LEFT JOIN (
+		SELECT
+			wcoi.course_code,
+			count(1) AS buyCount
+		FROM
+			wx_course_order_item wcoi
+		WHERE
+			wcoi.course_code = #{courseCode}
+	) t1 ON t1.course_code = wc.course_code
+	WHERE
+		wc.course_code = #{courseCode}
+  </select>
+  
 </mapper>

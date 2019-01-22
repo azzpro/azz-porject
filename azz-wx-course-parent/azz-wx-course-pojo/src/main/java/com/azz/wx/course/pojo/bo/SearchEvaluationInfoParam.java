@@ -7,6 +7,8 @@
  
 package com.azz.wx.course.pojo.bo;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.azz.core.common.QueryPage;
 
 import lombok.Data;
@@ -19,24 +21,12 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper=false)
-public class SearchCourseInfoParam extends QueryPage{
+public class SearchEvaluationInfoParam extends QueryPage{
 
-	private static final long serialVersionUID = -1543422342458159183L;
+	private static final long serialVersionUID = -8538894648942065844L;
 	
-	private Byte status;
-	
-	private String courseName;
-	
-	/**
-	 * 排序类型
-	 * 		1综合降序(课程创建时间降序)
-	 * 		2综合升序(课程创建时间升序)  
-	 * 		3开课时间降序 
-	 *  	4开课时间升序  
-	 *  	5开课价格降序  
-	 *  	6开课价格升序
-	 */
-	private Integer sortType = 1;
+	@NotBlank(message = "请选择课程")
+	private String courseCode;
 	
 }
 

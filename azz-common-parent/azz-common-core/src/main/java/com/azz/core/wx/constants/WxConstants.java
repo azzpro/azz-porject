@@ -43,4 +43,8 @@ public interface WxConstants {
 	public static final String REGFAILDCODE = "1111";
 	
 	public static final String REGFAILDMSG = "微信关联失败";
+	
+	public static final String UPDATEERRORCODE = "更新头像失败";
+	
+	public static final String UPDATEERRORMSG = "8888";
 }

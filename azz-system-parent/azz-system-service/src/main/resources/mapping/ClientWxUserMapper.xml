@@ -22,4 +22,8 @@
 		select id,openid,unionid,access_token,expires_in,refresh_token,scope,user_code,avatar_url,nick_name from client_wx_user
 		where openid = #{openid}
 	</select>
+	
+	<update id="updateAvatarUrlAndNickname">
+		update client_wx_user set avatar_url = #{url},nick_name = #{name} where openid = #{id}
+	</update>
 </mapper>

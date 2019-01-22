@@ -21,6 +21,12 @@ public abstract class WxCourseConstants {
 	 */
 	public static final long COURSE_PIC_FILE_SIZE_LIMIT = 2 * 1024 * 1024L;
 	
+
+	/**
+	 * 课程默认购买数量
+	 */
+	public static final int COURSE_BUY_COUNT = 1000;
+	
 	/**
 	 * 
 	 * <P>是否修改了模组图片</P>

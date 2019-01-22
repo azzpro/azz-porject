@@ -7,6 +7,8 @@
  
 package com.azz.wx.course.pojo.vo;
 
+import java.util.Date;
+
 import lombok.Data;
 
 /**
@@ -21,9 +23,17 @@ public class CourseDetail {
 
     private String courseName;
     
+    private Date latelyStartClassTime;
+    
+    private Integer hours;
+    
+    private Integer buyCount;
+    
     private String brandCode;
     
     private String brandName;
+    
+    private String brandInfo;
 
     private String coursePicName;
 

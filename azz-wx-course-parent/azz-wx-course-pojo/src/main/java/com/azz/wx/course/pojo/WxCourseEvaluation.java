@@ -19,11 +19,11 @@ public class WxCourseEvaluation implements Serializable {
     private String evaluationCode;
 
     /**
-     * 微信用户编码
+     * 用户编码
      *
      * @mbg.generated
      */
-    private String wxUserCode;
+    private String userCode;
 
     /**
      * 所属课程编码
@@ -31,6 +31,13 @@ public class WxCourseEvaluation implements Serializable {
      * @mbg.generated
      */
     private String courseCode;
+
+    /**
+     * 所属开课信息编码
+     *
+     * @mbg.generated
+     */
+    private String startClassCode;
 
     /**
      * 评分 1-5的整数
@@ -132,20 +139,20 @@ public class WxCourseEvaluation implements Serializable {
      *
      * @mbg.generated
      */
-    public String getWxUserCode() {
-        return wxUserCode;
+    public String getUserCode() {
+        return userCode;
     }
 
     /**
-     * 微信用户编码<br/>
-     * wx_course_evaluation.wx_user_code
+     * 用户编码<br/>
+     * wx_course_evaluation.user_code
      *
-     * @param wxUserCode 值对应 wx_course_evaluation.wx_user_code
+     * @param wxUserCode 值对应 wx_course_evaluation.user_code
      *
      * @mbg.generated
      */
-    public void setWxUserCode(String wxUserCode) {
-        this.wxUserCode = wxUserCode == null ? null : wxUserCode.trim();
+    public void setUserCode(String userCode) {
+        this.userCode = userCode == null ? null : userCode.trim();
     }
 
     /**
@@ -170,6 +177,30 @@ public class WxCourseEvaluation implements Serializable {
      */
     public void setCourseCode(String courseCode) {
         this.courseCode = courseCode == null ? null : courseCode.trim();
+    }
+
+    /**
+     * 所属开课信息编码<br/>
+     * 返回值对应的表列名 wx_course_evaluation.start_class_code
+     *
+     * @return 返回值对应 wx_course_evaluation.start_class_code
+     *
+     * @mbg.generated
+     */
+    public String getStartClassCode() {
+        return startClassCode;
+    }
+
+    /**
+     * 所属开课信息编码<br/>
+     * wx_course_evaluation.start_class_code
+     *
+     * @param startClassCode 值对应 wx_course_evaluation.start_class_code
+     *
+     * @mbg.generated
+     */
+    public void setStartClassCode(String startClassCode) {
+        this.startClassCode = startClassCode == null ? null : startClassCode.trim();
     }
 
     /**
@@ -330,8 +361,9 @@ public class WxCourseEvaluation implements Serializable {
         WxCourseEvaluation other = (WxCourseEvaluation) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getEvaluationCode() == null ? other.getEvaluationCode() == null : this.getEvaluationCode().equals(other.getEvaluationCode()))
-            && (this.getWxUserCode() == null ? other.getWxUserCode() == null : this.getWxUserCode().equals(other.getWxUserCode()))
+            && (this.getUserCode() == null ? other.getUserCode() == null : this.getUserCode().equals(other.getUserCode()))
             && (this.getCourseCode() == null ? other.getCourseCode() == null : this.getCourseCode().equals(other.getCourseCode()))
+            && (this.getStartClassCode() == null ? other.getStartClassCode() == null : this.getStartClassCode().equals(other.getStartClassCode()))
             && (this.getGrade() == null ? other.getGrade() == null : this.getGrade().equals(other.getGrade()))
             && (this.getEvaluationContent() == null ? other.getEvaluationContent() == null : this.getEvaluationContent().equals(other.getEvaluationContent()))
             && (this.getCreator() == null ? other.getCreator() == null : this.getCreator().equals(other.getCreator()))
@@ -346,8 +378,9 @@ public class WxCourseEvaluation implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getEvaluationCode() == null) ? 0 : getEvaluationCode().hashCode());
-        result = prime * result + ((getWxUserCode() == null) ? 0 : getWxUserCode().hashCode());
+        result = prime * result + ((getUserCode() == null) ? 0 : getUserCode().hashCode());
         result = prime * result + ((getCourseCode() == null) ? 0 : getCourseCode().hashCode());
+        result = prime * result + ((getStartClassCode() == null) ? 0 : getStartClassCode().hashCode());
         result = prime * result + ((getGrade() == null) ? 0 : getGrade().hashCode());
         result = prime * result + ((getEvaluationContent() == null) ? 0 : getEvaluationContent().hashCode());
         result = prime * result + ((getCreator() == null) ? 0 : getCreator().hashCode());
@@ -365,8 +398,9 @@ public class WxCourseEvaluation implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", evaluationCode=").append(evaluationCode);
-        sb.append(", wxUserCode=").append(wxUserCode);
+        sb.append(", userCode=").append(userCode);
         sb.append(", courseCode=").append(courseCode);
+        sb.append(", startClassCode=").append(startClassCode);
         sb.append(", grade=").append(grade);
         sb.append(", evaluationContent=").append(evaluationContent);
         sb.append(", creator=").append(creator);

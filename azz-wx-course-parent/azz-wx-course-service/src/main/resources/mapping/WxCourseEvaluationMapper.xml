@@ -4,8 +4,9 @@
   <resultMap id="BaseResultMap" type="com.azz.wx.course.pojo.WxCourseEvaluation">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="evaluation_code" jdbcType="VARCHAR" property="evaluationCode" />
-    <result column="wx_user_code" jdbcType="VARCHAR" property="wxUserCode" />
+    <result column="user_code" jdbcType="VARCHAR" property="userCode" />
     <result column="course_code" jdbcType="VARCHAR" property="courseCode" />
+    <result column="start_class_code" jdbcType="VARCHAR" property="startClassCode" />
     <result column="grade" jdbcType="TINYINT" property="grade" />
     <result column="evaluation_content" jdbcType="VARCHAR" property="evaluationContent" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
@@ -14,8 +15,8 @@
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, evaluation_code, wx_user_code, course_code, grade, evaluation_content, creator, 
-    create_time, modifier, modify_time
+    id, evaluation_code, user_code, course_code, start_class_code, grade, evaluation_content, 
+    creator, create_time, modifier, modify_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -28,14 +29,14 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.azz.wx.course.pojo.WxCourseEvaluation">
-    insert into wx_course_evaluation (id, evaluation_code, wx_user_code, 
-      course_code, grade, evaluation_content, 
-      creator, create_time, modifier, 
-      modify_time)
-    values (#{id,jdbcType=BIGINT}, #{evaluationCode,jdbcType=VARCHAR}, #{wxUserCode,jdbcType=VARCHAR}, 
-      #{courseCode,jdbcType=VARCHAR}, #{grade,jdbcType=TINYINT}, #{evaluationContent,jdbcType=VARCHAR}, 
-      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
-      #{modifyTime,jdbcType=TIMESTAMP})
+    insert into wx_course_evaluation (id, evaluation_code, user_code, 
+      course_code, start_class_code, grade, 
+      evaluation_content, creator, create_time, 
+      modifier, modify_time)
+    values (#{id,jdbcType=BIGINT}, #{evaluationCode,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, 
+      #{courseCode,jdbcType=VARCHAR}, #{startClassCode,jdbcType=VARCHAR}, #{grade,jdbcType=TINYINT}, 
+      #{evaluationContent,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.azz.wx.course.pojo.WxCourseEvaluation">
     insert into wx_course_evaluation
@@ -46,11 +47,14 @@
       <if test="evaluationCode != null">
         evaluation_code,
       </if>
-      <if test="wxUserCode != null">
-        wx_user_code,
+      <if test="userCode != null">
+        user_code,
       </if>
       <if test="courseCode != null">
         course_code,
+      </if>
+      <if test="startClassCode != null">
+        start_class_code,
       </if>
       <if test="grade != null">
         grade,
@@ -78,11 +82,14 @@
       <if test="evaluationCode != null">
         #{evaluationCode,jdbcType=VARCHAR},
       </if>
-      <if test="wxUserCode != null">
-        #{wxUserCode,jdbcType=VARCHAR},
+      <if test="userCode != null">
+        #{userCode,jdbcType=VARCHAR},
       </if>
       <if test="courseCode != null">
         #{courseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="startClassCode != null">
+        #{startClassCode,jdbcType=VARCHAR},
       </if>
       <if test="grade != null">
         #{grade,jdbcType=TINYINT},
@@ -110,11 +117,14 @@
       <if test="evaluationCode != null">
         evaluation_code = #{evaluationCode,jdbcType=VARCHAR},
       </if>
-      <if test="wxUserCode != null">
-        wx_user_code = #{wxUserCode,jdbcType=VARCHAR},
+      <if test="userCode != null">
+        user_code = #{userCode,jdbcType=VARCHAR},
       </if>
       <if test="courseCode != null">
         course_code = #{courseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="startClassCode != null">
+        start_class_code = #{startClassCode,jdbcType=VARCHAR},
       </if>
       <if test="grade != null">
         grade = #{grade,jdbcType=TINYINT},
@@ -140,8 +150,9 @@
   <update id="updateByPrimaryKey" parameterType="com.azz.wx.course.pojo.WxCourseEvaluation">
     update wx_course_evaluation
     set evaluation_code = #{evaluationCode,jdbcType=VARCHAR},
-      wx_user_code = #{wxUserCode,jdbcType=VARCHAR},
+      user_code = #{userCode,jdbcType=VARCHAR},
       course_code = #{courseCode,jdbcType=VARCHAR},
+      start_class_code = #{startClassCode,jdbcType=VARCHAR},
       grade = #{grade,jdbcType=TINYINT},
       evaluation_content = #{evaluationContent,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
@@ -150,4 +161,17 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="getEvaluationInfos" parameterType="com.azz.wx.course.pojo.bo.SearchEvaluationInfoParam" resultType="com.azz.wx.course.pojo.vo.EvaluationInfo">
+   	SELECT
+		wce.grade AS grade,
+		wce.evaluation_content AS evaluationContent,
+		wce.create_time AS createTime,
+		cwu.avatar_url AS avatarUrl,
+		cwu.nick_name AS nickName
+	FROM
+		wx_course_evaluation wce
+	JOIN client_wx_user cwu ON wce.user_code = cwu.user_code
+	WHERE wce.course_code = #{courseCode}
+  </select>
 </mapper>

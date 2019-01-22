@@ -17,8 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
@@ -37,6 +35,7 @@ import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
 import com.azz.util.SystemSeqUtils;
 import com.azz.wx.course.mapper.WxCourseClassificationMapper;
+import com.azz.wx.course.mapper.WxCourseEvaluationMapper;
 import com.azz.wx.course.mapper.WxCourseMapper;
 import com.azz.wx.course.mapper.WxCourseParamMapper;
 import com.azz.wx.course.mapper.WxCourseParamRelMapper;
@@ -55,8 +54,10 @@ import com.azz.wx.course.pojo.bo.CoursePic;
 import com.azz.wx.course.pojo.bo.EditCourseParam;
 import com.azz.wx.course.pojo.bo.PutOnOrPutOffOrDelCourseParam;
 import com.azz.wx.course.pojo.bo.SearchCourseInfoParam;
+import com.azz.wx.course.pojo.bo.SearchEvaluationInfoParam;
 import com.azz.wx.course.pojo.vo.CourseDetail;
 import com.azz.wx.course.pojo.vo.CourseInfo;
+import com.azz.wx.course.pojo.vo.EvaluationInfo;
 import com.azz.wx.course.pojo.vo.Param;
 import com.azz.wx.course.pojo.vo.ParamsValue;
 import com.azz.wx.course.pojo.vo.ProductParams;
@@ -98,6 +99,9 @@ public class CourseService {
 	
 	@Autowired
 	private WxCourseParamTermValueMapper wxCourseParamTermValueMapper;
+	
+	@Autowired
+	private WxCourseEvaluationMapper wxCourseEvaluationMapper;
 
 	/**
 	 * 
@@ -341,7 +345,6 @@ public class CourseService {
 	 * @return
 	 * @author 刘建麟  2018年10月31日 下午7:47:30
 	 */
-	@RequestMapping(value="getPrams",method=RequestMethod.POST)
 	public JsonResult<ProductParams> getPrams(String code){
 		if(org.apache.commons.lang3.StringUtils.isBlank(code))
 			throw new BaseException(MerchantProductErrorCode.MERCHANT_PRODUCT_ASSORTMENT_IS_NULL);
@@ -386,5 +389,57 @@ public class CourseService {
 		}
 		return new JsonResult<>(pp);
 	}
+	
+	/*******************************  微信课程首页接口   start ********************************/
+	
+	/**
+	 * 
+	 * <p>查询首页课程列表</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年1月21日 下午4:25:49
+	 */
+	public JsonResult<Pagination<CourseInfo>> getIndexCourseInfos(@RequestBody SearchCourseInfoParam param){
+		PageHelper.startPage(param.getPageNum(), param.getPageSize());
+		List<CourseInfo> infos = wxCourseMapper.getIndexCourseInfos(param);
+		return JsonResult.successJsonResult(new Pagination<>(infos));
+	}
+	
+	/**
+	 * 
+	 * <p>查询首页课程详情</p>
+	 * @param courseCode
+	 * @return
+	 * @author 黄智聪  2019年1月4日 下午3:20:59
+	 */
+	public JsonResult<CourseDetail> getIndexCourseDetail(String courseCode){
+		if(StringUtils.isBlank(courseCode)) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "请选择课程");
+		}
+		// 查询课程信息
+		CourseDetail detail = wxCourseMapper.getIndexCourseDetail(courseCode);
+		if(detail == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "所选课程不存在");
+		}
+		// 默认购买数量加1000
+		detail.setBuyCount(detail.getBuyCount() + WxCourseConstants.COURSE_BUY_COUNT);
+		return JsonResult.successJsonResult(detail);
+	}
+	
+	/**
+	 * 
+	 * <p>查询课程评价</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年1月21日 下午7:26:26
+	 */
+	public JsonResult<Pagination<EvaluationInfo>> getEvaluationInfos(@RequestBody SearchEvaluationInfoParam param){
+		JSR303ValidateUtils.validate(param);
+		PageHelper.startPage(param.getPageNum(), param.getPageSize());
+		List<EvaluationInfo> infos = wxCourseEvaluationMapper.getEvaluationInfos(param);
+		return JsonResult.successJsonResult(new Pagination<>(infos));
+	}
+	
+	/*******************************  微信课程首页接口     end  ********************************/
 }
 

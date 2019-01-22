@@ -7,6 +7,7 @@
  
 package com.azz.wx.course.pojo.vo;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import lombok.Data;
@@ -32,6 +33,8 @@ public class CourseInfo {
     private Date latelyStartClassTime;
     
     private String latelyStartClassLocation;
+    
+    private BigDecimal minPrice;
     
     private Integer peopleNumber;
 

@@ -64,4 +64,26 @@ public interface WxCourseMapper {
      */
     Param getCourseParamsByCourseCode(String courseCode);
     
+    /*******************************  微信课程首页接口   start ********************************/
+    
+    /**
+     * 
+     * <p>查询首页课程列表</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2019年1月4日 上午11:31:17
+     */
+    List<CourseInfo> getIndexCourseInfos(SearchCourseInfoParam param);
+    
+    /**
+     * 
+     * <p>查询首页课程详情</p>
+     * @param courseCode
+     * @return
+     * @author 黄智聪  2019年1月4日 下午3:40:58
+     */
+    CourseDetail getIndexCourseDetail(String courseCode);
+    
+    /*******************************  微信课程首页接口     end  ********************************/
+    
 }

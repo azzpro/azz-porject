@@ -378,6 +378,38 @@ public class OrderService {
 		return JsonResult.successJsonResult(order);
 	} 
 	
+	/**
+	 * 
+	 * <p>关闭订单--6小时未支付的待支付订单，状态改为已关闭</p>
+	 * @return
+	 * @author 黄智聪  2018年11月15日 上午10:38:19
+	 */
+	public JsonResult<String> closeCourseOrders(){
+		// 查询6小时未支付的客户订单id集合
+		List<String> orderCodes = wxCourseOrderMapper.getSixHoursNotPaidCourseOrderCodes(CourseOrderStatus.NOT_PAID.getValue());
+		Date nowDate = new Date();
+		for (String orderCode : orderCodes) {
+			// 将订单状态改为已完成但未评价
+			WxCourseOrder orderRecord = WxCourseOrder.builder()
+					.orderCode(orderCode)
+					.orderStatusId(CourseOrderStatus.CLOSED.getValue())
+					.modifyTime(nowDate)
+					.remark("6小时未支付，订单状态改为已关闭")
+					.build();
+			wxCourseOrderMapper.updateByOrderCode(orderRecord);
+			
+			// 插入课程订单状态变化记录
+			WxCourseOrderStatus record = WxCourseOrderStatus.builder()
+					.createTime(nowDate)
+					.orderCode(orderCode)
+					.orderStatusId(CourseOrderStatus.CLOSED.getValue())
+					.remark("6小时未支付，订单状态改为已关闭")
+					.build();
+			wxCourseOrderStatusMapper.insertSelective(record);
+		}
+		return JsonResult.successJsonResult();
+	}
+	
 	/*******************************  微信课程首页接口     end  ********************************/
 
 }

@@ -38,8 +38,6 @@ public class PlatformCourseOrderDetail {
 	
 	private String courseParams;
 	
-    private BigDecimal grandTotal;
-	
 	private Integer orderStatus; 
 	
 	private Date orderTime;
@@ -58,6 +56,8 @@ public class PlatformCourseOrderDetail {
 	private Integer peopleNumber;
 	
 	private BigDecimal price;
+	
+	private String location;
 	/**  开课信息 end  **/
 	
 

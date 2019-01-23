@@ -77,5 +77,14 @@ public interface WxCourseOrderMapper {
      * @author 黄智聪  2019年1月23日 上午10:35:29
      */
     PlatformCourseOrderDetail getPlatformCourseOrderDetail(String orderCode);
+
+    /**
+     * 
+     * <p>查询6小时未支付的订单编码集合</p>
+     * @param status
+     * @return
+     * @author 黄智聪  2019年1月23日 下午6:43:05
+     */
+	List<String> getSixHoursNotPaidCourseOrderCodes(int status);
     
 }

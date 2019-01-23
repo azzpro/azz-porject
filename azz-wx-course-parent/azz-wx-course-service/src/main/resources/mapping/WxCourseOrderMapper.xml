@@ -454,6 +454,7 @@
 		wcoi.hours AS hours,
 		wcoi.people_number AS peopleNumber,
 		wcoi.price AS price,
+		wcoi.location AS location,
 		wcai.person_name AS personName,
 		wcai.phone_number AS phoneNumber,
 		wcai.email AS email,
@@ -469,6 +470,16 @@
 	LEFT JOIN wx_course_evaluation wce ON wce.order_code = wco.order_code
 	WHERE
 		wco.order_code = #{orderCode}
+  </select>
+  
+  <select id="getSixHoursNotPaidCourseOrderCodes" parameterType="java.lang.Integer" resultType="string">
+    SELECT
+		wco.order_code
+	FROM
+		wx_course_order wco
+	WHERE wco. STATUS != 0
+	AND DATE_ADD(wco.create_time,INTERVAL 6 HOUR) &lt; NOW()  
+	AND wco.order_status_id = #{orderStatusId}
   </select>
   
 </mapper>

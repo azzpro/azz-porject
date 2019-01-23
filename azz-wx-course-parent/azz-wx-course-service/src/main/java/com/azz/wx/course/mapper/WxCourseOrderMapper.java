@@ -17,4 +17,10 @@ public interface WxCourseOrderMapper {
     int updateByPrimaryKeySelective(WxCourseOrder record);
 
     int updateByPrimaryKey(WxCourseOrder record);
+    
+    int getCountOrders(String userCode);
+    
+    int getCountOrdersStatus(Integer orderStatus);
+    
+    String getUserPhone(String userCode);
 }

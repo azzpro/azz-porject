@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.azz.wx.course.pojo.WxCourseAapplyInfo">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="apply_info_code" jdbcType="VARCHAR" property="applyInfoCode" />
-    <result column="wx_user_code" jdbcType="VARCHAR" property="wxUserCode" />
+    <result column="user_code" jdbcType="VARCHAR" property="userCode" />
     <result column="person_name" jdbcType="VARCHAR" property="personName" />
     <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
     <result column="email" jdbcType="VARCHAR" property="email" />
@@ -17,7 +17,7 @@
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, apply_info_code, wx_user_code, person_name, phone_number, email, company, graduate_school, 
+    id, apply_info_code, user_code, person_name, phone_number, email, company, graduate_school, 
     is_default, creator, create_time, modifier, modify_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -31,12 +31,12 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.azz.wx.course.pojo.WxCourseAapplyInfo">
-    insert into wx_course_apply_info (id, apply_info_code, wx_user_code, 
+    insert into wx_course_apply_info (id, apply_info_code, user_code, 
       person_name, phone_number, email, 
       company, graduate_school, is_default, 
       creator, create_time, modifier, 
       modify_time)
-    values (#{id,jdbcType=BIGINT}, #{applyInfoCode,jdbcType=VARCHAR}, #{wxUserCode,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{applyInfoCode,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, 
       #{personName,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
       #{company,jdbcType=VARCHAR}, #{graduateSchool,jdbcType=VARCHAR}, #{isDefault,jdbcType=TINYINT}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
@@ -51,8 +51,8 @@
       <if test="applyInfoCode != null">
         apply_info_code,
       </if>
-      <if test="wxUserCode != null">
-        wx_user_code,
+      <if test="userCode != null">
+        user_code,
       </if>
       <if test="personName != null">
         person_name,
@@ -92,8 +92,8 @@
       <if test="applyInfoCode != null">
         #{applyInfoCode,jdbcType=VARCHAR},
       </if>
-      <if test="wxUserCode != null">
-        #{wxUserCode,jdbcType=VARCHAR},
+      <if test="userCode != null">
+        #{userCode,jdbcType=VARCHAR},
       </if>
       <if test="personName != null">
         #{personName,jdbcType=VARCHAR},
@@ -133,8 +133,8 @@
       <if test="applyInfoCode != null">
         apply_info_code = #{applyInfoCode,jdbcType=VARCHAR},
       </if>
-      <if test="wxUserCode != null">
-        wx_user_code = #{wxUserCode,jdbcType=VARCHAR},
+      <if test="userCode != null">
+        user_code = #{userCode,jdbcType=VARCHAR},
       </if>
       <if test="personName != null">
         person_name = #{personName,jdbcType=VARCHAR},
@@ -172,7 +172,7 @@
   <update id="updateByPrimaryKey" parameterType="com.azz.wx.course.pojo.WxCourseAapplyInfo">
     update wx_course_apply_info
     set apply_info_code = #{applyInfoCode,jdbcType=VARCHAR},
-      wx_user_code = #{wxUserCode,jdbcType=VARCHAR},
+      user_code = #{userCode,jdbcType=VARCHAR},
       person_name = #{personName,jdbcType=VARCHAR},
       phone_number = #{phoneNumber,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},

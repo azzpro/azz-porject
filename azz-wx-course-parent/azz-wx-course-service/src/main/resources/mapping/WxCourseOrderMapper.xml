@@ -212,6 +212,57 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <update id="updateByOrderCode" parameterType="com.azz.wx.course.pojo.WxCourseOrder">
+    update wx_course_order
+    <set>
+      <if test="orderCreator != null">
+        order_creator = #{orderCreator,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatusId != null">
+        order_status_id = #{orderStatusId,jdbcType=INTEGER},
+      </if>
+      <if test="applyInfoCode != null">
+        apply_info_code = #{applyInfoCode,jdbcType=VARCHAR},
+      </if>
+      <if test="grandTotal != null">
+        grand_total = #{grandTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentMethod != null">
+        payment_method = #{paymentMethod,jdbcType=INTEGER},
+      </if>
+      <if test="paymentStatus != null">
+        payment_status = #{paymentStatus,jdbcType=INTEGER},
+      </if>
+      <if test="paymentType != null">
+        payment_type = #{paymentType,jdbcType=INTEGER},
+      </if>
+      <if test="invoiceStatus != null">
+        invoice_status = #{invoiceStatus,jdbcType=INTEGER},
+      </if>
+      <if test="confirmPerson != null">
+        confirm_person = #{confirmPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where order_code = #{orderCode,jdbcType=VARCHAR}
+  </update>
   <update id="updateByPrimaryKey" parameterType="com.azz.wx.course.pojo.WxCourseOrder">
     update wx_course_order
     set order_code = #{orderCode,jdbcType=VARCHAR},
@@ -232,4 +283,86 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="getCountOrders" parameterType="java.lang.String" resultType="int">
+  	SELECT COUNT(0) FROM wx_course_order WHERE creator = #{userCode,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getCountOrdersStatus" parameterType="java.lang.Integer" resultType="int">
+  	SELECT COUNT(0) FROM wx_course_order WHERE order_status_id = #{orderStatus}
+  </select>
+  
+  <select id="getUserPhone" parameterType="java.lang.String" resultType="java.lang.String">
+  	SELECT phone_number FROM client_user WHERE client_user_code = #{userCode,jdbcType=VARCHAR}
+  </select>
+
+  <select id="getPayOrderInfo" parameterType="string" resultType="com.azz.wx.course.pojo.vo.PayOrderInfo">
+    SELECT
+		wcoi.course_name AS courseName,
+		wcoi.start_class_code AS startClassCode,
+		wcoi.start_class_name AS startClassName,
+		wcoi.start_class_time AS startClassTime,
+		wcoi.price AS price,
+		wco. STATUS AS orderStatus
+	FROM
+		wx_course_order wco
+	JOIN wx_course_order_item wcoi ON wco.order_code = wcoi.order_code
+	WHERE
+		wco.order_code = #{orderCode}
+  </select>
+  
+  <select id="getCourseOrders" parameterType="com.azz.wx.course.pojo.bo.SearchCourseOrderParam" resultType="com.azz.wx.course.pojo.vo.CourseOrderInfo">
+    SELECT
+		wc.course_pic_name AS coursePicName,
+		wc.course_pic_url AS coursePicUrl,
+		wcoi.course_name AS courseName,
+		wcoi.start_class_time AS startClassTime,
+		wcoi.price AS price,
+		wco.order_code as orderCode,
+		wco. STATUS AS orderStatus,
+		wco.create_time as orderTime
+	FROM
+		wx_course_order wco
+	JOIN wx_course_order_item wcoi ON wco.order_code = wcoi.order_code
+	JOIN wx_course wc on wcoi.course_code = wc.course_code
+	<where>
+	 	wco.creator = #{userCode}
+	 	<if test="orderStatusId != null">
+			AND wco.order_status_id = #{orderStatusId}
+	 	</if>
+	</where>
+	ORDER BY wco.create_time DESC
+  </select>
+  
+  <select id="getCourseOrderDetail" parameterType="string" resultType="com.azz.wx.course.pojo.vo.CourseOrderDetail">
+    SELECT
+		wco.order_code AS orderCode,
+		wcoi.course_code AS courseCode,
+		wcoi.course_name AS courseName,
+		wc.course_pic_name AS coursePicName,
+		wc.course_pic_url AS coursePicUrl,
+		wco.grand_total AS grandTotal,
+		wco.`status` AS orderStatus,
+		wco.create_time AS orderTime,
+		wcoi.start_class_code AS startClassCode,
+		wcoi.start_class_name AS startClassName,
+		wcoi.start_class_time AS startClassTime,
+		wcoi.people_number AS peopleNumber,
+		wcoi.hours AS hours,
+		wcoi.longitude AS longitude,
+		wcoi.latitude AS latitude,
+		wcai.person_name AS personName,
+		wcai.phone_number AS phoneNumber,
+		wcai.email AS email,
+		wcai.company AS company,
+		wcai.graduate_school AS graduateSchool
+	FROM
+		wx_course_order wco
+	JOIN wx_course_order_item wcoi ON wco.order_code = wcoi.order_code
+	JOIN wx_course wc ON wcoi.course_code = wc.course_code
+	JOIN wx_course_apply_info wcai ON wcai.apply_info_code = wco.apply_info_code
+	WHERE
+		wco.order_code = #{orderCode}
+  </select>
+  
 </mapper>

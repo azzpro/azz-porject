@@ -5,6 +5,7 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="evaluation_code" jdbcType="VARCHAR" property="evaluationCode" />
     <result column="user_code" jdbcType="VARCHAR" property="userCode" />
+    <result column="order_code" jdbcType="VARCHAR" property="orderCode" />
     <result column="course_code" jdbcType="VARCHAR" property="courseCode" />
     <result column="start_class_code" jdbcType="VARCHAR" property="startClassCode" />
     <result column="grade" jdbcType="TINYINT" property="grade" />
@@ -15,7 +16,7 @@
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, evaluation_code, user_code, course_code, start_class_code, grade, evaluation_content, 
+    id, evaluation_code, user_code, order_code, course_code, start_class_code, grade, evaluation_content, 
     creator, create_time, modifier, modify_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -29,11 +30,11 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.azz.wx.course.pojo.WxCourseEvaluation">
-    insert into wx_course_evaluation (id, evaluation_code, user_code, 
+    insert into wx_course_evaluation (id, evaluation_code, user_code, order_code, 
       course_code, start_class_code, grade, 
       evaluation_content, creator, create_time, 
       modifier, modify_time)
-    values (#{id,jdbcType=BIGINT}, #{evaluationCode,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{evaluationCode,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, #{orderCode,jdbcType=VARCHAR}, 
       #{courseCode,jdbcType=VARCHAR}, #{startClassCode,jdbcType=VARCHAR}, #{grade,jdbcType=TINYINT}, 
       #{evaluationContent,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
@@ -49,6 +50,9 @@
       </if>
       <if test="userCode != null">
         user_code,
+      </if>
+      <if test="orderCode != null">
+        order_code,
       </if>
       <if test="courseCode != null">
         course_code,
@@ -85,6 +89,9 @@
       <if test="userCode != null">
         #{userCode,jdbcType=VARCHAR},
       </if>
+      <if test="orderCode != null">
+        #{orderCode,jdbcType=VARCHAR},
+      </if>
       <if test="courseCode != null">
         #{courseCode,jdbcType=VARCHAR},
       </if>
@@ -120,6 +127,9 @@
       <if test="userCode != null">
         user_code = #{userCode,jdbcType=VARCHAR},
       </if>
+      <if test="orderCode != null">
+        order_code = #{orderCode,jdbcType=VARCHAR},
+      </if>
       <if test="courseCode != null">
         course_code = #{courseCode,jdbcType=VARCHAR},
       </if>
@@ -151,6 +161,7 @@
     update wx_course_evaluation
     set evaluation_code = #{evaluationCode,jdbcType=VARCHAR},
       user_code = #{userCode,jdbcType=VARCHAR},
+      order_code = #{orderCode,jdbcType=VARCHAR},
       course_code = #{courseCode,jdbcType=VARCHAR},
       start_class_code = #{startClassCode,jdbcType=VARCHAR},
       grade = #{grade,jdbcType=TINYINT},
@@ -174,4 +185,13 @@
 	JOIN client_wx_user cwu ON wce.user_code = cwu.user_code
 	WHERE wce.course_code = #{courseCode}
   </select>
+  
+  <select id="countOrderEvaluation" parameterType="string" resultType="int">
+  	select 
+  		count(1)
+  	from 
+  		wx_course_evaluation 
+  	where order_code = #{orderCode}
+  </select>
+  
 </mapper>

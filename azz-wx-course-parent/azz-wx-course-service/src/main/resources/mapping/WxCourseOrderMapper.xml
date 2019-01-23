@@ -271,4 +271,27 @@
 	ORDER BY wco.create_time DESC
   </select>
   
+  <select id="getCourseOrderDetail" parameterType="com.azz.wx.course.pojo.bo.SearchCourseOrderParam" resultType="com.azz.wx.course.pojo.vo.CourseOrderInfo">
+    SELECT
+		wc.course_pic_name AS coursePicName,
+		wc.course_pic_url AS coursePicUrl,
+		wcoi.course_name AS courseName,
+		wcoi.start_class_time AS startClassTime,
+		wcoi.price AS price,
+		wco.order_code as orderCode,
+		wco. STATUS AS orderStatus,
+		wco.create_time as orderTime
+	FROM
+		wx_course_order wco
+	JOIN wx_course_order_item wcoi ON wco.order_code = wcoi.order_code
+	JOIN wx_course wc on wcoi.course_code = wc.course_code
+	<where>
+	 	wco.creator = #{userCode}
+	 	<if test="orderStatusId != null">
+			AND wco.order_status_id = #{orderStatusId}
+	 	</if>
+	</where>
+	ORDER BY wco.create_time DESC
+  </select>
+  
 </mapper>

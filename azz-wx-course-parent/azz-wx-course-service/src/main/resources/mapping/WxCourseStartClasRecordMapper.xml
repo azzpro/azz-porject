@@ -258,6 +258,8 @@
 		wcscr.people_number AS peopleNumber,
 		wcscr.price AS price,
 		wcscr.location AS location,
+		wcscr.longitude AS longitude,
+		wcscr.latitude AS latitude,
 		wcscr.status AS status
 	FROM
 		wx_course_start_class_record wcscr
@@ -276,11 +278,30 @@
 			)
 		</if>
 	</where>
-	ORDER BY wcscr.create_time DESC
+	<if test="sortType == 1">
+		ORDER BY wcscr.create_time DESC
+	</if>
+	<if test="sortType == 2">
+		ORDER BY wcscr.create_time ASC
+	</if>
+	<if test="sortType == 3">
+		ORDER BY wcscr.start_class_time DESC, wcscr.create_time DESC
+	</if>
+	<if test="sortType == 4">
+		ORDER BY wcscr.start_class_time ASC, wcscr.create_time DESC
+	</if>
+	<if test="sortType == 5">
+		ORDER BY wcscr.price DESC, wcscr.create_time DESC
+	</if>
+	<if test="sortType == 6">
+		ORDER BY wcscr.price ASC, wcscr.create_time DESC
+	</if>
   </select>
   
   <select id="getStartClassRecordDetail" resultType="com.azz.wx.course.pojo.vo.StartClassRecord" parameterType="string">
 	SELECT
+		wcscr.course_code AS courseCode,
+		wc.course_name AS courseName,
 		wcscr.start_class_code AS startClassCode,
 		wcscr.start_class_name AS startClassName,
 		wcscr.start_class_time AS startClassTime,
@@ -291,9 +312,16 @@
 		wcscr.latitude as latitude,
 		wcscr.room as room,
 		wcscr.location AS location,
-		wcscr.status AS status
+		wcscr.status AS status,
+		wcb.brand_name AS brandName,
+		wcc.classification_name AS classificationName,
+		GROUP_CONCAT(wcpr.param_term_value) AS courseParamsName
 	FROM
 		wx_course_start_class_record wcscr
-	where wcscr.start_class_code = #{startClassCode}
+	JOIN wx_course wc on wcscr.course_code = wc.course_code
+	JOIN wx_course_brand wcb on wc.brand_code = wcb.brand_code
+	JOIN wx_course_classification wcc on wcc.classification_code = wc.classification_code
+	where 
+		wcscr.start_class_code = #{startClassCode}
   </select>
 </mapper>

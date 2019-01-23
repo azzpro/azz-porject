@@ -16,6 +16,9 @@
     <result column="people_number" jdbcType="INTEGER" property="peopleNumber" />
     <result column="location" jdbcType="VARCHAR" property="location" />
     <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="hours" jdbcType="INTEGER" property="hours" />
+    <result column="longitude" jdbcType="DECIMAL" property="longitude" />
+    <result column="latitude" jdbcType="DECIMAL" property="latitude" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
@@ -24,7 +27,7 @@
   <sql id="Base_Column_List">
     id, order_code, course_code, course_name, classification_name, course_params_name, 
     brand_name, price, start_class_code, start_class_name, start_class_time, people_number, 
-    location, quantity, creator, create_time, modifier, modify_time
+    location, quantity, hours, longitude, latitude, creator, create_time, modifier, modify_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -41,14 +44,16 @@
       course_name, classification_name, course_params_name, 
       brand_name, price, start_class_code, 
       start_class_name, start_class_time, people_number, 
-      location, quantity, creator, 
+      location, quantity, hours, 
+      longitude, latitude, creator, 
       create_time, modifier, modify_time
       )
     values (#{id,jdbcType=BIGINT}, #{orderCode,jdbcType=VARCHAR}, #{courseCode,jdbcType=VARCHAR}, 
       #{courseName,jdbcType=VARCHAR}, #{classificationName,jdbcType=VARCHAR}, #{courseParamsName,jdbcType=VARCHAR}, 
       #{brandName,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{startClassCode,jdbcType=VARCHAR}, 
       #{startClassName,jdbcType=VARCHAR}, #{startClassTime,jdbcType=TIMESTAMP}, #{peopleNumber,jdbcType=INTEGER}, 
-      #{location,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, 
+      #{location,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, #{hours,jdbcType=INTEGER}, 
+      #{longitude,jdbcType=DECIMAL}, #{latitude,jdbcType=DECIMAL}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -96,6 +101,15 @@
       </if>
       <if test="quantity != null">
         quantity,
+      </if>
+      <if test="hours != null">
+        hours,
+      </if>
+      <if test="longitude != null">
+        longitude,
+      </if>
+      <if test="latitude != null">
+        latitude,
       </if>
       <if test="creator != null">
         creator,
@@ -153,6 +167,15 @@
       <if test="quantity != null">
         #{quantity,jdbcType=INTEGER},
       </if>
+      <if test="hours != null">
+        #{hours,jdbcType=INTEGER},
+      </if>
+      <if test="longitude != null">
+        #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null">
+        #{latitude,jdbcType=DECIMAL},
+      </if>
       <if test="creator != null">
         #{creator,jdbcType=VARCHAR},
       </if>
@@ -209,6 +232,15 @@
       <if test="quantity != null">
         quantity = #{quantity,jdbcType=INTEGER},
       </if>
+      <if test="hours != null">
+        hours = #{hours,jdbcType=INTEGER},
+      </if>
+      <if test="longitude != null">
+        longitude = #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null">
+        latitude = #{latitude,jdbcType=DECIMAL},
+      </if>
       <if test="creator != null">
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -239,6 +271,9 @@
       people_number = #{peopleNumber,jdbcType=INTEGER},
       location = #{location,jdbcType=VARCHAR},
       quantity = #{quantity,jdbcType=INTEGER},
+      hours = #{hours,jdbcType=INTEGER},
+      longitude = #{longitude,jdbcType=DECIMAL},
+      latitude = #{latitude,jdbcType=DECIMAL},
       creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modifier = #{modifier,jdbcType=VARCHAR},

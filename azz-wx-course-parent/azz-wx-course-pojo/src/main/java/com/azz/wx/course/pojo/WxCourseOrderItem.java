@@ -4,6 +4,13 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class WxCourseOrderItem implements Serializable {
     /**
      * 主键id
@@ -102,6 +109,27 @@ public class WxCourseOrderItem implements Serializable {
      * @mbg.generated
      */
     private Integer quantity;
+
+    /**
+     * 开课课时
+     *
+     * @mbg.generated
+     */
+    private Integer hours;
+
+    /**
+     * 经度
+     *
+     * @mbg.generated
+     */
+    private BigDecimal longitude;
+
+    /**
+     * 纬度
+     *
+     * @mbg.generated
+     */
+    private BigDecimal latitude;
 
     /**
      * 创建人
@@ -470,6 +498,78 @@ public class WxCourseOrderItem implements Serializable {
     }
 
     /**
+     * 开课课时<br/>
+     * 返回值对应的表列名 wx_course_order_item.hours
+     *
+     * @return 返回值对应 wx_course_order_item.hours
+     *
+     * @mbg.generated
+     */
+    public Integer getHours() {
+        return hours;
+    }
+
+    /**
+     * 开课课时<br/>
+     * wx_course_order_item.hours
+     *
+     * @param hours 值对应 wx_course_order_item.hours
+     *
+     * @mbg.generated
+     */
+    public void setHours(Integer hours) {
+        this.hours = hours;
+    }
+
+    /**
+     * 经度<br/>
+     * 返回值对应的表列名 wx_course_order_item.longitude
+     *
+     * @return 返回值对应 wx_course_order_item.longitude
+     *
+     * @mbg.generated
+     */
+    public BigDecimal getLongitude() {
+        return longitude;
+    }
+
+    /**
+     * 经度<br/>
+     * wx_course_order_item.longitude
+     *
+     * @param longitude 值对应 wx_course_order_item.longitude
+     *
+     * @mbg.generated
+     */
+    public void setLongitude(BigDecimal longitude) {
+        this.longitude = longitude;
+    }
+
+    /**
+     * 纬度<br/>
+     * 返回值对应的表列名 wx_course_order_item.latitude
+     *
+     * @return 返回值对应 wx_course_order_item.latitude
+     *
+     * @mbg.generated
+     */
+    public BigDecimal getLatitude() {
+        return latitude;
+    }
+
+    /**
+     * 纬度<br/>
+     * wx_course_order_item.latitude
+     *
+     * @param latitude 值对应 wx_course_order_item.latitude
+     *
+     * @mbg.generated
+     */
+    public void setLatitude(BigDecimal latitude) {
+        this.latitude = latitude;
+    }
+
+    /**
      * 创建人<br/>
      * 返回值对应的表列名 wx_course_order_item.creator
      *
@@ -591,6 +691,9 @@ public class WxCourseOrderItem implements Serializable {
             && (this.getPeopleNumber() == null ? other.getPeopleNumber() == null : this.getPeopleNumber().equals(other.getPeopleNumber()))
             && (this.getLocation() == null ? other.getLocation() == null : this.getLocation().equals(other.getLocation()))
             && (this.getQuantity() == null ? other.getQuantity() == null : this.getQuantity().equals(other.getQuantity()))
+            && (this.getHours() == null ? other.getHours() == null : this.getHours().equals(other.getHours()))
+            && (this.getLongitude() == null ? other.getLongitude() == null : this.getLongitude().equals(other.getLongitude()))
+            && (this.getLatitude() == null ? other.getLatitude() == null : this.getLatitude().equals(other.getLatitude()))
             && (this.getCreator() == null ? other.getCreator() == null : this.getCreator().equals(other.getCreator()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
             && (this.getModifier() == null ? other.getModifier() == null : this.getModifier().equals(other.getModifier()))
@@ -615,6 +718,9 @@ public class WxCourseOrderItem implements Serializable {
         result = prime * result + ((getPeopleNumber() == null) ? 0 : getPeopleNumber().hashCode());
         result = prime * result + ((getLocation() == null) ? 0 : getLocation().hashCode());
         result = prime * result + ((getQuantity() == null) ? 0 : getQuantity().hashCode());
+        result = prime * result + ((getHours() == null) ? 0 : getHours().hashCode());
+        result = prime * result + ((getLongitude() == null) ? 0 : getLongitude().hashCode());
+        result = prime * result + ((getLatitude() == null) ? 0 : getLatitude().hashCode());
         result = prime * result + ((getCreator() == null) ? 0 : getCreator().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getModifier() == null) ? 0 : getModifier().hashCode());
@@ -642,6 +748,9 @@ public class WxCourseOrderItem implements Serializable {
         sb.append(", peopleNumber=").append(peopleNumber);
         sb.append(", location=").append(location);
         sb.append(", quantity=").append(quantity);
+        sb.append(", hours=").append(hours);
+        sb.append(", longitude=").append(longitude);
+        sb.append(", latitude=").append(latitude);
         sb.append(", creator=").append(creator);
         sb.append(", createTime=").append(createTime);
         sb.append(", modifier=").append(modifier);

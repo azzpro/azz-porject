@@ -23,6 +23,11 @@ public interface WxCourseOrderMapper {
 
     int updateByPrimaryKey(WxCourseOrder record);
     
+    int getCountOrders(String userCode);
+    
+    int getCountOrdersStatus(Integer orderStatus);
+    
+    String getUserPhone(String userCode);
     /**
      * 
      * <p>查询待支付订单信息</p>

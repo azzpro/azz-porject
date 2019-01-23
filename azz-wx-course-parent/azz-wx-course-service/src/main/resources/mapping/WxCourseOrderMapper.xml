@@ -233,6 +233,18 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
+  <select id="getCountOrders" parameterType="java.lang.String" resultType="int">
+  	SELECT COUNT(0) FROM wx_course_order WHERE creator = #{userCode,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getCountOrdersStatus" parameterType="java.lang.Integer" resultType="int">
+  	SELECT COUNT(0) FROM wx_course_order WHERE order_status_id = #{orderStatus}
+  </select>
+  
+  <select id="getUserPhone" parameterType="java.lang.String" resultType="java.lang.String">
+  	SELECT phone_number FROM client_user WHERE client_user_code = #{userCode,jdbcType=VARCHAR}
+  </select>
+
   <select id="getPayOrderInfo" parameterType="string" resultType="com.azz.wx.course.pojo.vo.PayOrderInfo">
     SELECT
 		wcoi.course_name AS courseName,

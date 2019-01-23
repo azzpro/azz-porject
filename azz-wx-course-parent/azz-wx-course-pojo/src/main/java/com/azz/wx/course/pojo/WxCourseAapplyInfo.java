@@ -23,7 +23,7 @@ public class WxCourseAapplyInfo implements Serializable {
      *
      * @mbg.generated
      */
-    private String wxUserCode;
+    private String userCode;
 
     /**
      * 报名人姓名
@@ -153,20 +153,20 @@ public class WxCourseAapplyInfo implements Serializable {
      *
      * @mbg.generated
      */
-    public String getWxUserCode() {
-        return wxUserCode;
+    public String getUserCode() {
+        return userCode;
     }
 
     /**
      * 所属微信用户编码<br/>
      * wx_course_apply_info.wx_user_code
      *
-     * @param wxUserCode 值对应 wx_course_apply_info.wx_user_code
+     * @param userCode 值对应 wx_course_apply_info.wx_user_code
      *
      * @mbg.generated
      */
-    public void setWxUserCode(String wxUserCode) {
-        this.wxUserCode = wxUserCode == null ? null : wxUserCode.trim();
+    public void setUserCode(String userCode) {
+        this.userCode = userCode == null ? null : userCode.trim();
     }
 
     /**
@@ -423,7 +423,7 @@ public class WxCourseAapplyInfo implements Serializable {
         WxCourseAapplyInfo other = (WxCourseAapplyInfo) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getApplyInfoCode() == null ? other.getApplyInfoCode() == null : this.getApplyInfoCode().equals(other.getApplyInfoCode()))
-            && (this.getWxUserCode() == null ? other.getWxUserCode() == null : this.getWxUserCode().equals(other.getWxUserCode()))
+            && (this.getUserCode() == null ? other.getUserCode() == null : this.getUserCode().equals(other.getUserCode()))
             && (this.getPersonName() == null ? other.getPersonName() == null : this.getPersonName().equals(other.getPersonName()))
             && (this.getPhoneNumber() == null ? other.getPhoneNumber() == null : this.getPhoneNumber().equals(other.getPhoneNumber()))
             && (this.getEmail() == null ? other.getEmail() == null : this.getEmail().equals(other.getEmail()))
@@ -442,7 +442,7 @@ public class WxCourseAapplyInfo implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getApplyInfoCode() == null) ? 0 : getApplyInfoCode().hashCode());
-        result = prime * result + ((getWxUserCode() == null) ? 0 : getWxUserCode().hashCode());
+        result = prime * result + ((getUserCode() == null) ? 0 : getUserCode().hashCode());
         result = prime * result + ((getPersonName() == null) ? 0 : getPersonName().hashCode());
         result = prime * result + ((getPhoneNumber() == null) ? 0 : getPhoneNumber().hashCode());
         result = prime * result + ((getEmail() == null) ? 0 : getEmail().hashCode());
@@ -464,7 +464,7 @@ public class WxCourseAapplyInfo implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", applyInfoCode=").append(applyInfoCode);
-        sb.append(", wxUserCode=").append(wxUserCode);
+        sb.append(", userCode=").append(userCode);
         sb.append(", personName=").append(personName);
         sb.append(", phoneNumber=").append(phoneNumber);
         sb.append(", email=").append(email);

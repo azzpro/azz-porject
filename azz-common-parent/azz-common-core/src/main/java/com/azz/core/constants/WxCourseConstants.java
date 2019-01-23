@@ -140,5 +140,46 @@ public abstract class WxCourseConstants {
 		}
 	}
 	
+	/**
+     * 
+     * <P>课程订单状态</P>
+     * @version 1.0
+     * @author 黄智聪  2018年11月14日 下午2:09:47
+     */
+	public enum CourseOrderStatus {
+
+	    NOT_PAID(13, "待支付"),
+
+	    PENDING(14, "待处理"),
+
+	    NOT_CONFIRMED(15, "待确认"),
+
+	    FINISHED_NOT_EVALUATED(16, "已完成但未评价"),
+
+	    FINISHED_EVALUATED(17, "已完成且已评价");
+
+        @Getter
+        private int value;
+
+        @Getter
+        private String desc;
+
+        CourseOrderStatus(int value, String desc) {
+            this.value = value;
+            this.desc = desc;
+        }
+        
+        public static boolean checkStatusExist(int value) {
+        	CourseOrderStatus[] values = CourseOrderStatus.values();
+            for (CourseOrderStatus status : values) {
+                if (status.getValue() == value) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+    }
+	
 }
 

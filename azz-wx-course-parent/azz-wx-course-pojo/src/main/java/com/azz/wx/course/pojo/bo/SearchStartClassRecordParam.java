@@ -32,5 +32,16 @@ public class SearchStartClassRecordParam extends QueryPage{
 	
 	private String searchInput;
 	
+	/**
+	 * 排序类型
+	 * 		1综合降序(开课信息创建时间降序)
+	 * 		2综合升序(开课信息创建时间升序)  
+	 * 		3开课时间降序 
+	 *  	4开课时间升序  
+	 *  	5开课价格降序  
+	 *  	6开课价格升序
+	 */
+	private Integer sortType = 1; 
+	
 }
 

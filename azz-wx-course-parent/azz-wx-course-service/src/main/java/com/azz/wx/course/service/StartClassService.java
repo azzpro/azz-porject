@@ -198,6 +198,19 @@ public class StartClassService {
 	
 	/*******************************  微信课程首页接口   start ********************************/
 	
+	/**
+	 * 
+	 * <p>查询首页开课信息列表</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年1月4日 下午5:37:39
+	 */
+	public JsonResult<Pagination<StartClassRecord>> getIndexStartClassRecords(@RequestBody SearchStartClassRecordParam param){
+		JSR303ValidateUtils.validate(param);
+		PageHelper.startPage(param.getPageNum(), param.getPageSize());
+		List<StartClassRecord> infos = wxCourseStartClasRecordMapper.getStartClassRecords(param);
+		return JsonResult.successJsonResult(new Pagination<>(infos));
+	}
 	
 	
 	/*******************************  微信课程首页接口     end  ********************************/

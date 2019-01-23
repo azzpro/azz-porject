@@ -17,4 +17,6 @@ public interface WxCourseAapplyInfoMapper {
     int updateByPrimaryKeySelective(WxCourseAapplyInfo record);
 
     int updateByPrimaryKey(WxCourseAapplyInfo record);
+    
+    int getCountApplyInfo(String userCode);
 }

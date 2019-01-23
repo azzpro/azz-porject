@@ -21,4 +21,5 @@ public interface ClientUserMapper {
     
     ClientUser getClientUserByClientUserCode(String clientUserCode);
     
+    ClientUser getClientUserByClientUserPhoneNumber(String phoneNumber);
 }

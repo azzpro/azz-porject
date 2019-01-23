@@ -185,4 +185,8 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="getCountApplyInfo" parameterType="java.lang.String" resultType="int">
+  	SELECT COUNT(0) FROM wx_course_apply_info WHERE user_code = #{userCode,jdbcType=VARCHAR}
+  </select>
 </mapper>

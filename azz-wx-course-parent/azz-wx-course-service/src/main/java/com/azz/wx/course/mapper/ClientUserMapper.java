@@ -24,4 +24,5 @@ public interface ClientUserMapper {
     
     WxUserInfo getWxUserInfo(String clientUserCode);
     
+    ClientUser getClientUserByClientUserPhoneNumber(String phoneNumber);
 }

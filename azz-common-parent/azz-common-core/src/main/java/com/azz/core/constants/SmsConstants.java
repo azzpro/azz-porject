@@ -30,8 +30,9 @@ public enum SmsConstants {
 	
 	MERCHANT_ENTER_EXAMINE_SUCCESS("您的商户入驻审批已通过，请及时登陆，开启智造之旅。","商户入驻审批通过","SMS_150861382",1,7),
 	
-	MERCHANT_ENTER_EXAMINE_FAIL("您的商户入驻审批暂未通过，请联系在线客服咨询原因，并重新提交验证资料。","商户入驻审批不通过","SMS_150866466",1,8);
+	MERCHANT_ENTER_EXAMINE_FAIL("您的商户入驻审批暂未通过，请联系在线客服咨询原因，并重新提交验证资料。","商户入驻审批不通过","SMS_150866466",1,8),
 	
+	WX_REG("恭喜您注册成为爱智造自动化产业平台，初始密码为：${code}，详情咨询微信客服。","微信注册","SMS_156900729",2,10);
 	private String msgContent;
 	private String name;
 	private String code;

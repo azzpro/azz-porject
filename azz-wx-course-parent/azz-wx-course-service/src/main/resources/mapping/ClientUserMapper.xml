@@ -287,4 +287,11 @@
 	where cwu.user_code = #{clientUserCode}
   </select>
   
+  <select id="getClientUserByClientUserPhoneNumber" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from client_user
+    where status != 0
+    and phone_number = #{phoneNumber}
+  </select>
 </mapper>

@@ -25,14 +25,20 @@ import com.azz.exception.JSR303ValidationException;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
 import com.azz.wx.course.mapper.ClientUserMapper;
+import com.azz.wx.course.mapper.WxCourseEvaluationMapper;
 import com.azz.wx.course.mapper.WxCourseOrderItemMapper;
 import com.azz.wx.course.mapper.WxCourseOrderMapper;
+import com.azz.wx.course.mapper.WxCourseOrderStatusMapper;
 import com.azz.wx.course.mapper.WxCourseStartClasRecordMapper;
 import com.azz.wx.course.pojo.ClientUser;
+import com.azz.wx.course.pojo.WxCourseEvaluation;
 import com.azz.wx.course.pojo.WxCourseOrder;
 import com.azz.wx.course.pojo.WxCourseOrderItem;
+import com.azz.wx.course.pojo.WxCourseOrderStatus;
+import com.azz.wx.course.pojo.bo.EvaluateCourseParam;
 import com.azz.wx.course.pojo.bo.PayOrderParam;
 import com.azz.wx.course.pojo.bo.SearchCourseOrderParam;
+import com.azz.wx.course.pojo.vo.CourseOrderDetail;
 import com.azz.wx.course.pojo.vo.CourseOrderInfo;
 import com.azz.wx.course.pojo.vo.PayOrderInfo;
 import com.azz.wx.course.pojo.vo.StartClassRecord;
@@ -54,10 +60,16 @@ public class OrderService {
 	private WxCourseOrderMapper wxCourseOrderMapper;
 	
 	@Autowired
+	private WxCourseOrderStatusMapper wxCourseOrderStatusMapper;
+	
+	@Autowired
 	private WxCourseOrderItemMapper wxCourseOrderItemMapper;
 	
 	@Autowired
 	private ClientUserMapper clientUserMapper;
+	
+	@Autowired
+	private WxCourseEvaluationMapper wxCourseEvaluationMapper;
 	
 	/*******************************  微信课程首页接口   start ********************************/
 	
@@ -91,6 +103,15 @@ public class OrderService {
 				.paymentStatus(PayStatus.NOT_PAID.getValue())
 				.build();
 		wxCourseOrderMapper.insertSelective(orderRecord);
+		
+		// 插入课程订单状态变化记录
+		WxCourseOrderStatus record = WxCourseOrderStatus.builder()
+				.createTime(nowDate)
+				.creator(param.getClientUserCode())
+				.orderCode(orderCode)
+				.orderStatusId(CourseOrderStatus.NOT_PAID.getValue())
+				.build();
+		wxCourseOrderStatusMapper.insertSelective(record);
 		
 		// 插入订单细项记录
 		WxCourseOrderItem orderItemRecord = WxCourseOrderItem.builder()
@@ -167,24 +188,73 @@ public class OrderService {
 	
 	/**
 	 * 
-	 * <p>TODO</p>
+	 * <p>查询课程订单详情</p>
 	 * @param param
 	 * @return
 	 * @author 黄智聪  2019年1月22日 下午6:34:28
 	 */
-	public JsonResult<Pagination<CourseOrderInfo>> getCourseOrderDetail(@RequestBody SearchCourseOrderParam param){
-		PageHelper.startPage(param.getPageNum(), param.getPageSize());
-		if(param.getOrderStatusId() != null) {
-			if(!CourseOrderStatus.checkStatusExist(param.getOrderStatusId())) {
-				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "查询的订单状态不存在");
-			}
+	public JsonResult<CourseOrderDetail> getCourseOrderDetail(String orderCode){
+		if(StringUtils.isBlank(orderCode)) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "请选择课程订单");
 		}
-		List<CourseOrderInfo> infos = wxCourseOrderMapper.getCourseOrders(param);
-		return JsonResult.successJsonResult(new Pagination<CourseOrderInfo>(infos));
+		CourseOrderDetail order = wxCourseOrderMapper.getCourseOrderDetail(orderCode);
+		if(order == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "课程订单不存在");
+		}
+		return JsonResult.successJsonResult(order);
 	} 
 	
-	
-	
+	/**
+	 * 
+	 * <p>评价课程</p>
+	 * @return
+	 * @author 黄智聪  2019年1月23日 上午10:48:25
+	 */
+	public JsonResult<String> evaluateCourse(@RequestBody EvaluateCourseParam param){
+		JSR303ValidateUtils.validate(param);
+		CourseOrderDetail order = wxCourseOrderMapper.getCourseOrderDetail(param.getOrderCode());
+		if(order == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "课程订单不存在");
+		}
+		int count = wxCourseEvaluationMapper.countOrderEvaluation(param.getOrderCode());
+		if(count > 0) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "此订单已评价");
+		}
+		Date nowDate = new Date();
+		// 新增评论记录
+		WxCourseEvaluation evaluationRecord = WxCourseEvaluation.builder()
+				.courseCode(order.getCourseCode())
+				.createTime(nowDate)
+				.creator(param.getClientUserCode())
+				.evaluationCode("E" + System.currentTimeMillis())
+				.evaluationContent(param.getEvaluationContent())
+				.grade(param.getGrade())
+				.orderCode(param.getOrderCode())
+				.startClassCode(order.getStartClassCode())
+				.userCode(param.getClientUserCode())
+				.build();
+		wxCourseEvaluationMapper.insertSelective(evaluationRecord);
+		
+		// 将订单状态改为已完成且已评论
+		WxCourseOrder orderRecord = WxCourseOrder.builder()
+				.orderCode(param.getOrderCode())
+				.orderStatusId(CourseOrderStatus.FINISHED_EVALUATED.getValue())
+				.modifier(param.getClientUserCode())
+				.modifyTime(nowDate)
+				.build();
+		wxCourseOrderMapper.updateByOrderCode(orderRecord);
+		
+		// 插入课程订单状态变化记录
+		WxCourseOrderStatus record = WxCourseOrderStatus.builder()
+				.createTime(nowDate)
+				.creator(param.getClientUserCode())
+				.orderCode(param.getOrderCode())
+				.orderStatusId(CourseOrderStatus.FINISHED_EVALUATED.getValue())
+				.build();
+		wxCourseOrderStatusMapper.insertSelective(record);
+		
+		return JsonResult.successJsonResult();
+	}
 	
 	/*******************************  微信课程首页接口     end  ********************************/
 

@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.wx.course.pojo.WxCourseOrder;
 import com.azz.wx.course.pojo.bo.SearchCourseOrderParam;
+import com.azz.wx.course.pojo.vo.CourseOrderDetail;
 import com.azz.wx.course.pojo.vo.CourseOrderInfo;
 import com.azz.wx.course.pojo.vo.PayOrderInfo;
 
@@ -20,6 +21,8 @@ public interface WxCourseOrderMapper {
     WxCourseOrder selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(WxCourseOrder record);
+    
+    int updateByOrderCode(WxCourseOrder record);
 
     int updateByPrimaryKey(WxCourseOrder record);
     
@@ -45,4 +48,13 @@ public interface WxCourseOrderMapper {
      * @author 黄智聪  2019年1月22日 下午6:12:52
      */
     List<CourseOrderInfo> getCourseOrders(SearchCourseOrderParam param);
+    
+    /**
+     * 
+     * <p>查询课程订单详情</p>
+     * @param orderCode
+     * @return
+     * @author 黄智聪  2019年1月23日 上午10:35:29
+     */
+    CourseOrderDetail getCourseOrderDetail(String orderCode);
 }

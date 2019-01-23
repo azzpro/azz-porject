@@ -22,6 +22,8 @@ public class CourseOrderDetail {
 	
 	/**  订单信息 start  **/
 	private String orderCode;
+
+	private String courseCode;
 	
 	private String courseName;
 	

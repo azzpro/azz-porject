@@ -30,4 +30,13 @@ public interface WxCourseEvaluationMapper {
      * @author 黄智聪  2019年1月21日 下午7:52:28
      */
     List<EvaluationInfo> getEvaluationInfos(SearchEvaluationInfoParam param);
+    
+    /**
+     * 
+     * <p>查询订单评价数量</p>
+     * @param orderCode
+     * @return
+     * @author 黄智聪  2019年1月23日 下午12:38:37
+     */
+    int countOrderEvaluation(String orderCode);
 }

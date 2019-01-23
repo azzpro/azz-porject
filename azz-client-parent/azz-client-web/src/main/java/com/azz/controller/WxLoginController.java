@@ -155,6 +155,8 @@ public class WxLoginController {
 		wsc.setUnionid(param.getUnionid());
 		wsc.setRefresh_token(param.getRefreshToken());
 		wsc.setUserCode(loginClientUser.getClientUserInfo().getClientUserCode());
+		wsc.setAvatarUrl(param.getAvatarUrl());
+		wsc.setNickName(param.getNickName());
 		wxLoginService.insert(wsc);
 		return jr;
 	}

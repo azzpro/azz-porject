@@ -160,6 +160,29 @@ public class WxLoginService {
 							//直接完成登录操作
 							ClientWxUser wxUser = clientWxUserMapper.selectWxUserByOpenid(openid);
 							if(wxUser != null && StringUtils.isNotBlank(wxUser.getUserCode())) {
+								/*取最新头像 昵称*/
+								StringBuilder sb = new StringBuilder();
+								sb.append(WxConstants.USERINFOURL).append("?access_token=" + access_token)
+										.append("&openid=" + openid);
+								String userInfo = null;
+								try {
+									userInfo = HttpClientUtil.get(sb.toString(), "UTF-8");
+								} catch (Exception e) {
+									e.printStackTrace();
+									wcbi.setCode(WxConstants.HTTPERRORCODE);
+									wcbi.setMsg(WxConstants.HTTPERRORMSG);
+									return new JsonResult<>(wcbi);
+								}
+								if(userInfo != null) {
+									JSONObject cc = JSONObject.parseObject(userInfo);
+									int i = clientWxUserMapper.updateAvatarUrlAndNickname((String) cc.get("headimgurl"), (String) cc.get("nickname"), openid);
+									log.info("更新微信昵称 微信头像---->"+(String) cc.get("headimgurl")+"::"+(String) cc.get("nickname"));
+									if(i != 1) {
+										wcbi.setCode(WxConstants.UPDATEERRORCODE);
+										wcbi.setMsg(WxConstants.UPDATEERRORMSG);
+										return new JsonResult<>(wcbi);
+									}
+								}
 								ClientUser clientUser = clientUserMapper.getClientUserByClientUserCode(wxUser.getUserCode());
 								if(clientUser != null) {
 									wcbi.setCode(WxConstants.LOGINCODE);
@@ -265,6 +288,8 @@ public class WxLoginService {
 		wsc.setUnionid(wcrp.getUnionid());
 		wsc.setRefresh_token(wcrp.getRefreshToken());
 		wsc.setUserCode(clientUserRecord.getClientUserCode());
+		wsc.setAvatarUrl(wcrp.getAvatarUrl());
+		wsc.setNickName(wcrp.getNickName());
 		int i = clientWxUserMapper.insert(wsc);
 		if(1 == i) {
 			WxLoginInfo wi = new WxLoginInfo();

@@ -10,14 +10,20 @@
 		<result column="refresh_token" property="refresh_token" />
 		<result column="scope" property="scope" />
 		<result column="user_code" property="userCode" />
+		<result column="avatar_url" property="avatarUrl" />
+		<result column="nick_name" property="nickName" />
 	</resultMap>
 	<insert id="insert" parameterType="com.azz.system.pojo.ClientWxUser">
-		insert into client_wx_user (openid, unionid,access_token,expires_in,refresh_token,scope,user_code)
-		 values ( #{openid}, #{unionid}, #{access_token},#{expires_in},#{refresh_token},#{scope},#{userCode})
+		insert into client_wx_user (openid, unionid,access_token,expires_in,refresh_token,scope,user_code,avatar_url,nick_name)
+		 values ( #{openid}, #{unionid}, #{access_token},#{expires_in},#{refresh_token},#{scope},#{userCode},#{avatarUrl},#{nickName})
 	</insert>
 
 	<select id="selectWxUserByOpenid" resultMap="BaseResultMap" parameterType="String">
-		select id,openid,unionid,access_token,expires_in,refresh_token,scope,user_code from client_wx_user
+		select id,openid,unionid,access_token,expires_in,refresh_token,scope,user_code,avatar_url,nick_name from client_wx_user
 		where openid = #{openid}
 	</select>
+	
+	<update id="updateAvatarUrlAndNickname">
+		update client_wx_user set avatar_url = #{url},nick_name = #{name} where openid = #{id}
+	</update>
 </mapper>

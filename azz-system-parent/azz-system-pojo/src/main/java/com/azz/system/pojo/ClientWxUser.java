@@ -15,6 +15,21 @@ public class ClientWxUser implements Serializable{
 	private String refresh_token;
 	private String scope;
 	private String userCode;
+	private String avatarUrl;
+	private String nickName;
+	
+	public String getAvatarUrl() {
+		return avatarUrl;
+	}
+	public void setAvatarUrl(String avatarUrl) {
+		this.avatarUrl = avatarUrl;
+	}
+	public String getNickName() {
+		return nickName;
+	}
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
 	public Long getId() {
 		return id;
 	}

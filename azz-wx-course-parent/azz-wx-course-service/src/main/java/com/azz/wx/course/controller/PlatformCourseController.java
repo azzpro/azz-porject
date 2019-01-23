@@ -52,7 +52,7 @@ import com.azz.wx.course.service.CourseService;
  */
 @RestController
 @RequestMapping("/azz/api/platform/course")
-public class CourseController {
+public class PlatformCourseController {
 
 	@Autowired
 	CourseService courseService;

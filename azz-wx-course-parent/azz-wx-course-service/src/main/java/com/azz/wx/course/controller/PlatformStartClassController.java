@@ -34,7 +34,7 @@ import com.azz.wx.course.service.StartClassService;
  */
 @RestController
 @RequestMapping("/azz/api/platform/startClass")
-public class StartClassController {
+public class PlatformStartClassController {
 	
 	@Autowired
 	StartClassService startClassService;

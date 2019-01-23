@@ -32,7 +32,7 @@ import com.azz.wx.course.service.ParameterService;
  */
 @RestController
 @RequestMapping("/azz/api/platform/course")
-public class ParamsController {
+public class PlatformParamsController {
 
 	private final Logger LOG = LoggerFactory.getLogger(getClass());
 	

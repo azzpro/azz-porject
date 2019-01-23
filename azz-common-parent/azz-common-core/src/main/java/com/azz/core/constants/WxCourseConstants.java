@@ -156,7 +156,9 @@ public abstract class WxCourseConstants {
 
 	    FINISHED_NOT_EVALUATED(16, "已完成但未评价"),
 
-	    FINISHED_EVALUATED(17, "已完成且已评价");
+	    FINISHED_EVALUATED(17, "已完成且已评价"),
+
+	    CLOSED(18, "已关闭");
 
         @Getter
         private int value;

@@ -278,4 +278,13 @@
     and client_user_code = #{clientUserCode}
   </select>
   
+  <select id="getWxUserInfo" parameterType="string" resultType="com.azz.wx.course.pojo.vo.WxUserInfo">
+    SELECT
+		cwu.openid AS openid,
+		cwu.nick_name AS nickName
+	FROM
+		client_wx_user cwu
+	where cwu.user_code = #{clientUserCode}
+  </select>
+  
 </mapper>

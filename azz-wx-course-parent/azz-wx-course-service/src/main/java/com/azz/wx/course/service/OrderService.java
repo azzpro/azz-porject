@@ -35,13 +35,17 @@ import com.azz.wx.course.pojo.WxCourseEvaluation;
 import com.azz.wx.course.pojo.WxCourseOrder;
 import com.azz.wx.course.pojo.WxCourseOrderItem;
 import com.azz.wx.course.pojo.WxCourseOrderStatus;
+import com.azz.wx.course.pojo.bo.ChangeOrderStatusParam;
 import com.azz.wx.course.pojo.bo.EvaluateCourseParam;
 import com.azz.wx.course.pojo.bo.PayOrderParam;
 import com.azz.wx.course.pojo.bo.SearchCourseOrderParam;
 import com.azz.wx.course.pojo.vo.CourseOrderDetail;
 import com.azz.wx.course.pojo.vo.CourseOrderInfo;
 import com.azz.wx.course.pojo.vo.PayOrderInfo;
+import com.azz.wx.course.pojo.vo.PlatformCourseOrderDetail;
+import com.azz.wx.course.pojo.vo.PlatformCourseOrderInfo;
 import com.azz.wx.course.pojo.vo.StartClassRecord;
+import com.azz.wx.course.pojo.vo.WxUserInfo;
 import com.github.pagehelper.PageHelper;
 
 /**
@@ -85,8 +89,9 @@ public class OrderService {
 		if(startClassRecord == null){
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "开课信息不存在");
 		}
-		String orderCode = System.currentTimeMillis() + ""; // TOTO
+		String orderCode = System.currentTimeMillis() + ""; // TODO
 		ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getClientUserCode());
+		WxUserInfo wxUserInfo = clientUserMapper.getWxUserInfo(param.getClientUserCode());
 		// 下单人：若姓名为空，取手机号
 		String orderCreator = StringUtils.isBlank(user.getClientUserName()) ? user.getPhoneNumber() : user.getClientUserName();
 		Date nowDate = new Date();
@@ -101,6 +106,9 @@ public class OrderService {
 				.orderStatusId(CourseOrderStatus.NOT_PAID.getValue())
 				.paymentMethod(PayMethod.ONLINE.getValue())
 				.paymentStatus(PayStatus.NOT_PAID.getValue())
+				.openid(wxUserInfo.getOpenid())
+				.nickName(wxUserInfo.getNickName())
+				.wxBindingPhone(user.getPhoneNumber())
 				.build();
 		wxCourseOrderMapper.insertSelective(orderRecord);
 		
@@ -255,6 +263,120 @@ public class OrderService {
 		
 		return JsonResult.successJsonResult();
 	}
+	
+	/**
+	 * 
+	 * <p>取消课程订单</p>
+	 * @return
+	 * @author 黄智聪  2019年1月23日 上午10:48:25
+	 */
+	public JsonResult<String> cancelCourseOrder(@RequestBody ChangeOrderStatusParam param){
+		JSR303ValidateUtils.validate(param);
+		PayOrderInfo info = wxCourseOrderMapper.getPayOrderInfo(param.getOrderCode());
+		if(info == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "课程订单不存在");
+		}
+		// 判断订单是否处于待支付状态
+		if(info.getOrderStatus() != CourseOrderStatus.NOT_PAID.getValue()) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "课程订单状态异常");
+		}
+		
+		Date nowDate = new Date();
+		// 将订单状态改为已关闭
+		WxCourseOrder orderRecord = WxCourseOrder.builder()
+				.orderCode(param.getOrderCode())
+				.orderStatusId(CourseOrderStatus.CLOSED.getValue())
+				.modifier(param.getClientUserCode())
+				.modifyTime(nowDate)
+				.build();
+		wxCourseOrderMapper.updateByOrderCode(orderRecord);
+		
+		// 插入课程订单状态变化记录
+		WxCourseOrderStatus record = WxCourseOrderStatus.builder()
+				.createTime(nowDate)
+				.creator(param.getClientUserCode())
+				.orderCode(param.getOrderCode())
+				.orderStatusId(CourseOrderStatus.CLOSED.getValue())
+				.build();
+		wxCourseOrderStatusMapper.insertSelective(record);
+		
+		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
+	 * <p>确认课程订单</p>
+	 * @return
+	 * @author 黄智聪  2019年1月23日 上午10:48:25
+	 */
+	public JsonResult<String> confirmCourseOrder(@RequestBody ChangeOrderStatusParam param){
+		JSR303ValidateUtils.validate(param);
+		PayOrderInfo info = wxCourseOrderMapper.getPayOrderInfo(param.getOrderCode());
+		if(info == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "课程订单不存在");
+		}
+		// 判断订单是否处于待确认状态
+		if(info.getOrderStatus() != CourseOrderStatus.NOT_CONFIRMED.getValue()) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "课程订单状态异常");
+		}
+		
+		Date nowDate = new Date();
+		// 将订单状态改为已完成但未评价
+		WxCourseOrder orderRecord = WxCourseOrder.builder()
+				.orderCode(param.getOrderCode())
+				.orderStatusId(CourseOrderStatus.FINISHED_NOT_EVALUATED.getValue())
+				.modifier(param.getClientUserCode())
+				.modifyTime(nowDate)
+				.build();
+		wxCourseOrderMapper.updateByOrderCode(orderRecord);
+		
+		// 插入课程订单状态变化记录
+		WxCourseOrderStatus record = WxCourseOrderStatus.builder()
+				.createTime(nowDate)
+				.creator(param.getClientUserCode())
+				.orderCode(param.getOrderCode())
+				.orderStatusId(CourseOrderStatus.FINISHED_NOT_EVALUATED.getValue())
+				.build();
+		wxCourseOrderStatusMapper.insertSelective(record);
+		
+		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
+	 * <p>平台端查询课程订单列表</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年1月22日 下午6:15:33
+	 */
+	public JsonResult<Pagination<PlatformCourseOrderInfo>> getPlatformCourseOrders(@RequestBody SearchCourseOrderParam param){
+		PageHelper.startPage(param.getPageNum(), param.getPageSize());
+		if(param.getOrderStatusId() != null) {
+			if(!CourseOrderStatus.checkStatusExist(param.getOrderStatusId())) {
+				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "查询的订单状态不存在");
+			}
+		}
+		List<PlatformCourseOrderInfo> infos = wxCourseOrderMapper.getPlatformCourseOrders(param);
+		return JsonResult.successJsonResult(new Pagination<PlatformCourseOrderInfo>(infos));
+	}
+	
+	/**
+	 * 
+	 * <p>平台端查询课程订单详情</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年1月22日 下午6:34:28
+	 */
+	public JsonResult<PlatformCourseOrderDetail> getPlatformCourseOrderDetail(String orderCode){
+		if(StringUtils.isBlank(orderCode)) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "请选择课程订单");
+		}
+		PlatformCourseOrderDetail order = wxCourseOrderMapper.getPlatformCourseOrderDetail(orderCode);
+		if(order == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "课程订单不存在");
+		}
+		return JsonResult.successJsonResult(order);
+	} 
 	
 	/*******************************  微信课程首页接口     end  ********************************/
 

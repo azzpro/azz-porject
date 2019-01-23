@@ -23,8 +23,6 @@ import com.azz.wx.course.pojo.bo.SearchCourseOrderParam;
 import com.azz.wx.course.pojo.vo.CourseOrderDetail;
 import com.azz.wx.course.pojo.vo.CourseOrderInfo;
 import com.azz.wx.course.pojo.vo.PayOrderInfo;
-import com.azz.wx.course.pojo.vo.PlatformCourseOrderDetail;
-import com.azz.wx.course.pojo.vo.PlatformCourseOrderInfo;
 import com.azz.wx.course.service.OrderService;
 
 /**
@@ -37,8 +35,8 @@ import com.azz.wx.course.service.OrderService;
  * @author 黄智聪 2018年10月17日 下午1:42:55
  */
 @RestController
-@RequestMapping("/azz/api/courseOrder")
-public class OrderController {
+@RequestMapping("/azz/api/client/course/order")
+public class ClientOrderController {
 	
 	@Autowired
 	private OrderService orderService;
@@ -121,29 +119,5 @@ public class OrderController {
 	public JsonResult<String> confirmCourseOrder(@RequestBody ChangeOrderStatusParam param){
 		return orderService.confirmCourseOrder(param);
 	}
-	
-	/**
-	 * 
-	 * <p>平台端查询课程订单列表</p>
-	 * @param param
-	 * @return
-	 * @author 黄智聪  2019年1月22日 下午6:15:33
-	 */
-	@RequestMapping(value = "getPlatformCourseOrders", method = RequestMethod.POST)
-	public JsonResult<Pagination<PlatformCourseOrderInfo>> getPlatformCourseOrders(@RequestBody SearchCourseOrderParam param){
-		return orderService.getPlatformCourseOrders(param);
-	}
-	
-	/**
-	 * 
-	 * <p>平台端查询课程订单详情</p>
-	 * @param param
-	 * @return
-	 * @author 黄智聪  2019年1月22日 下午6:34:28
-	 */
-	@RequestMapping(value = "getPlatformCourseOrderDetail", method = RequestMethod.POST)
-	public JsonResult<PlatformCourseOrderDetail> getPlatformCourseOrderDetail(@RequestParam("orderCode") String orderCode){
-		return orderService.getPlatformCourseOrderDetail(orderCode);
-	} 
 	
 }

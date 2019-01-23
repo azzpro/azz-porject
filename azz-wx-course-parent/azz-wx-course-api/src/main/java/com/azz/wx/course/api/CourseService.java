@@ -30,12 +30,16 @@ import com.azz.wx.course.pojo.bo.PutOnOrPutOffOrDelCourseParam;
 import com.azz.wx.course.pojo.bo.SearchBrandParam;
 import com.azz.wx.course.pojo.bo.SearchClassificationListParam;
 import com.azz.wx.course.pojo.bo.SearchCourseInfoParam;
+import com.azz.wx.course.pojo.bo.SearchEvaluationInfoParam;
+import com.azz.wx.course.pojo.bo.SearchStartClassRecordParam;
 import com.azz.wx.course.pojo.vo.BrandInfo;
 import com.azz.wx.course.pojo.vo.ClassificationParams;
 import com.azz.wx.course.pojo.vo.CourseClassification;
 import com.azz.wx.course.pojo.vo.CourseDetail;
 import com.azz.wx.course.pojo.vo.CourseInfo;
+import com.azz.wx.course.pojo.vo.EvaluationInfo;
 import com.azz.wx.course.pojo.vo.ProductParams;
+import com.azz.wx.course.pojo.vo.StartClassRecord;
 
 /**
  * 
@@ -157,4 +161,48 @@ public interface CourseService {
 	
 	@RequestMapping(value = "/azz/api/platform/course/getAllBrand", method = RequestMethod.POST)
 	public JsonResult<List<BrandInfo>> getAllBrand();
+	
+	/*******************************  微信课程首页接口   start ********************************/
+	
+	/**
+	 * 
+	 * <p>查询首页课程列表</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年1月21日 下午4:25:49
+	 */
+	@RequestMapping(value = "/azz/api/client/course/getIndexCourseInfos", method = RequestMethod.POST)
+	public JsonResult<Pagination<CourseInfo>> getIndexCourseInfos(@RequestBody SearchCourseInfoParam param);
+	
+	/**
+	 * 
+	 * <p>查询首页课程详情</p>
+	 * @param courseCode
+	 * @return
+	 * @author 黄智聪  2019年1月4日 下午3:20:59
+	 */
+	@RequestMapping(value = "/azz/api/client/course/getIndexCourseDetail", method = RequestMethod.POST)
+	public JsonResult<CourseDetail> getIndexCourseDetail(@RequestParam("courseCode")String courseCode);
+	
+	/**
+	 * 
+	 * <p>查询课程评价</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年1月21日 下午7:26:26
+	 */
+	@RequestMapping(value = "/azz/api/client/course/getEvaluationInfos", method = RequestMethod.POST)
+	public JsonResult<Pagination<EvaluationInfo>> getEvaluationInfos(@RequestBody SearchEvaluationInfoParam param);
+	
+	/**
+	 * 
+	 * <p>查询首页开课信息列表</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年1月4日 下午5:37:39
+	 */
+	@RequestMapping(value = "/azz/api/client/course/getIndexStartClassRecords", method = RequestMethod.POST)
+	public JsonResult<Pagination<StartClassRecord>> getIndexStartClassRecords(@RequestBody SearchStartClassRecordParam param);
+	
+	/*******************************  微信课程首页接口   end ********************************/
 }

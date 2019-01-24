@@ -3,7 +3,7 @@ package com.azz.wx.course.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
-public class WxCourseAapplyInfo implements Serializable {
+public class WxCourseApplyInfo implements Serializable {
     /**
      * 主键id
      *
@@ -432,7 +432,7 @@ public class WxCourseAapplyInfo implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        WxCourseAapplyInfo other = (WxCourseAapplyInfo) that;
+        WxCourseApplyInfo other = (WxCourseApplyInfo) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getApplyInfoCode() == null ? other.getApplyInfoCode() == null : this.getApplyInfoCode().equals(other.getApplyInfoCode()))
             && (this.getUserCode() == null ? other.getUserCode() == null : this.getUserCode().equals(other.getUserCode()))

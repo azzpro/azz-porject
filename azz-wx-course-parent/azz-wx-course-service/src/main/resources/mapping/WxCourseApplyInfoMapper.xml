@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.azz.wx.course.mapper.WxCourseAapplyInfoMapper">
-  <resultMap id="BaseResultMap" type="com.azz.wx.course.pojo.WxCourseAapplyInfo">
+<mapper namespace="com.azz.wx.course.mapper.WxCourseApplyInfoMapper">
+  <resultMap id="BaseResultMap" type="com.azz.wx.course.pojo.WxCourseApplyInfo">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="apply_info_code" jdbcType="VARCHAR" property="applyInfoCode" />
     <result column="user_code" jdbcType="VARCHAR" property="userCode" />
@@ -31,7 +31,7 @@
     delete from wx_course_apply_info
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.azz.wx.course.pojo.WxCourseAapplyInfo">
+  <insert id="insert" parameterType="com.azz.wx.course.pojo.WxCourseApplyInfo">
     insert into wx_course_apply_info (id, apply_info_code, user_code, 
       person_name, phone_number, email, 
       company, graduate_school, is_default, 
@@ -43,7 +43,7 @@
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.azz.wx.course.pojo.WxCourseAapplyInfo">
+  <insert id="insertSelective" parameterType="com.azz.wx.course.pojo.WxCourseApplyInfo">
     insert into wx_course_apply_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -134,7 +134,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.azz.wx.course.pojo.WxCourseAapplyInfo">
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.wx.course.pojo.WxCourseApplyInfo">
     update wx_course_apply_info
     <set>
       <if test="applyInfoCode != null">
@@ -179,7 +179,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.azz.wx.course.pojo.WxCourseAapplyInfo">
+  <update id="updateByPrimaryKey" parameterType="com.azz.wx.course.pojo.WxCourseApplyInfo">
     update wx_course_apply_info
     set apply_info_code = #{applyInfoCode,jdbcType=VARCHAR},
       user_code = #{userCode,jdbcType=VARCHAR},
@@ -226,7 +226,7 @@
   		WHERE status = 1 and apply_info_code = #{applyCode,jdbcType=VARCHAR}
   </select>
   
-  <update id="updateByApplyInfoCode" parameterType="com.azz.wx.course.pojo.WxCourseAapplyInfo">
+  <update id="updateByApplyInfoCode" parameterType="com.azz.wx.course.pojo.WxCourseApplyInfo">
     update wx_course_apply_info
     set person_name = #{personName,jdbcType=VARCHAR},
       phone_number = #{phoneNumber,jdbcType=VARCHAR},

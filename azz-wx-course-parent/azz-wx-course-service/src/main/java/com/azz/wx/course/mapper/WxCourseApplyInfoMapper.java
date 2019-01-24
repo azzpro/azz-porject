@@ -4,23 +4,23 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.azz.wx.course.pojo.WxCourseAapplyInfo;
+import com.azz.wx.course.pojo.WxCourseApplyInfo;
 import com.azz.wx.course.pojo.bo.EditCourseApplyIsDefaultParam;
 import com.azz.wx.course.pojo.vo.CourseSignUpInfo;
 
 @Mapper
-public interface WxCourseAapplyInfoMapper {
+public interface WxCourseApplyInfoMapper {
     int deleteByPrimaryKey(Long id);
 
-    int insert(WxCourseAapplyInfo record);
+    int insert(WxCourseApplyInfo record);
 
-    int insertSelective(WxCourseAapplyInfo record);
+    int insertSelective(WxCourseApplyInfo record);
 
-    WxCourseAapplyInfo selectByPrimaryKey(Long id);
+    WxCourseApplyInfo selectByPrimaryKey(Long id);
 
-    int updateByPrimaryKeySelective(WxCourseAapplyInfo record);
+    int updateByPrimaryKeySelective(WxCourseApplyInfo record);
 
-    int updateByPrimaryKey(WxCourseAapplyInfo record);
+    int updateByPrimaryKey(WxCourseApplyInfo record);
     
     int getCountApplyInfo(String userCode);
     
@@ -28,7 +28,7 @@ public interface WxCourseAapplyInfoMapper {
     
     CourseSignUpInfo getCourseInfoByApplyCode(String applyCode);
     
-    int updateByApplyInfoCode(WxCourseAapplyInfo record);
+    int updateByApplyInfoCode(WxCourseApplyInfo record);
     
     int deleteApplyInfo(String applyInfoCode);
     

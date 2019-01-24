@@ -19,8 +19,8 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.util.JSR303ValidateUtils;
-import com.azz.wx.course.mapper.WxCourseAapplyInfoMapper;
-import com.azz.wx.course.pojo.WxCourseAapplyInfo;
+import com.azz.wx.course.mapper.WxCourseApplyInfoMapper;
+import com.azz.wx.course.pojo.WxCourseApplyInfo;
 import com.azz.wx.course.pojo.bo.AddCourseApplyParam;
 import com.azz.wx.course.pojo.bo.EditCourseApplyIsDefaultParam;
 import com.azz.wx.course.pojo.bo.EditCourseApplyParam;
@@ -36,7 +36,7 @@ import com.azz.wx.course.pojo.vo.CourseSignUpInfo;
 public class ApplyInfoService {
 	
 	@Autowired
-	private WxCourseAapplyInfoMapper wxCourseAapplyInfoMapper;
+	private WxCourseApplyInfoMapper wxCourseApplyInfoMapper;
 	
 	
 	/**
@@ -46,7 +46,7 @@ public class ApplyInfoService {
      * @author 彭斌  2019年1月23日 下午6:23:29
      */
     public JsonResult<List<CourseSignUpInfo>> getCourseSignUp(String userCode){
-        List<CourseSignUpInfo> listInfo = wxCourseAapplyInfoMapper.getCourseListByUserCode(userCode);
+        List<CourseSignUpInfo> listInfo = wxCourseApplyInfoMapper.getCourseListByUserCode(userCode);
         return JsonResult.successJsonResult(listInfo);
     }
     
@@ -60,7 +60,7 @@ public class ApplyInfoService {
         // 基础参数非空校验
         JSR303ValidateUtils.validate(param);
         
-        WxCourseAapplyInfo record = new WxCourseAapplyInfo();
+        WxCourseApplyInfo record = new WxCourseApplyInfo();
         Long currentTime = System.currentTimeMillis();
         record.setApplyInfoCode("A" + String.valueOf(currentTime));
         record.setCompany(param.getCompany());
@@ -71,7 +71,7 @@ public class ApplyInfoService {
         record.setPersonName(param.getPersonName());
         record.setPhoneNumber(param.getPhoneNumber());
         record.setUserCode(param.getUserCode());
-        wxCourseAapplyInfoMapper.insertSelective(record);
+        wxCourseApplyInfoMapper.insertSelective(record);
         return JsonResult.successJsonResult();
     }
 
@@ -86,12 +86,12 @@ public class ApplyInfoService {
         // 基础参数非空校验
         JSR303ValidateUtils.validate(param);
         
-        CourseSignUpInfo csui = wxCourseAapplyInfoMapper.getCourseInfoByApplyCode(param.getApplyCode());
+        CourseSignUpInfo csui = wxCourseApplyInfoMapper.getCourseInfoByApplyCode(param.getApplyCode());
         if(null == csui) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
                     "课程申请信息不存在,不允许修改");
         }
-        WxCourseAapplyInfo record = new WxCourseAapplyInfo();
+        WxCourseApplyInfo record = new WxCourseApplyInfo();
         record.setApplyInfoCode(param.getApplyCode());
         record.setCompany(param.getCompany());
         record.setEmail(param.getEmail());
@@ -100,7 +100,7 @@ public class ApplyInfoService {
         record.setModifyTime(new Date());
         record.setPersonName(param.getPersonName());
         record.setPhoneNumber(param.getPhoneNumber());
-        wxCourseAapplyInfoMapper.updateByApplyInfoCode(record);
+        wxCourseApplyInfoMapper.updateByApplyInfoCode(record);
         return JsonResult.successJsonResult();
     }
 
@@ -116,12 +116,12 @@ public class ApplyInfoService {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
                     "参数异常，请检查");
         }
-        CourseSignUpInfo csui = wxCourseAapplyInfoMapper.getCourseInfoByApplyCode(applyCode);
+        CourseSignUpInfo csui = wxCourseApplyInfoMapper.getCourseInfoByApplyCode(applyCode);
         if(null == csui) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
                     "课程申请信息不存在,不允许修改");
         }
-        wxCourseAapplyInfoMapper.deleteApplyInfo(applyCode);
+        wxCourseApplyInfoMapper.deleteApplyInfo(applyCode);
         return JsonResult.successJsonResult();
     }
     
@@ -137,13 +137,13 @@ public class ApplyInfoService {
                     "参数异常，请检查");
         }
         
-        CourseSignUpInfo csui = wxCourseAapplyInfoMapper.getCourseInfoByApplyCode(applyCode);
+        CourseSignUpInfo csui = wxCourseApplyInfoMapper.getCourseInfoByApplyCode(applyCode);
         if(null == csui) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,
                     "课程申请信息不存在,不允许设置默认");
         }
         
-        List<CourseSignUpInfo> listInfo = wxCourseAapplyInfoMapper.getCourseListByUserCode(csui.getUserCode());
+        List<CourseSignUpInfo> listInfo = wxCourseApplyInfoMapper.getCourseListByUserCode(csui.getUserCode());
         // 将之前的申请取消为否默认
         for (int i = 0; i < listInfo.size(); i++) {
             Byte isDefault = listInfo.get(i).getIsDefault();
@@ -156,7 +156,7 @@ public class ApplyInfoService {
                 EditCourseApplyIsDefaultParam param = new EditCourseApplyIsDefaultParam();
                 param.setApplyCode(dbApplyCode);
                 param.setIsDefualt((byte)0);
-                wxCourseAapplyInfoMapper.updateIsDefaultByApplyInfoCode(param);
+                wxCourseApplyInfoMapper.updateIsDefaultByApplyInfoCode(param);
             }
         }
         
@@ -164,7 +164,7 @@ public class ApplyInfoService {
         EditCourseApplyIsDefaultParam param = new EditCourseApplyIsDefaultParam();
         param.setApplyCode(applyCode);
         param.setIsDefualt((byte)1);
-        wxCourseAapplyInfoMapper.updateIsDefaultByApplyInfoCode(param);
+        wxCourseApplyInfoMapper.updateIsDefaultByApplyInfoCode(param);
         
         return JsonResult.successJsonResult();
     }
@@ -177,7 +177,7 @@ public class ApplyInfoService {
      * @author 彭斌  2019年1月24日 下午2:09:40
      */
     public JsonResult<CourseSignUpInfo> getCourseSignUpInfo(String applyCode){
-        CourseSignUpInfo csui = wxCourseAapplyInfoMapper.getCourseInfoByApplyCode(applyCode);
+        CourseSignUpInfo csui = wxCourseApplyInfoMapper.getCourseInfoByApplyCode(applyCode);
         return JsonResult.successJsonResult(csui);
     }
 }

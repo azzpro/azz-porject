@@ -38,7 +38,7 @@ import com.azz.util.PasswordHelper;
 import com.azz.util.RandomStringUtils;
 import com.azz.util.SystemSeqUtils;
 import com.azz.wx.course.mapper.ClientUserMapper;
-import com.azz.wx.course.mapper.WxCourseAapplyInfoMapper;
+import com.azz.wx.course.mapper.WxCourseApplyInfoMapper;
 import com.azz.wx.course.mapper.WxCourseOrderMapper;
 import com.azz.wx.course.pojo.ClientUser;
 import com.azz.wx.course.pojo.bo.BindingPhomeParam;
@@ -60,7 +60,7 @@ public class PersonalCenterService {
     private WxCourseOrderMapper wxCourseOrderMapper;
     
     @Autowired
-    private WxCourseAapplyInfoMapper wxCourseAapplyInfoMapper;
+    private WxCourseApplyInfoMapper wxCourseAapplyInfoMapper;
     
     @Autowired
     private ClientUserMapper clientUserMapper;

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2019年1月22日 下午2:47:45
+ * Create on 2019年1月23日 下午5:51:19
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
@@ -12,19 +12,17 @@ import lombok.Data;
 /**
  * <P>TODO</P>
  * @version 1.0
- * @author 彭斌  2019年1月22日 下午2:47:45
+ * @author 彭斌  2019年1月23日 下午5:51:19
  */
 @Data
-public class PersonalCenterInfo {
-    private String wechatId;
+public class CourseSignUpInfo {
+    private String applyCode;
     private String userCode;
-    private String avatarUrl;
-    private String nickName;
-    private Integer allOrders;
-    private Integer pendingOrder;
-    private Integer toBeConfirmed;
-    private Integer comment;
-    private String cellphoneNumber;
-    private Integer signUp;
+    private String personName;
+    private String phoneNumber;
+    private String company;
+    private Byte isDefault;
+    private String email;
+    private String graduateSchool;
 }
 

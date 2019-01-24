@@ -38,7 +38,7 @@ import com.azz.util.PasswordHelper;
 import com.azz.util.RandomStringUtils;
 import com.azz.util.SystemSeqUtils;
 import com.azz.wx.course.mapper.ClientUserMapper;
-import com.azz.wx.course.mapper.WxCourseAapplyInfoMapper;
+import com.azz.wx.course.mapper.WxCourseApplyInfoMapper;
 import com.azz.wx.course.mapper.WxCourseOrderMapper;
 import com.azz.wx.course.pojo.ClientUser;
 import com.azz.wx.course.pojo.bo.BindingPhomeParam;
@@ -60,7 +60,7 @@ public class PersonalCenterService {
     private WxCourseOrderMapper wxCourseOrderMapper;
     
     @Autowired
-    private WxCourseAapplyInfoMapper wxCourseAapplyInfoMapper;
+    private WxCourseApplyInfoMapper wxCourseAapplyInfoMapper;
     
     @Autowired
     private ClientUserMapper clientUserMapper;
@@ -83,12 +83,14 @@ public class PersonalCenterService {
             ClientWxUser cwu = clientWxUserMapper.selectWxUserByOpenid(openId);
             if(null != cwu) {
                 info = new PersonalCenterInfo();
+                String userCode = cwu.getUserCode();
+                
                 // 客户头部基础信息
                 info.setWechatId(openId);
                 info.setAvatarUrl(cwu.getAvatarUrl());
                 info.setNickName(cwu.getNickName());
+                info.setUserCode(cwu.getUserCode());
                 
-                String userCode = cwu.getUserCode();
                 // 统计数值
                 int allOrders = wxCourseOrderMapper.getCountOrders(userCode);
                 int notPaid = wxCourseOrderMapper.getCountOrdersStatus(CourseOrderStatus.NOT_PAID.getValue());

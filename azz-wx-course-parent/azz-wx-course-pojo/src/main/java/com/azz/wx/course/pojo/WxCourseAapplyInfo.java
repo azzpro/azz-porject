@@ -95,8 +95,20 @@ public class WxCourseAapplyInfo implements Serializable {
      */
     private Date modifyTime;
 
+    
+    private Integer status;
+    
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     private static final long serialVersionUID = 1L;
 
+    
     /**
      * 主键id<br/>
      * 返回值对应的表列名 wx_course_apply_info.id

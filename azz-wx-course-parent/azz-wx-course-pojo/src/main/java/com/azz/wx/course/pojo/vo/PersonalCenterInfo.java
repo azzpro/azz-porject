@@ -17,6 +17,7 @@ import lombok.Data;
 @Data
 public class PersonalCenterInfo {
     private String wechatId;
+    private String userCode;
     private String avatarUrl;
     private String nickName;
     private Integer allOrders;

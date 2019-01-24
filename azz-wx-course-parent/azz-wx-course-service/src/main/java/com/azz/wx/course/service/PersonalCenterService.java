@@ -23,13 +23,9 @@ import com.azz.core.constants.WxCourseConstants.CourseOrderStatus;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.model.Password;
 import com.azz.system.api.SystemSmsSendService;
-import com.azz.system.bo.AddClientWxUserParam;
-import com.azz.system.bo.AddWxBindingRecordParam;
 import com.azz.system.bo.SmsCheck;
 import com.azz.system.bo.SmsCodeValidation;
 import com.azz.system.bo.SmsParams;
-import com.azz.system.mapper.ClientWxUserMapper;
-import com.azz.system.pojo.ClientWxUser;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.system.vo.SmsInfo;
 import com.azz.util.JSR303ValidateUtils;
@@ -38,9 +34,16 @@ import com.azz.util.PasswordHelper;
 import com.azz.util.RandomStringUtils;
 import com.azz.util.SystemSeqUtils;
 import com.azz.wx.course.mapper.ClientUserMapper;
+import com.azz.wx.course.mapper.ClientWxUserMapper;
 import com.azz.wx.course.mapper.WxCourseApplyInfoMapper;
 import com.azz.wx.course.mapper.WxCourseOrderMapper;
+import com.azz.wx.course.mapper.WxCourseSuggestionsMapper;
 import com.azz.wx.course.pojo.ClientUser;
+import com.azz.wx.course.pojo.ClientWxUser;
+import com.azz.wx.course.pojo.WxCourseSuggestions;
+import com.azz.wx.course.pojo.bo.AddClientWxUserParam;
+import com.azz.wx.course.pojo.bo.AddCourseSuggestionsParam;
+import com.azz.wx.course.pojo.bo.AddWxBindingRecordParam;
 import com.azz.wx.course.pojo.bo.BindingPhomeParam;
 import com.azz.wx.course.pojo.vo.PersonalCenterInfo;
 
@@ -71,6 +74,8 @@ public class PersonalCenterService {
     @Autowired
     private DbSequenceService dbSequenceService;
     
+    @Autowired
+    private WxCourseSuggestionsMapper wxCourseSuggestionsMapper;
     /**
      * <p>获取个人中心首页相关信息</p>
      * @param wechatId
@@ -204,6 +209,27 @@ public class PersonalCenterService {
         clientWxUserMapper.deleteByPrimaryKey(openid);
         return JsonResult.successJsonResult();
     }
+    
+    /**
+     * <p>新增课程投诉建议</p>
+     * @param param
+     * @return
+     * @author 彭斌  2019年1月24日 下午3:46:20
+     */
+    public JsonResult<String> addSuggestions(@RequestBody AddCourseSuggestionsParam param){
+        // 基础参数非空校验
+        JSR303ValidateUtils.validate(param);
+        WxCourseSuggestions record = new WxCourseSuggestions();
+        record.setOpenid(param.getOpenid());
+        record.setUserCode(param.getUserCode());
+        record.setQuestionType(param.getQuestionType());
+        record.setContact(param.getContact());
+        record.setQuestionDescription(param.getQuestionDescription());
+        record.setCreateTime(new Date());
+        wxCourseSuggestionsMapper.insertSelective(record);
+        return JsonResult.successJsonResult();
+    }
+    
     
     /**
      * 

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.wx.course.pojo.bo.AddCourseApplyParam;
+import com.azz.wx.course.pojo.bo.AddCourseSuggestionsParam;
 import com.azz.wx.course.pojo.bo.BindingPhomeParam;
 import com.azz.wx.course.pojo.bo.EditCourseApplyParam;
 import com.azz.wx.course.pojo.vo.CourseSignUpInfo;
@@ -137,5 +138,16 @@ public class ClientPersonalCenterController {
 	@RequestMapping(value = "getCourseSignUpInfo", method = RequestMethod.POST)
 	public JsonResult<CourseSignUpInfo> getCourseSignUpInfo(@RequestParam("applyCode") String applyCode){
 	    return applyInfoService.getCourseSignUpInfo(applyCode);
+	}
+	
+	/**
+	 * <p>新增投诉建议</p>
+	 * @param param
+	 * @return
+	 * @author 彭斌  2019年1月24日 下午3:47:53
+	 */
+	@RequestMapping(value = "addSuggestions", method = RequestMethod.POST)
+	public JsonResult<String> addSuggestions(@RequestBody AddCourseSuggestionsParam param){
+	    return personalCenterService.addSuggestions(param);
 	}
 }

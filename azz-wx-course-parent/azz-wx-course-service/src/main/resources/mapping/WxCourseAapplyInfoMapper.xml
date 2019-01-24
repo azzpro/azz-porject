@@ -198,6 +198,55 @@
   </update>
   
   <select id="getCountApplyInfo" parameterType="java.lang.String" resultType="int">
-  	SELECT COUNT(0) FROM wx_course_apply_info WHERE user_code = #{userCode,jdbcType=VARCHAR}
+  	SELECT COUNT(0) FROM wx_course_apply_info WHERE status = 1 and user_code = #{userCode,jdbcType=VARCHAR}
   </select>
+  
+  <select id="getCourseListByUserCode" parameterType="java.lang.String" resultType="com.azz.wx.course.pojo.vo.CourseSignUpInfo">
+  		SELECT 
+  			apply_info_code as applyCode,
+  			user_code as userCode,
+  			person_name as personName,
+  			company as company,
+  			phone_number as phoneNumber,
+  			is_default as isDefault
+  		FROM wx_course_apply_info
+  		WHERE status = 1 and user_code = #{userCode,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getCourseInfoByApplyCode" parameterType="java.lang.String" resultType="com.azz.wx.course.pojo.vo.CourseSignUpInfo">
+  		SELECT 
+  			apply_info_code as applyCode,
+  			user_code as userCode,
+  			person_name as personName,
+  			company as company,
+  			phone_number as phoneNumber,
+  			email as email,
+  			graduate_school as graduateSchool
+  		FROM wx_course_apply_info
+  		WHERE status = 1 and apply_info_code = #{applyCode,jdbcType=VARCHAR}
+  </select>
+  
+  <update id="updateByApplyInfoCode" parameterType="com.azz.wx.course.pojo.WxCourseAapplyInfo">
+    update wx_course_apply_info
+    set person_name = #{personName,jdbcType=VARCHAR},
+      phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      company = #{company,jdbcType=VARCHAR},
+      graduate_school = #{graduateSchool,jdbcType=VARCHAR},
+	  modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+    where apply_info_code = #{applyInfoCode,jdbcType=VARCHAR}
+  </update>
+  
+   <update id="deleteApplyInfo" parameterType="java.lang.String">
+    update wx_course_apply_info
+    set status = 0,modify_time = now()
+    where apply_info_code = #{applyInfoCode,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateIsDefaultByApplyInfoCode" parameterType="com.azz.wx.course.pojo.bo.EditCourseApplyIsDefaultParam">
+    update wx_course_apply_info
+    set is_default = #{isDefault,jdbcType=TINYINT}
+    where apply_info_code = #{applyInfoCode,jdbcType=VARCHAR}
+  </update>
 </mapper>

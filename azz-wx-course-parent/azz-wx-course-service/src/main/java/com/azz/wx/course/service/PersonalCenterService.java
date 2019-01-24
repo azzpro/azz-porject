@@ -8,7 +8,6 @@
 package com.azz.wx.course.service;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,7 +42,6 @@ import com.azz.wx.course.mapper.WxCourseAapplyInfoMapper;
 import com.azz.wx.course.mapper.WxCourseOrderMapper;
 import com.azz.wx.course.pojo.ClientUser;
 import com.azz.wx.course.pojo.bo.BindingPhomeParam;
-import com.azz.wx.course.pojo.vo.CourseSignUpInfo;
 import com.azz.wx.course.pojo.vo.PersonalCenterInfo;
 
 /**
@@ -206,19 +204,6 @@ public class PersonalCenterService {
         clientWxUserMapper.deleteByPrimaryKey(openid);
         return JsonResult.successJsonResult();
     }
-    
-    /**
-     * <p>获取课程报名信息</p>
-     * @param userCode
-     * @return
-     * @author 彭斌  2019年1月23日 下午6:23:29
-     */
-    public JsonResult<List<CourseSignUpInfo>> getCourseSignUp(String userCode){
-       // List<CourseSignUpInfo> listInfo = 
-        return JsonResult.successJsonResult(null);
-    }
-    
-    
     
     /**
      * 

@@ -1,28 +1,22 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2019年1月23日 下午5:51:19
+ * Create on 2019年1月24日 下午1:55:49
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
-package com.azz.wx.course.pojo.vo;
+package com.azz.wx.course.pojo.bo;
 
 import lombok.Data;
 
 /**
  * <P>TODO</P>
  * @version 1.0
- * @author 彭斌  2019年1月23日 下午5:51:19
+ * @author 彭斌  2019年1月24日 下午1:55:49
  */
 @Data
-public class CourseSignUpInfo {
+public class EditCourseApplyIsDefaultParam {
+    private Byte isDefualt;
     private String applyCode;
-    private String userCode;
-    private String personName;
-    private String phoneNumber;
-    private String company;
-    private Byte isDefault;
-    private String email;
-    private String graduateSchool;
 }
 

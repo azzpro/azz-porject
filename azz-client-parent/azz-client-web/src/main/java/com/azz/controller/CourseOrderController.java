@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.azz.controller.utils.WebUtils;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.wx.course.api.OrderService;
@@ -44,6 +45,7 @@ public class CourseOrderController {
 	 */
 	@RequestMapping(value = "/generatePayOrderInfo", method = RequestMethod.POST)
 	public JsonResult<PayOrderInfo> generatePayOrderInfo(PayOrderParam param){
+		param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 		return orderService.generatePayOrderInfo(param);
 	}
 	
@@ -67,6 +69,7 @@ public class CourseOrderController {
 	 */
 	@RequestMapping(value = "/getCourseOrders", method = RequestMethod.POST)
 	public JsonResult<Pagination<CourseOrderInfo>> getCourseOrders(SearchCourseOrderParam param){
+		param.setUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 		return orderService.getCourseOrders(param);
 	}
 	
@@ -90,6 +93,7 @@ public class CourseOrderController {
 	 */
 	@RequestMapping(value = "/evaluateCourse", method = RequestMethod.POST)
 	public JsonResult<String> evaluateCourse(EvaluateCourseParam param){
+		param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 		return orderService.evaluateCourse(param);
 	}
 	
@@ -101,6 +105,7 @@ public class CourseOrderController {
 	 */
 	@RequestMapping(value = "/cancelCourseOrder", method = RequestMethod.POST)
 	public JsonResult<String> cancelCourseOrder(ChangeOrderStatusParam param){
+		param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 		return orderService.cancelCourseOrder(param);
 	}
 	
@@ -112,6 +117,7 @@ public class CourseOrderController {
 	 */
 	@RequestMapping(value = "/confirmCourseOrder", method = RequestMethod.POST)
 	public JsonResult<String> confirmCourseOrder(ChangeOrderStatusParam param){
+		param.setClientUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 		return orderService.confirmCourseOrder(param);
 	}
 

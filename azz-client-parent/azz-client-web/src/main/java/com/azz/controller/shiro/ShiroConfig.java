@@ -46,6 +46,7 @@ public class ShiroConfig {
 	filterChainDefinitionMap.put("/azz/api/client/login", "anon");
 	filterChainDefinitionMap.put("/azz/api/client/regist", "anon");
 	filterChainDefinitionMap.put("/azz/api/client/sendVerificationCode", "anon");
+	filterChainDefinitionMap.put("/azz/api/client/course/login", "anon");
 	
 	//开放微信回调接口
 	filterChainDefinitionMap.put("/azz/api/wechat/*", "anon");
@@ -67,9 +68,12 @@ public class ShiroConfig {
 	filterChainDefinitionMap.put("/azz/api/client/selection/getModuleDetail", "anon");
 	filterChainDefinitionMap.put("/azz/api/client/selection/getClassificationChildPagination", "anon");
 	filterChainDefinitionMap.put("/azz/api/client/selection/getClassificationList", "anon");
-	
-	// 官网首页数据
+	 
+	// 开放官网首页数据
 	filterChainDefinitionMap.put("/azz/api/index/*", "anon");
+	
+	// 开放开放微信课程接口
+	filterChainDefinitionMap.put("/azz/api/client/course/*", "anon");
 	
 	// 其余接口一律拦截
 	// 主要这行代码必须放在所有权限设置的最后，不然会导致所有 url 都被拦截

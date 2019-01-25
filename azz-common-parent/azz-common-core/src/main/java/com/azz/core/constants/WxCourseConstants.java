@@ -28,6 +28,11 @@ public abstract class WxCourseConstants {
 	public static final int COURSE_BUY_COUNT = 1000;
 	
 	/**
+	 *  微信课程登录用户名的前缀，用于区分是否为微信课程端用户登录
+	 */
+	public static final String WX_COURSE_LOGIN_USER_NAME_PREFIX = "wx_course_login:";
+	
+	/**
 	 * 
 	 * <P>是否修改了模组图片</P>
 	 * @version 1.0

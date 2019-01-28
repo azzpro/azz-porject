@@ -21,12 +21,15 @@ import com.azz.client.pojo.vo.LoginClientUserInfo;
 import com.azz.client.user.api.ClientService;
 import com.azz.controller.utils.WebUtils;
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.ShiroAuthErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.ClientConstants;
 import com.azz.core.constants.WxCourseConstants;
 import com.azz.core.exception.ShiroAuthException;
 import com.azz.core.exception.SuppressedException;
+import com.azz.exception.JSR303ValidationException;
+import com.azz.util.StringUtils;
 import com.azz.wx.course.api.CourseService;
 import com.azz.wx.course.pojo.bo.SearchCourseInfoParam;
 import com.azz.wx.course.pojo.bo.SearchEvaluationInfoParam;
@@ -60,6 +63,9 @@ public class CourseController {
 	 */
     @RequestMapping(value = "/login")
     public JsonResult<LoginClientUserInfo> login(String openid) {
+    	if(StringUtils.isBlank(openid)) {
+    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "缺少请求参数");
+    	}
     	// 从SecurityUtils里边创建一个 subject
     	Subject subject = SecurityUtils.getSubject();
     	// 在认证提交前准备 token（令牌）

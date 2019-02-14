@@ -345,7 +345,8 @@
 		wcoi.start_class_name AS startClassName,
 		wcoi.start_class_time AS startClassTime,
 		wcoi.price AS price,
-		wco. STATUS AS orderStatus
+		wco.order_code AS orderCode,
+		wco.order_status_id AS orderStatus
 	FROM
 		wx_course_order wco
 	JOIN wx_course_order_item wcoi ON wco.order_code = wcoi.order_code
@@ -361,7 +362,7 @@
 		wcoi.start_class_time AS startClassTime,
 		wcoi.price AS price,
 		wco.order_code as orderCode,
-		wco. STATUS AS orderStatus,
+		wco.order_status_id AS orderStatus,
 		wco.create_time as orderTime
 	FROM
 		wx_course_order wco
@@ -384,7 +385,7 @@
 		wc.course_pic_name AS coursePicName,
 		wc.course_pic_url AS coursePicUrl,
 		wco.grand_total AS grandTotal,
-		wco.`status` AS orderStatus,
+		wco.order_status_id AS orderStatus,
 		wco.create_time AS orderTime,
 		wcoi.start_class_code AS startClassCode,
 		wcoi.start_class_name AS startClassName,
@@ -413,7 +414,7 @@
 		wcoi.start_class_code AS startClassCode,
 		wco.grand_total AS grandTotal,
 		wco.order_code AS orderCode,
-		wco. STATUS AS orderStatus,
+		wco.order_status_id AS orderStatus,
 		wco.wx_binding_phone AS phoneNumber,
 		wco.create_time AS orderTime
 	FROM
@@ -446,7 +447,7 @@
 		wcoi.classification_name AS classificationName,
 		wcoi.course_params_name AS courseParams,
 		wco.grand_total AS grandTotal,
-		wco.`status` AS orderStatus,
+		wco.order_status_id AS orderStatus,
 		wco.create_time AS orderTime,
 		wcoi.start_class_code AS startClassCode,
 		wcoi.start_class_name AS startClassName,

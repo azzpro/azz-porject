@@ -270,5 +270,37 @@ public interface DbSequenceService {
     @RequestMapping(value="/azz/api/sequence/getMerchantInvoiceApplyNumber",method=RequestMethod.GET)
     public String getMerchantInvoiceApplyNumber() ;
 	
+    /**
+     * <p>获取微信课程订单编码序列</p>
+     * @return
+     * @author 彭斌  2019年2月18日 下午3:59:53
+     */
+    @RequestMapping(value="/azz/api/sequence/getWxCourseOrderSequenceNumber",method=RequestMethod.GET)
+    public String getWxCourseOrderSequenceNumber();
+    
+    /**
+     * <p>获取微信课程订单售后申请序列</p>
+     * @return
+     * @author 彭斌  2019年2月18日 下午4:02:32
+     */
+    @RequestMapping(value="/azz/api/sequence/getWxCourseOrderAfterSaleApplySequenceNumber",method=RequestMethod.GET)
+    public String getWxCourseOrderAfterSaleApplySequenceNumber();
+    
+    /**
+     * <p>获取微信课程订单退款申请编码</p>
+     * @return
+     * @author 彭斌  2019年2月18日 下午4:03:37
+     */
+    @RequestMapping(value="/azz/api/sequence/getWxCourseOrderRefundSequenceNumber",method=RequestMethod.GET)
+    public String getWxCourseOrderRefundSequenceNumber();
+
+    /**
+     * <p>>微信课程订单提现申请编码</p>
+     * @return
+     * @author 彭斌  2019年2月18日 下午4:04:06
+     */
+    @RequestMapping(value="/azz/api/sequence/getWxCourseOrderWithdrawSequenceNumber",method=RequestMethod.GET)
+    public String getWxCourseOrderWithdrawSequence();
+    
 }
 

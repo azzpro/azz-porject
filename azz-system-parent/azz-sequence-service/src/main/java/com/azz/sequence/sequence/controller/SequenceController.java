@@ -40,6 +40,10 @@ import com.azz.sequence.sequence.service.ProductSequence;
 import com.azz.sequence.sequence.service.WxBrandSequence;
 import com.azz.sequence.sequence.service.WxClassBeginSequence;
 import com.azz.sequence.sequence.service.WxClassificationSequence;
+import com.azz.sequence.sequence.service.WxCourseOrderAfterSaleApplySequence;
+import com.azz.sequence.sequence.service.WxCourseOrderRefundSequence;
+import com.azz.sequence.sequence.service.WxCourseOrderSequence;
+import com.azz.sequence.sequence.service.WxCourseOrderWithdrawSequence;
 import com.azz.sequence.sequence.service.WxCourseSequence;
 import com.azz.sequence.sequence.service.WxParamTremSequence;
 import com.azz.sequence.sequence.service.WxParamValueSequence;
@@ -147,7 +151,17 @@ public class SequenceController {
 	@Autowired
 	private WxParamValueSequence wxParamValueSequence;
 	
-	
+	@Autowired
+    private WxCourseOrderSequence wxCourseOrderSequence;
+    
+	@Autowired
+    private WxCourseOrderAfterSaleApplySequence wxCourseOrderAfterSaleApplySequence;
+    
+    @Autowired
+    private WxCourseOrderRefundSequence wxCourseOrderRefundSequence;
+    
+    @Autowired
+    private WxCourseOrderWithdrawSequence wxCourseOrderWithdrawSequence;
 	/**
 	 * <p>微信品牌</p>
 	 * @return
@@ -461,5 +475,45 @@ public class SequenceController {
         return merchantInvoiceApplySequenceService.getSequence();
     }
     
+    /**
+     * <p>获取微信课程订单编码序列</p>
+     * @return
+     * @author 彭斌  2019年2月18日 下午3:51:43
+     */
+    @RequestMapping(value="getWxCourseOrderSequenceNumber",method=RequestMethod.GET)
+    public String getWxCourseOrderSequenceNumber() {
+        return wxCourseOrderSequence.getSequence();
+    }
+    
+    /**
+     * <p>获取微信课程订单售后申请序列</p>
+     * @return
+     * @author 彭斌  2019年2月18日 下午3:52:59
+     */
+    @RequestMapping(value="getWxCourseOrderAfterSaleApplySequenceNumber",method=RequestMethod.GET)
+    public String getWxCourseOrderAfterSaleApplySequenceNumber() {
+        return wxCourseOrderAfterSaleApplySequence.getSequence();
+    }
+    
+    /**
+     * <p>获取微信课程订单退款申请编码</p>
+     * @return
+     * @author 彭斌  2019年2月18日 下午3:54:12
+     */
+    @RequestMapping(value="getWxCourseOrderRefundSequenceNumber",method=RequestMethod.GET)
+    public String getWxCourseOrderRefundSequenceNumber() {
+        return wxCourseOrderRefundSequence.getSequence();
+    }
+    
+    
+    /**
+     * <p>微信课程订单提现申请编码</p>
+     * @return
+     * @author 彭斌  2019年2月18日 下午3:55:08
+     */
+    @RequestMapping(value="getWxCourseOrderWithdrawSequenceNumber",method=RequestMethod.GET)
+    public String getWxCourseOrderWithdrawSequence() {
+        return wxCourseOrderWithdrawSequence.getSequence();
+    }
 }
 

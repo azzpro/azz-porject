@@ -221,7 +221,8 @@
   			company as company,
   			phone_number as phoneNumber,
   			email as email,
-  			graduate_school as graduateSchool
+  			graduate_school as graduateSchool,
+  			is_default as isDefault
   		FROM wx_course_apply_info
   		WHERE status = 1 and apply_info_code = #{applyCode,jdbcType=VARCHAR}
   </select>

@@ -31,57 +31,193 @@ import com.yeepay.g3.yop.sdk.api.StdApi;
 @Service
 public class YeepayService {
 
-	@Value("${yeepay.parentMerchantNo}")
+	
 	private static String parentMerchantNo;
 	
-	@Value("${yeepay.merchantNo}")
+	
 	private static String merchantNo;
 	
-	@Value("${yeepay.baseURL}")
+	
 	private static String baseURL;
 	
-	@Value("${yeepay.tradeOrderURI}")
+	
 	private static String tradeOrderURI;
 	
-	@Value("${yeepay.refundURI}")
+	
 	private static String refundURI;
 	
-	@Value("${yeepay.orderQueryURI}")
+	
 	private static String orderQueryURI;
 	
-	@Value("${yeepay.refundQueryURI}")
+	
 	private static String refundQueryURI;
 	
-	@Value("${yeepay.multiOrderQueryURI}")
+	
 	private static String multiOrderQueryURI;
 	
-	@Value("${yeepay.orderCloseURI}")
+	
 	private static String orderCloseURI;
 	
-	@Value("${yeepay.divideOrderURI}")
+	
 	private static String divideOrderURI;
 	
-	@Value("${yeepay.divideOrderQueryURI}")
+	
 	private static String divideOrderQueryURI;
 	
-	@Value("${yeepay.fullSettleURI}")
+	
 	private static String fullSettleURI;
 	
-	@Value("${yeepay.certOrderURI}")
+	
 	private static String certOrderURI;
 	
-	@Value("${yeepay.certOrderQueryURI}")
 	private static String certOrderQueryURI;
 	
-	@Value("${yeepay.CASHIER}")
+	
 	private static String CASHIERI;
 	
-	@Value("${yeepay.APICASHIER}")
+	
 	private static String APICASHIERI;
 	
-	@Value("${yeepay.privatekey}")
+	
 	private static String privatekey;
 	
+	
+	public static String getParentMerchantNo() {
+		return parentMerchantNo;
+	}
+	
+	@Value("${yeepay.parentMerchantNo}")
+	public  void setParentMerchantNo(String parentMerchantNo) {
+		this.parentMerchantNo = parentMerchantNo;
+	}
+
+	public static String getMerchantNo() {
+		return merchantNo;
+	}
+	@Value("${yeepay.merchantNo}")
+	public  void setMerchantNo(String merchantNo) {
+		this.merchantNo = merchantNo;
+	}
+
+	public static String getBaseURL() {
+		return baseURL;
+	}
+	@Value("${yeepay.baseURL}")
+	public  void setBaseURL(String baseURL) {
+		this.baseURL = baseURL;
+	}
+
+	public static String getTradeOrderURI() {
+		return tradeOrderURI;
+	}
+	@Value("${yeepay.tradeOrderURI}")
+	public  void setTradeOrderURI(String tradeOrderURI) {
+		this.tradeOrderURI = tradeOrderURI;
+	}
+
+	public static String getRefundURI() {
+		return refundURI;
+	}
+	@Value("${yeepay.refundURI}")
+	public  void setRefundURI(String refundURI) {
+		this.refundURI = refundURI;
+	}
+
+	public static String getOrderQueryURI() {
+		return orderQueryURI;
+	}
+	@Value("${yeepay.orderQueryURI}")
+	public  void setOrderQueryURI(String orderQueryURI) {
+		this.orderQueryURI = orderQueryURI;
+	}
+
+	public static String getRefundQueryURI() {
+		return refundQueryURI;
+	}
+	@Value("${yeepay.refundQueryURI}")
+	public  void setRefundQueryURI(String refundQueryURI) {
+		this.refundQueryURI = refundQueryURI;
+	}
+
+	public static String getMultiOrderQueryURI() {
+		return multiOrderQueryURI;
+	}
+	@Value("${yeepay.multiOrderQueryURI}")
+	public  void setMultiOrderQueryURI(String multiOrderQueryURI) {
+		this.multiOrderQueryURI = multiOrderQueryURI;
+	}
+
+	public static String getOrderCloseURI() {
+		return orderCloseURI;
+	}
+	@Value("${yeepay.orderCloseURI}")
+	public  void setOrderCloseURI(String orderCloseURI) {
+		this.orderCloseURI = orderCloseURI;
+	}
+
+	public static String getDivideOrderURI() {
+		return divideOrderURI;
+	}
+	@Value("${yeepay.divideOrderURI}")
+	public  void setDivideOrderURI(String divideOrderURI) {
+		this.divideOrderURI = divideOrderURI;
+	}
+
+	public static String getDivideOrderQueryURI() {
+		return divideOrderQueryURI;
+	}
+	@Value("${yeepay.divideOrderQueryURI}")
+	public  void setDivideOrderQueryURI(String divideOrderQueryURI) {
+		this.divideOrderQueryURI = divideOrderQueryURI;
+	}
+
+	public static String getFullSettleURI() {
+		return fullSettleURI;
+	}
+	@Value("${yeepay.fullSettleURI}")
+	public  void setFullSettleURI(String fullSettleURI) {
+		this.fullSettleURI = fullSettleURI;
+	}
+
+	public static String getCertOrderURI() {
+		return certOrderURI;
+	}
+	@Value("${yeepay.certOrderURI}")
+	public  void setCertOrderURI(String certOrderURI) {
+		this.certOrderURI = certOrderURI;
+	}
+
+	public static String getCertOrderQueryURI() {
+		return certOrderQueryURI;
+	}
+	@Value("${yeepay.certOrderQueryURI}")
+	public  void setCertOrderQueryURI(String certOrderQueryURI) {
+		this.certOrderQueryURI = certOrderQueryURI;
+	}
+
+	public static String getCASHIERI() {
+		return CASHIERI;
+	}
+	@Value("${yeepay.CASHIER}")
+	public  void setCASHIERI(String cASHIERI) {
+		this.CASHIERI = cASHIERI;
+	}
+
+	public static String getAPICASHIERI() {
+		return APICASHIERI;
+	}
+	@Value("${yeepay.APICASHIER}")
+	public  void setAPICASHIERI(String aPICASHIERI) {
+		this.APICASHIERI = aPICASHIERI;
+	}
+
+	public static String getPrivatekey() {
+		return privatekey;
+	}
+	@Value("${yeepay.privatekey}")
+	public void setPrivatekey(String privatekey) {
+		this.privatekey = privatekey;
+	}
 	
 	//yop接口应用URI地址
 	public static final String BASE_URL = "baseURL";

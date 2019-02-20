@@ -64,13 +64,13 @@ public class ClientPayService {
 	private String notifyUrl;
 	
 	@Value("${yeepay.tradeOrderURI}")
-	private static String tradeOrderURI;
+	private  String tradeOrderURI;
 	
 	@Value("${yeepay.parentMerchantNo}")
-	private static String parentMerchantNo;
+	private  String parentMerchantNo;
 	
 	@Value("${yeepay.merchantNo}")
-	private static String merchantNo;
+	private  String merchantNo;
 	
 	@Autowired
 	private ClientPayMapper ppm;

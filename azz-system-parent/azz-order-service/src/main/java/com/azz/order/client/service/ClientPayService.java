@@ -63,14 +63,6 @@ public class ClientPayService {
 	@Value("${yeepay.notify-url}")
 	private String notifyUrl;
 	
-	@Value("${yeepay.tradeOrderURI}")
-	private  String tradeOrderURI;
-	
-	@Value("${yeepay.parentMerchantNo}")
-	private  String parentMerchantNo;
-	
-	@Value("${yeepay.merchantNo}")
-	private  String merchantNo;
 	
 	@Autowired
 	private ClientPayMapper ppm;
@@ -129,7 +121,7 @@ public class ClientPayService {
 		
 		Map<String, String> result = new HashMap<>();
 		try {
-			result = YeepayService.requestYOP(params, tradeOrderURI, YeepayService.TRADEORDER);
+			result = YeepayService.requestYOP(params, YeepayService.TRADEORDER_URL, YeepayService.TRADEORDER);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -141,8 +133,8 @@ public class ClientPayService {
 			log.info("支付返回消息----->"+message);
 		}
 		
-		params.put("parentMerchantNo", parentMerchantNo);
-		params.put("merchantNo", merchantNo);
+		params.put("parentMerchantNo", YeepayService.getParentMerchantNo());
+		params.put("merchantNo", YeepayService.getMerchantNo());
 		params.put("orderId", order.getOrderId());
 		params.put("token", token);
 		params.put("timestamp", order.getTimestamp());

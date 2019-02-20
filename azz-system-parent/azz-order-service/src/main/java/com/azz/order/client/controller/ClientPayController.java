@@ -43,7 +43,7 @@ public class ClientPayController {
 	 * @author 刘建麟  2018年11月26日 下午3:14:49
 	 */
 	@RequestMapping(value="submitOrderPay",method=RequestMethod.POST)
-	public JsonResult<PaymentInfo> submitOrderPay(@RequestBody PageOrder po){
+	public JsonResult<String> submitOrderPay(@RequestBody PageOrder po){
 		return pps.submitOrderPay(po);
 	} 
 	
@@ -64,7 +64,7 @@ public class ClientPayController {
 	 * @return
 	 */
 	@RequestMapping("payNotify")
-	public JsonResult<RetBean> payNotify(@RequestParam("reqStr") String reqStr) {
+	public JsonResult<String> payNotify(@RequestParam("reqStr") String reqStr) {
 		return pps.payNotify(reqStr);
 	}
 	

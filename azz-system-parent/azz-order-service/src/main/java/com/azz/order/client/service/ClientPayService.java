@@ -12,12 +12,16 @@ package com.azz.order.client.service;
  * @author 刘建麟  2018年11月26日 下午3:15:10
  */
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +30,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
@@ -36,64 +39,38 @@ import com.azz.core.constants.ClientConstants.ClientOrderStatus;
 import com.azz.core.constants.ClientConstants.PayMethod;
 import com.azz.core.constants.ClientConstants.PayStatus;
 import com.azz.core.constants.PayConstants;
-import com.azz.core.constants.PayConstants.PayCode;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.order.api.client.ClientOrderService;
 import com.azz.order.api.client.SelectionService;
 import com.azz.order.client.mapper.ClientPayMapper;
 import com.azz.order.client.pojo.ClientPay;
-import com.azz.order.client.pojo.PayDataBean;
-import com.azz.order.client.pojo.PaymentInfo;
-import com.azz.order.client.pojo.RetBean;
 import com.azz.order.client.pojo.bo.OrderInfo;
 import com.azz.order.client.pojo.bo.PageOrder;
 import com.azz.order.client.pojo.bo.PayList;
 import com.azz.order.client.pojo.vo.ClientOrderDetail;
 import com.azz.order.client.pojo.vo.ClientOrderInfo;
-import com.azz.order.selection.bo.CallBackParam;
-import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.DateUtils;
 import com.azz.util.DecimalUtil;
 import com.azz.util.LLPayUtil;
 import com.github.pagehelper.PageHelper;
+
 
 @Service
 public class ClientPayService {
 	
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	
-	@Value("${llpay.version}")
-	private String version;
-	
-	@Value("${llpay.oid-partner}")
-	private String oidPartner;
-	
-	@Value("${llpay.sign-type}")
-	private String signType;
-	
-	@Value("${llpay.busi-partner}")
-	private String busiPartner;
-	
-	@Value("${llpay.notify-url}")
+	@Value("${yeepay.notify-url}")
 	private String notifyUrl;
 	
-	@Value("${llpay.url-return}")
-	private String urlReturn;
+	@Value("${yeepay.tradeOrderURI}")
+	private static String tradeOrderURI;
 	
-	@Value("${llpay.md5-key}")
-	private String md5Key;
+	@Value("${yeepay.parentMerchantNo}")
+	private static String parentMerchantNo;
 	
-	@Value("${llpay.trader-pri-key}")
-	private String traderPriKey;
-	
-	@Value("${llpay.order-pay-effective-time}")
-	private String orderPayEffectiveTime;
-	
-	@Value("${llpay.pay-url}")
-	private String payUrl;
-	
-	@Value("${llpay.yt-pub-key}")
-	private String ytPubKey;
+	@Value("${yeepay.merchantNo}")
+	private static String merchantNo;
 	
 	@Autowired
 	private ClientPayMapper ppm;
@@ -102,13 +79,10 @@ public class ClientPayService {
 	private ClientOrderService cos;
 
 	@Autowired
-	private DbSequenceService rss;
-
-	@Autowired
 	private SelectionService selectService;
 
 	@Transactional
-	public JsonResult<PaymentInfo> submitOrderPay(@RequestBody PageOrder po) {
+	public JsonResult<String> submitOrderPay(@RequestBody PageOrder po) {
 		List<ClientPay> selectOrder = ppm.selectOrder(po.getOrderCode());
 		if(!selectOrder.isEmpty() && selectOrder.size() > 1) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "支付订单不唯一");
@@ -133,58 +107,86 @@ public class ClientPayService {
 		}
 		//创建订单
 		OrderInfo order = createOrder(orderInfo);
+		if(null == order) {
+			return null;
+		}
+		String goodsParamExt = "{\"goodsName\":\""+order.getGoodsName()+"\",\"goodsDesc\":\""+order.getGoodsDesc()+"\"}";
+		String industryParamExt = "{\"bizSource\":\""+""+"\",\"bizEntity\":\""+""+"\"}";
+		String ext = "{\"appId\":\""+""+"\",\"openId\":\""+""+"\",\"clientId\":\""+""+"\"}";
+		Map<String, String> params = new HashMap<>();
+		params.put("orderId", order.getOrderId()); //商户订单编号
+		params.put("orderAmount", order.getOrderAmount()); //订单金额
+		//params.put("timeoutExpress", timeoutExpress); //订单有效期  可以不传
+		params.put("requestDate", order.getRequestDate()); //请求时间
+		//params.put("redirectUrl", redirectUrl); //页面回调地址 可以不传
+		params.put("notifyUrl", notifyUrl); //回调地址
+		params.put("goodsParamExt", goodsParamExt);
+		//params.put("paymentParamExt", paymentParamExt);
+		params.put("industryParamExt", industryParamExt);
+		//params.put("memo", memo);
+		//params.put("riskParamExt", riskParamExt);
+		//params.put("csUrl", csUrl);
+		
+		Map<String, String> result = new HashMap<>();
+		try {
+			result = YeepayService.requestYOP(params, tradeOrderURI, YeepayService.TRADEORDER);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		String token = result.get("token");
+		String codeRe = result.get("code");
+		if(!"OPR00000".equals(codeRe)){
+			String message = result.get("message");
+			log.info("支付返回消息----->"+message);
+		}
+		
+		params.put("parentMerchantNo", parentMerchantNo);
+		params.put("merchantNo", merchantNo);
+		params.put("orderId", order.getOrderId());
+		params.put("token", token);
+		params.put("timestamp", order.getTimestamp());
+		//params.put("directPayType", directPayType);
+		//params.put("cardType", cardType);
+		params.put("userNo", order.getUserNo());
+		params.put("userType", order.getUserType());
+		params.put("ext", ext);
+		
+		String url = "";
+		try {
+			url = YeepayService.getUrl(params);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		System.out.println("url-------->"+url);
 		//构造支付请求对象
-		PaymentInfo payInfo = new PaymentInfo();
-		payInfo.setVersion(version);
-		payInfo.setOid_partner(oidPartner);
-		payInfo.setUser_id(orderInfo.getClientUserCode());
-		payInfo.setSign_type(signType);
-		payInfo.setBusi_partner(busiPartner);
-		payInfo.setNo_order(order.getNo_order());
-		payInfo.setDt_order(order.getDt_order());
-		//payInfo.setName_goods(order.getName_goods());
-		payInfo.setName_goods("PLC零件");
-		payInfo.setInfo_order(order.getInfo_order());
-		payInfo.setMoney_order(order.getMoney_order());
-		payInfo.setNotify_url(notifyUrl);
-		payInfo.setUrl_return(urlReturn);
-		payInfo.setUserreq_ip(po.getClientIp());
-		payInfo.setUrl_order("");
-		payInfo.setValid_order(orderPayEffectiveTime);// 单位分钟，可以为空，默认7天
-		payInfo.setTimestamp(LLPayUtil.getCurrentDateTimeStr());
-		payInfo.setRisk_item(createRiskItem());
-        // 加签名
-        String sign = LLPayUtil.addSign(JSON.parseObject(JSON
-                .toJSONString(payInfo)), traderPriKey,
-                md5Key);
-        payInfo.setSign(sign);
-        payInfo.setReq_url(payUrl);
-        log.info("连连支付请求参数["+payInfo+"]");
+		
 		ClientPay clientPay = new ClientPay();
 		clientPay.setUserId(orderInfo.getClientUserCode());
 		clientPay.setOrderMoney(orderInfo.getGrandTotal().toPlainString());
-		clientPay.setUserreqIp(payInfo.getUserreq_ip());
-		clientPay.setGoodsName(payInfo.getName_goods());
-		clientPay.setBusiPartner(Integer.parseInt(payInfo.getBusi_partner()));
+		//clientPay.setUserreqIp(payInfo.getUserreq_ip());
+		//clientPay.setGoodsName(payInfo.getName_goods());
+		//clientPay.setBusiPartner(Integer.parseInt(payInfo.getBusi_partner()));
 		clientPay.setOrderCustomerPhone(Long.parseLong(orderInfo.getClientPhoneNumber()));
 		//clientPay.setOrderChannelMoney();//渠道费
 		clientPay.setOrderNumber(orderInfo.getClientOrderCode());
 		clientPay.setOrderMethod((byte) PayMethod.ONLINE.getValue());// 默认线上
-		clientPay.setOrderTime(Long.parseLong(payInfo.getDt_order()));
+		//clientPay.setOrderTime(Long.parseLong(payInfo.getDt_order()));
 		clientPay.setOrderStatus((byte) PayStatus.NOT_PAID.getValue());// 支付状态 默认待支付
-		clientPay.setPayNumber(payInfo.getNo_order()); //订单流水号
+		//clientPay.setPayNumber(payInfo.getNo_order()); //订单流水号
 		clientPay.setPayInstruation(PayConstants.PAYMENT_INSTITUTION);//支付机构
 		int i = ppm.insertPay(clientPay);
 		if(i != 1) {
 			return null;
 		}
-		return new JsonResult<>(payInfo);
+		return JsonResult.successJsonResult();
 	}
 
 	
-	public JsonResult<RetBean> payNotify(String reqStr) {
+	public JsonResult<String> payNotify(String reqStr) {
 		log.info("进入支付异步处理......");
-		RetBean retBean = new RetBean();
+		return null;
+		/*RetBean retBean = new RetBean();
 		if (LLPayUtil.isnull(reqStr)){
             retBean.setRet_code(PayCode.FAILD.getCode());
             retBean.setRet_msg(PayCode.FAILD.getDesc());
@@ -245,7 +247,7 @@ public class ClientPayService {
         	retBean.setRet_code(PayCode.FAILD.getCode());
             retBean.setRet_msg(PayCode.FAILD.getDesc());
             return new JsonResult<>(retBean);
-        }
+        }*/
 	}
 	/**
 	 * <p>
@@ -300,13 +302,20 @@ public class ClientPayService {
 	 * @author 刘建麟  2018年12月17日 下午2:05:32
 	 */
 	private OrderInfo createOrder(ClientOrderInfo corderInfo){
+		if(null == corderInfo || StringUtils.isBlank(corderInfo.getClientUserCode())) {
+			return null;
+		}
 		OrderInfo orderInfo = new OrderInfo();
-	    orderInfo.setNo_order(LLPayUtil.getCurrentDateTimeStr());
-	    orderInfo.setDt_order(LLPayUtil.getCurrentDateTimeStr());
-	    orderInfo.setMoney_order(corderInfo.getGrandTotal().toPlainString());
-	    orderInfo.setName_goods("");
-	    orderInfo.setInfo_order("用户购买");
-	    return orderInfo;
+		orderInfo.setOrderId(LLPayUtil.getCurrentDateTimeStr());//订单编号
+		orderInfo.setTimestamp(LLPayUtil.getCurrentDateTimeStr());//订单时间戳
+		orderInfo.setOrderAmount(corderInfo.getGrandTotal().toPlainString());//订单金额
+		orderInfo.setGoodsName("测试购买");//TODO fix
+		orderInfo.setGoodsDesc("");
+		orderInfo.setRequestDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));//下单时间
+	    orderInfo.setUserType("USER_ID"); //用户标示类型 默认USER_ID
+		orderInfo.setUserNo(corderInfo.getClientUserCode());//用户CODE
+	    log.info("订单创建成功----->"+orderInfo);
+		return orderInfo;
 	} 
 	
 	

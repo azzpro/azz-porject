@@ -11,60 +11,68 @@ import java.io.Serializable;
 */
 public class OrderInfo implements Serializable{
     private static final long serialVersionUID = 1L;
-    private String            no_order;             // 商户唯一订单号
-    private String            dt_order;             // 商户订单时间
-    private String            name_goods;           // 商品名称
-    private String            info_order;           // 订单描述
-    private String            money_order;          // 交易金额 单位为RMB-元
+    private String            orderId;             // 商户唯一订单号
+    private String            requestDate;             // 商户下单时间
+    private String            goodsName;           // 商品名称
+    private String            goodsDesc;           // 商品描述
+    private String            orderAmount;          // 交易金额 单位为RMB-元
+    private String 			  userNo;
+    private String            userType;
+    private String            timestamp;
+	public String getOrderId() {
+		return orderId;
+	}
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+	public String getRequestDate() {
+		return requestDate;
+	}
+	public void setRequestDate(String requestDate) {
+		this.requestDate = requestDate;
+	}
+	public String getGoodsName() {
+		return goodsName;
+	}
+	public void setGoodsName(String goodsName) {
+		this.goodsName = goodsName;
+	}
+	public String getGoodsDesc() {
+		return goodsDesc;
+	}
+	public void setGoodsDesc(String goodsDesc) {
+		this.goodsDesc = goodsDesc;
+	}
+	public String getOrderAmount() {
+		return orderAmount;
+	}
+	public void setOrderAmount(String orderAmount) {
+		this.orderAmount = orderAmount;
+	}
+	public String getUserNo() {
+		return userNo;
+	}
+	public void setUserNo(String userNo) {
+		this.userNo = userNo;
+	}
+	public String getUserType() {
+		return userType;
+	}
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
+	public String getTimestamp() {
+		return timestamp;
+	}
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
+	}
+	@Override
+	public String toString() {
+		return "OrderInfo [orderId=" + orderId + ", requestDate=" + requestDate + ", goodsName=" + goodsName
+				+ ", goodsDesc=" + goodsDesc + ", orderAmount=" + orderAmount + ", userNo=" + userNo + ", userType="
+				+ userType + ", timestamp=" + timestamp + "]";
+	}
 
-    public String getNo_order()
-    {
-        return no_order;
-    }
-
-    public void setNo_order(String no_order)
-    {
-        this.no_order = no_order;
-    }
-
-    public String getDt_order()
-    {
-        return dt_order;
-    }
-
-    public void setDt_order(String dt_order)
-    {
-        this.dt_order = dt_order;
-    }
-
-    public String getName_goods()
-    {
-        return name_goods;
-    }
-
-    public void setName_goods(String name_goods)
-    {
-        this.name_goods = name_goods;
-    }
-
-    public String getInfo_order()
-    {
-        return info_order;
-    }
-
-    public void setInfo_order(String info_order)
-    {
-        this.info_order = info_order;
-    }
-
-    public String getMoney_order()
-    {
-        return money_order;
-    }
-
-    public void setMoney_order(String money_order)
-    {
-        this.money_order = money_order;
-    }
 
 }

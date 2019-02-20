@@ -39,7 +39,7 @@ public class PayController {
 	private ClientPayService pfps;
 	
 	@RequestMapping("submitOrderPay")
-	public JsonResult<PaymentInfo> submitOrderPay(HttpServletRequest request,PageOrder po){
+	public JsonResult<String> submitOrderPay(HttpServletRequest request,PageOrder po){
 		po.setClientIp(LLPayUtil.getIpAddr(request));
 		return pfps.submitOrderPay(po);
 	}
@@ -50,7 +50,7 @@ public class PayController {
 		log.info("进入支付回调接口");
 		String reqStr = LLPayUtil.readReqStr(request);
 		log.info("回调参数["+reqStr+"]");
-		JsonResult<RetBean> payNotify = pfps.payNotify(reqStr);
+		JsonResult<String> payNotify = pfps.payNotify(reqStr);
 		response.getWriter().write(JSON.toJSONString(payNotify.getData()));
 		response.getWriter().flush();
 			

@@ -338,6 +338,17 @@
     and phone_number = #{phoneNumber}
   </select>
   
+  <select id="getClientUserByOpenid" parameterType="string" resultMap="BaseResultMap">
+    SELECT
+		cu.*
+	FROM
+		client_wx_user cwu
+	JOIN client_user cu ON cu.client_user_code = cwu.user_code
+	WHERE
+		cu.`status` = 1
+	AND cwu.openid = #{openid}
+  </select>
+  
   <select id="getClientUserByClientUserCode" parameterType="string" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

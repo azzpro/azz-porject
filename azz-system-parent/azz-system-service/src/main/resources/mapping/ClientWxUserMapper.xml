@@ -26,4 +26,18 @@
 	<update id="updateAvatarUrlAndNickname">
 		update client_wx_user set avatar_url = #{url},nick_name = #{name} where openid = #{id}
 	</update>
+	
+	<insert id="insertUser" parameterType="com.azz.system.bo.AddClientWxUserParam">
+		insert into client_wx_user (openid, user_code) values (#{openid},#{userCode})
+	</insert>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    	delete from client_wx_user
+    	where openid = #{openid}
+  	</delete>
+  
+  	<insert id="insertWxBindingRecord" parameterType="com.azz.system.bo.AddWxBindingRecordParam">
+		insert into wx_user_binding_record (openid, user_code,binding_time)
+		values ( #{openid}, #{userCode}, #{bindingTime})
+	</insert>
 </mapper>

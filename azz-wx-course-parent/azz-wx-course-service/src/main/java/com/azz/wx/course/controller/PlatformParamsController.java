@@ -9,8 +9,6 @@ package com.azz.wx.course.controller;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,10 +30,8 @@ import com.azz.wx.course.service.ParameterService;
  */
 @RestController
 @RequestMapping("/azz/api/platform/course")
-public class ParamsController {
+public class PlatformParamsController {
 
-	private final Logger LOG = LoggerFactory.getLogger(getClass());
-	
 	@Autowired
 	private ParameterService paramsService;
 	

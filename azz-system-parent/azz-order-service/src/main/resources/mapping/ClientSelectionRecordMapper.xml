@@ -238,7 +238,8 @@
   		count(1)
 	FROM
 		client_selection_record csr
-	where csr.product_code = #{productCode}
+	where csr.client_user_id = #{clientUserId}
+	and csr.product_code = #{productCode}
 	and csr.product_price_id = #{productPriceId}
 	and csr.status != 0 
   </select>

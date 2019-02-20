@@ -65,6 +65,7 @@ import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.ClientConstants.PersonalEditType;
 import com.azz.core.constants.SmsConstants;
 import com.azz.core.constants.UserConstants;
+import com.azz.core.constants.WxCourseConstants;
 import com.azz.core.constants.SmsConstants.SmsCode;
 import com.azz.core.constants.UserConstants.ClientType;
 import com.azz.core.exception.BaseException;
@@ -139,6 +140,7 @@ public class ClientService {
 
 	@Autowired
 	private StringRedisTemplate redis;
+	
 	/**
 	 * 
 	 * <p>
@@ -151,6 +153,17 @@ public class ClientService {
 	 */
 	public JsonResult<String> loginAuth(@RequestBody LoginParam param) {
 		String phoneNumber = param.getPhoneNumber();
+		// 来自于微信课程登录
+		if(phoneNumber.startsWith(WxCourseConstants.WX_COURSE_LOGIN_USER_NAME_PREFIX)) {
+			// 截取并获取openid
+			String openid = phoneNumber.substring(WxCourseConstants.WX_COURSE_LOGIN_USER_NAME_PREFIX.length());
+			ClientUser clientUser = clientUserMapper.getClientUserByOpenid(openid);
+			if(clientUser == null) {// 若查不到用户信息，说明此用户未绑定过手机，即非客户端用户
+				throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_NOT_BING_USER);
+			}
+			return JsonResult.successJsonResult();
+		}
+		// 其他登录：1.客户端手机号密码登录  2.客户端扫码登录
 		ClientUser clientUser = clientUserMapper.getClientUserByPhoneNumber(phoneNumber);
 		if (clientUser == null) {// 无效用户
 			throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "请输入正确的账号或密码");
@@ -197,6 +210,24 @@ public class ClientService {
 		info.setClientUserPermissions(clientUserPermissions);
 		info.setMenus(generateMenuTree(companyCode, phoneNumber));
 		return JsonResult.successJsonResult(info);
+	}
+	
+	/**
+	 * 
+	 * <p>
+	 * 获取登录客户的用户信息
+	 * </p>
+	 * 
+	 * @param openid
+	 * @return
+	 * @author 黄智聪 2018年10月23日 下午4:23:06
+	 */
+	public JsonResult<LoginClientUserInfo> getLoginClientUserInfoByOpenid(String openid) {
+		ClientUser clientUser = clientUserMapper.getClientUserByOpenid(openid);
+		if(clientUser == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "用户信息不存在");
+		}
+		return this.getLoginClientUserInfoByPhoneNumber(clientUser.getPhoneNumber());
 	}
 
 	/**

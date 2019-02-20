@@ -98,6 +98,12 @@ public class WxCourseOrder implements Serializable {
      */
     private String remark;
 
+    private String openid;
+    
+    private String nickName;
+    
+    private String wxBindingPhone;
+
     /**
      * 创建人
      *
@@ -618,4 +624,28 @@ public class WxCourseOrder implements Serializable {
         sb.append("]");
         return sb.toString();
     }
+
+	public String getOpenid() {
+		return openid;
+	}
+
+	public void setOpenid(String openid) {
+		this.openid = openid;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public String getWxBindingPhone() {
+		return wxBindingPhone;
+	}
+
+	public void setWxBindingPhone(String wxBindingPhone) {
+		this.wxBindingPhone = wxBindingPhone;
+	}
 }

@@ -435,6 +435,7 @@ public class ClientOrderService {
 					.id(id)
 					.orderStatusId(ClientOrderStatus.CLOSED.getValue())
 					.modifyTime(nowDate)
+					.remark("6小时未支付，客户订单状态改为已关闭")
 					.build(); 
 			clientOrderPersonalMapper.updateByPrimaryKeySelective(clientOrderRecord);
 			// 新增客户订单状态变更记录

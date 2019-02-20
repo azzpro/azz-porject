@@ -83,6 +83,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.azz</groupId>
+			<artifactId>azz-wx-course-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.azz</groupId>
 			<artifactId>azz-system-api</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

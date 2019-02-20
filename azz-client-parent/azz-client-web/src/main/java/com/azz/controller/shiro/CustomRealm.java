@@ -47,18 +47,18 @@ public class CustomRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken)
 	    throws AuthenticationException {
-	UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
-	String phoneNumber = token.getUsername();
-	String password = new String((char[]) token.getCredentials());
-	LoginParam param = new LoginParam(phoneNumber, password);
-	JsonResult<String> jr = clientService.loginAuth(param);
-	if(jr.getCode() != SystemErrorCode.SUCCESS.getCode()) {
-	    AuthenticationException authException = new AuthenticationException();
-	    authException.addSuppressed(new SuppressedException(jr.getCode(),jr.getMsg()));
-	    throw authException;
-	}
-	SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(token.getPrincipal(), password, getName());
-	return info;
+		UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
+		String phoneNumber = token.getUsername();
+		String password = new String((char[]) token.getCredentials());
+		LoginParam param = new LoginParam(phoneNumber, password);
+		JsonResult<String> jr = clientService.loginAuth(param);
+		if(jr.getCode() != SystemErrorCode.SUCCESS.getCode()) {
+		    AuthenticationException authException = new AuthenticationException();
+		    authException.addSuppressed(new SuppressedException(jr.getCode(),jr.getMsg()));
+		    throw authException;
+		}
+		SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(token.getPrincipal(), password, getName());
+		return info;
     }
 
     /**

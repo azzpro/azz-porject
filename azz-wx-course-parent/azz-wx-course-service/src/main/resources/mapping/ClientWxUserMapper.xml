@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.wx.course.mapper.ClientWxUserMapper">
+	<resultMap id="BaseResultMap" type="com.azz.wx.course.pojo.ClientWxUser">
+		<result column="id" property="id" />
+		<result column="openid" property="openid" />
+		<result column="unionid" property="unionid" />
+		<result column="access_token" property="access_token" />
+		<result column="expires_in" property="expires_in" />
+		<result column="refresh_token" property="refresh_token" />
+		<result column="scope" property="scope" />
+		<result column="user_code" property="userCode" />
+		<result column="avatar_url" property="avatarUrl" />
+		<result column="nick_name" property="nickName" />
+	</resultMap>
+	<insert id="insert" parameterType="com.azz.wx.course.pojo.ClientWxUser">
+		insert into client_wx_user (openid, unionid,access_token,expires_in,refresh_token,scope,user_code,avatar_url,nick_name)
+		 values ( #{openid}, #{unionid}, #{access_token},#{expires_in},#{refresh_token},#{scope},#{userCode},#{avatarUrl},#{nickName})
+	</insert>
+
+	<select id="selectWxUserByOpenid" resultMap="BaseResultMap" parameterType="String">
+		select id,openid,unionid,access_token,expires_in,refresh_token,scope,user_code,avatar_url,nick_name from client_wx_user
+		where openid = #{openid}
+	</select>
+	
+	<insert id="insertUser" parameterType="com.azz.wx.course.pojo.bo.AddClientWxUserParam">
+		insert into client_wx_user (openid, user_code) values (#{openid},#{userCode})
+	</insert>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    	delete from client_wx_user
+    	where openid = #{openid}
+  	</delete>
+  
+  	<insert id="insertWxBindingRecord" parameterType="com.azz.wx.course.pojo.bo.AddWxBindingRecordParam">
+		insert into wx_user_binding_record (openid, user_code,binding_time)
+		values ( #{openid}, #{userCode}, #{bindingTime})
+	</insert>
+</mapper>

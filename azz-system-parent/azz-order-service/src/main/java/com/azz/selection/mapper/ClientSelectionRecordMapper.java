@@ -36,13 +36,14 @@ public interface ClientSelectionRecordMapper {
     
     /**
      * 
-     * <p>根据产品编码、价格id查询选型记录的个数</p>
+     * <p>根据产品编码、价格id查询个人选型记录的个数</p>
      * @param productCode
      * @param productPriceId
      * @return
      * @author 黄智聪  2018年11月29日 下午7:45:03
+     * @param clientUserId 
      */
-    int countSelectionRecordByProductCodeAndProductPriceId(@Param("productCode")String productCode, @Param("productPriceId")Long productPriceId);
+    int countSelectionRecordByProductCodeAndProductPriceId(@Param("clientUserId")Long clientUserId, @Param("productCode")String productCode, @Param("productPriceId")Long productPriceId);
     
     /**
      * 

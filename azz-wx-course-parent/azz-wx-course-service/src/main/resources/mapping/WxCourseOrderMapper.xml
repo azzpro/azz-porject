@@ -13,6 +13,9 @@
     <result column="payment_type" jdbcType="INTEGER" property="paymentType" />
     <result column="invoice_status" jdbcType="INTEGER" property="invoiceStatus" />
     <result column="confirm_person" jdbcType="VARCHAR" property="confirmPerson" />
+    <result column="openid" jdbcType="VARCHAR" property="openid" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="wx_binding_phone" jdbcType="VARCHAR" property="wxBindingPhone" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
@@ -22,7 +25,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     id, order_code, order_creator, order_status_id, apply_info_code, grand_total, payment_method, 
-    payment_status, payment_type, invoice_status, confirm_person, status, remark, creator, 
+    payment_status, payment_type, invoice_status, confirm_person, status, remark, openid, nick_name, wx_binding_phone, creator, 
     create_time, modifier, modify_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -40,14 +43,14 @@
       order_status_id, apply_info_code, grand_total, 
       payment_method, payment_status, payment_type, 
       invoice_status, confirm_person, status, 
-      remark, creator, create_time, 
+      remark, openid, nick_name, wx_binding_phone, creator, create_time, 
       modifier, modify_time)
     values (#{id,jdbcType=BIGINT}, #{orderCode,jdbcType=VARCHAR}, #{orderCreator,jdbcType=VARCHAR}, 
       #{orderStatusId,jdbcType=INTEGER}, #{applyInfoCode,jdbcType=VARCHAR}, #{grandTotal,jdbcType=DECIMAL}, 
       #{paymentMethod,jdbcType=INTEGER}, #{paymentStatus,jdbcType=INTEGER}, #{paymentType,jdbcType=INTEGER}, 
       #{invoiceStatus,jdbcType=INTEGER}, #{confirmPerson,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{remark,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
+      #{remark,jdbcType=VARCHAR}, #{openid,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{wxBindingPhone,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.azz.wx.course.pojo.WxCourseOrder">
     insert into wx_course_order
@@ -90,6 +93,15 @@
       </if>
       <if test="remark != null">
         remark,
+      </if>
+      <if test="openid != null">
+        openid,
+      </if>
+      <if test="nickName != null">
+        nick_name,
+      </if>
+      <if test="wxBindingPhone != null">
+        wx_binding_phone,
       </if>
       <if test="creator != null">
         creator,
@@ -144,6 +156,15 @@
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="openid != null">
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null">
+       #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="wxBindingPhone != null">
+       #{wxBindingPhone,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null">
         #{creator,jdbcType=VARCHAR},
       </if>
@@ -197,6 +218,15 @@
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="openid != null">
+        openid = #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null">
+       nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="wxBindingPhone != null">
+       wx_binding_phone = #{wxBindingPhone,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null">
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -248,6 +278,15 @@
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="openid != null">
+        openid = #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null">
+       nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="wxBindingPhone != null">
+       wx_binding_phone = #{wxBindingPhone,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null">
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -277,6 +316,9 @@
       confirm_person = #{confirmPerson,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
+      openid = #{openid,jdbcType=VARCHAR},
+      nick_name = #{nickName,jdbcType=VARCHAR},
+      wx_binding_phone = #{wxBindingPhone,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modifier = #{modifier,jdbcType=VARCHAR},
@@ -303,7 +345,8 @@
 		wcoi.start_class_name AS startClassName,
 		wcoi.start_class_time AS startClassTime,
 		wcoi.price AS price,
-		wco. STATUS AS orderStatus
+		wco.order_code AS orderCode,
+		wco.order_status_id AS orderStatus
 	FROM
 		wx_course_order wco
 	JOIN wx_course_order_item wcoi ON wco.order_code = wcoi.order_code
@@ -319,7 +362,7 @@
 		wcoi.start_class_time AS startClassTime,
 		wcoi.price AS price,
 		wco.order_code as orderCode,
-		wco. STATUS AS orderStatus,
+		wco.order_status_id AS orderStatus,
 		wco.create_time as orderTime
 	FROM
 		wx_course_order wco
@@ -342,7 +385,7 @@
 		wc.course_pic_name AS coursePicName,
 		wc.course_pic_url AS coursePicUrl,
 		wco.grand_total AS grandTotal,
-		wco.`status` AS orderStatus,
+		wco.order_status_id AS orderStatus,
 		wco.create_time AS orderTime,
 		wcoi.start_class_code AS startClassCode,
 		wcoi.start_class_name AS startClassName,
@@ -363,6 +406,81 @@
 	JOIN wx_course_apply_info wcai ON wcai.apply_info_code = wco.apply_info_code
 	WHERE
 		wco.order_code = #{orderCode}
+  </select>
+  
+  <select id="getPlatformCourseOrders" parameterType="com.azz.wx.course.pojo.bo.SearchCourseOrderParam" resultType="com.azz.wx.course.pojo.vo.PlatformCourseOrderInfo">
+    SELECT
+		wcoi.course_name AS courseName,
+		wcoi.start_class_code AS startClassCode,
+		wco.grand_total AS grandTotal,
+		wco.order_code AS orderCode,
+		wco.order_status_id AS orderStatus,
+		wco.wx_binding_phone AS phoneNumber,
+		wco.create_time AS orderTime
+	FROM
+		wx_course_order wco
+	JOIN wx_course_order_item wcoi ON wco.order_code = wcoi.order_code
+	JOIN wx_course wc ON wcoi.course_code = wc.course_code
+	<where>
+		wco.status = 1
+	 	<if test="orderStatusId != null">
+			AND wco.order_status_id = #{orderStatusId}
+	 	</if>
+	 	<if test="searchInput != null and searchInput != ''">
+			AND (
+				wco.order_code LIKE CONCAT('%', #{searchInput}, '%')
+			OR wcoi.course_name LIKE CONCAT('%', #{searchInput}, '%') 
+			OR wcoi.start_class_code LIKE CONCAT('%', #{searchInput}, '%') 
+			)
+	 	</if>
+	</where>
+	ORDER BY wco.create_time DESC
+  </select>
+  
+  <select id="getPlatformCourseOrderDetail" parameterType="string" resultType="com.azz.wx.course.pojo.vo.PlatformCourseOrderDetail">
+    SELECT
+		wco.openid AS openid,
+		wco.nick_name AS nickName,
+		wco.wx_binding_phone AS wxBindingPhone,
+		wco.order_code AS orderCode,
+		wcoi.course_name AS courseName,
+		wcoi.classification_name AS classificationName,
+		wcoi.course_params_name AS courseParams,
+		wco.grand_total AS grandTotal,
+		wco.order_status_id AS orderStatus,
+		wco.create_time AS orderTime,
+		wcoi.start_class_code AS startClassCode,
+		wcoi.start_class_name AS startClassName,
+		wcoi.start_class_time AS startClassTime,
+		wcoi.hours AS hours,
+		wcoi.people_number AS peopleNumber,
+		wcoi.price AS price,
+		wcoi.location AS location,
+		wcai.person_name AS personName,
+		wcai.phone_number AS phoneNumber,
+		wcai.email AS email,
+		wcai.company AS company,
+		wcai.graduate_school AS graduateSchool,
+		wce.grade AS grade,
+		wce.evaluation_content AS evaluationContent
+	FROM
+		wx_course_order wco
+	JOIN wx_course_order_item wcoi ON wco.order_code = wcoi.order_code
+	JOIN wx_course wc ON wcoi.course_code = wc.course_code
+	JOIN wx_course_apply_info wcai ON wcai.apply_info_code = wco.apply_info_code
+	LEFT JOIN wx_course_evaluation wce ON wce.order_code = wco.order_code
+	WHERE
+		wco.order_code = #{orderCode}
+  </select>
+  
+  <select id="getSixHoursNotPaidCourseOrderCodes" parameterType="java.lang.Integer" resultType="string">
+    SELECT
+		wco.order_code
+	FROM
+		wx_course_order wco
+	WHERE wco. STATUS != 0
+	AND DATE_ADD(wco.create_time,INTERVAL 6 HOUR) &lt; NOW()  
+	AND wco.order_status_id = #{orderStatusId}
   </select>
   
 </mapper>

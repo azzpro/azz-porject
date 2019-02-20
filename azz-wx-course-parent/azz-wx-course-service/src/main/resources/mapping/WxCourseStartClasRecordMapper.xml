@@ -321,6 +321,7 @@
 	JOIN wx_course wc on wcscr.course_code = wc.course_code
 	JOIN wx_course_brand wcb on wc.brand_code = wcb.brand_code
 	JOIN wx_course_classification wcc on wcc.classification_code = wc.classification_code
+	JOIN wx_course_param_rel wcpr on wcpr.course_code = wc.course_code
 	where 
 		wcscr.start_class_code = #{startClassCode}
   </select>

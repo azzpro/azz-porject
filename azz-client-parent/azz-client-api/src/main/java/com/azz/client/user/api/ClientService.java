@@ -59,6 +59,17 @@ public interface ClientService {
     @RequestMapping("/azz/api/client/getLoginClientUserInfoByPhoneNumber")
     JsonResult<LoginClientUserInfo> getLoginClientUserInfoByPhoneNumber(@RequestParam("phoneNumber")String phoneNumber);
     
+    
+    /**
+     * 
+     * <p>查询登录客户信息</p>
+     * @param phoneNumber
+     * @return
+     * @author 黄智聪  2018年10月29日 上午11:07:27
+     */
+    @RequestMapping("/azz/api/client/getLoginClientUserInfoByOpenid")
+    JsonResult<LoginClientUserInfo> getLoginClientUserInfoByOpenid(@RequestParam("openid")String openid);
+    
     /*    
     @RequestMapping("/sendVerificationCode")
     JsonResult<Long> sendVerificationCode(String phoneNumber);

@@ -346,18 +346,19 @@ public class SelectionService {
 	 */
 	public JsonResult<String> addSelectionRecord(@RequestBody AddSelectionRecordParam param){
 		JSR303ValidateUtils.validate(param);
+		
 		String productCode = param.getProductCode();
 		Long productPriceId = param.getProductPriceId();
 		ProductInfomation productInfo = selectionMapper.getProductInfoByProductCode(productCode, productPriceId);
 		if(productInfo == null) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "产品信息不存在");
 		}
-		// 根据产品编码、价格id查询选型记录的个数
-		int count = clientSelectionRecordMapper.countSelectionRecordByProductCodeAndProductPriceId(productCode, productPriceId);
+		// 根据当前登录人、产品编码、价格id查询选型记录的个数
+		ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getClientUserCode());
+		int count = clientSelectionRecordMapper.countSelectionRecordByProductCodeAndProductPriceId(user.getId(), productCode, productPriceId);
 		if(count > 0) {// 若已存在相同的选型记录，则啥也不做
 			return JsonResult.successJsonResult();
 		}else {// 否则才添加至选型记录
-			ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getClientUserCode());
 			ClientSelectionRecord clientSelectionRecord = ClientSelectionRecord.builder()
 					.clientUserId(user.getId())
 					.createTime(new Date())

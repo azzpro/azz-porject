@@ -27,5 +27,7 @@ public class SearchCourseOrderParam extends QueryPage{
 	
 	private Integer orderStatusId;
 	
+	private String searchInput;
+	
 }
 

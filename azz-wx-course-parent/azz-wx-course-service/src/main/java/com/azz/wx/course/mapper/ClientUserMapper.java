@@ -4,6 +4,7 @@ package com.azz.wx.course.mapper;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.wx.course.pojo.ClientUser;
+import com.azz.wx.course.pojo.vo.WxUserInfo;
 
 @Mapper
 public interface ClientUserMapper {
@@ -21,4 +22,7 @@ public interface ClientUserMapper {
     
     ClientUser getClientUserByClientUserCode(String clientUserCode);
     
+    WxUserInfo getWxUserInfo(String clientUserCode);
+    
+    ClientUser getClientUserByClientUserPhoneNumber(String phoneNumber);
 }

@@ -18,6 +18,8 @@ public class ShiroAuthErrorCode extends BaseErrorCode{
     public static final ShiroAuthErrorCode SHIRO_AUTH_ERROR_LOGIN_ERROR = new ShiroAuthErrorCode(40002, "登录认证出错");
 
     public static final ShiroAuthErrorCode SHIRO_AUTH_ERROR_NO_PERMISSION = new ShiroAuthErrorCode(40003, "用户权限不足");
+    
+    public static final ShiroAuthErrorCode SHIRO_AUTH_ERROR_NOT_BING_USER = new ShiroAuthErrorCode(40004, "此openid尚未绑定用户");
 
     public ShiroAuthErrorCode(int code, String message) {
 	super(code, message);

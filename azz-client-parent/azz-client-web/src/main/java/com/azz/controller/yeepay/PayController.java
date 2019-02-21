@@ -71,6 +71,8 @@ public class PayController {
 			Map<String, String> params = new HashMap<>();
 			params.put("orderId", order.getOrderId()); //商户订单编号
 			params.put("orderAmount", order.getOrderAmount()); //订单金额
+			params.put("parentMerchantNo", YeepayService.getParentMerchantNo());
+			params.put("merchantNo", YeepayService.getMerchantNo());
 			//params.put("timeoutExpress", timeoutExpress); //订单有效期  可以不传
 			//params.put("requestDate", order.getRequestDate()); //请求时间
 			//params.put("redirectUrl", redirectUrl); //页面回调地址 可以不传

@@ -50,8 +50,8 @@ public class PayController {
 	
 	@Value("${yeepay.notify-url}")
 	private String notifyUrl;
-	
-	
+	public  final String[] TRADEORDER = {"parentMerchantNo","merchantNo","orderId","orderAmount","timeoutExpress","requestDate","redirectUrl","notifyUrl","goodsParamExt","paymentParamExt","industryParamExt","memo","riskParamExt","csUrl","fundProcessType"};
+	public  final String[] TRADEORDER_HMAC = {"parentMerchantNo","merchantNo","orderId","orderAmount","notifyUrl"};	
 	@Autowired
 	private ClientPayService pfps;
 	
@@ -82,12 +82,10 @@ public class PayController {
 			//params.put("csUrl", csUrl);
 			
 			Map<String, String> result = new HashMap<>();
-			System.out.println(YeepayService.TRADEORDER_URL);
-			System.out.println(YeepayService.TRADEORDER_HMAC);
-			String uri = YeepayService.getUrl(YeepayService.TRADEORDER_URL);
+			//String uri = YeepayService.getUrl(YeepayService.TRADEORDER_URL);
 			
 			try {
-				result = YeepayService.requestYOP(params, uri, YeepayService.TRADEORDER, YeepayService.TRADEORDER_HMAC);
+				result = YeepayService.requestYOP(params, "/rest/v1.0/sys/trade/order", TRADEORDER, TRADEORDER_HMAC);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

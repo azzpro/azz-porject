@@ -168,7 +168,7 @@ public class ClientPayService {
 		}
 		if(StringUtils.isNotBlank(url)) {
 			resultMap.put("code", PayCode.SUCCESS.getCode());
-			resultMap.put("msg", PayCode.SUCCESS.getDesc());
+			resultMap.put("msg", url);
 			return resultMap;
 		}
 		ClientPay clientPay = new ClientPay();

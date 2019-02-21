@@ -56,13 +56,16 @@ public class PayController {
 	
 	@RequestMapping("payNotify")
 	public void payNotify(HttpServletRequest request,HttpServletResponse response) throws Exception {
-		response.setCharacterEncoding("UTF-8");
+		String responseMsg = request.getParameter("response");
+		String customerId = request.getParameter("customerIdentification");
 		log.info("进入支付回调接口");
-		String reqStr = LLPayUtil.readReqStr(request);
+		log.info("responseMsg---->"+responseMsg);
+		log.info("customerId---->"+customerId);
+		/*String reqStr = LLPayUtil.readReqStr(request);
 		log.info("回调参数["+reqStr+"]");
 		JsonResult<String> payNotify = pfps.payNotify(reqStr);
 		response.getWriter().write(JSON.toJSONString(payNotify.getData()));
-		response.getWriter().flush();
+		response.getWriter().flush();*/
 			
 	}
 }

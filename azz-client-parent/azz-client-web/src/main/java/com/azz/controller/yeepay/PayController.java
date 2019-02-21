@@ -8,6 +8,8 @@
 package com.azz.controller.yeepay;
 
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,7 +46,12 @@ public class PayController {
 	
 	@RequestMapping("submitOrderPay")
 	public Map<String,Object> submitOrderPay(HttpServletRequest request,PageOrder po){
-		return pfps.submitOrderPay(po);
+		Map<String, Object> submitOrderPay = pfps.submitOrderPay(po);
+		Set<Entry<String, Object>> entrySet = submitOrderPay.entrySet();
+		for (Entry<String, Object> entry : entrySet) {
+			log.info("key-->"+entry.getKey()+"::value-->"+entry.getValue());
+		}
+		return submitOrderPay;
 	}
 	
 	@RequestMapping("payNotify")

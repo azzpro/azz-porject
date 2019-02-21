@@ -27,13 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.azz.core.common.JsonResult;
-import com.azz.core.constants.PayConstants;
 import com.azz.core.constants.ClientConstants.PayMethod;
 import com.azz.core.constants.ClientConstants.PayStatus;
+import com.azz.core.constants.PayConstants;
 import com.azz.order.api.client.ClientPayService;
 import com.azz.order.client.pojo.ClientPay;
-import com.azz.order.client.pojo.PaymentInfo;
-import com.azz.order.client.pojo.RetBean;
 import com.azz.order.client.pojo.bo.OrderInfo;
 import com.azz.order.client.pojo.bo.PageOrder;
 import com.azz.order.client.pojo.vo.ClientOrderInfo;
@@ -84,10 +82,11 @@ public class PayController {
 			//params.put("csUrl", csUrl);
 			
 			Map<String, String> result = new HashMap<>();
+			String uri = YeepayService.getUrl(YeepayService.TRADEORDER_URL);
 			try {
-				result = YeepayService.requestYOP(params, YeepayService.TRADEORDER_URL, YeepayService.TRADEORDER);
-			} catch (IOException e) {
-				e.printStackTrace();
+				result = YeepayService.requestYOP(params, uri, YeepayService.TRADEORDER, YeepayService.TRADEORDER_HMAC);
+			} catch (IOException e1) {
+				e1.printStackTrace();
 			}
 			
 			String token = result.get("token");

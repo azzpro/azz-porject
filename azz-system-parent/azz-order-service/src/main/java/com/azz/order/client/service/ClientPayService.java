@@ -12,11 +12,15 @@ package com.azz.order.client.service;
  * @author 刘建麟  2018年11月26日 下午3:15:10
  */
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -33,7 +37,10 @@ import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.ClientConstants;
 import com.azz.core.constants.ClientConstants.ClientOrderStatus;
+import com.azz.core.constants.ClientConstants.PayMethod;
 import com.azz.core.constants.ClientConstants.PayStatus;
+import com.azz.core.constants.PayConstants;
+import com.azz.core.constants.PayConstants.PayCode;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.order.api.client.ClientOrderService;
 import com.azz.order.api.client.SelectionService;
@@ -69,7 +76,7 @@ public class ClientPayService {
 	private SelectionService selectService;
 
 	@Transactional
-	public JsonResult<ClientOrderInfo> submitOrderPay(@RequestBody PageOrder po) {
+	public Map<String,Object> submitOrderPay(@RequestBody PageOrder po) {
 		List<ClientPay> selectOrder = ppm.selectOrder(po.getOrderCode());
 		if(!selectOrder.isEmpty() && selectOrder.size() > 1) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "支付订单不唯一");
@@ -92,9 +99,9 @@ public class ClientPayService {
 		if (DecimalUtil.lt(new BigDecimal(orderDeadTime.getTime()), new BigDecimal(System.currentTimeMillis()))) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单已失效，请重新下单");
 		}
-		return new JsonResult<>(orderInfo);
+		Map<String,Object> resultMap = new HashMap<String,Object>();
 		//创建订单
-		/*OrderInfo order = createOrder(orderInfo);
+		OrderInfo order = createOrder(orderInfo);
 		if(null == order) {
 			return null;
 		}
@@ -104,8 +111,10 @@ public class ClientPayService {
 		Map<String, String> params = new HashMap<>();
 		params.put("orderId", order.getOrderId()); //商户订单编号
 		params.put("orderAmount", order.getOrderAmount()); //订单金额
+		params.put("parentMerchantNo", YeepayService.getParentMerchantNo());
+		params.put("merchantNo", YeepayService.getMerchantNo());
 		//params.put("timeoutExpress", timeoutExpress); //订单有效期  可以不传
-		params.put("requestDate", order.getRequestDate()); //请求时间
+		//params.put("requestDate", order.getRequestDate()); //请求时间
 		//params.put("redirectUrl", redirectUrl); //页面回调地址 可以不传
 		params.put("notifyUrl", notifyUrl); //回调地址
 		params.put("goodsParamExt", goodsParamExt);
@@ -114,12 +123,16 @@ public class ClientPayService {
 		//params.put("memo", memo);
 		//params.put("riskParamExt", riskParamExt);
 		//params.put("csUrl", csUrl);
-		
+		Set<Entry<String, String>> entrySet = params.entrySet();
+		for (Entry<String, String> entry : entrySet) {
+			log.info("key-->"+entry.getKey()+"::value-->"+entry.getValue());
+		}
 		Map<String, String> result = new HashMap<>();
+		String uri = YeepayService.getUrl(YeepayService.TRADEORDER_URL);
 		try {
-			result = YeepayService.requestYOP(params, YeepayService.TRADEORDER_URL, YeepayService.TRADEORDER);
-		} catch (IOException e) {
-			e.printStackTrace();
+			result = YeepayService.requestYOP(params, uri, YeepayService.TRADEORDER, YeepayService.TRADEORDER_HMAC);
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
 		
 		String token = result.get("token");
@@ -127,6 +140,9 @@ public class ClientPayService {
 		if(!"OPR00000".equals(codeRe)){
 			String message = result.get("message");
 			log.info("支付返回消息----->"+message);
+			resultMap.put("code", PayCode.FAILD.getCode());
+			resultMap.put("msg", PayCode.FAILD.getDesc());
+			return resultMap;
 		}
 		
 		params.put("parentMerchantNo", YeepayService.getParentMerchantNo());
@@ -143,12 +159,18 @@ public class ClientPayService {
 		String url = "";
 		try {
 			url = YeepayService.getUrl(params);
-		} catch (UnsupportedEncodingException e) {
+			
+		} catch (Exception e) {
 			e.printStackTrace();
+			resultMap.put("code", PayCode.FAILD.getCode());
+			resultMap.put("msg", PayCode.FAILD.getDesc());
+			return resultMap;
 		}
-		System.out.println("url-------->"+url);
-		//构造支付请求对象
-		
+		if(StringUtils.isNotBlank(url)) {
+			resultMap.put("code", PayCode.SUCCESS.getCode());
+			resultMap.put("msg", PayCode.SUCCESS.getDesc());
+			return resultMap;
+		}
 		ClientPay clientPay = new ClientPay();
 		clientPay.setUserId(orderInfo.getClientUserCode());
 		clientPay.setOrderMoney(orderInfo.getGrandTotal().toPlainString());
@@ -167,7 +189,9 @@ public class ClientPayService {
 		if(i != 1) {
 			return null;
 		}
-		return JsonResult.successJsonResult();*/
+		resultMap.put("code", PayCode.FAILD.getCode());
+		resultMap.put("msg", PayCode.FAILD.getDesc());
+		return resultMap;
 	}
 
 	

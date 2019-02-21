@@ -13,6 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -70,7 +72,7 @@ public class PayController {
 			params.put("orderId", order.getOrderId()); //商户订单编号
 			params.put("orderAmount", order.getOrderAmount()); //订单金额
 			//params.put("timeoutExpress", timeoutExpress); //订单有效期  可以不传
-			params.put("requestDate", order.getRequestDate()); //请求时间
+			//params.put("requestDate", order.getRequestDate()); //请求时间
 			//params.put("redirectUrl", redirectUrl); //页面回调地址 可以不传
 			params.put("notifyUrl", notifyUrl); //回调地址
 			params.put("goodsParamExt", goodsParamExt);
@@ -79,7 +81,10 @@ public class PayController {
 			//params.put("memo", memo);
 			//params.put("riskParamExt", riskParamExt);
 			//params.put("csUrl", csUrl);
-			
+			Set<Entry<String, String>> entrySet = params.entrySet();
+			for (Entry<String, String> entry : entrySet) {
+				System.out.println("key-->"+entry.getKey()+"::value-->"+entry.getValue());
+			}
 			Map<String, String> result = new HashMap<>();
 			String uri = YeepayService.getUrl(YeepayService.TRADEORDER_URL);
 			

@@ -277,7 +277,7 @@ public class YeepayService {
 		String BASE_URL = getUrl("baseURL");
 		
 		String parentMer = getParentMerchantNo();
-		YopRequest request = new YopRequest("OPR:"+parentMer);
+		YopRequest request = new YopRequest("OPR:"+parentMer,YeepayService.getParentKey());
 		System.out.println(BASE_URL);
 		for (int i = 0; i < paramSign.length; i ++) {
 			String key = paramSign[i];

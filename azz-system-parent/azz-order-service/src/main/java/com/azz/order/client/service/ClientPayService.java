@@ -113,16 +113,18 @@ public class ClientPayService {
 		params.put("orderAmount", order.getOrderAmount()); //订单金额
 		params.put("parentMerchantNo", YeepayService.getParentMerchantNo());
 		params.put("merchantNo", YeepayService.getMerchantNo());
-		//params.put("timeoutExpress", timeoutExpress); //订单有效期  可以不传
-		//params.put("requestDate", order.getRequestDate()); //请求时间
-		//params.put("redirectUrl", redirectUrl); //页面回调地址 可以不传
+		params.put("timeoutExpress", ""); //订单有效期  可以不传
+		params.put("requestDate", order.getRequestDate()); //请求时间
+		params.put("redirectUrl", ""); //页面回调地址 可以不传
 		params.put("notifyUrl", notifyUrl); //回调地址
 		params.put("goodsParamExt", goodsParamExt);
-		//params.put("paymentParamExt", paymentParamExt);
 		params.put("industryParamExt", industryParamExt);
-		//params.put("memo", memo);
-		//params.put("riskParamExt", riskParamExt);
-		//params.put("csUrl", csUrl);
+		params.put("goodsParamExt", goodsParamExt);
+		params.put("paymentParamExt", "");
+		params.put("industryParamExt", industryParamExt);
+		params.put("memo", "");
+		params.put("riskParamExt", "");
+		params.put("csUrl", "");
 		Set<Entry<String, String>> entrySet = params.entrySet();
 		for (Entry<String, String> entry : entrySet) {
 			log.info("key-->"+entry.getKey()+"::value-->"+entry.getValue());
@@ -147,15 +149,13 @@ public class ClientPayService {
 		
 		params.put("parentMerchantNo", YeepayService.getParentMerchantNo());
 		params.put("merchantNo", YeepayService.getMerchantNo());
-		params.put("orderId", order.getOrderId());
 		params.put("token", token);
 		params.put("timestamp", order.getTimestamp());
-		//params.put("directPayType", directPayType);
-		//params.put("cardType", cardType);
 		params.put("userNo", order.getUserNo());
 		params.put("userType", order.getUserType());
-		//params.put("ext", ext);
-		
+		params.put("directPayType", "");
+		params.put("cardType", "");
+		params.put("ext", ext);
 		String url = "";
 		try {
 			url = YeepayService.getUrl(params);

@@ -38,9 +38,6 @@ public class PayController {
 	
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	
-	@Value("${yeepay.notify-url}")
-	private String notifyUrl;
-	
 	@Autowired
 	private ClientPayService pfps;
 	

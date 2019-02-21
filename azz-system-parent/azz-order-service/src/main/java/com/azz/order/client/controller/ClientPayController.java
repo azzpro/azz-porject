@@ -23,6 +23,7 @@ import com.azz.order.client.pojo.PaymentInfo;
 import com.azz.order.client.pojo.RetBean;
 import com.azz.order.client.pojo.bo.PageOrder;
 import com.azz.order.client.pojo.bo.PayList;
+import com.azz.order.client.pojo.vo.ClientOrderInfo;
 import com.azz.order.client.service.ClientPayService;
 
 /**
@@ -43,7 +44,7 @@ public class ClientPayController {
 	 * @author 刘建麟  2018年11月26日 下午3:14:49
 	 */
 	@RequestMapping(value="submitOrderPay",method=RequestMethod.POST)
-	public JsonResult<String> submitOrderPay(@RequestBody PageOrder po){
+	public JsonResult<ClientOrderInfo> submitOrderPay(@RequestBody PageOrder po){
 		return pps.submitOrderPay(po);
 	} 
 	

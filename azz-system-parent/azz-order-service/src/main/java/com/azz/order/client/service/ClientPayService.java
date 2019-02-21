@@ -12,12 +12,9 @@ package com.azz.order.client.service;
  * @author 刘建麟  2018年11月26日 下午3:15:10
  */
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,9 +33,7 @@ import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.ClientConstants;
 import com.azz.core.constants.ClientConstants.ClientOrderStatus;
-import com.azz.core.constants.ClientConstants.PayMethod;
 import com.azz.core.constants.ClientConstants.PayStatus;
-import com.azz.core.constants.PayConstants;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.order.api.client.ClientOrderService;
 import com.azz.order.api.client.SelectionService;
@@ -74,7 +69,7 @@ public class ClientPayService {
 	private SelectionService selectService;
 
 	@Transactional
-	public JsonResult<String> submitOrderPay(@RequestBody PageOrder po) {
+	public JsonResult<ClientOrderInfo> submitOrderPay(@RequestBody PageOrder po) {
 		List<ClientPay> selectOrder = ppm.selectOrder(po.getOrderCode());
 		if(!selectOrder.isEmpty() && selectOrder.size() > 1) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "支付订单不唯一");
@@ -97,8 +92,9 @@ public class ClientPayService {
 		if (DecimalUtil.lt(new BigDecimal(orderDeadTime.getTime()), new BigDecimal(System.currentTimeMillis()))) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单已失效，请重新下单");
 		}
+		return new JsonResult<>(orderInfo);
 		//创建订单
-		OrderInfo order = createOrder(orderInfo);
+		/*OrderInfo order = createOrder(orderInfo);
 		if(null == order) {
 			return null;
 		}
@@ -171,7 +167,7 @@ public class ClientPayService {
 		if(i != 1) {
 			return null;
 		}
-		return JsonResult.successJsonResult();
+		return JsonResult.successJsonResult();*/
 	}
 
 	

@@ -222,7 +222,7 @@ public class YeepayService {
 		String parentMerchantNo = YeepayService.getParentMerchantNo();
 		String hmackey = getMerchantKey();
 		
-		YopRequest request = new YopRequest("OPR:" + parentMerchantNo);
+		YopRequest request = new YopRequest("OPR:" + parentMerchantNo,YeepayService.getParentKey());
 		
 		for (int i = 0; i < paramSign.length; i ++) {
 			String key = paramSign[i];

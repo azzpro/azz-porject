@@ -62,6 +62,7 @@ public class PayController {
 		JsonResult<ClientOrderInfo> orderInfo = pfps.submitOrderPay(po);
 		if(orderInfo.getData() != null) {
 			OrderInfo order = createOrder(orderInfo.getData());
+			System.out.println("order---->"+order);
 			if(null == order) {
 				return null;
 			}
@@ -136,6 +137,7 @@ public class PayController {
 			//}
 			
 		}
+		System.out.println("111");
 		return JsonResult.successJsonResult();
 	}
 	

@@ -83,6 +83,9 @@ public class PayController {
 			
 			Map<String, String> result = new HashMap<>();
 			String uri = YeepayService.getUrl(YeepayService.TRADEORDER_URL);
+			System.out.println(uri);
+			System.out.println(YeepayService.TRADEORDER);
+			System.out.println(YeepayService.TRADEORDER_HMAC);
 			try {
 				result = YeepayService.requestYOP(params, uri, YeepayService.TRADEORDER, YeepayService.TRADEORDER_HMAC);
 			} catch (IOException e1) {

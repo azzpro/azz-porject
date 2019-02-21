@@ -154,7 +154,7 @@ public class ClientPayService {
 		//params.put("cardType", cardType);
 		params.put("userNo", order.getUserNo());
 		params.put("userType", order.getUserType());
-		params.put("ext", ext);
+		//params.put("ext", ext);
 		
 		String url = "";
 		try {

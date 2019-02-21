@@ -217,11 +217,13 @@ public class YeepayService {
 	 */
 	public static Map<String, String> requestYOP(Map<String, String> params, String uri, String[] paramSign, String[] paramHmac) throws IOException{
 		Map<String, String> result = new HashMap<String, String>();
-		
+		System.out.println("请求进入");
 		String BASE_URL = getUrl("baseURL");
 		String parentMerchantNo = YeepayService.getParentMerchantNo();
+		System.out.println("parentMerchantNo---->"+parentMerchantNo);
 		String hmackey = getMerchantKey();
-		
+		System.out.println("hmackey---->"+hmackey);
+		System.out.println("privatekey---->"+YeepayService.getParentKey());
 		YopRequest request = new YopRequest("OPR:" + parentMerchantNo,YeepayService.getParentKey());
 		
 		for (int i = 0; i < paramSign.length; i ++) {

@@ -1,0 +1,24 @@
+server:
+  port: 9908
+  tomcat:
+    uri-encoding: UTF-8
+spring:
+  application:
+    name: crawler
+  aop:
+    proxy-target-class: true
+  http:
+    multipart:
+      max-file-size: 30Mb
+      max-request-size: 30Mb
+  mvc:
+    throw-exception-if-no-handler-found: true
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp 
+  thymeleaf:
+    cache: false
+    enabled: false
+  messages:
+    basename: i18n/Messages
+

@@ -46,10 +46,10 @@ public class OkHttpUtil {
         Request request = new Request.Builder().url(url).build();
         String result = "";
         try {
-            log.info("发送GET请求的URL:" + url);
+            //log.info("发送GET请求的URL:" + url);
             Response response = client.newCall(request).execute();
             result = response.body().string();
-            log.info("GET请求返回值:" + result);
+            //log.info("GET请求返回值:" + result);
 
         } catch (Exception e) {
             log.error("发送GET请求异常", e);

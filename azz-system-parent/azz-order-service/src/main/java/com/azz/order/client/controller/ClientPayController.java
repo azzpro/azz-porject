@@ -67,8 +67,8 @@ public class ClientPayController {
 	 * @return
 	 */
 	@RequestMapping("payNotify")
-	public JsonResult<String> payNotify(@RequestParam("reqStr") String reqStr) {
-		return pps.payNotify(reqStr);
+	public JsonResult<RetBean> payNotify(@RequestParam("responseMsg") String responseMsg,@RequestParam("customerId") String customerId) {
+		return pps.payNotify(responseMsg,customerId);
 	}
 	
 	/**

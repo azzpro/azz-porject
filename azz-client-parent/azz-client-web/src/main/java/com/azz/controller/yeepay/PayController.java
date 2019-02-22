@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.azz.core.common.JsonResult;
 import com.azz.order.api.client.ClientPayService;
+import com.azz.order.client.pojo.RetBean;
 import com.azz.order.client.pojo.bo.PageOrder;
 
 /**
@@ -55,6 +57,9 @@ public class PayController {
 		log.info("进入支付回调接口");
 		log.info("responseMsg---->"+responseMsg);
 		log.info("customerId---->"+customerId);
+		JsonResult<RetBean> notify = pfps.payNotify(responseMsg,customerId);
+		response.getWriter().write("SUCCESS");
+		response.getWriter().flush();
 		/*String reqStr = LLPayUtil.readReqStr(request);
 		log.info("回调参数["+reqStr+"]");
 		JsonResult<String> payNotify = pfps.payNotify(reqStr);

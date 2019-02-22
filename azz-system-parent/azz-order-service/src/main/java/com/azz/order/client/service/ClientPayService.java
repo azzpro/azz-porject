@@ -46,6 +46,7 @@ import com.azz.order.api.client.ClientOrderService;
 import com.azz.order.api.client.SelectionService;
 import com.azz.order.client.mapper.ClientPayMapper;
 import com.azz.order.client.pojo.ClientPay;
+import com.azz.order.client.pojo.RetBean;
 import com.azz.order.client.pojo.bo.OrderInfo;
 import com.azz.order.client.pojo.bo.PageOrder;
 import com.azz.order.client.pojo.bo.PayList;
@@ -195,14 +196,26 @@ public class ClientPayService {
 	}
 
 	
-	public JsonResult<String> payNotify(String reqStr) {
+	public JsonResult<RetBean> payNotify(String responseMsg,String customerId) {
 		log.info("进入支付异步处理......");
-		return null;
-		/*RetBean retBean = new RetBean();
-		if (LLPayUtil.isnull(reqStr)){
-            retBean.setRet_code(PayCode.FAILD.getCode());
+		RetBean retBean = new RetBean();
+		if(StringUtils.isBlank(responseMsg) || StringUtils.isBlank(customerId)) {
+			retBean.setRet_code(PayCode.FAILD.getCode());
             retBean.setRet_msg(PayCode.FAILD.getDesc());
             return new JsonResult<>(retBean);
+		}
+		log.info("接收支付异步通知数据：【" + responseMsg + "】:【"+customerId+"】");
+		Map<String, String> callback = YeepayService.callback(responseMsg);
+		Set<Entry<String, String>> entrySet = callback.entrySet();
+		for (Entry<String, String> entry : entrySet) {
+			log.info("回调处理结果--->"+entry.getKey()+"::--value---->"+entry.getValue());
+		}
+		retBean.setRet_code(PayCode.SUCCESS.getCode());
+        retBean.setRet_msg(PayCode.SUCCESS.getDesc());
+        return new JsonResult<>(retBean);
+		/*
+		if (LLPayUtil.isnull(reqStr)){
+            
         }
         log.info("接收支付异步通知数据：【" + reqStr + "】");
         try{

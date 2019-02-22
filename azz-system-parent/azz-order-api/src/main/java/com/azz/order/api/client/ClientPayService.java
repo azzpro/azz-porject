@@ -37,7 +37,7 @@ public interface ClientPayService {
 	 * @author 刘建麟  2018年12月17日 下午6:27:10
 	 */
 	@RequestMapping(value="/azz/api/pay/payNotify",method=RequestMethod.POST)
-	public JsonResult<String> payNotify(@RequestParam("reqStr") String reqStr);
+	public JsonResult<RetBean> payNotify(@RequestParam("responseMsg") String responseMsg,@RequestParam("customerId") String customerId);
 	
 	/**
 	 * <p>提交支付</p>

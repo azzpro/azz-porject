@@ -17,7 +17,15 @@ public class ClientWxUser implements Serializable{
 	private String userCode;
 	private String avatarUrl;
 	private String nickName;
+	private String platformType;
 	
+	
+	public String getPlatformType() {
+		return platformType;
+	}
+	public void setPlatformType(String platformType) {
+		this.platformType = platformType;
+	}
 	public String getAvatarUrl() {
 		return avatarUrl;
 	}

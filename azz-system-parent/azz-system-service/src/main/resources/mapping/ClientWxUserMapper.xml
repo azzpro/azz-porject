@@ -12,14 +12,15 @@
 		<result column="user_code" property="userCode" />
 		<result column="avatar_url" property="avatarUrl" />
 		<result column="nick_name" property="nickName" />
+		<result column="platform_type" property="platformType" />
 	</resultMap>
 	<insert id="insert" parameterType="com.azz.system.pojo.ClientWxUser">
-		insert into client_wx_user (openid, unionid,access_token,expires_in,refresh_token,scope,user_code,avatar_url,nick_name)
-		 values ( #{openid}, #{unionid}, #{access_token},#{expires_in},#{refresh_token},#{scope},#{userCode},#{avatarUrl},#{nickName})
+		insert into client_wx_user (openid, unionid,access_token,expires_in,refresh_token,scope,user_code,avatar_url,nick_name,platform_type)
+		 values ( #{openid}, #{unionid}, #{access_token},#{expires_in},#{refresh_token},#{scope},#{userCode},#{avatarUrl},#{nickName},#{platformType})
 	</insert>
 
 	<select id="selectWxUserByOpenid" resultMap="BaseResultMap" parameterType="String">
-		select id,openid,unionid,access_token,expires_in,refresh_token,scope,user_code,avatar_url,nick_name from client_wx_user
+		select id,openid,unionid,access_token,expires_in,refresh_token,scope,user_code,avatar_url,nick_name,platform_type from client_wx_user
 		where openid = #{openid}
 	</select>
 	

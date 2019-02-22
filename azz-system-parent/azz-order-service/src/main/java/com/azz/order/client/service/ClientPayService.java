@@ -115,7 +115,7 @@ public class ClientPayService {
 		params.put("orderAmount", order.getOrderAmount()); //订单金额
 		params.put("parentMerchantNo", YeepayService.getParentMerchantNo());
 		params.put("merchantNo", YeepayService.getMerchantNo());
-		params.put("timeoutExpress", ""); //订单有效期  可以不传
+		params.put("timeoutExpress", "360"); //订单有效期  可以不传
 		params.put("requestDate", order.getRequestDate()); //请求时间
 		params.put("redirectUrl", ""); //页面回调地址 可以不传
 		params.put("notifyUrl", notifyUrl); //回调地址
@@ -137,6 +137,9 @@ public class ClientPayService {
 			result = YeepayService.requestYOP(params, uri, YeepayService.TRADEORDER, YeepayService.TRADEORDER_HMAC);
 		} catch (IOException e1) {
 			e1.printStackTrace();
+			resultMap.put("code", PayCode.FAILD.getCode());
+			resultMap.put("msg", PayCode.FAILD.getDesc());
+			return resultMap;
 		}
 		
 		String token = result.get("token");

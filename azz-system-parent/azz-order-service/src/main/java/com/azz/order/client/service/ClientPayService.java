@@ -169,29 +169,27 @@ public class ClientPayService {
 			return resultMap;
 		}
 		if(StringUtils.isNotBlank(url)) {
-			resultMap.put("code", PayCode.SUCCESS.getCode());
-			resultMap.put("msg", url);
-			return resultMap;
+			ClientPay clientPay = new ClientPay();
+			clientPay.setUserId(orderInfo.getClientUserCode());
+			clientPay.setOrderMoney(orderInfo.getGrandTotal().toPlainString());
+			clientPay.setUserreqIp(po.getClientIp());
+			clientPay.setGoodsName(order.getGoodsName());
+			clientPay.setOrderCustomerPhone(Long.parseLong(orderInfo.getClientPhoneNumber()));
+			//clientPay.setOrderChannelMoney();//渠道费
+			clientPay.setOrderNumber(orderInfo.getClientOrderCode());
+			clientPay.setOrderMethod((byte) PayMethod.ONLINE.getValue());// 默认线上
+			clientPay.setOrderTime(System.currentTimeMillis());
+			clientPay.setOrderStatus((byte) PayStatus.NOT_PAID.getValue());// 支付状态 默认待支付
+			clientPay.setPayNumber(order.getOrderId()); //订单流水号
+			clientPay.setPayInstruation(PayConstants.PAYMENT_INSTITUTION);//支付机构
+			int i = ppm.insertPay(clientPay);
+			if(i != 1) {
+				resultMap.put("code", PayCode.FAILD.getCode());
+				resultMap.put("msg", PayCode.FAILD.getDesc());
+			}
 		}
-		ClientPay clientPay = new ClientPay();
-		clientPay.setUserId(orderInfo.getClientUserCode());
-		clientPay.setOrderMoney(orderInfo.getGrandTotal().toPlainString());
-		clientPay.setUserreqIp(po.getClientIp());
-		clientPay.setGoodsName(order.getGoodsName());
-		clientPay.setOrderCustomerPhone(Long.parseLong(orderInfo.getClientPhoneNumber()));
-		//clientPay.setOrderChannelMoney();//渠道费
-		clientPay.setOrderNumber(orderInfo.getClientOrderCode());
-		clientPay.setOrderMethod((byte) PayMethod.ONLINE.getValue());// 默认线上
-		clientPay.setOrderTime(System.currentTimeMillis());
-		clientPay.setOrderStatus((byte) PayStatus.NOT_PAID.getValue());// 支付状态 默认待支付
-		clientPay.setPayNumber(order.getOrderId()); //订单流水号
-		clientPay.setPayInstruation(PayConstants.PAYMENT_INSTITUTION);//支付机构
-		int i = ppm.insertPay(clientPay);
-		if(i != 1) {
-			return null;
-		}
-		resultMap.put("code", PayCode.FAILD.getCode());
-		resultMap.put("msg", PayCode.FAILD.getDesc());
+		resultMap.put("code", PayCode.SUCCESS.getCode());
+		resultMap.put("msg", url);
 		return resultMap;
 	}
 
@@ -227,7 +225,7 @@ public class ClientPayService {
            	Map<String,Object> map1 = new HashMap<String,Object>();
            	map1.put("order_status", (byte) PayStatus.PAY_SUCCESS.getValue());
            	map1.put("order_info", "");
-           	map1.put("order_type", PayConstants.PayPlatForm.getDesc(paymentProduct)+"::"+PayConstants.PayType.getDesc(platformType));
+           	map1.put("order_type", PayConstants.PayType.getDesc(paymentProduct)+"::"+PayConstants.PayPlatForm.getDesc(platformType));
            	map1.put("pay_success_date", paySuccessDate);
            	map1.put("three_party_number", uniqueOrderNo);
            	map1.put("pay_number", orderId);

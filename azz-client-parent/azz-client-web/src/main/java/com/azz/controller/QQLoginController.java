@@ -6,6 +6,8 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,6 +47,8 @@ import com.azz.util.JSR303ValidateUtils;
 @RequestMapping("/azz/api/qq")
 public class QQLoginController {
 
+	private final Logger log = LoggerFactory.getLogger(getClass());
+	
 	@Autowired
 	private QQLoginService qqLoginService;
 	
@@ -73,6 +77,7 @@ public class QQLoginController {
 	 */
 	@RequestMapping(value="callback",method=RequestMethod.POST)
 	public Object callback(@RequestParam("code")String code) {
+		log.info("进入QQ 回调");
 		JsonResult<WxCallBackInfo> result = qqLoginService.callback(code);
 		if(Objects.equals(WxConstants.LOGINCODE, result.getData().getCode())) {
 			// 从SecurityUtils里边创建一个 subject

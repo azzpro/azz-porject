@@ -118,6 +118,7 @@ public class QQLoginService {
 	 * @return
 	 */
 	public JsonResult<QQCallBackInfo> callback(HttpServletRequest request,String code) {
+		log.info("进入QQ 回调");
 		QQCallBackInfo wcbi = new QQCallBackInfo();
 		if (StringUtils.isBlank(code)) {
 			wcbi.setCode(WxConstants.NOACCESSCODE);

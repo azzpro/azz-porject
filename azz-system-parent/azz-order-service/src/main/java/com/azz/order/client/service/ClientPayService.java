@@ -344,16 +344,5 @@ public class ClientPayService {
 	} 
 	
 	
-    /**
-     * <p>构建风控参数</p>
-     * @return
-     * @author 刘建麟  2018年12月17日 下午4:55:17
-     */
-    private String createRiskItem(){
-        JSONObject riskItemObj = new JSONObject();
-        riskItemObj.put("user_info_full_name", "你好");
-        riskItemObj.put("frms_ware_category", "1999");
-        return riskItemObj.toString();
-    }
 
 }

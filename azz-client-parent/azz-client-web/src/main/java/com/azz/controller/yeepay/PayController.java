@@ -8,8 +8,8 @@
 package com.azz.controller.yeepay;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,16 +17,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSON;
-import com.azz.core.common.JsonResult;
 import com.azz.order.api.client.ClientPayService;
 import com.azz.order.client.pojo.bo.PageOrder;
-import com.azz.util.LLPayUtil;
 
 /**
  * <P>TODO</P>
@@ -53,12 +49,13 @@ public class PayController {
 	}
 	
 	@RequestMapping(value="payNotify",method=RequestMethod.POST)
-	public void payNotify(HttpServletRequest request,HttpServletResponse response) throws Exception {
+	public String payNotify(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		String responseMsg = request.getParameter("response");
 		String customerId = request.getParameter("customerIdentification");
 		log.info("进入支付回调接口");
 		log.info("responseMsg---->"+responseMsg);
 		log.info("customerId---->"+customerId);
+		return "callback";
 		/*String reqStr = LLPayUtil.readReqStr(request);
 		log.info("回调参数["+reqStr+"]");
 		JsonResult<String> payNotify = pfps.payNotify(reqStr);

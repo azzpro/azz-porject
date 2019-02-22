@@ -145,19 +145,22 @@ public class QQLoginService {
 							redis.opsForValue().set(clientUser.getPhoneNumber(), "wxScan");
 							redis.expire(clientUser.getPhoneNumber(), 30, TimeUnit.MINUTES);
 							return new JsonResult<>(wcbi);
-						}	
+						}
+						UserInfo qzoneUserInfo = new UserInfo(accessToken, openID);
+			            UserInfoBean userInfoBean = qzoneUserInfo.getUserInfo();
+			            wcbi.setHeadimgurl((String) userInfoBean.getAvatar().getAvatarURL30());
+						wcbi.setNickname(userInfoBean.getNickname());
+						wcbi.setAccessToken(accessTokenObj.getAccessToken());
+						wcbi.setExpiresIn(accessTokenObj.getExpireIn()+"");
+						wcbi.setOpenid(openID);
+						wcbi.setCode(WxConstants.SUCCESSCODE);
+						wcbi.setMsg(WxConstants.SUCCESSMSG);
+						return new JsonResult<>(wcbi);
 		            }
-		            
-		            UserInfo qzoneUserInfo = new UserInfo(accessToken, openID);
-		            UserInfoBean userInfoBean = qzoneUserInfo.getUserInfo();
-		            wcbi.setHeadimgurl(userInfoBean.getNickname());
-					wcbi.setNickname((String) userInfoBean.getAvatar().getAvatarURL30());
-					wcbi.setAccessToken(accessTokenObj.getAccessToken());
-					wcbi.setExpiresIn(accessTokenObj.getExpireIn()+"");
-					wcbi.setOpenid(openID);
-					wcbi.setCode(WxConstants.SUCCESSCODE);
-					wcbi.setMsg(WxConstants.SUCCESSMSG);
+		            wcbi.setCode(WxConstants.STATECODE);
+					wcbi.setMsg(WxConstants.STATEMSG);
 					return new JsonResult<>(wcbi);
+		            
 		        }
 		    }catch(Exception e){
 		        e.printStackTrace();

@@ -189,11 +189,17 @@ public class ClientPayService {
 			if(i != 1) {
 				resultMap.put("code", PayCode.FAILD.getCode());
 				resultMap.put("msg", PayCode.FAILD.getDesc());
+				return resultMap;
 			}
+			resultMap.put("code", PayCode.SUCCESS.getCode());
+			resultMap.put("msg", url);
+			return resultMap;
+		}else {
+			resultMap.put("code", PayCode.FAILD.getCode());
+			resultMap.put("msg", PayCode.FAILD.getDesc());
+			return resultMap;
 		}
-		resultMap.put("code", PayCode.SUCCESS.getCode());
-		resultMap.put("msg", url);
-		return resultMap;
+		
 	}
 
 	

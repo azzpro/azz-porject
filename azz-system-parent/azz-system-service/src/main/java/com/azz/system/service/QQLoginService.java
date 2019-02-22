@@ -126,6 +126,7 @@ public class QQLoginService {
 			return new JsonResult<>(wcbi);
 		} else {
 			try {
+				request.getSession().setAttribute("qq_connect_state", request.getParameter("state"));
 				AccessToken accessTokenObj = (new Oauth()).getAccessTokenByRequest(request);
 		        log.info("accessTokenObj---->"+accessTokenObj.getAccessToken());
 				String accessToken   = null,

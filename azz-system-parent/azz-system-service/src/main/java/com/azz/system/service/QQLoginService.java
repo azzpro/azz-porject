@@ -155,6 +155,7 @@ public class QQLoginService {
 						wcbi.setOpenid(openID);
 						wcbi.setCode(WxConstants.SUCCESSCODE);
 						wcbi.setMsg(WxConstants.SUCCESSMSG);
+						log.info("返回对象---->"+wcbi);
 						return new JsonResult<>(wcbi);
 		            }
 		            wcbi.setCode(WxConstants.STATECODE);

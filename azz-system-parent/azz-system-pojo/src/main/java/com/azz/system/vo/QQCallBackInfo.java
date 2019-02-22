@@ -66,5 +66,11 @@ public class QQCallBackInfo {
 	public void setExpiresIn(String expiresIn) {
 		this.expiresIn = expiresIn;
 	}
+	@Override
+	public String toString() {
+		return "QQCallBackInfo [msg=" + msg + ", code=" + code + ", nickname=" + nickname + ", headimgurl=" + headimgurl
+				+ ", openid=" + openid + ", accessToken=" + accessToken + ", expiresIn=" + expiresIn + ", phone="
+				+ phone + ", password=" + password + "]";
+	}
 	
 }

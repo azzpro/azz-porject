@@ -127,21 +127,28 @@ public class QQLoginService {
 		} else {
 			try {
 				AccessToken accessTokenObj = (new Oauth()).getAccessTokenByRequest(request);
-		        String accessToken   = null,
+		        log.info("accessTokenObj---->"+accessTokenObj.getAccessToken());
+				String accessToken   = null,
 		                openID        = null;
 		        long tokenExpireIn = 0L;
 		        if (accessTokenObj.getAccessToken().equals("")) {
-		            System.out.print("没有获取到响应参数");
+		        	wcbi.setCode(WxConstants.STATECODE);
+					wcbi.setMsg(WxConstants.STATEMSG);
+					return new JsonResult<>(wcbi);
 		        }else{
+		        	System.out.println("1");
 		            accessToken = accessTokenObj.getAccessToken();
 		            tokenExpireIn = accessTokenObj.getExpireIn();
 		            OpenID openIDObj =  new OpenID(accessToken);
 		            openID = openIDObj.getUserOpenID();
 		            if(StringUtils.isNotBlank(openID)) {//直接完成登录操作
+		            	System.out.println("12");
 		            	ClientWxUser wxUser = clientWxUserMapper.selectWxUserByOpenid(openID);
 		            	if(wxUser != null) {
+		            		System.out.println("13");
 		            		ClientUser clientUser = clientUserMapper.getClientUserByClientUserCode(wxUser.getUserCode());
 							if(clientUser != null) {
+								System.out.println("14");
 								wcbi.setCode(WxConstants.LOGINCODE);
 								wcbi.setPhone(clientUser.getPhoneNumber());
 								redis.opsForValue().set(clientUser.getPhoneNumber(), "wxScan");
@@ -149,6 +156,7 @@ public class QQLoginService {
 								return new JsonResult<>(wcbi);
 							}
 		            	}
+		            	System.out.println("15");
 						UserInfo qzoneUserInfo = new UserInfo(accessToken, openID);
 			            UserInfoBean userInfoBean = qzoneUserInfo.getUserInfo();
 			            wcbi.setHeadimgurl((String) userInfoBean.getAvatar().getAvatarURL30());
@@ -173,9 +181,6 @@ public class QQLoginService {
 				wcbi.setMsg(WxConstants.HTTPERRORMSG);
 				return new JsonResult<>(wcbi);
 		    }
-			wcbi.setCode(WxConstants.STATECODE);
-			wcbi.setMsg(WxConstants.STATEMSG);
-			return new JsonResult<>(wcbi);
 		}	
 	}
 

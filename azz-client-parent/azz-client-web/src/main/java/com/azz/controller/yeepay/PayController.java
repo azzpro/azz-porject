@@ -58,7 +58,7 @@ public class PayController {
 		log.info("responseMsg---->"+responseMsg);
 		log.info("customerId---->"+customerId);
 		JsonResult<RetBean> notify = pfps.payNotify(responseMsg,customerId);
-		response.getWriter().write("SUCCESS");
+		response.getWriter().write(notify.getMsg());
 		response.getWriter().flush();
 		/*String reqStr = LLPayUtil.readReqStr(request);
 		log.info("回调参数["+reqStr+"]");

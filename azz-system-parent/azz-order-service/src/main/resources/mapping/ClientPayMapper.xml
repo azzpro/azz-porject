@@ -20,6 +20,7 @@
   <result column="goods_name" property="goodsName"/>
   <result column="busi_partner" property="busiPartner"/>
   <result column="pay_instruation" property="payInstruation"/>
+  <result column="pay_success_date" property="paySuccessDate"/>
 </resultMap>
   
   <select id="selectOrderStatus" parameterType="map" resultType="int">
@@ -43,7 +44,7 @@
       set order_status = #{order_status},
       order_info = #{order_info},
       order_type = #{order_type},
-      order_settle_date = #{order_settle_date},
+      pay_success_date = #{pay_success_date},
       three_party_number = #{three_party_number}
     where pay_number = #{pay_number}
   </update>

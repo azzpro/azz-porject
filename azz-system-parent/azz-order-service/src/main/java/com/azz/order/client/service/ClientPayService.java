@@ -52,6 +52,7 @@ import com.azz.order.client.pojo.bo.PageOrder;
 import com.azz.order.client.pojo.bo.PayList;
 import com.azz.order.client.pojo.vo.ClientOrderDetail;
 import com.azz.order.client.pojo.vo.ClientOrderInfo;
+import com.azz.order.selection.bo.CallBackParam;
 import com.azz.util.DateUtils;
 import com.azz.util.DecimalUtil;
 import com.azz.util.LLPayUtil;
@@ -175,16 +176,15 @@ public class ClientPayService {
 		ClientPay clientPay = new ClientPay();
 		clientPay.setUserId(orderInfo.getClientUserCode());
 		clientPay.setOrderMoney(orderInfo.getGrandTotal().toPlainString());
-		//clientPay.setUserreqIp(payInfo.getUserreq_ip());
-		//clientPay.setGoodsName(payInfo.getName_goods());
-		//clientPay.setBusiPartner(Integer.parseInt(payInfo.getBusi_partner()));
+		clientPay.setUserreqIp(po.getClientIp());
+		clientPay.setGoodsName(order.getGoodsName());
 		clientPay.setOrderCustomerPhone(Long.parseLong(orderInfo.getClientPhoneNumber()));
 		//clientPay.setOrderChannelMoney();//渠道费
 		clientPay.setOrderNumber(orderInfo.getClientOrderCode());
 		clientPay.setOrderMethod((byte) PayMethod.ONLINE.getValue());// 默认线上
-		//clientPay.setOrderTime(Long.parseLong(payInfo.getDt_order()));
+		clientPay.setOrderTime(System.currentTimeMillis());
 		clientPay.setOrderStatus((byte) PayStatus.NOT_PAID.getValue());// 支付状态 默认待支付
-		//clientPay.setPayNumber(payInfo.getNo_order()); //订单流水号
+		clientPay.setPayNumber(order.getOrderId()); //订单流水号
 		clientPay.setPayInstruation(PayConstants.PAYMENT_INSTITUTION);//支付机构
 		int i = ppm.insertPay(clientPay);
 		if(i != 1) {
@@ -210,69 +210,53 @@ public class ClientPayService {
 		for (Entry<String, String> entry : entrySet) {
 			log.info("回调处理结果--->"+entry.getKey()+"::--value---->"+entry.getValue());
 		}
-		retBean.setRet_code(PayCode.SUCCESS.getCode());
-        retBean.setRet_msg(PayCode.SUCCESS.getDesc());
-        return new JsonResult<>(retBean);
-		/*
-		if (LLPayUtil.isnull(reqStr)){
-            
-        }
-        log.info("接收支付异步通知数据：【" + reqStr + "】");
-        try{
-            if (!LLPayUtil.checkSign(reqStr, ytPubKey,md5Key)){
-            	 retBean.setRet_code(PayCode.FAILD.getCode());
-                 retBean.setRet_msg(PayCode.FAILD.getDesc());
-                 log.info("异步通知验签失败");
-                 return new JsonResult<>(retBean);
-            }
-        } catch (Exception e){
-        	log.info("异步通知报文解析异常：" + e);
-        	retBean.setRet_code(PayCode.FAILD.getCode());
-            retBean.setRet_msg(PayCode.FAILD.getDesc());
-            return new JsonResult<>(retBean);
-        }
-        log.info("支付异步通知数据接收处理成功");
-        // 解析异步通知对象
-        PayDataBean payDataBean = JSON.parseObject(reqStr, PayDataBean.class);
-        log.info("异步通知结果解析----------->"+payDataBean);
-        if(null != payDataBean && payDataBean.getResult_pay().equals("SUCCESS")) {
-        	 //校验订单是否支付成功
-            Map<String,Object> map = new HashMap<String,Object>();
-            map.put("no_order", payDataBean.getNo_order());
-            map.put("money_order", payDataBean.getMoney_order());
-            if(getOrderStatus(map)) {
-            	Map<String,Object> map1 = new HashMap<String,Object>();
-            	map1.put("order_status", (byte) PayStatus.PAY_SUCCESS.getValue());
-            	map1.put("order_info", payDataBean.getInfo_order());
-            	map1.put("order_type", PayConstants.PayType.getDesc(payDataBean.getPay_type()));
-            	map1.put("order_settle_date", payDataBean.getSettle_date());
-            	map1.put("three_party_number", payDataBean.getOid_paybill());
-            	map1.put("pay_number", payDataBean.getNo_order());
-            	int number = ppm.updateOrderByNumber(map1);
-            	if(number != 1) {
-            		retBean.setRet_code(PayCode.UPDATEFAILD.getCode());
-                    retBean.setRet_msg(PayCode.UPDATEFAILD.getDesc());
-                    return new JsonResult<>(retBean);
-            	}
-            	String orderCode = ppm.selectOrderCode(payDataBean.getNo_order());
-            	CallBackParam cbp = new CallBackParam();
-         		cbp.setClientOrderCode(orderCode);
-         		cbp.setPayMethod(PayMethod.ONLINE.getValue());
-         		cbp.setOrderType(PayConstants.PayType.getNum(payDataBean.getPay_type()));
-         		selectService.clientOrderPaySuccessOpt(cbp);
-         		retBean.setRet_code(PayCode.SUCCESS.getCode());
-                retBean.setRet_msg(PayCode.SUCCESS.getDesc());
+		String result = callback.get("status");//SUCCESS 成功
+		String platformType = callback.get("platformType"); //支付方式
+		String paymentProduct = callback.get("paymentProduct");//支付产品
+		String orderId = callback.get("orderId");//订单号
+		String payAmount = callback.get("payAmount");//实付金额
+		String uniqueOrderNo = callback.get("uniqueOrderNo");//三方流水号
+		String requestDate = callback.get("requestDate");//下单时间
+		String paySuccessDate = callback.get("paySuccessDate");//支付完成时间
+		if(StringUtils.isNotBlank(result) && result.equals("SUCCESS")) {
+       	 //校验订单是否支付成功
+           Map<String,Object> map = new HashMap<String,Object>();
+           map.put("no_order", orderId);
+           map.put("money_order", payAmount);
+           if(getOrderStatus(map)) {
+           	Map<String,Object> map1 = new HashMap<String,Object>();
+           	map1.put("order_status", (byte) PayStatus.PAY_SUCCESS.getValue());
+           	map1.put("order_info", "");
+           	map1.put("order_type", PayConstants.PayPlatForm.getDesc(paymentProduct)+"::"+PayConstants.PayType.getDesc(platformType));
+           	map1.put("pay_success_date", paySuccessDate);
+           	map1.put("three_party_number", uniqueOrderNo);
+           	map1.put("pay_number", orderId);
+           	int number = ppm.updateOrderByNumber(map1);
+           	if(number != 1) {
+           		retBean.setRet_code(PayCode.UPDATEFAILD.getCode());
+                retBean.setRet_msg(PayCode.UPDATEFAILD.getDesc());
                 return new JsonResult<>(retBean);
-            }else {
-            	retBean.setRet_code(PayCode.PAID.getCode());
-                retBean.setRet_msg(PayCode.PAID.getDesc());
-                return new JsonResult<>(retBean);
-            }
-        }else {
-        	retBean.setRet_code(PayCode.FAILD.getCode());
-            retBean.setRet_msg(PayCode.FAILD.getDesc());
-            return new JsonResult<>(retBean);
-        }*/
+           	}
+           	String orderCode = ppm.selectOrderCode(orderId);
+           	CallBackParam cbp = new CallBackParam();
+        		cbp.setClientOrderCode(orderCode);
+        		cbp.setPayMethod(PayMethod.ONLINE.getValue());
+        		cbp.setOrderType(PayConstants.PayPlatForm.getNum(platformType));
+        		selectService.clientOrderPaySuccessOpt(cbp);
+        		retBean.setRet_code(PayCode.SUCCESS.getCode());
+               retBean.setRet_msg(PayCode.SUCCESS.getDesc());
+               return new JsonResult<>(retBean);
+           }else {
+           	retBean.setRet_code(PayCode.PAID.getCode());
+               retBean.setRet_msg(PayCode.PAID.getDesc());
+               return new JsonResult<>(retBean);
+           }
+       }else {
+       	retBean.setRet_code(PayCode.FAILD.getCode());
+           retBean.setRet_msg(PayCode.FAILD.getDesc());
+           return new JsonResult<>(retBean);
+       }
+		
 	}
 	/**
 	 * <p>
@@ -334,7 +318,7 @@ public class ClientPayService {
 		orderInfo.setOrderId(LLPayUtil.getCurrentDateTimeStr());//订单编号
 		orderInfo.setTimestamp(LLPayUtil.getCurrentDateTimeStr());//订单时间戳
 		orderInfo.setOrderAmount(corderInfo.getGrandTotal().toPlainString());//订单金额
-		orderInfo.setGoodsName("测试购买");//TODO fix
+		orderInfo.setGoodsName("零件购买");//TODO fix
 		orderInfo.setGoodsDesc("");
 		orderInfo.setRequestDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));//下单时间
 	    orderInfo.setUserType("USER_ID"); //用户标示类型 默认USER_ID

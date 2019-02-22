@@ -25,6 +25,7 @@ import com.azz.core.common.JsonResult;
 import com.azz.order.api.client.ClientPayService;
 import com.azz.order.client.pojo.RetBean;
 import com.azz.order.client.pojo.bo.PageOrder;
+import com.azz.util.LLPayUtil;
 
 /**
  * <P>TODO</P>
@@ -42,6 +43,7 @@ public class PayController {
 	
 	@RequestMapping("submitOrderPay")
 	public Map<String,Object> submitOrderPay(HttpServletRequest request,PageOrder po){
+		po.setClientIp(LLPayUtil.getIpAddr(request));
 		Map<String, Object> submitOrderPay = pfps.submitOrderPay(po);
 		Set<Entry<String, Object>> entrySet = submitOrderPay.entrySet();
 		for (Entry<String, Object> entry : entrySet) {

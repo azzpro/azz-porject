@@ -178,7 +178,7 @@ public class ClientPayService {
 			//clientPay.setOrderChannelMoney();//渠道费
 			clientPay.setOrderNumber(orderInfo.getClientOrderCode());
 			clientPay.setOrderMethod((byte) PayMethod.ONLINE.getValue());// 默认线上
-			clientPay.setOrderTime(System.currentTimeMillis());
+			clientPay.setOrderTime(Long.parseLong(LLPayUtil.getCurrentDateTimeStr()));
 			clientPay.setOrderStatus((byte) PayStatus.NOT_PAID.getValue());// 支付状态 默认待支付
 			clientPay.setPayNumber(order.getOrderId()); //订单流水号
 			clientPay.setPayInstruation(PayConstants.PAYMENT_INSTITUTION);//支付机构

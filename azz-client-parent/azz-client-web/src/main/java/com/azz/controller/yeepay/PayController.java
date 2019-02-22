@@ -49,13 +49,12 @@ public class PayController {
 	}
 	
 	@RequestMapping(value="payNotify",method=RequestMethod.POST)
-	public String payNotify(HttpServletRequest request,HttpServletResponse response) throws Exception {
+	public void payNotify(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		String responseMsg = request.getParameter("response");
 		String customerId = request.getParameter("customerIdentification");
 		log.info("进入支付回调接口");
 		log.info("responseMsg---->"+responseMsg);
 		log.info("customerId---->"+customerId);
-		return "callback";
 		/*String reqStr = LLPayUtil.readReqStr(request);
 		log.info("回调参数["+reqStr+"]");
 		JsonResult<String> payNotify = pfps.payNotify(reqStr);

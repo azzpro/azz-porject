@@ -138,14 +138,16 @@ public class QQLoginService {
 		            openID = openIDObj.getUserOpenID();
 		            if(StringUtils.isNotBlank(openID)) {//直接完成登录操作
 		            	ClientWxUser wxUser = clientWxUserMapper.selectWxUserByOpenid(openID);
-		            	ClientUser clientUser = clientUserMapper.getClientUserByClientUserCode(wxUser.getUserCode());
-						if(clientUser != null) {
-							wcbi.setCode(WxConstants.LOGINCODE);
-							wcbi.setPhone(clientUser.getPhoneNumber());
-							redis.opsForValue().set(clientUser.getPhoneNumber(), "wxScan");
-							redis.expire(clientUser.getPhoneNumber(), 30, TimeUnit.MINUTES);
-							return new JsonResult<>(wcbi);
-						}
+		            	if(wxUser != null) {
+		            		ClientUser clientUser = clientUserMapper.getClientUserByClientUserCode(wxUser.getUserCode());
+							if(clientUser != null) {
+								wcbi.setCode(WxConstants.LOGINCODE);
+								wcbi.setPhone(clientUser.getPhoneNumber());
+								redis.opsForValue().set(clientUser.getPhoneNumber(), "wxScan");
+								redis.expire(clientUser.getPhoneNumber(), 30, TimeUnit.MINUTES);
+								return new JsonResult<>(wcbi);
+							}
+		            	}
 						UserInfo qzoneUserInfo = new UserInfo(accessToken, openID);
 			            UserInfoBean userInfoBean = qzoneUserInfo.getUserInfo();
 			            wcbi.setHeadimgurl((String) userInfoBean.getAvatar().getAvatarURL30());
@@ -155,7 +157,8 @@ public class QQLoginService {
 						wcbi.setOpenid(openID);
 						wcbi.setCode(WxConstants.SUCCESSCODE);
 						wcbi.setMsg(WxConstants.SUCCESSMSG);
-						log.info("返回对象---->"+wcbi);
+						log.info("返回nickname---->"+userInfoBean.getNickname());
+						log.info("返回headUrl---->"+(String) userInfoBean.getAvatar().getAvatarURL30());
 						return new JsonResult<>(wcbi);
 		            }
 		            wcbi.setCode(WxConstants.STATECODE);

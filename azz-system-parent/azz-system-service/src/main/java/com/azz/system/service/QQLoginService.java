@@ -14,6 +14,9 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPObject;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.constants.ClientConstants;
@@ -104,9 +107,7 @@ public class QQLoginService {
 								return new JsonResult<>(wcbi);
 							}
 		         }else {
-		        	 log.info("11");
 		        	 String url = String.format(BaseUrl+userInfoUrl, access_token, AppId, openid);
-		        	 log.info(url);	
 		        	 String resultString = "";
 		        		try {
 							 resultString = HttpClientUtil.get(url, "UTF-8",Integer.parseInt(connTimeout), Integer.parseInt(readTimeout));
@@ -118,21 +119,19 @@ public class QQLoginService {
 							return new JsonResult<>(wcbi);
 						} 
 		        		if(StringUtils.isNotBlank(resultString)) {
-		        			System.out.println(resultString);
+		        			JSONObject object = JSON.parseObject(resultString);
+		        			String nickname = object.getString("nickname");
+		        			String headUrl = object.getString("figureurl_qq_1");
+		        			wcbi.setNickname(nickname);
+							wcbi.setAccessToken(access_token);
+							wcbi.setHeadimgurl(headUrl);
+							wcbi.setExpiresIn("");
+							wcbi.setOpenid(openid);
+							wcbi.setCode(WxConstants.SUCCESSCODE);
+							wcbi.setMsg(WxConstants.SUCCESSMSG);
+							return new JsonResult<>(wcbi);
 		        		} 
 		         }
-		        //获取QQ信息
-		        		
-			            /*wcbi.setHeadimgurl((String) userInfoBean.getAvatar().getAvatarURL30());
-						wcbi.setNickname(userInfoBean.getNickname());
-						wcbi.setAccessToken(access_token);
-						wcbi.setExpiresIn(expires_in);
-						wcbi.setOpenid(openID);
-						wcbi.setCode(WxConstants.SUCCESSCODE);
-						wcbi.setMsg(WxConstants.SUCCESSMSG);
-						log.info("返回nickname---->"+userInfoBean.getNickname());
-						log.info("返回headUrl---->"+(String) userInfoBean.getAvatar().getAvatarURL30());
-						return new JsonResult<>(wcbi);*/
 		        }
 		    wcbi.setCode(WxConstants.STATECODE);
 			wcbi.setMsg(WxConstants.STATEMSG);

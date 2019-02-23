@@ -46,8 +46,8 @@ public class QQLoginController {
 	 * @return
 	 */
 	@RequestMapping("callback")
-	public JsonResult<QQCallBackInfo> callback(HttpServletRequest request,@RequestParam("code")String code) {
-		return qqLoginService.callback(request,code);
+	public JsonResult<QQCallBackInfo> callback(HttpServletRequest request,@RequestParam("code")String code,@RequestParam("state")String state) {
+		return qqLoginService.callback(request,code,state);
 	}
 	
 	/**

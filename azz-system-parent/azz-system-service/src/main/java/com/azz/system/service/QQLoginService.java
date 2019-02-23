@@ -57,9 +57,6 @@ public class QQLoginService {
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
-	@Value("${qq.open.me}")
-    private String meUrl;
-
 	@Autowired
 	private StringRedisTemplate redis;
 	
@@ -81,34 +78,22 @@ public class QQLoginService {
 	 * @return
 	 */
 	public JsonResult<WxInfo> goQQScanPage(HttpServletRequest request) {
+		WxInfo wi = new WxInfo();
 		String url = "";
 		try {
 			url = new Oauth().getAuthorizeURL(request);//认证登录
 		} catch (QQConnectException e) {
 			e.printStackTrace();
+			wi.setUrl("");
+			return new JsonResult<>(wi);
 		}
-		log.info("QQ登录请求url------------>" + url);
-		WxInfo wi = new WxInfo();
+		String header = request.getHeader("Referer");
+		log.info("QQ登录请求url------------>" + url+"::::请求header------>"+header);
 		wi.setUrl(url);
 		return new JsonResult<>(wi);
 	}
 
 	
-	private JSONObject getQQMe(String accessToken){
-        String url = String.format(meUrl, accessToken);
-        String string = "";
-		try {
-			string = HttpClientUtil.get(url, "UTF-8");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		if(StringUtils.isNotBlank(string)) {
-			String jsonStr = string.substring(string.indexOf("{"), string.indexOf("}")+1);
-			JSONObject jsonObject = (JSONObject) JSON.parse(jsonStr);
-			 return jsonObject;
-		}
-       return null; 
-    }
 	/**
 	 * 微信回调
 	 * 
@@ -117,7 +102,7 @@ public class QQLoginService {
 	 * @param key
 	 * @return
 	 */
-	public JsonResult<QQCallBackInfo> callback(HttpServletRequest request,String code) {
+	public JsonResult<QQCallBackInfo> callback(HttpServletRequest request,String code,String state) {
 		log.info("进入QQ 回调"+code);
 		QQCallBackInfo wcbi = new QQCallBackInfo();
 		if (StringUtils.isBlank(code)) {

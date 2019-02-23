@@ -76,9 +76,9 @@ public class QQLoginController {
 	 * @return
 	 */
 	@RequestMapping(value="callback",method=RequestMethod.POST)
-	public Object callback(@RequestParam("code")String code) {
+	public Object callback(@RequestParam("code")String code,@RequestParam("state")String state) {
 		log.info("进入QQ 回调");
-		JsonResult<WxCallBackInfo> result = qqLoginService.callback(code);
+		JsonResult<WxCallBackInfo> result = qqLoginService.callback(code,state);
 		if(Objects.equals(WxConstants.LOGINCODE, result.getData().getCode())) {
 			// 从SecurityUtils里边创建一个 subject
 			Subject subject = SecurityUtils.getSubject();

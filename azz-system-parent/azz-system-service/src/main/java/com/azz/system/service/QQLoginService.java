@@ -102,39 +102,31 @@ public class QQLoginService {
 	 * @param key
 	 * @return
 	 */
-	public JsonResult<QQCallBackInfo> callback(HttpServletRequest request,String code,String state) {
-		log.info("进入QQ 回调"+code);
+	public JsonResult<QQCallBackInfo> callback(HttpServletRequest request,String access_token,String expires_in) {
+		log.info("进入QQ 回调"+access_token);
 		QQCallBackInfo wcbi = new QQCallBackInfo();
-		if (StringUtils.isBlank(code)) {
+		if (StringUtils.isBlank(access_token)) {
 			wcbi.setCode(WxConstants.NOACCESSCODE);
 			wcbi.setMsg(WxConstants.NOACCESS);
 			return new JsonResult<>(wcbi);
 		} else {
+			request.getSession().setAttribute("accessToken", access_token);
+		    OpenID openIDObj =  new OpenID(access_token);
+		    String openID = "";
 			try {
-				request.getSession().setAttribute("qq_connect_state", request.getParameter("state"));
-				AccessToken accessTokenObj = (new Oauth()).getAccessTokenByRequest(request);
-		        log.info("accessTokenObj---->"+accessTokenObj.getAccessToken());
-				String accessToken   = null,
-		                openID        = null;
-		        long tokenExpireIn = 0L;
-		        if (accessTokenObj.getAccessToken().equals("")) {
-		        	wcbi.setCode(WxConstants.STATECODE);
-					wcbi.setMsg(WxConstants.STATEMSG);
-					return new JsonResult<>(wcbi);
-		        }else{
-		        	System.out.println("1");
-		            accessToken = accessTokenObj.getAccessToken();
-		            tokenExpireIn = accessTokenObj.getExpireIn();
-		            OpenID openIDObj =  new OpenID(accessToken);
-		            openID = openIDObj.getUserOpenID();
-		            if(StringUtils.isNotBlank(openID)) {//直接完成登录操作
-		            	System.out.println("12");
-		            	ClientWxUser wxUser = clientWxUserMapper.selectWxUserByOpenid(openID);
-		            	if(wxUser != null) {
-		            		System.out.println("13");
-		            		ClientUser clientUser = clientUserMapper.getClientUserByClientUserCode(wxUser.getUserCode());
-							if(clientUser != null) {
-								System.out.println("14");
+				openID = openIDObj.getUserOpenID();
+			} catch (QQConnectException e1) {
+				e1.printStackTrace();
+				wcbi.setCode(WxConstants.STATECODE);
+				wcbi.setMsg(e1.getMessage());
+				return new JsonResult<>(wcbi);
+			}
+		    log.info("openid-------------->"+openID);
+		    if(StringUtils.isNotBlank(openID)) {//直接完成登录操作
+		        ClientWxUser wxUser = clientWxUserMapper.selectWxUserByOpenid(openID);
+		        if(wxUser != null) {
+		        	ClientUser clientUser = clientUserMapper.getClientUserByClientUserCode(wxUser.getUserCode());
+						if(clientUser != null) {
 								wcbi.setCode(WxConstants.LOGINCODE);
 								wcbi.setPhone(clientUser.getPhoneNumber());
 								redis.opsForValue().set(clientUser.getPhoneNumber(), "wxScan");
@@ -142,31 +134,35 @@ public class QQLoginService {
 								return new JsonResult<>(wcbi);
 							}
 		            	}
-		            	System.out.println("15");
-						UserInfo qzoneUserInfo = new UserInfo(accessToken, openID);
-			            UserInfoBean userInfoBean = qzoneUserInfo.getUserInfo();
+						UserInfo qzoneUserInfo = new UserInfo(access_token, openID);
+			            UserInfoBean userInfoBean = null;
+						try {
+							userInfoBean = qzoneUserInfo.getUserInfo();
+						} catch (QQConnectException e) {
+							e.printStackTrace();
+							wcbi.setCode(WxConstants.STATECODE);
+							wcbi.setMsg(e.getMessage());
+							return new JsonResult<>(wcbi);
+						}
+						if(userInfoBean == null) {
+							wcbi.setCode(WxConstants.STATECODE);
+							wcbi.setMsg(WxConstants.STATEMSG);
+							return new JsonResult<>(wcbi);
+						}
 			            wcbi.setHeadimgurl((String) userInfoBean.getAvatar().getAvatarURL30());
 						wcbi.setNickname(userInfoBean.getNickname());
-						wcbi.setAccessToken(accessTokenObj.getAccessToken());
-						wcbi.setExpiresIn(accessTokenObj.getExpireIn()+"");
+						wcbi.setAccessToken(access_token);
+						wcbi.setExpiresIn(expires_in);
 						wcbi.setOpenid(openID);
 						wcbi.setCode(WxConstants.SUCCESSCODE);
 						wcbi.setMsg(WxConstants.SUCCESSMSG);
 						log.info("返回nickname---->"+userInfoBean.getNickname());
 						log.info("返回headUrl---->"+(String) userInfoBean.getAvatar().getAvatarURL30());
 						return new JsonResult<>(wcbi);
-		            }
-		            wcbi.setCode(WxConstants.STATECODE);
-					wcbi.setMsg(WxConstants.STATEMSG);
-					return new JsonResult<>(wcbi);
-		            
 		        }
-		    }catch(Exception e){
-		        e.printStackTrace();
-		        wcbi.setCode(WxConstants.HTTPERRORCODE);
-				wcbi.setMsg(WxConstants.HTTPERRORMSG);
-				return new JsonResult<>(wcbi);
-		    }
+		    wcbi.setCode(WxConstants.STATECODE);
+			wcbi.setMsg(WxConstants.STATEMSG);
+			return new JsonResult<>(wcbi);
 		}	
 	}
 

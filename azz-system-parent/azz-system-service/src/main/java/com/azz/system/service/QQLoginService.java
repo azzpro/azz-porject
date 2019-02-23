@@ -104,12 +104,13 @@ public class QQLoginService {
 								return new JsonResult<>(wcbi);
 							}
 		         }else {
+		        	 log.info("11");
 		        	 String url = String.format(BaseUrl+userInfoUrl, access_token, AppId, openid);
-		        	System.out.println(url);	
+		        	 log.info(url);	
 		        	 String resultString = "";
 		        		try {
 							 resultString = HttpClientUtil.get(url, "UTF-8",Integer.parseInt(connTimeout), Integer.parseInt(readTimeout));
-							 System.out.println(resultString);
+							 log.info(resultString);
 		        		} catch (Exception e) {
 							e.printStackTrace();
 							wcbi.setCode(WxConstants.STATECODE);

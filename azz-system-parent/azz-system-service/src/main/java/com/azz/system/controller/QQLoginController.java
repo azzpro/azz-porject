@@ -3,6 +3,8 @@ package com.azz.system.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,11 +22,15 @@ import com.azz.system.vo.QQLoginInfo;
 import com.azz.system.vo.WxCallBackInfo;
 import com.azz.system.vo.WxInfo;
 import com.azz.system.vo.WxLoginInfo;
+import com.qq.connect.QQConnectException;
+import com.qq.connect.oauth.Oauth;
 
 @RestController
 @RequestMapping("/azz/api/qq")
 public class QQLoginController {
 
+	private final Logger log = LoggerFactory.getLogger(getClass());
+	
 	@Autowired
 	private QQLoginService qqLoginService;
 	
@@ -35,7 +41,19 @@ public class QQLoginController {
 	 */
 	@RequestMapping("goQQScanPage")
 	public JsonResult<WxInfo> goQQScanPage(HttpServletRequest request,HttpServletResponse response) throws Exception {
-		return qqLoginService.goQQScanPage(request,response);
+		WxInfo wi = new WxInfo();
+		String url = "";
+		try {
+			url = new Oauth().getAuthorizeURL(request);//认证登录
+		} catch (QQConnectException e) {
+			e.printStackTrace();
+			wi.setUrl("");
+			return new JsonResult<>(wi);
+		}
+		String header = request.getHeader("Referer");
+		log.info("QQ登录请求url------------>" + url+"::::请求header------>"+header);
+		wi.setUrl(url);
+		return new JsonResult<>(wi);
 	}
 	
 	

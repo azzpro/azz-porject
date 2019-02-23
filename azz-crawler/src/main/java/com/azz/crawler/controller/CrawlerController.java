@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
@@ -45,6 +47,11 @@ public class CrawlerController {
 		return "index";
 	}
 	
+	@RequestMapping("login")
+    public String toLogin() {
+        return "login";
+    }
+	
 	/**
 	 * 
 	 * <p>查询本地生活所有标题</p>
@@ -56,6 +63,15 @@ public class CrawlerController {
 	public JsonResult<List<Bdsh5Title>> getBdsh5Titles(){
 		return crawlerService.getBdsh5Titles();
 	}
+	
+	
+	
+	@RequestMapping(value = "doLogin",method = RequestMethod.POST)
+	@ResponseBody
+	public JsonResult<String> doLogin(@RequestParam("userName")String userName, @RequestParam("pwd")String pwd){
+        System.out.println("userName="+userName+",pwd="+pwd);
+	    return crawlerService.doLogin(userName, pwd);
+    }
 	
 	/**
 	 * 

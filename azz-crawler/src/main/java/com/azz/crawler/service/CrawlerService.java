@@ -61,6 +61,24 @@ public class CrawlerService {
 	}
 	
 	/**
+	 * <p>爬虫登录</p>
+	 * @param name
+	 * @param pwd
+	 * @return
+	 * @author 彭斌  2019年2月23日 下午5:08:10
+	 */
+	public JsonResult<String> doLogin(String name, String pwd){
+	    JsonResult<String> jsonResult = new JsonResult<String>();
+	    if(null == name || null == pwd) {
+	        throw new RuntimeException("账号密码异常");
+        }
+	    if(!"admin".equals(name) || !"5S3DyUZ8".equals(pwd)) {
+	        throw new RuntimeException("账号密码错误");
+	    }
+	    return jsonResult;
+	}
+	
+	/**
 	 * 
 	 * <p>根据标题查询本地生活网信息</p>
 	 * @param titles 需要爬取数据的标题

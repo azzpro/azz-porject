@@ -92,7 +92,6 @@ public class QQLoginService {
 			wcbi.setMsg(WxConstants.NOACCESS);
 			return new JsonResult<>(wcbi);
 		} else {
-			
 		    if(StringUtils.isNotBlank(openid)) {//直接完成登录操作
 		        ClientWxUser wxUser = clientWxUserMapper.selectWxUserByOpenid(openid);
 		        if(wxUser != null) {
@@ -104,13 +103,14 @@ public class QQLoginService {
 								redis.expire(clientUser.getPhoneNumber(), 30, TimeUnit.MINUTES);
 								return new JsonResult<>(wcbi);
 							}
-		            	}
-		        //获取QQ信息
-		        		String url = String.format(BaseUrl+userInfoUrl, access_token, AppId, openid);
-		        		String resultString = "";
+		         }else {
+		        	 String url = String.format(BaseUrl+userInfoUrl, access_token, AppId, openid);
+		        	System.out.println(url);	
+		        	 String resultString = "";
 		        		try {
 							 resultString = HttpClientUtil.get(url, "UTF-8",Integer.parseInt(connTimeout), Integer.parseInt(readTimeout));
-						} catch (Exception e) {
+							 System.out.println(resultString);
+		        		} catch (Exception e) {
 							e.printStackTrace();
 							wcbi.setCode(WxConstants.STATECODE);
 							wcbi.setMsg(e.getMessage());
@@ -118,7 +118,10 @@ public class QQLoginService {
 						} 
 		        		if(StringUtils.isNotBlank(resultString)) {
 		        			System.out.println(resultString);
-		        		}
+		        		} 
+		         }
+		        //获取QQ信息
+		        		
 			            /*wcbi.setHeadimgurl((String) userInfoBean.getAvatar().getAvatarURL30());
 						wcbi.setNickname(userInfoBean.getNickname());
 						wcbi.setAccessToken(access_token);

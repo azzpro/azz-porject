@@ -2,6 +2,9 @@ package com.azz.controller;
 
 import java.util.Objects;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -38,6 +41,8 @@ import com.azz.system.vo.WxCallBackInfo;
 import com.azz.system.vo.WxInfo;
 import com.azz.system.vo.WxLoginInfo;
 import com.azz.util.JSR303ValidateUtils;
+import com.qq.connect.QQConnectException;
+import com.qq.connect.oauth.Oauth;
 
 /**
  * @author THINK
@@ -61,10 +66,14 @@ public class QQLoginController {
 	/**
 	 * 去到QQ扫码页面
 	 * @return
+	 * @throws Exception 
 	 */
 	@RequestMapping(value="goQQScanPage",method=RequestMethod.POST)
-	public JsonResult<WxInfo> goQQScanPage(){
-		return qqLoginService.goQQScanPage();
+	public void goQQScanPage(HttpServletRequest request,HttpServletResponse response) throws Exception{
+		String url = new Oauth().getAuthorizeURL(request);
+		response.sendRedirect(url);
+		
+		System.out.println("aaaaaaaa--->"+request.getHeader("Referer"));
 	}
 		
 	

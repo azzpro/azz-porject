@@ -149,7 +149,6 @@ public class QQLoginController {
 		WebUtils.setShiroSessionAttr(ClientConstants.LOGIN_CLIENT_USER, loginClientUser);
 		ClientWxUser wsc = new ClientWxUser();
 		wsc.setAccess_token(param.getAccessToken());
-		wsc.setExpires_in(Long.parseLong(param.getExpiresIn()));
 		wsc.setOpenid(param.getOpenid());
 		wsc.setUserCode(loginClientUser.getClientUserInfo().getClientUserCode());
 		wsc.setAvatarUrl(param.getAvatarUrl());

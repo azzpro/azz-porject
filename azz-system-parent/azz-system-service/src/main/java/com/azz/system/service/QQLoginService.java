@@ -75,34 +75,6 @@ public class QQLoginService {
 	private DbSequenceService dbSequenceService;
 
 	/**
-	 * 去到QQ扫码页面
-	 * 
-	 * @return
-	 * @throws Exception 
-	 */
-	public JsonResult<WxInfo> goQQScanPage(HttpServletRequest request,HttpServletResponse response) throws Exception {
-		String url = new Oauth().getAuthorizeURL(request);
-		response.sendRedirect(url);
-		
-		System.out.println("aaaaaaaa--->"+request.getHeader("Referer"));
-		return null;
-		/*WxInfo wi = new WxInfo();
-		String url = "";
-		try {
-			url = new Oauth().getAuthorizeURL(request);//认证登录
-		} catch (QQConnectException e) {
-			e.printStackTrace();
-			wi.setUrl("");
-			return new JsonResult<>(wi);
-		}
-		String header = request.getHeader("Referer");
-		log.info("QQ登录请求url------------>" + url+"::::请求header------>"+header);
-		wi.setUrl(url);
-		return new JsonResult<>(wi);*/
-	}
-
-	
-	/**
 	 * 微信回调
 	 * 
 	 * @param code
@@ -110,14 +82,18 @@ public class QQLoginService {
 	 * @param key
 	 * @return
 	 */
-	public JsonResult<QQCallBackInfo> callback(HttpServletRequest request,String access_token,String expires_in) {
-		log.info("进入QQ 回调"+access_token);
-		QQCallBackInfo wcbi = new QQCallBackInfo();
-		if (StringUtils.isBlank(access_token)) {
+	public JsonResult<QQCallBackInfo> callback(HttpServletRequest request,String access_token,String openid) {
+		log.info("进入QQ 回调"+access_token+":::"+openid);
+		return null;
+		//QQCallBackInfo wcbi = new QQCallBackInfo();
+		/*if (StringUtils.isBlank(code) || StringUtils.isBlank(state)) {
 			wcbi.setCode(WxConstants.NOACCESSCODE);
 			wcbi.setMsg(WxConstants.NOACCESS);
 			return new JsonResult<>(wcbi);
 		} else {
+			String  session_state=(String)request.getSession().getAttribute("qq_connect_state");
+			log.info("session--------->"+session_state);
+			String accessToken = QQLoginUT.getAccessToken(code);
 			request.getSession().setAttribute("accessToken", access_token);
 		    OpenID openIDObj =  new OpenID(access_token);
 		    String openID = "";
@@ -171,7 +147,7 @@ public class QQLoginService {
 		    wcbi.setCode(WxConstants.STATECODE);
 			wcbi.setMsg(WxConstants.STATEMSG);
 			return new JsonResult<>(wcbi);
-		}	
+		}	*/
 	}
 
 	/**

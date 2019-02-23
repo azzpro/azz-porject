@@ -35,7 +35,7 @@ public interface QQLoginService {
 	 * @return
 	 */
 	@RequestMapping(value="/azz/api/qq/callback",method=RequestMethod.POST)
-	public JsonResult<WxCallBackInfo> callback(@RequestParam("access_token")String access_token,@RequestParam("expires_in")String expires_in) ;
+	public JsonResult<WxCallBackInfo> callback(@RequestParam("access_token")String access_token,@RequestParam("openid")String openid) ;
 	
 	/**
 	 * 绑定或者注册

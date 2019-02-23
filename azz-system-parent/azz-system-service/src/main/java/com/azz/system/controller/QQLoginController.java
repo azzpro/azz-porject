@@ -66,8 +66,8 @@ public class QQLoginController {
 	 * @return
 	 */
 	@RequestMapping("callback")
-	public JsonResult<QQCallBackInfo> callback(HttpServletRequest request,@RequestParam("access_token")String access_token,@RequestParam("expires_in")String expires_in) {
-		return qqLoginService.callback(request,access_token,expires_in);
+	public JsonResult<QQCallBackInfo> callback(HttpServletRequest request,@RequestParam("access_token")String access_token,@RequestParam("openid")String openid) {
+		return qqLoginService.callback(request,access_token,openid);
 	}
 	
 	/**

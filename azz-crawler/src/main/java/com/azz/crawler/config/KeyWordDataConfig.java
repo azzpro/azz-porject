@@ -16,17 +16,28 @@ import org.springframework.context.annotation.Configuration;
  * @author 黄智聪  2019年2月19日 下午6:35:42
  */
 @Configuration
-public class Bdsh5DataConfig {
+public class KeyWordDataConfig {
 	
 	/**
 	 * 
-	 * <p>本地生活数据实例</p>
+	 * <p>本地生活关键字数据实例</p>
 	 * @return
 	 * @author 黄智聪  2019年2月19日 下午6:37:43
 	 */
 	@Bean
-	public Bdsh5Data getBdsh5Data() {
-		return new Bdsh5Data();
+	public Bdsh5KeyWordData getBdsh5Data() {
+		return new Bdsh5KeyWordData();
+	}
+	
+	/**
+	 * 
+	 * <p>百姓网关键字数据实例</p>
+	 * @return
+	 * @author 黄智聪  2019年2月19日 下午6:37:43
+	 */
+	@Bean
+	public BaixingKeyWordData getBaixingData() {
+		return new BaixingKeyWordData();
 	}
 
 }

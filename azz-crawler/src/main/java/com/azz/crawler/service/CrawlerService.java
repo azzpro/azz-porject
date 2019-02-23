@@ -9,7 +9,10 @@ package com.azz.crawler.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -22,9 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.azz.core.common.JsonResult;
-import com.azz.crawler.config.Bdsh5Data;
+import com.azz.crawler.config.BaixingKeyWordData;
+import com.azz.crawler.config.Bdsh5KeyWordData;
 import com.azz.crawler.pojo.Bdsh5Title;
-import com.azz.crawler.pojo.bo.SearchInfoParam;
 import com.azz.crawler.pojo.vo.SearchInfo;
 
 
@@ -35,9 +38,17 @@ import com.azz.crawler.pojo.vo.SearchInfo;
  */
 @Service
 public class CrawlerService {
+
+	@Autowired
+	private Bdsh5KeyWordData bdsh5KeyWordData;// 本地生活网关键字数据
 	
 	@Autowired
-	private Bdsh5Data bdsh5Data;
+	private BaixingKeyWordData baixingKeyWordData;// 百姓网关键字数据
+	
+	
+	/*****************************************************************************************************************************/
+	/*************************************************  本地生活网数据爬虫start  ******************************************************/
+	/*****************************************************************************************************************************/
 	
 	/**
 	 * 
@@ -46,7 +57,7 @@ public class CrawlerService {
 	 * @author 黄智聪  2019年2月20日 下午1:40:28
 	 */
 	public JsonResult<List<Bdsh5Title>> getBdsh5Titles(){
-		return JsonResult.successJsonResult(bdsh5Data.getAllTitles());
+		return JsonResult.successJsonResult(bdsh5KeyWordData.getAllTitles());
 	}
 	
 	/**
@@ -56,37 +67,51 @@ public class CrawlerService {
 	 * @return
 	 * @author 黄智聪  2019年2月20日 下午2:06:46
 	 */
-	public JsonResult<List<SearchInfo>> getBdsh5SearchInfoByTitle(SearchInfoParam param){
-		List<Bdsh5Title> titlesToSearch = param.getTitlesToSearch();
-		List<SearchInfo> searchInfos = new ArrayList<>();
+	public JsonResult<Map<String, List<SearchInfo>>> getBdsh5SearchInfoByTitle(List<Bdsh5Title> titlesToSearch){
+		if(titlesToSearch == null || titlesToSearch.size() == 0) {
+			throw new RuntimeException("请选择需要爬取数据的标题");
+		}
+		Map<String, List<SearchInfo>> result = new LinkedHashMap<>();
 		// 逐条查询
 		for (Bdsh5Title eachTitle : titlesToSearch) {
+			List<SearchInfo> searchInfos = new ArrayList<>();
+			String titleName = eachTitle.getName();
 			try {
-				String titleName = eachTitle.getName();
 				String url = eachTitle.getUrl();
 				Document doc = Jsoup.connect(url).get();
 				// 尾页连接地址，获取页数
-				String lastPageUrl = doc.getElementsByClass("page").select("a").last().attr("href");
-				int start = lastPageUrl.indexOf("/p_");
-				String pageStr = lastPageUrl.substring(start + 3, lastPageUrl.length() - 1);
-				// 总页数
-				int totalPages = Integer.parseInt(pageStr);
+				// 总页数，至少1页
+				int totalPages = 1;
+				try {
+					String lastPageUrl = doc.getElementsByClass("page").select("a").last().attr("href");
+					int start = lastPageUrl.indexOf("/p_");
+					String pageStr = lastPageUrl.substring(start + 3, lastPageUrl.length() - 1);
+					totalPages = Integer.parseInt(pageStr);
+				} catch (Exception e) {// 若这里抛异常说明只有一页
+					System.out.println("["+titleName+"]此页面只有一页数据");
+				}
 				System.out.println("准备爬取标题为[" + titleName + "]的数据，共" + totalPages + "页数据");
 				for(int page = 1; page <= totalPages; page++) {
 					System.out.println("正在爬取第"+ page +"页数据...");
 					String pageSuffix = "p_" + page;
 					String nextUrl = url + pageSuffix;
-					Document newPageDoc = Jsoup.connect(nextUrl).get();
+					Document newPageDoc = null;
+					try {
+						newPageDoc = Jsoup.connect(nextUrl).get();
+					} catch (Exception e) {
+						System.out.println("爬取["+titleName+"]时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
+						continue;
+					}
 					searchInfos.addAll(getEachPageInfo(newPageDoc));
 				}
-				System.out.println("标题为[" + titleName + "]的数据爬取完毕...");
-				System.out.println("共爬取了" + searchInfos.size() + "条数据");
+				result.put(titleName, searchInfos);
+				System.out.println("标题为[" + titleName + "]的数据爬取完毕，共爬取了" + searchInfos.size() + "条数据");
 				System.out.println("-------------------------------------------------");
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.out.println("爬取["+titleName+"]时，获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
 			}
 		}
-		return JsonResult.successJsonResult(searchInfos);
+		return JsonResult.successJsonResult(result);
 	}
 	
 	/**
@@ -98,28 +123,38 @@ public class CrawlerService {
 	 * @author 黄智聪  2019年2月20日 下午6:13:16
 	 * @throws IOException 
 	 */
-	public HSSFWorkbook exportBdsh5Data(String title, List<SearchInfo> infos) throws IOException {
-		if(infos == null || infos.size() == 0) {
+	public HSSFWorkbook exportBdsh5Data(Map<String, List<SearchInfo>> exportData) throws IOException {
+		if(exportData == null || exportData.size() == 0) {
 			throw new RuntimeException("无任何数据可导出");
 		}
+		Set<String> keys = exportData.keySet();
 		HSSFWorkbook wb = new HSSFWorkbook();
-		// 建立新的sheet对象（excel的表单）
-		HSSFSheet sheet = wb.createSheet(title);
-		// 在sheet里创建第一行，参数为行索引(excel的行)，可以是0～65535之间的任何一个
-		HSSFRow row0 = sheet.createRow(0);
-		// 添加表头
-        row0.createCell(0).setCellValue("联系人姓名");
-        row0.createCell(1).setCellValue("联系人手机号");
-        row0.createCell(2).setCellValue("标题");
-        row0.createCell(3).setCellValue("描述");
-        int i = 0;
-        for (SearchInfo info : infos) {
-        	i++;
-			HSSFRow row = sheet.createRow(i);
-			row.createCell(0).setCellValue(info.getName());
-			row.createCell(1).setCellValue(info.getPhoneNumber());
-			row.createCell(2).setCellValue(info.getTitle());
-			row.createCell(3).setCellValue(info.getDesc());
+		for (String key : keys) {// key为title
+			String titleName = "";
+			if(key.contains("/")) {
+				titleName = key.replace("/", "、");
+			}else {
+				titleName = key;
+			}
+			// 建立新的sheet对象（excel的表单）
+			HSSFSheet sheet = wb.createSheet(titleName);
+			// 在sheet里创建第一行，参数为行索引(excel的行)，可以是0～65535之间的任何一个
+			HSSFRow row0 = sheet.createRow(0);
+			// 添加表头
+			row0.createCell(0).setCellValue("联系人姓名");
+			row0.createCell(1).setCellValue("联系人手机号");
+			row0.createCell(2).setCellValue("标题");
+			row0.createCell(3).setCellValue("描述");
+			List<SearchInfo> infos = exportData.get(key);
+			int i = 0;
+			for (SearchInfo info : infos) {
+				i++;
+				HSSFRow row = sheet.createRow(i);
+				row.createCell(0).setCellValue(info.getName());
+				row.createCell(1).setCellValue(info.getPhoneNumber());
+				row.createCell(2).setCellValue(info.getTitle());
+				row.createCell(3).setCellValue(info.getDesc());
+			}
 		}
         wb.close();
 		return wb;
@@ -167,7 +202,26 @@ public class CrawlerService {
 		}
 		return searchInfos;
 	}
+	/***************************************************************************************************************************/
+	/*************************************************  本地生活网数据爬虫end ******************************************************/
+	/***************************************************************************************************************************/
 	
 	
+	
+	
+	/*****************************************************************************************************************************/
+	/*************************************************  本地生活网数据爬虫start  ******************************************************/
+	/*****************************************************************************************************************************/
+	
+	
+	
+	
+	
+	
+	
+	
+	/***************************************************************************************************************************/
+	/*************************************************  本地生活网数据爬虫end  ******************************************************/
+	/***************************************************************************************************************************/
 }
 

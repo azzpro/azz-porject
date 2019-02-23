@@ -153,6 +153,7 @@ public class QQLoginController {
 		wsc.setUserCode(loginClientUser.getClientUserInfo().getClientUserCode());
 		wsc.setAvatarUrl(param.getAvatarUrl());
 		wsc.setNickName(param.getNickName());
+		wsc.setPlatformType("QQ");
 		qqLoginService.insert(wsc);
 		return jr;
 	}

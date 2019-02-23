@@ -7,6 +7,8 @@
  
 package com.azz.order.api.client;
 
+import java.util.Map;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +37,7 @@ public interface ClientPayService {
 	 * @author 刘建麟  2018年12月17日 下午6:27:10
 	 */
 	@RequestMapping(value="/azz/api/pay/payNotify",method=RequestMethod.POST)
-	public JsonResult<String> payNotify(@RequestParam("reqStr") String reqStr);
+	public JsonResult<RetBean> payNotify(@RequestParam("responseMsg") String responseMsg,@RequestParam("customerId") String customerId);
 	
 	/**
 	 * <p>提交支付</p>
@@ -44,7 +46,7 @@ public interface ClientPayService {
 	 * @author 刘建麟  2018年11月26日 下午3:20:20
 	 */
 	@RequestMapping(value="/azz/api/pay/submitOrderPay",method=RequestMethod.POST)
-	public JsonResult<ClientOrderInfo> submitOrderPay(@RequestBody PageOrder po);
+	public Map<String,Object> submitOrderPay(@RequestBody PageOrder po);
 	
 	/**
 	 * <p>支付管理列表</p>

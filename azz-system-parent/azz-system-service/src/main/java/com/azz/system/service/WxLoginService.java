@@ -290,6 +290,7 @@ public class WxLoginService {
 		wsc.setUserCode(clientUserRecord.getClientUserCode());
 		wsc.setAvatarUrl(wcrp.getAvatarUrl());
 		wsc.setNickName(wcrp.getNickName());
+		wsc.setPlatformType("微信");
 		int i = clientWxUserMapper.insert(wsc);
 		if(1 == i) {
 			WxLoginInfo wi = new WxLoginInfo();

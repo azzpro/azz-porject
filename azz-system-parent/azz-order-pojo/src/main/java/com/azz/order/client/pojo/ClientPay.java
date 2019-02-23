@@ -41,8 +41,15 @@ public class ClientPay implements Serializable{
 	private String goodsName;//商品名称
 	private Integer busiPartner;//业务类型
 	private String payInstruation;
+	private String paySuccessDate;
 	private ClientOrderInfo coi;
 	
+	public String getPaySuccessDate() {
+		return paySuccessDate;
+	}
+	public void setPaySuccessDate(String paySuccessDate) {
+		this.paySuccessDate = paySuccessDate;
+	}
 	public ClientOrderInfo getCoi() {
 		return coi;
 	}

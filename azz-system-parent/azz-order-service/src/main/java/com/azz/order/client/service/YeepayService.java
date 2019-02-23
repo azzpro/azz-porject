@@ -1,4 +1,4 @@
-package com.azz.controller.yeepay;
+package com.azz.order.client.service;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -11,13 +11,16 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
-
+import sun.misc.BASE64Decoder;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.azz.core.constants.Configuration;
@@ -131,7 +134,7 @@ public class YeepayService {
 	}
 
 	//拼接支付链接
-	public static String getUrl(Map<String,String> paramValues) throws UnsupportedEncodingException{
+	public static String getUrl(Map<String,String> paramValues) throws Exception{
 		StringBuffer url = new StringBuffer();
 		url.append(getUrl("CASHIER"));
 		paramValues.put("merchantNo", getParentMerchantNo());
@@ -164,6 +167,11 @@ public class YeepayService {
 	//获取父商编密钥
 	public static String getParentKey(){
 		return Configuration.getInstance().getValue("privatekey");
+	}
+	
+	//获取父商编公钥
+	public static String getPKey(){
+		return Configuration.getInstance().getValue("publickey");
 	}	
 	
 	
@@ -193,10 +201,26 @@ public class YeepayService {
 		PublicKey isvPublicKey = InternalConfig.getYopPublicKey(CertTypeEnum.RSA2048);
 		return isvPublicKey;
 	}
+	public static PrivateKey getPrivateKey(String key) throws Exception {
+        byte[] keyBytes;
+        keyBytes = (new BASE64Decoder()).decodeBuffer(key);
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
+        return privateKey;
+  }
+	public static PublicKey getPublicKey(String key) throws Exception {
+        byte[] keyBytes;
+        keyBytes = (new BASE64Decoder()).decodeBuffer(key);
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        PublicKey publicKey = keyFactory.generatePublic(keySpec);
+        return publicKey;
+  }
 	//获取sign
-	public static String getSign(String stringBuilder){
+	public static String getSign(String stringBuilder) throws Exception{
 		String appKey = "OPR:"+getParentMerchantNo();
-		PrivateKey isvPrivateKey = getSecretKey();
+		PrivateKey isvPrivateKey = getPrivateKey(YeepayService.getParentKey());
 		DigitalSignatureDTO digitalSignatureDTO = new DigitalSignatureDTO();
 		digitalSignatureDTO.setAppKey(appKey);
 		digitalSignatureDTO.setCertType(CertTypeEnum.RSA2048);
@@ -488,20 +512,20 @@ public class YeepayService {
 	
 	//回调
 	public static Map<String, String> callback(String response){
-		System.out.println(response);
+		System.out.println("进入回调处理");
 		DigitalEnvelopeDTO dto = new DigitalEnvelopeDTO();
 		dto.setCipherText(response);
 		Map<String,String> jsonMap  = new HashMap<>();
 	    try {
-	        PrivateKey privateKey = InternalConfig.getISVPrivateKey(CertTypeEnum.RSA2048);
-	        PublicKey publicKey = InternalConfig.getYopPublicKey(CertTypeEnum.RSA2048);
+	        PrivateKey privateKey = getPrivateKey(YeepayService.getParentKey());
+	        PublicKey publicKey = getPublicKey(YeepayService.getPKey());
 	        dto = DigitalEnvelopeUtils.decrypt(dto, privateKey, publicKey);
 	        System.out.println(dto.getPlainText());
 	        jsonMap = parseResponse(dto.getPlainText());
         } catch (Exception e) {
         	e.printStackTrace();
         }
-	    
+	    System.out.println("回调处理结束");
 		return jsonMap;
 	}
 	

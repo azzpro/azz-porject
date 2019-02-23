@@ -7,6 +7,8 @@
  
 package com.azz.order.client.controller;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +46,7 @@ public class ClientPayController {
 	 * @author 刘建麟  2018年11月26日 下午3:14:49
 	 */
 	@RequestMapping(value="submitOrderPay",method=RequestMethod.POST)
-	public JsonResult<ClientOrderInfo> submitOrderPay(@RequestBody PageOrder po){
+	public Map<String,Object> submitOrderPay(@RequestBody PageOrder po){
 		return pps.submitOrderPay(po);
 	} 
 	
@@ -65,8 +67,8 @@ public class ClientPayController {
 	 * @return
 	 */
 	@RequestMapping("payNotify")
-	public JsonResult<String> payNotify(@RequestParam("reqStr") String reqStr) {
-		return pps.payNotify(reqStr);
+	public JsonResult<RetBean> payNotify(@RequestParam("responseMsg") String responseMsg,@RequestParam("customerId") String customerId) {
+		return pps.payNotify(responseMsg,customerId);
 	}
 	
 	/**

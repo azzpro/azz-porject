@@ -1,6 +1,7 @@
 package com.azz.system.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,10 +31,11 @@ public class QQLoginController {
 	/**
 	 * 去到QQ扫码页面
 	 * @return
+	 * @throws Exception 
 	 */
 	@RequestMapping("goQQScanPage")
-	public JsonResult<WxInfo> goQQScanPage(HttpServletRequest request) {
-		return qqLoginService.goQQScanPage(request);
+	public JsonResult<WxInfo> goQQScanPage(HttpServletRequest request,HttpServletResponse response) throws Exception {
+		return qqLoginService.goQQScanPage(request,response);
 	}
 	
 	

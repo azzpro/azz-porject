@@ -1,10 +1,12 @@
 package com.azz.system.service;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -76,9 +78,15 @@ public class QQLoginService {
 	 * 去到QQ扫码页面
 	 * 
 	 * @return
+	 * @throws Exception 
 	 */
-	public JsonResult<WxInfo> goQQScanPage(HttpServletRequest request) {
-		WxInfo wi = new WxInfo();
+	public JsonResult<WxInfo> goQQScanPage(HttpServletRequest request,HttpServletResponse response) throws Exception {
+		String url = new Oauth().getAuthorizeURL(request);
+		response.sendRedirect(url);
+		
+		System.out.println("aaaaaaaa--->"+request.getHeader("Referer"));
+		return null;
+		/*WxInfo wi = new WxInfo();
 		String url = "";
 		try {
 			url = new Oauth().getAuthorizeURL(request);//认证登录
@@ -90,7 +98,7 @@ public class QQLoginService {
 		String header = request.getHeader("Referer");
 		log.info("QQ登录请求url------------>" + url+"::::请求header------>"+header);
 		wi.setUrl(url);
-		return new JsonResult<>(wi);
+		return new JsonResult<>(wi);*/
 	}
 
 	

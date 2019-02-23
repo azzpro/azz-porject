@@ -19,13 +19,6 @@ import com.azz.system.vo.WxLoginInfo;
 @FeignClient("azz-system-service")
 public interface QQLoginService {
 
-	/**
-	 * 去到QQ扫码页面
-	 * @return
-	 */
-	@RequestMapping(value="/azz/api/qq/goQQScanPage",method=RequestMethod.POST)
-	public JsonResult<WxInfo> goQQScanPage();
-		
 	
 	/**
 	 * QQ回调

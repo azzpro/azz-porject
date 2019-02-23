@@ -58,15 +58,6 @@ public class QQLoginController {
 	@Value("${shiro.session.timeout}")
     private Long sessionTimeout;
 	
-	/**
-	 * 去到QQ扫码页面
-	 * @return
-	 */
-	@RequestMapping(value="goQQScanPage",method=RequestMethod.POST)
-	public JsonResult<WxInfo> goQQScanPage(){
-		return qqLoginService.goQQScanPage();
-	}
-		
 	
 	/**
 	 * QQ回调

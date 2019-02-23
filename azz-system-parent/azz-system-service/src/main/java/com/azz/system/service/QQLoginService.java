@@ -1,12 +1,9 @@
 package com.azz.system.service;
 
-import java.io.IOException;
 import java.util.Date;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,8 +14,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.constants.ClientConstants;
@@ -30,35 +25,42 @@ import com.azz.system.api.SystemSmsSendService;
 import com.azz.system.bo.QQClientRegistParam;
 import com.azz.system.bo.SmsCheck;
 import com.azz.system.bo.SmsCodeValidation;
-import com.azz.system.bo.WxClientRegistParam;
 import com.azz.system.mapper.ClientUserMapper;
 import com.azz.system.mapper.ClientWxUserMapper;
 import com.azz.system.pojo.ClientUser;
 import com.azz.system.pojo.ClientWxUser;
 import com.azz.system.sequence.api.DbSequenceService;
-import com.azz.system.service.bean.QQUserInfoBeanx;
 import com.azz.system.vo.QQCallBackInfo;
 import com.azz.system.vo.QQLoginInfo;
 import com.azz.system.vo.SmsInfo;
-import com.azz.system.vo.WxCallBackInfo;
-import com.azz.system.vo.WxInfo;
-import com.azz.system.vo.WxLoginInfo;
 import com.azz.util.HttpClientUtil;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.PasswordHelper;
 import com.azz.util.SystemSeqUtils;
-import com.qq.connect.QQConnectException;
-import com.qq.connect.api.OpenID;
-import com.qq.connect.api.qzone.UserInfo;
-import com.qq.connect.javabeans.AccessToken;
-import com.qq.connect.javabeans.qzone.UserInfoBean;
-import com.qq.connect.oauth.Oauth;
 
 @Service
 public class QQLoginService {
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
+	@Value("${qq.AppId}")
+	private String AppId;
+	
+	@Value("${qq.AppSecret}")
+	private String AppSecret;
+	
+	@Value("${qq.baseUrl}")
+	private String BaseUrl;
+	
+	@Value("${qq.user_info_url}")
+	private String userInfoUrl;
+	
+	@Value("${qq.conn_timeout}")
+	private String connTimeout;
+	
+	@Value("${qq.read_timeout}")
+	private String readTimeout;
+	
 	@Autowired
 	private StringRedisTemplate redis;
 	
@@ -84,30 +86,15 @@ public class QQLoginService {
 	 */
 	public JsonResult<QQCallBackInfo> callback(HttpServletRequest request,String access_token,String openid) {
 		log.info("进入QQ 回调"+access_token+":::"+openid);
-		return null;
-		//QQCallBackInfo wcbi = new QQCallBackInfo();
-		/*if (StringUtils.isBlank(code) || StringUtils.isBlank(state)) {
+		QQCallBackInfo wcbi = new QQCallBackInfo();
+		if (StringUtils.isBlank(access_token) || StringUtils.isBlank(openid)) {
 			wcbi.setCode(WxConstants.NOACCESSCODE);
 			wcbi.setMsg(WxConstants.NOACCESS);
 			return new JsonResult<>(wcbi);
 		} else {
-			String  session_state=(String)request.getSession().getAttribute("qq_connect_state");
-			log.info("session--------->"+session_state);
-			String accessToken = QQLoginUT.getAccessToken(code);
-			request.getSession().setAttribute("accessToken", access_token);
-		    OpenID openIDObj =  new OpenID(access_token);
-		    String openID = "";
-			try {
-				openID = openIDObj.getUserOpenID();
-			} catch (QQConnectException e1) {
-				e1.printStackTrace();
-				wcbi.setCode(WxConstants.STATECODE);
-				wcbi.setMsg(e1.getMessage());
-				return new JsonResult<>(wcbi);
-			}
-		    log.info("openid-------------->"+openID);
-		    if(StringUtils.isNotBlank(openID)) {//直接完成登录操作
-		        ClientWxUser wxUser = clientWxUserMapper.selectWxUserByOpenid(openID);
+			
+		    if(StringUtils.isNotBlank(openid)) {//直接完成登录操作
+		        ClientWxUser wxUser = clientWxUserMapper.selectWxUserByOpenid(openid);
 		        if(wxUser != null) {
 		        	ClientUser clientUser = clientUserMapper.getClientUserByClientUserCode(wxUser.getUserCode());
 						if(clientUser != null) {
@@ -118,22 +105,21 @@ public class QQLoginService {
 								return new JsonResult<>(wcbi);
 							}
 		            	}
-						UserInfo qzoneUserInfo = new UserInfo(access_token, openID);
-			            UserInfoBean userInfoBean = null;
-						try {
-							userInfoBean = qzoneUserInfo.getUserInfo();
-						} catch (QQConnectException e) {
+		        //获取QQ信息
+		        		String url = String.format(BaseUrl+userInfoUrl, access_token, AppId, openid);
+		        		String resultString = "";
+		        		try {
+							 resultString = HttpClientUtil.get(url, "UTF-8",Integer.parseInt(connTimeout), Integer.parseInt(readTimeout));
+						} catch (Exception e) {
 							e.printStackTrace();
 							wcbi.setCode(WxConstants.STATECODE);
 							wcbi.setMsg(e.getMessage());
 							return new JsonResult<>(wcbi);
-						}
-						if(userInfoBean == null) {
-							wcbi.setCode(WxConstants.STATECODE);
-							wcbi.setMsg(WxConstants.STATEMSG);
-							return new JsonResult<>(wcbi);
-						}
-			            wcbi.setHeadimgurl((String) userInfoBean.getAvatar().getAvatarURL30());
+						} 
+		        		if(StringUtils.isNotBlank(resultString)) {
+		        			System.out.println(resultString);
+		        		}
+			            /*wcbi.setHeadimgurl((String) userInfoBean.getAvatar().getAvatarURL30());
 						wcbi.setNickname(userInfoBean.getNickname());
 						wcbi.setAccessToken(access_token);
 						wcbi.setExpiresIn(expires_in);
@@ -142,12 +128,12 @@ public class QQLoginService {
 						wcbi.setMsg(WxConstants.SUCCESSMSG);
 						log.info("返回nickname---->"+userInfoBean.getNickname());
 						log.info("返回headUrl---->"+(String) userInfoBean.getAvatar().getAvatarURL30());
-						return new JsonResult<>(wcbi);
+						return new JsonResult<>(wcbi);*/
 		        }
 		    wcbi.setCode(WxConstants.STATECODE);
 			wcbi.setMsg(WxConstants.STATEMSG);
 			return new JsonResult<>(wcbi);
-		}	*/
+		}
 	}
 
 	/**

@@ -192,7 +192,6 @@ public class QQLoginService {
 		clientUserMapper.insertSelective(clientUserRecord);
 		ClientWxUser wsc = new ClientWxUser();
 		wsc.setAccess_token(wcrp.getAccessToken());
-		wsc.setExpires_in(Long.parseLong(wcrp.getExpiresIn()));
 		wsc.setOpenid(wcrp.getOpenid());
 		wsc.setUserCode(clientUserRecord.getClientUserCode());
 		wsc.setAvatarUrl(wcrp.getAvatarUrl());

@@ -27,16 +27,16 @@ import lombok.Getter;
  * @version 1.0
  * @author 黄智聪  2019年2月19日 下午2:55:43
  */
-public class Bdsh5Data {
+public class Bdsh5KeyWordData {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(Bdsh5Data.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Bdsh5KeyWordData.class);
 
 	private static final String URL = "http://guangdong.bdsh5.com/";
 	
 	@Getter
 	private List<Bdsh5Title> allTitles;
 	
-	public Bdsh5Data() {
+	public Bdsh5KeyWordData() {
 		this.initData();
 	}
 	
@@ -51,16 +51,16 @@ public class Bdsh5Data {
 				for (Element eachBox : allBoxes) {
 					String titleUrl = eachBox.select("h3 a").attr("href");// 每个大标题对应的url
 					String title = eachBox.select("h3 a").html();// 每个大标题的名字，如房产服务、商务服务等
-					System.out.println("*****大标题：" + title + "对应Url为：" + titleUrl + "*****");
+					System.out.println("*****   大标题：" + title + "对应Url为：" + titleUrl);
 					Elements itemsOfTitle = eachBox.getElementsByClass("item").select("a");// 每个大标题下有多个子标题
 					List<Bdsh5Title> subTitles = new ArrayList<>();
 					for (Element item : itemsOfTitle) {
 						String itemUrl = item.attr("href");
 						String itemTitle = item.html();
 						System.out.println("子标题：" + itemTitle + "对应Url为：" + itemUrl);
-						subTitles.add(new Bdsh5Title(false, itemTitle, itemUrl, null));
+						subTitles.add(new Bdsh5Title(itemTitle, itemUrl, null));
 					}
-					allTitles.add(new Bdsh5Title(true, title, titleUrl, subTitles));
+					allTitles.add(new Bdsh5Title(title, titleUrl, subTitles));
 					System.out.println("---------------------------------");
 				}
 			}

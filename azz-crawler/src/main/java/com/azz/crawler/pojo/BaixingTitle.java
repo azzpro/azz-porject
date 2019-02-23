@@ -14,14 +14,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * <P>TODO</P>
+ * <P>百姓网标题</P>
  * @version 1.0
  * @author 黄智聪  2019年2月20日 下午2:54:38
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Bdsh5Title {
+public class BaixingTitle {
 	
 	/**
 	 * 标题的名字
@@ -36,7 +36,7 @@ public class Bdsh5Title {
 	/**
 	 * 子标题
 	 */
-	private List<Bdsh5Title> subTitles;
+	private List<BaixingTitle> subTitles;
 	
 }
 

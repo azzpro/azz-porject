@@ -34,7 +34,7 @@
                     </tr>
                 </table>
             <br>
-                <input type="button" id="loginBtn" value="登录" style="color:#BC8F8F;width: 216px">
+                <input type="button" id="loginBtn" value="登录" style="color:#BC8F8F;width: 80px">
     </center>
 </body>
 

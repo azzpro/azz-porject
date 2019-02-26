@@ -7,11 +7,17 @@
  
 package com.azz.crawler.service;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -27,6 +33,7 @@ import org.springframework.stereotype.Service;
 import com.azz.core.common.JsonResult;
 import com.azz.crawler.config.BaixingKeyWordData;
 import com.azz.crawler.config.Bdsh5KeyWordData;
+import com.azz.crawler.pojo.BaixingTitle;
 import com.azz.crawler.pojo.Bdsh5Title;
 import com.azz.crawler.pojo.vo.SearchInfo;
 
@@ -102,7 +109,7 @@ public class CrawlerService {
 						System.out.println("爬取["+titleName+"]时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
 						continue;
 					}
-					searchInfos.addAll(getEachPageInfo(newPageDoc));
+					searchInfos.addAll(getBdsh5EachPageInfo(newPageDoc));
 				}
 				result.put(titleName, searchInfos);
 				System.out.println("标题为[" + titleName + "]的数据爬取完毕，共爬取了" + searchInfos.size() + "条数据");
@@ -167,7 +174,7 @@ public class CrawlerService {
 	 * @return
 	 * @author 黄智聪  2019年2月20日 下午3:58:53
 	 */
-	private List<SearchInfo> getEachPageInfo(Document doc) {
+	private List<SearchInfo> getBdsh5EachPageInfo(Document doc) {
 		Element listPart = doc.getElementById("list");
 		List<SearchInfo> searchInfos = new ArrayList<>();
 		if(listPart != null) {
@@ -214,10 +221,189 @@ public class CrawlerService {
 	/*****************************************************************************************************************************/
 	
 	
+	/**
+	 * 
+	 * <p>查询百姓网所有标题</p>
+	 * @return
+	 * @author 黄智聪  2019年2月20日 下午1:40:28
+	 */
+	public JsonResult<List<BaixingTitle>> getBaixingTitles(){
+		return JsonResult.successJsonResult(baixingKeyWordData.getAllTitles());
+	}
 	
+	/**
+	 * 
+	 * <p>根据标题查询百姓网信息</p>
+	 * @param titles 需要爬取数据的标题
+	 * @return
+	 * @author 黄智聪  2019年2月20日 下午2:06:46
+	 */
+	public static JsonResult<Map<String, List<SearchInfo>>> getBaixingSearchInfoByTitle(List<BaixingTitle> titlesToSearch){
+		if(titlesToSearch == null || titlesToSearch.size() == 0) {
+			throw new RuntimeException("请选择需要爬取数据的标题");
+		}
+		Map<String, List<SearchInfo>> result = new LinkedHashMap<>();
+		// 逐条查询
+		for (BaixingTitle eachTitle : titlesToSearch) {
+			List<SearchInfo> searchInfos = new ArrayList<>();
+			String titleName = eachTitle.getName();
+			try {
+				String url = eachTitle.getUrl();
+				Document doc = Jsoup.connect(url).get();
+				// 尾页连接地址，获取页数
+				// 总页数，至少1页
+				int totalPages = 1;
+				try {
+					Element lastPageLi = doc.select("section.listing-pager-section ul li").last().previousElementSibling();
+					String pageStr = lastPageLi.select("a").html();
+					totalPages = Integer.parseInt(pageStr);
+				} catch (Exception e) {// 若这里抛异常说明只有一页
+					System.out.println("["+titleName+"]此页面只有一页数据");
+				}
+				System.out.println("准备爬取标题为[" + titleName + "]的数据，共" + totalPages + "页数据");
+				for(int page = 1; page <= totalPages; page++) {
+					System.out.println("正在爬取第"+ page +"页数据...");
+					String pageSuffix = "p_" + page;
+					String nextUrl = url + pageSuffix;
+					Document newPageDoc = null;
+					try {
+						newPageDoc = Jsoup.connect(nextUrl).get();
+					} catch (Exception e) {
+						System.out.println("爬取["+titleName+"]时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
+						continue;
+					}
+					searchInfos.addAll(getBaixingEachPageInfo(newPageDoc));
+				}
+				result.put(titleName, searchInfos);
+				System.out.println("标题为[" + titleName + "]的数据爬取完毕，共爬取了" + searchInfos.size() + "条数据");
+				System.out.println("-------------------------------------------------");
+			} catch (IOException e) {
+				System.out.println("爬取["+titleName+"]时，获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
+			}
+		}
+		return JsonResult.successJsonResult(result);
+	}
 	
+	/**
+	 * 
+	 * <p>爬取每页数据</p>
+	 * @param doc
+	 * @return
+	 * @author 黄智聪  2019年2月20日 下午3:58:53
+	 */
+	private static List<SearchInfo> getBaixingEachPageInfo(Document doc) {
+		Elements listPart = doc.select("ul.list-ad-items li");
+		List<SearchInfo> searchInfos = new ArrayList<>();
+		if(listPart != null && listPart.size() > 0) {
+			int i = 0 ;
+			for (Element info : listPart) {// 当前页中的每一个栏目
+				System.out.println("正在处理此页的第" + i + "条栏目");
+				SearchInfo si = new SearchInfo();
+				String detailUrl = info.select("a").attr("href");
+				Document newPageDoc = null;
+				try {
+					newPageDoc = Jsoup.connect(detailUrl).get();
+				} catch (Exception e) {
+					System.out.println("爬取url["+detailUrl+"]时，获取页面数据出错，跳过此条数据，错误信息：" + e.getMessage());
+					continue;
+				}
+				//String phoneNumber = newPageDoc.getElementById("mobileNumber").children().first().html();
+				//System.out.println(phoneNumber);
+				Elements items = newPageDoc.select("div.viewad-meta div.viewad-meta-item");
+				if(items != null) {
+					for (Element item : items) {
+						Elements labels = item.select("label");
+						if(labels != null) {
+							int count = labels.size();
+							if(count == 2) {
+								String title = labels.get(0).html();// 标题
+								String content = labels.get(1).html();// 内容
+								System.out.println("title:"+title + "，对应content:"+content);
+							}else {
+								String title = labels.get(0).html();// 标题
+								String tagName = labels.get(0).nextElementSibling().tagName();
+								String content = "";
+								if("div".equals(tagName) ) {
+									content = labels.get(0).nextElementSibling().select("label").html();
+									System.out.println("title:"+title + "，对应content:"+content);
+								}else if("span".equals(tagName)){
+									content = labels.get(0).nextElementSibling().select("a").html();
+									System.out.println("title:"+title + "，对应content:"+content);
+								}else {
+									// 未知情况
+									System.out.println("未发现此标签"+"["+tagName+"]");
+								}
+							}
+						}
+					}
+				}
+				Elements items2 = newPageDoc.select("div.viewad-meta2 div.viewad-meta2-item");
+				if(items != null) {
+					for (Element item : items2) {
+						Elements labels = item.select("label");
+						if(labels != null) {
+							int count = labels.size();
+							if(count == 2) {
+								String title = labels.get(0).html();// 标题
+								String content = labels.get(1).html();// 内容
+								System.out.println("title:"+title + "，对应content:"+content);
+							}else {
+								String title = labels.get(0).html();// 标题
+								String tagName = labels.get(0).nextElementSibling().tagName();
+								String content = "";
+								if("div".equals(tagName) ) {
+									content = labels.get(0).nextElementSibling().select("label").html();
+									System.out.println("title:"+title + "，对应content:"+content);
+								}else if("span".equals(tagName)){
+									content = labels.get(0).nextElementSibling().select("a").html();
+									System.out.println("title:"+title + "，对应content:"+content);
+								}else {
+									// 未知情况
+									System.out.println("未发现此标签"+"["+tagName+"]");
+								}
+							}
+						}
+					}
+				}
+				
+				
+				
+				//searchInfos.add(si);
+			}
+		}
+		return searchInfos;
+	}
 	
-	
+	public static void main(String[] args) throws IOException {
+		String titleName = "招聘";
+		String url = "http://shenzhen.baixing.com/gongzuo/";
+		Document doc = Jsoup.connect(url).get();
+		List<SearchInfo> searchInfos = new ArrayList<>();
+		int totalPages = 1;
+		try {
+			Element lastPageLi = doc.select("section.listing-pager-section ul li").last().previousElementSibling();
+			String pageStr = lastPageLi.select("a").html();
+			totalPages = Integer.parseInt(pageStr);
+		} catch (Exception e) {// 若这里抛异常说明只有一页
+			System.out.println("["+titleName+"]此页面只有一页数据");
+		}
+		Map<String, List<SearchInfo>> result = new LinkedHashMap<>();
+		// 逐页查询
+		for(int page = 1; page <= totalPages; page++) {
+			System.out.println("正在爬取第"+ page +"页数据...");
+			String pageSuffix = "?page=" + page;
+			String nextUrl = url + pageSuffix;
+			Document newPageDoc = null;
+			try {
+				newPageDoc = Jsoup.parse(HttpRequest.sendGetWithNoParams(nextUrl));
+			} catch (Exception e) {
+				System.out.println("爬取["+titleName+"]时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
+				continue;
+			}
+			searchInfos.addAll(getBaixingEachPageInfo(newPageDoc));
+		}
+		System.out.println("");
+	}
 	
 	
 	/***************************************************************************************************************************/

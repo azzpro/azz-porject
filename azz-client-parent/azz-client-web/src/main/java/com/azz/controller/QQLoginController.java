@@ -58,15 +58,6 @@ public class QQLoginController {
 	@Value("${shiro.session.timeout}")
     private Long sessionTimeout;
 	
-	/**
-	 * 去到QQ扫码页面
-	 * @return
-	 */
-	@RequestMapping(value="goQQScanPage",method=RequestMethod.POST)
-	public JsonResult<WxInfo> goQQScanPage(){
-		return qqLoginService.goQQScanPage();
-	}
-		
 	
 	/**
 	 * QQ回调
@@ -76,9 +67,9 @@ public class QQLoginController {
 	 * @return
 	 */
 	@RequestMapping(value="callback",method=RequestMethod.POST)
-	public Object callback(@RequestParam("openid")String openid,@RequestParam("access_token")String access_token) {
+	public Object callback(@RequestParam("access_token")String access_token,@RequestParam("openid")String openid) {
 		log.info("进入QQ 回调");
-		JsonResult<WxCallBackInfo> result = qqLoginService.callback(openid,access_token);
+		JsonResult<WxCallBackInfo> result = qqLoginService.callback(access_token,openid);
 		if(Objects.equals(WxConstants.LOGINCODE, result.getData().getCode())) {
 			// 从SecurityUtils里边创建一个 subject
 			Subject subject = SecurityUtils.getSubject();
@@ -158,11 +149,11 @@ public class QQLoginController {
 		WebUtils.setShiroSessionAttr(ClientConstants.LOGIN_CLIENT_USER, loginClientUser);
 		ClientWxUser wsc = new ClientWxUser();
 		wsc.setAccess_token(param.getAccessToken());
-		wsc.setExpires_in(Long.parseLong(param.getExpiresIn()));
 		wsc.setOpenid(param.getOpenid());
 		wsc.setUserCode(loginClientUser.getClientUserInfo().getClientUserCode());
 		wsc.setAvatarUrl(param.getAvatarUrl());
 		wsc.setNickName(param.getNickName());
+		wsc.setPlatformType("QQ");
 		qqLoginService.insert(wsc);
 		return jr;
 	}

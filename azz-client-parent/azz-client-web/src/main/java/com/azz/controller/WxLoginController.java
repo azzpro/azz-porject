@@ -157,6 +157,7 @@ public class WxLoginController {
 		wsc.setUserCode(loginClientUser.getClientUserInfo().getClientUserCode());
 		wsc.setAvatarUrl(param.getAvatarUrl());
 		wsc.setNickName(param.getNickName());
+		wsc.setPlatformType("微信");
 		wxLoginService.insert(wsc);
 		return jr;
 	}

@@ -41,5 +41,12 @@ public class ChildClassification{
      * @mbg.generated
      */
     private Byte assortmentTop;
+    
+    /**
+     * 分类图片url
+     *
+     * @mbg.generated
+     */
+    private String assortmentPicUrl;
 }
 

@@ -7,18 +7,14 @@
  
 package com.azz.crawler.service;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -31,10 +27,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.azz.crawler.common.JsonResult;
+import com.azz.crawler.common.ManagerHttpUtils;
 import com.azz.crawler.config.BaixingKeyWordData;
 import com.azz.crawler.config.Bdsh5KeyWordData;
 import com.azz.crawler.pojo.BaixingTitle;
 import com.azz.crawler.pojo.Bdsh5Title;
+import com.azz.crawler.pojo.User;
 import com.azz.crawler.pojo.vo.SearchInfo;
 
 
@@ -74,7 +72,7 @@ public class CrawlerService {
 	 * @return
 	 * @author 彭斌  2019年2月23日 下午5:08:10
 	 */
-	public JsonResult<String> doLogin(String name, String pwd){
+	public JsonResult<String> doLogin(String name, String pwd, HttpServletRequest req){
 	    JsonResult<String> jsonResult = new JsonResult<String>();
 	    if(null == name || null == pwd) {
 	        throw new RuntimeException("账号密码异常");
@@ -82,6 +80,10 @@ public class CrawlerService {
 	    if(!"admin".equals(name) || !"5S3DyUZ8".equals(pwd)) {
 	        throw new RuntimeException("账号密码错误");
 	    }
+	    
+	    User user = new User();
+	    user.setUserName(name);
+	    ManagerHttpUtils.setUser(user, req);
 	    return jsonResult;
 	}
 	

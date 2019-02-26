@@ -68,9 +68,8 @@ public class CrawlerController {
 	
 	@RequestMapping(value = "doLogin",method = RequestMethod.POST)
 	@ResponseBody
-	public JsonResult<String> doLogin(@RequestParam("userName")String userName, @RequestParam("pwd")String pwd){
-        System.out.println("userName="+userName+",pwd="+pwd);
-	    return crawlerService.doLogin(userName, pwd);
+	public JsonResult<String> doLogin(@RequestParam("userName")String userName, @RequestParam("pwd")String pwd, HttpServletRequest req){
+	    return crawlerService.doLogin(userName, pwd, req);
     }
 	
 	/**

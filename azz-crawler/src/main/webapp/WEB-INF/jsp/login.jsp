@@ -34,7 +34,7 @@
                     </tr>
                 </table>
             <br>
-                <input type="button" id="loginBtn" value="登录" style="color:#BC8F8F;width: 216px">
+                <input type="button" id="loginBtn" value="登录" style="color:#BC8F8F;width: 80px">
     </center>
 </body>
 
@@ -50,7 +50,7 @@
             cache: false, //禁用缓存   
 			async: false,
             success:function(result){
-            	
+            	window.location.href = "${basePath}"+"/azz/crawler/index";
             },
             error:function(jqXHR){
                 console.log("Error: "+jqXHR.status);

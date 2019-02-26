@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
-import com.azz.core.common.JsonResult;
+import com.azz.crawler.common.JsonResult;
 import com.azz.crawler.pojo.Bdsh5Title;
 import com.azz.crawler.pojo.vo.SearchInfo;
 import com.azz.crawler.service.CrawlerService;
@@ -68,9 +68,8 @@ public class CrawlerController {
 	
 	@RequestMapping(value = "doLogin",method = RequestMethod.POST)
 	@ResponseBody
-	public JsonResult<String> doLogin(@RequestParam("userName")String userName, @RequestParam("pwd")String pwd){
-        System.out.println("userName="+userName+",pwd="+pwd);
-	    return crawlerService.doLogin(userName, pwd);
+	public JsonResult<String> doLogin(@RequestParam("userName")String userName, @RequestParam("pwd")String pwd, HttpServletRequest req){
+	    return crawlerService.doLogin(userName, pwd, req);
     }
 	
 	/**

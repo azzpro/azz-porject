@@ -3,6 +3,8 @@ package com.azz.crawler.service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Random;
@@ -17,16 +19,15 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 public abstract class HttpRequest {
-
-	public static boolean proxyHost = false;
-	public static boolean proxyPort = false;
-	public int port = 80;
-
+	
 	public static void main(String[] args) {
 		String result = sendGetWithNoParams("http://shenzhen.baixing.com/gongzuo/");
+		
+		
+		//String result = getHtml("http://shenzhen.baixing.com/gongzuo/","116.209.55.4","9999");
 		System.out.println(result);
 	}
-
+	
 	/**
 	 * 向指定URL发送GET方法的请求
 	 * 
@@ -39,9 +40,11 @@ public abstract class HttpRequest {
 		BufferedReader in = null;
 		try {
 			// 如果不设置，只要代理IP和代理端口正确,此项不设置也可以
-			System.getProperties().setProperty("proxySet", "true"); 
-			System.getProperties().setProperty("http.proxyHost", "112.85.131.170");
-			System.getProperties().setProperty("http.proxyPort", "9999");
+//			System.getProperties().setProperty("proxySet", "true"); 
+//			System.getProperties().setProperty("http.proxyHost", "112.85.131.170");
+//			System.getProperties().setProperty("http.proxyPort", "9999");
+			
+			//Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("112.85.131.170", 9999));
 			
 			String urlNameString = url;
 			URL realUrl = new URL(urlNameString);
@@ -111,91 +114,93 @@ public abstract class HttpRequest {
 		return x; 
 	}
 	
-	 public static String getHtml( String url, String ip, String port) {
-	        String entity = null;
-	        CloseableHttpClient httpClient = HttpClients.createDefault();
-
-	        //设置代理访问和超时处理
-	        System.out.println("此时线程: " + Thread.currentThread().getName() + " 爬取所使用的代理为: "
-	                + ip + ":" + port);
-	        HttpHost proxy = new HttpHost(ip, Integer.parseInt(port));
-	        RequestConfig config = RequestConfig.custom().setProxy(proxy).setConnectTimeout(3000).
-	                setSocketTimeout(3000).build();
-	        HttpGet httpGet = new HttpGet(url);
-	        httpGet.setConfig(config);
-
-	        httpGet.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;" +
-	                "q=0.9,image/webp,*/*;q=0.8");
-	        httpGet.setHeader("Accept-Encoding", "gzip, deflate, sdch");
-	        httpGet.setHeader("Accept-Language", "zh-CN,zh;q=0.8");
-	        httpGet.setHeader("Cache-Control", "no-cache");
-	        httpGet.setHeader("Connection", "keep-alive");
-	        httpGet.setHeader("Host", "www.xicidaili.com");
-	        httpGet.setHeader("Pragma", "no-cache");
-	        httpGet.setHeader("Upgrade-Insecure-Requests", "1");
-	        httpGet.setHeader("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 " +
-	                "(KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36");
-
-	        try {
-	            //客户端执行httpGet方法，返回响应
-	            CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
-
-	            //得到服务响应状态码
-	            if (httpResponse.getStatusLine().getStatusCode() == 200) {
-	                entity = EntityUtils.toString(httpResponse.getEntity(), "utf-8");
-	            }
-
-	            httpResponse.close();
-	            httpClient.close();
-	        } catch (ClientProtocolException e) {
-	            entity = null;
-	        } catch (IOException e) {
-	            entity = null;
-	        }
-
-	        return entity;
-	    }
-
-	    //对上一个方法的重载，使用本机ip进行网站爬取
-	    public static String getHtml(String url) {
-	        String entity = null;
-	        CloseableHttpClient httpClient = HttpClients.createDefault();
-
-	        //设置超时处理
-	        RequestConfig config = RequestConfig.custom().setConnectTimeout(3000).
-	                setSocketTimeout(3000).build();
-	        HttpGet httpGet = new HttpGet(url);
-	        httpGet.setConfig(config);
-
-	        httpGet.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;" +
-	                "q=0.9,image/webp,*/*;q=0.8");
-	        httpGet.setHeader("Accept-Encoding", "gzip, deflate, sdch");
-	        httpGet.setHeader("Accept-Language", "zh-CN,zh;q=0.8");
-	        httpGet.setHeader("Cache-Control", "no-cache");
-	        httpGet.setHeader("Connection", "keep-alive");
-	        httpGet.setHeader("Host", "www.xicidaili.com");
-	        httpGet.setHeader("Pragma", "no-cache");
-	        httpGet.setHeader("Upgrade-Insecure-Requests", "1");
-	        httpGet.setHeader("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 " +
-	                "(KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36");
-
-	        try {
-	            //客户端执行httpGet方法，返回响应
-	            CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
-
-	            //得到服务响应状态码
-	            if (httpResponse.getStatusLine().getStatusCode() == 200) {
-	                entity = EntityUtils.toString(httpResponse.getEntity(), "utf-8");
-	            }
-
-	            httpResponse.close();
-	            httpClient.close();
-	        } catch (ClientProtocolException e) {
-	            e.printStackTrace();
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
-
-	        return entity;
-	    }
+	public static String getHtml( String url, String ip, String port) {
+		String entity = null;
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		
+		//设置代理访问和超时处理
+		System.out.println("此时线程: " + Thread.currentThread().getName() + " 爬取所使用的代理为: "
+				+ ip + ":" + port);
+		HttpHost proxy = new HttpHost(ip, Integer.parseInt(port));
+		RequestConfig config = RequestConfig.custom().setProxy(proxy).setConnectTimeout(3000).
+				setSocketTimeout(3000).build();
+		HttpGet httpGet = new HttpGet(url);
+		httpGet.setConfig(config);
+		
+		httpGet.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;" +
+				"q=0.9,image/webp,*/*;q=0.8");
+		httpGet.setHeader("Accept-Encoding", "gzip, deflate, sdch");
+		httpGet.setHeader("Accept-Language", "zh-CN,zh;q=0.8");
+		httpGet.setHeader("Cache-Control", "no-cache");
+		httpGet.setHeader("Connection", "keep-alive");
+		httpGet.setHeader("Host", "www.xicidaili.com");
+		httpGet.setHeader("Pragma", "no-cache");
+		httpGet.setHeader("Upgrade-Insecure-Requests", "1");
+		httpGet.setHeader("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 " +
+				"(KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36");
+		
+		try {
+			//客户端执行httpGet方法，返回响应
+			CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
+			
+			//得到服务响应状态码
+			if (httpResponse.getStatusLine().getStatusCode() == 200) {
+				entity = EntityUtils.toString(httpResponse.getEntity(), "utf-8");
+			}
+			
+			httpResponse.close();
+			httpClient.close();
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+			entity = null;
+		} catch (IOException e) {
+			e.printStackTrace();
+			entity = null;
+		}
+		
+		return entity;
+	}
+	
+	//对上一个方法的重载，使用本机ip进行网站爬取
+	public static String getHtml(String url) {
+		String entity = null;
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		
+		//设置超时处理
+		RequestConfig config = RequestConfig.custom().setConnectTimeout(3000).
+				setSocketTimeout(3000).build();
+		HttpGet httpGet = new HttpGet(url);
+		httpGet.setConfig(config);
+		
+		httpGet.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;" +
+				"q=0.9,image/webp,*/*;q=0.8");
+		httpGet.setHeader("Accept-Encoding", "gzip, deflate, sdch");
+		httpGet.setHeader("Accept-Language", "zh-CN,zh;q=0.8");
+		httpGet.setHeader("Cache-Control", "no-cache");
+		httpGet.setHeader("Connection", "keep-alive");
+		httpGet.setHeader("Host", "www.xicidaili.com");
+		httpGet.setHeader("Pragma", "no-cache");
+		httpGet.setHeader("Upgrade-Insecure-Requests", "1");
+		httpGet.setHeader("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 " +
+				"(KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36");
+		
+		try {
+			//客户端执行httpGet方法，返回响应
+			CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
+			
+			//得到服务响应状态码
+			if (httpResponse.getStatusLine().getStatusCode() == 200) {
+				entity = EntityUtils.toString(httpResponse.getEntity(), "utf-8");
+			}
+			
+			httpResponse.close();
+			httpClient.close();
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return entity;
+	}
 }

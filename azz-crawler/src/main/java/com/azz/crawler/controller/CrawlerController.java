@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
-import com.azz.core.common.JsonResult;
+import com.azz.crawler.common.JsonResult;
 import com.azz.crawler.pojo.Bdsh5Title;
 import com.azz.crawler.pojo.vo.SearchInfo;
 import com.azz.crawler.service.CrawlerService;

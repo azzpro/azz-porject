@@ -29,9 +29,6 @@ public class UserInterceptor implements HandlerInterceptor {
             System.out.println("===============成功拦截失效未登陆的路由！====================");
             response.sendRedirect(request.getContextPath() + "/azz/crawler/login");
             return false;
-        } else {
-            System.out.println("===============校验成功！====================");
-            response.sendRedirect(request.getContextPath() + "/azz/crawler/index");
         }
         return true;
     }

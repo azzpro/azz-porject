@@ -50,7 +50,7 @@
             cache: false, //禁用缓存   
 			async: false,
             success:function(result){
-            	
+            	window.location.href = "${basePath}"+"/azz/crawler/index";
             },
             error:function(jqXHR){
                 console.log("Error: "+jqXHR.status);

@@ -7,23 +7,27 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Random;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.util.EntityUtils;
 
 public abstract class HttpRequest {
 	
 	public static void main(String[] args) {
-		String result = sendGetWithNoParams("http://shenzhen.baixing.com/gongzuo/");
+		// String result = sendGetWithNoParams("http://shenzhen.baixing.com/qichebaoyang/");
 		
-		
+		String result = httpGet("http://shenzhen.baixing.com/qichebaoyang/");
 		//String result = getHtml("http://shenzhen.baixing.com/gongzuo/","116.209.55.4","9999");
 		System.out.println(result);
 	}
@@ -44,12 +48,11 @@ public abstract class HttpRequest {
 //			System.getProperties().setProperty("http.proxyHost", "112.85.131.170");
 //			System.getProperties().setProperty("http.proxyPort", "9999");
 			
-			//Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("112.85.131.170", 9999));
+			Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("116.23.226.111", 4206));
 			
-			String urlNameString = url;
-			URL realUrl = new URL(urlNameString);
+			URL realUrl = new URL(url);
 			// 打开和URL之间的连接
-			URLConnection connection = realUrl.openConnection();
+			URLConnection connection = realUrl.openConnection(proxy);
 			// 设置通用的请求属性
 			connection.setRequestProperty("accept", "*/*");
 			connection.setRequestProperty("connection", "Keep-Alive");
@@ -79,40 +82,41 @@ public abstract class HttpRequest {
 		return result;
 	}
 	
-	
-	
-	public static String getRandomIp(){
-		//ip范围
-		int[][] range = {{607649792,608174079},//36.56.0.0-36.63.255.255
-				{1038614528,1039007743},//61.232.0.0-61.237.255.255
-				{1783627776,1784676351},//106.80.0.0-106.95.255.255
-				{2035023872,2035154943},//121.76.0.0-121.77.255.255
-				{2078801920,2079064063},//123.232.0.0-123.235.255.255
-				{-1950089216,-1948778497},//139.196.0.0-139.215.255.255
-				{-1425539072,-1425014785},//171.8.0.0-171.15.255.255
-				{-1236271104,-1235419137},//182.80.0.0-182.92.255.255
-				{-770113536,-768606209},//210.25.0.0-210.47.255.255
-				{-569376768,-564133889}, //222.16.0.0-222.95.255.255
-		};
-		
-		Random rdint = new Random();
-		int index = rdint.nextInt(10);
-		String ip = num2ip(range[index][0]+new Random().nextInt(range[index][1]-range[index][0]));
-		return ip;
+	/**
+	 * java使用代理发送http请求
+	 * @return
+	 */
+	public static String httpGet(String url) {
+		String ip = "116.23.226.111";
+		int port = 4206;
+		String content = null;
+		DefaultHttpClient httpclient = null;
+		try {
+			httpclient = new DefaultHttpClient();
+			/** 设置代理IP **/
+			HttpHost proxy = new HttpHost(ip, port);
+			httpclient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY,proxy);
+ 
+			HttpGet httpget = new HttpGet(url);
+			
+			httpget.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT,1000*30);	//设置请求超时时间
+			httpget.setHeader("Proxy-Authorization","Basic eXVsb3JlOll1bG9yZVByb3h5MjAxMzo=");
+			httpget.setHeader("User-Agent",
+							"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.79 Safari/537.1");
+			httpget.setHeader("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+ 
+			HttpResponse responses = httpclient.execute(httpget);
+			HttpEntity entity = responses.getEntity();
+			content = EntityUtils.toString(entity);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			httpclient.getConnectionManager().shutdown();	//关闭连接
+		}
+		return content;
 	}
-	
-	public static String num2ip(int ip) {
-		int [] b=new int[4] ;
-		String x = "";
-		
-		b[0] = (int)((ip >> 24) & 0xff);
-		b[1] = (int)((ip >> 16) & 0xff);
-		b[2] = (int)((ip >> 8) & 0xff);
-		b[3] = (int)(ip & 0xff);
-		x=Integer.toString(b[0])+"."+Integer.toString(b[1])+"."+Integer.toString(b[2])+"."+Integer.toString(b[3]); 
-		
-		return x; 
-	}
+
 	
 	public static String getHtml( String url, String ip, String port) {
 		String entity = null;

@@ -84,22 +84,19 @@
                 console.log("Error: "+jqXHR.status);
             }
         });
-	
-		var selectedTitles = '';
-		$('.cb').click(function(){
-			$('input:checkbox[class=cb]:checked').each(function(num){
-			    if(num == 0){
-			    	selectedTitles = $(this).val();
-			    }else{
-			    	selectedTitles += ','+$(this).val();
-			    }
-			})
-			//console.log(selectedTitles);
-		});
-	
 		$("#submitTitles").click(function(){
+			var selectedCheckboxes = $('input[type=checkbox]:checked');
+			var selectedTitles = '';
+			for (var i = 0; i < selectedCheckboxes.length; i++) {
+				if(i == 0){
+					selectedTitles = selectedCheckboxes[i].value;
+				}else{
+					selectedTitles += ','+selectedCheckboxes[i].value;
+				}
+			}
 			if(selectedTitles.length == 0){//未选中任何标题
 				alert("请选中需要爬取数据的标题");
+				return;
 			}else{
 				$("#submitTitles").attr("disabled","disabled");
 				$(".pic_center").css("display","block");
@@ -114,7 +111,6 @@
 					}
 					postData.push(eachData);
 				}
-				console.log(postData);
 				$.ajax({
 		            type:"POST",
 		            url:"${basePath}"+"/azz/crawler/getBdsh5SearchInfoByTitle",

@@ -42,14 +42,19 @@ public class CrawlerController {
 	@Autowired
 	CrawlerService crawlerService;
 	
-	@RequestMapping("index")
-	public String toIndex() {
-		return "index";
+	@RequestMapping("menu")
+	public String menu() {
+		return "menu";
 	}
-	
+
 	@RequestMapping("login")
     public String toLogin() {
         return "login";
+    }
+	
+	@RequestMapping("bdsh5")
+    public String bxsh5() {
+        return "bdsh5";
     }
 	
 	/**

@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import com.azz.crawler.common.JsonResult;
 import com.azz.crawler.common.ManagerHttpUtils;
+import com.azz.crawler.common.ProxyHttpRequest;
 import com.azz.crawler.config.BaixingKeyWordData;
 import com.azz.crawler.config.Bdsh5KeyWordData;
 import com.azz.crawler.pojo.BaixingTitle;

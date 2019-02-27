@@ -1,4 +1,4 @@
-package com.azz.crawler.service;
+package com.azz.crawler.common;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;

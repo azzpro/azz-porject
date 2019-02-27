@@ -36,6 +36,11 @@ public class SearchInfo {
 	 * 联系人姓名
 	 */
 	private String name;
+	
+	/**
+	 * 其他描述
+	 */
+	private String otherDesc;
 
 }
 

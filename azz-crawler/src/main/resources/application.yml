@@ -21,4 +21,3 @@ spring:
     enabled: false
   messages:
     basename: i18n/Messages
-

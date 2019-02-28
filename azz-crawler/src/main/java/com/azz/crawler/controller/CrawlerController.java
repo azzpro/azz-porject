@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
 import com.azz.crawler.common.JsonResult;
+import com.azz.crawler.pojo.BaixingTitle;
 import com.azz.crawler.pojo.Bdsh5Title;
 import com.azz.crawler.pojo.GanJiTitle;
 import com.azz.crawler.pojo.vo.SearchInfo;
@@ -61,6 +62,11 @@ public class CrawlerController {
 	@RequestMapping("ganji")
     public String ganji() {
         return "ganji";
+	}
+	
+	@RequestMapping("baixing")
+    public String baixing() {
+        return "baixing";
     }
 	
 	/**
@@ -85,6 +91,20 @@ public class CrawlerController {
     public JsonResult<List<GanJiTitle>> getGanJiTitles(){
         return crawlerService.getGanJiTitles();
     }
+
+
+	/* * 
+	 * <p>查询百姓网所有标题</p>
+	 * @return
+	 * @author 黄智聪  2019年2月20日 下午1:40:28
+	 */
+	@RequestMapping("getBaixingTitles")
+	@ResponseBody
+	public JsonResult<List<BaixingTitle>> getBaixingTitles(){
+		return crawlerService.getBaixingTitles();
+	}
+	
+	
 	
 	@RequestMapping(value = "doLogin",method = RequestMethod.POST)
 	@ResponseBody
@@ -136,6 +156,46 @@ public class CrawlerController {
 		WebUtils.setSessionAttribute(request, "bdsh5", null);
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-disposition", "attachment;filename=bdsh5.xlsx");
+		response.flushBuffer();
+		wb.write(response.getOutputStream());
+		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
+	 * <p>根据标题查询百姓网信息</p>
+	 * @param titles 需要爬取数据的标题
+	 * @return
+	 * @author 黄智聪  2019年2月20日 下午2:06:46
+	 */
+	@RequestMapping(value = "getBaixingSearchInfoByTitle", produces = "application/json;charset=utf-8")
+	@ResponseBody
+	public JsonResult<Map<String, List<SearchInfo>>> getBaixingSearchInfoByTitle(@RequestBody List<BaixingTitle> titlesToSearch, HttpServletRequest request){
+		JsonResult<Map<String, List<SearchInfo>>> result = crawlerService.getBaixingSearchInfoByTitle(titlesToSearch);
+		Map<String, List<SearchInfo>> data = result.getData();
+		WebUtils.setSessionAttribute(request, "baixing", data);
+		return result;
+	}
+	
+	
+	/**
+	 * 
+	 * <p>导出百姓网的数据</p>
+	 * @param title
+	 * @param infos
+	 * @return
+	 * @author 黄智聪  2019年2月20日 下午6:13:16
+	 * @throws IOException 
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping("exportBaixingData")
+	@ResponseBody
+	public JsonResult<String> exportBaixingData(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		Map<String, List<SearchInfo>> data = (Map<String, List<SearchInfo>>) WebUtils.getSessionAttribute(request, "baixing");
+		HSSFWorkbook wb = crawlerService.exportBaixingData(data);
+		WebUtils.setSessionAttribute(request, "baixing", null);
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-disposition", "attachment;filename=baixing.xlsx");
 		response.flushBuffer();
 		wb.write(response.getOutputStream());
 		return JsonResult.successJsonResult();

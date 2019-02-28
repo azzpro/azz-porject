@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import com.azz.crawler.common.JsonResult;
 import com.azz.crawler.common.ManagerHttpUtils;
+import com.azz.crawler.common.ProxyHttpRequest;
 import com.azz.crawler.config.BaixingKeyWordData;
 import com.azz.crawler.config.Bdsh5KeyWordData;
 import com.azz.crawler.config.GanjiKeyWordData;
@@ -241,7 +242,7 @@ public class CrawlerService {
         wb.close();
 		return wb;
 	}
-
+	
 	/**
 	 * 
 	 * <p>爬取每页数据</p>
@@ -349,48 +350,42 @@ public class CrawlerService {
 	 * @return
 	 * @author 黄智聪  2019年2月20日 下午2:06:46
 	 */
-	public static JsonResult<Map<String, List<SearchInfo>>> getBaixingSearchInfoByTitle(List<BaixingTitle> titlesToSearch){
+	public JsonResult<Map<String, List<SearchInfo>>> getBaixingSearchInfoByTitle(List<BaixingTitle> titlesToSearch){
 		if(titlesToSearch == null || titlesToSearch.size() == 0) {
 			throw new RuntimeException("请选择需要爬取数据的标题");
 		}
 		Map<String, List<SearchInfo>> result = new LinkedHashMap<>();
 		// 逐条查询
 		for (BaixingTitle eachTitle : titlesToSearch) {
-			List<SearchInfo> searchInfos = new ArrayList<>();
 			String titleName = eachTitle.getName();
+			String url = eachTitle.getUrl();
+			List<SearchInfo> searchInfos = new ArrayList<>();
+			Document doc = Jsoup.parse(ProxyHttpRequest.doGetRequest(url));
+			int totalPages = 1;
 			try {
-				String url = eachTitle.getUrl();
-				Document doc = Jsoup.connect(url).get();
-				// 尾页连接地址，获取页数
-				// 总页数，至少1页
-				int totalPages = 1;
-				try {
-					Element lastPageLi = doc.select("section.listing-pager-section ul li").last().previousElementSibling();
-					String pageStr = lastPageLi.select("a").html();
-					totalPages = Integer.parseInt(pageStr);
-				} catch (Exception e) {// 若这里抛异常说明只有一页
-					System.out.println("["+titleName+"]此页面只有一页数据");
-				}
-				System.out.println("准备爬取标题为[" + titleName + "]的数据，共" + totalPages + "页数据");
-				for(int page = 1; page <= totalPages; page++) {
-					System.out.println("正在爬取第"+ page +"页数据...");
-					String pageSuffix = "p_" + page;
-					String nextUrl = url + pageSuffix;
-					Document newPageDoc = null;
-					try {
-						newPageDoc = Jsoup.connect(nextUrl).get();
-					} catch (Exception e) {
-						System.out.println("爬取["+titleName+"]时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
-						continue;
-					}
-					searchInfos.addAll(getBaixingEachPageInfo(newPageDoc));
-				}
-				result.put(titleName, searchInfos);
-				System.out.println("标题为[" + titleName + "]的数据爬取完毕，共爬取了" + searchInfos.size() + "条数据");
-				System.out.println("-------------------------------------------------");
-			} catch (IOException e) {
-				System.out.println("爬取["+titleName+"]时，获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
+				Element lastPageLi = doc.select("section.listing-pager-section ul li").last().previousElementSibling();
+				String pageStr = lastPageLi.select("a").html();
+				totalPages = Integer.parseInt(pageStr);
+			} catch (Exception e) {// 若这里抛异常说明只有一页
+				System.out.println("["+titleName+"]此页面只有一页数据");
 			}
+			// 逐页查询
+			for(int page = 1; page <= totalPages; page++) {
+				System.out.println("正在爬取第"+ page +"页数据...");
+				String pageSuffix = "?page=" + page;
+				String nextUrl = url + pageSuffix;
+				Document newPageDoc = null;
+				try {
+					newPageDoc = Jsoup.parse(ProxyHttpRequest.doGetRequest(nextUrl));
+				} catch (Exception e) {
+					System.out.println("爬取["+titleName+"]时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
+					continue;
+				}
+				searchInfos.addAll(getBaixingEachPageInfo(page, newPageDoc));
+			}
+			result.put(titleName, searchInfos);
+			System.out.println("标题为[" + titleName + "]的数据爬取完毕，共爬取了" + searchInfos.size() + "条数据");
+			System.out.println("-------------------------------------------------");
 		}
 		return JsonResult.successJsonResult(result);
 	}
@@ -402,93 +397,221 @@ public class CrawlerService {
 	 * @return
 	 * @author 黄智聪  2019年2月20日 下午3:58:53
 	 */
-	private static List<SearchInfo> getBaixingEachPageInfo(Document doc) {
-		Elements listPart = doc.select("ul.list-ad-items li");
+	private static List<SearchInfo> getBaixingEachPageInfo(int page, Document doc) {
+		Elements listPart = doc.select("ul li.listing-ad");
 		List<SearchInfo> searchInfos = new ArrayList<>();
 		if(listPart != null && listPart.size() > 0) {
 			int i = 0 ;
 			for (Element info : listPart) {// 当前页中的每一个栏目
-				System.out.println("正在处理此页的第" + i + "条栏目");
-				SearchInfo si = new SearchInfo();
+				i++;
+				System.out.println("正在处理" + page + "页的第" + i + "条栏目");
 				String detailUrl = info.select("a").attr("href");
 				Document newPageDoc = null;
+				SearchInfo si = new SearchInfo();
+				StringBuffer otherDesc = new StringBuffer();
 				try {
-					newPageDoc = Jsoup.connect(detailUrl).get();
+					newPageDoc = Jsoup.parse(ProxyHttpRequest.doGetRequest(detailUrl));
 				} catch (Exception e) {
-					System.out.println("爬取url["+detailUrl+"]时，获取页面数据出错，跳过此条数据，错误信息：" + e.getMessage());
+					System.out.println("爬取url["+detailUrl+"]的第"+page+"页时，获取页面数据出错，跳过此条数据，错误信息：" + e.getMessage());
 					continue;
 				}
-				//String phoneNumber = newPageDoc.getElementById("mobileNumber").children().first().html();
-				//System.out.println(phoneNumber);
+				String phoneNumber = "无";
+				try {
+					phoneNumber = newPageDoc.getElementById("mobileNumber").children().first().html();
+					System.out.println("title:content-->"+"联系：" + phoneNumber);
+				} catch (Exception e) {
+					System.out.println("无手机号可获取");
+				}
+				si.setPhoneNumber(phoneNumber);
 				Elements items = newPageDoc.select("div.viewad-meta div.viewad-meta-item");
-				if(items != null) {
+				if(items != null && items.size() > 0) {
 					for (Element item : items) {
 						Elements labels = item.select("label");
-						if(labels != null) {
+						if(labels != null && labels.size() > 0) {
 							int count = labels.size();
 							if(count == 2) {
 								String title = labels.get(0).html();// 标题
 								String content = labels.get(1).html();// 内容
-								System.out.println("title:"+title + "，对应content:"+content);
+								System.out.println("title:content-->"+title + content);
+								otherDesc.append(title + content+"  ");
 							}else {
 								String title = labels.get(0).html();// 标题
 								String tagName = labels.get(0).nextElementSibling().tagName();
 								String content = "";
 								if("div".equals(tagName) ) {
 									content = labels.get(0).nextElementSibling().select("label").html();
-									System.out.println("title:"+title + "，对应content:"+content);
+									System.out.println("title:content-->"+title + content);
 								}else if("span".equals(tagName)){
-									content = labels.get(0).nextElementSibling().select("a").html();
-									System.out.println("title:"+title + "，对应content:"+content);
+									Elements a = labels.get(0).nextElementSibling().select("a");
+									if(a!=null && a.size()>0) {
+										content = labels.get(0).nextElementSibling().select("a").html();
+									}else {
+										content = labels.get(0).nextElementSibling().html();
+									}
+									System.out.println("title:content-->"+title + content);
+								}else if("a".equals(tagName)){
+									content = labels.get(0).nextElementSibling().html();
+									System.out.println("title:content-->"+title + content);
 								}else {
 									// 未知情况
 									System.out.println("未发现此标签"+"["+tagName+"]");
+									continue;
 								}
+								otherDesc.append(title + content+"  ");
 							}
 						}
 					}
 				}
 				Elements items2 = newPageDoc.select("div.viewad-meta2 div.viewad-meta2-item");
-				if(items != null) {
+				if(items2 != null && items2.size() > 0) {
 					for (Element item : items2) {
 						Elements labels = item.select("label");
-						if(labels != null) {
+						if(labels != null && labels.size() > 0) {
 							int count = labels.size();
 							if(count == 2) {
 								String title = labels.get(0).html();// 标题
 								String content = labels.get(1).html();// 内容
-								System.out.println("title:"+title + "，对应content:"+content);
+								System.out.println("title:content-->"+title + content);
+								otherDesc.append(title + content+"  ");
 							}else {
 								String title = labels.get(0).html();// 标题
 								String tagName = labels.get(0).nextElementSibling().tagName();
 								String content = "";
 								if("div".equals(tagName) ) {
-									content = labels.get(0).nextElementSibling().select("label").html();
-									System.out.println("title:"+title + "，对应content:"+content);
+									content = labels.get(0).nextElementSibling().select("label").html().replace("\n", " ");
+									System.out.println("title:content-->"+title + content);
 								}else if("span".equals(tagName)){
-									content = labels.get(0).nextElementSibling().select("a").html();
-									System.out.println("title:"+title + "，对应content:"+content);
+									Elements a = labels.get(0).nextElementSibling().select("a");
+									if(a!=null && a.size()>0) {
+										content = labels.get(0).nextElementSibling().select("a").html();
+									}else {
+										content = labels.get(0).nextElementSibling().html();
+									}
+									System.out.println("title:content-->"+title + content);
+								}else if("a".equals(tagName)){
+									content = labels.get(0).nextElementSibling().html();
+									System.out.println("title:content-->"+title + content);
 								}else {
 									// 未知情况
 									System.out.println("未发现此标签"+"["+tagName+"]");
+									continue;
 								}
-							}
+								otherDesc.append(title + content+"  ");
+							}		
 						}
 					}
 				}
-				
-				
-				
-				//searchInfos.add(si);
+				Elements items3 = newPageDoc.select("section.viewad-meta ul li");
+				if(items3 != null && items3.size() > 0) {
+					for (Element item : items3) {
+						Elements labels = item.select("label");
+						if(labels != null && labels.size() > 0) {
+							int count = labels.size();
+							if(count == 2) {
+								String title = labels.get(0).html();// 标题
+								String content = labels.get(1).html();// 内容
+								System.out.println("title:content-->"+title + content);
+								otherDesc.append(title + content+"  ");
+							}else {
+								String title = labels.get(0).html();// 标题
+								String tagName = labels.get(0).nextElementSibling().tagName();
+								String content = "";
+								if("div".equals(tagName) ) {
+									content = labels.get(0).nextElementSibling().select("label").html().replace("\n", " ");
+									System.out.println("title:content-->"+title + content);
+								}else if("span".equals(tagName)){
+									Elements a = labels.get(0).nextElementSibling().select("a");
+									if(a!=null && a.size()>0) {
+										content = labels.get(0).nextElementSibling().select("a").html().replace("\n", " ");
+									}else {
+										content = labels.get(0).nextElementSibling().html();
+									}
+									System.out.println("title:content-->"+title + content);
+								}else if("a".equals(tagName)){
+									content = labels.get(0).nextElementSibling().html();
+									System.out.println("title:content-->"+title + content);
+								}else {
+									// 未知情况
+									System.out.println("未发现此标签"+"["+tagName+"]");
+									continue;
+								}
+								otherDesc.append(title + content+"  ");
+							}		
+						}
+					}
+				}
+				Elements descs = newPageDoc.select("section.viewad-description div.viewad-text");
+				if(descs != null && descs.size() > 0) {
+					String description = descs.get(0).nextElementSibling().html().replace("<br>", "").replace("\n", "");
+					System.out.println("*************"+description);
+					si.setDesc(description);
+				}
+				Elements titleEle = newPageDoc.select(".viewad-title");
+				if(titleEle != null && titleEle.size() > 0) {
+					String title = titleEle.get(0).nextElementSibling().html().replace("\n", "");
+					System.out.println("*************"+title);
+					si.setTitle(title);
+				}
+				searchInfos.add(si);
 			}
 		}
 		return searchInfos;
+	}
+	
+	/**
+	 * 
+	 * <p>导出本地生活网的数据</p>
+	 * @param title
+	 * @param infos
+	 * @return
+	 * @author 黄智聪  2019年2月20日 下午6:13:16
+	 * @throws IOException 
+	 */
+	public HSSFWorkbook exportBaixingData(Map<String, List<SearchInfo>> exportData) throws IOException {
+		if(exportData == null || exportData.size() == 0) {
+			throw new RuntimeException("无任何数据可导出");
+		}
+		Set<String> keys = exportData.keySet();
+		HSSFWorkbook wb = new HSSFWorkbook();
+		for (String key : keys) {// key为title
+			String titleName = "";
+			if(key.contains("/")) {
+				titleName = key.replace("/", "、");
+			}else {
+				titleName = key;
+			}
+			// 建立新的sheet对象（excel的表单）
+			HSSFSheet sheet = wb.createSheet(titleName);
+			// 在sheet里创建第一行，参数为行索引(excel的行)，可以是0～65535之间的任何一个
+			HSSFRow row0 = sheet.createRow(0);
+			// 添加表头
+			row0.createCell(0).setCellValue("标题");
+			row0.createCell(1).setCellValue("联系人手机号");
+			row0.createCell(2).setCellValue("描述");
+			row0.createCell(3).setCellValue("其他描述");
+			List<SearchInfo> infos = exportData.get(key);
+			int i = 0;
+			for (SearchInfo info : infos) {
+				i++;
+				HSSFRow row = sheet.createRow(i);
+				row.createCell(0).setCellValue(info.getTitle());
+				row.createCell(1).setCellValue(info.getPhoneNumber());
+				row.createCell(2).setCellValue(info.getDesc());
+				row.createCell(3).setCellValue(info.getOtherDesc());
+			}
+		}
+        wb.close();
+		return wb;
 	}
 	
 	public static void main(String[] args) throws IOException {
 		/*String titleName = "招聘";
 		String url = "http://shenzhen.baixing.com/gongzuo/";
 		Document doc = Jsoup.connect(url).get();
+		String titleName = "房产";
+		String url = "http://shenzhen.baixing.com/qiufang/";
+		Document doc = Jsoup.parse(ProxyHttpRequest.doGetRequest(url));
+         branch 'master' of https://github.com/azzpro/azz-porject.git
 		List<SearchInfo> searchInfos = new ArrayList<>();
 		int totalPages = 1;
 		try {
@@ -498,7 +621,7 @@ public class CrawlerService {
 		} catch (Exception e) {// 若这里抛异常说明只有一页
 			System.out.println("["+titleName+"]此页面只有一页数据");
 		}
-		Map<String, List<SearchInfo>> result = new LinkedHashMap<>();
+		//Map<String, List<SearchInfo>> result = new LinkedHashMap<>();
 		// 逐页查询
 		for(int page = 1; page <= totalPages; page++) {
 			System.out.println("正在爬取第"+ page +"页数据...");
@@ -506,12 +629,12 @@ public class CrawlerService {
 			String nextUrl = url + pageSuffix;
 			Document newPageDoc = null;
 			try {
-				newPageDoc = Jsoup.parse(HttpRequest.sendGetWithNoParams(nextUrl));
+				newPageDoc = Jsoup.parse(ProxyHttpRequest.doGetRequest(nextUrl));
 			} catch (Exception e) {
 				System.out.println("爬取["+titleName+"]时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
 				continue;
 			}
-			searchInfos.addAll(getBaixingEachPageInfo(newPageDoc));
+			searchInfos.addAll(getBaixingEachPageInfo(page, newPageDoc));
 		}
 		System.out.println("");*/
 	    
@@ -543,11 +666,10 @@ public class CrawlerService {
             }
             
         }
-	}
 	
 	
 	/***************************************************************************************************************************/
 	/*************************************************  本地生活网数据爬虫end  ******************************************************/
 	/***************************************************************************************************************************/
 }
-
+}

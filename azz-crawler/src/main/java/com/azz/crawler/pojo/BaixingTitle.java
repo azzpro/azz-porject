@@ -38,5 +38,10 @@ public class BaixingTitle {
 	 */
 	private List<BaixingTitle> subTitles;
 	
+	/**
+	 * 总共的子标题数量
+	 */
+	private int totalSubTitleSize;
+	
 }
 

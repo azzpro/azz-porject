@@ -40,14 +40,14 @@
 	}
 	
     </style>
-<title>本地生活网</title>
+<title>百姓网</title>
 </head>
 <body>
 	<div id="content">
 	</div>
 	<button id="submitTitles">提交爬虫的标题关键字</button>
 	
-	<button id="downloadBtn" onclick="window.open('${basePath}/azz/crawler/exportBdsh5Data')" style="display: none;">导出爬取数据</button>
+	<button id="downloadBtn" onclick="window.open('${basePath}/azz/crawler/exportBaixingData')" style="display: none;">导出爬取数据</button>
 	
 	<div class="layer" style="display: none;"></div>
 	<img alt="加载中" width="20px" height="20px" src="/static/images/loading.gif" class="pic_center" style="display: none;">
@@ -58,24 +58,56 @@
 
 		$.ajax({
             type:"POST",
-            url:"${basePath}"+"/azz/crawler/getBdsh5Titles",
+            url:"${basePath}"+"/azz/crawler/getBaixingTitles",
             dataType:"json",
             cache: false, //禁用缓存   
 			async: false,
             success:function(result){
-            	//console.log(result);
+            	console.log(result);
             	if(result.code == 0){
             		var data = result.data;
             		var html_content = '';
+            		var secondTitles;
             		for(var i = 0 ; i<data.length ;i++){
             			var firstTitle = data[i];
-            			html_content += '<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td colspan="'+firstTitle.subTitles.length+'"><input class="cb" type="checkbox" value="'+firstTitle.name+'_'+firstTitle.url+'">'+firstTitle.name+'</td></tr>';
+            			html_content += '<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td colspan="'+firstTitle.totalSubTitleSize+'"><input class="cb" type="checkbox" value="'+firstTitle.name+'_'+firstTitle.url+'">'+firstTitle.name+'</td></tr>';
             			html_content += '<tr>'
-            			var subTitles = firstTitle.subTitles;
-            			for(var j = 0; j < subTitles.length; j++){
-            				html_content+='<td><input class="cb" type="checkbox" value="'+subTitles[j].name+'_'+subTitles[j].url+'">'+subTitles[j].name + '</td>'
+            			var secondTitles = firstTitle.subTitles;
+            			for(var j = 0; j < secondTitles.length; j++){
+            				var secondTitle = secondTitles[j];
+            				if(secondTitle.name){
+            					if(secondTitle.name){
+            						if(secondTitle.url){
+		            					html_content += '<td colspan="'+secondTitle.totalSubTitleSize+'"><input class="cb" type="checkbox" value="'+secondTitle.name+'_'+secondTitle.url+'">'+secondTitle.name+'</td>';
+            						}else{
+            							html_content += '<td colspan="'+secondTitle.totalSubTitleSize+'">'+secondTitle.name+'</td>';
+            						}
+            					}else{
+            						html_content += '<td colspan="'+secondTitle.totalSubTitleSize+'">'+secondTitle.name+'</td>';
+            					}
+            				}else{
+            					html_content += '<td colspan="'+secondTitle.totalSubTitleSize+'">空</td>';
+            				}
             			}
-            			html_content+='</tr></table><hr>';
+            			html_content += '</tr>'
+            			html_content += '<tr>'
+                    	for(var k = 0; k < secondTitles.length; k++){
+                    		var secondTitle = secondTitles[k];
+                    		var thirdTitles = secondTitle.subTitles;
+                    		for(var l = 0; l < thirdTitles.length; l++){
+                    			var thirdTitle = thirdTitles[l];
+                    			if(thirdTitle.name){
+                        			if(thirdTitle.url){
+            	           				html_content += '<td colspan="'+thirdTitle.totalSubTitleSize+'"><input class="cb" type="checkbox" value="'+thirdTitle.name+'_'+thirdTitle.url+'">'+thirdTitle.name+'</td>';
+                        			}else{
+                        					html_content += '<td colspan="'+thirdTitle.totalSubTitleSize+'">'+thirdTitle.name+'</td>';
+                        			}
+                        		}else{
+                        			html_content += '<td colspan="'+thirdTitle.totalSubTitleSize+'">空</td>';
+                        		}
+                    		}
+                    	}
+	        			html_content += '</tr></table><hr>'
             		}
             		$("#content").html(html_content);
             	}
@@ -113,7 +145,7 @@
 				}
 				$.ajax({
 		            type:"POST",
-		            url:"${basePath}"+"/azz/crawler/getBdsh5SearchInfoByTitle",
+		            url:"${basePath}"+"/azz/crawler/getBaixingSearchInfoByTitle",
 		            dataType:"json",
 		            contentType: "application/json; charset=utf-8",
 		            data:JSON.stringify(postData),

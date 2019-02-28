@@ -187,7 +187,7 @@ public class CrawlerService {
         wb.close();
 		return wb;
 	}
-
+	
 	/**
 	 * 
 	 * <p>爬取每页数据</p>
@@ -259,7 +259,7 @@ public class CrawlerService {
 	 * @return
 	 * @author 黄智聪  2019年2月20日 下午2:06:46
 	 */
-	public static JsonResult<Map<String, List<SearchInfo>>> getBaixingSearchInfoByTitle(List<BaixingTitle> titlesToSearch){
+	public JsonResult<Map<String, List<SearchInfo>>> getBaixingSearchInfoByTitle(List<BaixingTitle> titlesToSearch){
 		if(titlesToSearch == null || titlesToSearch.size() == 0) {
 			throw new RuntimeException("请选择需要爬取数据的标题");
 		}
@@ -324,13 +324,14 @@ public class CrawlerService {
 					System.out.println("爬取url["+detailUrl+"]的第"+page+"页时，获取页面数据出错，跳过此条数据，错误信息：" + e.getMessage());
 					continue;
 				}
+				String phoneNumber = "无";
 				try {
-					String phoneNumber = newPageDoc.getElementById("mobileNumber").children().first().html();
+					phoneNumber = newPageDoc.getElementById("mobileNumber").children().first().html();
 					System.out.println("title:content-->"+"联系：" + phoneNumber);
-					si.setPhoneNumber(phoneNumber);
 				} catch (Exception e) {
-					e.printStackTrace();
+					System.out.println("无手机号可获取");
 				}
+				si.setPhoneNumber(phoneNumber);
 				Elements items = newPageDoc.select("div.viewad-meta div.viewad-meta-item");
 				if(items != null && items.size() > 0) {
 					for (Element item : items) {
@@ -464,6 +465,52 @@ public class CrawlerService {
 			}
 		}
 		return searchInfos;
+	}
+	
+	/**
+	 * 
+	 * <p>导出本地生活网的数据</p>
+	 * @param title
+	 * @param infos
+	 * @return
+	 * @author 黄智聪  2019年2月20日 下午6:13:16
+	 * @throws IOException 
+	 */
+	public HSSFWorkbook exportBaixingData(Map<String, List<SearchInfo>> exportData) throws IOException {
+		if(exportData == null || exportData.size() == 0) {
+			throw new RuntimeException("无任何数据可导出");
+		}
+		Set<String> keys = exportData.keySet();
+		HSSFWorkbook wb = new HSSFWorkbook();
+		for (String key : keys) {// key为title
+			String titleName = "";
+			if(key.contains("/")) {
+				titleName = key.replace("/", "、");
+			}else {
+				titleName = key;
+			}
+			// 建立新的sheet对象（excel的表单）
+			HSSFSheet sheet = wb.createSheet(titleName);
+			// 在sheet里创建第一行，参数为行索引(excel的行)，可以是0～65535之间的任何一个
+			HSSFRow row0 = sheet.createRow(0);
+			// 添加表头
+			row0.createCell(0).setCellValue("标题");
+			row0.createCell(1).setCellValue("联系人手机号");
+			row0.createCell(2).setCellValue("描述");
+			row0.createCell(3).setCellValue("其他描述");
+			List<SearchInfo> infos = exportData.get(key);
+			int i = 0;
+			for (SearchInfo info : infos) {
+				i++;
+				HSSFRow row = sheet.createRow(i);
+				row.createCell(0).setCellValue(info.getTitle());
+				row.createCell(1).setCellValue(info.getPhoneNumber());
+				row.createCell(2).setCellValue(info.getDesc());
+				row.createCell(3).setCellValue(info.getOtherDesc());
+			}
+		}
+        wb.close();
+		return wb;
 	}
 	
 	public static void main(String[] args) throws IOException {

@@ -27,6 +27,9 @@
                     <tr>
                         <td><button id="bdsh5" onclick="window.open('${basePath}/azz/crawler/bdsh5')">本地生活网</button></td>
                     </tr>
+                    <tr>
+                        <td><button id="baixing" onclick="window.open('${basePath}/azz/crawler/baixing')">百姓网</button></td>
+                    </tr>
                 </table>
             <br>
     </center>

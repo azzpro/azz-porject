@@ -12,8 +12,9 @@ import org.apache.http.util.EntityUtils;
 
 public class ProxyHttpRequest {
 	// 代理服务器
-	final static String proxyHost = "113.119.0.196";
-	final static Integer proxyPort = 4206;
+	private final static String PROXY_HOST = "116.23.227.118";
+	private final static Integer PROXY_PORT = 4206;
+	private final static String HTTP = "http";
 	
 	public static String doGetRequest(String url) {
 		try {
@@ -45,31 +46,17 @@ public class ProxyHttpRequest {
 	 */
 	public static String doRequest(HttpRequestBase httpReq) {
 		String result = new String();
-		RequestConfig reqConfig = RequestConfig.custom().setConnectionRequestTimeout(5000).setConnectTimeout(10000) // 设置连接超时时间
-				.setSocketTimeout(10000) // 设置读取超时时间
-				.setExpectContinueEnabled(false).setProxy(new HttpHost(proxyHost, proxyPort, "http"))
-				.setCircularRedirectsAllowed(true) // 允许多次重定向
-				.build();
-		httpReq.setConfig(reqConfig);
+		setProxy(httpReq, false);
 		try {
 			// 设置请求头
 			setHeaders(httpReq);
-			
 			CloseableHttpClient httpClient = HttpClients.createDefault();
 			// 执行请求
 			CloseableHttpResponse httpResp = httpClient.execute(httpReq);
-			
-			// 保存Cookie
-			
-			// 获取http code
-			int statusCode = httpResp.getStatusLine().getStatusCode();
-			System.out.println(statusCode);
-			
 			HttpEntity entity = httpResp.getEntity();
 			if (entity != null) {
 				result = EntityUtils.toString(entity, "utf-8");
 			}
-
 			httpResp.close();
 			httpClient.close();
 			httpReq.abort();
@@ -78,5 +65,18 @@ public class ProxyHttpRequest {
 			return null;
 		}
 		return result;
+	}
+
+	private static void setProxy(HttpRequestBase httpReq, boolean changeProxy) {
+		HttpHost proxy = new HttpHost(PROXY_HOST, PROXY_PORT, HTTP);
+		RequestConfig reqConfig = RequestConfig.custom()
+				.setConnectionRequestTimeout(5000)
+				.setConnectTimeout(5000) // 设置连接超时时间
+				.setSocketTimeout(5000) // 设置读取超时时间
+				.setExpectContinueEnabled(false)
+				.setProxy(proxy)// 设置代理
+				.setCircularRedirectsAllowed(true) // 允许多次重定向
+				.build();
+		httpReq.setConfig(reqConfig);
 	}
 }

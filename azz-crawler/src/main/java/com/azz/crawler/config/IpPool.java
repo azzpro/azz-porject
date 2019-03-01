@@ -39,16 +39,16 @@ public class IpPool {
 	
 	public void initIps(){
 		LOGGER.info("正在初始化代理ip池的数据...");
-		ProxyIp[] proxyIpArr = { new ProxyIp("119.129.236.155", 4206), 
-				new ProxyIp("116.23.227.52", 4206),
-				new ProxyIp("116.23.226.28", 4206), 
-				new ProxyIp("116.23.227.39", 4206),
-				new ProxyIp("119.129.236.234", 4206), 
-				new ProxyIp("116.23.226.215", 4206),
-				new ProxyIp("113.119.11.12", 4206),
-				new ProxyIp("119.129.237.55", 4206),
-				new ProxyIp("113.119.11.125", 4206),
-				new ProxyIp("119.129.236.107", 4206) };
+		ProxyIp[] proxyIpArr = { new ProxyIp("119.129.239.235", 4206), 
+				new ProxyIp("119.129.237.56", 4206),
+				new ProxyIp("116.23.227.36", 4206), 
+				new ProxyIp("119.129.238.62", 4206),
+				new ProxyIp("113.119.2.43", 4206), 
+				new ProxyIp("116.23.227.64", 4206),
+				new ProxyIp("116.23.227.71", 4206),
+				new ProxyIp("119.129.237.74", 4206),
+				new ProxyIp("116.23.226.77", 4206),
+				new ProxyIp("113.119.11.146", 4206) };
 		Map<String, ProxyIp> ips = new HashMap<>();
 		for (ProxyIp proxyIp : proxyIpArr) {
 			ips.put(proxyIp.getIp(), proxyIp);

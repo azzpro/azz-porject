@@ -201,5 +201,27 @@ public class CrawlerController {
 		wb.write(response.getOutputStream());
 		return JsonResult.successJsonResult();
 	}
+	
+	/**
+	 * <p>导出赶集网保险信息</p>
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 * @author 彭斌  2019年3月1日 下午2:13:39
+	 */
+	@SuppressWarnings("unchecked")
+    @RequestMapping("exportGanjiBaoXianData")
+    @ResponseBody
+    public JsonResult<String> exportGanJiBaoxianData(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Map<String, List<BaoXianInfo>> data = (Map<String, List<BaoXianInfo>>) WebUtils.getSessionAttribute(request, "ganji");
+        HSSFWorkbook wb = crawlerService.exportGanJiBaoxianData(data);
+        WebUtils.setSessionAttribute(request, "ganji", null);
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-disposition", "attachment;filename=ganjibaoxian.xlsx");
+        response.flushBuffer();
+        wb.write(response.getOutputStream());
+        return JsonResult.successJsonResult();
+    }
 }
 

@@ -173,7 +173,7 @@ public class CrawlerService {
                 int totalPages = 1;
                 String url = ganJiTitle.getUrl();
                 try {
-                    Document doc = Jsoup.connect(url).get();
+                    Document doc = Jsoup.parse(proxyHttpRequest.doGetRequest(url));
                     Element pageSize = doc.select("div.leftBox div.pageBox ul li").last().previousElementSibling();
                     totalPages = Integer.parseInt(pageSize.text());
                 } catch (Exception e) {// 若这里抛异常说明只有一页
@@ -186,12 +186,12 @@ public class CrawlerService {
                     String nextUrl = url + pageSuffix;
                     Document newPageDoc = null;
                     try {
-                        newPageDoc = Jsoup.connect(nextUrl).get();
+                        newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(nextUrl));
                     } catch (Exception e) {
                         System.out.println("爬取保险时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
                         continue;
                     }
-                    searchInfos.addAll(getGanjiSeachPageInfo(newPageDoc));
+                    searchInfos.addAll(getGanjiBaoxianSeachPageInfo(newPageDoc));
                 }
             } catch (Exception e) {
                 System.out.println("爬取["+titleName+"]时，获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
@@ -290,8 +290,13 @@ public class CrawlerService {
 		return searchInfos;
 	}
 	
-	
-	private List<BaoXianInfo> getGanjiSeachPageInfo(Document doc) {
+	/**
+	 * <p>导出赶集网保险信息</p>
+	 * @param doc
+	 * @return
+	 * @author 彭斌  2019年3月1日 下午2:09:12
+	 */
+	private List<BaoXianInfo> getGanjiBaoxianSeachPageInfo(Document doc) {
         Elements lastPageLi = doc.select("div.leftBox div.list ul").last().children();
         List<BaoXianInfo> searchInfos = new ArrayList<>();
         System.out.println("开始爬取赶集网保险信息");
@@ -302,10 +307,10 @@ public class CrawlerService {
                     String baoxianUrl = info.select("div.txt p a").attr("href");
                     String detailUrl = "http://sz.ganji.com"+baoxianUrl;
                     System.out.println("detailUrl="+detailUrl);
-                    Document newPageDoc;
+                    Document newPageDoc = null;
                     try {
-                        newPageDoc = Jsoup.connect(detailUrl).get();
-                    } catch (IOException e) {
+                        newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(detailUrl));
+                    } catch (Exception e) {
                         System.out.println("爬取保险时，在["+ baoxianUrl +"]页面数据出错，跳过此页面，错误信息：" + e.getMessage());
                         continue;
                     }
@@ -618,40 +623,50 @@ public class CrawlerService {
 		return wb;
 	}
 
+	/**
+	 * <p>导出赶集网保险信息</p>
+	 * @param exportData
+	 * @return
+	 * @throws IOException
+	 * @author 彭斌  2019年3月1日 下午2:13:00
+	 */
+	public HSSFWorkbook exportGanJiBaoxianData(Map<String, List<BaoXianInfo>> exportData) throws IOException {
+        if(exportData == null || exportData.size() == 0) {
+            throw new RuntimeException("无任何数据可导出");
+        }
+        Set<String> keys = exportData.keySet();
+        HSSFWorkbook wb = new HSSFWorkbook();
+        for (String key : keys) {// key为title
+            String titleName = "";
+            if(key.contains("/")) {
+                titleName = key.replace("/", "、");
+            }else {
+                titleName = key;
+            }
+            // 建立新的sheet对象（excel的表单）
+            HSSFSheet sheet = wb.createSheet(titleName);
+            // 在sheet里创建第一行，参数为行索引(excel的行)，可以是0～65535之间的任何一个
+            HSSFRow row0 = sheet.createRow(0);
+            // 添加表头
+            row0.createCell(0).setCellValue("保险公司名称");
+            row0.createCell(1).setCellValue("描述");
+            List<BaoXianInfo> infos = exportData.get(key);
+            int i = 0;
+            for (BaoXianInfo info : infos) {
+                i++;
+                HSSFRow row = sheet.createRow(i);
+                row.createCell(0).setCellValue(info.getTitle());
+                row.createCell(1).setCellValue(info.getDesc());
+            }
+        }
+        wb.close();
+        return wb;
+    }
 
 	/***************************************************************************************************************************/
 	/*************************************************  本地生活网数据爬虫end  ******************************************************/
 	/**
 	 * @throws IOException *************************************************************************************************************************/
 
-	
-	public static void main(String[] args) throws IOException {
-        String url = "http://sz.ganji.com/baoxian";
-        String ganjiurl = "http://sz.ganji.com";
-        Document doc = Jsoup.connect(url).get();
-        Elements lastPageLi = doc.select("div.leftBox div.list ul").last().children();
-        List<BaoXianInfo> searchInfos = new ArrayList<>();
-        if(lastPageLi != null) {
-            // 每页的信息
-            if(lastPageLi != null && lastPageLi.size() > 0) {
-                for (Element info : lastPageLi) {
-                    String baoxianUrl = info.select("div.txt p a").attr("href");
-                    String detailUrl = ganjiurl+baoxianUrl;
-                    System.out.println("detailUrl="+detailUrl);
-                    Document newPageDoc = Jsoup.connect(detailUrl).get();
-                    Elements detailInfo = newPageDoc.getElementById("dzcontactus").select("div.con ul");
-                    System.out.println("detailInfo="+detailInfo);
-                    for (Element detals : detailInfo) {
-                        BaoXianInfo si = new BaoXianInfo();
-                        si.setTitle(detals.select("li.fb").text());
-                        si.setDesc(detals.select("li").text());
-                        System.out.println("保险公司名称："+detals.select("li.fb").text());
-                        System.out.println("保险详情："+detals.select("li").text());
-                        searchInfos.add(si);
-                    }
-                }
-            }
-        }
-        
-    }
+    
 }

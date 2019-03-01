@@ -47,7 +47,7 @@
 	</div>
 	<button id="submitTitles">提交爬虫的标题关键字</button>
 	
-	<button id="downloadBtn" onclick="window.open('${basePath}/azz/crawler/exportBdsh5Data')" style="display: none;">导出爬取数据</button>
+	<button id="downloadBtn" onclick="window.open('${basePath}/azz/crawler/exportGanjiBaoXianData')" style="display: none;">导出爬取数据</button>
 	
 	<div class="layer" style="display: none;"></div>
 	<img alt="加载中" width="20px" height="20px" src="/static/images/loading.gif" class="pic_center" style="display: none;">

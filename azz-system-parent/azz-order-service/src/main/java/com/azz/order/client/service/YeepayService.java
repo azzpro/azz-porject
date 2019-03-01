@@ -386,9 +386,9 @@ public class YeepayService {
 	 */
 	public static Map<String,String> upload(String fileType, String file) throws IOException {
 		Map<String, String> result = new HashMap<>();
-		String uri = YeepayService.getUrl(YeepayService.UPLOAD_URL);
+		String uri = YeepayService.getUrl(YeepayService.NEWUPLOAD_URL);
 		System.out.println(uri);
-		YopRequest request = new YopRequest("OPR:"+getParentMerchantNo());
+		YopRequest request = new YopRequest("OPR:"+getParentMerchantNo(),YeepayService.getParentKey());
 		
 		
 		request.addParam("fileType", fileType);
@@ -419,9 +419,9 @@ public class YeepayService {
 	 */
 	public static Map<String,String> uploadStream(String fileType, String file) throws IOException {
 		Map<String, String> result = new HashMap<>();
-		String uri = YeepayService.getUrl(YeepayService.UPLOAD_URL);
+		String uri = YeepayService.getUrl(YeepayService.NEWUPLOAD_URL);
 		System.out.println(uri);
-		YopRequest request = new YopRequest("OPR:"+getParentMerchantNo());
+		YopRequest request = new YopRequest("OPR:"+getParentMerchantNo(),YeepayService.getParentKey());
 		request.addParam("fileType", fileType);
 
 		// 本地文件流参数传递
@@ -452,14 +452,14 @@ public class YeepayService {
 	 * */
 	public static Map<String,String> uploadUrlStream(String fileType, String file) throws IOException {
 		Map<String, String> result = new HashMap<>();
-		String uri = YeepayService.getUrl(YeepayService.UPLOAD_URL);
+		String uri = YeepayService.getUrl(YeepayService.NEWUPLOAD_URL);
 		System.out.println(uri);
-		YopRequest request = new YopRequest("OPR:"+getParentMerchantNo());
+		YopRequest request = new YopRequest("OPR:"+getParentMerchantNo(),YeepayService.getParentKey());
 		request.addParam("fileType", fileType);
 	    //request.addParam("_file", "file:"+file);
 		//request.addParam("_file", file);
 		// 本地远程文件参数
-		request.addFile(new URL("https://www.yeepay.com/logo.png").openStream());
+		request.addFile("merQual",new URL(file).openStream());
 	    System.out.println(request.toQueryString());
 
 	    YopResponse response = YopRsaClient.upload(uri, request);

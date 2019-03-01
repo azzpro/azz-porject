@@ -21,7 +21,7 @@ spring:
     password: 123456
   http:
     multipart:
-      maxFileSize: 10Mb
+      maxFileSize: 100Mb
       maxRequestSize: 100Mb
 eureka:
   client:

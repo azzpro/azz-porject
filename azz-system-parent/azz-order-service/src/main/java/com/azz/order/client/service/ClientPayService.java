@@ -19,8 +19,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -30,8 +31,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.alibaba.fastjson.JSONObject;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.page.Pagination;
@@ -44,12 +46,17 @@ import com.azz.core.constants.PayConstants.PayCode;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.order.api.client.ClientOrderService;
 import com.azz.order.api.client.SelectionService;
+import com.azz.order.client.mapper.ClientEnterpriseRegInfoMapper;
 import com.azz.order.client.mapper.ClientPayMapper;
+import com.azz.order.client.mapper.ClientPersonRegInfoMapper;
 import com.azz.order.client.pojo.ClientPay;
+import com.azz.order.client.pojo.Enterprisereginfoadd;
 import com.azz.order.client.pojo.RetBean;
+import com.azz.order.client.pojo.bo.Enterprisereginfo;
 import com.azz.order.client.pojo.bo.OrderInfo;
 import com.azz.order.client.pojo.bo.PageOrder;
 import com.azz.order.client.pojo.bo.PayList;
+import com.azz.order.client.pojo.bo.Personreginfo;
 import com.azz.order.client.pojo.vo.ClientOrderDetail;
 import com.azz.order.client.pojo.vo.ClientOrderInfo;
 import com.azz.order.selection.bo.CallBackParam;
@@ -57,6 +64,10 @@ import com.azz.util.DateUtils;
 import com.azz.util.DecimalUtil;
 import com.azz.util.LLPayUtil;
 import com.github.pagehelper.PageHelper;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 
 
 @Service
@@ -67,6 +78,11 @@ public class ClientPayService {
 	@Value("${yeepay.notify-url}")
 	private String notifyUrl;
 	
+	@Value("${yeepay.regEn-notify-url}")
+	private String regEnNotifyUrl;
+	
+	@Value("${yeepay.regPe-notify-url}")
+	private String regPeNotifyUrl;
 	
 	@Autowired
 	private ClientPayMapper ppm;
@@ -76,6 +92,12 @@ public class ClientPayService {
 
 	@Autowired
 	private SelectionService selectService;
+	
+	@Autowired
+	private ClientEnterpriseRegInfoMapper clientEnterpriseRegInfoMapper;
+	
+	@Autowired
+	private ClientPersonRegInfoMapper clientPersonRegInfoMapper;
 
 	@Transactional
 	public Map<String,Object> submitOrderPay(@RequestBody PageOrder po) {
@@ -127,10 +149,6 @@ public class ClientPayService {
 		params.put("memo", "");
 		params.put("riskParamExt", "");
 		params.put("csUrl", "");
-		Set<Entry<String, String>> entrySet = params.entrySet();
-		for (Entry<String, String> entry : entrySet) {
-			log.info("key-->"+entry.getKey()+"::value-->"+entry.getValue());
-		}
 		Map<String, String> result = new HashMap<>();
 		String uri = YeepayService.getUrl(YeepayService.TRADEORDER_URL);
 		try {
@@ -202,6 +220,337 @@ public class ClientPayService {
 		
 	}
 
+	/**
+	 * 子商户入网注册 【个人】
+	 * @param po
+	 * @return
+	 * @throws Exception 
+	 */
+	public JsonResult<String> regPersonl(@RequestBody Personreginfo po) throws Exception{
+		Map<String, String> upload = upload("http://azz-image.oss-cn-shenzhen.aliyuncs.com/yeepay-image/bank.jpg");
+		Map<String, String> upload1 = upload("http://azz-image.oss-cn-shenzhen.aliyuncs.com/yeepay-image/h_1.jpg");
+		Map<String, String> upload2 = upload("http://azz-image.oss-cn-shenzhen.aliyuncs.com/yeepay-image/h_2.jpg");
+		Map<String, String> upload3 = upload("http://azz-image.oss-cn-shenzhen.aliyuncs.com/yeepay-image/idcard_1.jpg");
+		Map<String, String> upload4 = upload("http://azz-image.oss-cn-shenzhen.aliyuncs.com/yeepay-image/idcard_2.jpg");
+		Map<String,String> param = new HashMap<String,String>();
+		Map<String,String> param1 = new HashMap<String,String>();
+		Map<String,String> param2 = new HashMap<String,String>();
+		Map<String,String> param3 = new HashMap<String,String>();
+		Map<String,String> param4 = new HashMap<String,String>();
+		if(!upload.isEmpty() && "REG00000".equals(upload.get("returnCode"))) {
+			param.put("quaType", "SETTLE_BANKCARD");
+			param.put("quaUrl", upload.get("merQualUrl"));
+		}
+		if(!upload1.isEmpty() && "REG00000".equals(upload1.get("returnCode"))) {
+			param1.put("quaType", "HAND_BANKCARD");
+			param1.put("quaUrl", upload1.get("merQualUrl"));
+		}
+		if(!upload2.isEmpty() && "REG00000".equals(upload2.get("returnCode"))) {
+			param2.put("quaType", "HAND_IDCARD");
+			param2.put("quaUrl", upload2.get("merQualUrl"));
+		}
+		if(!upload3.isEmpty() && "REG00000".equals(upload3.get("returnCode"))) {
+			param3.put("quaType", "IDCARD_BACK");
+			param3.put("quaUrl", upload3.get("merQualUrl"));
+		}
+		if(!upload4.isEmpty() && "REG00000".equals(upload4.get("returnCode"))) {
+			param4.put("quaType", "IDCARD_FRONT");
+			param4.put("quaUrl", upload4.get("merQualUrl"));
+		}
+		JSONObject jsonObject = JSONObject.fromObject(param);
+		JSONObject jsonObject1 = JSONObject.fromObject(param1);
+		JSONObject jsonObject2 = JSONObject.fromObject(param2);
+		JSONObject jsonObject3 = JSONObject.fromObject(param3);
+		JSONObject jsonObject4 = JSONObject.fromObject(param4);
+		JSONArray array = new JSONArray();
+		array.add(jsonObject.toString());
+		array.add(jsonObject1.toString());
+		array.add(jsonObject2.toString());
+		array.add(jsonObject3.toString());
+		array.add(jsonObject4.toString());
+		array.toArray();
+		if(null != po) {
+			//String status = clientPersonRegInfoMapper.selectStatusByCardNoAndParentMerchantNo(po.getCardNo(), po.getParentMerchantNo());
+			//if(StringUtils.isNotBlank(status) && status.equals(PayConstants.Status.UR.getStatus())) {
+				//状态不为空 并且 未注册
+				Map<String, String> params = new HashMap<>();
+				params.put("legalName", po.getLegalName());
+				params.put("legalIdCard", po.getLegalIdCard());
+				if(StringUtils.isBlank(po.getMerShortName())) {
+					params.put("merShortName", "");
+				}else {
+					params.put("merShortName", po.getMerShortName());
+				}
+				if(StringUtils.isBlank(po.getMerLegalEmail())) {
+					params.put("merLegalEmail", "");
+				}else {
+					params.put("merLegalEmail", po.getMerLegalEmail());
+				}
+				if(StringUtils.isBlank(po.getMerLegalPhone())) {
+					params.put("merLegalPhone", "");
+				}else {
+					params.put("merLegalPhone", po.getMerLegalPhone());
+				}
+				if(StringUtils.isBlank(po.getMerLevel1No())) {
+					params.put("merLevel1No", "");
+				}else {
+					params.put("merLevel1No", po.getMerLevel1No());
+				}
+				if(StringUtils.isBlank(po.getMerLevel2No())) {
+					params.put("merLevel2No", "");
+				}else {
+					params.put("merLevel2No", po.getMerLevel2No());
+				}
+				params.put("merProvince", po.getMerProvince());
+				params.put("merCity", po.getMerCity());
+				params.put("merDistrict", po.getMerDistrict());
+				params.put("merAddress", po.getMerAddress());
+				params.put("cardNo", po.getCardNo());
+				params.put("headBankCode", po.getHeadBankCode());
+				params.put("bankCode", po.getBankCode());
+				if(StringUtils.isBlank(po.getBankProvince())) {
+					params.put("bankProvince", "");
+				}else {
+					params.put("bankProvince", po.getBankProvince());
+				}
+				if(StringUtils.isBlank(po.getBankCity())) {
+					params.put("bankCity", "");
+				}else {
+					params.put("bankCity", po.getBankCity());
+				}
+				params.put("fileInfo", array.toString());
+				params.put("requestNo", po.getRequestNo());
+				params.put("parentMerchantNo", po.getParentMerchantNo());
+				params.put("notifyUrl", regEnNotifyUrl);
+				if(StringUtils.isBlank( po.getMerAuthorizeType())) {
+					params.put("merAuthorizeType", "");
+				}else {
+					params.put("merAuthorizeType", po.getMerAuthorizeType());
+				}
+				if(StringUtils.isBlank(po.getBusinessFunction())) {
+					params.put("businessFunction", "");
+				}else {
+					params.put("businessFunction",po.getBusinessFunction());
+				}
+				String str = "{\"payProductMap\":{\"B2C_PAY\":{\"dsPayBankMap\":{\"NET_BANK\":{\"rateType\":\"PERCENTAGE\",\"rate\":\"0.3\"}}},\"B2B_PAY\":{\"dsPayBankMap\":{\"NET_BANK\":{\"rateType\":\"ONEPAY\",\"rate\":\"10\"}}}},\"payScenarioMap\":{\"WEB_ACCESS\":{\"webUrl\":\"http://www.izz2025.com\",\"icp\":\"18144663\"}}}";
+				//String debitJson = "{\"payProductMap\":{\"ONE_KEY_PAY_DEBIT\":{\"dsPayBankMap\":{\"BANK_PAY_WAP\":{\"rateType\":\"PERCENTAGE\",\"rate\":\"0.6\"}}},\"ONE_KEY_PAY_CREDIT\":{\"dsPayBankMap\":{\"BANK_PAY_WAP\":{\"rateType\":\"PERCENTAGE\",\"rate\":\"0.6\"}}},\"B2C_PAY\":{\"dsPayBankMap\":{\"NET_BANK\":{\"rateType\":\"PERCENTAGE\",\"rate\":\"0.3\"}}},\"B2B_PAY\":{\"dsPayBankMap\":{\"NET_BANK\":{\"rateType\":\"ONEPAY\",\"rate\":\"10\"}}},\"USER_SCAN_PAY\":{\"dsPayBankMap\":{\"WECHAT_ATIVE_SCAN_OFFLINE\":{\"rateType\":\"PERCENTAGE\",\"rate\":\"0.6\"},\"ALIPAY_ONLINE\":{\"rateType\":\"PERCENTAGE\",\"rate\":\"0.6\"},\"ALIPAY_OFFLINE\":{\"rateType\":\"PERCENTAGE\",\"rate\":\"0.6\"}}}}}";
+			    JSONObject productInfo = JSONObject.fromObject(str);
+			    System.out.println("产品信息---->"+productInfo.toString());
+				params.put("productInfo",productInfo.toString());
+			    org.json.JSONObject json = new org.json.JSONObject(params);
+				log.info("子商户入网注册参数----->"+json.toString());
+				String uri = YeepayService.getUrl(YeepayService.PERSON_URL);
+				Map<String, String> result = new HashMap<>();
+				try {
+					result = YeepayService.requestYOP(params, uri, YeepayService.PERSON);
+				} catch (IOException e) {
+					//TODO return code and msg
+					e.printStackTrace();
+				}
+				String merchantNo = result.get("merchantNo"); //商户编号
+				String returnMsg = result.get("returnMsg"); //返回信息
+				String returnCode = result.get("returnCode"); //返回CODE
+				String requestNo = result.get("requestNo"); //入网请求号
+				String parentMerchantNo = result.get("parentMerchantNo"); //代理商编号
+				String externalId = result.get("externalId"); //入网流水号
+				log.info("【merchantNo】--->"+merchantNo+"【returnMsg】--->"+returnMsg+
+						"【returnCode】--->"+returnCode+"【requestNo】--->"+requestNo+
+						"【parentMerchantNo】--->"+parentMerchantNo+"【externalId】--->"+externalId);
+				
+			//}
+			
+		}
+		return null;
+	}
+	
+	
+	/**
+	 * 子商户入网注册 【企业】
+	 * @param po
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/azz/api/pay/regEnterprise",method=RequestMethod.POST)
+	public JsonResult<String> regEnterprise(@RequestBody Enterprisereginfo po) throws Exception{
+		Map<String, String> upload = upload("http://azz-image.oss-cn-shenzhen.aliyuncs.com/yeepay-image/fa_1.jpg");
+		Map<String, String> upload1 = upload("http://azz-image.oss-cn-shenzhen.aliyuncs.com/yeepay-image/fa_2.jpg");
+		Map<String, String> upload2 = upload("http://azz-image.oss-cn-shenzhen.aliyuncs.com/yeepay-image/kaihu.jpeg");
+		Map<String, String> upload3 = upload("http://azz-image.oss-cn-shenzhen.aliyuncs.com/yeepay-image/yinye.png");
+		Map<String, String> upload4 = upload("http://azz-image.oss-cn-shenzhen.aliyuncs.com/yeepay-image/yinye.png");
+		Map<String, String> upload5 = upload("http://azz-image.oss-cn-shenzhen.aliyuncs.com/yeepay-image/yinye.png");
+		Map<String, String> upload6 = upload("http://azz-image.oss-cn-shenzhen.aliyuncs.com/yeepay-image/yinye.png");
+		Map<String,String> param = new HashMap<String,String>();
+		Map<String,String> param1 = new HashMap<String,String>();
+		Map<String,String> param2 = new HashMap<String,String>();
+		Map<String,String> param3 = new HashMap<String,String>();
+		Map<String,String> param4 = new HashMap<String,String>();
+		Map<String,String> param5 = new HashMap<String,String>();
+		Map<String,String> param6 = new HashMap<String,String>();
+		if(!upload.isEmpty() && "REG00000".equals(upload.get("returnCode"))) {
+			param.put("quaType", "IDCARD_FRONT");
+			param.put("quaUrl", upload.get("merQualUrl"));
+		}
+		if(!upload1.isEmpty() && "REG00000".equals(upload1.get("returnCode"))) {
+			param1.put("quaType", "IDCARD_BACK");
+			param1.put("quaUrl", upload1.get("merQualUrl"));
+		}
+		if(!upload2.isEmpty() && "REG00000".equals(upload2.get("returnCode"))) {
+			param2.put("quaType", "OP_BANK_CODE");
+			param2.put("quaUrl", upload2.get("merQualUrl"));
+		}
+		if(!upload3.isEmpty() && "REG00000".equals(upload3.get("returnCode"))) {
+			param3.put("quaType", "CORP_CODE");
+			param3.put("quaUrl", upload3.get("merQualUrl"));
+		}
+		if(!upload4.isEmpty() && "REG00000".equals(upload4.get("returnCode"))) {
+			param4.put("quaType", "TAX_CODE");
+			param4.put("quaUrl", upload4.get("merQualUrl"));
+		}
+		if(!upload5.isEmpty() && "REG00000".equals(upload5.get("returnCode"))) {
+			param5.put("quaType", "ORG_CODE");
+			param5.put("quaUrl", upload5.get("merQualUrl"));
+		}
+		if(!upload6.isEmpty() && "REG00000".equals(upload6.get("returnCode"))) {
+			param6.put("quaType", "UNI_CREDIT_CODE");
+			param6.put("quaUrl", upload6.get("merQualUrl"));
+		}
+		JSONObject jsonObject = JSONObject.fromObject(param);
+		JSONObject jsonObject1 = JSONObject.fromObject(param1);
+		JSONObject jsonObject2 = JSONObject.fromObject(param2);
+		JSONObject jsonObject3 = JSONObject.fromObject(param3);
+		JSONObject jsonObject4 = JSONObject.fromObject(param4);
+		JSONObject jsonObject5 = JSONObject.fromObject(param5);
+		JSONObject jsonObject6 = JSONObject.fromObject(param6);
+		JSONArray array = new JSONArray();
+		array.add(jsonObject.toString());
+		array.add(jsonObject1.toString());
+		array.add(jsonObject2.toString());
+		array.add(jsonObject3.toString());
+		array.add(jsonObject4.toString());
+		array.add(jsonObject5.toString());
+		array.add(jsonObject6.toString());
+		array.toArray();
+		if(null != po) {
+			//String status = clientEnterpriseRegInfoMapper.selectStatusByCardNoAndMerFullName(po.getCardNo(), po.getMerFullName());
+			//if(StringUtils.isNotBlank(status) && Objects.equals(status, PayConstants.Status.UR)) {
+				//状态不为空 并且 未注册
+				Map<String, String> params = new HashMap<>();
+				params.put("merFullName", po.getMerFullName());
+				params.put("merShortName", po.getMerShortName());
+				params.put("merCertNo", po.getMerCertNo());
+				params.put("merCertType", po.getMerCertType());
+				params.put("legalName", po.getLegalName());
+				params.put("legalIdCard", po.getLegalIdCard());
+				params.put("merContactName", po.getMerContactName());
+				params.put("merContactPhone", po.getMerContactPhone());
+				if(StringUtils.isBlank(po.getMerContactEmail())) {
+					params.put("merContactEmail", "");
+				}else {
+					params.put("merContactEmail", po.getMerContactEmail());
+				}
+				if(StringUtils.isBlank(po.getMerLevel1No())) {
+					params.put("merLevel1No", "");
+				}else {
+					params.put("merLevel1No", po.getMerLevel1No());
+				}
+				if(StringUtils.isBlank(po.getMerLevel2No())) {
+					params.put("merLevel2No", "");
+				}else {
+					params.put("merLevel2No", po.getMerLevel2No());
+				}
+				params.put("merProvince", po.getMerProvince());
+				params.put("merCity", po.getMerCity());
+				params.put("merDistrict", po.getMerDistrict());
+				params.put("merAddress", po.getMerAddress());
+				if(StringUtils.isBlank(po.getTaxRegistCert())) {
+					params.put("taxRegistCert", "");
+				}else {
+					params.put("taxRegistCert", po.getTaxRegistCert());
+				}
+				params.put("accountLicense", po.getAccountLicense());
+				if(StringUtils.isBlank(po.getOrgCode())) {
+					params.put("orgCode", "");
+				}else {
+					params.put("orgCode", po.getOrgCode());
+				}
+				if(StringUtils.isBlank(po.getOrgCodeExpiry())) {
+					params.put("orgCodeExpiry", "");
+				}else {
+					params.put("orgCodeExpiry", po.getOrgCodeExpiry());
+				}
+				if(StringUtils.isBlank(po.getIsOrgCodeLong())) {
+					params.put("isOrgCodeLong", "");
+				}else {
+					params.put("isOrgCodeLong", po.getIsOrgCodeLong());
+				}
+				params.put("cardNo", po.getCardNo());
+				params.put("headBankCode", po.getHeadBankCode());
+				params.put("bankCode", "102584002660");
+				if(StringUtils.isBlank(po.getBankProvince())) {
+					params.put("bankProvince", "");
+				}else {
+					params.put("bankProvince", po.getBankProvince());
+				}
+				if(StringUtils.isBlank(po.getBankCity())) {
+					params.put("bankCity", "");
+				}else {
+					params.put("bankCity", po.getBankCity());
+				}
+				String str = "{\"payProductMap\":{\"ONE_KEY_PAY_DEBIT\":{\"dsPayBankMap\":{\"BANK_PAY_WAP\":{\"rateType\":\"PERCENTAGE\",\"rate\":\"0.6\"}}},\"ONE_KEY_PAY_CREDIT\":{\"dsPayBankMap\":{\"BANK_PAY_WAP\":{\"rateType\":\"PERCENTAGE\",\"rate\":\"0.6\"}}},\"B2C_PAY\":{\"dsPayBankMap\":{\"NET_BANK\":{\"rateType\":\"PERCENTAGE\",\"rate\":\"0.3\"}}},\"B2B_PAY\":{\"dsPayBankMap\":{\"NET_BANK\":{\"rateType\":\"ONEPAY\",\"rate\":\"10\"}}},\"USER_SCAN_PAY\":{\"dsPayBankMap\":{\"WECHAT_ATIVE_SCAN\":{\"rateType\":\"PERCENTAGE\",\"rate\":\"0.6\"},\"ALIPAY\":{\"rateType\":\"PERCENTAGE\",\"rate\":\"0.6\"}}}},\"payScenarioMap\":{\"WEB_ACCESS\":{\"webUrl\":\"http://www.izz2025.com\",\"icp\":\"18144663\"}}}";
+				JSONObject productInfo = JSONObject.fromObject(str);
+				params.put("productInfo",productInfo.toString());
+				params.put("fileInfo", array.toString());
+				params.put("requestNo", po.getRequestNo());
+				params.put("parentMerchantNo", po.getParentMerchantNo());
+				params.put("notifyUrl", regEnNotifyUrl);
+				if(StringUtils.isBlank( po.getMerAuthorizeType())) {
+					params.put("merAuthorizeType", "");
+				}else {
+					params.put("merAuthorizeType", po.getMerAuthorizeType());
+				}
+				if(StringUtils.isBlank(po.getBusinessFunction())) {
+					params.put("businessFunction", "");
+				}else {
+					params.put("businessFunction",po.getBusinessFunction());
+				}
+				org.json.JSONObject json = new org.json.JSONObject(params);
+				log.info("子商户入网注册参数----->"+json.toString());
+				String uri = YeepayService.getUrl(YeepayService.ENTERPRISE_URL);
+				Map<String, String> result = new HashMap<>();
+				try {
+					result = YeepayService.requestYOP(params, uri, YeepayService.ENTERPRISE);
+				} catch (IOException e) {
+					//TODO return code and msg
+					e.printStackTrace();
+				}
+				String merchantNo = result.get("merchantNo"); //商户编号
+				String returnMsg = result.get("returnMsg"); //返回信息
+				String returnCode = result.get("returnCode"); //返回CODE
+				String requestNo = result.get("requestNo"); //入网请求号
+				String parentMerchantNo = result.get("parentMerchantNo"); //代理商编号
+				String externalId = result.get("externalId"); //入网流水号
+				log.info("【merchantNo】--->"+merchantNo+"【returnMsg】--->"+returnMsg+
+						"【returnCode】--->"+returnCode+"【requestNo】--->"+requestNo+
+						"【parentMerchantNo】--->"+parentMerchantNo+"【externalId】--->"+externalId);
+				
+			}
+			
+		return null;
+		
+	}
+	
+	/**
+	 * 文件上传
+	 * @param responseMsg
+	 * @param customerId
+	 * @return
+	 * @throws Exception 
+	 */
+	private Map<String,String> upload(String url) throws Exception {
+		String fileType = "IMAGE";
+		Map<String, String> result = YeepayService.uploadUrlStream(fileType, url);
+		return result;
+	}
 	
 	public JsonResult<RetBean> payNotify(String responseMsg,String customerId) {
 		log.info("进入支付异步处理......");

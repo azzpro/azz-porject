@@ -9,8 +9,9 @@ package com.azz.order.client.controller;
 
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,11 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.order.client.pojo.ClientPay;
-import com.azz.order.client.pojo.PaymentInfo;
 import com.azz.order.client.pojo.RetBean;
+import com.azz.order.client.pojo.bo.Enterprisereginfo;
 import com.azz.order.client.pojo.bo.PageOrder;
 import com.azz.order.client.pojo.bo.PayList;
-import com.azz.order.client.pojo.vo.ClientOrderInfo;
+import com.azz.order.client.pojo.bo.Personreginfo;
 import com.azz.order.client.service.ClientPayService;
 
 /**
@@ -69,6 +70,52 @@ public class ClientPayController {
 	@RequestMapping("payNotify")
 	public JsonResult<RetBean> payNotify(@RequestParam("responseMsg") String responseMsg,@RequestParam("customerId") String customerId) {
 		return pps.payNotify(responseMsg,customerId);
+	}
+	
+	
+	/**
+	 * 子商户入网注册【个人】
+	 * @param request
+	 * @param po
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping("regPersonl")
+	public JsonResult<String> regPersonl(@RequestBody Personreginfo po) throws Exception{
+		return pps.regPersonl(po);
+	}
+	
+	/**
+	 * 子商户入网注册【企业】
+	 * @param request
+	 * @param po
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping("regEnterprise")
+	public JsonResult<String> regEnterprise(@RequestBody Enterprisereginfo po) throws Exception{
+		return pps.regEnterprise(po);
+	}
+	
+	
+	/**
+	 * 子商户入网注册【个人】回调
+	 * @param request
+	 * @param po
+	 * @return
+	 */
+	@RequestMapping("regPersonlNotify")
+	public void regPersonlNotify(HttpServletRequest request,HttpServletResponse response){
+	}
+	
+	/**
+	 * 子商户入网注册【企业】 回调
+	 * @param request
+	 * @param po
+	 * @return
+	 */
+	@RequestMapping("regEnterpriseNotify")
+	public void regEnterpriseNotify(HttpServletRequest request,HttpServletResponse response){
 	}
 	
 	/**

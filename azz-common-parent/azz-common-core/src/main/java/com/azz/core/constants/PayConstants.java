@@ -15,6 +15,30 @@ public interface PayConstants {
 	
 	public static final String PAYMENT_INSTITUTION = "易宝支付";
 	
+	public enum Status{
+		UR("0","未注册"),RD("1","已注册");
+		private String status;
+		private String msg;
+		public String getStatus() {
+			return status;
+		}
+		public void setStatus(String status) {
+			this.status = status;
+		}
+		public String getMsg() {
+			return msg;
+		}
+		public void setMsg(String msg) {
+			this.msg = msg;
+		}
+		private Status(String status,String msg) {
+			this.status = status;
+			this.msg = msg;
+		}
+		
+	}
+	
+	
 	public enum PayCode{
 		SUCCESS("交易成功","0000","SUCCESS"),
 		FAILD("交易失败","9999","FAILD"),

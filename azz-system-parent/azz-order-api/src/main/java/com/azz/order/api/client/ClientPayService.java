@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.order.client.pojo.ClientPay;
-import com.azz.order.client.pojo.PaymentInfo;
 import com.azz.order.client.pojo.RetBean;
+import com.azz.order.client.pojo.bo.Enterprisereginfo;
 import com.azz.order.client.pojo.bo.PageOrder;
 import com.azz.order.client.pojo.bo.PayList;
-import com.azz.order.client.pojo.vo.ClientOrderInfo;
+import com.azz.order.client.pojo.bo.Personreginfo;
 
 /**
  * <P>TODO</P>
@@ -47,6 +47,42 @@ public interface ClientPayService {
 	 */
 	@RequestMapping(value="/azz/api/pay/submitOrderPay",method=RequestMethod.POST)
 	public Map<String,Object> submitOrderPay(@RequestBody PageOrder po);
+	
+	/**
+	 * 子商户入网注册 【个人】
+	 * @param po
+	 * @return
+	 */
+	@RequestMapping(value="/azz/api/pay/regPersonl",method=RequestMethod.POST)
+	public JsonResult<String> regPersonl(@RequestBody Personreginfo po);
+	
+	
+	/**
+	 * 子商户入网注册 【企业】
+	 * @param po
+	 * @return
+	 */
+	@RequestMapping(value="/azz/api/pay/regEnterprise",method=RequestMethod.POST)
+	public JsonResult<String> regEnterprise(@RequestBody Enterprisereginfo po);
+	
+	
+	/**
+	 * 子商户入网注册【个人】回调
+	 * @param request
+	 * @param po
+	 * @return
+	 */
+	//@RequestMapping("regPersonlNotify")
+	//public void regPersonlNotify(HttpServletRequest request,HttpServletResponse response);
+	
+	/**
+	 * 子商户入网注册【企业】回调
+	 * @param request
+	 * @param po
+	 * @return
+	 */
+	//@RequestMapping("regEnterpriseNotify")
+	//public void regEnterpriseNotify(HttpServletRequest request,HttpServletResponse response);
 	
 	/**
 	 * <p>支付管理列表</p>

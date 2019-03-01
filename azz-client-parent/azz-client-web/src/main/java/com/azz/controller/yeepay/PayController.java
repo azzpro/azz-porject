@@ -24,7 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.azz.core.common.JsonResult;
 import com.azz.order.api.client.ClientPayService;
 import com.azz.order.client.pojo.RetBean;
+import com.azz.order.client.pojo.bo.Enterprisereginfo;
 import com.azz.order.client.pojo.bo.PageOrder;
+import com.azz.order.client.pojo.bo.Personreginfo;
+import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.LLPayUtil;
 
 /**
@@ -41,6 +44,12 @@ public class PayController {
 	@Autowired
 	private ClientPayService pfps;
 	
+	/**
+	 * 提交订单
+	 * @param request
+	 * @param po
+	 * @return
+	 */
 	@RequestMapping("submitOrderPay")
 	public Map<String,Object> submitOrderPay(HttpServletRequest request,PageOrder po){
 		po.setClientIp(LLPayUtil.getIpAddr(request));
@@ -52,6 +61,57 @@ public class PayController {
 		return submitOrderPay;
 	}
 	
+	/**
+	 * 子商户入网注册【个人】
+	 * @param request
+	 * @param po
+	 * @return
+	 */
+	@RequestMapping("regPersonl")
+	public JsonResult<String> regPersonl(Personreginfo po){
+		JSR303ValidateUtils.validate(po);
+		return pfps.regPersonl(po);
+	}
+	
+	/**
+	 * 子商户入网注册【企业】
+	 * @param request
+	 * @param po
+	 * @return
+	 */
+	@RequestMapping("regEnterprise")
+	public JsonResult<String> regEnterprise(Enterprisereginfo po){
+		JSR303ValidateUtils.validate(po);
+		return pfps.regEnterprise(po);
+	}
+	
+	
+	/**
+	 * 子商户入网注册【个人】回调
+	 * @param request
+	 * @param po
+	 * @return
+	 */
+	@RequestMapping("regPersonlNotify")
+	public void regPersonlNotify(HttpServletRequest request,HttpServletResponse response){
+	}
+	
+	/**
+	 * 子商户入网注册【企业】 回调
+	 * @param request
+	 * @param po
+	 * @return
+	 */
+	@RequestMapping("regEnterpriseNotify")
+	public void regEnterpriseNotify(HttpServletRequest request,HttpServletResponse response){
+	}
+	
+	
+	/** 支付回调
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
 	@RequestMapping(value="payNotify",method=RequestMethod.POST)
 	public void payNotify(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		String responseMsg = request.getParameter("response");
@@ -62,11 +122,5 @@ public class PayController {
 		JsonResult<RetBean> notify = pfps.payNotify(responseMsg,customerId);
 		response.getWriter().write(notify.getMsg());
 		response.getWriter().flush();
-		/*String reqStr = LLPayUtil.readReqStr(request);
-		log.info("回调参数["+reqStr+"]");
-		JsonResult<String> payNotify = pfps.payNotify(reqStr);
-		response.getWriter().write(JSON.toJSONString(payNotify.getData()));
-		response.getWriter().flush();*/
-			
 	}
 }

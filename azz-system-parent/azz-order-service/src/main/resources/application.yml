@@ -70,3 +70,5 @@ mybatis:
   mapper-locations: classpath:mapping/**/*.xml
 yeepay: 
   notify-url: http://120.78.162.226:8081/azz/api/pay/payNotify
+  regEn-notify-url: http://120.78.162.226:8081/azz/api/pay/regEnterpriseNotify
+  regPe-notify-url: http://120.78.162.226:8081/azz/api/pay/regPersonlNotify

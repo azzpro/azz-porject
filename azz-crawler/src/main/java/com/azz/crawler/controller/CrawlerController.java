@@ -25,7 +25,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
 import com.azz.crawler.common.JsonResult;
+import com.azz.crawler.pojo.BaixingTitle;
 import com.azz.crawler.pojo.Bdsh5Title;
+import com.azz.crawler.pojo.GanJiTitle;
+import com.azz.crawler.pojo.vo.BaoXianInfo;
 import com.azz.crawler.pojo.vo.SearchInfo;
 import com.azz.crawler.service.CrawlerService;
 
@@ -57,6 +60,16 @@ public class CrawlerController {
         return "bdsh5";
     }
 	
+	@RequestMapping("ganji")
+    public String ganji() {
+        return "ganji";
+	}
+	
+	@RequestMapping("baixing")
+    public String baixing() {
+        return "baixing";
+    }
+	
 	/**
 	 * 
 	 * <p>查询本地生活所有标题</p>
@@ -67,6 +80,29 @@ public class CrawlerController {
 	@ResponseBody
 	public JsonResult<List<Bdsh5Title>> getBdsh5Titles(){
 		return crawlerService.getBdsh5Titles();
+	}
+	
+	/**
+	 * <p>初始所有赶集网基础标题路由数据</p>
+	 * @return
+	 * @author 彭斌  2019年2月27日 下午3:09:45
+	 */
+	@RequestMapping("getGanJiTitles")
+    @ResponseBody
+    public JsonResult<List<GanJiTitle>> getGanJiTitles(){
+        return crawlerService.getGanJiTitles();
+    }
+
+
+	/* * 
+	 * <p>查询百姓网所有标题</p>
+	 * @return
+	 * @author 黄智聪  2019年2月20日 下午1:40:28
+	 */
+	@RequestMapping("getBaixingTitles")
+	@ResponseBody
+	public JsonResult<List<BaixingTitle>> getBaixingTitles(){
+		return crawlerService.getBaixingTitles();
 	}
 	
 	
@@ -93,6 +129,16 @@ public class CrawlerController {
 		return result;
 	}
 	
+	
+	@RequestMapping(value = "getGanjiSearchInfoByTitle", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public JsonResult<Map<String, List<BaoXianInfo>>> getGanjiSearchInfoByTitle(@RequestBody List<GanJiTitle> titlesToSearch, HttpServletRequest request){
+        JsonResult<Map<String, List<BaoXianInfo>>> result = crawlerService.getGanjiSearchInfoByTitle(titlesToSearch);
+        Map<String, List<BaoXianInfo>> data = result.getData();
+        WebUtils.setSessionAttribute(request, "ganji", data);
+        return result;
+    }
+	
 	/**
 	 * 
 	 * <p>导出本地生活网的数据</p>
@@ -115,5 +161,67 @@ public class CrawlerController {
 		wb.write(response.getOutputStream());
 		return JsonResult.successJsonResult();
 	}
+	
+	/**
+	 * 
+	 * <p>根据标题查询百姓网信息</p>
+	 * @param titles 需要爬取数据的标题
+	 * @return
+	 * @author 黄智聪  2019年2月20日 下午2:06:46
+	 */
+	@RequestMapping(value = "getBaixingSearchInfoByTitle", produces = "application/json;charset=utf-8")
+	@ResponseBody
+	public JsonResult<Map<String, List<SearchInfo>>> getBaixingSearchInfoByTitle(@RequestBody List<BaixingTitle> titlesToSearch, HttpServletRequest request){
+		JsonResult<Map<String, List<SearchInfo>>> result = crawlerService.getBaixingSearchInfoByTitle(titlesToSearch);
+		Map<String, List<SearchInfo>> data = result.getData();
+		WebUtils.setSessionAttribute(request, "baixing", data);
+		return result;
+	}
+	
+	
+	/**
+	 * 
+	 * <p>导出百姓网的数据</p>
+	 * @param title
+	 * @param infos
+	 * @return
+	 * @author 黄智聪  2019年2月20日 下午6:13:16
+	 * @throws IOException 
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping("exportBaixingData")
+	@ResponseBody
+	public JsonResult<String> exportBaixingData(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		Map<String, List<SearchInfo>> data = (Map<String, List<SearchInfo>>) WebUtils.getSessionAttribute(request, "baixing");
+		HSSFWorkbook wb = crawlerService.exportBaixingData(data);
+		WebUtils.setSessionAttribute(request, "baixing", null);
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-disposition", "attachment;filename=baixing.xlsx");
+		response.flushBuffer();
+		wb.write(response.getOutputStream());
+		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * <p>导出赶集网保险信息</p>
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 * @author 彭斌  2019年3月1日 下午2:13:39
+	 */
+	@SuppressWarnings("unchecked")
+    @RequestMapping("exportGanjiBaoXianData")
+    @ResponseBody
+    public JsonResult<String> exportGanJiBaoxianData(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Map<String, List<BaoXianInfo>> data = (Map<String, List<BaoXianInfo>>) WebUtils.getSessionAttribute(request, "ganji");
+        HSSFWorkbook wb = crawlerService.exportGanJiBaoxianData(data);
+        WebUtils.setSessionAttribute(request, "ganji", null);
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-disposition", "attachment;filename=ganjibaoxian.xlsx");
+        response.flushBuffer();
+        wb.write(response.getOutputStream());
+        return JsonResult.successJsonResult();
+    }
 }
 

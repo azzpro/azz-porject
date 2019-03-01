@@ -1,47 +1,34 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2019年2月20日 下午2:54:38
+ * Create on 2019年2月28日 下午5:36:00
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
 package com.azz.crawler.pojo;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * <P>百姓网标题</P>
+ * <P>TODO</P>
  * @version 1.0
- * @author 黄智聪  2019年2月20日 下午2:54:38
+ * @author 黄智聪  2019年2月28日 下午5:36:00
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BaixingTitle {
+public class ProxyIp {
 	
-	/**
-	 * 标题的名字
-	 */
-	private String name;
+	private String ip;
 	
-	/**
-	 * 标题对应的url
-	 */
-	private String url;
+	private int port;
 	
-	/**
-	 * 子标题
-	 */
-	private List<BaixingTitle> subTitles;
-	
-	/**
-	 * 总共的子标题数量
-	 */
-	private int totalSubTitleSize;
-	
+	@Override
+	public String toString() {
+		return "[ip:"+ip + ", port:"+port+"]";
+	}
+
 }
 

@@ -13,15 +13,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * <P>百姓网标题</P>
- * @version 1.0
- * @author 黄智聪  2019年2月20日 下午2:54:38
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BaixingTitle {
+public class GanJiTitle {
 	
 	/**
 	 * 标题的名字
@@ -36,12 +32,7 @@ public class BaixingTitle {
 	/**
 	 * 子标题
 	 */
-	private List<BaixingTitle> subTitles;
-	
-	/**
-	 * 总共的子标题数量
-	 */
-	private int totalSubTitleSize;
+	private List<GanJiTitle> subTitles;
 	
 }
 

@@ -40,14 +40,14 @@
 	}
 	
     </style>
-<title>本地生活网</title>
+<title>赶集网数据分析</title>
 </head>
 <body>
 	<div id="content">
 	</div>
 	<button id="submitTitles">提交爬虫的标题关键字</button>
 	
-	<button id="downloadBtn" onclick="window.open('${basePath}/azz/crawler/exportBdsh5Data')" style="display: none;">导出爬取数据</button>
+	<button id="downloadBtn" onclick="window.open('${basePath}/azz/crawler/exportGanjiBaoXianData')" style="display: none;">导出爬取数据</button>
 	
 	<div class="layer" style="display: none;"></div>
 	<img alt="加载中" width="20px" height="20px" src="/static/images/loading.gif" class="pic_center" style="display: none;">
@@ -58,7 +58,7 @@
 
 		$.ajax({
             type:"POST",
-            url:"${basePath}"+"/azz/crawler/getBdsh5Titles",
+            url:"${basePath}"+"/azz/crawler/getGanJiTitles",
             dataType:"json",
             cache: false, //禁用缓存   
 			async: false,
@@ -69,7 +69,7 @@
             		var html_content = '';
             		for(var i = 0 ; i<data.length ;i++){
             			var firstTitle = data[i];
-            			html_content += '<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td colspan="'+firstTitle.subTitles.length+'"><input class="cb" type="checkbox" value="'+firstTitle.name+'_'+firstTitle.url+'">'+firstTitle.name+'</td></tr>';
+            			html_content += '<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td colspan="'+firstTitle.subTitles.length+'"><h3>'+firstTitle.name+'</h3></td></tr>';
             			html_content += '<tr>'
             			var subTitles = firstTitle.subTitles;
             			for(var j = 0; j < subTitles.length; j++){
@@ -113,12 +113,12 @@
 				}
 				$.ajax({
 		            type:"POST",
-		            url:"${basePath}"+"/azz/crawler/getBdsh5SearchInfoByTitle",
+		            url:"${basePath}"+"/azz/crawler/getGanjiSearchInfoByTitle",
 		            dataType:"json",
 		            contentType: "application/json; charset=utf-8",
 		            data:JSON.stringify(postData),
 		            success:function(result){
-		            	//console.log(result);
+		            	console.log(result);
 		            },
 		            error:function(jqXHR){
 		                console.log("Error: "+jqXHR.status);

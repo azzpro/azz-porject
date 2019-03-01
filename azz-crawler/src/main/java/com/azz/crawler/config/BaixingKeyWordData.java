@@ -53,6 +53,7 @@ public class BaixingKeyWordData {
 				System.out.println("*******  一级标题：" + fistTitleName + "，对应url为：" + firstTitleUrl);
 				Elements lis = eachSectionBox.select("ul.content li.category-group");
 				List<BaixingTitle> secondTitles = new ArrayList<>();
+				int totalSubTitleSize = 0;
 				for (Element li : lis) {
 					String secondTitle = li.select("div").html();
 					String secondTitleName = null;
@@ -72,13 +73,13 @@ public class BaixingKeyWordData {
 						String thirdTitleName = content.select("a").html(); // 3级标题
 						String thirdTitleUrl = URL + content.select("a").attr("href");// 3级标题对应的url
 						System.out.println("*  三级标题：" + thirdTitleName + "，对应url为：" + thirdTitleUrl);
-						thirdTitles.add(new BaixingTitle(thirdTitleName, thirdTitleUrl, null));
+						thirdTitles.add(new BaixingTitle(thirdTitleName, thirdTitleUrl, null, 0));
 					}
-					secondTitles.add(new BaixingTitle(secondTitleName, secondUrl, thirdTitles));
+					secondTitles.add(new BaixingTitle(secondTitleName, secondUrl, thirdTitles, thirdTitles.size()));
+					totalSubTitleSize += thirdTitles.size();
 				}
-				firstTitles.add(new BaixingTitle(fistTitleName, firstTitleUrl, secondTitles));
+				firstTitles.add(new BaixingTitle(fistTitleName, firstTitleUrl, secondTitles, totalSubTitleSize));
 			}
-			// System.out.println(JSONObject.toJSONString(firstTitles));
 			this.allTitles = firstTitles;
 			LOGGER.info("初始化百姓网数据完毕...");
 		} catch (IOException e) {

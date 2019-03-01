@@ -40,5 +40,14 @@ public class KeyWordDataConfig {
 		return new BaixingKeyWordData();
 	}
 
+	/**
+	 * <p>赶集网关键字数据实例</p>
+	 * @return
+	 * @author 彭斌  2019年2月27日 下午3:19:09
+	 */
+	@Bean
+    public GanjiKeyWordData getGanjiKeyWordData() {
+        return new GanjiKeyWordData();
+    }
 }
 

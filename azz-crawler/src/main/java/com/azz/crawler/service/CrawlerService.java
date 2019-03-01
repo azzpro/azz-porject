@@ -51,6 +51,9 @@ public class CrawlerService {
 	@Autowired
 	private BaixingKeyWordData baixingKeyWordData;// 百姓网关键字数据
 	
+	@Autowired
+	private ProxyHttpRequest proxyHttpRequest;
+	
 	
 	/*****************************************************************************************************************************/
 	/*************************************************  本地生活网数据爬虫start  ******************************************************/
@@ -269,7 +272,7 @@ public class CrawlerService {
 			String titleName = eachTitle.getName();
 			String url = eachTitle.getUrl();
 			List<SearchInfo> searchInfos = new ArrayList<>();
-			Document doc = Jsoup.parse(ProxyHttpRequest.doGetRequest(url));
+			Document doc = Jsoup.parse(proxyHttpRequest.doGetRequest(url));
 			int totalPages = 1;
 			try {
 				Element lastPageLi = doc.select("section.listing-pager-section ul li").last().previousElementSibling();
@@ -285,7 +288,7 @@ public class CrawlerService {
 				String nextUrl = url + pageSuffix;
 				Document newPageDoc = null;
 				try {
-					newPageDoc = Jsoup.parse(ProxyHttpRequest.doGetRequest(nextUrl));
+					newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(nextUrl));
 				} catch (Exception e) {
 					System.out.println("爬取["+titleName+"]时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
 					continue;
@@ -306,20 +309,20 @@ public class CrawlerService {
 	 * @return
 	 * @author 黄智聪  2019年2月20日 下午3:58:53
 	 */
-	private static List<SearchInfo> getBaixingEachPageInfo(int page, Document doc) {
+	private List<SearchInfo> getBaixingEachPageInfo(int page, Document doc) {
 		Elements listPart = doc.select("ul li.listing-ad");
 		List<SearchInfo> searchInfos = new ArrayList<>();
 		if(listPart != null && listPart.size() > 0) {
 			int i = 0 ;
 			for (Element info : listPart) {// 当前页中的每一个栏目
 				i++;
-				System.out.println("正在处理" + page + "页的第" + i + "条栏目");
+				System.out.println("正在处理第" + page + "页的第" + i + "条栏目");
 				String detailUrl = info.select("a").attr("href");
 				Document newPageDoc = null;
 				SearchInfo si = new SearchInfo();
 				StringBuffer otherDesc = new StringBuffer();
 				try {
-					newPageDoc = Jsoup.parse(ProxyHttpRequest.doGetRequest(detailUrl));
+					newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(detailUrl));
 				} catch (Exception e) {
 					System.out.println("爬取url["+detailUrl+"]的第"+page+"页时，获取页面数据出错，跳过此条数据，错误信息：" + e.getMessage());
 					continue;
@@ -348,7 +351,12 @@ public class CrawlerService {
 								String tagName = labels.get(0).nextElementSibling().tagName();
 								String content = "";
 								if("div".equals(tagName) ) {
-									content = labels.get(0).nextElementSibling().select("label").html();
+									Elements a = labels.get(0).nextElementSibling().select("a");
+									if(a!=null && a.size()>0) {
+										content = labels.get(0).nextElementSibling().select("a").html();
+									}else {
+										content = labels.get(0).nextElementSibling().select("label").html().replace("\n", " ");
+									}
 									System.out.println("title:content-->"+title + content);
 								}else if("span".equals(tagName)){
 									Elements a = labels.get(0).nextElementSibling().select("a");
@@ -387,7 +395,12 @@ public class CrawlerService {
 								String tagName = labels.get(0).nextElementSibling().tagName();
 								String content = "";
 								if("div".equals(tagName) ) {
-									content = labels.get(0).nextElementSibling().select("label").html().replace("\n", " ");
+									Elements a = labels.get(0).nextElementSibling().select("a");
+									if(a!=null && a.size()>0) {
+										content = labels.get(0).nextElementSibling().select("a").html();
+									}else {
+										content = labels.get(0).nextElementSibling().select("label").html().replace("\n", " ");
+									}
 									System.out.println("title:content-->"+title + content);
 								}else if("span".equals(tagName)){
 									Elements a = labels.get(0).nextElementSibling().select("a");
@@ -513,10 +526,10 @@ public class CrawlerService {
 		return wb;
 	}
 	
-	public static void main(String[] args) throws IOException {
+	/*public static void main(String[] args) throws IOException {
 		String titleName = "房产";
 		String url = "http://shenzhen.baixing.com/qiufang/";
-		Document doc = Jsoup.parse(ProxyHttpRequest.doGetRequest(url));
+		Document doc = Jsoup.parse(proxyHttpRequest.doGetRequest(url));
 		List<SearchInfo> searchInfos = new ArrayList<>();
 		int totalPages = 1;
 		try {
@@ -534,7 +547,7 @@ public class CrawlerService {
 			String nextUrl = url + pageSuffix;
 			Document newPageDoc = null;
 			try {
-				newPageDoc = Jsoup.parse(ProxyHttpRequest.doGetRequest(nextUrl));
+				newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(nextUrl));
 			} catch (Exception e) {
 				System.out.println("爬取["+titleName+"]时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
 				continue;
@@ -543,7 +556,7 @@ public class CrawlerService {
 		}
 		//System.out.println("");
 	}
-	
+	*/
 	
 	/***************************************************************************************************************************/
 	/*************************************************  本地生活网数据爬虫end  ******************************************************/

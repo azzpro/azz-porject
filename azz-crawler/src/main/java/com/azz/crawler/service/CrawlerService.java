@@ -31,8 +31,10 @@ import com.azz.crawler.common.ManagerHttpUtils;
 import com.azz.crawler.common.ProxyHttpRequest;
 import com.azz.crawler.config.BaixingKeyWordData;
 import com.azz.crawler.config.Bdsh5KeyWordData;
+import com.azz.crawler.config.GanjiKeyWordData;
 import com.azz.crawler.pojo.BaixingTitle;
 import com.azz.crawler.pojo.Bdsh5Title;
+import com.azz.crawler.pojo.GanJiTitle;
 import com.azz.crawler.pojo.User;
 import com.azz.crawler.pojo.vo.SearchInfo;
 
@@ -54,6 +56,9 @@ public class CrawlerService {
 	@Autowired
 	private ProxyHttpRequest proxyHttpRequest;
 	
+	@Autowired
+    private GanjiKeyWordData ganjiKeyWordData;// 赶集关键字数据
+	
 	
 	/*****************************************************************************************************************************/
 	/*************************************************  本地生活网数据爬虫start  ******************************************************/
@@ -68,6 +73,15 @@ public class CrawlerService {
 	public JsonResult<List<Bdsh5Title>> getBdsh5Titles(){
 		return JsonResult.successJsonResult(bdsh5KeyWordData.getAllTitles());
 	}
+	
+	/**
+	 * <p>初始所有赶集基础数据</p>
+	 * @return
+	 * @author 彭斌  2019年2月27日 下午3:09:05
+	 */
+	public JsonResult<List<GanJiTitle>> getGanJiTitles(){
+        return JsonResult.successJsonResult(ganjiKeyWordData.getAllTitles());
+    }
 	
 	/**
 	 * <p>爬虫登录</p>
@@ -144,6 +158,47 @@ public class CrawlerService {
 		}
 		return JsonResult.successJsonResult(result);
 	}
+	
+	public JsonResult<Map<String, List<SearchInfo>>> getGanjiSearchInfoByTitle(List<GanJiTitle> titlesToSearch){
+        if(titlesToSearch == null || titlesToSearch.size() == 0) {
+            throw new RuntimeException("请选择需要爬取数据的标题");
+        }
+        Map<String, List<SearchInfo>> result = new LinkedHashMap<>();
+        // 逐页查询
+        for (GanJiTitle ganJiTitle : titlesToSearch) {
+            List<SearchInfo> searchInfos = new ArrayList<>();
+            String titleName = ganJiTitle.getName();
+            try {
+                int totalPages = 1;
+                String url = ganJiTitle.getUrl();
+                try {
+                    Document doc = Jsoup.connect(url).get();
+                    Element pageSize = doc.select("div.leftBox div.pageBox ul li").last().previousElementSibling();
+                    totalPages = Integer.parseInt(pageSize.text());
+                } catch (Exception e) {// 若这里抛异常说明只有一页
+                    System.out.println("["+titleName+"]此页面只有一页数据");
+                }
+                
+                for(int page = 1; page <= totalPages; page++) {
+                    System.out.println("正在爬取第"+ page +"页数据...");
+                    String pageSuffix = "o" + page;
+                    String nextUrl = url + pageSuffix;
+                    Document newPageDoc = null;
+                    try {
+                        newPageDoc = Jsoup.connect(nextUrl).get();
+                    } catch (Exception e) {
+                        System.out.println("爬取保险时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
+                        continue;
+                    }
+                    //searchInfos.addAll(getGanjiSeachPageInfo(newPageDoc));
+                }
+            } catch (Exception e) {
+                System.out.println("爬取["+titleName+"]时，获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
+            }
+        }
+        return JsonResult.successJsonResult(result);
+    }
+	
 	
 	/**
 	 * 
@@ -233,6 +288,42 @@ public class CrawlerService {
 		}
 		return searchInfos;
 	}
+	
+	
+	private List<SearchInfo> getGanjiSeachPageInfo(Document doc) {
+        Elements lastPageLi = doc.select("div.leftBox div.list ul").last().children();
+        List<SearchInfo> searchInfos = new ArrayList<>();
+        if(lastPageLi != null) {
+            // 每页的信息
+            if(lastPageLi != null && lastPageLi.size() > 0) {
+                for (Element info : lastPageLi) {
+                    SearchInfo si = new SearchInfo();
+                    // 每条记录的描述内容所在标签
+                    Elements eleOfTitle = info.select("h2 a");
+                    if(eleOfTitle != null && eleOfTitle.size() > 0) {
+                        si.setTitle(eleOfTitle.html());
+                    }
+                    // 每条记录的描述内容所在标签
+                    Elements eleOfContent = info.select(".cont p");
+                    if(eleOfContent != null && eleOfContent.size() > 0) {
+                        si.setDesc(eleOfContent.html());
+                    }
+                    // 联系电话所在标签
+                    Elements eleOfTel = info.getElementsByClass("t");
+                    if(eleOfTel != null && eleOfTel.size() > 0) {
+                        si.setPhoneNumber(eleOfTel.html());
+                    }
+                    // 联系人姓名所在标签
+                    Elements eleOfName = info.getElementsByClass("name");
+                    if(eleOfName != null && eleOfName.size() > 0) {
+                        si.setName(eleOfName.html());
+                    }
+                    searchInfos.add(si);
+                }
+            }
+        }
+        return searchInfos;
+    }
 	/***************************************************************************************************************************/
 	/*************************************************  本地生活网数据爬虫end ******************************************************/
 	/***************************************************************************************************************************/
@@ -525,41 +616,10 @@ public class CrawlerService {
         wb.close();
 		return wb;
 	}
-	
-	/*public static void main(String[] args) throws IOException {
-		String titleName = "房产";
-		String url = "http://shenzhen.baixing.com/qiufang/";
-		Document doc = Jsoup.parse(proxyHttpRequest.doGetRequest(url));
-		List<SearchInfo> searchInfos = new ArrayList<>();
-		int totalPages = 1;
-		try {
-			Element lastPageLi = doc.select("section.listing-pager-section ul li").last().previousElementSibling();
-			String pageStr = lastPageLi.select("a").html();
-			totalPages = Integer.parseInt(pageStr);
-		} catch (Exception e) {// 若这里抛异常说明只有一页
-			System.out.println("["+titleName+"]此页面只有一页数据");
-		}
-		//Map<String, List<SearchInfo>> result = new LinkedHashMap<>();
-		// 逐页查询
-		for(int page = 1; page <= totalPages; page++) {
-			System.out.println("正在爬取第"+ page +"页数据...");
-			String pageSuffix = "?page=" + page;
-			String nextUrl = url + pageSuffix;
-			Document newPageDoc = null;
-			try {
-				newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(nextUrl));
-			} catch (Exception e) {
-				System.out.println("爬取["+titleName+"]时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
-				continue;
-			}
-			searchInfos.addAll(getBaixingEachPageInfo(page, newPageDoc));
-		}
-		//System.out.println("");
-	}
-	*/
-	
+
+
 	/***************************************************************************************************************************/
 	/*************************************************  本地生活网数据爬虫end  ******************************************************/
 	/***************************************************************************************************************************/
-}
 
+}

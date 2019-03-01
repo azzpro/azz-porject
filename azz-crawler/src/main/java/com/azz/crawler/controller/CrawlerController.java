@@ -27,6 +27,7 @@ import org.springframework.web.util.WebUtils;
 import com.azz.crawler.common.JsonResult;
 import com.azz.crawler.pojo.BaixingTitle;
 import com.azz.crawler.pojo.Bdsh5Title;
+import com.azz.crawler.pojo.GanJiTitle;
 import com.azz.crawler.pojo.vo.SearchInfo;
 import com.azz.crawler.service.CrawlerService;
 
@@ -58,6 +59,11 @@ public class CrawlerController {
         return "bdsh5";
     }
 	
+	@RequestMapping("ganji")
+    public String ganji() {
+        return "ganji";
+	}
+	
 	@RequestMapping("baixing")
     public String baixing() {
         return "baixing";
@@ -76,7 +82,18 @@ public class CrawlerController {
 	}
 	
 	/**
-	 * 
+	 * <p>初始所有赶集网基础标题路由数据</p>
+	 * @return
+	 * @author 彭斌  2019年2月27日 下午3:09:45
+	 */
+	@RequestMapping("getGanJiTitles")
+    @ResponseBody
+    public JsonResult<List<GanJiTitle>> getGanJiTitles(){
+        return crawlerService.getGanJiTitles();
+    }
+
+
+	/* * 
 	 * <p>查询百姓网所有标题</p>
 	 * @return
 	 * @author 黄智聪  2019年2月20日 下午1:40:28
@@ -110,6 +127,16 @@ public class CrawlerController {
 		WebUtils.setSessionAttribute(request, "bdsh5", data);
 		return result;
 	}
+	
+	
+	@RequestMapping(value = "getGanjiSearchInfoByTitle", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public JsonResult<Map<String, List<SearchInfo>>> getGanjiSearchInfoByTitle(@RequestBody List<GanJiTitle> titlesToSearch, HttpServletRequest request){
+        JsonResult<Map<String, List<SearchInfo>>> result = crawlerService.getGanjiSearchInfoByTitle(titlesToSearch);
+        Map<String, List<SearchInfo>> data = result.getData();
+        WebUtils.setSessionAttribute(request, "ganji", data);
+        return result;
+    }
 	
 	/**
 	 * 

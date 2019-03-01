@@ -28,6 +28,7 @@ import com.azz.crawler.common.JsonResult;
 import com.azz.crawler.pojo.BaixingTitle;
 import com.azz.crawler.pojo.Bdsh5Title;
 import com.azz.crawler.pojo.GanJiTitle;
+import com.azz.crawler.pojo.vo.BaoXianInfo;
 import com.azz.crawler.pojo.vo.SearchInfo;
 import com.azz.crawler.service.CrawlerService;
 
@@ -131,9 +132,9 @@ public class CrawlerController {
 	
 	@RequestMapping(value = "getGanjiSearchInfoByTitle", produces = "application/json;charset=utf-8")
     @ResponseBody
-    public JsonResult<Map<String, List<SearchInfo>>> getGanjiSearchInfoByTitle(@RequestBody List<GanJiTitle> titlesToSearch, HttpServletRequest request){
-        JsonResult<Map<String, List<SearchInfo>>> result = crawlerService.getGanjiSearchInfoByTitle(titlesToSearch);
-        Map<String, List<SearchInfo>> data = result.getData();
+    public JsonResult<Map<String, List<BaoXianInfo>>> getGanjiSearchInfoByTitle(@RequestBody List<GanJiTitle> titlesToSearch, HttpServletRequest request){
+        JsonResult<Map<String, List<BaoXianInfo>>> result = crawlerService.getGanjiSearchInfoByTitle(titlesToSearch);
+        Map<String, List<BaoXianInfo>> data = result.getData();
         WebUtils.setSessionAttribute(request, "ganji", data);
         return result;
     }

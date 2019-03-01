@@ -36,6 +36,7 @@ import com.azz.crawler.pojo.BaixingTitle;
 import com.azz.crawler.pojo.Bdsh5Title;
 import com.azz.crawler.pojo.GanJiTitle;
 import com.azz.crawler.pojo.User;
+import com.azz.crawler.pojo.vo.BaoXianInfo;
 import com.azz.crawler.pojo.vo.SearchInfo;
 
 
@@ -159,14 +160,14 @@ public class CrawlerService {
 		return JsonResult.successJsonResult(result);
 	}
 	
-	public JsonResult<Map<String, List<SearchInfo>>> getGanjiSearchInfoByTitle(List<GanJiTitle> titlesToSearch){
+	public JsonResult<Map<String, List<BaoXianInfo>>> getGanjiSearchInfoByTitle(List<GanJiTitle> titlesToSearch){
         if(titlesToSearch == null || titlesToSearch.size() == 0) {
             throw new RuntimeException("请选择需要爬取数据的标题");
         }
-        Map<String, List<SearchInfo>> result = new LinkedHashMap<>();
+        Map<String, List<BaoXianInfo>> result = new LinkedHashMap<>();
         // 逐页查询
         for (GanJiTitle ganJiTitle : titlesToSearch) {
-            List<SearchInfo> searchInfos = new ArrayList<>();
+            List<BaoXianInfo> searchInfos = new ArrayList<>();
             String titleName = ganJiTitle.getName();
             try {
                 int totalPages = 1;
@@ -190,7 +191,7 @@ public class CrawlerService {
                         System.out.println("爬取保险时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
                         continue;
                     }
-                    //searchInfos.addAll(getGanjiSeachPageInfo(newPageDoc));
+                    searchInfos.addAll(getGanjiSeachPageInfo(newPageDoc));
                 }
             } catch (Exception e) {
                 System.out.println("爬取["+titleName+"]时，获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
@@ -290,35 +291,35 @@ public class CrawlerService {
 	}
 	
 	
-	private List<SearchInfo> getGanjiSeachPageInfo(Document doc) {
+	private List<BaoXianInfo> getGanjiSeachPageInfo(Document doc) {
         Elements lastPageLi = doc.select("div.leftBox div.list ul").last().children();
-        List<SearchInfo> searchInfos = new ArrayList<>();
+        List<BaoXianInfo> searchInfos = new ArrayList<>();
+        System.out.println("开始爬取赶集网保险信息");
         if(lastPageLi != null) {
             // 每页的信息
             if(lastPageLi != null && lastPageLi.size() > 0) {
                 for (Element info : lastPageLi) {
-                    SearchInfo si = new SearchInfo();
-                    // 每条记录的描述内容所在标签
-                    Elements eleOfTitle = info.select("h2 a");
-                    if(eleOfTitle != null && eleOfTitle.size() > 0) {
-                        si.setTitle(eleOfTitle.html());
+                    String baoxianUrl = info.select("div.txt p a").attr("href");
+                    String detailUrl = "http://sz.ganji.com"+baoxianUrl;
+                    System.out.println("detailUrl="+detailUrl);
+                    Document newPageDoc;
+                    try {
+                        newPageDoc = Jsoup.connect(detailUrl).get();
+                    } catch (IOException e) {
+                        System.out.println("爬取保险时，在["+ baoxianUrl +"]页面数据出错，跳过此页面，错误信息：" + e.getMessage());
+                        continue;
                     }
-                    // 每条记录的描述内容所在标签
-                    Elements eleOfContent = info.select(".cont p");
-                    if(eleOfContent != null && eleOfContent.size() > 0) {
-                        si.setDesc(eleOfContent.html());
+                    Elements detailInfo = newPageDoc.getElementById("dzcontactus").select("div.con ul");
+                    System.out.println("detailInfo="+detailInfo);
+                    for (Element detals : detailInfo) {
+                        BaoXianInfo si = new BaoXianInfo();
+                        si.setTitle(detals.select("li.fb").text());
+                        si.setDesc(detals.select("li").text());
+                        System.out.println("保险公司名称："+detals.select("li.fb").text());
+                        System.out.println("保险详情："+detals.select("li").text());
+                        System.out.println("=================================================");
+                        searchInfos.add(si);
                     }
-                    // 联系电话所在标签
-                    Elements eleOfTel = info.getElementsByClass("t");
-                    if(eleOfTel != null && eleOfTel.size() > 0) {
-                        si.setPhoneNumber(eleOfTel.html());
-                    }
-                    // 联系人姓名所在标签
-                    Elements eleOfName = info.getElementsByClass("name");
-                    if(eleOfName != null && eleOfName.size() > 0) {
-                        si.setName(eleOfName.html());
-                    }
-                    searchInfos.add(si);
                 }
             }
         }
@@ -620,6 +621,37 @@ public class CrawlerService {
 
 	/***************************************************************************************************************************/
 	/*************************************************  本地生活网数据爬虫end  ******************************************************/
-	/***************************************************************************************************************************/
+	/**
+	 * @throws IOException *************************************************************************************************************************/
 
+	
+	public static void main(String[] args) throws IOException {
+        String url = "http://sz.ganji.com/baoxian";
+        String ganjiurl = "http://sz.ganji.com";
+        Document doc = Jsoup.connect(url).get();
+        Elements lastPageLi = doc.select("div.leftBox div.list ul").last().children();
+        List<BaoXianInfo> searchInfos = new ArrayList<>();
+        if(lastPageLi != null) {
+            // 每页的信息
+            if(lastPageLi != null && lastPageLi.size() > 0) {
+                for (Element info : lastPageLi) {
+                    String baoxianUrl = info.select("div.txt p a").attr("href");
+                    String detailUrl = ganjiurl+baoxianUrl;
+                    System.out.println("detailUrl="+detailUrl);
+                    Document newPageDoc = Jsoup.connect(detailUrl).get();
+                    Elements detailInfo = newPageDoc.getElementById("dzcontactus").select("div.con ul");
+                    System.out.println("detailInfo="+detailInfo);
+                    for (Element detals : detailInfo) {
+                        BaoXianInfo si = new BaoXianInfo();
+                        si.setTitle(detals.select("li.fb").text());
+                        si.setDesc(detals.select("li").text());
+                        System.out.println("保险公司名称："+detals.select("li.fb").text());
+                        System.out.println("保险详情："+detals.select("li").text());
+                        searchInfos.add(si);
+                    }
+                }
+            }
+        }
+        
+    }
 }

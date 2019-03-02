@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.azz.core.common.JsonResult;
 import com.azz.order.api.client.ClientPayService;
 import com.azz.order.client.pojo.RetBean;
+import com.azz.order.client.pojo.bo.BankBranch;
 import com.azz.order.client.pojo.bo.Enterprisereginfo;
 import com.azz.order.client.pojo.bo.PageOrder;
 import com.azz.order.client.pojo.bo.Personreginfo;
@@ -104,6 +105,19 @@ public class PayController {
 	 */
 	@RequestMapping("regEnterpriseNotify")
 	public void regEnterpriseNotify(HttpServletRequest request,HttpServletResponse response){
+	}
+	
+	
+	/**
+	 * 获取支行信息
+	 * @param request
+	 * @param po
+	 * @return
+	 */
+	@RequestMapping("getBankBranchInfo")
+	public Map<String,String> getBankBranchInfo(BankBranch bb){
+		JSR303ValidateUtils.validate(bb);
+		return pfps.getBankBranchInfo(bb);
 	}
 	
 	

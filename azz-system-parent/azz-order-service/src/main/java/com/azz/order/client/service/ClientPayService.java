@@ -52,6 +52,7 @@ import com.azz.order.client.mapper.ClientPersonRegInfoMapper;
 import com.azz.order.client.pojo.ClientPay;
 import com.azz.order.client.pojo.Enterprisereginfoadd;
 import com.azz.order.client.pojo.RetBean;
+import com.azz.order.client.pojo.bo.BankBranch;
 import com.azz.order.client.pojo.bo.Enterprisereginfo;
 import com.azz.order.client.pojo.bo.OrderInfo;
 import com.azz.order.client.pojo.bo.PageOrder;
@@ -538,6 +539,23 @@ public class ClientPayService {
 		return null;
 		
 	}
+	
+	/**
+	 * 获取支行信息
+	 * @param bb
+	 * @return
+	 */
+	public Map<String,String> getBankBranchInfo(@RequestBody BankBranch bb){
+		Map<String, String> branchInfo = new HashMap<String,String>();
+		try {
+			branchInfo = YeepayService.getBankBranchInfo(bb.getHeadBankCode(), bb.getProvinceCode(), bb.getCityCode());
+		} catch (IOException e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+		}
+		return branchInfo;
+	}
+	
 	
 	/**
 	 * 文件上传

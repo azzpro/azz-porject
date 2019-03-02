@@ -19,6 +19,7 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.order.client.pojo.ClientPay;
 import com.azz.order.client.pojo.RetBean;
+import com.azz.order.client.pojo.bo.BankBranch;
 import com.azz.order.client.pojo.bo.Enterprisereginfo;
 import com.azz.order.client.pojo.bo.PageOrder;
 import com.azz.order.client.pojo.bo.PayList;
@@ -83,6 +84,15 @@ public interface ClientPayService {
 	 */
 	//@RequestMapping("regEnterpriseNotify")
 	//public void regEnterpriseNotify(HttpServletRequest request,HttpServletResponse response);
+	/**
+	 * 获取支行信息
+	 * @param request
+	 * @param po
+	 * @return
+	 */
+	@RequestMapping("getBankBranchInfo")
+	public Map<String,String> getBankBranchInfo(@RequestBody BankBranch bb);
+		
 	
 	/**
 	 * <p>支付管理列表</p>

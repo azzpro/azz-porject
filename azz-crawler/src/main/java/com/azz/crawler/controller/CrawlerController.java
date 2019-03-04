@@ -174,7 +174,11 @@ public class CrawlerController {
 	public JsonResult<Map<String, List<SearchInfo>>> getBaixingSearchInfoByTitle(@RequestBody List<BaixingTitle> titlesToSearch, HttpServletRequest request){
 		JsonResult<Map<String, List<SearchInfo>>> result = crawlerService.getBaixingSearchInfoByTitle(titlesToSearch);
 		Map<String, List<SearchInfo>> data = result.getData();
-		WebUtils.setSessionAttribute(request, "baixing", data);
+		if(data != null) {
+			WebUtils.setSessionAttribute(request, "baixing", data);
+		}else {
+			throw new RuntimeException("爬取出错");
+		}
 		return result;
 	}
 	

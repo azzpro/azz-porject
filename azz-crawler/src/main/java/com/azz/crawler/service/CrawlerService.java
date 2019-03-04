@@ -172,8 +172,8 @@ public class CrawlerService {
             try {
                 int totalPages = 1;
                 String url = ganJiTitle.getUrl();
+                Document doc = Jsoup.parse(proxyHttpRequest.doGetRequest(url));
                 try {
-                    Document doc = Jsoup.parse(proxyHttpRequest.doGetRequest(url));
                     Element pageSize = doc.select("div.leftBox div.pageBox ul li").last().previousElementSibling();
                     totalPages = Integer.parseInt(pageSize.text());
                 } catch (Exception e) {// 若这里抛异常说明只有一页
@@ -193,6 +193,9 @@ public class CrawlerService {
                     }
                     searchInfos.addAll(getGanjiBaoxianSeachPageInfo(newPageDoc));
                 }
+                result.put(titleName, searchInfos);
+                System.out.println("标题为[" + titleName + "]的数据爬取完毕，共爬取了" + searchInfos.size() + "条数据");
+                System.out.println("-------------------------------------------------");
             } catch (Exception e) {
                 System.out.println("爬取["+titleName+"]时，获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
             }
@@ -304,11 +307,12 @@ public class CrawlerService {
             // 每页的信息
             if(lastPageLi != null && lastPageLi.size() > 0) {
                 for (Element info : lastPageLi) {
-                    String baoxianUrl = info.select("div.txt p a").attr("href");
+                    String baoxianUrl = info.select("div.txt p a").attr("href").trim();
                     String detailUrl = "http://sz.ganji.com"+baoxianUrl;
                     System.out.println("detailUrl="+detailUrl);
                     Document newPageDoc = null;
                     try {
+                        //newPageDoc = Jsoup.connect(detailUrl).get();
                         newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(detailUrl));
                     } catch (Exception e) {
                         System.out.println("爬取保险时，在["+ baoxianUrl +"]页面数据出错，跳过此页面，错误信息：" + e.getMessage());

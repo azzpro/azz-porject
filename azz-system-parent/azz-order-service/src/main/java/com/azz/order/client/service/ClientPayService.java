@@ -187,7 +187,7 @@ public class ClientPayService {
 		params.put("userType", order.getUserType());
 		params.put("directPayType", "");
 		params.put("cardType", "");
-		params.put("ext", "");
+		params.put("ext", ext);
 		Set<Entry<String, String>> entrySet1 = params.entrySet();
 		for (Entry<String, String> entry : entrySet1) {
 			log.info("key1--->:"+entry.getKey()+":::value1--->:"+entry.getValue());

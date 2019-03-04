@@ -430,6 +430,7 @@ public class CrawlerService {
 					System.out.println("title:content-->"+"联系：" + phoneNumber);
 				} catch (Exception e) {
 					System.out.println("无手机号可获取");
+					continue;// 无手机号可获取，直接放弃此页数据
 				}
 				si.setPhoneNumber(phoneNumber);
 				Elements items = newPageDoc.select("div.viewad-meta div.viewad-meta-item");
@@ -605,6 +606,8 @@ public class CrawlerService {
 				*/
 				searchInfos.add(si);
 			}
+		}else {
+			System.out.println("此页[第"+page+"页]无符合的数据可处理");
 		}
 		return searchInfos;
 	}

@@ -139,6 +139,7 @@ public class ClientPayService {
 		params.put("parentMerchantNo", YeepayService.getParentMerchantNo());
 		params.put("merchantNo", YeepayService.getMerchantNo());
 		params.put("timeoutExpress", "360"); //订单有效期  可以不传
+		params.put("timeoutExpressType", PayConstants.Unit.HOUR.getPrc());
 		params.put("requestDate", order.getRequestDate()); //请求时间
 		params.put("redirectUrl", ""); //页面回调地址 可以不传
 		params.put("notifyUrl", notifyUrl); //回调地址
@@ -150,6 +151,12 @@ public class ClientPayService {
 		params.put("memo", "");
 		params.put("riskParamExt", "");
 		params.put("csUrl", "");
+		params.put("assureType", "");
+		params.put("assurePeriod", "");
+		params.put("fundProcessType", "");
+		params.put("divideDetail", "");
+		params.put("divideNotifyUrl", "");
+		params.put("timeoutNotifyUrl", "");
 		Map<String, String> result = new HashMap<>();
 		String uri = YeepayService.getUrl(YeepayService.TRADEORDER_URL);
 		try {

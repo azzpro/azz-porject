@@ -15,6 +15,25 @@ public interface PayConstants {
 	
 	public static final String PAYMENT_INSTITUTION = "易宝支付";
 	
+	public enum Unit{
+		SECOND("秒"), MINUTE("分"), HOUR("时"), DAY("天");
+		private String prc;
+
+		public String getPrc() {
+			return prc;
+		}
+
+		public void setPrc(String prc) {
+			this.prc = prc;
+		}
+
+		private Unit(String prc) {
+			this.prc = prc;
+		}
+		
+	}
+	
+	
 	public enum Status{
 		UR("0","未注册"),RD("1","已注册");
 		private String status;

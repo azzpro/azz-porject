@@ -52,6 +52,7 @@ import com.azz.order.client.mapper.ClientPersonRegInfoMapper;
 import com.azz.order.client.pojo.ClientPay;
 import com.azz.order.client.pojo.Enterprisereginfoadd;
 import com.azz.order.client.pojo.RetBean;
+import com.azz.order.client.pojo.bo.BankBranch;
 import com.azz.order.client.pojo.bo.Enterprisereginfo;
 import com.azz.order.client.pojo.bo.OrderInfo;
 import com.azz.order.client.pojo.bo.PageOrder;
@@ -138,17 +139,26 @@ public class ClientPayService {
 		params.put("parentMerchantNo", YeepayService.getParentMerchantNo());
 		params.put("merchantNo", YeepayService.getMerchantNo());
 		params.put("timeoutExpress", "360"); //订单有效期  可以不传
+		params.put("timeoutExpressType", PayConstants.Unit.HOUR.getPrc());
 		params.put("requestDate", order.getRequestDate()); //请求时间
 		params.put("redirectUrl", ""); //页面回调地址 可以不传
 		params.put("notifyUrl", notifyUrl); //回调地址
-		params.put("goodsParamExt", goodsParamExt);
 		params.put("industryParamExt", industryParamExt);
 		params.put("goodsParamExt", goodsParamExt);
 		params.put("paymentParamExt", "");
-		params.put("industryParamExt", industryParamExt);
 		params.put("memo", "");
 		params.put("riskParamExt", "");
 		params.put("csUrl", "");
+		params.put("assureType", "");
+		params.put("assurePeriod", "");
+		params.put("fundProcessType", "");
+		params.put("divideDetail", "");
+		params.put("divideNotifyUrl", "");
+		params.put("timeoutNotifyUrl", "");
+		Set<Entry<String, String>> entrySet = params.entrySet();
+		for (Entry<String, String> entry : entrySet) {
+			log.info("key--->:"+entry.getKey()+":::value--->:"+entry.getValue());
+		}
 		Map<String, String> result = new HashMap<>();
 		String uri = YeepayService.getUrl(YeepayService.TRADEORDER_URL);
 		try {
@@ -538,6 +548,23 @@ public class ClientPayService {
 		return null;
 		
 	}
+	
+	/**
+	 * 获取支行信息
+	 * @param bb
+	 * @return
+	 */
+	public Map<String,String> getBankBranchInfo(@RequestBody BankBranch bb){
+		Map<String, String> branchInfo = new HashMap<String,String>();
+		try {
+			branchInfo = YeepayService.getBankBranchInfo(bb.getHeadBankCode(), bb.getProvinceCode(), bb.getCityCode());
+		} catch (IOException e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+		}
+		return branchInfo;
+	}
+	
 	
 	/**
 	 * 文件上传

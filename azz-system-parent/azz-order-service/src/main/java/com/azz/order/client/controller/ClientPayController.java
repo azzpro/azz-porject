@@ -23,11 +23,13 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.order.client.pojo.ClientPay;
 import com.azz.order.client.pojo.RetBean;
+import com.azz.order.client.pojo.bo.BankBranch;
 import com.azz.order.client.pojo.bo.Enterprisereginfo;
 import com.azz.order.client.pojo.bo.PageOrder;
 import com.azz.order.client.pojo.bo.PayList;
 import com.azz.order.client.pojo.bo.Personreginfo;
 import com.azz.order.client.service.ClientPayService;
+import com.azz.util.JSR303ValidateUtils;
 
 /**
  * <P>TODO</P>
@@ -116,6 +118,18 @@ public class ClientPayController {
 	 */
 	@RequestMapping("regEnterpriseNotify")
 	public void regEnterpriseNotify(HttpServletRequest request,HttpServletResponse response){
+	}
+	
+	
+	/**
+	 * 获取支行信息
+	 * @param request
+	 * @param po
+	 * @return
+	 */
+	@RequestMapping("getBankBranchInfo")
+	public Map<String,String> getBankBranchInfo(@RequestBody BankBranch bb){
+		return pps.getBankBranchInfo(bb);
 	}
 	
 	/**

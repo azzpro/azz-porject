@@ -97,4 +97,5 @@ public class ProxyHttpRequest {
 				.build();
 		httpReq.setConfig(reqConfig);
 	}
+	
 }

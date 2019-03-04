@@ -452,10 +452,18 @@ public class CrawlerService {
 								String tagName = labels.get(0).nextElementSibling().tagName();
 								String content = "";
 								if("div".equals(tagName) ) {
+									boolean isGetContent = false;
+									Elements span = labels.get(0).nextElementSibling().select("span");
+									if(span!=null && span.size()>0) {
+										content = labels.get(0).nextElementSibling().select("span").html().replace("\n", " ");
+										isGetContent = true;
+									}
 									Elements a = labels.get(0).nextElementSibling().select("a");
 									if(a!=null && a.size()>0) {
-										content = labels.get(0).nextElementSibling().select("a").html();
-									}else {
+										content = labels.get(0).nextElementSibling().select("a").html().replace("\n", "");
+										isGetContent = true;
+									}
+									if(!isGetContent){
 										content = labels.get(0).nextElementSibling().select("label").html().replace("\n", " ");
 									}
 									System.out.println("title:content-->"+title + content);
@@ -496,23 +504,31 @@ public class CrawlerService {
 								String tagName = labels.get(0).nextElementSibling().tagName();
 								String content = "";
 								if("div".equals(tagName) ) {
+									boolean isGetContent = false;
+									Elements span = labels.get(0).nextElementSibling().select("span");
+									if(span!=null && span.size()>0) {
+										content = labels.get(0).nextElementSibling().select("span").html().replace("\n", " ");
+										isGetContent = true;
+									}
 									Elements a = labels.get(0).nextElementSibling().select("a");
 									if(a!=null && a.size()>0) {
-										content = labels.get(0).nextElementSibling().select("a").html();
-									}else {
+										content = labels.get(0).nextElementSibling().select("a").html().replace("\n", "");
+										isGetContent = true;
+									}
+									if(!isGetContent){
 										content = labels.get(0).nextElementSibling().select("label").html().replace("\n", " ");
 									}
 									System.out.println("title:content-->"+title + content);
 								}else if("span".equals(tagName)){
 									Elements a = labels.get(0).nextElementSibling().select("a");
 									if(a!=null && a.size()>0) {
-										content = labels.get(0).nextElementSibling().select("a").html();
+										content = labels.get(0).nextElementSibling().select("a").html().replace("<br>", "").replace("\n", "");
 									}else {
-										content = labels.get(0).nextElementSibling().html();
+										content = labels.get(0).nextElementSibling().html().replace("<br>", "").replace("\n", "");
 									}
 									System.out.println("title:content-->"+title + content);
 								}else if("a".equals(tagName)){
-									content = labels.get(0).nextElementSibling().html();
+									content = labels.get(0).nextElementSibling().html().replace("<br>", "").replace("\n", "");
 									System.out.println("title:content-->"+title + content);
 								}else {
 									// 未知情况
@@ -531,27 +547,40 @@ public class CrawlerService {
 						if(labels != null && labels.size() > 0) {
 							int count = labels.size();
 							if(count == 2) {
-								String title = labels.get(0).html();// 标题
-								String content = labels.get(1).html();// 内容
+								String title = labels.get(0).html().replace("<br>", "").replace("\n", "");// 标题
+								String content = labels.get(1).html().replace("<br>", "").replace("\n", "");// 内容
 								System.out.println("title:content-->"+title + content);
 								otherDesc.append(title + content+"  ");
 							}else {
-								String title = labels.get(0).html();// 标题
+								String title = labels.get(0).html().replace("<br>", "").replace("\n", "");// 标题
 								String tagName = labels.get(0).nextElementSibling().tagName();
 								String content = "";
 								if("div".equals(tagName) ) {
-									content = labels.get(0).nextElementSibling().select("label").html().replace("\n", " ");
+									boolean isGetContent = false;
+									Elements span = labels.get(0).nextElementSibling().select("span");
+									if(span!=null && span.size()>0) {
+										content = labels.get(0).nextElementSibling().select("span").html().replace("\n", " ");
+										isGetContent = true;
+									}
+									Elements a = labels.get(0).nextElementSibling().select("a");
+									if(a!=null && a.size()>0) {
+										content = labels.get(0).nextElementSibling().select("a").html().replace("\n", "");
+										isGetContent = true;
+									}
+									if(!isGetContent){
+										content = labels.get(0).nextElementSibling().select("label").html().replace("\n", " ");
+									}
 									System.out.println("title:content-->"+title + content);
 								}else if("span".equals(tagName)){
 									Elements a = labels.get(0).nextElementSibling().select("a");
 									if(a!=null && a.size()>0) {
 										content = labels.get(0).nextElementSibling().select("a").html().replace("\n", " ");
 									}else {
-										content = labels.get(0).nextElementSibling().html();
+										content = labels.get(0).nextElementSibling().html().replace("<br>", "").replace("\n", "");
 									}
 									System.out.println("title:content-->"+title + content);
 								}else if("a".equals(tagName)){
-									content = labels.get(0).nextElementSibling().html();
+									content = labels.get(0).nextElementSibling().html().replace("<br>", "").replace("\n", "");
 									System.out.println("title:content-->"+title + content);
 								}else {
 									// 未知情况
@@ -563,6 +592,8 @@ public class CrawlerService {
 						}
 					}
 				}
+				si.setOtherDesc(otherDesc.toString());
+				/*
 				Elements descs = newPageDoc.select("section.viewad-description div.viewad-text");
 				if(descs != null && descs.size() > 0) {
 					String description = descs.get(0).nextElementSibling().html().replace("<br>", "").replace("\n", "");
@@ -571,10 +602,11 @@ public class CrawlerService {
 				}
 				Elements titleEle = newPageDoc.select(".viewad-title");
 				if(titleEle != null && titleEle.size() > 0) {
-					String title = titleEle.get(0).nextElementSibling().html().replace("\n", "");
+					String title = titleEle.get(0).nextElementSibling().html().replace("<br>", "").replace("\n", "");
 					System.out.println("*************"+title);
 					si.setTitle(title);
 				}
+				*/
 				searchInfos.add(si);
 			}
 		}
@@ -608,19 +640,19 @@ public class CrawlerService {
 			// 在sheet里创建第一行，参数为行索引(excel的行)，可以是0～65535之间的任何一个
 			HSSFRow row0 = sheet.createRow(0);
 			// 添加表头
-			row0.createCell(0).setCellValue("标题");
-			row0.createCell(1).setCellValue("联系人手机号");
-			row0.createCell(2).setCellValue("描述");
-			row0.createCell(3).setCellValue("其他描述");
+			//row0.createCell(0).setCellValue("标题");
+			row0.createCell(0).setCellValue("联系人手机号");
+			//row0.createCell(2).setCellValue("描述");
+			row0.createCell(1).setCellValue("其他描述");
 			List<SearchInfo> infos = exportData.get(key);
 			int i = 0;
 			for (SearchInfo info : infos) {
 				i++;
 				HSSFRow row = sheet.createRow(i);
-				row.createCell(0).setCellValue(info.getTitle());
-				row.createCell(1).setCellValue(info.getPhoneNumber());
-				row.createCell(2).setCellValue(info.getDesc());
-				row.createCell(3).setCellValue(info.getOtherDesc());
+				//row.createCell(0).setCellValue(info.getTitle());
+				row.createCell(0).setCellValue(info.getPhoneNumber());
+				//row.createCell(2).setCellValue(info.getDesc());
+				row.createCell(1).setCellValue(info.getOtherDesc());
 			}
 		}
         wb.close();

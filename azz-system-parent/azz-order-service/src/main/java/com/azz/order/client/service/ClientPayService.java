@@ -130,16 +130,19 @@ public class ClientPayService {
 		if(null == order) {
 			return null;
 		}
+		String appId = "";
+		String openId = "";
+		String clientId = "";
 		String goodsParamExt = "{\"goodsName\":\""+order.getGoodsName()+"\",\"goodsDesc\":\""+order.getGoodsDesc()+"\"}";
 		String industryParamExt = "{\"bizSource\":\""+""+"\",\"bizEntity\":\""+""+"\"}";
-		String ext = "{\"appId\":\""+""+"\",\"openId\":\""+""+"\",\"clientId\":\""+""+"\"}";
+		String ext = "{\"appId\":\""+appId+"\",\"openId\":\""+openId+"\",\"clientId\":\""+clientId+"\"}";
 		Map<String, String> params = new HashMap<>();
 		params.put("orderId", order.getOrderId()); //商户订单编号
 		params.put("orderAmount", order.getOrderAmount()); //订单金额
 		params.put("parentMerchantNo", YeepayService.getParentMerchantNo());
 		params.put("merchantNo", YeepayService.getMerchantNo());
 		params.put("timeoutExpress", "360"); //订单有效期  可以不传
-		params.put("timeoutExpressType", PayConstants.Unit.HOUR.getPrc());
+		params.put("timeoutExpressType", PayConstants.Unit.MINUTE.getPrc());
 		params.put("requestDate", order.getRequestDate()); //请求时间
 		params.put("redirectUrl", ""); //页面回调地址 可以不传
 		params.put("notifyUrl", notifyUrl); //回调地址
@@ -180,7 +183,6 @@ public class ClientPayService {
 			return resultMap;
 		}
 		
-		params.put("parentMerchantNo", YeepayService.getParentMerchantNo());
 		params.put("merchantNo", YeepayService.getMerchantNo());
 		params.put("token", token);
 		params.put("timestamp", order.getTimestamp());
@@ -189,6 +191,10 @@ public class ClientPayService {
 		params.put("directPayType", "");
 		params.put("cardType", "");
 		params.put("ext", ext);
+		Set<Entry<String, String>> entrySet1 = params.entrySet();
+		for (Entry<String, String> entry : entrySet1) {
+			log.info("key1--->:"+entry.getKey()+":::value1--->:"+entry.getValue());
+		}
 		String url = "";
 		try {
 			url = YeepayService.getUrl(params);
@@ -200,6 +206,7 @@ public class ClientPayService {
 			return resultMap;
 		}
 		if(StringUtils.isNotBlank(url)) {
+			log.info("url---->"+url);
 			ClientPay clientPay = new ClientPay();
 			clientPay.setUserId(orderInfo.getClientUserCode());
 			clientPay.setOrderMoney(orderInfo.getGrandTotal().toPlainString());
@@ -705,7 +712,8 @@ public class ClientPayService {
 		orderInfo.setGoodsDesc("");
 		orderInfo.setRequestDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));//下单时间
 	    orderInfo.setUserType("USER_ID"); //用户标示类型 默认USER_ID
-		orderInfo.setUserNo(corderInfo.getClientUserCode());//用户CODE
+		//orderInfo.setUserNo(corderInfo.getClientUserCode());//用户CODE
+	    orderInfo.setUserNo("18676389907");
 	    log.info("订单创建成功----->"+orderInfo);
 		return orderInfo;
 	} 

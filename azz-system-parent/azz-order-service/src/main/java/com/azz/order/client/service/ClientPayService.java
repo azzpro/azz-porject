@@ -143,11 +143,9 @@ public class ClientPayService {
 		params.put("requestDate", order.getRequestDate()); //请求时间
 		params.put("redirectUrl", ""); //页面回调地址 可以不传
 		params.put("notifyUrl", notifyUrl); //回调地址
-		params.put("goodsParamExt", goodsParamExt);
 		params.put("industryParamExt", industryParamExt);
 		params.put("goodsParamExt", goodsParamExt);
 		params.put("paymentParamExt", "");
-		params.put("industryParamExt", industryParamExt);
 		params.put("memo", "");
 		params.put("riskParamExt", "");
 		params.put("csUrl", "");

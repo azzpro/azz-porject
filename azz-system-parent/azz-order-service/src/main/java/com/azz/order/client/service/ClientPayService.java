@@ -206,6 +206,7 @@ public class ClientPayService {
 			return resultMap;
 		}
 		if(StringUtils.isNotBlank(url)) {
+			log.info("url---->"+url);
 			ClientPay clientPay = new ClientPay();
 			clientPay.setUserId(orderInfo.getClientUserCode());
 			clientPay.setOrderMoney(orderInfo.getGrandTotal().toPlainString());

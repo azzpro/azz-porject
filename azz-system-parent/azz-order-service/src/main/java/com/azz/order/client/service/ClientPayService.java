@@ -130,9 +130,12 @@ public class ClientPayService {
 		if(null == order) {
 			return null;
 		}
+		String appId = "";
+		String openId = "";
+		String clientId = "";
 		String goodsParamExt = "{\"goodsName\":\""+order.getGoodsName()+"\",\"goodsDesc\":\""+order.getGoodsDesc()+"\"}";
 		String industryParamExt = "{\"bizSource\":\""+""+"\",\"bizEntity\":\""+""+"\"}";
-		String ext = "{\"appId\":\""+""+"\",\"openId\":\""+""+"\",\"clientId\":\""+""+"\"}";
+		String ext = "{\"appId\":\""+appId+"\",\"openId\":\""+openId+"\",\"clientId\":\""+clientId+"\"}";
 		Map<String, String> params = new HashMap<>();
 		params.put("orderId", order.getOrderId()); //商户订单编号
 		params.put("orderAmount", order.getOrderAmount()); //订单金额

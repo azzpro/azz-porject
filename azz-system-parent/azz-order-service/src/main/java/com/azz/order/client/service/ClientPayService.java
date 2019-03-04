@@ -155,6 +155,10 @@ public class ClientPayService {
 		params.put("divideDetail", "");
 		params.put("divideNotifyUrl", "");
 		params.put("timeoutNotifyUrl", "");
+		Set<Entry<String, String>> entrySet = params.entrySet();
+		for (Entry<String, String> entry : entrySet) {
+			System.out.println("key--->:"+entry.getKey()+":::value--->:"+entry.getValue());
+		}
 		Map<String, String> result = new HashMap<>();
 		String uri = YeepayService.getUrl(YeepayService.TRADEORDER_URL);
 		try {

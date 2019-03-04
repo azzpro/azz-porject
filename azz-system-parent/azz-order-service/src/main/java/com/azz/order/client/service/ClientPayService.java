@@ -139,7 +139,7 @@ public class ClientPayService {
 		params.put("parentMerchantNo", YeepayService.getParentMerchantNo());
 		params.put("merchantNo", YeepayService.getMerchantNo());
 		params.put("timeoutExpress", "360"); //订单有效期  可以不传
-		params.put("timeoutExpressType", PayConstants.Unit.HOUR.getPrc());
+		params.put("timeoutExpressType", PayConstants.Unit.MINUTE.getPrc());
 		params.put("requestDate", order.getRequestDate()); //请求时间
 		params.put("redirectUrl", ""); //页面回调地址 可以不传
 		params.put("notifyUrl", notifyUrl); //回调地址
@@ -180,7 +180,6 @@ public class ClientPayService {
 			return resultMap;
 		}
 		
-		params.put("parentMerchantNo", YeepayService.getParentMerchantNo());
 		params.put("merchantNo", YeepayService.getMerchantNo());
 		params.put("token", token);
 		params.put("timestamp", order.getTimestamp());
@@ -188,7 +187,11 @@ public class ClientPayService {
 		params.put("userType", order.getUserType());
 		params.put("directPayType", "");
 		params.put("cardType", "");
-		params.put("ext", ext);
+		params.put("ext", "");
+		Set<Entry<String, String>> entrySet1 = params.entrySet();
+		for (Entry<String, String> entry : entrySet1) {
+			log.info("key1--->:"+entry.getKey()+":::value1--->:"+entry.getValue());
+		}
 		String url = "";
 		try {
 			url = YeepayService.getUrl(params);

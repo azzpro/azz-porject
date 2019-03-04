@@ -171,7 +171,7 @@ public class CrawlerService {
             String titleName = ganJiTitle.getName();
             int totalPages = 1;
                 String url = ganJiTitle.getUrl();
-                Document doc = getDocument(url);
+                Document doc = getGanJiDocument(url);
                 try {
                     Element pageSize = doc.select("div.leftBox div.pageBox ul li").last().previousElementSibling();
                     totalPages = Integer.parseInt(pageSize.text());
@@ -185,7 +185,7 @@ public class CrawlerService {
                     String nextUrl = url + pageSuffix;
                     Document newPageDoc = null;
                     try {
-                        newPageDoc = getDocument(nextUrl);
+                        newPageDoc = getGanJiDocument(nextUrl);
                     } catch (Exception e) {
                         System.out.println("爬取保险时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
                         continue;
@@ -309,7 +309,7 @@ public class CrawlerService {
                     Document newPageDoc = null;
                     try {
                         //newPageDoc = Jsoup.connect(detailUrl).get();
-                        newPageDoc = getDocument(detailUrl);
+                        newPageDoc = getGanJiDocument(detailUrl);
                     } catch (Exception e) {
                         System.out.println("爬取保险时，在["+ baoxianUrl +"]页面数据出错，跳过此页面，错误信息：" + e.getMessage());
                         continue;
@@ -335,7 +335,7 @@ public class CrawlerService {
 	/*************************************************  本地生活网数据爬虫end ******************************************************/
 	/***************************************************************************************************************************/
 
-    private Document getDocument(String detailUrl) {
+    private Document getGanJiDocument(String detailUrl) {
         Document newPageDoc;
         String ganJiErrorMsg = "访问过于频繁，本次访问做以下验证码校验";
         String resp = proxyHttpRequest.doGetRequest(detailUrl);
@@ -346,9 +346,19 @@ public class CrawlerService {
         }
         return newPageDoc;
     }
-	
-	
-	
+    
+    private Document getBaixingDocument(String detailUrl) {
+        Document newPageDoc;
+        String baixingErrorMsg = "s9verify_html?identity=spider_";
+        String resp = proxyHttpRequest.doGetRequest(detailUrl);
+        if(resp.contains(baixingErrorMsg)) {
+            newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(detailUrl, true));
+        }else {
+            newPageDoc = Jsoup.parse(resp);
+        }
+        return newPageDoc;
+    }
+    
 	
 	/*****************************************************************************************************************************/
 	/*************************************************  本地生活网数据爬虫start  ******************************************************/
@@ -382,7 +392,7 @@ public class CrawlerService {
 			String titleName = eachTitle.getName();
 			String url = eachTitle.getUrl();
 			List<SearchInfo> searchInfos = new ArrayList<>();
-			Document doc = Jsoup.parse(proxyHttpRequest.doGetRequest(url));
+			Document doc = getBaixingDocument(url);
 			int totalPages = 1;
 			try {
 				Element lastPageLi = doc.select("section.listing-pager-section ul li").last().previousElementSibling();
@@ -398,7 +408,7 @@ public class CrawlerService {
 				String nextUrl = url + pageSuffix;
 				Document newPageDoc = null;
 				try {
-					newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(nextUrl));
+					newPageDoc = getBaixingDocument(nextUrl);
 				} catch (Exception e) {
 					System.out.println("爬取["+titleName+"]时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
 					continue;
@@ -432,7 +442,7 @@ public class CrawlerService {
 				SearchInfo si = new SearchInfo();
 				StringBuffer otherDesc = new StringBuffer();
 				try {
-					newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(detailUrl));
+					newPageDoc = getBaixingDocument(detailUrl);
 				} catch (Exception e) {
 					System.out.println("爬取url["+detailUrl+"]的第"+page+"页时，获取页面数据出错，跳过此条数据，错误信息：" + e.getMessage());
 					continue;
@@ -713,8 +723,7 @@ public class CrawlerService {
 
 	/***************************************************************************************************************************/
 	/*************************************************  本地生活网数据爬虫end  ******************************************************/
-	/**
-	 * @throws IOException *************************************************************************************************************************/
+	/***************************************************************************************************************************/
 
     
 }

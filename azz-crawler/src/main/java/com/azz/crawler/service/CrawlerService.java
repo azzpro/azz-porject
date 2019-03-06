@@ -144,11 +144,11 @@ public class CrawlerService {
 					Document newPageDoc = null;
 					try {
 						newPageDoc = Jsoup.connect(nextUrl).get();
+						searchInfos.addAll(getBdsh5EachPageInfo(newPageDoc));
 					} catch (Exception e) {
 						System.out.println("爬取["+titleName+"]时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
 						continue;
 					}
-					searchInfos.addAll(getBdsh5EachPageInfo(newPageDoc));
 				}
 				result.put(titleName, searchInfos);
 				System.out.println("标题为[" + titleName + "]的数据爬取完毕，共爬取了" + searchInfos.size() + "条数据");
@@ -187,11 +187,11 @@ public class CrawlerService {
                     try {
                         System.out.println("nextUrl="+nextUrl);
                         newPageDoc = getGanJiDocument(nextUrl);
+                        searchInfos.addAll(getGanjiBaoxianSeachPageInfo(newPageDoc));
                     } catch (Exception e) {
                         System.out.println("爬取保险时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
                         continue;
                     }
-                    searchInfos.addAll(getGanjiBaoxianSeachPageInfo(newPageDoc));
                 }
                 result.put(titleName, searchInfos);
                 System.out.println("标题为[" + titleName + "]的数据爬取完毕，共爬取了" + searchInfos.size() + "条数据");
@@ -416,11 +416,11 @@ public class CrawlerService {
 				Document newPageDoc = null;
 				try {
 					newPageDoc = getBaixingDocument(nextUrl);
+					searchInfos.addAll(getBaixingEachPageInfo(page, newPageDoc));
 				} catch (Exception e) {
 					System.out.println("爬取["+titleName+"]时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
 					continue;
 				}
-				searchInfos.addAll(getBaixingEachPageInfo(page, newPageDoc));
 			}
 			result.put(titleName, searchInfos);
 			System.out.println("标题为[" + titleName + "]的数据爬取完毕，共爬取了" + searchInfos.size() + "条数据");

@@ -185,6 +185,7 @@ public class CrawlerService {
                     String nextUrl = url + pageSuffix;
                     Document newPageDoc = null;
                     try {
+                        System.out.println("nextUrl="+nextUrl);
                         newPageDoc = getGanJiDocument(nextUrl);
                     } catch (Exception e) {
                         System.out.println("爬取保险时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
@@ -308,23 +309,28 @@ public class CrawlerService {
                     System.out.println("detailUrl="+detailUrl);
                     Document newPageDoc = null;
                     try {
-                        //newPageDoc = Jsoup.connect(detailUrl).get();
+                        newPageDoc = Jsoup.connect(detailUrl).get();
                         newPageDoc = getGanJiDocument(detailUrl);
                     } catch (Exception e) {
                         System.out.println("爬取保险时，在["+ baoxianUrl +"]页面数据出错，跳过此页面，错误信息：" + e.getMessage());
                         continue;
                     }
                     if(newPageDoc.getElementById("dzcontactus")!=null) {
-                        Elements detailInfo = newPageDoc.getElementById("dzcontactus").select("div.con ul");
-                        for (Element detals : detailInfo) {
-                            BaoXianInfo si = new BaoXianInfo();
-                            si.setTitle(detals.select("li.fb").text());
-                            si.setDesc(detals.select("li").text());
-                            System.out.println("保险公司名称："+detals.select("li.fb").text());
-                            System.out.println("保险详情："+detals.select("li").text());
-                            System.out.println("=================================================");
-                            searchInfos.add(si);
+                        Elements detailInfo = newPageDoc.getElementById("dzcontactus").select("div.con ul li");
+                        BaoXianInfo si = new BaoXianInfo();
+                        si.setTitle(detailInfo.get(0).select("li.fb").text());
+                        String description = "";
+                        String phone = "";
+                        for (int i = 0; i < detailInfo.size(); i++) {
+                            description += detailInfo.get(i).select("li").text();
+                            if(detailInfo.get(i).select("li").text().contains("联系电话：")) {
+                                phone = detailInfo.get(i).select("li p").text();
+                                
+                            }
                         }
+                        si.setPhoneNumber(phone);
+                        si.setDesc(description);
+                        searchInfos.add(si);
                     }
                 }
             }
@@ -336,10 +342,13 @@ public class CrawlerService {
 	/***************************************************************************************************************************/
 
     private Document getGanJiDocument(String detailUrl) {
-        Document newPageDoc;
+        Document newPageDoc = null;
         String ganJiErrorMsg = "访问过于频繁，本次访问做以下验证码校验";
+        String ganjiErrorMsg2 = "ERR_ACCESS_DENIED";
         String resp = proxyHttpRequest.doGetRequest(detailUrl);
         if(resp.contains(ganJiErrorMsg)) {
+            newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(detailUrl, true));
+        } if(resp.contains(ganjiErrorMsg2)){
             newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(detailUrl, true));
         }else {
             newPageDoc = Jsoup.parse(resp);
@@ -707,14 +716,16 @@ public class CrawlerService {
             HSSFRow row0 = sheet.createRow(0);
             // 添加表头
             row0.createCell(0).setCellValue("保险公司名称");
-            row0.createCell(1).setCellValue("描述");
+            row0.createCell(1).setCellValue("联系电话");
+            row0.createCell(2).setCellValue("描述");
             List<BaoXianInfo> infos = exportData.get(key);
             int i = 0;
             for (BaoXianInfo info : infos) {
                 i++;
                 HSSFRow row = sheet.createRow(i);
                 row.createCell(0).setCellValue(info.getTitle());
-                row.createCell(1).setCellValue(info.getDesc());
+                row.createCell(1).setCellValue(info.getPhoneNumber());
+                row.createCell(2).setCellValue(info.getDesc());
             }
         }
         wb.close();
@@ -723,7 +734,5 @@ public class CrawlerService {
 
 	/***************************************************************************************************************************/
 	/*************************************************  本地生活网数据爬虫end  ******************************************************/
-	/***************************************************************************************************************************/
-
     
 }

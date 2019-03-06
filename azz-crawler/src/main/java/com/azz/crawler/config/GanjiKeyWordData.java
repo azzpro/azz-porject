@@ -7,10 +7,14 @@
  
 package com.azz.crawler.config;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -31,6 +35,8 @@ public class GanjiKeyWordData {
     private static final Logger LOGGER = LoggerFactory.getLogger(GanjiKeyWordData.class);
 
     private static final String URL = "http://sz.ganji.com/";
+    
+    private static final String qqjeURL = "http://jixiaopaiming.qqje.com/";
     //private static final String schoolURL = "http://www.zkbedu.com/school";
     
     @Getter
@@ -112,5 +118,54 @@ public class GanjiKeyWordData {
         }
     }
     
+    
+    public static void main(String[] args) {
+        HSSFWorkbook wb = new HSSFWorkbook();
+        HSSFSheet sheet = wb.createSheet("中国技校排名(全国技校排名,中专排名)【100所】");
+        // 在sheet里创建第一行，参数为行索引(excel的行)，可以是0～65535之间的任何一个
+        HSSFRow row0 = sheet.createRow(0);
+        row0.createCell(0).setCellValue("学校名称");
+        row0.createCell(1).setCellValue("联系方式");
+        row0.createCell(2).setCellValue("专业信息");
+        try {
+            Document doc = Jsoup.connect(qqjeURL).get();
+            Elements allLies = doc.getElementsByClass("hideline");
+            Elements profession = doc.getElementsByClass("item-tr");
+            
+            
+            for (int i = 0; i < allLies.size(); i++) {
+                HSSFRow row = sheet.createRow(i);
+                String schoolName = allLies.get(i).getElementsByClass("keyword").select("a").html();
+                row.createCell(0).setCellValue(schoolName);
+                String schoolNameUrl = allLies.get(i).getElementsByClass("keyword").select("a").attr("href");
+                Document shoolDetaildoc = Jsoup.connect(schoolNameUrl).get();
+                Elements details = shoolDetaildoc.select("div.commentL div.mpBox ul li");
+                Elements professionDetails = profession.get(i).select("div.item-info ul li");
+                String str = "";
+                for (int j = 4; j < details.size(); j++) {
+                        System.out.println(details.get(j).text());
+                        str += details.get(j).text()+"、";
+                }
+                row.createCell(1).setCellValue(str);
+                String professionDetail = "";
+                for (int k = 0; k < professionDetails.size(); k++) {
+                    System.out.println("相关专业："+professionDetails.get(k).text());
+                    professionDetail += professionDetails.get(k).text()+"、";
+                }
+                row.createCell(2).setCellValue(professionDetail);
+                System.out.println("================================================");
+            }
+            
+            try {
+                FileOutputStream output = new FileOutputStream("D:\\中国技校排名(全国技校排名,中专排名)【100所】.xls");
+                wb.write(output);
+                output.flush(); 
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.getMessage();
+        }
+    }
 }
 

@@ -346,11 +346,9 @@ public class CrawlerService {
         String ganJiErrorMsg = "访问过于频繁，本次访问做以下验证码校验";
         String ganjiErrorMsg2 = "ERR_ACCESS_DENIED";
         String resp = proxyHttpRequest.doGetRequest(detailUrl);
-        if(resp.contains(ganJiErrorMsg)) {
+        if(resp.contains(ganJiErrorMsg) || resp.contains(ganjiErrorMsg2)) {
             newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(detailUrl, true));
-        } if(resp.contains(ganjiErrorMsg2)){
-            newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(detailUrl, true));
-        }else {
+        } else {
             newPageDoc = Jsoup.parse(resp);
         }
         return newPageDoc;

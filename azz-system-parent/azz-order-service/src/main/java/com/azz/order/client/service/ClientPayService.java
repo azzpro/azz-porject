@@ -720,8 +720,7 @@ public class ClientPayService {
 		orderInfo.setGoodsDesc("");
 		orderInfo.setRequestDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));//下单时间
 	    orderInfo.setUserType("USER_ID"); //用户标示类型 默认USER_ID
-		//orderInfo.setUserNo(corderInfo.getClientUserCode());//用户CODE
-	    orderInfo.setUserNo("18676389907");
+		orderInfo.setUserNo(corderInfo.getClientUserCode());//用户CODE
 	    log.info("订单创建成功----->"+orderInfo);
 		return orderInfo;
 	} 

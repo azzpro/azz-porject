@@ -346,6 +346,7 @@ public class CrawlerService {
         String ganjiErrorMsg2 = "ERR_ACCESS_DENIED";
         String resp = proxyHttpRequest.doGetRequest(detailUrl);
         if(resp.contains(ganJiErrorMsg) || resp.contains(ganjiErrorMsg2)) {
+            System.out.println("#######包含错误信息########"+resp.indexOf(ganJiErrorMsg) + "&" + resp.indexOf(ganjiErrorMsg2)+"###############");
             newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(detailUrl, true));
         } else {
             newPageDoc = Jsoup.parse(resp);

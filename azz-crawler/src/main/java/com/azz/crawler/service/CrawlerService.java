@@ -192,6 +192,7 @@ public class CrawlerService {
                         System.out.println("爬取保险时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
                         continue;
                     }
+                    System.out.println("第"+ page +"页数据爬取完毕。");
                 }
                 result.put(titleName, searchInfos);
                 System.out.println("标题为[" + titleName + "]的数据爬取完毕，共爬取了" + searchInfos.size() + "条数据");
@@ -309,7 +310,6 @@ public class CrawlerService {
                     System.out.println("detailUrl="+detailUrl);
                     Document newPageDoc = null;
                     try {
-                        newPageDoc = Jsoup.connect(detailUrl).get();
                         newPageDoc = getGanJiDocument(detailUrl);
                     } catch (Exception e) {
                         System.out.println("爬取保险时，在["+ baoxianUrl +"]页面数据出错，跳过此页面，错误信息：" + e.getMessage());

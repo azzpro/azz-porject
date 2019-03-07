@@ -144,11 +144,11 @@ public class CrawlerService {
 					Document newPageDoc = null;
 					try {
 						newPageDoc = Jsoup.connect(nextUrl).get();
+						searchInfos.addAll(getBdsh5EachPageInfo(newPageDoc));
 					} catch (Exception e) {
 						System.out.println("爬取["+titleName+"]时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
 						continue;
 					}
-					searchInfos.addAll(getBdsh5EachPageInfo(newPageDoc));
 				}
 				result.put(titleName, searchInfos);
 				System.out.println("标题为[" + titleName + "]的数据爬取完毕，共爬取了" + searchInfos.size() + "条数据");
@@ -169,11 +169,10 @@ public class CrawlerService {
         for (GanJiTitle ganJiTitle : titlesToSearch) {
             List<BaoXianInfo> searchInfos = new ArrayList<>();
             String titleName = ganJiTitle.getName();
-            try {
-                int totalPages = 1;
+            int totalPages = 1;
                 String url = ganJiTitle.getUrl();
+                Document doc = getGanJiDocument(url);
                 try {
-                    Document doc = Jsoup.parse(proxyHttpRequest.doGetRequest(url));
                     Element pageSize = doc.select("div.leftBox div.pageBox ul li").last().previousElementSibling();
                     totalPages = Integer.parseInt(pageSize.text());
                 } catch (Exception e) {// 若这里抛异常说明只有一页
@@ -186,16 +185,17 @@ public class CrawlerService {
                     String nextUrl = url + pageSuffix;
                     Document newPageDoc = null;
                     try {
-                        newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(nextUrl));
+                        newPageDoc = getGanJiDocument(nextUrl);
+                        searchInfos.addAll(getGanjiBaoxianSeachPageInfo(newPageDoc));
                     } catch (Exception e) {
                         System.out.println("爬取保险时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
                         continue;
                     }
-                    searchInfos.addAll(getGanjiBaoxianSeachPageInfo(newPageDoc));
+                    System.out.println("第"+ page +"页数据爬取完毕。");
                 }
-            } catch (Exception e) {
-                System.out.println("爬取["+titleName+"]时，获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
-            }
+                result.put(titleName, searchInfos);
+                System.out.println("标题为[" + titleName + "]的数据爬取完毕，共爬取了" + searchInfos.size() + "条数据");
+                System.out.println("-------------------------------------------------");  
         }
         return JsonResult.successJsonResult(result);
     }
@@ -297,32 +297,38 @@ public class CrawlerService {
 	 * @author 彭斌  2019年3月1日 下午2:09:12
 	 */
 	private List<BaoXianInfo> getGanjiBaoxianSeachPageInfo(Document doc) {
+	    List<BaoXianInfo> searchInfos = new ArrayList<>();
         Elements lastPageLi = doc.select("div.leftBox div.list ul").last().children();
-        List<BaoXianInfo> searchInfos = new ArrayList<>();
         System.out.println("开始爬取赶集网保险信息");
         if(lastPageLi != null) {
             // 每页的信息
             if(lastPageLi != null && lastPageLi.size() > 0) {
                 for (Element info : lastPageLi) {
-                    String baoxianUrl = info.select("div.txt p a").attr("href");
+                    String baoxianUrl = info.select("div.txt p a").attr("href").trim();
                     String detailUrl = "http://sz.ganji.com"+baoxianUrl;
                     System.out.println("detailUrl="+detailUrl);
                     Document newPageDoc = null;
                     try {
-                        newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(detailUrl));
+                        newPageDoc = getGanJiDocument(detailUrl);
                     } catch (Exception e) {
                         System.out.println("爬取保险时，在["+ baoxianUrl +"]页面数据出错，跳过此页面，错误信息：" + e.getMessage());
                         continue;
                     }
-                    Elements detailInfo = newPageDoc.getElementById("dzcontactus").select("div.con ul");
-                    System.out.println("detailInfo="+detailInfo);
-                    for (Element detals : detailInfo) {
+                    if(newPageDoc.getElementById("dzcontactus")!=null) {
+                        Elements detailInfo = newPageDoc.getElementById("dzcontactus").select("div.con ul li");
                         BaoXianInfo si = new BaoXianInfo();
-                        si.setTitle(detals.select("li.fb").text());
-                        si.setDesc(detals.select("li").text());
-                        System.out.println("保险公司名称："+detals.select("li.fb").text());
-                        System.out.println("保险详情："+detals.select("li").text());
-                        System.out.println("=================================================");
+                        si.setTitle(detailInfo.get(0).select("li.fb").text());
+                        String description = "";
+                        String phone = "";
+                        for (int i = 0; i < detailInfo.size(); i++) {
+                            description += detailInfo.get(i).select("li").text();
+                            if(detailInfo.get(i).select("li").text().contains("联系电话：")) {
+                                phone = detailInfo.get(i).select("li p").text();
+                                
+                            }
+                        }
+                        si.setPhoneNumber(phone);
+                        si.setDesc(description);
                         searchInfos.add(si);
                     }
                 }
@@ -333,9 +339,39 @@ public class CrawlerService {
 	/***************************************************************************************************************************/
 	/*************************************************  本地生活网数据爬虫end ******************************************************/
 	/***************************************************************************************************************************/
-	
-	
-	
+
+    private Document getGanJiDocument(String detailUrl) {
+        Document newPageDoc = null;
+        String ganJiErrorMsg = "访问过于频繁，本次访问做以下验证码校验";
+        String ganjiErrorMsg2 = "ERR_ACCESS_DENIED";
+        try {
+            Thread.sleep(1000L);
+        } catch (Exception e) {
+            System.out.println("异常：" + e.getMessage());
+        }
+        
+        String resp = proxyHttpRequest.doGetRequest(detailUrl);
+        if(resp.contains(ganJiErrorMsg) || resp.contains(ganjiErrorMsg2)) {
+            System.out.println("#######包含错误信息########"+resp.indexOf(ganJiErrorMsg) + "&" + resp.indexOf(ganjiErrorMsg2)+"###############");
+            newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(detailUrl, true));
+        } else {
+            newPageDoc = Jsoup.parse(resp);
+        }
+        return newPageDoc;
+    }
+    
+    private Document getBaixingDocument(String detailUrl) {
+        Document newPageDoc;
+        String baixingErrorMsg = "s9verify_html?identity=spider_";
+        String resp = proxyHttpRequest.doGetRequest(detailUrl);
+        if(resp.contains(baixingErrorMsg)) {
+            newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(detailUrl, true));
+        }else {
+            newPageDoc = Jsoup.parse(resp);
+        }
+        return newPageDoc;
+    }
+    
 	
 	/*****************************************************************************************************************************/
 	/*************************************************  本地生活网数据爬虫start  ******************************************************/
@@ -369,7 +405,7 @@ public class CrawlerService {
 			String titleName = eachTitle.getName();
 			String url = eachTitle.getUrl();
 			List<SearchInfo> searchInfos = new ArrayList<>();
-			Document doc = Jsoup.parse(proxyHttpRequest.doGetRequest(url));
+			Document doc = getBaixingDocument(url);
 			int totalPages = 1;
 			try {
 				Element lastPageLi = doc.select("section.listing-pager-section ul li").last().previousElementSibling();
@@ -385,12 +421,12 @@ public class CrawlerService {
 				String nextUrl = url + pageSuffix;
 				Document newPageDoc = null;
 				try {
-					newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(nextUrl));
+					newPageDoc = getBaixingDocument(nextUrl);
+					searchInfos.addAll(getBaixingEachPageInfo(page, newPageDoc));
 				} catch (Exception e) {
 					System.out.println("爬取["+titleName+"]时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
 					continue;
 				}
-				searchInfos.addAll(getBaixingEachPageInfo(page, newPageDoc));
 			}
 			result.put(titleName, searchInfos);
 			System.out.println("标题为[" + titleName + "]的数据爬取完毕，共爬取了" + searchInfos.size() + "条数据");
@@ -419,7 +455,7 @@ public class CrawlerService {
 				SearchInfo si = new SearchInfo();
 				StringBuffer otherDesc = new StringBuffer();
 				try {
-					newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(detailUrl));
+					newPageDoc = getBaixingDocument(detailUrl);
 				} catch (Exception e) {
 					System.out.println("爬取url["+detailUrl+"]的第"+page+"页时，获取页面数据出错，跳过此条数据，错误信息：" + e.getMessage());
 					continue;
@@ -430,6 +466,7 @@ public class CrawlerService {
 					System.out.println("title:content-->"+"联系：" + phoneNumber);
 				} catch (Exception e) {
 					System.out.println("无手机号可获取");
+					continue;// 无手机号可获取，直接放弃此页数据
 				}
 				si.setPhoneNumber(phoneNumber);
 				Elements items = newPageDoc.select("div.viewad-meta div.viewad-meta-item");
@@ -448,10 +485,18 @@ public class CrawlerService {
 								String tagName = labels.get(0).nextElementSibling().tagName();
 								String content = "";
 								if("div".equals(tagName) ) {
+									boolean isGetContent = false;
+									Elements span = labels.get(0).nextElementSibling().select("span");
+									if(span!=null && span.size()>0) {
+										content = labels.get(0).nextElementSibling().select("span").html().replace("\n", " ");
+										isGetContent = true;
+									}
 									Elements a = labels.get(0).nextElementSibling().select("a");
 									if(a!=null && a.size()>0) {
-										content = labels.get(0).nextElementSibling().select("a").html();
-									}else {
+										content = labels.get(0).nextElementSibling().select("a").html().replace("\n", "");
+										isGetContent = true;
+									}
+									if(!isGetContent){
 										content = labels.get(0).nextElementSibling().select("label").html().replace("\n", " ");
 									}
 									System.out.println("title:content-->"+title + content);
@@ -492,23 +537,31 @@ public class CrawlerService {
 								String tagName = labels.get(0).nextElementSibling().tagName();
 								String content = "";
 								if("div".equals(tagName) ) {
+									boolean isGetContent = false;
+									Elements span = labels.get(0).nextElementSibling().select("span");
+									if(span!=null && span.size()>0) {
+										content = labels.get(0).nextElementSibling().select("span").html().replace("\n", " ");
+										isGetContent = true;
+									}
 									Elements a = labels.get(0).nextElementSibling().select("a");
 									if(a!=null && a.size()>0) {
-										content = labels.get(0).nextElementSibling().select("a").html();
-									}else {
+										content = labels.get(0).nextElementSibling().select("a").html().replace("\n", "");
+										isGetContent = true;
+									}
+									if(!isGetContent){
 										content = labels.get(0).nextElementSibling().select("label").html().replace("\n", " ");
 									}
 									System.out.println("title:content-->"+title + content);
 								}else if("span".equals(tagName)){
 									Elements a = labels.get(0).nextElementSibling().select("a");
 									if(a!=null && a.size()>0) {
-										content = labels.get(0).nextElementSibling().select("a").html();
+										content = labels.get(0).nextElementSibling().select("a").html().replace("<br>", "").replace("\n", "");
 									}else {
-										content = labels.get(0).nextElementSibling().html();
+										content = labels.get(0).nextElementSibling().html().replace("<br>", "").replace("\n", "");
 									}
 									System.out.println("title:content-->"+title + content);
 								}else if("a".equals(tagName)){
-									content = labels.get(0).nextElementSibling().html();
+									content = labels.get(0).nextElementSibling().html().replace("<br>", "").replace("\n", "");
 									System.out.println("title:content-->"+title + content);
 								}else {
 									// 未知情况
@@ -527,27 +580,40 @@ public class CrawlerService {
 						if(labels != null && labels.size() > 0) {
 							int count = labels.size();
 							if(count == 2) {
-								String title = labels.get(0).html();// 标题
-								String content = labels.get(1).html();// 内容
+								String title = labels.get(0).html().replace("<br>", "").replace("\n", "");// 标题
+								String content = labels.get(1).html().replace("<br>", "").replace("\n", "");// 内容
 								System.out.println("title:content-->"+title + content);
 								otherDesc.append(title + content+"  ");
 							}else {
-								String title = labels.get(0).html();// 标题
+								String title = labels.get(0).html().replace("<br>", "").replace("\n", "");// 标题
 								String tagName = labels.get(0).nextElementSibling().tagName();
 								String content = "";
 								if("div".equals(tagName) ) {
-									content = labels.get(0).nextElementSibling().select("label").html().replace("\n", " ");
+									boolean isGetContent = false;
+									Elements span = labels.get(0).nextElementSibling().select("span");
+									if(span!=null && span.size()>0) {
+										content = labels.get(0).nextElementSibling().select("span").html().replace("\n", " ");
+										isGetContent = true;
+									}
+									Elements a = labels.get(0).nextElementSibling().select("a");
+									if(a!=null && a.size()>0) {
+										content = labels.get(0).nextElementSibling().select("a").html().replace("\n", "");
+										isGetContent = true;
+									}
+									if(!isGetContent){
+										content = labels.get(0).nextElementSibling().select("label").html().replace("\n", " ");
+									}
 									System.out.println("title:content-->"+title + content);
 								}else if("span".equals(tagName)){
 									Elements a = labels.get(0).nextElementSibling().select("a");
 									if(a!=null && a.size()>0) {
 										content = labels.get(0).nextElementSibling().select("a").html().replace("\n", " ");
 									}else {
-										content = labels.get(0).nextElementSibling().html();
+										content = labels.get(0).nextElementSibling().html().replace("<br>", "").replace("\n", "");
 									}
 									System.out.println("title:content-->"+title + content);
 								}else if("a".equals(tagName)){
-									content = labels.get(0).nextElementSibling().html();
+									content = labels.get(0).nextElementSibling().html().replace("<br>", "").replace("\n", "");
 									System.out.println("title:content-->"+title + content);
 								}else {
 									// 未知情况
@@ -559,6 +625,8 @@ public class CrawlerService {
 						}
 					}
 				}
+				si.setOtherDesc(otherDesc.toString());
+				/*
 				Elements descs = newPageDoc.select("section.viewad-description div.viewad-text");
 				if(descs != null && descs.size() > 0) {
 					String description = descs.get(0).nextElementSibling().html().replace("<br>", "").replace("\n", "");
@@ -567,12 +635,15 @@ public class CrawlerService {
 				}
 				Elements titleEle = newPageDoc.select(".viewad-title");
 				if(titleEle != null && titleEle.size() > 0) {
-					String title = titleEle.get(0).nextElementSibling().html().replace("\n", "");
+					String title = titleEle.get(0).nextElementSibling().html().replace("<br>", "").replace("\n", "");
 					System.out.println("*************"+title);
 					si.setTitle(title);
 				}
+				*/
 				searchInfos.add(si);
 			}
+		}else {
+			System.out.println("此页[第"+page+"页]无符合的数据可处理");
 		}
 		return searchInfos;
 	}
@@ -604,19 +675,19 @@ public class CrawlerService {
 			// 在sheet里创建第一行，参数为行索引(excel的行)，可以是0～65535之间的任何一个
 			HSSFRow row0 = sheet.createRow(0);
 			// 添加表头
-			row0.createCell(0).setCellValue("标题");
-			row0.createCell(1).setCellValue("联系人手机号");
-			row0.createCell(2).setCellValue("描述");
-			row0.createCell(3).setCellValue("其他描述");
+			//row0.createCell(0).setCellValue("标题");
+			row0.createCell(0).setCellValue("联系人手机号");
+			//row0.createCell(2).setCellValue("描述");
+			row0.createCell(1).setCellValue("其他描述");
 			List<SearchInfo> infos = exportData.get(key);
 			int i = 0;
 			for (SearchInfo info : infos) {
 				i++;
 				HSSFRow row = sheet.createRow(i);
-				row.createCell(0).setCellValue(info.getTitle());
-				row.createCell(1).setCellValue(info.getPhoneNumber());
-				row.createCell(2).setCellValue(info.getDesc());
-				row.createCell(3).setCellValue(info.getOtherDesc());
+				//row.createCell(0).setCellValue(info.getTitle());
+				row.createCell(0).setCellValue(info.getPhoneNumber());
+				//row.createCell(2).setCellValue(info.getDesc());
+				row.createCell(1).setCellValue(info.getOtherDesc());
 			}
 		}
         wb.close();
@@ -649,14 +720,16 @@ public class CrawlerService {
             HSSFRow row0 = sheet.createRow(0);
             // 添加表头
             row0.createCell(0).setCellValue("保险公司名称");
-            row0.createCell(1).setCellValue("描述");
+            row0.createCell(1).setCellValue("联系电话");
+            row0.createCell(2).setCellValue("描述");
             List<BaoXianInfo> infos = exportData.get(key);
             int i = 0;
             for (BaoXianInfo info : infos) {
                 i++;
                 HSSFRow row = sheet.createRow(i);
                 row.createCell(0).setCellValue(info.getTitle());
-                row.createCell(1).setCellValue(info.getDesc());
+                row.createCell(1).setCellValue(info.getPhoneNumber());
+                row.createCell(2).setCellValue(info.getDesc());
             }
         }
         wb.close();
@@ -665,8 +738,5 @@ public class CrawlerService {
 
 	/***************************************************************************************************************************/
 	/*************************************************  本地生活网数据爬虫end  ******************************************************/
-	/**
-	 * @throws IOException *************************************************************************************************************************/
-
     
 }

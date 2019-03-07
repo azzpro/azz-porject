@@ -118,16 +118,20 @@
 		            contentType: "application/json; charset=utf-8",
 		            data:JSON.stringify(postData),
 		            success:function(result){
-		            	console.log(result);
+		            	//console.log(result);
 		            },
 		            error:function(jqXHR){
-		                console.log("Error: "+jqXHR.status);
+		            	console.log("Error: "+jqXHR.status);
+		                $("#downloadBtn").hide();
+		                alert("爬取出错，请重试");
 		            },
 		            complete:function(XMLHttpRequest,textStatus){
-		               $("#submitTitles").removeAttr("disabled");
-		               $(".pic_center").css("display","none");
-		               $(".layer").css("display","none");
-		               $("#downloadBtn").css("display","inline");
+		            	if(XMLHttpRequest.status == 200){
+			                $("#downloadBtn").css("display","inline");
+		            	}
+			            $(".layer").css("display","none");
+				        $(".pic_center").css("display","none");
+			            $("#submitTitles").removeAttr("disabled");
 		            },
 		        });
 			}

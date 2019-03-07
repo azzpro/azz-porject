@@ -156,7 +156,7 @@ public class CrawlerController {
 		HSSFWorkbook wb = crawlerService.exportBdsh5Data(data);
 		WebUtils.setSessionAttribute(request, "bdsh5", null);
 		response.setContentType("application/octet-stream");
-		response.setHeader("Content-disposition", "attachment;filename=bdsh5.xlsx");
+		response.setHeader("Content-disposition", "attachment;filename=bdsh5.xls");
 		response.flushBuffer();
 		wb.write(response.getOutputStream());
 		return JsonResult.successJsonResult();
@@ -200,7 +200,7 @@ public class CrawlerController {
 		HSSFWorkbook wb = crawlerService.exportBaixingData(data);
 		WebUtils.setSessionAttribute(request, "baixing", null);
 		response.setContentType("application/octet-stream");
-		response.setHeader("Content-disposition", "attachment;filename=baixing.xlsx");
+		response.setHeader("Content-disposition", "attachment;filename=baixing.xls");
 		response.flushBuffer();
 		wb.write(response.getOutputStream());
 		return JsonResult.successJsonResult();
@@ -222,10 +222,30 @@ public class CrawlerController {
         HSSFWorkbook wb = crawlerService.exportGanJiBaoxianData(data);
         WebUtils.setSessionAttribute(request, "ganji", null);
         response.setContentType("application/octet-stream");
-        response.setHeader("Content-disposition", "attachment;filename=ganjibaoxian.xlsx");
+        response.setHeader("Content-disposition", "attachment;filename=ganjibaoxian.xls");
         response.flushBuffer();
         wb.write(response.getOutputStream());
         return JsonResult.successJsonResult();
     }
+	
+	/**
+	 * <p>导出技校信息</p>
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 * @author 彭斌  2019年3月7日 上午10:13:52
+	 */
+	/*@SuppressWarnings("unchecked")
+    @RequestMapping("exportJXData")
+    @ResponseBody
+    public JsonResult<String> exportJXData(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HSSFWorkbook wb = crawlerService.exportJXData();
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-disposition", "attachment;filename=jx.xlsx");
+        response.flushBuffer();
+        wb.write(response.getOutputStream());
+        return JsonResult.successJsonResult();
+    }*/
 }
 

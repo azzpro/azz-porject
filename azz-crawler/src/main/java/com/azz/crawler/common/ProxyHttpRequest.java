@@ -27,12 +27,21 @@ public class ProxyHttpRequest {
 	
 	public String doGetRequest(String url) {
 		try {
-			return doRequest(new HttpGet(url), false);
+			return doGetRequest(url, false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
+	
+	public String doGetRequest(String url, boolean changeProxy) {
+        try {
+            return doRequest(new HttpGet(url), changeProxy);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 	/**
 	 * 
@@ -97,4 +106,5 @@ public class ProxyHttpRequest {
 				.build();
 		httpReq.setConfig(reqConfig);
 	}
+	
 }

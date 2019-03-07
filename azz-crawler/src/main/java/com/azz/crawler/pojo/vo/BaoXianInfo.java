@@ -22,6 +22,11 @@ public class BaoXianInfo {
     private String title;
     
     /**
+     * 联系电话
+     */
+    private String phoneNumber;
+    
+    /**
      * 描述
      */
     private String desc;

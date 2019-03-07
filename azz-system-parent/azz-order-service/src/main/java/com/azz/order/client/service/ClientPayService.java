@@ -396,6 +396,7 @@ public class ClientPayService {
 		Map<String, String> upload4 = upload("http://azz-image.oss-cn-shenzhen.aliyuncs.com/yeepay-image/yinye.png");
 		Map<String, String> upload5 = upload("http://azz-image.oss-cn-shenzhen.aliyuncs.com/yeepay-image/yinye.png");
 		Map<String, String> upload6 = upload("http://azz-image.oss-cn-shenzhen.aliyuncs.com/yeepay-image/yinye.png");
+		Map<String, String> upload7 = upload("http://azz-image.oss-cn-shenzhen.aliyuncs.com/yeepay-image/sq.jpg");
 		Map<String,String> param = new HashMap<String,String>();
 		Map<String,String> param1 = new HashMap<String,String>();
 		Map<String,String> param2 = new HashMap<String,String>();
@@ -403,6 +404,7 @@ public class ClientPayService {
 		Map<String,String> param4 = new HashMap<String,String>();
 		Map<String,String> param5 = new HashMap<String,String>();
 		Map<String,String> param6 = new HashMap<String,String>();
+		Map<String,String> param7 = new HashMap<String,String>();
 		if(!upload.isEmpty() && "REG00000".equals(upload.get("returnCode"))) {
 			param.put("quaType", "IDCARD_FRONT");
 			param.put("quaUrl", upload.get("merQualUrl"));
@@ -431,6 +433,10 @@ public class ClientPayService {
 			param6.put("quaType", "UNI_CREDIT_CODE");
 			param6.put("quaUrl", upload6.get("merQualUrl"));
 		}
+		if(!upload7.isEmpty() && "REG00000".equals(upload7.get("returnCode"))) {
+			param7.put("quaType", "ICP_AUTHORIZED");
+			param7.put("quaUrl", upload7.get("merQualUrl"));
+		}
 		JSONObject jsonObject = JSONObject.fromObject(param);
 		JSONObject jsonObject1 = JSONObject.fromObject(param1);
 		JSONObject jsonObject2 = JSONObject.fromObject(param2);
@@ -438,6 +444,7 @@ public class ClientPayService {
 		JSONObject jsonObject4 = JSONObject.fromObject(param4);
 		JSONObject jsonObject5 = JSONObject.fromObject(param5);
 		JSONObject jsonObject6 = JSONObject.fromObject(param6);
+		JSONObject jsonObject7 = JSONObject.fromObject(param7);
 		JSONArray array = new JSONArray();
 		array.add(jsonObject.toString());
 		array.add(jsonObject1.toString());
@@ -446,6 +453,7 @@ public class ClientPayService {
 		array.add(jsonObject4.toString());
 		array.add(jsonObject5.toString());
 		array.add(jsonObject6.toString());
+		array.add(jsonObject7.toString());
 		array.toArray();
 		if(null != po) {
 			//String status = clientEnterpriseRegInfoMapper.selectStatusByCardNoAndMerFullName(po.getCardNo(), po.getMerFullName());

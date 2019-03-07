@@ -227,5 +227,25 @@ public class CrawlerController {
         wb.write(response.getOutputStream());
         return JsonResult.successJsonResult();
     }
+	
+	/**
+	 * <p>导出技校信息</p>
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 * @author 彭斌  2019年3月7日 上午10:13:52
+	 */
+	/*@SuppressWarnings("unchecked")
+    @RequestMapping("exportJXData")
+    @ResponseBody
+    public JsonResult<String> exportJXData(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HSSFWorkbook wb = crawlerService.exportJXData();
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-disposition", "attachment;filename=jx.xlsx");
+        response.flushBuffer();
+        wb.write(response.getOutputStream());
+        return JsonResult.successJsonResult();
+    }*/
 }
 

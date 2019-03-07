@@ -344,6 +344,12 @@ public class CrawlerService {
         Document newPageDoc = null;
         String ganJiErrorMsg = "访问过于频繁，本次访问做以下验证码校验";
         String ganjiErrorMsg2 = "ERR_ACCESS_DENIED";
+        try {
+            Thread.sleep(1000L);
+        } catch (Exception e) {
+            System.out.println("异常：" + e.getMessage());
+        }
+        
         String resp = proxyHttpRequest.doGetRequest(detailUrl);
         if(resp.contains(ganJiErrorMsg) || resp.contains(ganjiErrorMsg2)) {
             System.out.println("#######包含错误信息########"+resp.indexOf(ganJiErrorMsg) + "&" + resp.indexOf(ganjiErrorMsg2)+"###############");

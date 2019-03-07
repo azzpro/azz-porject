@@ -309,7 +309,7 @@ public class CrawlerService {
                     System.out.println("detailUrl="+detailUrl);
                     Document newPageDoc = null;
                     try {
-                        newPageDoc = Jsoup.connect(detailUrl).get();
+                        //newPageDoc = Jsoup.connect(detailUrl).get();
                         newPageDoc = getGanJiDocument(detailUrl);
                     } catch (Exception e) {
                         System.out.println("爬取保险时，在["+ baoxianUrl +"]页面数据出错，跳过此页面，错误信息：" + e.getMessage());

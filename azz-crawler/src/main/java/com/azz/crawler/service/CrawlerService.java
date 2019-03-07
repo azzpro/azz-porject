@@ -185,7 +185,6 @@ public class CrawlerService {
                     String nextUrl = url + pageSuffix;
                     Document newPageDoc = null;
                     try {
-                        System.out.println("nextUrl="+nextUrl);
                         newPageDoc = getGanJiDocument(nextUrl);
                         searchInfos.addAll(getGanjiBaoxianSeachPageInfo(newPageDoc));
                     } catch (Exception e) {

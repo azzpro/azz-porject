@@ -52,7 +52,7 @@
   <select id="selectPayInfoByPayNumber" resultMap="BaseResultMap" parameterType="String">
   	select id,pay_number,three_party_number,order_number,order_status,order_type,order_money,
   	order_channel_money,order_customer_phone,order_time,order_method,pay_instruation
-  	from client_pay where order_number = #{number}
+  	from client_pay where pay_number = #{number}
   </select>
   <select id="selectPayList" resultMap="BaseResultMap" parameterType="com.azz.order.client.pojo.bo.PayList">
   	select id,pay_number,three_party_number,order_number,order_status,order_type,order_money,

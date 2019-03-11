@@ -7,7 +7,9 @@
  
 package com.azz.crawler.pojo;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * <P>TODO</P>
@@ -15,6 +17,8 @@ import lombok.Data;
  * @author 彭斌  2019年3月11日 下午5:29:17
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CityInfo {
     private String cityUrl;
     private String cityName;

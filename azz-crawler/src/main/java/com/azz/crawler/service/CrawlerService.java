@@ -34,6 +34,7 @@ import com.azz.crawler.config.Bdsh5KeyWordData;
 import com.azz.crawler.config.GanjiKeyWordData;
 import com.azz.crawler.pojo.BaixingTitle;
 import com.azz.crawler.pojo.Bdsh5Title;
+import com.azz.crawler.pojo.CityInfo;
 import com.azz.crawler.pojo.GanJiTitle;
 import com.azz.crawler.pojo.User;
 import com.azz.crawler.pojo.vo.BaoXianInfo;
@@ -82,6 +83,15 @@ public class CrawlerService {
 	 */
 	public JsonResult<List<GanJiTitle>> getGanJiTitles(){
         return JsonResult.successJsonResult(ganjiKeyWordData.getAllTitles());
+    }
+	
+	/**
+	 * <p>初始所有赶集地区数据</p>
+	 * @return
+	 * @author 彭斌  2019年2月27日 下午3:09:05
+	 */
+	public JsonResult<List<CityInfo>> getGanjiCities(){
+        return JsonResult.successJsonResult(ganjiKeyWordData.getCityInfos());
     }
 	
 	/**
@@ -160,7 +170,7 @@ public class CrawlerService {
 		return JsonResult.successJsonResult(result);
 	}
 	
-	public JsonResult<Map<String, List<BaoXianInfo>>> getGanjiSearchInfoByTitle(List<GanJiTitle> titlesToSearch){
+	public JsonResult<Map<String, List<BaoXianInfo>>> getGanjiSearchInfoByTitle(String prefixUrl, List<GanJiTitle> titlesToSearch){
         if(titlesToSearch == null || titlesToSearch.size() == 0) {
             throw new RuntimeException("请选择需要爬取数据的标题");
         }
@@ -186,7 +196,7 @@ public class CrawlerService {
                     Document newPageDoc = null;
                     try {
                         newPageDoc = getGanJiDocument(nextUrl);
-                        searchInfos.addAll(getGanjiBaoxianSeachPageInfo(newPageDoc));
+                        searchInfos.addAll(getGanjiBaoxianSeachPageInfo(prefixUrl, newPageDoc));
                     } catch (Exception e) {
                         System.out.println("爬取保险时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
                         continue;
@@ -295,8 +305,9 @@ public class CrawlerService {
 	 * @param doc
 	 * @return
 	 * @author 彭斌  2019年3月1日 下午2:09:12
+	 * @param prefixUrl 
 	 */
-	private List<BaoXianInfo> getGanjiBaoxianSeachPageInfo(Document doc) {
+	private List<BaoXianInfo> getGanjiBaoxianSeachPageInfo(String prefixUrl, Document doc) {
 	    List<BaoXianInfo> searchInfos = new ArrayList<>();
         Elements lastPageLi = doc.select("div.leftBox div.list ul").last().children();
         System.out.println("开始爬取赶集网保险信息");
@@ -305,7 +316,7 @@ public class CrawlerService {
             if(lastPageLi != null && lastPageLi.size() > 0) {
                 for (Element info : lastPageLi) {
                     String baoxianUrl = info.select("div.txt p a").attr("href").trim();
-                    String detailUrl = "http://sz.ganji.com"+baoxianUrl;
+                    String detailUrl = prefixUrl + baoxianUrl;
                     System.out.println("detailUrl="+detailUrl);
                     Document newPageDoc = null;
                     try {

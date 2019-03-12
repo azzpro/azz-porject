@@ -198,6 +198,7 @@ public class CrawlerService {
                         newPageDoc = getGanJiDocument(nextUrl);
                         searchInfos.addAll(getGanjiBaoxianSeachPageInfo(prefixUrl, newPageDoc));
                     } catch (Exception e) {
+                    	e.printStackTrace();
                         System.out.println("爬取保险时，在第"+ page +"页获取页面数据出错，跳过此页面，错误信息：" + e.getMessage());
                         continue;
                     }
@@ -209,7 +210,6 @@ public class CrawlerService {
         }
         return JsonResult.successJsonResult(result);
     }
-	
 	
 	/**
 	 * 
@@ -300,6 +300,12 @@ public class CrawlerService {
 		return searchInfos;
 	}
 	
+	public static void main(String[] args) {
+		Document doc = Jsoup.parse("");
+		System.out.println(doc);
+		System.out.println(doc.select("div").last());
+	}
+	
 	/**
 	 * <p>导出赶集网保险信息</p>
 	 * @param doc
@@ -355,6 +361,7 @@ public class CrawlerService {
         Document newPageDoc = null;
         String ganJiErrorMsg = "访问过于频繁，本次访问做以下验证码校验";
         String ganjiErrorMsg2 = "ERR_ACCESS_DENIED";
+        String ganjiErrorMsg3 = "The requested URL could not be retrieved";
         try {
             Thread.sleep(1000L);
         } catch (Exception e) {
@@ -363,10 +370,11 @@ public class CrawlerService {
         
         try {
             String resp = proxyHttpRequest.doGetRequest(detailUrl);
-            if(resp.contains(ganJiErrorMsg) || resp.contains(ganjiErrorMsg2)) {
-                System.out.println("#######包含错误信息########"+resp.indexOf(ganJiErrorMsg) + "&" + resp.indexOf(ganjiErrorMsg2)+"###############");
+            if(resp.contains(ganJiErrorMsg) || resp.contains(ganjiErrorMsg2) || resp.contains(ganjiErrorMsg3)) {
+                //System.out.println("#######包含错误信息########"+resp.indexOf(ganJiErrorMsg) + "&" + resp.indexOf(ganjiErrorMsg2)+"###############");
                 newPageDoc = Jsoup.parse(proxyHttpRequest.doGetRequest(detailUrl, true));
             } else {
+            	//System.out.println("#######未包含错误信息#######"+resp.substring(0,500));
                 newPageDoc = Jsoup.parse(resp);
             }
         } catch (Exception e) {

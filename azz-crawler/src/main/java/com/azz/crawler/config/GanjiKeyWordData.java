@@ -89,6 +89,7 @@ public class GanjiKeyWordData {
 						}
 					}
 	            }
+	            LOGGER.info("共初始化了"+cityInfos.size()+"个城市");
 	            try {
 	            } catch (Exception e) {
 	                e.printStackTrace();

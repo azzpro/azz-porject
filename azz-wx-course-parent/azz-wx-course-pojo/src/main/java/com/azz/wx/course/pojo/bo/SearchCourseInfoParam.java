@@ -38,5 +38,10 @@ public class SearchCourseInfoParam extends QueryPage{
 	 */
 	private Integer sortType = 1;
 	
+	/**
+	 * 所属二级分类编码
+	 */
+	private String classificationCode;
+	
 }
 

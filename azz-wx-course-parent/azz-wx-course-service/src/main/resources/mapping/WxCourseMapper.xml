@@ -383,6 +383,8 @@
 		GROUP BY
 			wscr.course_code
 	) t1 ON t1.course_code = wc.course_code
+	JOIN wx_course_classification wcc3 on wcc3.classification_code = wc.classification_code
+	JOIN wx_course_classification wcc2 on wcc3.classification_parent_code = wcc2.classification_code
 	<where>
 		wc.status != 0
 		<if test="status != null">
@@ -390,6 +392,9 @@
 		</if>
 		<if test="courseName != null and courseName != ''">
 			AND wc.course_name LIKE CONCAT('%', #{courseName}, '%') 
+		</if>
+		<if test="classificationCode != null and classificationCode != ''">
+			AND wcc2.classification_code = #{classificationCode}
 		</if>
 	</where>
 	<if test="sortType == 1">

@@ -34,5 +34,10 @@ public class ClassificationParams {
      */
     private String assortmentName;
     
+    /**
+     * 图片url
+     */
+    private String assortmentPicUrl;
+    
 }
 

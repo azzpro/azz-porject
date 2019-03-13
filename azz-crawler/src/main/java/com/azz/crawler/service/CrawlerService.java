@@ -106,7 +106,7 @@ public class CrawlerService {
 	    if(null == name || null == pwd) {
 	        throw new RuntimeException("账号密码异常");
         }
-	    if(!"admin".equals(name) || !"5S3DyUZ8".equals(pwd)) {
+	    if(!"admin".equals(name) || !"GYjQlDqe".equals(pwd)) {
 	        throw new RuntimeException("账号密码错误");
 	    }
 	    

@@ -425,7 +425,8 @@
 		wc.course_pic_url AS coursePicUrl,
 		t.start_class_time AS latelyStartClassTime,
 		t.hours AS hours,
-		IFNULL(t1.buyCount, 0) AS buyCount
+		IFNULL(t1.buyCount, 0) AS buyCount,
+		t2.minPrice as minPrice
 	FROM
 		wx_course wc
 	LEFT JOIN (
@@ -458,6 +459,15 @@
 		WHERE
 			wcoi.course_code = #{courseCode}
 	) t1 ON t1.course_code = wc.course_code
+	LEFT JOIN (
+		SELECT
+			wscr.course_code,
+			min(wscr.price) AS minPrice
+		FROM
+			wx_course_start_class_record wscr
+		GROUP BY
+			wscr.course_code
+	) t2 ON t2.course_code = wc.course_code
 	WHERE
 		wc.course_code = #{courseCode}
   </select>

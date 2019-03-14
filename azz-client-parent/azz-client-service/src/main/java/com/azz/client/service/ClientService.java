@@ -159,7 +159,7 @@ public class ClientService {
 			String openid = phoneNumber.substring(WxCourseConstants.WX_COURSE_LOGIN_USER_NAME_PREFIX.length());
 			ClientUser clientUser = clientUserMapper.getClientUserByOpenid(openid);
 			if(clientUser == null) {// 若查不到用户信息，说明此用户未绑定过手机，即非客户端用户
-				throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_NOT_BING_USER);
+				throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_NOT_BIND_USER);
 			}
 			return JsonResult.successJsonResult();
 		}

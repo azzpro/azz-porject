@@ -108,7 +108,7 @@ public class CourseController {
         	LoginClientUserInfo loginClientUser = jr.getData();
         	loginClientUser.setSessionId(subject.getSession().getId());
         	WebUtils.setShiroSessionAttr(ClientConstants.LOGIN_CLIENT_USER, loginClientUser);
-    		return JsonResult.successJsonResult(new UserInfo(null, wxUserInfo));
+    		return JsonResult.successJsonResult(new UserInfo(loginClientUser, wxUserInfo));
     	}else {
     		WxUserInfo wxUserInfo = new WxUserInfo();
         	if(StringUtils.isBlank(code)) {

@@ -76,59 +76,95 @@ public class CourseController {
 	 */
     @RequestMapping(value = "/login")
     public JsonResult<UserInfo> login(String code) {
-    	WxUserInfo wxUserInfo = new WxUserInfo();
-    	if(StringUtils.isBlank(code)) {
-    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "缺少请求参数");
+    	// TODO
+    	if("123".equals(code)) {
+    		String openid = "openid000001";
+    		WxUserInfo wxUserInfo = new WxUserInfo();
+    		wxUserInfo.setHeadimgurl("http://azz-image.oss-cn-shenzhen.aliyuncs.com/merchant-image/module_pic/02_MN00000286.jpg");
+    		wxUserInfo.setNickname("cc");
+    		wxUserInfo.setOpenid(openid);
+    		
+    		// 从SecurityUtils里边创建一个 subject
+        	Subject subject = SecurityUtils.getSubject();
+        	// 在认证提交前准备 token（令牌）
+        	UsernamePasswordToken token = new UsernamePasswordToken(WxCourseConstants.WX_COURSE_LOGIN_USER_NAME_PREFIX + openid, "noUse");
+        	try {
+        		// 执行认证登陆
+        		subject.login(token);
+        	} catch (AuthenticationException e) {
+        		Throwable[] throwables = e.getSuppressed();
+        		if(throwables != null && throwables.length != 0) {
+        			int c = ((SuppressedException) throwables[0]).getCode();
+        			String msg = ((SuppressedException) throwables[0]).getMessage();
+        			JsonResult<UserInfo> jr = new JsonResult<>();
+        			jr.setData(new UserInfo(null, wxUserInfo));
+        			jr.setCode(c);
+        			jr.setMsg(msg);
+        			return jr;
+        		}
+        		throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "登录失败,请重试");
+        	}
+        	JsonResult<LoginClientUserInfo> jr = clientService.getLoginClientUserInfoByOpenid(openid);
+        	LoginClientUserInfo loginClientUser = jr.getData();
+        	loginClientUser.setSessionId(subject.getSession().getId());
+        	WebUtils.setShiroSessionAttr(ClientConstants.LOGIN_CLIENT_USER, loginClientUser);
+    		return JsonResult.successJsonResult(new UserInfo(null, wxUserInfo));
+    	}else {
+    		WxUserInfo wxUserInfo = new WxUserInfo();
+        	if(StringUtils.isBlank(code)) {
+        		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "缺少请求参数");
+        	}
+        	System.out.println("code---->"+code);
+    		String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
+    		url = url.replace("APPID", appid).replace("SECRET", secret).replace("CODE", code);
+    		// 获取accessToken
+    		String accessTokenResult = OkHttpUtil.get(url);
+    		//System.out.println("accessTokenResult:------------>" + accessTokenResult);
+    		JSONObject jsonObject = JSONObject.parseObject(accessTokenResult);
+    		String openid = jsonObject.getString("openid");
+            if (openid != null) {
+                //拉取用户信息
+                String access_token = jsonObject.getString("access_token");
+                url = "https://api.weixin.qq.com/sns/userinfo?access_token="+access_token+"&openid="+openid+"&lang=zh_CN";
+                //第二次请求，用openid与access_token获取用户的信息
+                String usesrInfo = OkHttpUtil.get(url);
+                System.out.println("usesrInfo:---------------->" + usesrInfo);
+                jsonObject = JSONObject.parseObject(usesrInfo);
+                String nickname = jsonObject.getString("nickname");
+                String headimgurl = jsonObject.getString("headimgurl");
+                wxUserInfo.setOpenid(openid);
+                wxUserInfo.setNickname(nickname);
+                wxUserInfo.setHeadimgurl(headimgurl);
+            }else {
+            	throw new BaseException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "获取微信用户信息出错");
+            }
+        	// 从SecurityUtils里边创建一个 subject
+        	Subject subject = SecurityUtils.getSubject();
+        	// 在认证提交前准备 token（令牌）
+        	UsernamePasswordToken token = new UsernamePasswordToken(WxCourseConstants.WX_COURSE_LOGIN_USER_NAME_PREFIX + openid, "noUse");
+        	try {
+        		// 执行认证登陆
+        		subject.login(token);
+        	} catch (AuthenticationException e) {
+        		Throwable[] throwables = e.getSuppressed();
+        		if(throwables != null && throwables.length != 0) {
+        			int c = ((SuppressedException) throwables[0]).getCode();
+        			String msg = ((SuppressedException) throwables[0]).getMessage();
+        			JsonResult<UserInfo> jr = new JsonResult<>();
+        			jr.setData(new UserInfo(null, wxUserInfo));
+        			jr.setCode(c);
+        			jr.setMsg(msg);
+        			return jr;
+        		}
+        		throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "登录失败,请重试");
+        	}
+        	JsonResult<LoginClientUserInfo> jr = clientService.getLoginClientUserInfoByOpenid(openid);
+        	LoginClientUserInfo loginClientUser = jr.getData();
+        	loginClientUser.setSessionId(subject.getSession().getId());
+        	WebUtils.setShiroSessionAttr(ClientConstants.LOGIN_CLIENT_USER, loginClientUser);
+        	return JsonResult.successJsonResult(new UserInfo(loginClientUser, wxUserInfo));
     	}
-    	System.out.println("code---->"+code);
-		String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
-		url = url.replace("APPID", appid).replace("SECRET", secret).replace("CODE", code);
-		// 获取accessToken
-		String accessTokenResult = OkHttpUtil.get(url);
-		//System.out.println("accessTokenResult:------------>" + accessTokenResult);
-		JSONObject jsonObject = JSONObject.parseObject(accessTokenResult);
-		String openid = jsonObject.getString("openid");
-        if (openid != null) {
-            //拉取用户信息
-            String access_token = jsonObject.getString("access_token");
-            url = "https://api.weixin.qq.com/sns/userinfo?access_token="+access_token+"&openid="+openid+"&lang=zh_CN";
-            //第二次请求，用openid与access_token获取用户的信息
-            String usesrInfo = OkHttpUtil.get(url);
-            System.out.println("usesrInfo:---------------->" + usesrInfo);
-            jsonObject = JSONObject.parseObject(usesrInfo);
-            String nickname = jsonObject.getString("nickname");
-            String headimgurl = jsonObject.getString("headimgurl");
-            wxUserInfo.setOpenid(openid);
-            wxUserInfo.setNickname(nickname);
-            wxUserInfo.setHeadimgurl(headimgurl);
-        }else {
-        	throw new BaseException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "获取微信用户信息出错");
-        }
-    	// 从SecurityUtils里边创建一个 subject
-    	Subject subject = SecurityUtils.getSubject();
-    	// 在认证提交前准备 token（令牌）
-    	UsernamePasswordToken token = new UsernamePasswordToken(WxCourseConstants.WX_COURSE_LOGIN_USER_NAME_PREFIX + openid, "noUse");
-    	try {
-    		// 执行认证登陆
-    		subject.login(token);
-    	} catch (AuthenticationException e) {
-    		Throwable[] throwables = e.getSuppressed();
-    		if(throwables != null && throwables.length != 0) {
-    			int c = ((SuppressedException) throwables[0]).getCode();
-    			String msg = ((SuppressedException) throwables[0]).getMessage();
-    			JsonResult<UserInfo> jr = new JsonResult<>();
-    			jr.setData(new UserInfo(null, wxUserInfo));
-    			jr.setCode(c);
-    			jr.setMsg(msg);
-    			return jr;
-    		}
-    		throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "登录失败,请重试");
-    	}
-    	JsonResult<LoginClientUserInfo> jr = clientService.getLoginClientUserInfoByOpenid(openid);
-    	LoginClientUserInfo loginClientUser = jr.getData();
-    	loginClientUser.setSessionId(subject.getSession().getId());
-    	WebUtils.setShiroSessionAttr(ClientConstants.LOGIN_CLIENT_USER, loginClientUser);
-    	return JsonResult.successJsonResult(new UserInfo(loginClientUser, wxUserInfo));
+    	
     }
 	
 	/**

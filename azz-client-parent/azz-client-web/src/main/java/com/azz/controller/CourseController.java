@@ -27,7 +27,6 @@ import com.azz.controller.utils.WebUtils;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.ShiroAuthErrorCode;
-import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.ClientConstants;
 import com.azz.core.constants.WxCourseConstants;
@@ -116,7 +115,6 @@ public class CourseController {
         	if(StringUtils.isBlank(code)) {
         		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "缺少请求参数");
         	}
-        	System.out.println("code---->"+code);
     		String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
     		url = url.replace("APPID", appid).replace("SECRET", secret).replace("CODE", code);
     		// 获取accessToken
@@ -130,7 +128,6 @@ public class CourseController {
                 url = "https://api.weixin.qq.com/sns/userinfo?access_token="+access_token+"&openid="+openid+"&lang=zh_CN";
                 //第二次请求，用openid与access_token获取用户的信息
                 String usesrInfo = OkHttpUtil.get(url);
-                System.out.println("usesrInfo:---------------->" + usesrInfo);
                 jsonObject = JSONObject.parseObject(usesrInfo);
                 String nickname = jsonObject.getString("nickname");
                 String headimgurl = jsonObject.getString("headimgurl");
@@ -169,6 +166,46 @@ public class CourseController {
         	return JsonResult.successJsonResult(new UserInfo(loginClientUser, wxUserInfo));
     	}
     	
+    }
+    
+    /**
+	 * 
+	 * <p>微信课程登录</p>
+	 * @param openid
+	 * @return
+	 * @author 黄智聪  2019年1月25日 下午1:03:08
+	 */
+    @RequestMapping(value = "/relogin")
+    public JsonResult<LoginClientUserInfo> relogin(String openid) {
+    	if(StringUtils.isBlank(openid)) {
+    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "缺少请求参数");
+    	}
+    	// 从SecurityUtils里边创建一个 subject
+    	Subject subject = SecurityUtils.getSubject();
+    	// 在认证提交前准备 token（令牌）
+    	UsernamePasswordToken token = new UsernamePasswordToken(WxCourseConstants.WX_COURSE_LOGIN_USER_NAME_PREFIX + openid, "noUse");
+    	try {
+    		// 执行认证登陆
+    		subject.login(token);
+    		// 设置为负数表示永不超时
+    		subject.getSession().setTimeout(-1000L);
+    	} catch (AuthenticationException e) {
+    		Throwable[] throwables = e.getSuppressed();
+    		if(throwables != null && throwables.length != 0) {
+    			int c = ((SuppressedException) throwables[0]).getCode();
+    			String msg = ((SuppressedException) throwables[0]).getMessage();
+    			JsonResult<LoginClientUserInfo> jr = new JsonResult<>();
+    			jr.setCode(c);
+    			jr.setMsg(msg);
+    			return jr;
+    		}
+    		throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "登录失败,请重试");
+    	}
+    	JsonResult<LoginClientUserInfo> jr = clientService.getLoginClientUserInfoByOpenid(openid);
+    	LoginClientUserInfo loginClientUser = jr.getData();
+    	loginClientUser.setSessionId(subject.getSession().getId());
+    	WebUtils.setShiroSessionAttr(ClientConstants.LOGIN_CLIENT_USER, loginClientUser);
+    	return JsonResult.successJsonResult(loginClientUser);
     }
 	
 	/**

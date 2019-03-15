@@ -24,5 +24,9 @@ public class BindingPhomeParam {
     private String phoneNumber;
     @NotBlank(message = "验证密码不允许为空")
     private String verificationCode;
+    @NotBlank(message = "参数异常")
+    private String avatarUrl;
+    @NotBlank(message = "参数异常")
+    private String nickName;
 }
 

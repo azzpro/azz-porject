@@ -167,15 +167,15 @@ public class PersonalCenterService {
             this.sendPasswordMsg(phoneNumber, password);
             
             // 绑定微信客户表
-            wxUser.setOpenid(openid);
             wxUser.setUserCode(clientUserCode);
-            
             bindingRecord.setUserCode(clientUserCode);
         } else {
-            wxUser.setOpenid(openid);
             wxUser.setUserCode(user.getClientUserCode());
             bindingRecord.setUserCode(user.getClientUserCode());
         }
+        wxUser.setOpenid(openid);
+        wxUser.setAvatarUrl(param.getAvatarUrl());
+        wxUser.setNickName(param.getNickName());
         clientWxUserMapper.insertUser(wxUser);
         
         bindingRecord.setOpenid(openid);

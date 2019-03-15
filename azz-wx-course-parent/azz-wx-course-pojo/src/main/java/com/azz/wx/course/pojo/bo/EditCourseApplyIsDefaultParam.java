@@ -16,7 +16,7 @@ import lombok.Data;
  */
 @Data
 public class EditCourseApplyIsDefaultParam {
-    private Byte isDefualt;
+    private Byte isDefault;
     private String applyCode;
 }
 

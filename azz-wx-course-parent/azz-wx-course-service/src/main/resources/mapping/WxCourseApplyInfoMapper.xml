@@ -248,6 +248,6 @@
   <update id="updateIsDefaultByApplyInfoCode" parameterType="com.azz.wx.course.pojo.bo.EditCourseApplyIsDefaultParam">
     update wx_course_apply_info
     set is_default = #{isDefault,jdbcType=TINYINT}
-    where apply_info_code = #{applyInfoCode,jdbcType=VARCHAR}
+    where apply_info_code = #{applyCode,jdbcType=VARCHAR}
   </update>
 </mapper>

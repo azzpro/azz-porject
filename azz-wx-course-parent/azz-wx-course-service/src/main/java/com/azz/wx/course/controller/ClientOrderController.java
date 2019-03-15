@@ -83,7 +83,7 @@ public class ClientOrderController {
 	 * @return
 	 * @author 黄智聪  2019年3月15日 下午12:07:16
 	 */
-	@RequestMapping(value = "getCourseOrders", method = RequestMethod.POST)
+	@RequestMapping(value = "getPersonalCourseOrders", method = RequestMethod.POST)
 	public JsonResult<Pagination<CourseOrderInfo>> getPersonalCourseOrders(@RequestBody SearchPersonalOrderParam param){
 		return orderService.getPersonalCourseOrders(param);
 	}

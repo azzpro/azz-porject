@@ -155,7 +155,7 @@ public class ApplyInfoService {
                 }
                 EditCourseApplyIsDefaultParam param = new EditCourseApplyIsDefaultParam();
                 param.setApplyCode(dbApplyCode);
-                param.setIsDefualt((byte)0);
+                param.setIsDefault((byte)0);
                 wxCourseApplyInfoMapper.updateIsDefaultByApplyInfoCode(param);
             }
         }
@@ -163,7 +163,7 @@ public class ApplyInfoService {
         // 设置新的默认
         EditCourseApplyIsDefaultParam param = new EditCourseApplyIsDefaultParam();
         param.setApplyCode(applyCode);
-        param.setIsDefualt((byte)1);
+        param.setIsDefault((byte)1);
         wxCourseApplyInfoMapper.updateIsDefaultByApplyInfoCode(param);
         
         return JsonResult.successJsonResult();

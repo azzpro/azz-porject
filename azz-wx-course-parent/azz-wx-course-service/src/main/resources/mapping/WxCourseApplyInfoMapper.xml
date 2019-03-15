@@ -235,7 +235,7 @@
       company = #{company,jdbcType=VARCHAR},
       graduate_school = #{graduateSchool,jdbcType=VARCHAR},
 	  modifier = #{modifier,jdbcType=VARCHAR},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where apply_info_code = #{applyInfoCode,jdbcType=VARCHAR}
   </update>
   

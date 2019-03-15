@@ -22,8 +22,10 @@ import com.azz.core.constants.ClientConstants.PayMethod;
 import com.azz.core.constants.ClientConstants.PayStatus;
 import com.azz.core.constants.WxCourseConstants.CourseOrderStatus;
 import com.azz.exception.JSR303ValidationException;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
+import com.azz.util.SystemSeqUtils;
 import com.azz.wx.course.mapper.ClientUserMapper;
 import com.azz.wx.course.mapper.WxCourseEvaluationMapper;
 import com.azz.wx.course.mapper.WxCourseOrderItemMapper;
@@ -39,6 +41,7 @@ import com.azz.wx.course.pojo.bo.ChangeOrderStatusParam;
 import com.azz.wx.course.pojo.bo.EvaluateCourseParam;
 import com.azz.wx.course.pojo.bo.PayOrderParam;
 import com.azz.wx.course.pojo.bo.SearchCourseOrderParam;
+import com.azz.wx.course.pojo.bo.SearchPersonalOrderParam;
 import com.azz.wx.course.pojo.vo.CourseOrderDetail;
 import com.azz.wx.course.pojo.vo.CourseOrderInfo;
 import com.azz.wx.course.pojo.vo.PayOrderInfo;
@@ -49,7 +52,7 @@ import com.azz.wx.course.pojo.vo.WxUserInfo;
 import com.github.pagehelper.PageHelper;
 
 /**
- * <P>TODO</P>
+ * <P>微信订单</P>
  * @version 1.0
  * @author 黄智聪  2019年1月22日 下午5:10:02
  */
@@ -75,6 +78,10 @@ public class OrderService {
 	@Autowired
 	private WxCourseEvaluationMapper wxCourseEvaluationMapper;
 	
+	@Autowired
+	private DbSequenceService dbSequenceService;
+	
+	
 	/*******************************  微信课程首页接口   start ********************************/
 	
 	/**
@@ -89,7 +96,8 @@ public class OrderService {
 		if(startClassRecord == null){
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "开课信息不存在");
 		}
-		String orderCode = System.currentTimeMillis() + ""; // TODO
+		String orderCode = SystemSeqUtils.getSeq(dbSequenceService.getWxCourseOrderSequenceNumber());
+		// 新增一个待确认的商户订单
 		ClientUser user = clientUserMapper.getClientUserByClientUserCode(param.getClientUserCode());
 		WxUserInfo wxUserInfo = clientUserMapper.getWxUserInfo(param.getClientUserCode());
 		// 下单人：若姓名为空，取手机号
@@ -408,6 +416,20 @@ public class OrderService {
 			wxCourseOrderStatusMapper.insertSelective(record);
 		}
 		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
+	 * <p>查询个人报名课程信息列表</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年1月21日 下午7:26:26
+	 */
+	public JsonResult<Pagination<CourseOrderInfo>> getPersonalCourseOrders(@RequestBody SearchPersonalOrderParam param){
+		JSR303ValidateUtils.validate(param);
+		PageHelper.startPage(param.getPageNum(), param.getPageSize());
+		List<CourseOrderInfo> infos = wxCourseOrderMapper.getPersonalCourseOrders(param);
+		return JsonResult.successJsonResult(new Pagination<>(infos));
 	}
 	
 	/*******************************  微信课程首页接口     end  ********************************/

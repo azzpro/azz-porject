@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.wx.course.pojo.WxCourseOrder;
 import com.azz.wx.course.pojo.bo.SearchCourseOrderParam;
+import com.azz.wx.course.pojo.bo.SearchPersonalOrderParam;
 import com.azz.wx.course.pojo.vo.CourseOrderDetail;
 import com.azz.wx.course.pojo.vo.CourseOrderInfo;
 import com.azz.wx.course.pojo.vo.PayOrderInfo;
@@ -50,6 +51,15 @@ public interface WxCourseOrderMapper {
      * @author 黄智聪  2019年1月22日 下午6:12:52
      */
     List<CourseOrderInfo> getCourseOrders(SearchCourseOrderParam param);
+    
+    /**
+     * 
+     * <p>查询个人参与的课程信息列表</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2019年3月15日 上午11:57:53
+     */
+    List<CourseOrderInfo> getPersonalCourseOrders(SearchPersonalOrderParam param);
     
     /**
      * 

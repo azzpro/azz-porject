@@ -20,6 +20,7 @@ import com.azz.wx.course.pojo.bo.ChangeOrderStatusParam;
 import com.azz.wx.course.pojo.bo.EvaluateCourseParam;
 import com.azz.wx.course.pojo.bo.PayOrderParam;
 import com.azz.wx.course.pojo.bo.SearchCourseOrderParam;
+import com.azz.wx.course.pojo.bo.SearchPersonalOrderParam;
 import com.azz.wx.course.pojo.vo.CourseOrderDetail;
 import com.azz.wx.course.pojo.vo.CourseOrderInfo;
 import com.azz.wx.course.pojo.vo.PayOrderInfo;
@@ -73,6 +74,18 @@ public class ClientOrderController {
 	@RequestMapping(value = "getCourseOrders", method = RequestMethod.POST)
 	public JsonResult<Pagination<CourseOrderInfo>> getCourseOrders(@RequestBody SearchCourseOrderParam param){
 		return orderService.getCourseOrders(param);
+	}
+	
+	/**
+	 * 
+	 * <p>查询个人报名课程信息列表</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年3月15日 下午12:07:16
+	 */
+	@RequestMapping(value = "getCourseOrders", method = RequestMethod.POST)
+	public JsonResult<Pagination<CourseOrderInfo>> getPersonalCourseOrders(@RequestBody SearchPersonalOrderParam param){
+		return orderService.getPersonalCourseOrders(param);
 	}
 	
 	/**

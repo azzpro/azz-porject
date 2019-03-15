@@ -91,6 +91,8 @@ public class CourseController {
         	try {
         		// 执行认证登陆
         		subject.login(token);
+        		// 设置为负数表示永不超时
+        		subject.getSession().setTimeout(-1000L);
         	} catch (AuthenticationException e) {
         		Throwable[] throwables = e.getSuppressed();
         		if(throwables != null && throwables.length != 0) {
@@ -145,6 +147,8 @@ public class CourseController {
         	try {
         		// 执行认证登陆
         		subject.login(token);
+        		// 设置为负数表示永不超时
+        		subject.getSession().setTimeout(-1000L);
         	} catch (AuthenticationException e) {
         		Throwable[] throwables = e.getSuppressed();
         		if(throwables != null && throwables.length != 0) {

@@ -29,3 +29,7 @@ com.azz.sequence.sequence.service.impl.WxClassificationSequenceImpl
 com.azz.sequence.sequence.service.impl.WxCourseSequenceImpl
 com.azz.sequence.sequence.service.impl.WxParamTremSequenceImpl
 com.azz.sequence.sequence.service.impl.WxParamValueSequenceImpl
+com.azz.sequence.sequence.service.impl.WxCourseOrderSequenceImpl
+com.azz.sequence.sequence.service.impl.WxCourseOrderAfterSaleApplySequenceImpl
+com.azz.sequence.sequence.service.impl.WxCourseOrderRefundSequenceImpl
+com.azz.sequence.sequence.service.impl.WxCourseOrderWithdrawSequenceImpl

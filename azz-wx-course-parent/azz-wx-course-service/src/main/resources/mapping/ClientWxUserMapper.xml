@@ -24,7 +24,7 @@
 	</select>
 	
 	<insert id="insertUser" parameterType="com.azz.wx.course.pojo.bo.AddClientWxUserParam">
-		insert into client_wx_user (openid, user_code) values (#{openid},#{userCode})
+		insert into client_wx_user (openid, user_code,avatar_url, nick_name) values (#{openid},#{userCode},#{avatarUrl},#{nickName})
 	</insert>
 	
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">

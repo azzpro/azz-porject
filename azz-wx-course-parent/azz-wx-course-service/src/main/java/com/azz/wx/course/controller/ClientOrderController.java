@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
+import com.azz.wx.course.pojo.bo.CallBackParam;
 import com.azz.wx.course.pojo.bo.ChangeOrderStatusParam;
 import com.azz.wx.course.pojo.bo.EvaluateCourseParam;
 import com.azz.wx.course.pojo.bo.PayOrderParam;
@@ -131,6 +132,18 @@ public class ClientOrderController {
 	@RequestMapping(value = "confirmCourseOrder", method = RequestMethod.POST)
 	public JsonResult<String> confirmCourseOrder(@RequestBody ChangeOrderStatusParam param){
 		return orderService.confirmCourseOrder(param);
+	}
+	
+	/**
+	 * 
+	 * <p>微信订单支付成功后的操作</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月26日 下午3:41:55
+	 */
+	@RequestMapping(value = "courseOrderPaySuccessOpt", method = RequestMethod.POST)
+	public JsonResult<String> courseOrderPaySuccessOpt(@RequestBody CallBackParam param){
+		return orderService.courseOrderPaySuccessOpt(param);
 	}
 	
 }

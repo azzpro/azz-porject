@@ -37,6 +37,7 @@ import com.azz.wx.course.pojo.WxCourseEvaluation;
 import com.azz.wx.course.pojo.WxCourseOrder;
 import com.azz.wx.course.pojo.WxCourseOrderItem;
 import com.azz.wx.course.pojo.WxCourseOrderStatus;
+import com.azz.wx.course.pojo.bo.CallBackParam;
 import com.azz.wx.course.pojo.bo.ChangeOrderStatusParam;
 import com.azz.wx.course.pojo.bo.EvaluateCourseParam;
 import com.azz.wx.course.pojo.bo.PayOrderParam;
@@ -430,6 +431,48 @@ public class OrderService {
 		PageHelper.startPage(param.getPageNum(), param.getPageSize());
 		List<CourseOrderInfo> infos = wxCourseOrderMapper.getPersonalCourseOrders(param);
 		return JsonResult.successJsonResult(new Pagination<>(infos));
+	}
+	
+	/**
+	 * 
+	 * <p>微信订单支付成功后的操作</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月26日 下午3:41:55
+	 */
+	public JsonResult<String> courseOrderPaySuccessOpt(@RequestBody CallBackParam param){
+		JSR303ValidateUtils.validate(param);
+		String orderCode = param.getOrderCode();
+		PayOrderInfo info = wxCourseOrderMapper.getPayOrderInfo(param.getOrderCode());
+		if(info == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "课程订单不存在");
+		}
+		// 判断订单是否处于待支付状态
+		if(info.getOrderStatus() != CourseOrderStatus.NOT_PAID.getValue()) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "课程订单状态异常");
+		}
+		Date nowDate = new Date();
+		// 修改订单
+		WxCourseOrder orderRecord = WxCourseOrder.builder()
+				.orderCode(orderCode)
+				.orderStatusId(CourseOrderStatus.PENDING.getValue())
+				.paymentMethod(param.getPayMethod())
+				.paymentType(param.getOrderType())
+				.paymentStatus(PayStatus.PAY_SUCCESS.getValue())
+				.modifyTime(nowDate)
+				.build();
+		wxCourseOrderMapper.updateByOrderCode(orderRecord);
+		
+		// 插入课程订单状态变化记录
+		WxCourseOrderStatus record = WxCourseOrderStatus.builder()
+				.createTime(nowDate)
+				.orderCode(orderCode)
+				.orderStatusId(CourseOrderStatus.PENDING.getValue())
+				.remark("订单支付成功，状态变更为待处理")
+				.build();
+		wxCourseOrderStatusMapper.insertSelective(record);
+		
+		return JsonResult.successJsonResult();
 	}
 	
 	/*******************************  微信课程首页接口     end  ********************************/

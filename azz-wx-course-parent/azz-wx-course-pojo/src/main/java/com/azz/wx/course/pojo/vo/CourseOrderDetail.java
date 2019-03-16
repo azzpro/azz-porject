@@ -40,6 +40,8 @@ public class CourseOrderDetail {
 	private Date payTime;
 	
 	private String payNumber;
+	
+	private String applyInfoCode;
 	/**  订单信息 end  **/
 	
 	

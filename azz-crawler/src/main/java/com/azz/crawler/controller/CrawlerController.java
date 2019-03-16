@@ -27,6 +27,7 @@ import org.springframework.web.util.WebUtils;
 import com.azz.crawler.common.JsonResult;
 import com.azz.crawler.pojo.BaixingTitle;
 import com.azz.crawler.pojo.Bdsh5Title;
+import com.azz.crawler.pojo.CityInfo;
 import com.azz.crawler.pojo.GanJiTitle;
 import com.azz.crawler.pojo.vo.BaoXianInfo;
 import com.azz.crawler.pojo.vo.SearchInfo;
@@ -70,6 +71,11 @@ public class CrawlerController {
         return "baixing";
     }
 	
+	@RequestMapping("citySelection")
+    public String citySelection() {
+        return "citySelection";
+    }
+	
 	/**
 	 * 
 	 * <p>查询本地生活所有标题</p>
@@ -94,7 +100,7 @@ public class CrawlerController {
     }
 
 
-	/* * 
+	/**
 	 * <p>查询百姓网所有标题</p>
 	 * @return
 	 * @author 黄智聪  2019年2月20日 下午1:40:28
@@ -106,11 +112,21 @@ public class CrawlerController {
 	}
 	
 	
-	
 	@RequestMapping(value = "doLogin",method = RequestMethod.POST)
 	@ResponseBody
 	public JsonResult<String> doLogin(@RequestParam("userName")String userName, @RequestParam("pwd")String pwd, HttpServletRequest req){
 	    return crawlerService.doLogin(userName, pwd, req);
+    }
+	
+	/**
+	 * <p>初始所有赶集网基础标题路由数据</p>
+	 * @return
+	 * @author 彭斌  2019年2月27日 下午3:09:45
+	 */
+	@RequestMapping("getGanjiCities")
+    @ResponseBody
+    public JsonResult<List<CityInfo>> getGanjiCities(CityInfo info, HttpServletRequest request){
+        return crawlerService.getGanjiCities();
     }
 	
 	/**
@@ -129,11 +145,37 @@ public class CrawlerController {
 		return result;
 	}
 	
+	/**
+	 * 
+	 * <p>选择赶集网城市</p>
+	 * @param info
+	 * @param request
+	 * @return
+	 * @author 黄智聪  2019年3月11日 下午6:32:19
+	 */
+	@RequestMapping(value = "selectCity",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public JsonResult<String> selectCity(@RequestBody CityInfo info, HttpServletRequest request){
+		WebUtils.setSessionAttribute(request, "ganjiCity", info);
+        return JsonResult.successJsonResult();
+    }
+	
 	
 	@RequestMapping(value = "getGanjiSearchInfoByTitle", produces = "application/json;charset=utf-8")
     @ResponseBody
     public JsonResult<Map<String, List<BaoXianInfo>>> getGanjiSearchInfoByTitle(@RequestBody List<GanJiTitle> titlesToSearch, HttpServletRequest request){
-        JsonResult<Map<String, List<BaoXianInfo>>> result = crawlerService.getGanjiSearchInfoByTitle(titlesToSearch);
+		CityInfo info = (CityInfo)WebUtils.getSessionAttribute(request, "ganjiCity");
+		if(info == null) {
+			throw new RuntimeException("请选择城市");
+		}
+		String prefixUrl = info.getCityUrl();
+		// 对url进行处理
+		for (GanJiTitle ganJiTitle : titlesToSearch) {
+			String subfixUrl = ganJiTitle.getUrl();// 只是后缀：如baoxian/  
+			String newUrl = prefixUrl + subfixUrl;
+			ganJiTitle.setUrl(newUrl);
+		}
+		JsonResult<Map<String, List<BaoXianInfo>>> result = crawlerService.getGanjiSearchInfoByTitle(prefixUrl, titlesToSearch);
         Map<String, List<BaoXianInfo>> data = result.getData();
         WebUtils.setSessionAttribute(request, "ganji", data);
         return result;

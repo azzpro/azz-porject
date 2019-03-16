@@ -18,5 +18,7 @@ import lombok.Data;
 public class AddClientWxUserParam {
     private String openid;
     private String userCode;
+    private String avatarUrl;
+    private String nickName;
 }
 

@@ -383,6 +383,8 @@
 		GROUP BY
 			wscr.course_code
 	) t1 ON t1.course_code = wc.course_code
+	JOIN wx_course_classification wcc3 on wcc3.classification_code = wc.classification_code
+	JOIN wx_course_classification wcc2 on wcc3.classification_parent_code = wcc2.classification_code
 	<where>
 		wc.status != 0
 		<if test="status != null">
@@ -390,6 +392,9 @@
 		</if>
 		<if test="courseName != null and courseName != ''">
 			AND wc.course_name LIKE CONCAT('%', #{courseName}, '%') 
+		</if>
+		<if test="classificationCode != null and classificationCode != ''">
+			AND wcc2.classification_code = #{classificationCode}
 		</if>
 	</where>
 	<if test="sortType == 1">
@@ -420,7 +425,8 @@
 		wc.course_pic_url AS coursePicUrl,
 		t.start_class_time AS latelyStartClassTime,
 		t.hours AS hours,
-		IFNULL(t1.buyCount, 0) AS buyCount
+		IFNULL(t1.buyCount, 0) AS buyCount,
+		t2.minPrice as minPrice
 	FROM
 		wx_course wc
 	LEFT JOIN (
@@ -453,6 +459,15 @@
 		WHERE
 			wcoi.course_code = #{courseCode}
 	) t1 ON t1.course_code = wc.course_code
+	LEFT JOIN (
+		SELECT
+			wscr.course_code,
+			min(wscr.price) AS minPrice
+		FROM
+			wx_course_start_class_record wscr
+		GROUP BY
+			wscr.course_code
+	) t2 ON t2.course_code = wc.course_code
 	WHERE
 		wc.course_code = #{courseCode}
   </select>

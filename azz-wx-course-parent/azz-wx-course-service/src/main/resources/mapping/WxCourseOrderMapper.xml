@@ -377,6 +377,29 @@
 	ORDER BY wco.create_time DESC
   </select>
   
+  <select id="getPersonalCourseOrders" parameterType="com.azz.wx.course.pojo.bo.SearchPersonalOrderParam" resultType="com.azz.wx.course.pojo.vo.CourseOrderInfo">
+	SELECT
+		wc.course_pic_name AS coursePicName,
+		wc.course_pic_url AS coursePicUrl,
+		wcoi.course_code AS courseCode,
+		wcoi.start_class_code AS startClassCode,
+		wcoi.course_name AS courseName,
+		wcoi.start_class_time AS startClassTime,
+		wcoi.hours AS hours,
+		wcoi.people_number AS peopleNumber,
+		wcoi.latitude AS latitude,
+		wcoi.longitude AS longitude,
+		wcoi.location AS location
+	FROM
+		wx_course_order wco
+	JOIN wx_course_order_item wcoi ON wco.order_code = wcoi.order_code
+	JOIN wx_course wc ON wcoi.course_code = wc.course_code
+	WHERE
+		wco.creator = #{userCode}
+	AND wco.order_status_id NOT IN (13, 18)
+	ORDER BY wco.create_time DESC
+  </select>
+  
   <select id="getCourseOrderDetail" parameterType="string" resultType="com.azz.wx.course.pojo.vo.CourseOrderDetail">
     SELECT
 		wco.order_code AS orderCode,
@@ -387,6 +410,7 @@
 		wco.grand_total AS grandTotal,
 		wco.order_status_id AS orderStatus,
 		wco.create_time AS orderTime,
+		wco.apply_info_code as applyInfoCode,
 		wcoi.start_class_code AS startClassCode,
 		wcoi.start_class_name AS startClassName,
 		wcoi.start_class_time AS startClassTime,
@@ -398,12 +422,14 @@
 		wcai.phone_number AS phoneNumber,
 		wcai.email AS email,
 		wcai.company AS company,
-		wcai.graduate_school AS graduateSchool
+		wcai.graduate_school AS graduateSchool,
+		wcos.create_time as payTime
 	FROM
 		wx_course_order wco
 	JOIN wx_course_order_item wcoi ON wco.order_code = wcoi.order_code
 	JOIN wx_course wc ON wcoi.course_code = wc.course_code
 	JOIN wx_course_apply_info wcai ON wcai.apply_info_code = wco.apply_info_code
+	LEFT JOIN wx_course_order_status wcos on wcos.order_code = wco.order_code and wcos.order_status_id = 14
 	WHERE
 		wco.order_code = #{orderCode}
   </select>

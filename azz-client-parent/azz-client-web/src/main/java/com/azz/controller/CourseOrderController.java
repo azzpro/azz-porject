@@ -8,6 +8,7 @@
 package com.azz.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +22,7 @@ import com.azz.wx.course.pojo.bo.ChangeOrderStatusParam;
 import com.azz.wx.course.pojo.bo.EvaluateCourseParam;
 import com.azz.wx.course.pojo.bo.PayOrderParam;
 import com.azz.wx.course.pojo.bo.SearchCourseOrderParam;
+import com.azz.wx.course.pojo.bo.SearchPersonalOrderParam;
 import com.azz.wx.course.pojo.vo.CourseOrderDetail;
 import com.azz.wx.course.pojo.vo.CourseOrderInfo;
 import com.azz.wx.course.pojo.vo.PayOrderInfo;
@@ -71,6 +73,19 @@ public class CourseOrderController {
 	public JsonResult<Pagination<CourseOrderInfo>> getCourseOrders(SearchCourseOrderParam param){
 		param.setUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
 		return orderService.getCourseOrders(param);
+	}
+	
+	/**
+	 * 
+	 * <p>查询个人报名课程信息列表</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年1月22日 下午6:15:33
+	 */
+	@RequestMapping(value = "/getPersonalCourseOrders", method = RequestMethod.POST)
+	public JsonResult<Pagination<CourseOrderInfo>> getPersonalCourseOrders(SearchPersonalOrderParam param){
+		param.setUserCode(WebUtils.getLoginClientUser().getClientUserInfo().getClientUserCode());
+		return orderService.getPersonalCourseOrders(param);
 	}
 	
 	/**

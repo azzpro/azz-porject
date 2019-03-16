@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
+import com.azz.wx.course.pojo.bo.CallBackParam;
 import com.azz.wx.course.pojo.bo.ChangeOrderStatusParam;
 import com.azz.wx.course.pojo.bo.EvaluateCourseParam;
 import com.azz.wx.course.pojo.bo.PayOrderParam;
 import com.azz.wx.course.pojo.bo.SearchCourseOrderParam;
+import com.azz.wx.course.pojo.bo.SearchPersonalOrderParam;
 import com.azz.wx.course.pojo.vo.CourseOrderDetail;
 import com.azz.wx.course.pojo.vo.CourseOrderInfo;
 import com.azz.wx.course.pojo.vo.PayOrderInfo;
@@ -77,6 +79,18 @@ public class ClientOrderController {
 	
 	/**
 	 * 
+	 * <p>查询个人报名课程信息列表</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年3月15日 下午12:07:16
+	 */
+	@RequestMapping(value = "getPersonalCourseOrders", method = RequestMethod.POST)
+	public JsonResult<Pagination<CourseOrderInfo>> getPersonalCourseOrders(@RequestBody SearchPersonalOrderParam param){
+		return orderService.getPersonalCourseOrders(param);
+	}
+	
+	/**
+	 * 
 	 * <p>查询课程订单详情</p>
 	 * @param param
 	 * @return
@@ -118,6 +132,18 @@ public class ClientOrderController {
 	@RequestMapping(value = "confirmCourseOrder", method = RequestMethod.POST)
 	public JsonResult<String> confirmCourseOrder(@RequestBody ChangeOrderStatusParam param){
 		return orderService.confirmCourseOrder(param);
+	}
+	
+	/**
+	 * 
+	 * <p>微信订单支付成功后的操作</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月26日 下午3:41:55
+	 */
+	@RequestMapping(value = "courseOrderPaySuccessOpt", method = RequestMethod.POST)
+	public JsonResult<String> courseOrderPaySuccessOpt(@RequestBody CallBackParam param){
+		return orderService.courseOrderPaySuccessOpt(param);
 	}
 	
 }

@@ -139,10 +139,10 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.yeepay.g3.sdk.yop</groupId>
-			<artifactId>yop-java-sdk</artifactId>
-			<version>3.1.9</version>
-			<classifier>jdk18</classifier>
+  			<groupId>com.yeepay.g3.sdk.yop</groupId>
+  			<artifactId>yop-java-sdk</artifactId>
+  			<version>3.1.9</version>
+  			<classifier>jdk18</classifier>
 		</dependency>
 		<dependency>
 			<groupId>com.yeepay.g3.yop.sdk</groupId>

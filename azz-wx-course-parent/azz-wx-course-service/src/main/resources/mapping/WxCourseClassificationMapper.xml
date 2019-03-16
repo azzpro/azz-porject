@@ -257,7 +257,8 @@
   		id as id,
 		classification_code as assortmentCode,
 		classification_name as assortmentName,
-		classification_parent_code as assortmentParentCode
+		classification_parent_code as assortmentParentCode,
+		classification_pic_url as assortmentPicUrl
 	FROM
 		wx_course_classification
 	WHERE status = 1 and classification_top = 0
@@ -271,7 +272,8 @@
   		id as id,
 		classification_code as assortmentCode,
 		classification_name as assortmentName,
-		classification_parent_code as assortmentParentCode
+		classification_parent_code as assortmentParentCode,
+		classification_pic_url as assortmentPicUrl
 	FROM
 		wx_course_classification
 	WHERE status = 1 and classification_parent_code = #{parentCode}

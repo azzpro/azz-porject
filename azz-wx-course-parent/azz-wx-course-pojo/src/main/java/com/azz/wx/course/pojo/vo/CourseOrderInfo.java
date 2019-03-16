@@ -35,6 +35,20 @@ public class CourseOrderInfo {
 	private Integer orderStatus; 
 	
 	private Date orderTime;
-
+	
+	private String courseCode;
+	
+	private String startClassCode;
+	
+	private Integer hours;
+	
+	private Integer peopleNumber;
+	
+	private BigDecimal latitude;
+	
+	private BigDecimal longitude;
+	
+	private String location;
+	
 }
 

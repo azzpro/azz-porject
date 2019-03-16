@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.order.client.mapper.WxPayMapper">
+  <resultMap id="BaseResultMap" type="com.azz.order.client.wx.pojo.WxPay">
+    <id column="id" property="id" jdbcType="BIGINT" />
+  <result column="system_order_num" property="systemOrderNum"/>  
+  <result column="goods_body" property="goodsBody"/> 
+  <result column="goods_info" property="goodsInfo"/> 
+  <result column="fee_type" property="feeType"/> 
+  <result column="total_fee" property="totalFee"/> 
+  <result column="create_ip" property="createIp"/> 
+  <result column="create_order_time" property="createOrderTime"/> 
+  <result column="expire_order_time" property="expireOrderTime"/> 
+  <result column="order_status" property="orderStatus"/>
+  <result column="course_name" property="courseName"/>
+  <result column="course_num" property="courseNum"/>
+  <result column="course_pay_num" property="coursePayNum"/> 
+</resultMap>
+  <insert id="insertPay" parameterType="com.azz.order.client.wx.pojo.WxPay">
+    insert into wx_pay
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="systemOrderNum != null">
+        system_order_num,
+      </if>
+      <if test="goodsBody != null">
+        goods_body,
+      </if>
+      <if test="goodsInfo != null">
+        goods_info,
+      </if>
+      <if test="feeType != null">
+        fee_type,
+      </if>
+      <if test="totalFee != null">
+        total_fee,
+      </if>
+      <if test="createIp != null">
+        create_ip,
+      </if>
+      <if test="createOrderTime != null">
+        create_order_time,
+      </if>
+      <if test="expireOrderTime != null">
+        expire_order_time,
+      </if>
+      <if test="orderStatus != null">
+        order_status,
+      </if>
+      <if test="courseName != null">
+        course_name,
+      </if>
+      <if test="courseNum != null">
+        course_num,
+      </if>
+      <if test="coursePayNum != null">
+        course_pay_num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id},
+      </if>
+       <if test="systemOrderNum != null">
+        #{systemOrderNum},
+      </if>
+      <if test="goodsBody != null">
+        #{goodsBody},
+      </if>
+      <if test="goodsInfo != null">
+        #{goodsInfo},
+      </if>
+      <if test="feeType != null">
+        #{feeType},
+      </if>
+      <if test="totalFee != null">
+        #{totalFee},
+      </if>
+      <if test="createIp != null">
+        #{createIp},
+      </if>
+      <if test="createOrderTime != null">
+        #{createOrderTime},
+      </if>
+      <if test="expireOrderTime != null">
+        #{expireOrderTime},
+      </if>
+      <if test="orderStatus != null">
+        #{orderStatus},
+      </if>
+      <if test="courseName != null">
+        #{courseName}
+      </if>
+      <if test="courseNum != null">
+        #{courseNum}
+      </if>
+      <if test="coursePayNum != null">
+        #{coursePayNum}
+      </if>
+    </trim>
+  </insert>
+  <select id="selectWxOrder" resultMap="BaseResultMap">
+  	select order_status from wx_pay
+  	where course_pay_num = #{course_pay_num}
+  </select>
+  <!-- <select id="selectOrderStatus" parameterType="map" resultType="int">
+  	select count(*) from client_pay
+  	where  order_status != 1
+  	and pay_number = #{no_order}  and order_money = #{money_order}
+  </select>
+  
+  <select id="selectOrderCode" resultType="string">
+  	select order_number from client_pay
+  	where pay_number = #{no_order}
+  </select>
+  
+  <select id="selectOrder" resultMap="BaseResultMap">
+  	select order_status from client_pay
+  	where order_number = #{order_number}
+  </select>
+  
+  <update id="updateOrderByNumber" parameterType="map">
+    update client_pay
+      set order_status = #{order_status},
+      order_info = #{order_info},
+      order_type = #{order_type},
+      pay_success_date = #{pay_success_date},
+      three_party_number = #{three_party_number}
+    where pay_number = #{pay_number}
+  </update>
+  
+  <select id="selectPayInfoByPayNumber" resultMap="BaseResultMap" parameterType="String">
+  	select id,pay_number,three_party_number,order_number,order_status,order_type,order_money,
+  	order_channel_money,order_customer_phone,order_time,order_method,pay_instruation
+  	from client_pay where pay_number = #{number}
+  </select>
+  <select id="selectPayList" resultMap="BaseResultMap" parameterType="com.azz.order.client.pojo.bo.PayList">
+  	select id,pay_number,three_party_number,order_number,order_status,order_type,order_money,
+  	order_channel_money,order_customer_phone,order_time,order_method,pay_instruation
+  	from client_pay
+  	<where>
+  		<if test="param != null and param != ''">
+  			pay_number like CONCAT('%', #{param}, '%')
+  			or
+  			three_party_number like CONCAT('%', #{param}, '%')
+  			or
+  			order_number like CONCAT('%', #{param}, '%')
+  		</if>
+  	</where>
+  	order by order_time desc
+  </select>
+   -->
+  
+</mapper>

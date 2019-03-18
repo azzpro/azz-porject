@@ -61,7 +61,7 @@ public class WxPayService {
 	@Value("${wx.mchId}")
 	private String mchid;
 
-	@Value("${wx.api}")
+	@Value("${wx.Api}")
 	private String api;
 	
 	@Value("${wx.callback}")

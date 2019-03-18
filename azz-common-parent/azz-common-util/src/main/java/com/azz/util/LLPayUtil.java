@@ -50,6 +50,18 @@ public class LLPayUtil{
         String timeString = dataFormat.format(date);
         return timeString;
     }
+    /**
+     * 获取当前时间str，格式yyyyMMddHHmmss
+     * @return
+     * @author guoyx
+     */
+    public static String getCurrentDateTimeStrE()
+    {
+        SimpleDateFormat dataFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        Date date = new Date();
+        String timeString = dataFormat.format(date);
+        return timeString.substring(0, 15);
+    }
 
     /**
      * 

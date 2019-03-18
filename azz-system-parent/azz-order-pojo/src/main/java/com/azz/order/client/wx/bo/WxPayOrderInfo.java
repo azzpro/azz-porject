@@ -6,6 +6,14 @@ public class WxPayOrderInfo {
 	private String coursePayNum;//课程订单编号；
 	private String orderMoney;//订单金额
 	private String ip;
+	private String openid;
+	
+	public String getOpenid() {
+		return openid;
+	}
+	public void setOpenid(String openid) {
+		this.openid = openid;
+	}
 	public String getCourseName() {
 		return courseName;
 	}

@@ -99,7 +99,7 @@ public class WxPayService {
 		}
 		Map<String, String> reqData = null;
 		try {
-			reqData = createReqData(po.getOrderMoney(),"",po.getIp(),po.getCourseName());
+			reqData = createReqData(po.getOrderMoney(),po.getOpenid(),po.getIp(),po.getCourseName());
 		}catch (Exception e) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "创建订单错误");
 		}
@@ -174,19 +174,29 @@ public class WxPayService {
 	}
 	
 	public String callback(String xml) {
-		Map<String, String> notifyMap;
+		String resXml = "";
 		try {
-			notifyMap = WXPayUtil.xmlToMap(xml);
-			if(notifyMap.get("result_code").equals("SUCCESS")) {
-				String ordersSn = notifyMap.get("out_trade_no");
-				String amountpaid = notifyMap.get("total_fee");
-				log.info("订单号---->"+ordersSn+"::金额------->"+amountpaid);
-		}
+			//解析XML
+			Map<String, String> map = WXPayUtil.xmlToMap(xml);
+	        String return_code = map.get("return_code");//状态
+	        String out_trade_no = map.get("out_trade_no");//订单号
+			if (return_code.equals("SUCCESS")) {
+				if (out_trade_no != null) {
+					//处理订单逻辑
+					log.info("微信手机支付回调成功订单号:{}",out_trade_no);
+					resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>" + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
+					return resXml;
+				}
+			}else{
+				log.info("微信手机支付回调失败订单号:{}",out_trade_no);
+				resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
+				return resXml;
+			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("手机支付回调通知失败",e);
+			 resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
+			 return resXml;
 		}
-		
 		return null;
 	}
 

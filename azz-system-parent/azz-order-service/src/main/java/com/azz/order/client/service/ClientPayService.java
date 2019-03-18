@@ -713,7 +713,7 @@ public class ClientPayService {
 			return null;
 		}
 		OrderInfo orderInfo = new OrderInfo();
-		orderInfo.setOrderId(LLPayUtil.getCurrentDateTimeStr());//订单编号
+		orderInfo.setOrderId(LLPayUtil.getCurrentDateTimeStrE());//订单编号
 		orderInfo.setTimestamp(LLPayUtil.getCurrentDateTimeStr());//订单时间戳
 		orderInfo.setOrderAmount(corderInfo.getGrandTotal().toPlainString());//订单金额
 		orderInfo.setGoodsName("零件购买");//TODO fix

@@ -164,7 +164,7 @@ public class WxPayService {
 		reqMap.put("appid", appid);
 		reqMap.put("mch_id", mchid);
 		reqMap.put("nonce_str", WXPayUtil.generateNonceStr());
-		reqMap.put("sign_type", WXPayConstants.HMACSHA256);
+		reqMap.put("sign_type", WXPayConstants.MD5);
 		reqMap.put("body", courseName);
 		reqMap.put("out_trade_no", String.valueOf(WXPayUtil.getCurrentTimestamp()));
 		BigDecimal multiply = totalFee.multiply(new BigDecimal(100));

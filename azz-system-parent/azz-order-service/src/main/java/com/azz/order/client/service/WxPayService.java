@@ -96,9 +96,9 @@ public class WxPayService {
 			}
 			WXPayUtil.getLogger().info("po.getOrderMoney()=====>"+po.getOrderMoney());
 			WXPayUtil.getLogger().info("po.toPlainString()=====>"+detail.getData().getGrandTotal().toPlainString());
-			/*if(po.getOrderMoney().equals(detail.getData().getGrandTotal().toPlainString())) {
+			if(!po.getOrderMoney().equals(detail.getData().getGrandTotal().toPlainString())) {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单金额不一致");
-			}*/
+			}
 		}
 		Map<String, String> reqData = null;
 		try {
@@ -109,7 +109,7 @@ public class WxPayService {
 		if (null == reqData) {
 			return null;
 		}
-		String reqUrl = WXPayConstants.DOMAIN_API + WXPayConstants.UNIFIEDORDER_URL_SUFFIX;
+		String reqUrl = "https://"+WXPayConstants.DOMAIN_API + WXPayConstants.UNIFIEDORDER_URL_SUFFIX;
 		String mapToXml = "";
 		try {
 			mapToXml = WXPayUtil.mapToXml(reqData);

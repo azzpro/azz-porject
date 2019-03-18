@@ -123,10 +123,10 @@ public class CourseController {
         	}
     		String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
     		url = url.replace("APPID", appid).replace("SECRET", secret).replace("CODE", code);
-    		log.debug("appid:" + appid +"   secret:" + secret + "  url:"+ url);
+    		log.info("appid:" + appid +"   secret:" + secret + "  url:"+ url);
     		// 获取accessToken
     		String accessTokenResult = OkHttpUtil.get(url);
-    		log.debug("accessTokenResult:------------>" + accessTokenResult);
+    		log.info("accessTokenResult:------------>" + accessTokenResult);
     		JSONObject jsonObject = JSONObject.parseObject(accessTokenResult);
     		String openid = jsonObject.getString("openid");
             if (openid != null) {

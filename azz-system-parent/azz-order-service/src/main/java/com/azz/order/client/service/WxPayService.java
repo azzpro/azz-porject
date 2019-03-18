@@ -69,7 +69,7 @@ public class WxPayService {
 	private String callback;
 	
 	static {
-		st = SignType.HMACSHA256;
+		st = SignType.MD5;
 	}
 
 	
@@ -144,6 +144,7 @@ public class WxPayService {
 			payMap.put("package", "prepay_id=" + prepay_id);
 			String paySign = WXPayUtil.generateSignature(payMap, api);
 			payMap.put("paySign", paySign);
+			
 			return payMap;
 		}catch (Exception e) {
 			WXPayUtil.getLogger().error(e.getMessage());

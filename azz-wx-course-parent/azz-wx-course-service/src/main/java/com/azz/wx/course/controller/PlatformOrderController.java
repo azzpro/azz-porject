@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
+import com.azz.wx.course.pojo.bo.ChangeOrderStatusParam;
 import com.azz.wx.course.pojo.bo.SearchCourseOrderParam;
 import com.azz.wx.course.pojo.vo.PlatformCourseOrderDetail;
 import com.azz.wx.course.pojo.vo.PlatformCourseOrderInfo;
@@ -60,5 +61,16 @@ public class PlatformOrderController {
 	public JsonResult<PlatformCourseOrderDetail> getPlatformCourseOrderDetail(@RequestParam("orderCode") String orderCode){
 		return orderService.getPlatformCourseOrderDetail(orderCode);
 	} 
+	
+	/**
+	 * 
+	 * <p>平台端确认课程订单，将待处理状态改为待确认状态</p>
+	 * @return
+	 * @author 黄智聪  2019年1月23日 上午10:48:25
+	 */
+	@RequestMapping(value = "platformConfirmCourseOrder", method = RequestMethod.POST)
+	public JsonResult<String> platformConfirmCourseOrder(@RequestBody ChangeOrderStatusParam param){
+		return orderService.platformConfirmCourseOrder(param);
+	}
 	
 }

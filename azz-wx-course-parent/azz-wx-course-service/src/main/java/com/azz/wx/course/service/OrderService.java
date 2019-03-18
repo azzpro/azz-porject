@@ -353,6 +353,45 @@ public class OrderService {
 	
 	/**
 	 * 
+	 * <p>平台端确认课程订单，将待处理状态改为待确认状态</p>
+	 * @return
+	 * @author 黄智聪  2019年1月23日 上午10:48:25
+	 */
+	public JsonResult<String> platformConfirmCourseOrder(@RequestBody ChangeOrderStatusParam param){
+		JSR303ValidateUtils.validate(param);
+		PayOrderInfo info = wxCourseOrderMapper.getPayOrderInfo(param.getOrderCode());
+		if(info == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "课程订单不存在");
+		}
+		// 判断订单是否处于待确认状态
+		if(info.getOrderStatus() != CourseOrderStatus.PENDING.getValue()) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "课程订单状态异常");
+		}
+		
+		Date nowDate = new Date();
+		// 将订单状态改为已完成但未评价
+		WxCourseOrder orderRecord = WxCourseOrder.builder()
+				.orderCode(param.getOrderCode())
+				.orderStatusId(CourseOrderStatus.NOT_CONFIRMED.getValue())
+				.modifier(param.getClientUserCode())
+				.modifyTime(nowDate)
+				.build();
+		wxCourseOrderMapper.updateByOrderCode(orderRecord);
+		
+		// 插入课程订单状态变化记录
+		WxCourseOrderStatus record = WxCourseOrderStatus.builder()
+				.createTime(nowDate)
+				.creator(param.getClientUserCode())
+				.orderCode(param.getOrderCode())
+				.orderStatusId(CourseOrderStatus.NOT_CONFIRMED.getValue())
+				.build();
+		wxCourseOrderStatusMapper.insertSelective(record);
+		
+		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
 	 * <p>平台端查询课程订单列表</p>
 	 * @param param
 	 * @return

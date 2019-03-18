@@ -145,4 +145,13 @@ public interface OrderService {
 	@RequestMapping(value = "/azz/api/platform/course/order/getPlatformCourseOrderDetail", method = RequestMethod.POST)
 	public JsonResult<PlatformCourseOrderDetail> getPlatformCourseOrderDetail(@RequestParam("orderCode") String orderCode);
 
+	/**
+	 * 
+	 * <p>平台端确认课程订单，将待处理状态改为待确认状态</p>
+	 * @return
+	 * @author 黄智聪  2019年1月23日 上午10:48:25
+	 */
+	@RequestMapping(value = "/azz/api/platform/course/order/platformConfirmCourseOrder", method = RequestMethod.POST)
+	public JsonResult<String> platformConfirmCourseOrder(@RequestBody ChangeOrderStatusParam param);
+	
 }

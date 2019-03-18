@@ -8,6 +8,7 @@
 package com.azz.platform.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.wx.course.api.OrderService;
+import com.azz.wx.course.pojo.bo.ChangeOrderStatusParam;
 import com.azz.wx.course.pojo.bo.SearchCourseOrderParam;
 import com.azz.wx.course.pojo.vo.PlatformCourseOrderDetail;
 import com.azz.wx.course.pojo.vo.PlatformCourseOrderInfo;
@@ -54,6 +56,18 @@ public class CourseOrderController {
 	@RequestMapping(value = "/getPlatformCourseOrderDetail", method = RequestMethod.POST)
 	public JsonResult<PlatformCourseOrderDetail> getPlatformCourseOrderDetail(@RequestParam("orderCode") String orderCode){
 		return orderService.getPlatformCourseOrderDetail(orderCode);
+	}
+	
+	/**
+	 * 
+	 * <p>平台端确认课程订单，将待处理状态改为待确认状态</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年1月22日 下午6:34:28
+	 */
+	@RequestMapping(value = "/confirmCourseOrder", method = RequestMethod.POST)
+	public JsonResult<String> platformConfirmCourseOrder(@RequestBody ChangeOrderStatusParam param){
+		return orderService.platformConfirmCourseOrder(param);
 	}
 
 }

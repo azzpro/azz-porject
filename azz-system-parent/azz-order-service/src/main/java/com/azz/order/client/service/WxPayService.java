@@ -168,7 +168,9 @@ public class WxPayService {
 		reqMap.put("body", courseName);
 		reqMap.put("out_trade_no", String.valueOf(WXPayUtil.getCurrentTimestamp()));
 		BigDecimal multiply = totalFee.multiply(new BigDecimal(100));
-		reqMap.put("total_fee", multiply.toPlainString()); //单位分
+		String money = multiply.toPlainString();
+		String fenMoney = money.substring(0,money.indexOf("."));
+		reqMap.put("total_fee", fenMoney); //单位分
 		reqMap.put("spbill_create_ip",ip);
 		reqMap.put("notify_url", callback);
 		reqMap.put("trade_type", "JSAPI");

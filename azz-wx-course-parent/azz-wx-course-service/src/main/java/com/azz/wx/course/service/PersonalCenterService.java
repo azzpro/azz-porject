@@ -45,6 +45,7 @@ import com.azz.wx.course.pojo.bo.AddClientWxUserParam;
 import com.azz.wx.course.pojo.bo.AddCourseSuggestionsParam;
 import com.azz.wx.course.pojo.bo.AddWxBindingRecordParam;
 import com.azz.wx.course.pojo.bo.BindingPhomeParam;
+import com.azz.wx.course.pojo.bo.SearchOrderTotalParam;
 import com.azz.wx.course.pojo.vo.PersonalCenterInfo;
 
 /**
@@ -98,9 +99,9 @@ public class PersonalCenterService {
                 
                 // 统计数值
                 int allOrders = wxCourseOrderMapper.getCountOrders(userCode);
-                int notPaid = wxCourseOrderMapper.getCountOrdersStatus(CourseOrderStatus.NOT_PAID.getValue());
-                int notConfirmed = wxCourseOrderMapper.getCountOrdersStatus(CourseOrderStatus.NOT_CONFIRMED.getValue());
-                int notEvaluated = wxCourseOrderMapper.getCountOrdersStatus(CourseOrderStatus.FINISHED_NOT_EVALUATED.getValue());
+                int notPaid = wxCourseOrderMapper.getCountOrdersStatus(new SearchOrderTotalParam(CourseOrderStatus.NOT_PAID.getValue(),userCode));
+                int notConfirmed = wxCourseOrderMapper.getCountOrdersStatus(new SearchOrderTotalParam(CourseOrderStatus.NOT_CONFIRMED.getValue(),userCode));
+                int notEvaluated = wxCourseOrderMapper.getCountOrdersStatus(new SearchOrderTotalParam(CourseOrderStatus.FINISHED_NOT_EVALUATED.getValue(),userCode));
                 String phone = wxCourseOrderMapper.getUserPhone(userCode);
                 int applyCount = wxCourseAapplyInfoMapper.getCountApplyInfo(userCode);
                 // 全部订单

@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.azz.wx.course.pojo.WxCourseOrder;
 import com.azz.wx.course.pojo.bo.SearchCourseOrderParam;
+import com.azz.wx.course.pojo.bo.SearchOrderTotalParam;
 import com.azz.wx.course.pojo.bo.SearchPersonalOrderParam;
 import com.azz.wx.course.pojo.vo.CourseOrderDetail;
 import com.azz.wx.course.pojo.vo.CourseOrderInfo;
@@ -31,7 +32,7 @@ public interface WxCourseOrderMapper {
     
     int getCountOrders(String userCode);
     
-    int getCountOrdersStatus(Integer orderStatus);
+    int getCountOrdersStatus(SearchOrderTotalParam param);
     
     String getUserPhone(String userCode);
     /**

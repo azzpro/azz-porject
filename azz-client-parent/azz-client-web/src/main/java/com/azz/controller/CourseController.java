@@ -117,6 +117,7 @@ public class CourseController {
         	}
     		String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
     		url = url.replace("APPID", appid).replace("SECRET", secret).replace("CODE", code);
+    		System.out.println("appid:" + appid +"   secret:" + secret);
     		// 获取accessToken
     		String accessTokenResult = OkHttpUtil.get(url);
     		System.out.println("accessTokenResult:------------>" + accessTokenResult);

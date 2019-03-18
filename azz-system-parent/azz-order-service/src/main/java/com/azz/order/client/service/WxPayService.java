@@ -93,9 +93,11 @@ public class WxPayService {
 			if(detail.getData().getOrderStatus() == CourseOrderStatus.CLOSED.getValue()) {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单已失效，请重新下单");
 			}
-			if(po.getOrderMoney().equals(detail.getData().getGrandTotal().toPlainString())) {
+			System.out.println("po.getOrderMoney()=====>"+po.getOrderMoney());
+			System.out.println("po.toPlainString()=====>"+detail.getData().getGrandTotal().toPlainString());
+			/*if(po.getOrderMoney().equals(detail.getData().getGrandTotal().toPlainString())) {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单金额不一致");
-			}
+			}*/
 		}
 		Map<String, String> reqData = null;
 		try {

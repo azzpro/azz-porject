@@ -119,7 +119,7 @@ public class CourseController {
     		url = url.replace("APPID", appid).replace("SECRET", secret).replace("CODE", code);
     		// 获取accessToken
     		String accessTokenResult = OkHttpUtil.get(url);
-    		//System.out.println("accessTokenResult:------------>" + accessTokenResult);
+    		System.out.println("accessTokenResult:------------>" + accessTokenResult);
     		JSONObject jsonObject = JSONObject.parseObject(accessTokenResult);
     		String openid = jsonObject.getString("openid");
             if (openid != null) {

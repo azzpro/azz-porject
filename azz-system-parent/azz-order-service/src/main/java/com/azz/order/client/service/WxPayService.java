@@ -80,6 +80,7 @@ public class WxPayService {
 	
 	@Transactional
 	public Map<String,String> submitOrderPay(@RequestBody WxPayOrderInfo po) {
+		WXPayUtil.getLogger().info("openid--------->" + po.getOpenid());
 		//根据课程编号去判断该笔订单是否已支付
 		WxPay wxPay = wpm.selectWxOrder(po.getCoursePayNum());
 		if(wxPay != null) {
@@ -93,8 +94,8 @@ public class WxPayService {
 			if(detail.getData().getOrderStatus() == CourseOrderStatus.CLOSED.getValue()) {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单已失效，请重新下单");
 			}
-			System.out.println("po.getOrderMoney()=====>"+po.getOrderMoney());
-			System.out.println("po.toPlainString()=====>"+detail.getData().getGrandTotal().toPlainString());
+			WXPayUtil.getLogger().info("po.getOrderMoney()=====>"+po.getOrderMoney());
+			WXPayUtil.getLogger().info("po.toPlainString()=====>"+detail.getData().getGrandTotal().toPlainString());
 			/*if(po.getOrderMoney().equals(detail.getData().getGrandTotal().toPlainString())) {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单金额不一致");
 			}*/
@@ -118,11 +119,13 @@ public class WxPayService {
 		if (StringUtils.isBlank(mapToXml)) {
 			return null;
 		}
-		
+		WXPayUtil.getLogger().info("reqUrl------------->" + reqUrl);
+		WXPayUtil.getLogger().info("mapToXml------------->" + mapToXml);
 		String result = "";
 		try {
 			result = HttpClientUtil.sendPost(reqUrl, mapToXml);
 		} catch (Exception e) {
+			WXPayUtil.getLogger().info(e.getMessage());
 			e.printStackTrace();
 		}
 		WXPayUtil.getLogger().info("统一下单请求返回结果------------->" + result);

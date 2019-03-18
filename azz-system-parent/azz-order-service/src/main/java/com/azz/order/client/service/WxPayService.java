@@ -13,6 +13,7 @@ package com.azz.order.client.service;
  */
 
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -102,7 +103,7 @@ public class WxPayService {
 		}
 		Map<String, String> reqData = null;
 		try {
-			reqData = createReqData(po.getOrderMoney(),po.getOpenid(),po.getIp(),po.getCourseName());
+			reqData = createReqData(detail.getData().getGrandTotal(),po.getOpenid(),po.getIp(),po.getCourseName());
 		}catch (Exception e) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "创建订单错误");
 		}
@@ -158,7 +159,7 @@ public class WxPayService {
 	 * @return
 	 * @throws Exception
 	 */
-	private Map<String,String> createReqData(String totalFee,String openid,String ip,String courseName) throws Exception{
+	private Map<String,String> createReqData(BigDecimal totalFee,String openid,String ip,String courseName) throws Exception{
 		Map<String,String> reqMap = new HashMap<String,String>();
 		reqMap.put("appid", appid);
 		reqMap.put("mch_id", mchid);
@@ -166,7 +167,8 @@ public class WxPayService {
 		reqMap.put("sign_type", WXPayConstants.HMACSHA256);
 		reqMap.put("body", courseName);
 		reqMap.put("out_trade_no", String.valueOf(WXPayUtil.getCurrentTimestamp()));
-		reqMap.put("total_fee", totalFee); //单位分
+		BigDecimal multiply = totalFee.multiply(new BigDecimal(100));
+		reqMap.put("total_fee", multiply.toPlainString()); //单位分
 		reqMap.put("spbill_create_ip",ip);
 		reqMap.put("notify_url", callback);
 		reqMap.put("trade_type", "JSAPI");

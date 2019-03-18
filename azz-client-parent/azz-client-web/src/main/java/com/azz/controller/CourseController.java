@@ -171,7 +171,6 @@ public class CourseController {
         	loginClientUser.setSessionId(subject.getSession().getId());
         	WebUtils.setShiroSessionAttr(ClientConstants.LOGIN_CLIENT_USER, loginClientUser);
         	UserInfo ui = new UserInfo(loginClientUser, wxUserInfo);
-        	log.info("###############用户所有信息--->" + JSONObject.toJSONString(ui));
         	return JsonResult.successJsonResult(ui);
     	}
     	

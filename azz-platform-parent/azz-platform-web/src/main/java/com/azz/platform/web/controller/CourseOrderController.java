@@ -66,7 +66,7 @@ public class CourseOrderController {
 	 * @author 黄智聪  2019年1月22日 下午6:34:28
 	 */
 	@RequestMapping(value = "/confirmCourseOrder", method = RequestMethod.POST)
-	public JsonResult<String> platformConfirmCourseOrder(@RequestBody ChangeOrderStatusParam param){
+	public JsonResult<String> platformConfirmCourseOrder(ChangeOrderStatusParam param){
 		return orderService.platformConfirmCourseOrder(param);
 	}
 

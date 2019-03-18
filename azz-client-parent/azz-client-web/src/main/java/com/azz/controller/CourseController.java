@@ -11,6 +11,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +46,8 @@ import com.azz.wx.course.pojo.vo.CourseInfo;
 import com.azz.wx.course.pojo.vo.EvaluationInfo;
 import com.azz.wx.course.pojo.vo.StartClassRecord;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * <P>TODO</P>
  * @version 1.0
@@ -52,7 +55,10 @@ import com.azz.wx.course.pojo.vo.StartClassRecord;
  */
 @RestController
 @RequestMapping("/azz/api/client/course")
+@Slf4j
 public class CourseController {
+	
+	
 	
 	@Autowired
 	private CourseService courseService;
@@ -117,9 +123,10 @@ public class CourseController {
         	}
     		String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
     		url = url.replace("APPID", appid).replace("SECRET", secret).replace("CODE", code);
+    		log.info("appid:" + appid +"   secret:" + secret + "  url:"+ url);
     		// 获取accessToken
     		String accessTokenResult = OkHttpUtil.get(url);
-    		//System.out.println("accessTokenResult:------------>" + accessTokenResult);
+    		log.info("accessTokenResult:------------>" + accessTokenResult);
     		JSONObject jsonObject = JSONObject.parseObject(accessTokenResult);
     		String openid = jsonObject.getString("openid");
             if (openid != null) {
@@ -163,7 +170,8 @@ public class CourseController {
         	LoginClientUserInfo loginClientUser = jr.getData();
         	loginClientUser.setSessionId(subject.getSession().getId());
         	WebUtils.setShiroSessionAttr(ClientConstants.LOGIN_CLIENT_USER, loginClientUser);
-        	return JsonResult.successJsonResult(new UserInfo(loginClientUser, wxUserInfo));
+        	UserInfo ui = new UserInfo(loginClientUser, wxUserInfo);
+        	return JsonResult.successJsonResult(ui);
     	}
     	
     }

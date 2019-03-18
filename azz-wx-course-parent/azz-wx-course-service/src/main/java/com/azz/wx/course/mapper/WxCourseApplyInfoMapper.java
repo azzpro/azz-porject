@@ -17,6 +17,8 @@ public interface WxCourseApplyInfoMapper {
     int insertSelective(WxCourseApplyInfo record);
 
     WxCourseApplyInfo selectByPrimaryKey(Long id);
+    
+    WxCourseApplyInfo selectByCode(String code);
 
     int updateByPrimaryKeySelective(WxCourseApplyInfo record);
 

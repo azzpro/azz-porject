@@ -420,15 +420,18 @@
   <select id="getIndexCourseDetail" parameterType="string" resultType="com.azz.wx.course.pojo.vo.CourseDetail">
 	SELECT
 		wc.course_code AS courseCode,
+		wcb.brand_info as brandInfo,
 		wc.course_name AS courseName,
 		wc.course_pic_name AS coursePicName,
 		wc.course_pic_url AS coursePicUrl,
+		wc.course_info as courseInfo,
 		t.start_class_time AS latelyStartClassTime,
 		t.hours AS hours,
 		IFNULL(t1.buyCount, 0) AS buyCount,
 		t2.minPrice as minPrice
 	FROM
 		wx_course wc
+	JOIN wx_course_brand wcb on wc.brand_code = wcb.brand_code
 	LEFT JOIN (
 		SELECT
 			descStartClassRecord.course_code,

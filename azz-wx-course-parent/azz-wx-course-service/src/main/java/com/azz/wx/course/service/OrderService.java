@@ -27,12 +27,14 @@ import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
 import com.azz.util.SystemSeqUtils;
 import com.azz.wx.course.mapper.ClientUserMapper;
+import com.azz.wx.course.mapper.WxCourseApplyInfoMapper;
 import com.azz.wx.course.mapper.WxCourseEvaluationMapper;
 import com.azz.wx.course.mapper.WxCourseOrderItemMapper;
 import com.azz.wx.course.mapper.WxCourseOrderMapper;
 import com.azz.wx.course.mapper.WxCourseOrderStatusMapper;
 import com.azz.wx.course.mapper.WxCourseStartClasRecordMapper;
 import com.azz.wx.course.pojo.ClientUser;
+import com.azz.wx.course.pojo.WxCourseApplyInfo;
 import com.azz.wx.course.pojo.WxCourseEvaluation;
 import com.azz.wx.course.pojo.WxCourseOrder;
 import com.azz.wx.course.pojo.WxCourseOrderItem;
@@ -80,6 +82,9 @@ public class OrderService {
 	private WxCourseEvaluationMapper wxCourseEvaluationMapper;
 	
 	@Autowired
+	private WxCourseApplyInfoMapper wxCourseApplyInfoMapper;
+	
+	@Autowired
 	private DbSequenceService dbSequenceService;
 	
 	
@@ -96,6 +101,11 @@ public class OrderService {
 		StartClassRecord startClassRecord = wxCourseStartClasRecordMapper.getStartClassRecordDetail(param.getStartClassCode());
 		if(startClassRecord == null){
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "开课信息不存在");
+		}
+		String applyInfoCode = param.getApplyInfoCode();
+		WxCourseApplyInfo applyInfo = wxCourseApplyInfoMapper.selectByCode(applyInfoCode);
+		if(applyInfo == null){
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "报名信息不存在");
 		}
 		String orderCode = SystemSeqUtils.getSeq(dbSequenceService.getWxCourseOrderSequenceNumber());
 		// 新增一个待确认的商户订单
@@ -345,6 +355,45 @@ public class OrderService {
 				.creator(param.getClientUserCode())
 				.orderCode(param.getOrderCode())
 				.orderStatusId(CourseOrderStatus.FINISHED_NOT_EVALUATED.getValue())
+				.build();
+		wxCourseOrderStatusMapper.insertSelective(record);
+		
+		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
+	 * <p>平台端确认课程订单，将待处理状态改为待确认状态</p>
+	 * @return
+	 * @author 黄智聪  2019年1月23日 上午10:48:25
+	 */
+	public JsonResult<String> platformConfirmCourseOrder(@RequestBody ChangeOrderStatusParam param){
+		JSR303ValidateUtils.validate(param);
+		PayOrderInfo info = wxCourseOrderMapper.getPayOrderInfo(param.getOrderCode());
+		if(info == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "课程订单不存在");
+		}
+		// 判断订单是否处于待确认状态
+		if(info.getOrderStatus() != CourseOrderStatus.PENDING.getValue()) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "课程订单状态异常");
+		}
+		
+		Date nowDate = new Date();
+		// 将订单状态改为已完成但未评价
+		WxCourseOrder orderRecord = WxCourseOrder.builder()
+				.orderCode(param.getOrderCode())
+				.orderStatusId(CourseOrderStatus.NOT_CONFIRMED.getValue())
+				.modifier(param.getClientUserCode())
+				.modifyTime(nowDate)
+				.build();
+		wxCourseOrderMapper.updateByOrderCode(orderRecord);
+		
+		// 插入课程订单状态变化记录
+		WxCourseOrderStatus record = WxCourseOrderStatus.builder()
+				.createTime(nowDate)
+				.creator(param.getClientUserCode())
+				.orderCode(param.getOrderCode())
+				.orderStatusId(CourseOrderStatus.NOT_CONFIRMED.getValue())
 				.build();
 		wxCourseOrderStatusMapper.insertSelective(record);
 		

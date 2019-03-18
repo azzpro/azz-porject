@@ -27,6 +27,12 @@
     from wx_course_apply_info
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="selectByCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wx_course_apply_info
+    where apply_info_code = #{applyInfoCode}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from wx_course_apply_info
     where id = #{id,jdbcType=BIGINT}

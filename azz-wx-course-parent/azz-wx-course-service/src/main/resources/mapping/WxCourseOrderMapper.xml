@@ -330,8 +330,9 @@
   	SELECT COUNT(0) FROM wx_course_order WHERE creator = #{userCode,jdbcType=VARCHAR}
   </select>
   
-  <select id="getCountOrdersStatus" parameterType="java.lang.Integer" resultType="int">
-  	SELECT COUNT(0) FROM wx_course_order WHERE order_status_id = #{orderStatus}
+  <select id="getCountOrdersStatus" parameterType="com.azz.wx.course.pojo.bo.SearchOrderTotalParam" resultType="int">
+  	SELECT COUNT(0) FROM wx_course_order WHERE order_status_id = #{orderStatus} 
+  	and creator = #{userCode,jdbcType=VARCHAR}
   </select>
   
   <select id="getUserPhone" parameterType="java.lang.String" resultType="java.lang.String">

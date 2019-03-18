@@ -27,12 +27,14 @@ import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
 import com.azz.util.SystemSeqUtils;
 import com.azz.wx.course.mapper.ClientUserMapper;
+import com.azz.wx.course.mapper.WxCourseApplyInfoMapper;
 import com.azz.wx.course.mapper.WxCourseEvaluationMapper;
 import com.azz.wx.course.mapper.WxCourseOrderItemMapper;
 import com.azz.wx.course.mapper.WxCourseOrderMapper;
 import com.azz.wx.course.mapper.WxCourseOrderStatusMapper;
 import com.azz.wx.course.mapper.WxCourseStartClasRecordMapper;
 import com.azz.wx.course.pojo.ClientUser;
+import com.azz.wx.course.pojo.WxCourseApplyInfo;
 import com.azz.wx.course.pojo.WxCourseEvaluation;
 import com.azz.wx.course.pojo.WxCourseOrder;
 import com.azz.wx.course.pojo.WxCourseOrderItem;
@@ -80,6 +82,9 @@ public class OrderService {
 	private WxCourseEvaluationMapper wxCourseEvaluationMapper;
 	
 	@Autowired
+	private WxCourseApplyInfoMapper wxCourseApplyInfoMapper;
+	
+	@Autowired
 	private DbSequenceService dbSequenceService;
 	
 	
@@ -96,6 +101,11 @@ public class OrderService {
 		StartClassRecord startClassRecord = wxCourseStartClasRecordMapper.getStartClassRecordDetail(param.getStartClassCode());
 		if(startClassRecord == null){
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "开课信息不存在");
+		}
+		String applyInfoCode = param.getApplyInfoCode();
+		WxCourseApplyInfo applyInfo = wxCourseApplyInfoMapper.selectByCode(applyInfoCode);
+		if(applyInfo == null){
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "报名信息不存在");
 		}
 		String orderCode = SystemSeqUtils.getSeq(dbSequenceService.getWxCourseOrderSequenceNumber());
 		// 新增一个待确认的商户订单

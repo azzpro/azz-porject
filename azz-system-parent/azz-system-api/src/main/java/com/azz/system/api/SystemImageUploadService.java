@@ -35,5 +35,8 @@ public interface SystemImageUploadService {
 	 */
 	@RequestMapping(value="/azz/api/imageUpload",method=RequestMethod.POST)
 	JsonResult<String> uploadImage(@RequestParam("bucketname") String bucketname,@RequestParam("filename")String filename,@RequestParam("suffix") String suffix,@RequestParam("filedata") String filedata,@RequestParam("plattype") Integer plattype,@RequestParam("imagetype") Integer imagetype);
+	
+	@RequestMapping(value="/azz/api/createBucketName",method=RequestMethod.POST)
+	JsonResult<String> createBucketName(@RequestParam("bucketname") String bucketname);
 }
 

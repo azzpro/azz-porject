@@ -33,6 +33,32 @@ public interface PayConstants {
 		
 	}
 	
+	public enum RegYee{
+		businessPic("BP","营业执照"),
+		legalBackPic("LBP","法人反面照"),
+		legalFrontPic("LFB","法人正面照"),
+		openAccountPic("OAP","开户许可照"),
+		icpAuthPic("IAP","ICP授权照");
+		private String code;
+		private String msg;
+		public String getCode() {
+			return code;
+		}
+		public void setCode(String code) {
+			this.code = code;
+		}
+		public String getMsg() {
+			return msg;
+		}
+		public void setMsg(String msg) {
+			this.msg = msg;
+		}
+		private RegYee(String code,String msg) {
+			this.code = code;
+			this.msg = msg;
+		}
+		
+	}
 	
 	public enum Status{
 		UR("0","未注册"),RD("1","已注册");
@@ -92,6 +118,40 @@ public interface PayConstants {
 		}
 		
 	}
+	
+	public enum RegCode{
+		SUCCESS("请求成功","0000","SUCCESS"),
+		FAILD("请求失败","9999","FAILD");
+		private String desc;
+		private String code;
+		private String msg;
+		
+		public String getMsg() {
+			return msg;
+		}
+		public void setMsg(String msg) {
+			this.msg = msg;
+		}
+		public String getDesc() {
+			return desc;
+		}
+		public void setDesc(String desc) {
+			this.desc = desc;
+		}
+		public String getCode() {
+			return code;
+		}
+		public void setCode(String code) {
+			this.code = code;
+		}
+		private RegCode(String desc, String code,String msg) {
+			this.desc = desc;
+			this.code = code;
+			this.msg = msg;
+		}
+		
+	}
+	
 	
 	public enum PayType{
 		NCPAY("一键支付","NCPAY"),

@@ -58,7 +58,6 @@ public class SystemUploadController {
 	 * @return
 	 * @author 刘建麟  2018年10月23日 下午2:25:34
 	 */
-	@Deprecated
 	@RequestMapping(value="createBucketName",method=RequestMethod.POST)
 	public JsonResult<String> createBucketName(String bucketname){
 		String name = imageService.createBucketName(bucketname);

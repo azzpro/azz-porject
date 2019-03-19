@@ -28,6 +28,9 @@ public class FileConstants {
 	//客户端端图片文件夹
 	public static final String CLIENT_IMAGE_PATH = "client-image";
 	
+	//易宝图片文件夹
+	public static final String YEEPAY_IMAGE_PATH = "yeepay-image";
+	
 	//法人图片
 	public static final String AZZ_LEGAL_PERSON_PATH = "legal_person_pic";
 	

@@ -1,5 +1,7 @@
 package com.azz.order.client.pojo;
 
+import java.util.Date;
+
 import lombok.Data;
 
 /**
@@ -19,8 +21,8 @@ public class Enterprisereginfoadd {
 	private String merContactName;//商户联系人姓名
 	private String merContactPhone;//商户联系人手机号
 	private String merContactEmail;//商户联系人邮箱 【非必传】
-	private String merLevel1No;//商户一级分类 【非必传】
-	private String merLevel2No;//商户二级分类 【非必传】
+	private String merLevelfNo;//商户一级分类 【非必传】
+	private String merLevelsNo;//商户二级分类 【非必传】
 	private String merProvince;//商户所在省
 	private String merCity;//商户所在市
 	private String merDistrict;//商户所在区
@@ -36,11 +38,16 @@ public class Enterprisereginfoadd {
 	private String bankCode;//开户支行编码
 	private String bankProvince;//开户省【非必传】
 	private String productInfo;//开通产品信息【非必传】
-	private String fileInfo;//资质影印件信息
 	private String requestNo;//入网请求号
 	private String parentMerchantNo;//代理商编号
 	private String businessFunction;//业务功能【非必传】
-	private String notifyUrl;//回调地址
 	private String merAuthorizeType;//授权类型【非必传】
 	private String status;//0 未注册 1已注册
+	private String legalFrontPic;//法人正面身份证照
+	private String legalBackPic;//法人反面身份证照
+	private String openAccountPic;//开户许可照片
+	private String businessPic;//4证合一
+	private String icpAuthPic;//ICP 授权许可照片
+	private String creator;
+	private Date createTime;
 }

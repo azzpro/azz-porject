@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
+import com.azz.core.constants.PayConstants;
 import com.azz.order.client.pojo.ClientPay;
 import com.azz.order.client.pojo.RetBean;
 import com.azz.order.client.pojo.bo.BankBranch;
@@ -38,41 +39,32 @@ import com.azz.util.JSR303ValidateUtils;
  * @author 刘建麟  2018年11月26日 下午3:09:13
  */
 @RestController
-@RequestMapping("/azz/api/pay")
-public class ClientPayController {
+@RequestMapping("/azz/api/merchant")
+public class RegYeeMerchantController {
 	
 	@Autowired
 	private ClientPayService pps;
 	/**
-	 * <p>提交支付</p>
-	 * @param spp
+	 * 子商户入网注册【企业】
+	 * @param request
+	 * @param po
 	 * @return
-	 * @author 刘建麟  2018年11月26日 下午3:14:49
+	 * @throws Exception 
 	 */
-	@RequestMapping(value="submitOrderPay",method=RequestMethod.POST)
-	public Map<String,Object> submitOrderPay(@RequestBody PageOrder po){
-		return pps.submitOrderPay(po);
-	} 
-	
-	/**
-	 * <p>支付管理列表</p>
-	 * @param param
-	 * @return
-	 * @author 刘建麟  2018年12月3日 下午2:46:08
-	 */
-	@RequestMapping("toPayList")
-	public JsonResult<Pagination<ClientPay>> toPayList(@RequestBody PayList pl){
-		return pps.searchParamsList(pl);
+	@RequestMapping("regMerchantYeeEnterpriseAccount")
+	public Map<String,String> regMerchantYeeEnterpriseAccount(@RequestBody EnterprisereginfoCopy po) throws Exception{
+		return pps.regMerchantYeeEnterpriseAccount(po);
 	}
 	
+	
 	/**
-	 * 支付回调
-	 * @param reqStr
+	 * 子商户入网注册【企业】 回调
+	 * @param request
+	 * @param po
 	 * @return
 	 */
-	@RequestMapping("payNotify")
-	public JsonResult<RetBean> payNotify(@RequestParam("responseMsg") String responseMsg,@RequestParam("customerId") String customerId) {
-		return pps.payNotify(responseMsg,customerId);
+	@RequestMapping("regEnterpriseNotify")
+	public void regEnterpriseNotify(HttpServletRequest request,HttpServletResponse response){
 	}
 	
 	
@@ -87,15 +79,5 @@ public class ClientPayController {
 		return pps.getBankBranchInfo(bb);
 	}
 	
-	/**
-	 * <p>
-	 * 支付订单详情
-	 * </p>
-	 * 
-	 */
-	@RequestMapping("getOrderInfo")
-	public JsonResult<ClientPay> getOrderInfo(@RequestParam("number") String number) {
-		return pps.getOrderInfo(number);
-	}
 }
 

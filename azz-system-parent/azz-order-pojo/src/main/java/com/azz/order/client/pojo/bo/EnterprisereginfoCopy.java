@@ -3,7 +3,6 @@ package com.azz.order.client.pojo.bo;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
 
@@ -12,17 +11,17 @@ import lombok.Data;
  * 子商户入网参数【企业】
  */
 @Data
-public class Enterprisereginfo {
+public class EnterprisereginfoCopy {
 	@NotNull(message = "请上传身份证正面照")
-	private MultipartFile legalFrontPic;
+	private YeeModulePic legalFrontPic;
 	@NotNull(message = "请上传身份证反面照")
-	private MultipartFile legalBackPic;
+	private YeeModulePic legalBackPic;
 	@NotNull(message = "请上传开户许可照")
-	private MultipartFile openAccountPic;
+	private YeeModulePic openAccountPic;
 	@NotNull(message = "请上传营业执照")
-	private MultipartFile businessPic;
+	private YeeModulePic businessPic;
 	@NotNull(message = "请上传ICP授权照")
-	private MultipartFile icpAuthPic;
+	private YeeModulePic icpAuthPic;
 	@NotBlank(message="商户全称不能为空")
 	private String merFullName;//商户全称
 	@NotBlank(message="商户简称不能为空")

@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -85,10 +86,15 @@ public class WxPayService {
 	public Map<String,String> submitOrderPay(@RequestBody WxPayOrderInfo po) {
 		WXPayUtil.getLogger().info("openid--------->" + po.getOpenid());
 		//根据课程编号去判断该笔订单是否已支付
-		WxPay wxPay = wpm.selectWxOrder(po.getCoursePayNum());
-		if(wxPay != null) {
-			if(wxPay.getOrderStatus() != PayStatus.NOT_PAID.getValue()){
-				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "支付订单状态异常");
+		List<WxPay> wxPays = wpm.selectWxOrder(po.getCoursePayNum());
+		if(!wxPays.isEmpty()) {
+			for (WxPay wxPay2 : wxPays) {
+				if(wxPay2.getOrderStatus() == ClientConstants.PayStatus.PAY_CLOSED.getValue()) {
+					throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单已关闭");
+				}
+				if(wxPay2.getOrderStatus() == ClientConstants.PayStatus.PAY_SUCCESS.getValue()) {
+					throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单已完成");
+				}
 			}
 		}
 		JsonResult<CourseOrderDetail> detail = orderService.getCourseOrderDetail(po.getCoursePayNum());

@@ -1,5 +1,7 @@
 package com.azz.order.client.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -10,7 +12,7 @@ public interface WxPayMapper {
 	
 	int insertPay(WxPay wp);
 	
-	WxPay selectWxOrder(String course_pay_num);
+	List<WxPay> selectWxOrder(String course_pay_num);
 	
 	String selectWxCourseNum(String no);
 	

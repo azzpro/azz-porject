@@ -408,6 +408,7 @@
 		wcoi.course_name AS courseName,
 		wc.course_pic_name AS coursePicName,
 		wc.course_pic_url AS coursePicUrl,
+		wc.course_info AS courseInfo,
 		wco.grand_total AS grandTotal,
 		wco.order_status_id AS orderStatus,
 		wco.create_time AS orderTime,

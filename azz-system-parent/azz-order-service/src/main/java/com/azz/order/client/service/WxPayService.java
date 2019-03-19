@@ -12,13 +12,11 @@ package com.azz.order.client.service;
  * @author 刘建麟  2018年11月26日 下午3:15:10
  */
 
-import java.io.InputStream;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -32,7 +30,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
+import com.azz.core.constants.ClientConstants;
+import com.azz.core.constants.ClientConstants.PayMethod;
 import com.azz.core.constants.ClientConstants.PayStatus;
+import com.azz.core.constants.PayConstants;
 import com.azz.core.constants.WxCourseConstants.CourseOrderStatus;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.order.client.mapper.WxPayMapper;
@@ -40,6 +41,7 @@ import com.azz.order.client.wx.bo.WxPayOrderInfo;
 import com.azz.order.client.wx.pojo.WxPay;
 import com.azz.util.HttpClientUtil;
 import com.azz.wx.course.api.OrderService;
+import com.azz.wx.course.pojo.bo.CallBackParam;
 import com.azz.wx.course.pojo.vo.CourseOrderDetail;
 import com.github.wxpay.sdk.WXPayConstants;
 import com.github.wxpay.sdk.WXPayConstants.SignType;
@@ -103,7 +105,7 @@ public class WxPayService {
 		}
 		Map<String, String> reqData = null;
 		try {
-			reqData = createReqData(detail.getData().getGrandTotal(),po.getOpenid(),po.getIp(),po.getCourseName());
+			reqData = createReqData(detail.getData().getGrandTotal(),detail.getData().getCourseInfo(),po);
 		}catch (Exception e) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "创建订单错误");
 		}
@@ -160,26 +162,43 @@ public class WxPayService {
 	 * @return
 	 * @throws Exception
 	 */
-	private Map<String,String> createReqData(BigDecimal totalFee,String openid,String ip,String courseName) throws Exception{
+	private Map<String,String> createReqData(BigDecimal totalFee,String info,WxPayOrderInfo po) throws Exception{
 		Map<String,String> reqMap = new HashMap<String,String>();
 		reqMap.put("appid", appid);
 		reqMap.put("mch_id", mchid);
 		reqMap.put("nonce_str", WXPayUtil.generateNonceStr());
 		reqMap.put("sign_type", WXPayConstants.MD5);
-		reqMap.put("body", courseName);
+		reqMap.put("body", po.getCourseName());
 		reqMap.put("out_trade_no", String.valueOf(WXPayUtil.getCurrentTimestamp()));
 		BigDecimal multiply = totalFee.multiply(new BigDecimal(100));
 		String money = multiply.toPlainString();
 		String fenMoney = money.substring(0,money.indexOf("."));
 		reqMap.put("total_fee", fenMoney); //单位分
-		reqMap.put("spbill_create_ip",ip);
+		reqMap.put("spbill_create_ip",po.getIp());
 		reqMap.put("notify_url", callback);
 		reqMap.put("trade_type", "JSAPI");
-		if(openid.equals("")) {
+		if(StringUtils.isBlank(po.getOpenid())) {
 			return null;
 		}
-		reqMap.put("openid", openid);
+		reqMap.put("openid", po.getOpenid());
 		reqMap.put("sign", WXPayUtil.generateSignature(reqMap, api, st));
+		WxPay wp = new WxPay();
+		wp.setCourseName(po.getCourseName());
+		wp.setCourseNum(po.getCourseNum());
+		wp.setCoursePayNum(po.getCoursePayNum());
+		wp.setCreateIp(po.getIp());
+		LocalDateTime now = LocalDateTime.now();
+		wp.setCreateOrderTime(now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
+		wp.setFeeType("CNY");
+		wp.setGoodsBody(po.getCourseName());
+		wp.setGoodsInfo(info);
+		wp.setOrderStatus(ClientConstants.PayStatus.NOT_PAID.getValue());
+		wp.setOutTradeNo(reqMap.get("out_trade_no"));
+		wp.setTotalFee(fenMoney);
+		int i = wpm.insertPay(wp);
+		if(i != 1) {
+			return null;
+		}
 		return reqMap;
 	}
 	
@@ -193,9 +212,30 @@ public class WxPayService {
 			if (return_code.equals("SUCCESS")) {
 				if (out_trade_no != null) {
 					//处理订单逻辑
-					log.info("微信手机支付回调成功订单号:{}",out_trade_no);
-					resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>" + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
-					return resXml;
+					String transaction_id = map.get("transaction_id");
+					String time_end = map.get("time_end");
+					String device_info = map.get("device_info");
+					int i = wpm.updateWxPayByCallback(transaction_id, ClientConstants.PayStatus.PAY_SUCCESS.getValue(), time_end, device_info, out_trade_no);
+					if(i != 1) {
+						log.info("微信手机支付回调更新订单失败:{}",out_trade_no);
+						resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
+						return resXml;
+					}else {
+						String coursePayNum = wpm.selectWxCourseNum(out_trade_no);
+						if(StringUtils.isBlank(coursePayNum)) {
+							log.info("微信手机支付回调更新订单失败:{}",out_trade_no);
+							resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
+							return resXml;
+						}
+						CallBackParam cbp = new CallBackParam();
+		        		cbp.setOrderCode(coursePayNum);
+		        		cbp.setPayMethod(PayMethod.ONLINE.getValue());
+		        		cbp.setOrderType(PayConstants.PayPlatForm.getNum("WECHAT"));
+						orderService.courseOrderPaySuccessOpt(cbp);
+						log.info("微信手机支付回调成功订单号:{}",out_trade_no);
+						resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>" + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
+						return resXml;
+					}
 				}
 			}else{
 				log.info("微信手机支付回调失败订单号:{}",out_trade_no);

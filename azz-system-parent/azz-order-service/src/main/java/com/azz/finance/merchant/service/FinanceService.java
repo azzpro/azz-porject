@@ -6,12 +6,18 @@
  ******************************************************************************/
  
 package com.azz.finance.merchant.service;
+
+import org.springframework.stereotype.Service;
+
 /**
  * <P>TODO</P>
  * @version 1.0
  * @author 黄智聪  2019年3月19日 下午12:01:06
  */
+@Service
 public class FinanceService {
+	
+	
 
 }
 

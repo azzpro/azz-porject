@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.order.client.mapper.WxPayMapper">
+  <resultMap id="BaseResultMap" type="com.azz.order.client.wx.pojo.WxPay">
+    <id column="id" property="id"/>
+  <result column="goods_body" property="goodsBody"/> 
+  <result column="goods_info" property="goodsInfo"/> 
+  <result column="fee_type" property="feeType"/> 
+  <result column="total_fee" property="totalFee"/> 
+  <result column="create_ip" property="createIp"/> 
+  <result column="create_order_time" property="createOrderTime"/> 
+  <result column="expire_order_time" property="expireOrderTime"/> 
+  <result column="order_status" property="orderStatus"/>
+  <result column="course_name" property="courseName"/>
+  <result column="course_num" property="courseNum"/>
+  <result column="course_pay_num" property="coursePayNum"/> 
+  <result column="out_trade_no" property="outTradeNo"/> 
+  <result column="pay_time_end" property="payTimeEnd"/> 
+  <result column="transaction_id" property="transactionId"/> 
+  <result column="device_info" property="deviceInfo"/> 
+</resultMap>
+  <insert id="insertPay" parameterType="com.azz.order.client.wx.pojo.WxPay">
+    insert into wx_pay
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="goodsBody != null">
+        goods_body,
+      </if>
+      <if test="goodsInfo != null">
+        goods_info,
+      </if>
+      <if test="feeType != null">
+        fee_type,
+      </if>
+      <if test="totalFee != null">
+        total_fee,
+      </if>
+      <if test="createIp != null">
+        create_ip,
+      </if>
+      <if test="createOrderTime != null">
+        create_order_time,
+      </if>
+      <if test="expireOrderTime != null">
+        expire_order_time,
+      </if>
+      <if test="orderStatus != null">
+        order_status,
+      </if>
+      <if test="courseName != null">
+        course_name,
+      </if>
+      <if test="courseNum != null">
+        course_num,
+      </if>
+      <if test="coursePayNum != null">
+        course_pay_num,
+      </if>
+      <if test="outTradeNo != null">
+        out_trade_no,
+      </if>
+      <if test="payTimeEnd != null">
+        pay_time_end,
+      </if>
+      <if test="transactionId != null">
+        transaction_id,
+      </if>
+      <if test="deviceInfo != null">
+        device_info,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id},
+      </if>
+      <if test="goodsBody != null">
+        #{goodsBody},
+      </if>
+      <if test="goodsInfo != null">
+        #{goodsInfo},
+      </if>
+      <if test="feeType != null">
+        #{feeType},
+      </if>
+      <if test="totalFee != null">
+        #{totalFee},
+      </if>
+      <if test="createIp != null">
+        #{createIp},
+      </if>
+      <if test="createOrderTime != null">
+        #{createOrderTime},
+      </if>
+      <if test="expireOrderTime != null">
+        #{expireOrderTime},
+      </if>
+      <if test="orderStatus != null">
+        #{orderStatus},
+      </if>
+      <if test="courseName != null">
+        #{courseName},
+      </if>
+      <if test="courseNum != null">
+        #{courseNum},
+      </if>
+      <if test="coursePayNum != null">
+        #{coursePayNum},
+      </if>
+      <if test="outTradeNo != null">
+        #{outTradeNo},
+      </if>
+       <if test="payTimeEnd != null">
+        #{payTimeEnd},
+      </if>
+       <if test="transactionId != null">
+        #{transactionId},
+      </if>
+       <if test="deviceInfo != null">
+        #{deviceInfo},
+      </if>
+    </trim>
+  </insert>
+  <select id="selectWxOrder" resultMap="BaseResultMap">
+  	select order_status from wx_pay
+  	where course_pay_num = #{course_pay_num}
+  </select>
+  
+  <select id="selectWxCourseNum" resultType="String">
+  	select course_pay_num from wx_pay
+  	where out_trade_no = #{no}
+  </select>
+  
+  <update id="updateWxPayByCallback">
+  	update wx_pay set transaction_id = #{otn},order_status = #{os},pay_time_end = #{ptp},device_info =#{di}
+  	where out_trade_no = #{son}
+  </update>
+  
+</mapper>

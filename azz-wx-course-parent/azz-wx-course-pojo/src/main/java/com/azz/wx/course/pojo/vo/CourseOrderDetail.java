@@ -31,6 +31,8 @@ public class CourseOrderDetail {
 	
 	private String coursePicName;
 	
+	private String courseInfo;
+	
     private BigDecimal grandTotal;
 	
 	private Integer orderStatus; 

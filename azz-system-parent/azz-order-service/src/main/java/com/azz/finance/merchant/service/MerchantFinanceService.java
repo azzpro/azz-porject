@@ -29,7 +29,11 @@ import com.azz.order.finance.pojo.MerchantWithdrawDepositApplyOrder;
 import com.azz.order.finance.pojo.bo.SearchMerchantOrderParam;
 import com.azz.order.finance.pojo.bo.SearchWithdrawDepositApplyParam;
 import com.azz.order.finance.pojo.bo.WithdrawDepositApplyParam;
+import com.azz.order.finance.pojo.vo.AccountInfo;
+import com.azz.order.finance.pojo.vo.ApplyInfo;
 import com.azz.order.finance.pojo.vo.MerchantOrderInfo;
+import com.azz.order.finance.pojo.vo.OrderInfo;
+import com.azz.order.finance.pojo.vo.WithdrawDepositApplyDetail;
 import com.azz.order.finance.pojo.vo.WithdrawDepositApplyInfo;
 import com.azz.order.finance.pojo.vo.WithdrawDepositCount;
 import com.azz.order.merchant.mapper.MerchantOrderMapper;
@@ -93,6 +97,30 @@ public class MerchantFinanceService {
 		PageHelper.startPage(param.getPageNum(), param.getPageSize());
 		List<WithdrawDepositApplyInfo> infos = merchantWithdrawDepositApplyMapper.getWithdrawDepositApplyInfos(param);
 		return JsonResult.successJsonResult(new Pagination<>(infos));
+	}
+	
+	/**
+	 * 
+	 * <p>查询提现申请详情</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年3月19日 下午4:18:04
+	 */
+	public JsonResult<WithdrawDepositApplyDetail> getWithdrawDepositApplyDetail(@RequestParam("applyCode") String applyCode){
+		if(StringUtils.isBlank(applyCode)) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "提现申请编码不能为空");
+		}
+		// 提现信息
+		ApplyInfo applyInfo = merchantWithdrawDepositApplyMapper.getWithdrawDepositApplyInfo(applyCode);
+		// 账户信息
+		AccountInfo accountInfo = null;// TODO
+		// 订单信息
+		OrderInfo orderInfo = merchantWithdrawDepositApplyMapper.getWithdrawDepositApplyOrderInfo(applyCode);
+		if(orderInfo != null) {
+			// 查询提现申请详情中的订单列表
+			orderInfo.setOrders(merchantWithdrawDepositApplyMapper.getWithdrawDepositApplyOrders(applyCode));
+		}
+		return JsonResult.successJsonResult(new WithdrawDepositApplyDetail(applyInfo, accountInfo, orderInfo));
 	}
 	
 	/**

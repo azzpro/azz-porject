@@ -20,6 +20,7 @@ import com.azz.order.finance.pojo.bo.SearchMerchantOrderParam;
 import com.azz.order.finance.pojo.bo.SearchWithdrawDepositApplyParam;
 import com.azz.order.finance.pojo.bo.WithdrawDepositApplyParam;
 import com.azz.order.finance.pojo.vo.MerchantOrderInfo;
+import com.azz.order.finance.pojo.vo.WithdrawDepositApplyDetail;
 import com.azz.order.finance.pojo.vo.WithdrawDepositApplyInfo;
 import com.azz.order.finance.pojo.vo.WithdrawDepositCount;
 
@@ -57,6 +58,18 @@ public class MerchantFinanceController {
 	@RequestMapping("/getWithdrawDepositApplyInfos")
 	public JsonResult<Pagination<WithdrawDepositApplyInfo>> getWithdrawDepositApplyInfos(@RequestBody SearchWithdrawDepositApplyParam param){
 		return merchantFinanceService.getWithdrawDepositApplyInfos(param);
+	}
+	
+	/**
+	 * 
+	 * <p>查询提现申请详情</p>
+	 * @param applyCode
+	 * @return
+	 * @author 黄智聪  2019年3月19日 下午7:28:50
+	 */
+	@RequestMapping("/getWithdrawDepositApplyDetail")
+	public JsonResult<WithdrawDepositApplyDetail> getWithdrawDepositApplyDetail(@RequestParam("applyCode") String applyCode){
+		return merchantFinanceService.getWithdrawDepositApplyDetail(applyCode);
 	}
 	
 	/**

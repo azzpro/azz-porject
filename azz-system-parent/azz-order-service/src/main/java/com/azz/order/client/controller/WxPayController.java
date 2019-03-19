@@ -59,7 +59,7 @@ public class WxPayController {
 	 * @return
 	 */
 	@RequestMapping("callback")
-	public String callback(@RequestParam("wx") String wx) {
+	public String callback(@RequestParam("xml") String wx) {
 		return pps.callback(wx);
 	}
 	

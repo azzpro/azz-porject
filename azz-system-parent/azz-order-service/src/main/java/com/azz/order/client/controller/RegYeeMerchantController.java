@@ -64,7 +64,7 @@ public class RegYeeMerchantController {
 	 * @return
 	 */
 	@RequestMapping("regEnterpriseNotify")
-	public void regEnterpriseNotify(HttpServletRequest request,HttpServletResponse response){
+	public void regEnterpriseNotify(){
 	}
 	
 	

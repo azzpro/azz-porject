@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -85,10 +86,7 @@ public class ClientPayService {
 
 	@Value("${yeepay.regEn-notify-url}")
 	private String regEnNotifyUrl;
-
-	@Value("${yeepay.regPe-notify-url}")
-	private String regPeNotifyUrl;
-
+	
 	@Autowired
 	private ClientPayMapper ppm;
 
@@ -104,6 +102,8 @@ public class ClientPayService {
 	@Autowired
 	private SystemImageUploadService systemImageUploadService;
 
+	public static String REQUEST_PREFIX = "YOP_ENREG";
+	
 	@Transactional
 	public Map<String, Object> submitOrderPay(@RequestBody PageOrder po) {
 		List<ClientPay> selectOrder = ppm.selectOrder(po.getOrderCode());
@@ -404,8 +404,10 @@ public class ClientPayService {
 		JSONObject productInfo = JSONObject.fromObject(str);
 		params.put("productInfo",productInfo.toString());
 		params.put("fileInfo",array.toString());
-		params.put("requestNo",po.getRequestNo());
-		params.put("parentMerchantNo",po.getParentMerchantNo());
+		LocalDateTime now = LocalDateTime.now();
+		String string = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+		params.put("requestNo",REQUEST_PREFIX+string);
+		params.put("parentMerchantNo",YeepayService.getParentMerchantNo());
 		params.put("notifyUrl",regEnNotifyUrl);
 		if(StringUtils.isBlank(po.getMerAuthorizeType())){
 			params.put("merAuthorizeType", "");
@@ -666,4 +668,6 @@ public class ClientPayService {
 		}
 		return null;
 	}
+
+	
 }

@@ -43,7 +43,7 @@ public interface RegYeeMerchantService {
 	 * @return
 	 */
 	@RequestMapping("regEnterpriseNotify")
-	public void regEnterpriseNotify(HttpServletRequest request,HttpServletResponse response);
+	public void regEnterpriseNotify();
 	/**
 	 * 获取支行信息
 	 * @param request

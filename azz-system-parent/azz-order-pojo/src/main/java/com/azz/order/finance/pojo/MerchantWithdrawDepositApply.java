@@ -27,6 +27,13 @@ public class MerchantWithdrawDepositApply implements Serializable {
     private String merchantCode;
 
     /**
+     * 提现账户
+     *
+     * @mbg.generated
+     */
+    private String withdrawDepositAccount;
+
+    /**
      * 订单总量
      *
      * @mbg.generated
@@ -182,6 +189,30 @@ public class MerchantWithdrawDepositApply implements Serializable {
      */
     public void setMerchantCode(String merchantCode) {
         this.merchantCode = merchantCode == null ? null : merchantCode.trim();
+    }
+
+    /**
+     * 提现账户<br/>
+     * 返回值对应的表列名 merchant_withdraw_deposit_apply.withdraw_deposit_account
+     *
+     * @return 返回值对应 merchant_withdraw_deposit_apply.withdraw_deposit_account
+     *
+     * @mbg.generated
+     */
+    public String getWithdrawDepositAccount() {
+        return withdrawDepositAccount;
+    }
+
+    /**
+     * 提现账户<br/>
+     * merchant_withdraw_deposit_apply.withdraw_deposit_account
+     *
+     * @param withdrawDepositAccount 值对应 merchant_withdraw_deposit_apply.withdraw_deposit_account
+     *
+     * @mbg.generated
+     */
+    public void setWithdrawDepositAccount(String withdrawDepositAccount) {
+        this.withdrawDepositAccount = withdrawDepositAccount == null ? null : withdrawDepositAccount.trim();
     }
 
     /**
@@ -487,6 +518,7 @@ public class MerchantWithdrawDepositApply implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getApplyCode() == null ? other.getApplyCode() == null : this.getApplyCode().equals(other.getApplyCode()))
             && (this.getMerchantCode() == null ? other.getMerchantCode() == null : this.getMerchantCode().equals(other.getMerchantCode()))
+            && (this.getWithdrawDepositAccount() == null ? other.getWithdrawDepositAccount() == null : this.getWithdrawDepositAccount().equals(other.getWithdrawDepositAccount()))
             && (this.getTotalOrderCount() == null ? other.getTotalOrderCount() == null : this.getTotalOrderCount().equals(other.getTotalOrderCount()))
             && (this.getTotalOrderMoney() == null ? other.getTotalOrderMoney() == null : this.getTotalOrderMoney().equals(other.getTotalOrderMoney()))
             && (this.getTotalWithdrawDepositMoney() == null ? other.getTotalWithdrawDepositMoney() == null : this.getTotalWithdrawDepositMoney().equals(other.getTotalWithdrawDepositMoney()))
@@ -508,6 +540,7 @@ public class MerchantWithdrawDepositApply implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getApplyCode() == null) ? 0 : getApplyCode().hashCode());
         result = prime * result + ((getMerchantCode() == null) ? 0 : getMerchantCode().hashCode());
+        result = prime * result + ((getWithdrawDepositAccount() == null) ? 0 : getWithdrawDepositAccount().hashCode());
         result = prime * result + ((getTotalOrderCount() == null) ? 0 : getTotalOrderCount().hashCode());
         result = prime * result + ((getTotalOrderMoney() == null) ? 0 : getTotalOrderMoney().hashCode());
         result = prime * result + ((getTotalWithdrawDepositMoney() == null) ? 0 : getTotalWithdrawDepositMoney().hashCode());
@@ -532,6 +565,7 @@ public class MerchantWithdrawDepositApply implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", applyCode=").append(applyCode);
         sb.append(", merchantCode=").append(merchantCode);
+        sb.append(", withdrawDepositAccount=").append(withdrawDepositAccount);
         sb.append(", totalOrderCount=").append(totalOrderCount);
         sb.append(", totalOrderMoney=").append(totalOrderMoney);
         sb.append(", totalWithdrawDepositMoney=").append(totalWithdrawDepositMoney);

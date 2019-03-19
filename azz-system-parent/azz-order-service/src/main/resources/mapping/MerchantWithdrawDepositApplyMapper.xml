@@ -5,6 +5,7 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="apply_code" jdbcType="VARCHAR" property="applyCode" />
     <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="withdraw_deposit_account" jdbcType="VARCHAR" property="withdrawDepositAccount" />
     <result column="total_order_count" jdbcType="INTEGER" property="totalOrderCount" />
     <result column="total_order_money" jdbcType="DECIMAL" property="totalOrderMoney" />
     <result column="total_withdraw_deposit_money" jdbcType="DECIMAL" property="totalWithdrawDepositMoney" />
@@ -19,9 +20,9 @@
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, apply_code, merchant_code, total_order_count, total_order_money, total_withdraw_deposit_money, 
-    third_info_code, third_info_status, third_info_withdraw_deposit_money, status, remark, 
-    creator, create_time, modifier, modify_time
+    id, apply_code, merchant_code, withdraw_deposit_account, total_order_count, total_order_money, 
+    total_withdraw_deposit_money, third_info_code, third_info_status, third_info_withdraw_deposit_money, 
+    status, remark, creator, create_time, modifier, modify_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -35,13 +36,15 @@
   </delete>
   <insert id="insert" parameterType="com.azz.order.finance.pojo.MerchantWithdrawDepositApply">
     insert into merchant_withdraw_deposit_apply (id, apply_code, merchant_code, 
-      total_order_count, total_order_money, total_withdraw_deposit_money, 
+      withdraw_deposit_account, total_order_count, 
+      total_order_money, total_withdraw_deposit_money, 
       third_info_code, third_info_status, third_info_withdraw_deposit_money, 
       status, remark, creator, 
       create_time, modifier, modify_time
       )
     values (#{id,jdbcType=BIGINT}, #{applyCode,jdbcType=VARCHAR}, #{merchantCode,jdbcType=VARCHAR}, 
-      #{totalOrderCount,jdbcType=INTEGER}, #{totalOrderMoney,jdbcType=DECIMAL}, #{totalWithdrawDepositMoney,jdbcType=DECIMAL}, 
+      #{withdrawDepositAccount,jdbcType=VARCHAR}, #{totalOrderCount,jdbcType=INTEGER}, 
+      #{totalOrderMoney,jdbcType=DECIMAL}, #{totalWithdrawDepositMoney,jdbcType=DECIMAL}, 
       #{thirdInfoCode,jdbcType=VARCHAR}, #{thirdInfoStatus,jdbcType=VARCHAR}, #{thirdInfoWithdrawDepositMoney,jdbcType=DECIMAL}, 
       #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
@@ -58,6 +61,9 @@
       </if>
       <if test="merchantCode != null">
         merchant_code,
+      </if>
+      <if test="withdrawDepositAccount != null">
+        withdraw_deposit_account,
       </if>
       <if test="totalOrderCount != null">
         total_order_count,
@@ -106,6 +112,9 @@
       <if test="merchantCode != null">
         #{merchantCode,jdbcType=VARCHAR},
       </if>
+      <if test="withdrawDepositAccount != null">
+        #{withdrawDepositAccount,jdbcType=VARCHAR},
+      </if>
       <if test="totalOrderCount != null">
         #{totalOrderCount,jdbcType=INTEGER},
       </if>
@@ -153,6 +162,9 @@
       <if test="merchantCode != null">
         merchant_code = #{merchantCode,jdbcType=VARCHAR},
       </if>
+      <if test="withdrawDepositAccount != null">
+        withdraw_deposit_account = #{withdrawDepositAccount,jdbcType=VARCHAR},
+      </if>
       <if test="totalOrderCount != null">
         total_order_count = #{totalOrderCount,jdbcType=INTEGER},
       </if>
@@ -196,6 +208,7 @@
     update merchant_withdraw_deposit_apply
     set apply_code = #{applyCode,jdbcType=VARCHAR},
       merchant_code = #{merchantCode,jdbcType=VARCHAR},
+      withdraw_deposit_account = #{withdrawDepositAccount,jdbcType=VARCHAR},
       total_order_count = #{totalOrderCount,jdbcType=INTEGER},
       total_order_money = #{totalOrderMoney,jdbcType=DECIMAL},
       total_withdraw_deposit_money = #{totalWithdrawDepositMoney,jdbcType=DECIMAL},
@@ -210,4 +223,28 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="getWithdrawDepositApplyInfos" parameterType="com.azz.order.finance.pojo.bo.SearchWithdrawDepositApplyParam" resultType="com.azz.order.finance.pojo.vo.WithdrawDepositApplyInfo">
+    SELECT
+		mwda.apply_code AS applyCode,
+		mwda.total_withdraw_deposit_money AS totalWithdrawDepositMoney,
+		mwda.total_order_money - mwda.total_withdraw_deposit_money AS commissionCharge,
+		mwda. STATUS AS STATUS,
+		mwda.withdraw_deposit_account AS withdrawDepositAccount,
+		mwda.create_time AS createTime
+	FROM
+		merchant_withdraw_deposit_apply mwda
+	JOIN merchant_user mu ON mu.merchant_user_code = mwda.creator
+	<where>
+		mwda.merchant_code = #{merchantCode}
+		<if test="searchInput != null and searchInput != ''">
+		AND (
+				mwda.apply_code LIKE CONCAT('%', #{searchInput}, '%') 
+			OR mu.merchant_user_name LIKE CONCAT('%', #{searchInput}, '%')
+		)
+		</if>
+	</where>
+	ORDER BY
+		mwda.create_time DESC
+  </select>
 </mapper>

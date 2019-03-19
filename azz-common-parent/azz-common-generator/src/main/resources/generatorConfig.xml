@@ -48,13 +48,13 @@
 			<property name="enableSubPackages" value="true" />
 		</javaClientGenerator>
 
-		<table tableName="wx_course_evaluation"
-			domainObjectName="WxCourseEvaluation" enableCountByExample="false"
+		<table tableName="merchant_withdraw_deposit_apply"
+			domainObjectName="MerchantWithdrawDepositApply" enableCountByExample="false"
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false"></table>
 			
-		<table tableName="wx_course_order_item"
-			domainObjectName="WxCourseOrderItem" enableCountByExample="false"
+		<table tableName="merchant_withdraw_deposit_apply_order"
+			domainObjectName="MerchantWithdrawDepositApplyOrder" enableCountByExample="false"
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false"></table>
 

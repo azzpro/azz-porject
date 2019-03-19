@@ -4,6 +4,15 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.azz.order.finance.pojo.MerchantWithdrawDepositApply.MerchantWithdrawDepositApplyBuilder;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class MerchantWithdrawDepositApplyOrder implements Serializable {
     /**
      * 主键id

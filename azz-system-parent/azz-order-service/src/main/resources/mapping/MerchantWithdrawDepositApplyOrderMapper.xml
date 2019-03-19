@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.finance.merchant.mapper.MerchantWithdrawDepositApplyOrderMapper">
+  <resultMap id="BaseResultMap" type="com.azz.order.finance.pojo.MerchantWithdrawDepositApplyOrder">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="apply_code" jdbcType="VARCHAR" property="applyCode" />
+    <result column="merchant_order_code" jdbcType="VARCHAR" property="merchantOrderCode" />
+    <result column="grand_total" jdbcType="DECIMAL" property="grandTotal" />
+    <result column="withdraw_deposit_money" jdbcType="DECIMAL" property="withdrawDepositMoney" />
+    <result column="transaction_cost" jdbcType="DECIMAL" property="transactionCost" />
+    <result column="order_date" jdbcType="TIMESTAMP" property="orderDate" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, apply_code, merchant_order_code, grand_total, withdraw_deposit_money, transaction_cost, 
+    order_date, status, remark, creator, create_time, modifier, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_withdraw_deposit_apply_order
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from merchant_withdraw_deposit_apply_order
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.order.finance.pojo.MerchantWithdrawDepositApplyOrder">
+    insert into merchant_withdraw_deposit_apply_order (id, apply_code, merchant_order_code, 
+      grand_total, withdraw_deposit_money, transaction_cost, 
+      order_date, status, remark, 
+      creator, create_time, modifier, 
+      modify_time)
+    values (#{id,jdbcType=BIGINT}, #{applyCode,jdbcType=VARCHAR}, #{merchantOrderCode,jdbcType=VARCHAR}, 
+      #{grandTotal,jdbcType=DECIMAL}, #{withdrawDepositMoney,jdbcType=DECIMAL}, #{transactionCost,jdbcType=DECIMAL}, 
+      #{orderDate,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.order.finance.pojo.MerchantWithdrawDepositApplyOrder">
+    insert into merchant_withdraw_deposit_apply_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="applyCode != null">
+        apply_code,
+      </if>
+      <if test="merchantOrderCode != null">
+        merchant_order_code,
+      </if>
+      <if test="grandTotal != null">
+        grand_total,
+      </if>
+      <if test="withdrawDepositMoney != null">
+        withdraw_deposit_money,
+      </if>
+      <if test="transactionCost != null">
+        transaction_cost,
+      </if>
+      <if test="orderDate != null">
+        order_date,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="applyCode != null">
+        #{applyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantOrderCode != null">
+        #{merchantOrderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="grandTotal != null">
+        #{grandTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="withdrawDepositMoney != null">
+        #{withdrawDepositMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="transactionCost != null">
+        #{transactionCost,jdbcType=DECIMAL},
+      </if>
+      <if test="orderDate != null">
+        #{orderDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.order.finance.pojo.MerchantWithdrawDepositApplyOrder">
+    update merchant_withdraw_deposit_apply_order
+    <set>
+      <if test="applyCode != null">
+        apply_code = #{applyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantOrderCode != null">
+        merchant_order_code = #{merchantOrderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="grandTotal != null">
+        grand_total = #{grandTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="withdrawDepositMoney != null">
+        withdraw_deposit_money = #{withdrawDepositMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="transactionCost != null">
+        transaction_cost = #{transactionCost,jdbcType=DECIMAL},
+      </if>
+      <if test="orderDate != null">
+        order_date = #{orderDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.order.finance.pojo.MerchantWithdrawDepositApplyOrder">
+    update merchant_withdraw_deposit_apply_order
+    set apply_code = #{applyCode,jdbcType=VARCHAR},
+      merchant_order_code = #{merchantOrderCode,jdbcType=VARCHAR},
+      grand_total = #{grandTotal,jdbcType=DECIMAL},
+      withdraw_deposit_money = #{withdrawDepositMoney,jdbcType=DECIMAL},
+      transaction_cost = #{transactionCost,jdbcType=DECIMAL},
+      order_date = #{orderDate,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

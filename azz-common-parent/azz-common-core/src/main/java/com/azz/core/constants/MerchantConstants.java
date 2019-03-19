@@ -477,4 +477,32 @@ public abstract class MerchantConstants {
 
 	}
 	
+	/**
+     * 
+     * <P>资质申请状态（0：未申请 1：待审批 2：已通过 3：已拒绝）</P>
+     * @version 1.0
+     * @author 黄智聪  2018年10月23日 上午11:57:37
+     */
+    public enum WithdrawDepositApplyStatus {
+
+    	PENDING(1, "待审核"),
+	
+		NOT_PAID_WITH(2, "待打款"),
+		
+		PAID_WITH(3, "已打款"),
+		
+		CLOSED(4, "已关闭");
+	
+		@Getter
+		private int value;
+	
+		@Getter
+		private String desc;
+	
+		WithdrawDepositApplyStatus(int value, String desc) {
+		    this.value = value;
+		    this.desc = desc;
+		}
+    }
+	
 }

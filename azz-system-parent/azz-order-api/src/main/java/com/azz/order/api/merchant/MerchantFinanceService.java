@@ -1,21 +1,19 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2019年3月19日 上午11:59:47
+ * Create on 2019年3月19日 下午6:40:33
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
-package com.azz.finance.merchant.contoller;
+package com.azz.order.api.merchant;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
-import com.azz.finance.merchant.service.MerchantFinanceService;
 import com.azz.order.finance.pojo.bo.SearchMerchantOrderParam;
 import com.azz.order.finance.pojo.bo.SearchWithdrawDepositApplyParam;
 import com.azz.order.finance.pojo.bo.WithdrawDepositApplyParam;
@@ -26,15 +24,11 @@ import com.azz.order.finance.pojo.vo.WithdrawDepositCount;
 /**
  * <P>TODO</P>
  * @version 1.0
- * @author 黄智聪  2019年3月19日 上午11:59:47
+ * @author 黄智聪  2019年3月19日 下午6:40:33
  */
-@RestController
-@RequestMapping("/azz/api/merchant/finance")
-public class MerchantFinanceController {
-	
-	@Autowired
-	private MerchantFinanceService merchantFinanceService;
-	
+@FeignClient("azz-order-service")
+public interface MerchantFinanceService {
+
 	/**
 	 * 
 	 * <p>根据商户查询提现统计</p>
@@ -42,10 +36,9 @@ public class MerchantFinanceController {
 	 * @return
 	 * @author 黄智聪  2019年3月19日 下午4:26:36
 	 */
-	@RequestMapping("/getWithdrawDepositCount")
-	public JsonResult<WithdrawDepositCount> getWithdrawDepositCount(@RequestParam("merchantCode") String merchantCode){
-		return merchantFinanceService.getWithdrawDepositCount(merchantCode);
-	}
+	@RequestMapping("/azz/api/merchant/finance/getWithdrawDepositCount")
+	public JsonResult<WithdrawDepositCount> getWithdrawDepositCount(@RequestParam("merchantCode") String merchantCode);
+
 	
 	/**
 	 * 
@@ -54,10 +47,9 @@ public class MerchantFinanceController {
 	 * @return
 	 * @author 黄智聪  2019年3月19日 下午4:18:04
 	 */
-	@RequestMapping("/getWithdrawDepositApplyInfos")
-	public JsonResult<Pagination<WithdrawDepositApplyInfo>> getWithdrawDepositApplyInfos(@RequestBody SearchWithdrawDepositApplyParam param){
-		return merchantFinanceService.getWithdrawDepositApplyInfos(param);
-	}
+	@RequestMapping("/azz/api/merchant/finance/getWithdrawDepositApplyInfos")
+	public JsonResult<Pagination<WithdrawDepositApplyInfo>> getWithdrawDepositApplyInfos(@RequestBody SearchWithdrawDepositApplyParam param);
+
 	
 	/**
 	 * 
@@ -66,10 +58,9 @@ public class MerchantFinanceController {
 	 * @return
 	 * @author 黄智聪  2019年3月19日 下午4:18:04
 	 */
-	@RequestMapping("/withdrawDepositApply")
-	public JsonResult<String> withdrawDepositApply(@RequestBody WithdrawDepositApplyParam param){
-		return merchantFinanceService.withdrawDepositApply(param);
-	}
+	@RequestMapping("/azz/api/merchant/finance/withdrawDepositApply")
+	public JsonResult<String> withdrawDepositApply(@RequestBody WithdrawDepositApplyParam param);
+
 	
 	/**
 	 * 
@@ -78,10 +69,9 @@ public class MerchantFinanceController {
 	 * @return
 	 * @author 黄智聪  2019年3月19日 下午4:18:04
 	 */
-	@RequestMapping("/getMerchantOrders")
-	public JsonResult<Pagination<MerchantOrderInfo>> getMerchantOrders(@RequestBody SearchMerchantOrderParam param){
-		return merchantFinanceService.getMerchantOrders(param);
-	}
+	@RequestMapping("/azz/api/merchant/finance/getMerchantOrders")
+	public JsonResult<Pagination<MerchantOrderInfo>> getMerchantOrders(@RequestBody SearchMerchantOrderParam param);
 
+	
 }
 

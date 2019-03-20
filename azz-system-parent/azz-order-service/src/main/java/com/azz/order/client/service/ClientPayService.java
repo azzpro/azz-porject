@@ -459,6 +459,14 @@ public class ClientPayService {
 		}
 	}
 
+	
+	/**
+	 * 易宝提现
+	 */
+	public void CashWithdrawal() {
+		
+	}
+	
 
 	/**
 	 * 获取支行信息
@@ -636,8 +644,6 @@ public class ClientPayService {
 	 */
 	public Map<String,String> uploadModulePic(List<YeeModulePic> pic,String name) {
 		//创建OS存储空间
-		JsonResult<String> result = systemImageUploadService.createBucketName(name);
-		log.info("os 存储空间--------->"+result.getData());
 		Map<String,String> fileMap = new HashMap<String,String>();
 		if(!pic.isEmpty()) {
 			for (YeeModulePic yeeModulePic : pic) {
@@ -656,7 +662,9 @@ public class ClientPayService {
 				String string = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
 				//组装新文件名
 				String newFileName = string+"_"+name;
-				JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, fileName.substring(fileName.indexOf(".")),
+				String suffix = fileName.substring(fileName.indexOf("."));
+				log.info("文件后缀为--------->"+suffix);
+				JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix,
 						 fileDate, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_OTHER_IMAGE_TYPE);
 				if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 					fileMap.put(yeeModulePic.getType(), jr.getData());

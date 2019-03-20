@@ -33,3 +33,4 @@ com.azz.sequence.sequence.service.impl.WxCourseOrderSequenceImpl
 com.azz.sequence.sequence.service.impl.WxCourseOrderAfterSaleApplySequenceImpl
 com.azz.sequence.sequence.service.impl.WxCourseOrderRefundSequenceImpl
 com.azz.sequence.sequence.service.impl.WxCourseOrderWithdrawSequenceImpl
+com.azz.sequence.sequence.service.impl.WithdrawDepositApplySequenceImpl

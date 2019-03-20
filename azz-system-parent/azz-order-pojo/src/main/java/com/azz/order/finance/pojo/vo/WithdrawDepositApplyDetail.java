@@ -29,5 +29,8 @@ public class WithdrawDepositApplyDetail {
 	// 订单信息
 	private OrderInfo orderInfo;
 	
+	//　三方信息
+	private ThirdInfo thirdInfo;
+	
 }
 

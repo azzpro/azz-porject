@@ -7,8 +7,6 @@
  
 package com.azz.order.finance.pojo.bo;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 import com.azz.core.common.QueryPage;
 
 import lombok.Data;
@@ -25,7 +23,6 @@ public class SearchWithdrawDepositApplyParam extends QueryPage{
 	
 	private static final long serialVersionUID = 8770090692145173298L;
 	
-	@NotBlank(message = "缺少请求参数")
 	private String merchantCode;
 	
 	private String searchInput;

@@ -93,7 +93,9 @@ public class MerchantFinanceService {
 	 * @author 黄智聪  2019年3月19日 下午4:18:04
 	 */
 	public JsonResult<Pagination<WithdrawDepositApplyInfo>> getWithdrawDepositApplyInfos(@RequestBody SearchWithdrawDepositApplyParam param){
-		JSR303ValidateUtils.validate(param);
+		if(StringUtils.isBlank(param.getMerchantCode())) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "缺少请求参数");
+		}
 		PageHelper.startPage(param.getPageNum(), param.getPageSize());
 		List<WithdrawDepositApplyInfo> infos = merchantWithdrawDepositApplyMapper.getWithdrawDepositApplyInfos(param);
 		return JsonResult.successJsonResult(new Pagination<>(infos));
@@ -120,7 +122,7 @@ public class MerchantFinanceService {
 			// 查询提现申请详情中的订单列表
 			orderInfo.setOrders(merchantWithdrawDepositApplyMapper.getWithdrawDepositApplyOrders(applyCode));
 		}
-		return JsonResult.successJsonResult(new WithdrawDepositApplyDetail(applyInfo, accountInfo, orderInfo));
+		return JsonResult.successJsonResult(new WithdrawDepositApplyDetail(applyInfo, accountInfo, orderInfo, null));
 	}
 	
 	/**
@@ -134,8 +136,12 @@ public class MerchantFinanceService {
 		JSR303ValidateUtils.validate(param);
 		Date nowDate = new Date();
 		String applyCode = System.currentTimeMillis() + ""; // TODO
-		
 		List<String> orderCodes = param.getMerchantOrderCodes();
+		// 判断所选订单是否存在已经提过款的或正在提款中的
+		int count = merchantWithdrawDepositApplyOrderMapper.existPayWithOrder(orderCodes);
+		if(count > 0) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "所选订单中包含提款中或已提款的订单");
+		}
 		// 订单总额
 		BigDecimal totalOrderMoney = BigDecimal.ZERO;
 		// 实际到账金额

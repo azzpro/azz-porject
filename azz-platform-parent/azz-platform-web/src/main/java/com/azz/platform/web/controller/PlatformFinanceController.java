@@ -5,17 +5,16 @@
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
-package com.azz.finance.platform.contoller;
+package com.azz.platform.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
-import com.azz.finance.platform.service.PlatformFinanceService;
+import com.azz.order.api.platform.PlatformFinanceService;
 import com.azz.order.finance.pojo.bo.SearchWithdrawDepositApplyParam;
 import com.azz.order.finance.pojo.vo.WithdrawDepositApplyDetail;
 import com.azz.order.finance.pojo.vo.WithdrawDepositApplyInfo;
@@ -40,7 +39,7 @@ public class PlatformFinanceController {
 	 * @author 黄智聪  2019年3月19日 下午4:18:04
 	 */
 	@RequestMapping("/getPlatformWithdrawDepositApplyInfos")
-	public JsonResult<Pagination<WithdrawDepositApplyInfo>> getPlatformWithdrawDepositApplyInfos(@RequestBody SearchWithdrawDepositApplyParam param){
+	public JsonResult<Pagination<WithdrawDepositApplyInfo>> getPlatformWithdrawDepositApplyInfos(SearchWithdrawDepositApplyParam param){
 		return platformFinanceService.getPlatformWithdrawDepositApplyInfos(param);
 	}
 	

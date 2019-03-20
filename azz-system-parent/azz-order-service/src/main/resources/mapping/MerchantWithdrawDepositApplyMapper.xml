@@ -236,7 +236,9 @@
 		merchant_withdraw_deposit_apply mwda
 	JOIN merchant_user mu ON mu.merchant_user_code = mwda.creator
 	<where>
-		mwda.merchant_code = #{merchantCode}
+		<if test="merchantCode != null and merchantCode != ''">
+			mwda.merchant_code = #{merchantCode}
+		</if>
 		<if test="searchInput != null and searchInput != ''">
 		AND (
 				mwda.apply_code LIKE CONCAT('%', #{searchInput}, '%') 
@@ -303,7 +305,7 @@
   
   <select id="getWithdrawDepositMoneyByMerchantCode" parameterType="string" resultType="java.math.BigDecimal">
 	SELECT
-		IFNULL(SUM(mwda.total_withdraw_deposit_money),0) AS withdrawDepositMoney
+		IFNULL(SUM(mwda.total_order_money),0) AS withdrawDepositMoney
 	FROM
 		merchant_withdraw_deposit_apply mwda
 	WHERE
@@ -316,7 +318,7 @@
 		mo.merchant_order_code AS merchantOrderCode,
 		mo.grand_total AS grandTotal,
 		mo.order_status_id AS orderStatusId,
-		mo.create_time AS orderTime,
+		mo.create_time AS orderDate,
 		CASE
 	WHEN (mwdao.id IS NULL)
 	OR (
@@ -344,6 +346,30 @@
 	</where>
 	ORDER BY
 		mo.create_time DESC
+  </select>
+  
+  <select id="getPlatformWithdrawDepositApplyInfos" parameterType="com.azz.order.finance.pojo.bo.SearchWithdrawDepositApplyParam" resultType="com.azz.order.finance.pojo.vo.WithdrawDepositApplyInfo">
+    SELECT
+		mwda.apply_code AS applyCode,
+		mwda.total_order_money AS totalOrderMoney,
+		mwda.total_withdraw_deposit_money AS totalWithdrawDepositMoney,
+		mwda. STATUS AS status,
+		m.merchant_name AS merchantName,
+		mu.merchant_user_name AS creator,
+		mwda.create_time AS createTime
+	FROM
+		merchant_withdraw_deposit_apply mwda
+	JOIN merchant_user mu ON mu.merchant_user_code = mwda.creator
+	JOIN merchant m ON m.merchant_code = mu.merchant_code
+	<where>
+		<if test="searchInput != null and searchInput != ''">
+				mwda.apply_code LIKE CONCAT('%', #{searchInput}, '%') 
+			OR mu.merchant_user_name LIKE CONCAT('%', #{searchInput}, '%')
+			OR m.merchant_name LIKE CONCAT('%', #{searchInput}, '%')
+		</if>
+	</where>
+	ORDER BY
+		mwda.create_time DESC
   </select>
   
 </mapper>

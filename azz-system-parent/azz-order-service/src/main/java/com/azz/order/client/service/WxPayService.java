@@ -201,7 +201,6 @@ public class WxPayService {
 		wp.setOrderStatus(ClientConstants.PayStatus.NOT_PAID.getValue());
 		wp.setOutTradeNo(reqMap.get("out_trade_no"));
 		wp.setTotalFee(fenMoney);
-		wp.setSign(reqMap.get("sign"));
 		int i = wpm.insertPay(wp);
 		if(i != 1) {
 			return null;
@@ -224,15 +223,18 @@ public class WxPayService {
 					String device_info = map.get("device_info");
 					String total_fee = map.get("total_fee");
 					String sign = map.get("sign");
+					String signature = WXPayUtil.generateSignature(map, api, st);
 					Map<String,String> maps = wpm.selectTotalFeeByOrderNum(out_trade_no);
 					log.info("微信回调支付金额:{}",total_fee);
 					log.info("订单金额:{}",maps.get("total_fee"));
+					log.info("微信回调签名:{}",sign);
+					log.info("回调签名:{}",signature);
 					if(!total_fee.equals(maps.get("total_fee"))) {
 						log.info("微信手机支付回调金额不一致:{}",out_trade_no);
 						resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
 						return resXml;
 					}
-					if(!sign.equals(maps.get("sign"))) {
+					if(!sign.equals(signature)) {
 						log.info("微信手机支付回调签名不一致:{}",out_trade_no);
 						resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
 						return resXml;

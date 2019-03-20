@@ -18,7 +18,6 @@
   <result column="pay_time_end" property="payTimeEnd"/> 
   <result column="transaction_id" property="transactionId"/> 
   <result column="device_info" property="deviceInfo"/> 
-   <result column="sign" property="sign"/>
 </resultMap>
   <insert id="insertPay" parameterType="com.azz.order.client.wx.pojo.WxPay">
     insert into wx_pay
@@ -71,9 +70,6 @@
       <if test="deviceInfo != null">
         device_info,
       </if>
-       <if test="sign != null">
-        sign,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -124,9 +120,6 @@
        <if test="deviceInfo != null">
         #{deviceInfo},
       </if>
-      <if test="sign != null">
-        #{sign},
-      </if>
     </trim>
   </insert>
   <select id="selectWxOrder" resultMap="BaseResultMap">
@@ -135,7 +128,7 @@
   </select>
   
   <select id="selectTotalFeeByOrderNum" resultType="map">
-  	select total_fee,sign from wx_pay
+  	select total_fee from wx_pay
   	where out_trade_no = #{out_trade_no}
   </select>
   

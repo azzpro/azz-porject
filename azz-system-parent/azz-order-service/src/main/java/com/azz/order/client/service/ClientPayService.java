@@ -499,6 +499,10 @@ public class ClientPayService {
 		log.info("上传图片url------------>"+url);
 		String fileType = "IMAGE";
 		Map<String, String> result = YeepayService.uploadUrlStream(fileType, url);
+		Set<Entry<String, String>> entrySet = result.entrySet();
+		for (Entry<String, String> entry : entrySet) {
+			log.info("返回KEY---->"+entry.getKey()+":::"+entry.getValue());
+		}
 		return result;
 	}
 

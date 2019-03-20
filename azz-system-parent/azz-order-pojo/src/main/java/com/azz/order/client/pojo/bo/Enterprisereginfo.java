@@ -63,9 +63,7 @@ public class Enterprisereginfo {
 	private String bankCity;//开户市【非必传】
 	private String bankProvince;//开户省【非必传】
 	private String bankCode;
-	@NotBlank(message="入网请求号不能为空")
 	private String requestNo;//入网请求号
-	@NotBlank(message="代理商编号不能为空")
 	private String parentMerchantNo;//代理商编号
 	private String businessFunction;//业务功能【非必传】
 	private String merAuthorizeType;//授权类型【非必传】

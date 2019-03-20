@@ -662,7 +662,7 @@ public class ClientPayService {
 				String string = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
 				//组装新文件名
 				String newFileName = string+"_"+name;
-				String suffix = fileName.substring(fileName.indexOf("."));
+				String suffix = fileName.substring(fileName.indexOf(".")+1, fileName.length());
 				log.info("文件后缀为--------->"+suffix);
 				JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix,
 						 fileDate, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_OTHER_IMAGE_TYPE);

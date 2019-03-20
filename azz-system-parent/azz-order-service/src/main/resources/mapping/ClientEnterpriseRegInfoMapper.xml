@@ -12,8 +12,8 @@
     <result column="mer_contact_name" jdbcType="VARCHAR" property="merContactName" />
     <result column="mer_contact_phone" jdbcType="VARCHAR" property="merContactPhone" />
     <result column="mer_contact_email" jdbcType="VARCHAR" property="merContactEmail" />
-    <result column="mer_level1_no" jdbcType="VARCHAR" property="merLevel1No" />
-    <result column="mer_level2_no" jdbcType="VARCHAR" property="merLevel2No" />
+    <result column="mer_levelf_no" jdbcType="VARCHAR" property="merLevelfNo" />
+    <result column="mer_levels_no" jdbcType="VARCHAR" property="merLevelsNo" />
     <result column="mer_province" jdbcType="VARCHAR" property="merProvince" />
     <result column="mer_city" jdbcType="VARCHAR" property="merCity" />
     <result column="mer_district" jdbcType="VARCHAR" property="merDistrict" />
@@ -29,7 +29,6 @@
     <result column="bank_province" jdbcType="VARCHAR" property="bankProvince" />
     <result column="bank_city" jdbcType="VARCHAR" property="bankCity" />
     <result column="product_info" jdbcType="VARCHAR" property="productInfo" />
-    <result column="file_info" jdbcType="VARCHAR" property="fileInfo" />
     <result column="request_no" jdbcType="VARCHAR" property="requestNo" />
     <result column="parent_merchant_no" jdbcType="VARCHAR" property="parentMerchantNo" />
     <result column="mer_authorize_type" jdbcType="VARCHAR" property="merAuthorizeType" />
@@ -74,11 +73,11 @@
       <if test="merContactEmail != null">
         mer_contact_email,
       </if>
-      <if test="merLevel1No != null">
-        mer_level1_no,
+      <if test="merLevelfNo != null">
+        mer_levelf_no,
       </if>
-      <if test="merLevel2No != null">
-        mer_level2_no,
+      <if test="merLevelsNo != null">
+        mer_levels_no,
       </if>
       <if test="merProvince != null">
         mer_province,
@@ -125,9 +124,6 @@
        <if test="productInfo != null">
         product_info,
       </if>
-      <if test="fileInfo != null">
-        file_info,
-      </if>
       <if test="requestNo != null">
         request_no,
       </if>
@@ -172,11 +168,11 @@
       <if test="merContactEmail != null">
         #{merContactEmail,jdbcType=VARCHAR},
       </if>
-      <if test="merLevel1No != null">
-        #{merLevel1No,jdbcType=VARCHAR},
+      <if test="merLevelfNo != null">
+        #{merLevelfNo,jdbcType=VARCHAR},
       </if>
-      <if test="merLevel2No != null">
-        #{merLevel2No,jdbcType=VARCHAR},
+      <if test="merLevelsNo != null">
+        #{merLevelsNo,jdbcType=VARCHAR},
       </if>
       <if test="merProvince != null">
         #{merProvince,jdbcType=VARCHAR},
@@ -222,9 +218,6 @@
       </if>
       <if test="productInfo != null">
         #{productInfo,jdbcType=VARCHAR},
-      </if>
-      <if test="fileInfo != null">
-        #{fileInfo,jdbcType=VARCHAR},
       </if>
       <if test="requestNo != null">
         #{requestNo,jdbcType=VARCHAR},

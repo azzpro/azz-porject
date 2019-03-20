@@ -201,6 +201,7 @@ public class WxPayService {
 		wp.setOrderStatus(ClientConstants.PayStatus.NOT_PAID.getValue());
 		wp.setOutTradeNo(reqMap.get("out_trade_no"));
 		wp.setTotalFee(fenMoney);
+		wp.setSign(reqMap.get("sign"));
 		int i = wpm.insertPay(wp);
 		if(i != 1) {
 			return null;
@@ -221,6 +222,21 @@ public class WxPayService {
 					String transaction_id = map.get("transaction_id");
 					String time_end = map.get("time_end");
 					String device_info = map.get("device_info");
+					String total_fee = map.get("total_fee");
+					String sign = map.get("sign");
+					Map<String,String> maps = wpm.selectTotalFeeByOrderNum(out_trade_no);
+					log.info("微信回调支付金额:{}",total_fee);
+					log.info("订单金额:{}",maps.get("total_fee"));
+					if(!total_fee.equals(maps.get("total_fee"))) {
+						log.info("微信手机支付回调金额不一致:{}",out_trade_no);
+						resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
+						return resXml;
+					}
+					if(!sign.equals(maps.get("sign"))) {
+						log.info("微信手机支付回调签名不一致:{}",out_trade_no);
+						resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
+						return resXml;
+					}
 					int i = wpm.updateWxPayByCallback(transaction_id, ClientConstants.PayStatus.PAY_SUCCESS.getValue(), time_end, device_info, out_trade_no);
 					if(i != 1) {
 						log.info("微信手机支付回调更新订单失败:{}",out_trade_no);

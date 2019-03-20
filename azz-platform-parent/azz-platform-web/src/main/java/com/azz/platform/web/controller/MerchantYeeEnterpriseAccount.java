@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.azz.core.common.JsonResult;
 import com.azz.core.constants.PayConstants;
 import com.azz.order.api.client.RegYeeMerchantService;
+import com.azz.order.client.pojo.RetBean;
 import com.azz.order.client.pojo.bo.Enterprisereginfo;
 import com.azz.order.client.pojo.bo.EnterprisereginfoCopy;
 import com.azz.order.client.pojo.bo.YeeModulePic;
@@ -71,18 +73,18 @@ public class MerchantYeeEnterpriseAccount {
 	 * @param request
 	 * @param po
 	 * @return
+	 * @throws IOException 
 	 */
 	@RequestMapping("regEnterpriseNotify")
-	public void regEnterpriseNotify(HttpServletRequest request,HttpServletResponse response) {
+	public void regEnterpriseNotify(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		log.info("进入企业商户入网回调");
-		Map<String,String> result = (Map<String,String>) request.getAttribute("result");
-		String returnCode = result.get("returnCode");
-		String returnMsg = result.get("returnMsg");
-		String parentMerchantNo = result.get("parentMerchantNo");
-		String merchantNo = result.get("merchantNo");
-		String requestNo = result.get("requestNo");
-		String externalId = result.get("externalId");
-		log.info("returnCode----------->"+returnCode);
+		String responseMsg = request.getParameter("response");
+		String customerId = request.getParameter("customerIdentification");
+		log.info("responseMsg---->"+responseMsg);
+		log.info("customerId---->"+customerId);
+		JsonResult<RetBean> notify = clientPayService.regEnterpriseNotify(responseMsg,customerId);
+		response.getWriter().write(notify.getMsg());
+		response.getWriter().flush();
 	}
 	
 }

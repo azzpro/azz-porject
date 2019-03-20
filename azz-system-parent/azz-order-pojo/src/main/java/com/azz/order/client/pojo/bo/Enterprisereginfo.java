@@ -23,6 +23,8 @@ public class Enterprisereginfo {
 	private MultipartFile businessPic;
 	@NotNull(message = "请上传ICP授权照")
 	private MultipartFile icpAuthPic;
+	@NotBlank(message="商户编码不能为空")
+	private String merchantCode;//
 	@NotBlank(message="商户全称不能为空")
 	private String merFullName;//商户全称
 	@NotBlank(message="商户简称不能为空")

@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -31,7 +30,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,14 +47,16 @@ import com.azz.core.constants.MerchantConstants;
 import com.azz.core.constants.PayConstants;
 import com.azz.core.constants.PayConstants.PayCode;
 import com.azz.core.constants.PayConstants.RegCode;
-import com.azz.core.exception.BaseException;
+import com.azz.core.constants.PayConstants.YeeCode;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.order.api.client.ClientOrderService;
 import com.azz.order.api.client.SelectionService;
 import com.azz.order.client.mapper.ClientEnterpriseRegInfoMapper;
 import com.azz.order.client.mapper.ClientPayMapper;
+import com.azz.order.client.mapper.MerchantYeeBindMapper;
 import com.azz.order.client.pojo.ClientPay;
 import com.azz.order.client.pojo.Enterprisereginfoadd;
+import com.azz.order.client.pojo.MerchantYeeBind;
 import com.azz.order.client.pojo.RetBean;
 import com.azz.order.client.pojo.bo.BankBranch;
 import com.azz.order.client.pojo.bo.EnterprisereginfoCopy;
@@ -90,6 +90,9 @@ public class ClientPayService {
 	
 	@Autowired
 	private ClientPayMapper ppm;
+	
+	@Autowired
+	private MerchantYeeBindMapper mybMapper;
 
 	@Autowired
 	private ClientOrderService cos;
@@ -482,21 +485,86 @@ public class ClientPayService {
 				resultMap.put("msg", RegCode.FAILD.getDesc());
 				return resultMap;
 			}
+			MerchantYeeBind myb = new MerchantYeeBind();
+			myb.setMerchantId(po.getMerchantCode());
+			myb.setYeeMerchantNo(merchantNo);
+			int insertBind = mybMapper.insertBind(myb);
+			if(insertBind != 1) {
+				resultMap.put("code", RegCode.FAILD.getCode());
+				resultMap.put("msg", "商户编号绑定失败");
+				return resultMap;
+			}
 			resultMap.put("code", RegCode.SUCCESS.getCode());
 			resultMap.put("msg", RegCode.SUCCESS.getDesc());
 			return resultMap;
-				}else {
-					resultMap.put("code", RegCode.FAILD.getCode());
-					resultMap.put("msg", RegCode.FAILD.getDesc());
-					return resultMap;
-				}
+		}else {
+				resultMap.put("code", RegCode.FAILD.getCode());
+				resultMap.put("msg", returnMsg);
+				return resultMap;
+		}
 		}else {
 			resultMap.put("code", PayCode.FAILD.getCode());
-			resultMap.put("msg", PayCode.FAILD.getDesc());
+			resultMap.put("msg", "参数不正确");
 			return resultMap;
 		}
 	}
 
+	/**
+	 * 易宝回调
+	 * @param result
+	 */
+	public JsonResult<RetBean> regEnterpriseNotify(String responseMsg,String customerId){
+		log.info("进入商户入网异步处理......");
+		RetBean retBean = new RetBean();
+		if (StringUtils.isBlank(responseMsg) || StringUtils.isBlank(customerId)) {
+			retBean.setRet_code(YeeCode.FAILD.getCode());
+			retBean.setRet_msg(YeeCode.FAILD.getDesc());
+			return new JsonResult<>(retBean);
+		}
+		log.info("接收商户入网异步通知数据：【" + responseMsg + "】:【" + customerId + "】");
+		Map<String, String> callback = YeepayService.callback(responseMsg);
+		Set<Entry<String, String>> entrySet = callback.entrySet();
+		for (Entry<String, String> entry : entrySet) {
+			log.info("回调处理结果--->" + entry.getKey() + "::--value---->" + entry.getValue());
+		}
+		String agentNo = callback.get("agentNo");// 主商编
+		String merNo = callback.get("merNo"); // 子商编
+		String externalId = callback.get("externalId");//易宝流水号
+		String requestNo = callback.get("requestNo");// 请求单号
+		String merFullName = callback.get("merFullName");// 商户全称
+		String merNetInStatus = callback.get("merNetInStatus");// 状态
+		log.info("商户全称:{},商户入网返回状态:{}",merFullName,merNetInStatus);
+		if (StringUtils.isNotBlank(merNetInStatus) && merNetInStatus.equals("PROCESS_SUCCESS")) {
+			List<MerchantYeeBind> selectBindByYeeNo = mybMapper.selectBindByYeeNo(merNo);
+			if(selectBindByYeeNo.isEmpty()) {
+				retBean.setRet_code(YeeCode.FAILD.getCode());
+				retBean.setRet_msg(YeeCode.FAILD.getDesc());
+				return new JsonResult<>(retBean);
+			}
+			boolean flag = false;
+			for (MerchantYeeBind merchantYeeBind : selectBindByYeeNo) {
+				if(merchantYeeBind.getBindStatus() == 1) {
+					flag = true;
+				}
+			}
+			if(!flag) {
+				int bind = mybMapper.updateBind(merNo);
+				if(bind != 1) {
+					retBean.setRet_code(YeeCode.FAILD.getCode());
+					retBean.setRet_msg(YeeCode.FAILD.getDesc());
+					return new JsonResult<>(retBean);
+				}
+			}
+			retBean.setRet_code(YeeCode.SUCCESS.getCode());
+			retBean.setRet_msg(YeeCode.SUCCESS.getDesc());
+			return new JsonResult<>(retBean);
+		} else {
+			retBean.setRet_code(YeeCode.FAILD.getCode());
+			retBean.setRet_msg(YeeCode.FAILD.getDesc());
+			return new JsonResult<>(retBean);
+		}
+
+	}
 	
 	/**
 	 * 易宝提现
@@ -704,10 +772,11 @@ public class ClientPayService {
 				LocalDateTime now = LocalDateTime.now();
 				String string = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
 				//组装新文件名
-				String newFileName = string+"_"+name;
+				String type = yeeModulePic.getType();
+				String newFileName = string+"_"+name+"_"+type;
 				String suffix = fileName.substring(fileName.indexOf(".")+1, fileName.length());
 				log.info("文件后缀为--------->"+suffix);
-				String type = yeeModulePic.getType();
+				
 				if(type.equals(PayConstants.RegYee.legalFrontPic.getCode())) {
 					JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix,
 							 fileDate, FileConstants.AZZ_YEE, FileConstants.AZZ_LEGAL_IMAGE_TYPE);

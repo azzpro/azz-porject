@@ -56,6 +56,7 @@ import com.azz.order.api.client.SelectionService;
 import com.azz.order.client.mapper.ClientEnterpriseRegInfoMapper;
 import com.azz.order.client.mapper.ClientPayMapper;
 import com.azz.order.client.pojo.ClientPay;
+import com.azz.order.client.pojo.Enterprisereginfoadd;
 import com.azz.order.client.pojo.RetBean;
 import com.azz.order.client.pojo.bo.BankBranch;
 import com.azz.order.client.pojo.bo.EnterprisereginfoCopy;
@@ -342,9 +343,9 @@ public class ClientPayService {
 		return resultMap;
 	}
 	if(null!=po && array.size() > 0){
-		String status = clientEnterpriseRegInfoMapper.selectStatusByCardNoAndMerFullName(po.getCardNo(),po.getMerFullName());
-	if(StringUtils.isNotBlank(status) && Objects.equals(status,PayConstants.Status.UR.getStatus())) {
-	// 状态不为空 并且 未注册
+		//String status = clientEnterpriseRegInfoMapper.selectStatusByCardNoAndMerFullName(po.getCardNo(),po.getMerFullName());
+	//if(StringUtils.isNotBlank(status) && Objects.equals(status,PayConstants.Status.UR.getStatus())) {
+		// 状态不为空 并且 未注册
 		Map<String, String> params = new HashMap<>();
 		params.put("merFullName",po.getMerFullName());
 		params.put("merShortName",po.getMerShortName());
@@ -443,6 +444,44 @@ public class ClientPayService {
 		String externalId = result.get("externalId"); // 入网流水号
 		log.info("【merchantNo】--->"+merchantNo+"【returnMsg】--->"+returnMsg+"【returnCode】--->"+returnCode+"【requestNo】--->"+requestNo+"【parentMerchantNo】--->"+parentMerchantNo+"【externalId】--->"+externalId);
 		if(returnCode.equals("REG00000")) {
+			Enterprisereginfoadd ef = new Enterprisereginfoadd();
+			ef.setStatus(PayConstants.Status.UR.getStatus());//状态通过回调更新
+			ef.setMerFullName(params.get("merFullName"));
+			ef.setMerShortName(params.get("merShortName"));
+			ef.setMerCertNo(params.get("merCertNo"));
+			ef.setMerCertType(params.get("merCertType"));
+			ef.setLegalName(params.get("legalName"));
+			ef.setLegalIdCard(params.get("legalIdCard"));
+			ef.setMerContactName(params.get("merContactName"));
+			ef.setMerContactPhone(params.get("merContactPhone"));
+			ef.setMerContactEmail(params.get("merContactEmail"));
+			ef.setMerLevelfNo(params.get("merLevel1No"));
+			ef.setMerLevelsNo(params.get("merLevel2No"));
+			ef.setMerProvince(params.get("merProvince"));
+			ef.setMerCity(params.get("merCity"));
+			ef.setMerDistrict(params.get("merDistrict"));
+			ef.setMerAddress(params.get("merAddress"));
+			ef.setTaxRegistCert(params.get("taxRegistCert"));
+			ef.setOrgCode(params.get("orgCode"));
+			ef.setAccountLicense(params.get("accountLicense"));
+			ef.setOrgCodeExpiry(params.get("orgCodeExpiry"));
+			ef.setIsOrgCodeLong(params.get("isOrgCodeLong"));
+			ef.setCardNo(params.get("cardNo"));
+			ef.setHeadBankCode(params.get("headBankCode"));
+			ef.setBankCode(params.get("bankCode"));
+			ef.setProductInfo(params.get("productInfo"));
+			ef.setRequestNo(params.get("requestNo"));
+			ef.setParentMerchantNo(params.get("parentMerchantNo"));
+			ef.setBankProvince(params.get("bankProvince"));
+			ef.setBankCity(params.get("bankCity"));
+			ef.setMerAuthorizeType(params.get("merAuthorizeType"));
+			ef.setBusinessFunction(params.get("businessFunction"));
+			int insertSelective = clientEnterpriseRegInfoMapper.insertSelective(ef);
+			if(insertSelective != 1) {
+				resultMap.put("code", RegCode.FAILD.getCode());
+				resultMap.put("msg", RegCode.FAILD.getDesc());
+				return resultMap;
+			}
 			resultMap.put("code", RegCode.SUCCESS.getCode());
 			resultMap.put("msg", RegCode.SUCCESS.getDesc());
 			return resultMap;
@@ -451,11 +490,6 @@ public class ClientPayService {
 					resultMap.put("msg", RegCode.FAILD.getDesc());
 					return resultMap;
 				}
-			}else {
-				resultMap.put("code", RegCode.FAILD.getCode());
-				resultMap.put("msg", RegCode.FAILD.getDesc());
-				return resultMap;
-			}
 		}else {
 			resultMap.put("code", PayCode.FAILD.getCode());
 			resultMap.put("msg", PayCode.FAILD.getDesc());

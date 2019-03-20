@@ -267,6 +267,10 @@ public class ClientPayService {
 		Map<String, String> uploadModulePic = uploadModulePic(yps, po.getMerShortName());
 		JSONArray array = new JSONArray();
 		if (!uploadModulePic.isEmpty()) {
+			Set<Entry<String, String>> entrySet = uploadModulePic.entrySet();
+			for (Entry<String, String> entry : entrySet) {
+				log.info("上传图片url---->"+entry.getKey()+":::"+entry.getValue());
+			}
 			Map<String, String> upload = upload(uploadModulePic.get(legalFrontPic.getType()));
 			Map<String, String> upload1 = upload(uploadModulePic.get(legalBackPic.getType()));
 			Map<String, String> upload2 = upload(uploadModulePic.get(openAccountPic.getType()));
@@ -665,15 +669,44 @@ public class ClientPayService {
 				String newFileName = string+"_"+name;
 				String suffix = fileName.substring(fileName.indexOf(".")+1, fileName.length());
 				log.info("文件后缀为--------->"+suffix);
-				JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix,
-						 fileDate, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_OTHER_IMAGE_TYPE);
-				if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
-					fileMap.put(yeeModulePic.getType(), jr.getData());
-					return fileMap;
-			    }else {
-			    	return null;
-			    }
+				String type = yeeModulePic.getType();
+				if(type.equals(PayConstants.RegYee.legalFrontPic.getCode())) {
+					JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix,
+							 fileDate, FileConstants.AZZ_YEE, FileConstants.AZZ_LEGAL_IMAGE_TYPE);
+					if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
+						fileMap.put(yeeModulePic.getType(), jr.getData());
+				    }
+				}
+				if(type.equals(PayConstants.RegYee.legalBackPic.getCode())) {
+					JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix,
+							 fileDate, FileConstants.AZZ_YEE, FileConstants.AZZ_LEGAL_IMAGE_TYPE);
+					if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
+						fileMap.put(yeeModulePic.getType(), jr.getData());
+				    }
+				}
+				if(type.equals(PayConstants.RegYee.businessPic.getCode())) {
+					JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix,
+							 fileDate, FileConstants.AZZ_YEE, FileConstants.AZZ_TRADING_CERTIFICATE_IMAGE_TYPE);
+					if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
+						fileMap.put(yeeModulePic.getType(), jr.getData());
+				    }
+				}
+				if(type.equals(PayConstants.RegYee.icpAuthPic.getCode())) {
+					JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix,
+							 fileDate, FileConstants.AZZ_YEE, FileConstants.AZZ_ICP_IMAGE_TYPE);
+					if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
+						fileMap.put(yeeModulePic.getType(), jr.getData());
+				    }
+				}
+				if(type.equals(PayConstants.RegYee.openAccountPic.getCode())) {
+					JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix,
+							 fileDate, FileConstants.AZZ_YEE, FileConstants.AZZ_OPEN_IMAGE_TYPE);
+					if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
+						fileMap.put(yeeModulePic.getType(), jr.getData());
+				    }
+				}
 			}
+			return fileMap;
 		}
 		return null;
 	}

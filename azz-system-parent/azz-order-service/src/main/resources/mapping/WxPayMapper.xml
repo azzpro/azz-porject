@@ -127,6 +127,11 @@
   	where course_pay_num = #{course_pay_num}
   </select>
   
+  <select id="selectTotalFeeByOrderNum" resultType="map">
+  	select total_fee from wx_pay
+  	where out_trade_no = #{out_trade_no}
+  </select>
+  
   <select id="selectWxCourseNum" resultType="String">
   	select course_pay_num from wx_pay
   	where out_trade_no = #{no}

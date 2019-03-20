@@ -35,6 +35,9 @@ public class AzzImageUtil {
 		if(FileConstants.AZZ_PLATFORM == plattype) {
 			return FileConstants.PLATFORM_IMAGE_PATH;
 		}
+		if(FileConstants.AZZ_YEE == plattype) {
+			return FileConstants.YEEPAY_IMAGE_PATH;
+		}
 		return "";
 	}
 	
@@ -47,6 +50,12 @@ public class AzzImageUtil {
 	public static String getImageByType(Integer imagetype) {
 		if(null == imagetype) {
 			return "";
+		}
+		if(FileConstants.AZZ_ICP_IMAGE_TYPE == imagetype) {
+			return FileConstants.AZZ_ICP_PATH;
+		}
+		if(FileConstants.AZZ_OPEN_IMAGE_TYPE == imagetype) {
+			return FileConstants.AZZ_OPEN_PATH;
 		}
 		if(FileConstants.AZZ_AVATAR_IMAGE_TYPE == imagetype) {
 			return FileConstants.AZZ_AVATAR_PATH;

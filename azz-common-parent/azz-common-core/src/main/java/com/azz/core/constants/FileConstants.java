@@ -40,6 +40,12 @@ public class FileConstants {
 	//经营执照图片
 	public static final String AZZ_BUSINESS_LICENSE_PATH = "business_license_pic";
 	
+	//ICP图片
+	public static final String AZZ_ICP_PATH = "icp_pic";
+	
+	//开户图片
+	public static final String AZZ_OPEN_PATH = "open_pic";
+	
 	//分类图片
 	public static final String AZZ_CLASSIFICATION_PATH = "classification_pic";
 	
@@ -82,6 +88,9 @@ public class FileConstants {
 	//客户端
 	public static final int AZZ_CLIENT = 3;
 	
+	//易宝
+	public static final int AZZ_YEE = 4;
+	
 	//法人图片
 	public static final int AZZ_LEGAL_IMAGE_TYPE = 1;
 	
@@ -123,6 +132,12 @@ public class FileConstants {
     
     // 微信课程
     public static final int AZZ_WX_COURSE_IMAGE_TYPE = 14;
+    
+    //ICP图片
+  	public static final int AZZ_ICP_IMAGE_TYPE = 15;
+  	
+  	//开户图片
+  	public static final int AZZ_OPEN_IMAGE_TYPE = 16;
     
 	//支持的图片格式
 	public static final String AZZ_IMAGE_SUFFIX = "bmp|jpg|png|git|webp|tiff";

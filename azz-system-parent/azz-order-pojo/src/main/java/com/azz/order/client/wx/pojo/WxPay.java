@@ -23,6 +23,7 @@ public class WxPay implements Serializable{
 	private String payTimeEnd;//支付完成时间
 	private String transactionId;//微信支付订单号
 	private String deviceInfo;//设备号
+	
 	public Long getId() {
 		return id;
 	}

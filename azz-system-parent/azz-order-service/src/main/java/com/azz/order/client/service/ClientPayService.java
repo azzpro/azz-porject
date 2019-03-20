@@ -56,6 +56,7 @@ import com.azz.order.api.client.SelectionService;
 import com.azz.order.client.mapper.ClientEnterpriseRegInfoMapper;
 import com.azz.order.client.mapper.ClientPayMapper;
 import com.azz.order.client.pojo.ClientPay;
+import com.azz.order.client.pojo.Enterprisereginfoadd;
 import com.azz.order.client.pojo.RetBean;
 import com.azz.order.client.pojo.bo.BankBranch;
 import com.azz.order.client.pojo.bo.EnterprisereginfoCopy;
@@ -267,6 +268,10 @@ public class ClientPayService {
 		Map<String, String> uploadModulePic = uploadModulePic(yps, po.getMerShortName());
 		JSONArray array = new JSONArray();
 		if (!uploadModulePic.isEmpty()) {
+			Set<Entry<String, String>> entrySet = uploadModulePic.entrySet();
+			for (Entry<String, String> entry : entrySet) {
+				log.info("上传图片url---->"+entry.getKey()+":::"+entry.getValue());
+			}
 			Map<String, String> upload = upload(uploadModulePic.get(legalFrontPic.getType()));
 			Map<String, String> upload1 = upload(uploadModulePic.get(legalBackPic.getType()));
 			Map<String, String> upload2 = upload(uploadModulePic.get(openAccountPic.getType()));
@@ -338,9 +343,9 @@ public class ClientPayService {
 		return resultMap;
 	}
 	if(null!=po && array.size() > 0){
-		String status = clientEnterpriseRegInfoMapper.selectStatusByCardNoAndMerFullName(po.getCardNo(),po.getMerFullName());
-	if(StringUtils.isNotBlank(status) && Objects.equals(status,PayConstants.Status.UR.getStatus())) {
-	// 状态不为空 并且 未注册
+		//String status = clientEnterpriseRegInfoMapper.selectStatusByCardNoAndMerFullName(po.getCardNo(),po.getMerFullName());
+	//if(StringUtils.isNotBlank(status) && Objects.equals(status,PayConstants.Status.UR.getStatus())) {
+		// 状态不为空 并且 未注册
 		Map<String, String> params = new HashMap<>();
 		params.put("merFullName",po.getMerFullName());
 		params.put("merShortName",po.getMerShortName());
@@ -439,6 +444,44 @@ public class ClientPayService {
 		String externalId = result.get("externalId"); // 入网流水号
 		log.info("【merchantNo】--->"+merchantNo+"【returnMsg】--->"+returnMsg+"【returnCode】--->"+returnCode+"【requestNo】--->"+requestNo+"【parentMerchantNo】--->"+parentMerchantNo+"【externalId】--->"+externalId);
 		if(returnCode.equals("REG00000")) {
+			Enterprisereginfoadd ef = new Enterprisereginfoadd();
+			ef.setStatus(PayConstants.Status.UR.getStatus());//状态通过回调更新
+			ef.setMerFullName(params.get("merFullName"));
+			ef.setMerShortName(params.get("merShortName"));
+			ef.setMerCertNo(params.get("merCertNo"));
+			ef.setMerCertType(params.get("merCertType"));
+			ef.setLegalName(params.get("legalName"));
+			ef.setLegalIdCard(params.get("legalIdCard"));
+			ef.setMerContactName(params.get("merContactName"));
+			ef.setMerContactPhone(params.get("merContactPhone"));
+			ef.setMerContactEmail(params.get("merContactEmail"));
+			ef.setMerLevelfNo(params.get("merLevel1No"));
+			ef.setMerLevelsNo(params.get("merLevel2No"));
+			ef.setMerProvince(params.get("merProvince"));
+			ef.setMerCity(params.get("merCity"));
+			ef.setMerDistrict(params.get("merDistrict"));
+			ef.setMerAddress(params.get("merAddress"));
+			ef.setTaxRegistCert(params.get("taxRegistCert"));
+			ef.setOrgCode(params.get("orgCode"));
+			ef.setAccountLicense(params.get("accountLicense"));
+			ef.setOrgCodeExpiry(params.get("orgCodeExpiry"));
+			ef.setIsOrgCodeLong(params.get("isOrgCodeLong"));
+			ef.setCardNo(params.get("cardNo"));
+			ef.setHeadBankCode(params.get("headBankCode"));
+			ef.setBankCode(params.get("bankCode"));
+			ef.setProductInfo(params.get("productInfo"));
+			ef.setRequestNo(params.get("requestNo"));
+			ef.setParentMerchantNo(params.get("parentMerchantNo"));
+			ef.setBankProvince(params.get("bankProvince"));
+			ef.setBankCity(params.get("bankCity"));
+			ef.setMerAuthorizeType(params.get("merAuthorizeType"));
+			ef.setBusinessFunction(params.get("businessFunction"));
+			int insertSelective = clientEnterpriseRegInfoMapper.insertSelective(ef);
+			if(insertSelective != 1) {
+				resultMap.put("code", RegCode.FAILD.getCode());
+				resultMap.put("msg", RegCode.FAILD.getDesc());
+				return resultMap;
+			}
 			resultMap.put("code", RegCode.SUCCESS.getCode());
 			resultMap.put("msg", RegCode.SUCCESS.getDesc());
 			return resultMap;
@@ -447,11 +490,6 @@ public class ClientPayService {
 					resultMap.put("msg", RegCode.FAILD.getDesc());
 					return resultMap;
 				}
-			}else {
-				resultMap.put("code", RegCode.FAILD.getCode());
-				resultMap.put("msg", RegCode.FAILD.getDesc());
-				return resultMap;
-			}
 		}else {
 			resultMap.put("code", PayCode.FAILD.getCode());
 			resultMap.put("msg", PayCode.FAILD.getDesc());
@@ -459,6 +497,14 @@ public class ClientPayService {
 		}
 	}
 
+	
+	/**
+	 * 易宝提现
+	 */
+	public void CashWithdrawal() {
+		
+	}
+	
 
 	/**
 	 * 获取支行信息
@@ -484,8 +530,13 @@ public class ClientPayService {
 	 * @throws Exception 
 	 */
 	private Map<String,String> upload(String url) throws Exception {
+		log.info("上传图片url------------>"+url);
 		String fileType = "IMAGE";
 		Map<String, String> result = YeepayService.uploadUrlStream(fileType, url);
+		Set<Entry<String, String>> entrySet = result.entrySet();
+		for (Entry<String, String> entry : entrySet) {
+			log.info("返回KEY---->"+entry.getKey()+":::"+entry.getValue());
+		}
 		return result;
 	}
 
@@ -636,8 +687,6 @@ public class ClientPayService {
 	 */
 	public Map<String,String> uploadModulePic(List<YeeModulePic> pic,String name) {
 		//创建OS存储空间
-		JsonResult<String> result = systemImageUploadService.createBucketName(name);
-		log.info("os 存储空间--------->"+result.getData());
 		Map<String,String> fileMap = new HashMap<String,String>();
 		if(!pic.isEmpty()) {
 			for (YeeModulePic yeeModulePic : pic) {
@@ -656,15 +705,46 @@ public class ClientPayService {
 				String string = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
 				//组装新文件名
 				String newFileName = string+"_"+name;
-				JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, fileName.substring(fileName.indexOf(".")),
-						 fileDate, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_OTHER_IMAGE_TYPE);
-				if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
-					fileMap.put(yeeModulePic.getType(), jr.getData());
-					return fileMap;
-			    }else {
-			    	return null;
-			    }
+				String suffix = fileName.substring(fileName.indexOf(".")+1, fileName.length());
+				log.info("文件后缀为--------->"+suffix);
+				String type = yeeModulePic.getType();
+				if(type.equals(PayConstants.RegYee.legalFrontPic.getCode())) {
+					JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix,
+							 fileDate, FileConstants.AZZ_YEE, FileConstants.AZZ_LEGAL_IMAGE_TYPE);
+					if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
+						fileMap.put(yeeModulePic.getType(), jr.getData());
+				    }
+				}
+				if(type.equals(PayConstants.RegYee.legalBackPic.getCode())) {
+					JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix,
+							 fileDate, FileConstants.AZZ_YEE, FileConstants.AZZ_LEGAL_IMAGE_TYPE);
+					if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
+						fileMap.put(yeeModulePic.getType(), jr.getData());
+				    }
+				}
+				if(type.equals(PayConstants.RegYee.businessPic.getCode())) {
+					JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix,
+							 fileDate, FileConstants.AZZ_YEE, FileConstants.AZZ_TRADING_CERTIFICATE_IMAGE_TYPE);
+					if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
+						fileMap.put(yeeModulePic.getType(), jr.getData());
+				    }
+				}
+				if(type.equals(PayConstants.RegYee.icpAuthPic.getCode())) {
+					JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix,
+							 fileDate, FileConstants.AZZ_YEE, FileConstants.AZZ_ICP_IMAGE_TYPE);
+					if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
+						fileMap.put(yeeModulePic.getType(), jr.getData());
+				    }
+				}
+				if(type.equals(PayConstants.RegYee.openAccountPic.getCode())) {
+					JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix,
+							 fileDate, FileConstants.AZZ_YEE, FileConstants.AZZ_OPEN_IMAGE_TYPE);
+					if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
+						fileMap.put(yeeModulePic.getType(), jr.getData());
+				    }
+				}
 			}
+			return fileMap;
 		}
 		return null;
 	}

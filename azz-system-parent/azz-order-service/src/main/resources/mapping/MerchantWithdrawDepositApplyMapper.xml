@@ -247,4 +247,103 @@
 	ORDER BY
 		mwda.create_time DESC
   </select>
+  
+   <select id="getWithdrawDepositApplyInfo" parameterType="string" resultType="com.azz.order.finance.pojo.vo.ApplyInfo">
+    SELECT
+		mwda.apply_code AS applyCode,
+		mwda.total_withdraw_deposit_money AS totalWithdrawDepositMoney,
+		mu.merchant_user_name AS creator,
+		mu.phone_number AS phoneNumber,
+		mwda.`status` AS status,
+		mwda.remark AS remark,
+		mwda.create_time AS createTime
+	FROM
+		merchant_withdraw_deposit_apply mwda
+	JOIN merchant_user mu ON mu.merchant_user_code = mwda.creator
+	WHERE
+		mwda.apply_code = #{applyCode}
+  </select>
+  
+  <select id="getWithdrawDepositApplyOrderInfo" parameterType="string" resultType="com.azz.order.finance.pojo.vo.OrderInfo">
+	SELECT
+		mwda.total_order_count as totalOrderCount,
+		mwda.total_order_money as totalOrderMoney,
+		mwda.total_withdraw_deposit_money as totalWithdrawDepositMoney,
+		mwda.total_order_money - mwda.total_withdraw_deposit_money AS totalTransactionCost
+	FROM
+		merchant_withdraw_deposit_apply mwda
+	WHERE
+		mwda.apply_code = #{applyCode}
+  </select>
+  
+  <select id="getWithdrawDepositApplyOrders" parameterType="string" resultType="com.azz.order.finance.pojo.vo.MerchantOrderInfo">
+	SELECT
+		mwdao.merchant_order_code as merchantOrderCode,
+		mwdao.grand_total as grandTotal,
+		mwdao.grand_total - mwdao.withdraw_deposit_money as transactionCost,
+		mwdao.withdraw_deposit_money as withdrawDepositMoney,
+		mwdao.order_date as orderDate
+	FROM
+		merchant_withdraw_deposit_apply_order mwdao
+	where 
+		mwdao.apply_code = #{applyCode}
+
+  </select>
+  
+  <select id="getTotalIncomeByMerchantCode" parameterType="string" resultType="java.math.BigDecimal">
+    SELECT
+		IFNULL(SUM(grand_total),0) AS totalIncome
+	FROM
+		merchant_order mo
+	JOIN merchant m ON m.id = mo.merchant_id
+	WHERE
+		mo.order_status_id = 4
+	AND m.merchant_code = #{merchantCode}
+  </select>
+  
+  <select id="getWithdrawDepositMoneyByMerchantCode" parameterType="string" resultType="java.math.BigDecimal">
+	SELECT
+		IFNULL(SUM(mwda.total_withdraw_deposit_money),0) AS withdrawDepositMoney
+	FROM
+		merchant_withdraw_deposit_apply mwda
+	WHERE
+		mwda.`status` = 3
+	AND	mwda.merchant_code = #{merchantCode}
+  </select>
+  
+  <select id="getMerchantOrders" parameterType="com.azz.order.finance.pojo.bo.SearchMerchantOrderParam" resultType="com.azz.order.finance.pojo.vo.MerchantOrderInfo">
+	SELECT
+		mo.merchant_order_code AS merchantOrderCode,
+		mo.grand_total AS grandTotal,
+		mo.order_status_id AS orderStatusId,
+		mo.create_time AS orderTime,
+		CASE
+	WHEN (mwdao.id IS NULL)
+	OR (
+		mwdao.id IS NOT NULL
+		AND mwda.`status` = 4
+	) THEN
+		1
+	WHEN mwdao.id IS NOT NULL
+	AND mwda.`status` IN (1, 2) THEN
+		2
+	WHEN mwdao.id IS NOT NULL
+	AND mwda.`status` = 3 THEN
+		3
+	END AS withdrawDepositStatus
+	FROM
+		merchant_order mo
+	LEFT JOIN merchant_withdraw_deposit_apply_order mwdao ON mo.merchant_order_code = mwdao.merchant_order_code
+	LEFT JOIN merchant_withdraw_deposit_apply mwda ON mwda.apply_code = mwdao.apply_code
+	<where>
+			mo.order_status_id = 4
+		and mo.merchant_id = #{merchantId}
+		<if test="searchInput != null and searchInput != ''">
+			AND mo.merchant_order_code LIKE CONCAT('%', #{searchInput}, '%')
+		</if>
+	</where>
+	ORDER BY
+		mo.create_time DESC
+  </select>
+  
 </mapper>

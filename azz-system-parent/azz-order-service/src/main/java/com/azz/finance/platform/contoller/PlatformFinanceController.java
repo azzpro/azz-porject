@@ -5,13 +5,13 @@
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
-package com.azz.finance.merchant.contoller;
+package com.azz.finance.platform.contoller;
 /**
  * <P>TODO</P>
  * @version 1.0
  * @author 黄智聪  2019年3月19日 上午11:59:47
  */
-public class FinanceController {
+public class PlatformFinanceController {
 
 }
 

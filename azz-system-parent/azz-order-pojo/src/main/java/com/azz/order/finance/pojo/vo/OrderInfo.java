@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2019年3月19日 下午4:24:22
+ * Create on 2019年3月19日 下午7:02:51
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
@@ -8,28 +8,27 @@
 package com.azz.order.finance.pojo.vo;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
- * <P>提现统计</P>
+ * <P>TODO</P>
  * @version 1.0
- * @author 黄智聪  2019年3月19日 下午4:24:22
+ * @author 黄智聪  2019年3月19日 下午7:02:51
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class WithdrawDepositCount {
+public class OrderInfo {
+	
+	private Integer totalOrderCount;
 
-	// 总收入
-	private BigDecimal totalIncome;
-	
-	// 已提现金额
-	private BigDecimal withdrawDepositMoney;
-	
-	// 可提现金额
-	private BigDecimal notWithdrawDepositMoney;
+    private BigDecimal totalOrderMoney;
+
+    private BigDecimal totalWithdrawDepositMoney;
+    
+    private BigDecimal totalTransactionCost;// 总交易费用（手续费）
+    
+	private List<MerchantOrderInfo> orders;
+
 }
 

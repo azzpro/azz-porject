@@ -302,5 +302,14 @@ public interface DbSequenceService {
     @RequestMapping(value="/azz/api/sequence/getWxCourseOrderWithdrawSequenceNumber",method=RequestMethod.GET)
     public String getWxCourseOrderWithdrawSequence();
     
+    /**
+     * 
+     * <p>商户提现申请编码</p>
+     * @return
+     * @author 黄智聪  2019年3月20日 下午5:44:20
+     */
+    @RequestMapping(value="/azz/api/sequence/getWithdrawDepositApplySequence",method=RequestMethod.GET)
+    public String getWithdrawDepositApplySequence();
+    
 }
 

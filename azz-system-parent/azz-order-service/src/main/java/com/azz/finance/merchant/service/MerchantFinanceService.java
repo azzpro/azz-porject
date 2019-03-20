@@ -38,8 +38,10 @@ import com.azz.order.finance.pojo.vo.WithdrawDepositApplyInfo;
 import com.azz.order.finance.pojo.vo.WithdrawDepositCount;
 import com.azz.order.merchant.mapper.MerchantOrderMapper;
 import com.azz.order.merchant.pojo.MerchantOrder;
+import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
+import com.azz.util.SystemSeqUtils;
 import com.github.pagehelper.PageHelper;
 
 /**
@@ -59,6 +61,9 @@ public class MerchantFinanceService {
 	
 	@Autowired
 	private MerchantOrderMapper merchantOrderMapper;
+
+	@Autowired
+	private DbSequenceService dbSequenceService;
 	
 	/**
 	 * 提现手续费率
@@ -135,7 +140,7 @@ public class MerchantFinanceService {
 	public JsonResult<String> withdrawDepositApply(@RequestBody WithdrawDepositApplyParam param){
 		JSR303ValidateUtils.validate(param);
 		Date nowDate = new Date();
-		String applyCode = System.currentTimeMillis() + ""; // TODO
+		String applyCode =  SystemSeqUtils.getSeq(dbSequenceService.getWithdrawDepositApplySequence());
 		List<String> orderCodes = param.getMerchantOrderCodes();
 		// 判断所选订单是否存在已经提过款的或正在提款中的
 		int count = merchantWithdrawDepositApplyOrderMapper.existPayWithOrder(orderCodes);

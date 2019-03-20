@@ -185,4 +185,19 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="existPayWithOrder" resultType="int">
+    SELECT
+		count(1)
+	FROM
+		merchant_withdraw_deposit_apply_order mwdao
+	JOIN merchant_withdraw_deposit_apply mwda ON mwda.apply_code = mwdao.apply_code
+	WHERE
+		mwda.`status` != 4
+	AND mwdao.merchant_order_code in 
+	<foreach collection ="list" item="orderCode" separator ="," open="(" close=")">
+	  	#{orderCode}
+	</foreach >
+  </select>
+  
 </mapper>

@@ -37,6 +37,7 @@ import com.azz.sequence.sequence.service.ProductMoudleSequence;
 import com.azz.sequence.sequence.service.ProductParamSequence;
 import com.azz.sequence.sequence.service.ProductParamTermSequence;
 import com.azz.sequence.sequence.service.ProductSequence;
+import com.azz.sequence.sequence.service.WithdrawDepositApplySequence;
 import com.azz.sequence.sequence.service.WxBrandSequence;
 import com.azz.sequence.sequence.service.WxClassBeginSequence;
 import com.azz.sequence.sequence.service.WxClassificationSequence;
@@ -159,9 +160,12 @@ public class SequenceController {
     
     @Autowired
     private WxCourseOrderRefundSequence wxCourseOrderRefundSequence;
-    
+
     @Autowired
     private WxCourseOrderWithdrawSequence wxCourseOrderWithdrawSequence;
+    
+    @Autowired
+    private WithdrawDepositApplySequence withdrawDepositApplySequence;
 	/**
 	 * <p>微信品牌</p>
 	 * @return
@@ -515,5 +519,16 @@ public class SequenceController {
     public String getWxCourseOrderWithdrawSequence() {
         return wxCourseOrderWithdrawSequence.getSequence();
     }
+    
+    /**
+     * <p>商户提现申请编码</p>
+     * @return
+     * @author 彭斌  2019年2月18日 下午3:55:08
+     */
+    @RequestMapping(value="getWithdrawDepositApplySequence",method=RequestMethod.GET)
+    public String getWithdrawDepositApplySequence() {
+        return withdrawDepositApplySequence.getSequence();
+    }
+    
 }
 

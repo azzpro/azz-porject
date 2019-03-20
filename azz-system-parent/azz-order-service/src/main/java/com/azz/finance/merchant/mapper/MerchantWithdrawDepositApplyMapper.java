@@ -89,4 +89,13 @@ public interface MerchantWithdrawDepositApplyMapper {
      * @author 黄智聪  2019年3月19日 下午5:56:55
      */
     List<MerchantOrderInfo> getMerchantOrders(SearchMerchantOrderParam param);
+    
+    /**
+     * 
+     * <p>平台端--查询提现记录</p>
+     * @param param
+     * @return
+     * @author 黄智聪  2019年3月19日 下午4:17:38
+     */
+    List<WithdrawDepositApplyInfo> getPlatformWithdrawDepositApplyInfos(SearchWithdrawDepositApplyParam param);
 }

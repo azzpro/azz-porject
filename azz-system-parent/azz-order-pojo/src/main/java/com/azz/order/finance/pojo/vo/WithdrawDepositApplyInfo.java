@@ -31,5 +31,11 @@ public class WithdrawDepositApplyInfo {
 	
 	private String createTime;
 	
+	private String merchantName;
+	
+	private String totalOrderMoney;
+	
+	private String creator;
+	
 }
 

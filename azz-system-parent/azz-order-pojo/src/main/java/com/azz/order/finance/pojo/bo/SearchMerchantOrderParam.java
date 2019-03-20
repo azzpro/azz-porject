@@ -7,7 +7,7 @@
  
 package com.azz.order.finance.pojo.bo;
 
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.azz.core.common.QueryPage;
 
@@ -25,7 +25,7 @@ public class SearchMerchantOrderParam extends QueryPage{
 	
 	private static final long serialVersionUID = 8770090692145173298L;
 	
-	@NotBlank(message = "缺少请求参数")
+	@NotNull(message = "缺少请求参数")
 	private Long merchantId;
 	
 	private String searchInput;

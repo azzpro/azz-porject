@@ -492,6 +492,7 @@ public class ClientPayService {
 	 * @throws Exception 
 	 */
 	private Map<String,String> upload(String url) throws Exception {
+		log.info("上传图片url------------>"+url);
 		String fileType = "IMAGE";
 		Map<String, String> result = YeepayService.uploadUrlStream(fileType, url);
 		return result;

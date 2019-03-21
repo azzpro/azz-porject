@@ -50,6 +50,7 @@ public class YeepayService {
 	public static final String BALANCEQUERY_URL = "balancequeryURI";
 	public static final String HMACKEYQUERY_URL = "hmackeyqueryURI";
 	public static final String APICASHIER_URI = "APICASHIER";
+	public static final String CASHWITHDRALWAL_URL = "cashWithdralwalURL";
 	
 	public static final String TRADEDIVIDE_URL = "tradedivideURI";
 	public static final String TRADEDIVIDEQUERY_URL = "tradedividequeryURI";
@@ -89,6 +90,7 @@ public class YeepayService {
 	public static final String[] SETTLEMENTSQUERY = {"parentMerchantNo","merchantNo","startSettleDate","endSettleDate"};
 	public static final String[] BALANCEQUERY = {"parentMerchantNo","merchantNo"};
 	public static final String[] HMACKEYQUERY = {"parentMerchantNo","merchantNo"};
+	public static final String[] CASHWITHDRALWALKEY = {"customerNumber","amount","orderId","cashType","feeType","leaveWord","bankCardId","notifyUrl"};
 	
 	public static final String[] TRADEDIVIDE = {"parentMerchantNo","merchantNo","divideRequestId","orderId","uniqueOrderNo","contractNo","divideDetail","infoParamExt"};
 	public static final String[] TRADEDIVIDEQUERY = {"parentMerchantNo","merchantNo","divideRequestId","orderId","uniqueOrderNo"};

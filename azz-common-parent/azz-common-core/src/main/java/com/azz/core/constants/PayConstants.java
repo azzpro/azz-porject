@@ -119,6 +119,39 @@ public interface PayConstants {
 		
 	}
 	
+	public enum YeeCode{
+		SUCCESS("注册成功","0000","SUCCESS"),
+		FAILD("注册失败","9999","FAILD");
+		private String desc;
+		private String code;
+		private String msg;
+		
+		public String getMsg() {
+			return msg;
+		}
+		public void setMsg(String msg) {
+			this.msg = msg;
+		}
+		public String getDesc() {
+			return desc;
+		}
+		public void setDesc(String desc) {
+			this.desc = desc;
+		}
+		public String getCode() {
+			return code;
+		}
+		public void setCode(String code) {
+			this.code = code;
+		}
+		private YeeCode(String desc, String code,String msg) {
+			this.desc = desc;
+			this.code = code;
+			this.msg = msg;
+		}
+		
+	}
+	
 	public enum RegCode{
 		SUCCESS("请求成功","0000","SUCCESS"),
 		FAILD("请求失败","9999","FAILD");

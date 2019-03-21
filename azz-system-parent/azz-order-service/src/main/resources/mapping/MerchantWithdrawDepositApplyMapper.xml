@@ -279,7 +279,8 @@
 		mwda.total_order_count as totalOrderCount,
 		mwda.total_order_money as totalOrderMoney,
 		mwda.total_withdraw_deposit_money as totalWithdrawDepositMoney,
-		mwda.total_order_money - mwda.total_withdraw_deposit_money AS totalTransactionCost
+		mwda.total_order_money - mwda.total_withdraw_deposit_money AS totalTransactionCost,
+		mwda.status AS status
 	FROM
 		merchant_withdraw_deposit_apply mwda
 	WHERE

@@ -46,6 +46,9 @@ public class ShiroConfig {
 	filterChainDefinitionMap.put("/azz/api/user/login", "anon");
 	filterChainDefinitionMap.put("/azz/api/platform/course/getClassificationParent", "anon");
 	filterChainDefinitionMap.put("/azz/api/platform/course/getClassificationChild", "anon");
+	//易宝回调 放开
+	filterChainDefinitionMap.put("/azz/api/cashWithdrawal/cashWithdrawalCallback", "anon");
+	filterChainDefinitionMap.put("/azz/api/merchant/regEnterpriseNotify", "anon");
 	// 其余接口一律拦截
 	// 主要这行代码必须放在所有权限设置的最后，不然会导致所有 url 都被拦截
 	filterChainDefinitionMap.put("/**", "authc");

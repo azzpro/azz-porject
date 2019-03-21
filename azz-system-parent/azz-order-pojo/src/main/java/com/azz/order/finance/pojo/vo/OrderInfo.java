@@ -29,6 +29,8 @@ public class OrderInfo {
     private BigDecimal totalTransactionCost;// 总交易费用（手续费）
     
 	private List<MerchantOrderInfo> orders;
+	
+	private Integer status;//状态
 
 }
 

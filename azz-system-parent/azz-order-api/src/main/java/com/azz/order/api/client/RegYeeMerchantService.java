@@ -16,7 +16,10 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.azz.core.common.JsonResult;
+import com.azz.order.client.pojo.RetBean;
 import com.azz.order.client.pojo.bo.BankBranch;
 import com.azz.order.client.pojo.bo.EnterprisereginfoCopy;
 
@@ -43,7 +46,7 @@ public interface RegYeeMerchantService {
 	 * @return
 	 */
 	@RequestMapping("regEnterpriseNotify")
-	public void regEnterpriseNotify();
+	public JsonResult<RetBean> regEnterpriseNotify(@RequestParam("responseMsg") String responseMsg,@RequestParam("customerId") String customerId);
 	/**
 	 * 获取支行信息
 	 * @param request

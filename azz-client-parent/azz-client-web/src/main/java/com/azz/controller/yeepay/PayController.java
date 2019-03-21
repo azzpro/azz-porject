@@ -63,52 +63,6 @@ public class PayController {
 	}
 	
 	/**
-	 * 子商户入网注册【个人】
-	 * @param request
-	 * @param po
-	 * @return
-	 */
-	@RequestMapping("regPersonl")
-	public JsonResult<String> regPersonl(Personreginfo po){
-		JSR303ValidateUtils.validate(po);
-		return pfps.regPersonl(po);
-	}
-	
-	/**
-	 * 子商户入网注册【企业】
-	 * @param request
-	 * @param po
-	 * @return
-	 */
-	@RequestMapping("regEnterprise")
-	public JsonResult<String> regEnterprise(Enterprisereginfo po){
-		JSR303ValidateUtils.validate(po);
-		return pfps.regEnterprise(po);
-	}
-	
-	
-	/**
-	 * 子商户入网注册【个人】回调
-	 * @param request
-	 * @param po
-	 * @return
-	 */
-	@RequestMapping("regPersonlNotify")
-	public void regPersonlNotify(HttpServletRequest request,HttpServletResponse response){
-	}
-	
-	/**
-	 * 子商户入网注册【企业】 回调
-	 * @param request
-	 * @param po
-	 * @return
-	 */
-	@RequestMapping("regEnterpriseNotify")
-	public void regEnterpriseNotify(HttpServletRequest request,HttpServletResponse response){
-	}
-	
-	
-	/**
 	 * 获取支行信息
 	 * @param request
 	 * @param po

@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.azz.core.common.JsonResult;
 import com.azz.core.constants.PayConstants;
 import com.azz.order.api.client.RegYeeMerchantService;
+import com.azz.order.client.pojo.RetBean;
 import com.azz.order.client.pojo.bo.Enterprisereginfo;
 import com.azz.order.client.pojo.bo.EnterprisereginfoCopy;
 import com.azz.order.client.pojo.bo.YeeModulePic;
@@ -32,11 +34,17 @@ import com.azz.utils.WebUtils;
 @RequestMapping("/azz/api/merchant")
 public class MerchantYeeEnterpriseAccount {
 
-	private static final Logger log = LoggerFactory.getLogger("易宝企业商户入网");
+	private  Logger log = LoggerFactory.getLogger(getClass());
 	
 	@Autowired
-	private RegYeeMerchantService clientPayService;
+	private RegYeeMerchantService regYeeMerchantService;
 	
+	/**
+	 * 易宝商户入网注册
+	 * @param enInfo
+	 * @return
+	 * @throws IOException
+	 */
 	@RequestMapping("regMerchantYeeEnterpriseAccount")
 	public Map<String,String> regMerchantYeeEnterpriseAccount(Enterprisereginfo enInfo) throws IOException {
 		JSR303ValidateUtils.validate(enInfo);
@@ -63,7 +71,7 @@ public class MerchantYeeEnterpriseAccount {
 		param.setBusinessPic(business);
 		param.setOpenAccountPic(openAccount);
 		param.setCreator(WebUtils.getLoginUser().getUserInfo().getUserCode());
-		return clientPayService.regMerchantYeeEnterpriseAccount(param);
+		return regYeeMerchantService.regMerchantYeeEnterpriseAccount(param);
 	}
 	
 	/**
@@ -71,18 +79,18 @@ public class MerchantYeeEnterpriseAccount {
 	 * @param request
 	 * @param po
 	 * @return
+	 * @throws IOException 
 	 */
 	@RequestMapping("regEnterpriseNotify")
-	public void regEnterpriseNotify(HttpServletRequest request,HttpServletResponse response) {
+	public void regEnterpriseNotify(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		log.info("进入企业商户入网回调");
-		Map<String,String> result = (Map<String,String>) request.getAttribute("result");
-		String returnCode = result.get("returnCode");
-		String returnMsg = result.get("returnMsg");
-		String parentMerchantNo = result.get("parentMerchantNo");
-		String merchantNo = result.get("merchantNo");
-		String requestNo = result.get("requestNo");
-		String externalId = result.get("externalId");
-		log.info("returnCode----------->"+returnCode);
+		String responseMsg = request.getParameter("response");
+		String customerId = request.getParameter("customerIdentification");
+		log.info("responseMsg---->"+responseMsg);
+		log.info("customerId---->"+customerId);
+		JsonResult<RetBean> notify = regYeeMerchantService.regEnterpriseNotify(responseMsg,customerId);
+		response.getWriter().write(notify.getMsg());
+		response.getWriter().flush();
 	}
 	
 }

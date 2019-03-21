@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -31,7 +30,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,19 +44,25 @@ import com.azz.core.constants.ClientConstants.PayMethod;
 import com.azz.core.constants.ClientConstants.PayStatus;
 import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.MerchantConstants;
+import com.azz.core.constants.MerchantConstants.WithdrawDepositApplyStatus;
 import com.azz.core.constants.PayConstants;
 import com.azz.core.constants.PayConstants.PayCode;
 import com.azz.core.constants.PayConstants.RegCode;
-import com.azz.core.exception.BaseException;
+import com.azz.core.constants.PayConstants.YeeCode;
+import com.azz.core.constants.WithdralwalContants;
 import com.azz.exception.JSR303ValidationException;
+import com.azz.finance.merchant.mapper.MerchantWithdrawDepositApplyMapper;
 import com.azz.order.api.client.ClientOrderService;
 import com.azz.order.api.client.SelectionService;
 import com.azz.order.client.mapper.ClientEnterpriseRegInfoMapper;
 import com.azz.order.client.mapper.ClientPayMapper;
+import com.azz.order.client.mapper.MerchantYeeBindMapper;
 import com.azz.order.client.pojo.ClientPay;
 import com.azz.order.client.pojo.Enterprisereginfoadd;
+import com.azz.order.client.pojo.MerchantYeeBind;
 import com.azz.order.client.pojo.RetBean;
 import com.azz.order.client.pojo.bo.BankBranch;
+import com.azz.order.client.pojo.bo.CashWithdrawal;
 import com.azz.order.client.pojo.bo.EnterprisereginfoCopy;
 import com.azz.order.client.pojo.bo.OrderInfo;
 import com.azz.order.client.pojo.bo.PageOrder;
@@ -90,6 +94,9 @@ public class ClientPayService {
 	
 	@Autowired
 	private ClientPayMapper ppm;
+	
+	@Autowired
+	private MerchantYeeBindMapper mybMapper;
 
 	@Autowired
 	private ClientOrderService cos;
@@ -102,9 +109,35 @@ public class ClientPayService {
 
 	@Autowired
 	private SystemImageUploadService systemImageUploadService;
+	
+	@Autowired
+	private MerchantWithdrawDepositApplyMapper merchantWithdrawDepositApplyMapper;
 
 	public static String REQUEST_PREFIX = "YOP_ENREG";
 	
+	/**
+	 * <p>
+	 * 支付订单详情
+	 * </p>
+	 * 
+	 * @param param
+	 * @return
+	 * @author 刘建麟 2018年10月31日 上午11:29:49
+	 */
+	public JsonResult<ClientPay> getOrderInfo(String number) {
+		ClientPay payNumber = ppm.selectPayInfoByPayNumber(number);
+		// 判断该订单是否处于待支付 并且未失效
+		JsonResult<ClientOrderDetail> detail = cos.getClientOrderDetail(number);
+		ClientOrderInfo orderInfo = detail.getData().getOrderInfo();
+		payNumber.setCoi(orderInfo);
+		return JsonResult.successJsonResult(payNumber);
+	}
+	
+	/**
+	 * 提交易宝支付
+	 * @param po
+	 * @return
+	 */
 	@Transactional
 	public Map<String, Object> submitOrderPay(@RequestBody PageOrder po) {
 		List<ClientPay> selectOrder = ppm.selectOrder(po.getOrderCode());
@@ -482,17 +515,26 @@ public class ClientPayService {
 				resultMap.put("msg", RegCode.FAILD.getDesc());
 				return resultMap;
 			}
+			MerchantYeeBind myb = new MerchantYeeBind();
+			myb.setMerchantId(po.getMerchantCode());
+			myb.setYeeMerchantNo(merchantNo);
+			int insertBind = mybMapper.insertBind(myb);
+			if(insertBind != 1) {
+				resultMap.put("code", RegCode.FAILD.getCode());
+				resultMap.put("msg", "商户编号绑定失败");
+				return resultMap;
+			}
 			resultMap.put("code", RegCode.SUCCESS.getCode());
 			resultMap.put("msg", RegCode.SUCCESS.getDesc());
 			return resultMap;
-				}else {
-					resultMap.put("code", RegCode.FAILD.getCode());
-					resultMap.put("msg", RegCode.FAILD.getDesc());
-					return resultMap;
-				}
+		}else {
+				resultMap.put("code", RegCode.FAILD.getCode());
+				resultMap.put("msg", returnMsg);
+				return resultMap;
+		}
 		}else {
 			resultMap.put("code", PayCode.FAILD.getCode());
-			resultMap.put("msg", PayCode.FAILD.getDesc());
+			resultMap.put("msg", "参数不正确");
 			return resultMap;
 		}
 	}
@@ -501,11 +543,164 @@ public class ClientPayService {
 	/**
 	 * 易宝提现
 	 */
-	public void CashWithdrawal() {
+	public Map<String,String> cashWithdrawal(CashWithdrawal ca) {
+		Map<String,String> result = new HashMap<String,String>();
+		Map<String,String> params = new HashMap<String,String>();
+		//根据订单号去查询提现金额
+		com.azz.order.finance.pojo.vo.OrderInfo info = merchantWithdrawDepositApplyMapper.getWithdrawDepositApplyOrderInfo(ca.getOrderId());
 		
+		if(info != null) {
+			if(WithdrawDepositApplyStatus.PENDING.getValue() != info.getStatus()) {
+				result.put("code", "9999");
+				result.put("msg", "提现单号状态出错");
+				return result;
+			}
+			if(info.getTotalOrderMoney().compareTo(BigDecimal.ZERO) == 0) {
+				result.put("code", "9999");
+				result.put("msg", "提现金额不能为0");
+				return result;
+			}
+			//根据商户编号去查询易宝商户编号
+			MerchantYeeBind yeeBind = mybMapper.selectBindByMerchantNo(ca.getMerchantCode());
+			params.put("customerNumber", yeeBind.getYeeMerchantNo());//商户编号
+			params.put("amount", info.getTotalOrderMoney().toPlainString());//提现金额
+			params.put("orderId", ca.getOrderId());//商户订单号
+			params.put("cashType", WithdralwalContants.CASHTYPEONE);//提现类型 D1
+			params.put("feeType", WithdralwalContants.FEETYPETARGET);//计费类型
+			params.put("notifyUrl", regEnNotifyUrl);//提现回调
+			Map<String, String> re = new HashMap<>();
+			String uri = YeepayService.getUrl(YeepayService.CASHWITHDRALWAL_URL);
+			try {
+				re = YeepayService.requestYOP(params, uri, YeepayService.CASHWITHDRALWALKEY, YeepayService.CASHWITHDRALWALKEY);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+				result.put("code", "9999");
+				result.put("msg", "提现失败");
+				return result;
+			}
+			Set<Entry<String, String>> entrySet = re.entrySet();
+			for (Entry<String, String> entry : entrySet) {
+				log.info("提现返回---->"+entry.getKey()+":::"+entry.getValue());
+			}
+		}else {
+			
+		}
+		
+		/*MerchantWithdrawDepositApply applyInfo = merchantWithdrawDepositApplyMapper.selectByApplyCode(applyCode);
+		if(applyInfo == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "提款申请记录不存在");
+		}
+		MerchantWithdrawDepositApply record = MerchantWithdrawDepositApply.builder()
+				.id(applyInfo.getId())
+				.modifier(param.getMerchantUserCode())
+				.modifyTime(new Date())
+				.status((byte)WithdrawDepositApplyStatus.NOT_PAID_WITH.getValue())
+				.build();
+		merchantWithdrawDepositApplyMapper.updateByPrimaryKeySelective(record);
+		*/
+		return result;
 	}
 	
+	/**
+	 * 易宝商户入网回调
+	 * @param result
+	 */
+	public JsonResult<RetBean> regEnterpriseNotify(String responseMsg,String customerId){
+		log.info("进入商户入网异步处理......");
+		RetBean retBean = new RetBean();
+		if (StringUtils.isBlank(responseMsg) || StringUtils.isBlank(customerId)) {
+			retBean.setRet_code(YeeCode.FAILD.getCode());
+			retBean.setRet_msg(YeeCode.FAILD.getDesc());
+			return new JsonResult<>(retBean);
+		}
+		log.info("接收商户入网异步通知数据：【" + responseMsg + "】:【" + customerId + "】");
+		Map<String, String> callback = YeepayService.callback(responseMsg);
+		Set<Entry<String, String>> entrySet = callback.entrySet();
+		for (Entry<String, String> entry : entrySet) {
+			log.info("回调处理结果--->" + entry.getKey() + "::--value---->" + entry.getValue());
+		}
+		String agentNo = callback.get("agentNo");// 主商编
+		String merNo = callback.get("merNo"); // 子商编
+		String externalId = callback.get("externalId");//易宝流水号
+		String requestNo = callback.get("requestNo");// 请求单号
+		String merFullName = callback.get("merFullName");// 商户全称
+		String merNetInStatus = callback.get("merNetInStatus");// 状态
+		log.info("商户全称:{},商户入网返回状态:{}",merFullName,merNetInStatus);
+		if (StringUtils.isNotBlank(merNetInStatus) && merNetInStatus.equals("PROCESS_SUCCESS")) {
+			List<MerchantYeeBind> selectBindByYeeNo = mybMapper.selectBindByYeeNo(merNo);
+			if(selectBindByYeeNo.isEmpty()) {
+				retBean.setRet_code(YeeCode.FAILD.getCode());
+				retBean.setRet_msg(YeeCode.FAILD.getDesc());
+				return new JsonResult<>(retBean);
+			}
+			boolean flag = false;
+			for (MerchantYeeBind merchantYeeBind : selectBindByYeeNo) {
+				if(merchantYeeBind.getBindStatus() == 1) {
+					flag = true;
+				}
+			}
+			if(!flag) {
+				int bind = mybMapper.updateBind(merNo);
+				if(bind != 1) {
+					retBean.setRet_code(YeeCode.FAILD.getCode());
+					retBean.setRet_msg(YeeCode.FAILD.getDesc());
+					return new JsonResult<>(retBean);
+				}
+			}
+			retBean.setRet_code(YeeCode.SUCCESS.getCode());
+			retBean.setRet_msg(YeeCode.SUCCESS.getDesc());
+			return new JsonResult<>(retBean);
+		} else {
+			retBean.setRet_code(YeeCode.FAILD.getCode());
+			retBean.setRet_msg(YeeCode.FAILD.getDesc());
+			return new JsonResult<>(retBean);
+		}
 
+	}
+	
+	
+	
+
+	/**
+	 * 易宝提现回调
+	 * @param result
+	 */
+	public JsonResult<RetBean> cashWithdrawalCallback(String responseMsg,String customerId){
+		log.info("进入商户提现异步处理......");
+		RetBean retBean = new RetBean();
+		if (StringUtils.isBlank(responseMsg) || StringUtils.isBlank(customerId)) {
+			retBean.setRet_code(YeeCode.FAILD.getCode());
+			retBean.setRet_msg(YeeCode.FAILD.getDesc());
+			return new JsonResult<>(retBean);
+		}
+		log.info("接收商户提现异步通知数据：【" + responseMsg + "】:【" + customerId + "】");
+		Map<String, String> callback = YeepayService.callback(responseMsg);
+		Set<Entry<String, String>> entrySet = callback.entrySet();
+		for (Entry<String, String> entry : entrySet) {
+			log.info("回调处理结果--->" + entry.getKey() + "::--value---->" + entry.getValue());
+		}
+		String customerNumber = callback.get("customerNumber");// 商户编号
+		String groupNumber = callback.get("groupNumber"); //系统商编号
+		String orderId = callback.get("orderId");//提现订单号
+		String cashType = callback.get("cashType");//提现类型
+		String bankAccountNo = callback.get("bankAccountNo");//提现账户
+		String bankAccountName = callback.get("bankAccountName");//提现账户名称
+		String bankName = callback.get("bankName");//开户银行名称
+		String bankCardType = callback.get("bankCardType");//提现账户类型
+		String amount = callback.get("amount");//提现金额
+		String realAmount = callback.get("realAmount");//实际到账金额
+		String fee = callback.get("fee");//提现手续费
+		String feeType = callback.get("feeType");//手续费类型
+		String requestDate = callback.get("requestDate");//请求时间
+		String finishTime = callback.get("finishTime");//终态时间
+		String transferStatusCode = callback.get("transferStatusCode");//提现状态码
+		String bankTrxStatusCode = callback.get("bankTrxStatusCode");//银行状态码
+		log.info("提现订单号:{},提现账户:{},提现金额:{},实际到账金额:{},提现手续费:{},提现状态码:{},银行状态码:{}",orderId,bankAccountNo,amount,realAmount,fee,transferStatusCode,bankTrxStatusCode);
+		return null;
+	}
+	
+	
+	
 	/**
 	 * 获取支行信息
 	 * @param bb
@@ -619,23 +814,7 @@ public class ClientPayService {
 		return JsonResult.successJsonResult(new Pagination<>(selectPayList));
 	}
 
-	/**
-	 * <p>
-	 * 支付订单详情
-	 * </p>
-	 * 
-	 * @param param
-	 * @return
-	 * @author 刘建麟 2018年10月31日 上午11:29:49
-	 */
-	public JsonResult<ClientPay> getOrderInfo(String number) {
-		ClientPay payNumber = ppm.selectPayInfoByPayNumber(number);
-		// 判断该订单是否处于待支付 并且未失效
-		JsonResult<ClientOrderDetail> detail = cos.getClientOrderDetail(number);
-		ClientOrderInfo orderInfo = detail.getData().getOrderInfo();
-		payNumber.setCoi(orderInfo);
-		return JsonResult.successJsonResult(payNumber);
-	}
+	
 
 	/**
 	 * 获取订单状态
@@ -650,7 +829,6 @@ public class ClientPayService {
 		}
 		return true;
 	}
-
 	/**
 	 * <p>
 	 * 创建订单
@@ -685,7 +863,7 @@ public class ClientPayService {
 	 * @return
 	 * @author 黄智聪  2018年11月1日 下午4:49:22
 	 */
-	public Map<String,String> uploadModulePic(List<YeeModulePic> pic,String name) {
+	private Map<String,String> uploadModulePic(List<YeeModulePic> pic,String name) {
 		//创建OS存储空间
 		Map<String,String> fileMap = new HashMap<String,String>();
 		if(!pic.isEmpty()) {
@@ -704,10 +882,11 @@ public class ClientPayService {
 				LocalDateTime now = LocalDateTime.now();
 				String string = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
 				//组装新文件名
-				String newFileName = string+"_"+name;
+				String type = yeeModulePic.getType();
+				String newFileName = string+"_"+name+"_"+type;
 				String suffix = fileName.substring(fileName.indexOf(".")+1, fileName.length());
 				log.info("文件后缀为--------->"+suffix);
-				String type = yeeModulePic.getType();
+				
 				if(type.equals(PayConstants.RegYee.legalFrontPic.getCode())) {
 					JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix,
 							 fileDate, FileConstants.AZZ_YEE, FileConstants.AZZ_LEGAL_IMAGE_TYPE);

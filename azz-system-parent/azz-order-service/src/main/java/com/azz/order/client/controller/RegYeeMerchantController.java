@@ -64,7 +64,8 @@ public class RegYeeMerchantController {
 	 * @return
 	 */
 	@RequestMapping("regEnterpriseNotify")
-	public void regEnterpriseNotify(){
+	public JsonResult<RetBean> regEnterpriseNotify(@RequestParam("responseMsg") String responseMsg,@RequestParam("customerId") String customerId){
+		return pps.regEnterpriseNotify(responseMsg,customerId);
 	}
 	
 	

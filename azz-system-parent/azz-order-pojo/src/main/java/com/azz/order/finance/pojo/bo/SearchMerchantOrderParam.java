@@ -29,6 +29,8 @@ public class SearchMerchantOrderParam extends QueryPage{
 	private Long merchantId;
 	
 	private String searchInput;
+	
+	private Double rate;
 
 }
 

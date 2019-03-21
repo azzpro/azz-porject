@@ -8,6 +8,7 @@
 package com.azz.merchant.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,7 @@ import com.azz.order.api.merchant.MerchantFinanceService;
 import com.azz.order.finance.pojo.bo.SearchMerchantOrderParam;
 import com.azz.order.finance.pojo.bo.SearchWithdrawDepositApplyParam;
 import com.azz.order.finance.pojo.bo.WithdrawDepositApplyParam;
+import com.azz.order.finance.pojo.vo.AccountInfo;
 import com.azz.order.finance.pojo.vo.MerchantOrderInfo;
 import com.azz.order.finance.pojo.vo.WithdrawDepositApplyDetail;
 import com.azz.order.finance.pojo.vo.WithdrawDepositApplyInfo;
@@ -75,13 +77,25 @@ public class MerchantFinanceController {
 	
 	/**
 	 * 
+	 * <p>根据商户编码查询账户信息</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年3月19日 下午4:18:04
+	 */
+	@RequestMapping("/getAccountInfoByMerchantCode")
+	public JsonResult<AccountInfo> getAccountInfoByMerchantCode(){
+		return merchantFinanceService.getAccountInfoByMerchantCode(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantCode());
+	}
+	
+	/**
+	 * 
 	 * <p>提现申请</p>
 	 * @param param
 	 * @return
 	 * @author 黄智聪  2019年3月19日 下午4:18:04
 	 */
-	@RequestMapping("/withdrawDepositApply")
-	public JsonResult<String> withdrawDepositApply(WithdrawDepositApplyParam param){
+	@RequestMapping(value = "/withdrawDepositApply", produces = "application/json;charset=UTF-8")
+	public JsonResult<String> withdrawDepositApply(@RequestBody WithdrawDepositApplyParam param){
 		param.setMerchantCode(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantCode());
 		param.setMerchantUserCode(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
 		return merchantFinanceService.withdrawDepositApply(param);

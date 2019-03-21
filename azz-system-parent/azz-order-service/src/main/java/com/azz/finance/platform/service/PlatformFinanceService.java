@@ -68,8 +68,11 @@ public class PlatformFinanceService {
 		}
 		// 提现信息
 		ApplyInfo applyInfo = merchantWithdrawDepositApplyMapper.getWithdrawDepositApplyInfo(applyCode);
+		if(applyInfo == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "提现申请不存在");
+		}
 		// 账户信息
-		AccountInfo accountInfo = null;// TODO
+		AccountInfo accountInfo = merchantWithdrawDepositApplyMapper.getAccountByMerchantCode(applyInfo.getMerchantCode());
 		// 订单信息
 		OrderInfo orderInfo = merchantWithdrawDepositApplyMapper.getWithdrawDepositApplyOrderInfo(applyCode);
 		if(orderInfo != null) {
@@ -77,7 +80,7 @@ public class PlatformFinanceService {
 			orderInfo.setOrders(merchantWithdrawDepositApplyMapper.getWithdrawDepositApplyOrders(applyCode));
 		}
 		// 三方信息
-		ThirdInfo thirdInfo = null;// TODO
+		ThirdInfo thirdInfo = merchantWithdrawDepositApplyMapper.getThirdInfo(applyCode);
 		return JsonResult.successJsonResult(new WithdrawDepositApplyDetail(applyInfo, accountInfo, orderInfo, thirdInfo));
 	}
 

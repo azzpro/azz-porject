@@ -39,10 +39,8 @@ import com.azz.order.finance.pojo.vo.WithdrawDepositApplyInfo;
 import com.azz.order.finance.pojo.vo.WithdrawDepositCount;
 import com.azz.order.merchant.mapper.MerchantOrderMapper;
 import com.azz.order.merchant.pojo.MerchantOrder;
-import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
-import com.azz.util.SystemSeqUtils;
 import com.github.pagehelper.PageHelper;
 
 /**
@@ -117,8 +115,11 @@ public class MerchantFinanceService {
 		}
 		// 提现信息
 		ApplyInfo applyInfo = merchantWithdrawDepositApplyMapper.getWithdrawDepositApplyInfo(applyCode);
+		if(applyInfo == null) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "提现申请不存在");
+		}
 		// 账户信息
-		AccountInfo accountInfo = null;// TODO
+		AccountInfo accountInfo = merchantWithdrawDepositApplyMapper.getAccountByMerchantCode(applyInfo.getMerchantCode());
 		// 订单信息
 		OrderInfo orderInfo = merchantWithdrawDepositApplyMapper.getWithdrawDepositApplyOrderInfo(applyCode);
 		if(orderInfo != null) {
@@ -126,6 +127,19 @@ public class MerchantFinanceService {
 			orderInfo.setOrders(merchantWithdrawDepositApplyMapper.getWithdrawDepositApplyOrders(applyCode));
 		}
 		return JsonResult.successJsonResult(new WithdrawDepositApplyDetail(applyInfo, accountInfo, orderInfo, null));
+	}
+	
+	/**
+	 * 
+	 * <p>根据商户编码查询账户信息</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年3月19日 下午4:18:04
+	 */
+	public JsonResult<AccountInfo> getAccountInfoByMerchantCode(@RequestParam("merchantCode") String merchantCode){
+		// 账户信息
+		AccountInfo accountInfo = merchantWithdrawDepositApplyMapper.getAccountByMerchantCode(merchantCode);
+		return JsonResult.successJsonResult(accountInfo);
 	}
 	
 	/**
@@ -199,6 +213,7 @@ public class MerchantFinanceService {
 	public JsonResult<Pagination<MerchantOrderInfo>> getMerchantOrders(@RequestBody SearchMerchantOrderParam param){
 		JSR303ValidateUtils.validate(param);
 		PageHelper.startPage(param.getPageNum(), param.getPageSize());
+		param.setRate(WITHDRAW_DEPOSIT_RATE.doubleValue());
 		List<MerchantOrderInfo> infos = merchantWithdrawDepositApplyMapper.getMerchantOrders(param);
 		return JsonResult.successJsonResult(new Pagination<>(infos));
 	}

@@ -570,7 +570,10 @@ public class ClientPayService {
 			//params.put("orderId", ca.getOrderId());//商户订单号20190314105445
 			params.put("cashType", WithdralwalContants.CASHTYPEONE);//提现类型 D1
 			params.put("feeType", WithdralwalContants.FEETYPETARGET);//计费类型
+			params.put("leaveWord", "");
+			params.put("bankCardId", "");
 			params.put("notifyUrl", regEnNotifyUrl);//提现回调
+			
 			Map<String, String> re = new HashMap<>();
 			String uri = YeepayService.getUrl(YeepayService.CASHWITHDRALWAL_URL);
 			try {

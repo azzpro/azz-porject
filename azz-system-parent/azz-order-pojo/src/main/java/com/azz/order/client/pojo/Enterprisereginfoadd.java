@@ -12,6 +12,7 @@ import lombok.Data;
 public class Enterprisereginfoadd {
 	
 	private Long id;
+	private String merchantNo;//子商户编码
 	private String merFullName;//商户全称
 	private String merShortName;//商户简称
 	private String merCertNo;//证件号

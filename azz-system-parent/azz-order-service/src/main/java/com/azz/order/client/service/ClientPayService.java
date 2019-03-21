@@ -44,7 +44,6 @@ import com.azz.core.constants.ClientConstants.PayMethod;
 import com.azz.core.constants.ClientConstants.PayStatus;
 import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.MerchantConstants;
-import com.azz.core.constants.MerchantConstants.WithdrawDepositApplyStatus;
 import com.azz.core.constants.PayConstants;
 import com.azz.core.constants.PayConstants.PayCode;
 import com.azz.core.constants.PayConstants.RegCode;
@@ -91,6 +90,9 @@ public class ClientPayService {
 
 	@Value("${yeepay.regEn-notify-url}")
 	private String regEnNotifyUrl;
+	
+	@Value("${yeepay.cashWithdralwal-notify-url}")
+	private String cashWithdralwalNotifyUrl;
 	
 	@Autowired
 	private ClientPayMapper ppm;
@@ -509,6 +511,7 @@ public class ClientPayService {
 			ef.setBankCity(params.get("bankCity"));
 			ef.setMerAuthorizeType(params.get("merAuthorizeType"));
 			ef.setBusinessFunction(params.get("businessFunction"));
+			ef.setMerchantNo(merchantNo);
 			int insertSelective = clientEnterpriseRegInfoMapper.insertSelective(ef);
 			if(insertSelective != 1) {
 				resultMap.put("code", RegCode.FAILD.getCode());
@@ -547,27 +550,36 @@ public class ClientPayService {
 		Map<String,String> result = new HashMap<String,String>();
 		Map<String,String> params = new HashMap<String,String>();
 		//根据订单号去查询提现金额
-		com.azz.order.finance.pojo.vo.OrderInfo info = merchantWithdrawDepositApplyMapper.getWithdrawDepositApplyOrderInfo(ca.getOrderId());
+		//com.azz.order.finance.pojo.vo.OrderInfo info = merchantWithdrawDepositApplyMapper.getWithdrawDepositApplyOrderInfo(ca.getOrderId());
 		
-		if(info != null) {
-			if(WithdrawDepositApplyStatus.PENDING.getValue() != info.getStatus()) {
-				result.put("code", "9999");
-				result.put("msg", "提现单号状态出错");
-				return result;
-			}
-			if(info.getTotalOrderMoney().compareTo(BigDecimal.ZERO) == 0) {
-				result.put("code", "9999");
-				result.put("msg", "提现金额不能为0");
-				return result;
-			}
+		//if(info != null) {
+			//if(WithdrawDepositApplyStatus.PENDING.getValue() != info.getStatus()) {
+			//	result.put("code", "9999");
+			//	result.put("msg", "提现单号状态出错");
+			//	return result;
+			//}
+			//if(info.getTotalOrderMoney().compareTo(BigDecimal.ZERO) == 0) {
+			//	result.put("code", "9999");
+			//	result.put("msg", "提现金额不能为0");
+			//	return result;
+			//}
 			//根据商户编号去查询易宝商户编号
-			MerchantYeeBind yeeBind = mybMapper.selectBindByMerchantNo(ca.getMerchantCode());
-			params.put("customerNumber", yeeBind.getYeeMerchantNo());//商户编号
-			params.put("amount", info.getTotalOrderMoney().toPlainString());//提现金额
-			params.put("orderId", ca.getOrderId());//商户订单号
+			//MerchantYeeBind yeeBind = mybMapper.selectBindByMerchantNo(ca.getMerchantCode());
+			//params.put("customerNumber", yeeBind.getYeeMerchantNo());//商户编号
+			params.put("customerNumber", "10027243789");
+			params.put("amount", "145.01");
+			params.put("orderId", "20190314105445");
+			//params.put("amount", info.getTotalOrderMoney().toPlainString());//提现金额
+			//params.put("orderId", ca.getOrderId());//商户订单号20190314105445
 			params.put("cashType", WithdralwalContants.CASHTYPEONE);//提现类型 D1
 			params.put("feeType", WithdralwalContants.FEETYPETARGET);//计费类型
-			params.put("notifyUrl", regEnNotifyUrl);//提现回调
+			params.put("leaveWord", "");
+			params.put("bankCardId", "");
+			params.put("notifyUrl", cashWithdralwalNotifyUrl);//提现回调
+			Set<Entry<String, String>> es = params.entrySet();
+			for (Entry<String, String> entry : es) {
+				log.info("提现参数---->"+entry.getKey()+":::"+entry.getValue());
+			}
 			Map<String, String> re = new HashMap<>();
 			String uri = YeepayService.getUrl(YeepayService.CASHWITHDRALWAL_URL);
 			try {
@@ -582,9 +594,9 @@ public class ClientPayService {
 			for (Entry<String, String> entry : entrySet) {
 				log.info("提现返回---->"+entry.getKey()+":::"+entry.getValue());
 			}
-		}else {
+		//}else {
 			
-		}
+		//}
 		
 		/*MerchantWithdrawDepositApply applyInfo = merchantWithdrawDepositApplyMapper.selectByApplyCode(applyCode);
 		if(applyInfo == null) {

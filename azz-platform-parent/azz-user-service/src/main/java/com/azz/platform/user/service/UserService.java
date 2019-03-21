@@ -336,6 +336,7 @@ public class UserService {
 		SmsParams sms = new SmsParams();
 		sms.setPhone(phoneNumber);
 		sms.setMsgType(SmsConstants.ACCOUNT_CREATE_SUCCESS.getMsgType());
+		sms.setCode(password);
 		systemSmsSendService.sendSmsCode(sms);
 	}
 	

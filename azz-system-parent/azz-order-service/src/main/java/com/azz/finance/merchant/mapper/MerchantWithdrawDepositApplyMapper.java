@@ -22,7 +22,9 @@ public interface MerchantWithdrawDepositApplyMapper {
     int insertSelective(MerchantWithdrawDepositApply record);
 
     MerchantWithdrawDepositApply selectByPrimaryKey(Long id);
-
+    
+    MerchantWithdrawDepositApply selectByApplyCode(String applyCode);
+    
     int updateByPrimaryKeySelective(MerchantWithdrawDepositApply record);
 
     int updateByPrimaryKey(MerchantWithdrawDepositApply record);

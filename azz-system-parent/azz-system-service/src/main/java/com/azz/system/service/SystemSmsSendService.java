@@ -10,6 +10,7 @@ package com.azz.system.service;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,7 +124,11 @@ private static final Logger LOG = LoggerFactory.getLogger(SystemSmsSendService.c
 		if(null == smsConstants)
 			throw new SmsException(SmsErrorCode.SMS_ERROR_TYPE_NOT_EXIST);
 		SystemMsgLog sml = new SystemMsgLog();
-		sml.setMsgCode(RandomStringUtils.generNumCode(6));
+		if(StringUtils.isNotBlank(sms.getCode())) {
+			sml.setMsgCode(sms.getCode());
+		}else {
+			sml.setMsgCode(RandomStringUtils.generNumCode(6));
+		}
 		sml.setMsgContent(smsConstants.getMsgContent().replace("${code}", sml.getMsgCode()));
 		sml.setMsgPhone(Long.parseLong(sms.getPhone()));
 		sml.setMsgTitle(smsConstants.getName());

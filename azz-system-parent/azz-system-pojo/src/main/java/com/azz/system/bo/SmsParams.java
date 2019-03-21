@@ -25,5 +25,7 @@ public class SmsParams {
 	private String phone;
 	@NotNull(message="短信类型不能为空")
 	private Integer msgType;
+	
+	private String code;
 }
 

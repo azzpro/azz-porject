@@ -10,6 +10,7 @@ package com.azz.system.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
@@ -39,6 +40,12 @@ public class SmsSendController {
 	 */
 	@RequestMapping("smsSend")
 	public JsonResult<String> sendSmsCode(@RequestBody SmsParams sms) {
+		return sendService.sendSmsCode(sms);
+	}
+	
+	
+	@RequestMapping(value="smsSendByValue",method=RequestMethod.POST)
+	JsonResult<String> sendSmsCodeByValue(@RequestBody SmsParams sms){
 		return sendService.sendSmsCode(sms);
 	}
 	

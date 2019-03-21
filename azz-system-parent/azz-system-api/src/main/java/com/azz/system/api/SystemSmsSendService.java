@@ -30,6 +30,9 @@ public interface SystemSmsSendService {
 	@RequestMapping(value="/azz/api/system/smsSend",method=RequestMethod.POST)
 	JsonResult<String> sendSmsCode(@RequestBody SmsParams sms);
 	
+	@RequestMapping(value="/azz/api/system/smsSendByValue",method=RequestMethod.POST)
+	JsonResult<String> sendSmsCodeByValue(@RequestBody SmsParams sms);
+	
 	@RequestMapping(value="/azz/api/system/validationCode",method=RequestMethod.POST)
 	JsonResult<SmsInfo> checkMsgCodeTime(@RequestBody SmsCodeValidation sv);
 

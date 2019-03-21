@@ -14,4 +14,6 @@ public interface MerchantYeeBindMapper {
 	int insertBind(MerchantYeeBind myb);
 	
 	List<MerchantYeeBind> selectBindByYeeNo(String no);
+	
+	MerchantYeeBind selectBindByMerchantNo(String no);
 }

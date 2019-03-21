@@ -82,6 +82,11 @@ public class WxPayService {
 	@Autowired
 	private OrderService orderService;
 	
+	/**
+	 * 微信支付 统一下单
+	 * @param po
+	 * @return
+	 */
 	@Transactional
 	public Map<String,String> submitOrderPay(@RequestBody WxPayOrderInfo po) {
 		WXPayUtil.getLogger().info("openid--------->" + po.getOpenid());
@@ -208,6 +213,11 @@ public class WxPayService {
 		return reqMap;
 	}
 	
+	/**
+	 * 微信支付回调
+	 * @param xml
+	 * @return
+	 */
 	public String callback(String xml) {
 		String resXml = "";
 		try {

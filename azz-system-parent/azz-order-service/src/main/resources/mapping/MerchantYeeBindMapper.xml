@@ -13,6 +13,11 @@
   	where yee_merchant_no = #{no}
   </select>
   
+  <select id="selectBindByMerchantNo" resultMap="BaseResultMap">
+  	select id,merchant_id,yee_merchant_no,bind_status from merchant_yee_bind
+  	where merchant_id = #{no}
+  </select>
+  
   <update id="updateBind">
     update merchant_yee_bind
       set bind_status = 1,

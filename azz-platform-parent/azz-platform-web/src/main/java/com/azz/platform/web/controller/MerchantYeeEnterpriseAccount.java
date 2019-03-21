@@ -34,11 +34,17 @@ import com.azz.utils.WebUtils;
 @RequestMapping("/azz/api/merchant")
 public class MerchantYeeEnterpriseAccount {
 
-	private static final Logger log = LoggerFactory.getLogger("易宝企业商户入网");
+	private  Logger log = LoggerFactory.getLogger(getClass());
 	
 	@Autowired
-	private RegYeeMerchantService clientPayService;
+	private RegYeeMerchantService regYeeMerchantService;
 	
+	/**
+	 * 易宝商户入网注册
+	 * @param enInfo
+	 * @return
+	 * @throws IOException
+	 */
 	@RequestMapping("regMerchantYeeEnterpriseAccount")
 	public Map<String,String> regMerchantYeeEnterpriseAccount(Enterprisereginfo enInfo) throws IOException {
 		JSR303ValidateUtils.validate(enInfo);
@@ -65,7 +71,7 @@ public class MerchantYeeEnterpriseAccount {
 		param.setBusinessPic(business);
 		param.setOpenAccountPic(openAccount);
 		param.setCreator(WebUtils.getLoginUser().getUserInfo().getUserCode());
-		return clientPayService.regMerchantYeeEnterpriseAccount(param);
+		return regYeeMerchantService.regMerchantYeeEnterpriseAccount(param);
 	}
 	
 	/**
@@ -82,7 +88,7 @@ public class MerchantYeeEnterpriseAccount {
 		String customerId = request.getParameter("customerIdentification");
 		log.info("responseMsg---->"+responseMsg);
 		log.info("customerId---->"+customerId);
-		JsonResult<RetBean> notify = clientPayService.regEnterpriseNotify(responseMsg,customerId);
+		JsonResult<RetBean> notify = regYeeMerchantService.regEnterpriseNotify(responseMsg,customerId);
 		response.getWriter().write(notify.getMsg());
 		response.getWriter().flush();
 	}

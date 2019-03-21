@@ -491,7 +491,9 @@ public abstract class MerchantConstants {
 		
 		PAID_WITH(3, "已打款"),
 		
-		CLOSED(4, "已关闭");
+		CLOSED(4, "已关闭"),
+    	
+    	PROCCESSING(5, "处理中");
 	
 		@Getter
 		private int value;

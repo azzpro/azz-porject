@@ -266,12 +266,27 @@
 		mu.phone_number AS phoneNumber,
 		mwda.`status` AS status,
 		mwda.remark AS remark,
-		mwda.create_time AS createTime
+		mwda.create_time AS createTime,
+		mwda.merchant_code AS merchantCode
 	FROM
 		merchant_withdraw_deposit_apply mwda
 	JOIN merchant_user mu ON mu.merchant_user_code = mwda.creator
 	WHERE
 		mwda.apply_code = #{applyCode}
+  </select>
+  
+  <select id="getAccountByMerchantCode" parameterType="string" resultType="com.azz.order.finance.pojo.vo.AccountInfo">
+  	SELECT
+		myea.mer_cert_no as creditCode,
+		myea.card_no as accountBankCardNumber,
+		m.merchant_name AS merchantName
+	FROM
+		merchant_yee_enterprise_account myea
+	JOIN merchant_yee_bind myb ON myb.yee_merchant_no = myea.merchant_no
+	JOIN merchant m ON m.merchant_code = myb.merchant_id
+	WHERE
+		myb.bind_status = 1
+	AND myb.merchant_id = #{merchantCode}
   </select>
   
   <select id="getWithdrawDepositApplyOrderInfo" parameterType="string" resultType="com.azz.order.finance.pojo.vo.OrderInfo">

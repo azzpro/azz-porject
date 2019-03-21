@@ -33,6 +33,8 @@ public class ApplyInfo {
     private String creator;
 
     private Date createTime;
+    
+    private String merchantCode;
 	
 }
 

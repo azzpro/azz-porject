@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.azz.order.finance.pojo.MerchantWithdrawDepositApply;
 import com.azz.order.finance.pojo.bo.SearchMerchantOrderParam;
 import com.azz.order.finance.pojo.bo.SearchWithdrawDepositApplyParam;
+import com.azz.order.finance.pojo.vo.AccountInfo;
 import com.azz.order.finance.pojo.vo.ApplyInfo;
 import com.azz.order.finance.pojo.vo.MerchantOrderInfo;
 import com.azz.order.finance.pojo.vo.OrderInfo;
@@ -64,6 +65,15 @@ public interface MerchantWithdrawDepositApplyMapper {
      * @author 黄智聪  2019年3月19日 下午7:16:33
      */
     ApplyInfo getWithdrawDepositApplyInfo(String applyCode);
+    
+    /**
+     * 
+     * <p>根据商户编码查询账户信息</p>
+     * @param merchantCode
+     * @return
+     * @author 黄智聪  2019年3月21日 上午11:39:38
+     */
+    AccountInfo getAccountByMerchantCode(String merchantCode);
     
     /**
      * 

@@ -19,6 +19,7 @@ import com.azz.order.api.merchant.MerchantFinanceService;
 import com.azz.order.finance.pojo.bo.SearchMerchantOrderParam;
 import com.azz.order.finance.pojo.bo.SearchWithdrawDepositApplyParam;
 import com.azz.order.finance.pojo.bo.WithdrawDepositApplyParam;
+import com.azz.order.finance.pojo.vo.AccountInfo;
 import com.azz.order.finance.pojo.vo.MerchantOrderInfo;
 import com.azz.order.finance.pojo.vo.WithdrawDepositApplyDetail;
 import com.azz.order.finance.pojo.vo.WithdrawDepositApplyInfo;
@@ -71,6 +72,18 @@ public class MerchantFinanceController {
 	@RequestMapping("/getWithdrawDepositApplyDetail")
 	public JsonResult<WithdrawDepositApplyDetail> getWithdrawDepositApplyDetail(@RequestParam("applyCode") String applyCode){
 		return merchantFinanceService.getWithdrawDepositApplyDetail(applyCode);
+	}
+	
+	/**
+	 * 
+	 * <p>根据商户编码查询账户信息</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年3月19日 下午4:18:04
+	 */
+	@RequestMapping("/getAccountInfoByMerchantCode")
+	public JsonResult<AccountInfo> getAccountInfoByMerchantCode(){
+		return merchantFinanceService.getAccountInfoByMerchantCode(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantCode());
 	}
 	
 	/**

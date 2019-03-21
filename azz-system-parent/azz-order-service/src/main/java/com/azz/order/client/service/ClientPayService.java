@@ -509,6 +509,7 @@ public class ClientPayService {
 			ef.setBankCity(params.get("bankCity"));
 			ef.setMerAuthorizeType(params.get("merAuthorizeType"));
 			ef.setBusinessFunction(params.get("businessFunction"));
+			ef.setMerchantNo(merchantNo);
 			int insertSelective = clientEnterpriseRegInfoMapper.insertSelective(ef);
 			if(insertSelective != 1) {
 				resultMap.put("code", RegCode.FAILD.getCode());

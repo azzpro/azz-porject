@@ -34,6 +34,7 @@
     <result column="mer_authorize_type" jdbcType="VARCHAR" property="merAuthorizeType" />
     <result column="business_function" jdbcType="VARCHAR" property="businessFunction" />
     <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="merchant_no" jdbcType="VARCHAR" property="merchantNo" />
   </resultMap>
   
   <!-- 根据商户全称和开卡号 查询状态 -->
@@ -139,6 +140,9 @@
        <if test="status != null">
         status,
       </if>
+      <if test="merchant_no != null">
+        merchantNo,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -233,6 +237,9 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=VARCHAR},
+      </if>
+       <if test="merchantNo != null">
+        #{merchantNo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

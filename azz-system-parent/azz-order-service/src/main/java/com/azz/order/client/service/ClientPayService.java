@@ -44,7 +44,6 @@ import com.azz.core.constants.ClientConstants.PayMethod;
 import com.azz.core.constants.ClientConstants.PayStatus;
 import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.MerchantConstants;
-import com.azz.core.constants.MerchantConstants.WithdrawDepositApplyStatus;
 import com.azz.core.constants.PayConstants;
 import com.azz.core.constants.PayConstants.PayCode;
 import com.azz.core.constants.PayConstants.RegCode;
@@ -574,7 +573,10 @@ public class ClientPayService {
 			params.put("leaveWord", "");
 			params.put("bankCardId", "");
 			params.put("notifyUrl", regEnNotifyUrl);//提现回调
-			
+			Set<Entry<String, String>> es = params.entrySet();
+			for (Entry<String, String> entry : es) {
+				log.info("提现参数---->"+entry.getKey()+":::"+entry.getValue());
+			}
 			Map<String, String> re = new HashMap<>();
 			String uri = YeepayService.getUrl(YeepayService.CASHWITHDRALWAL_URL);
 			try {

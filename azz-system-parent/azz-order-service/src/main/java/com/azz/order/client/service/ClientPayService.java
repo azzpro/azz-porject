@@ -91,6 +91,9 @@ public class ClientPayService {
 	@Value("${yeepay.regEn-notify-url}")
 	private String regEnNotifyUrl;
 	
+	@Value("${yeepay.cashWithdralwal-notify-url}")
+	private String cashWithdralwalNotifyUrl;
+	
 	@Autowired
 	private ClientPayMapper ppm;
 	
@@ -572,7 +575,7 @@ public class ClientPayService {
 			params.put("feeType", WithdralwalContants.FEETYPETARGET);//计费类型
 			params.put("leaveWord", "");
 			params.put("bankCardId", "");
-			params.put("notifyUrl", regEnNotifyUrl);//提现回调
+			params.put("notifyUrl", cashWithdralwalNotifyUrl);//提现回调
 			Set<Entry<String, String>> es = params.entrySet();
 			for (Entry<String, String> entry : es) {
 				log.info("提现参数---->"+entry.getKey()+":::"+entry.getValue());

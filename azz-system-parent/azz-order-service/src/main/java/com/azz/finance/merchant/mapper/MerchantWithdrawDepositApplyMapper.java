@@ -12,6 +12,7 @@ import com.azz.order.finance.pojo.vo.AccountInfo;
 import com.azz.order.finance.pojo.vo.ApplyInfo;
 import com.azz.order.finance.pojo.vo.MerchantOrderInfo;
 import com.azz.order.finance.pojo.vo.OrderInfo;
+import com.azz.order.finance.pojo.vo.ThirdInfo;
 import com.azz.order.finance.pojo.vo.WithdrawDepositApplyInfo;
 
 @Mapper
@@ -77,6 +78,15 @@ public interface MerchantWithdrawDepositApplyMapper {
     
     /**
      * 
+     * <p>TODO</p>
+     * @param applyCode
+     * @return
+     * @author 黄智聪  2019年3月21日 下午5:20:58
+     */
+    ThirdInfo getThirdInfo(String applyCode);
+
+    /**
+     * 
      * <p>查询提现的订单信息</p>
      * @param applyCode
      * @return
@@ -110,4 +120,5 @@ public interface MerchantWithdrawDepositApplyMapper {
      * @author 黄智聪  2019年3月19日 下午4:17:38
      */
     List<WithdrawDepositApplyInfo> getPlatformWithdrawDepositApplyInfos(SearchWithdrawDepositApplyParam param);
+
 }

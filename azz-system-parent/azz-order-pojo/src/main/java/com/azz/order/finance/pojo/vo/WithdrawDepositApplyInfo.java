@@ -8,6 +8,7 @@
 package com.azz.order.finance.pojo.vo;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import lombok.Data;
 
@@ -29,11 +30,13 @@ public class WithdrawDepositApplyInfo {
 	
 	private String withdrawDepositAccount;
 	
-	private String createTime;
+	private Date createTime;
+	
+	private Date payWithTime;// 打款时间
 	
 	private String merchantName;
 	
-	private String totalOrderMoney;
+	private BigDecimal totalOrderMoney;
 	
 	private String creator;
 	

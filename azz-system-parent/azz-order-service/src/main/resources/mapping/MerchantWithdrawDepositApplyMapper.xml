@@ -275,6 +275,17 @@
 		mwda.apply_code = #{applyCode}
   </select>
   
+  <select id="getThirdInfo" parameterType="string" resultType="com.azz.order.finance.pojo.vo.ThirdInfo">
+    SELECT
+		mwda.third_info_code AS thirdInfoCode,
+		mwda.third_info_withdraw_deposit_money AS thirdInfoWithdrawDepositMoney,
+		mwda.third_info_status AS thirdInfoStatus
+	FROM
+		merchant_withdraw_deposit_apply mwda
+	WHERE
+		mwda.apply_code = #{applyCode}
+  </select>
+  
   <select id="getAccountByMerchantCode" parameterType="string" resultType="com.azz.order.finance.pojo.vo.AccountInfo">
   	SELECT
 		myea.mer_cert_no as creditCode,

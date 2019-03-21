@@ -8,6 +8,7 @@
 package com.azz.merchant.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -93,8 +94,8 @@ public class MerchantFinanceController {
 	 * @return
 	 * @author 黄智聪  2019年3月19日 下午4:18:04
 	 */
-	@RequestMapping("/withdrawDepositApply")
-	public JsonResult<String> withdrawDepositApply(WithdrawDepositApplyParam param){
+	@RequestMapping(value = "/withdrawDepositApply", produces = "application/json;charset=UTF-8")
+	public JsonResult<String> withdrawDepositApply(@RequestBody WithdrawDepositApplyParam param){
 		param.setMerchantCode(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantCode());
 		param.setMerchantUserCode(WebUtils.getLoginMerchantUser().getMerchantUserInfo().getMerchantUserCode());
 		return merchantFinanceService.withdrawDepositApply(param);

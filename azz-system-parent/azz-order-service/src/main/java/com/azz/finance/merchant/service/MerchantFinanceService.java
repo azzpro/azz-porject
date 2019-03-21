@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.page.Pagination;
+import com.azz.core.constants.MerchantConstants;
 import com.azz.core.constants.MerchantConstants.WithdrawDepositApplyStatus;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.finance.merchant.mapper.MerchantWithdrawDepositApplyMapper;
@@ -62,9 +63,6 @@ public class MerchantFinanceService {
 	@Autowired
 	private MerchantOrderMapper merchantOrderMapper;
 
-	@Autowired
-	private DbSequenceService dbSequenceService;
-	
 	/**
 	 * 提现手续费率
 	 */
@@ -140,7 +138,7 @@ public class MerchantFinanceService {
 	public JsonResult<String> withdrawDepositApply(@RequestBody WithdrawDepositApplyParam param){
 		JSR303ValidateUtils.validate(param);
 		Date nowDate = new Date();
-		String applyCode =  SystemSeqUtils.getSeq(dbSequenceService.getWithdrawDepositApplySequence());
+		String applyCode = MerchantConstants.MERCHANT_WITHDRAW_DEPOSIT_APPLY_CODE_PREFIX + System.currentTimeMillis();
 		List<String> orderCodes = param.getMerchantOrderCodes();
 		// 判断所选订单是否存在已经提过款的或正在提款中的
 		int count = merchantWithdrawDepositApplyOrderMapper.existPayWithOrder(orderCodes);
@@ -187,7 +185,6 @@ public class MerchantFinanceService {
 				.withdrawDepositAccount(param.getWithdrawDepositAccount())
 				.build();
 		merchantWithdrawDepositApplyMapper.insertSelective(applyRecord);
-		
 		
 		return JsonResult.successJsonResult();
 	}

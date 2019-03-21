@@ -30,6 +30,14 @@
     from merchant_withdraw_deposit_apply
     where id = #{id,jdbcType=BIGINT}
   </select>
+  
+  <select id="selectByApplyCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_withdraw_deposit_apply
+    where apply_code = #{applyCode}
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from merchant_withdraw_deposit_apply
     where id = #{id,jdbcType=BIGINT}

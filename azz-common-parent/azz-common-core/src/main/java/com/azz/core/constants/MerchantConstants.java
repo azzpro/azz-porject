@@ -51,6 +51,10 @@ public abstract class MerchantConstants {
 	 */
 	public static final long MERCHANT_REGIST_SMS_TIME_OUT = 10 * 60L;
 	
+	/**
+	 * 商户提现单号前缀
+	 */
+	public static final String MERCHANT_WITHDRAW_DEPOSIT_APPLY_CODE_PREFIX = "19";
 
 	/**
 	 * 

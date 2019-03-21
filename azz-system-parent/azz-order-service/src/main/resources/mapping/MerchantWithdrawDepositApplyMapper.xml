@@ -341,6 +341,8 @@
 	SELECT
 		mo.merchant_order_code AS merchantOrderCode,
 		mo.grand_total AS grandTotal,
+		mo.grand_total - mo.grand_total * #{rate} as withdrawDepositMoney,
+		mo.grand_total * #{rate} as transactionCost,
 		mo.order_status_id AS orderStatusId,
 		mo.create_time AS orderDate,
 		CASE

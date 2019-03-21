@@ -213,6 +213,7 @@ public class MerchantFinanceService {
 	public JsonResult<Pagination<MerchantOrderInfo>> getMerchantOrders(@RequestBody SearchMerchantOrderParam param){
 		JSR303ValidateUtils.validate(param);
 		PageHelper.startPage(param.getPageNum(), param.getPageSize());
+		param.setRate(WITHDRAW_DEPOSIT_RATE.doubleValue());
 		List<MerchantOrderInfo> infos = merchantWithdrawDepositApplyMapper.getMerchantOrders(param);
 		return JsonResult.successJsonResult(new Pagination<>(infos));
 	}

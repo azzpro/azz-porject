@@ -834,7 +834,8 @@ public class MerchantService {
 		SmsParams sms = new SmsParams();
 		sms.setPhone(phoneNumber);
 		sms.setMsgType(SmsConstants.ACCOUNT_CREATE_SUCCESS.getMsgType());
-		systemSmsSendService.sendSmsCode(sms);
+		sms.setCode(password);
+		systemSmsSendService.sendSmsCodeByValue(sms);
 	}
 	
 	/**

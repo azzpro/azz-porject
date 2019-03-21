@@ -469,7 +469,7 @@ public class ClientService {
 			// 随机生成6位数密码
 			String password = RandomStringUtils.randomNumeric(6);
 			// 生成盐值加密的密码
-			Password pwd = PasswordHelper.encryptPasswordByModel(password + "");
+			Password pwd = PasswordHelper.encryptPasswordByModel(password);
 			Date nowDate = new Date();
 			String creator = param.getCreator();
 			String clientUserCode = dbSequenceService.getClientCustomerNumber();
@@ -494,7 +494,11 @@ public class ClientService {
 			clientUserRoleMapper.insertSelective(userRoleRecord);
 
 			// 发送短信通知成员
-			this.sendPasswordMsg(phoneNumber, password);
+			try {
+				this.sendPasswordMsg(phoneNumber, password);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} else {// 若能根据手机号查询到用户信息，判断是否为企业用户
 			if (u.getClientType() == ClientType.ENTERPRISE.getValue()) { // 若为企业用户，则表示已被企业注册
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "手机号已存在");
@@ -898,6 +902,7 @@ public class ClientService {
 		SmsParams sms = new SmsParams();
 		sms.setPhone(phoneNumber);
 		sms.setMsgType(SmsConstants.ACCOUNT_CREATE_SUCCESS.getMsgType());
+		sms.setCode(password);
 		systemSmsSendService.sendSmsCode(sms);
 	}
 

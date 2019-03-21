@@ -44,11 +44,6 @@ public class SmsSendController {
 	}
 	
 	
-	@RequestMapping(value="smsSendByValue",method=RequestMethod.POST)
-	JsonResult<String> sendSmsCodeByValue(@RequestBody SmsParams sms){
-		return sendService.sendSmsCode(sms);
-	}
-	
 	/**
 	 * <p>短信验证码时间校验</p>
 	 * @param sms

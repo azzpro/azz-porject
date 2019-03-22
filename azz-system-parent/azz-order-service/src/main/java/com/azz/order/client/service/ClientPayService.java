@@ -885,9 +885,9 @@ public class ClientPayService {
 				if(StringUtils.isBlank(fileName)) {
 					throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "文件名不能为空");
 				}
-				if(yeeModulePic.getFileSize() > MerchantConstants.GOODS_MODULE_FILE_SIZE_LIMIT) {
+				/*if(yeeModulePic.getFileSize() > MerchantConstants.GOODS_MODULE_FILE_SIZE_LIMIT) {
 			    	throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "文件大小不能超过2M");
-			    }
+			    }*/
 				if(StringUtils.isBlank(fileDate)) {
 			    	throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "图片内容为空");
 			    }

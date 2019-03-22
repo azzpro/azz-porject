@@ -48,7 +48,7 @@ public class SystemUploadController {
 	 * @throws FileNotFoundException
 	 * @author 刘建麟  2018年10月23日 下午4:19:44
 	 */
-	@RequestMapping(value="imageUpload",method=RequestMethod.POST)
+	@RequestMapping(value="imageUpload")
 	public JsonResult<String> imageUpload(String bucketname, String filename,String suffix, String filedata, Integer plattype, Integer imagetype) throws FileNotFoundException {
 		LOG.info("图片存储路径--------->"+bucketname);
 		JsonResult<String> image = imageService.uploadImage(bucketname,filename,suffix,filedata,plattype,imagetype);

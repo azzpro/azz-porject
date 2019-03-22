@@ -47,6 +47,7 @@ public class SystemImageService {
 	private String accessKeySecret;
 	
 	public JsonResult<String> uploadImage(String bucketname,String filename,String suffix,String filedata,Integer plattype,Integer imageType){
+		LOG.info("图片存储路径--------->"+bucketname);
 		if(StringUtils.isBlank(bucketname)) {
     		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"存储空间名称不能为空");
     	}

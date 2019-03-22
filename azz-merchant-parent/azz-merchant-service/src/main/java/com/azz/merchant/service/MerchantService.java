@@ -20,6 +20,8 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -115,7 +117,8 @@ import sun.misc.BASE64Decoder;
 @Transactional(rollbackFor = Exception.class)
 @Service
 public class MerchantService {
-
+	Logger log = LoggerFactory.getLogger(getClass());
+	
 	@Autowired
 	private MerchantMapper merchantMapper;
 
@@ -379,6 +382,7 @@ public class MerchantService {
 			// 新名称为文件名 + 商户编码 + 第几张
 			String newFileName = fileNameNoSufix + "_" + merchantCode + "_" + (i + 1);
 			// 图片url
+			log.info("图片存储路径--------->"+FileConstants.IMAGE_BUCKETNAME);
 			JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName,
 					sufix, filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_BUSINESS_IMAGE_TYPE);
 			if (jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {

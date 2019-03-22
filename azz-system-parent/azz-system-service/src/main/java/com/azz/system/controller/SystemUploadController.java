@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.constants.FileConstants;
 import com.azz.system.service.SystemImageService;
 
 /**
@@ -49,6 +50,7 @@ public class SystemUploadController {
 	 */
 	@RequestMapping(value="imageUpload",method=RequestMethod.POST)
 	public JsonResult<String> imageUpload(String bucketname, String filename,String suffix, String filedata, Integer plattype, Integer imagetype) throws FileNotFoundException {
+		LOG.info("图片存储路径--------->"+bucketname);
 		JsonResult<String> image = imageService.uploadImage(bucketname,filename,suffix,filedata,plattype,imagetype);
 		return image;
 	}

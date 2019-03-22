@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
@@ -47,21 +48,9 @@ public class SystemUploadController {
 	 * @author 刘建麟  2018年10月23日 下午4:19:44
 	 */
 	@RequestMapping(value="imageUpload",method=RequestMethod.POST)
-	public JsonResult<String> imageUpload(String bucketname,String filename,String suffix,String filedata,Integer plattype,Integer imagetype) throws FileNotFoundException {
+	public JsonResult<String> imageUpload(@RequestParam("bucketname") String bucketname,@RequestParam("filename") String filename,@RequestParam("suffix") String suffix,@RequestParam("filedata") String filedata,@RequestParam("plattype") Integer plattype,@RequestParam("imagetype") Integer imagetype) throws FileNotFoundException {
 		JsonResult<String> image = imageService.uploadImage(bucketname,filename,suffix,filedata,plattype,imagetype);
 		return image;
-	}
-	
-	/**
-	 * <p>创建存储空间</p>
-	 * @param bucketname
-	 * @return
-	 * @author 刘建麟  2018年10月23日 下午2:25:34
-	 */
-	@RequestMapping(value="createBucketName",method=RequestMethod.POST)
-	public JsonResult<String> createBucketName(String bucketname){
-		String name = imageService.createBucketName(bucketname);
-		return JsonResult.successJsonResult(name);
 	}
 	
 }

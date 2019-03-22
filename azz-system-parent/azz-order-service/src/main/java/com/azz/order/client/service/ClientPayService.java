@@ -71,6 +71,7 @@ import com.azz.order.client.pojo.vo.ClientOrderDetail;
 import com.azz.order.client.pojo.vo.ClientOrderInfo;
 import com.azz.order.selection.bo.CallBackParam;
 import com.azz.system.api.SystemImageUploadService;
+import com.azz.system.bo.UploadImageParam;
 import com.azz.util.DateUtils;
 import com.azz.util.DecimalUtil;
 import com.azz.util.JSR303ValidateUtils;
@@ -900,36 +901,36 @@ public class ClientPayService {
 				log.info("文件后缀为--------->"+suffix);
 				
 				if(type.equals(PayConstants.RegYee.legalFrontPic.getCode())) {
-					JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix,
-							 fileDate, FileConstants.AZZ_YEE, FileConstants.AZZ_LEGAL_IMAGE_TYPE);
+					JsonResult<String> jr = systemImageUploadService.uploadImage(new UploadImageParam(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix, fileDate,FileConstants.AZZ_YEE,
+							FileConstants.AZZ_LEGAL_IMAGE_TYPE));
 					if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 						fileMap.put(yeeModulePic.getType(), jr.getData());
 				    }
 				}
 				if(type.equals(PayConstants.RegYee.legalBackPic.getCode())) {
-					JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix,
-							 fileDate, FileConstants.AZZ_YEE, FileConstants.AZZ_LEGAL_IMAGE_TYPE);
+					JsonResult<String> jr = systemImageUploadService.uploadImage(new UploadImageParam(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix, fileDate,FileConstants.AZZ_YEE,
+							FileConstants.AZZ_LEGAL_IMAGE_TYPE));
 					if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 						fileMap.put(yeeModulePic.getType(), jr.getData());
 				    }
 				}
 				if(type.equals(PayConstants.RegYee.businessPic.getCode())) {
-					JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix,
-							 fileDate, FileConstants.AZZ_YEE, FileConstants.AZZ_TRADING_CERTIFICATE_IMAGE_TYPE);
+					JsonResult<String> jr = systemImageUploadService.uploadImage(new UploadImageParam(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix, fileDate,FileConstants.AZZ_YEE,
+							FileConstants.AZZ_TRADING_CERTIFICATE_IMAGE_TYPE));
 					if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 						fileMap.put(yeeModulePic.getType(), jr.getData());
 				    }
 				}
 				if(type.equals(PayConstants.RegYee.icpAuthPic.getCode())) {
-					JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix,
-							 fileDate, FileConstants.AZZ_YEE, FileConstants.AZZ_ICP_IMAGE_TYPE);
+					JsonResult<String> jr = systemImageUploadService.uploadImage(new UploadImageParam(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix, fileDate,FileConstants.AZZ_YEE,
+							FileConstants.AZZ_ICP_IMAGE_TYPE));
 					if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 						fileMap.put(yeeModulePic.getType(), jr.getData());
 				    }
 				}
 				if(type.equals(PayConstants.RegYee.openAccountPic.getCode())) {
-					JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix,
-							 fileDate, FileConstants.AZZ_YEE, FileConstants.AZZ_OPEN_IMAGE_TYPE);
+					JsonResult<String> jr = systemImageUploadService.uploadImage(new UploadImageParam(FileConstants.IMAGE_BUCKETNAME, newFileName, suffix, fileDate,FileConstants.AZZ_YEE,
+							FileConstants.AZZ_OPEN_IMAGE_TYPE));
 					if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 						fileMap.put(yeeModulePic.getType(), jr.getData());
 				    }

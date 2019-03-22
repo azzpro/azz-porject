@@ -25,6 +25,7 @@ import com.azz.core.constants.MerchantConstants.IsChangeGoodsBrandPic;
 import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.system.api.SystemImageUploadService;
+import com.azz.system.bo.UploadImageParam;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
 import com.azz.util.SystemSeqUtils;
@@ -146,8 +147,9 @@ public class BrandService {
         // 新名称为文件名 + 品牌编码
         String newFileName = fileNameNoSufix + "_" + brandCode;
         // 图片url
-        JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
-            filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_BRAND_IMAGE_TYPE);
+        
+        JsonResult<String> jr = systemImageUploadService.uploadImage(new UploadImageParam(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata,FileConstants.AZZ_PLATFORM,
+				FileConstants.AZZ_BRAND_IMAGE_TYPE));
         UploadFileInfo file = new UploadFileInfo();
         if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
             file.setImgUrl(jr.getData());

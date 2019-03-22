@@ -18,6 +18,7 @@ import com.azz.core.constants.PlatformConstants;
 import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.system.api.SystemImageUploadService;
+import com.azz.system.bo.UploadImageParam;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
 import com.azz.util.StringUtils;
@@ -86,9 +87,10 @@ public class ClassificationService {
         String sufix = originalFileName.substring(dotIndex + 1, originalFileName.length());
         // 新名称为文件名 + 文件后缀
         String newFileName = fileNameNoSufix +"_"+ SystemSeqUtils.getSeq(classificationCode);
-
+        
         // 图片url
-        JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_CLASSIFICATION_IMAGE_TYPE);
+        JsonResult<String> jr = systemImageUploadService.uploadImage(new UploadImageParam(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata,FileConstants.AZZ_PLATFORM,
+				FileConstants.AZZ_CLASSIFICATION_IMAGE_TYPE));
         if (jr.getCode() != SystemErrorCode.SUCCESS.getCode()) {
             throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "主图上传失败，请重试");
         }
@@ -183,7 +185,8 @@ public class ClassificationService {
             String newFileName = fileNameNoSufix + "_" + param.getAssortmentCode();
             
             // 图片url
-            JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_CLASSIFICATION_IMAGE_TYPE);
+            JsonResult<String> jr = systemImageUploadService.uploadImage(new UploadImageParam(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata,FileConstants.AZZ_PLATFORM,
+    				FileConstants.AZZ_CLASSIFICATION_IMAGE_TYPE));
             
             if (jr.getCode() != SystemErrorCode.SUCCESS.getCode()) {
                 throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "主图上传失败，请重试");

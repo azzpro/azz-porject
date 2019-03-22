@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.Bucket;
@@ -24,6 +25,7 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.constants.FileConstants;
 import com.azz.exception.JSR303ValidationException;
+import com.azz.system.bo.UploadImageParam;
 import com.azz.util.AzzImageUtil;
 import com.azz.util.Base64;
 
@@ -46,32 +48,12 @@ public class SystemImageService {
 	@Value("${aliyun.accessKeySecret}")
 	private String accessKeySecret;
 	
-	public JsonResult<String> uploadImage(String bucketname,String filename,String suffix,String filedata,Integer plattype,Integer imageType){
-		LOG.info("图片存储路径--------->"+bucketname);
-		if(StringUtils.isBlank(bucketname)) {
-    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"存储空间名称不能为空");
-    	}
-		if(!bucketNameExist(bucketname)) {
+	public JsonResult<String> uploadImage(@RequestBody UploadImageParam up){
+		if(!bucketNameExist(up.getBucketname())) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"存储空间名称不存在");
 		}
-		if(StringUtils.isBlank(filename)) {
-    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"文件名不能为空");
-    	}
-		if(StringUtils.isBlank(suffix)) {
-    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"文件后缀不能为空");
-    	}
-		//生产环境放开
-		if(StringUtils.isBlank(filedata) || filedata.length() <= 0) {
-    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"文件数据不能为空");
-    	}
-		if(null == imageType) {
-    		throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"图片类型不能为空");
-    	}
-		if(null == plattype) {
-			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"平台类型不能为空");
-		}
 		//后缀
-		boolean contains = FileConstants.AZZ_IMAGE_SUFFIX.contains(suffix);
+		boolean contains = FileConstants.AZZ_IMAGE_SUFFIX.contains(up.getSuffix());
 		
 		if(!contains) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"不支持的文件后缀");
@@ -82,14 +64,14 @@ public class SystemImageService {
 		//文件名
 		StringBuilder finalName = new StringBuilder();
 		//获取平台名 ：平台端 商户断 客户端
-		String type = AzzImageUtil.getPlatByType(plattype);
+		String type = AzzImageUtil.getPlatByType(up.getPlattype());
 		if(StringUtils.isBlank(type) || type.length() <= 0) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"平台类型错误");
 		}else {
 			finalName.append(type);
 		}
 		//获取图片类型：营业执照  法人照片 图像 其他
-		String imagetype = AzzImageUtil.getImageByType(imageType);
+		String imagetype = AzzImageUtil.getImageByType(up.getImagetype());
 		if(StringUtils.isBlank(imagetype) || imagetype.length() <= 0) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM,"图片类型错误");
 		}else {
@@ -97,20 +79,12 @@ public class SystemImageService {
 			finalName.append(imagetype);
 			finalName.append("/");
 		}
-		finalName.append(filename).append(".").append(suffix);
+		finalName.append(up.getFilename()).append(".").append(up.getSuffix());
 		LOG.info("生成的图片名称------->["+finalName.toString()+"]");
 		//base64 
 		/**生产环境使用****/
-		byte[] decode = Base64.decode(filedata);
+		byte[] decode = Base64.decode(up.getFiledata());
 		InputStream is = new ByteArrayInputStream(decode);
-		
-		/**本地测试****/
-		/*InputStream is = null;
-		try {
-			 is = new FileInputStream(new File("D:\\123.jpg"));
-		}catch (FileNotFoundException e) {
-			LOG.error("文件找不到");
-		}*/
 		//判断文件大小 不能超过20MB
 		try {
 			if(FileConstants.IMAGE_SIZE < is.available()/1024/1024) {
@@ -131,10 +105,10 @@ public class SystemImageService {
 		// 创建OSSClient实例。
 		OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
 		// 上传文件流。
-		ossClient.putObject(bucketname, finalName.toString(), is);
+		ossClient.putObject(up.getBucketname(), finalName.toString(), is);
 		// 关闭OSSClient。
 		ossClient.shutdown();
-		imageurl.insert(7, bucketname+".");
+		imageurl.insert(7, up.getBucketname()+".");
 		imageurl.append("/").append(finalName.toString());
 		return JsonResult.successJsonResult(imageurl.toString());
 	}

@@ -71,6 +71,7 @@ import com.azz.merchant.pojo.vo.ProductForImport;
 import com.azz.merchant.pojo.vo.UploadFileInfo;
 import com.azz.platform.merchant.pojo.PlatformGoodsParamsValue;
 import com.azz.system.api.SystemImageUploadService;
+import com.azz.system.bo.UploadImageParam;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
@@ -379,8 +380,14 @@ public class GoodsModuleService {
 	    // 新名称为文件名 + 模组编码
 	    String newFileName = fileNameNoSufix + "_" + moduleCode;
 	    // 图片url
-	    JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
-		    filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_MODULE_IMAGE_TYPE);
+	    UploadImageParam up = new UploadImageParam();
+	    up.setBucketname(FileConstants.IMAGE_BUCKETNAME);
+	    up.setFiledata(filedata);
+	    up.setFilename(newFileName);
+	    up.setImagetype(FileConstants.AZZ_MODULE_IMAGE_TYPE);
+	    up.setPlattype(FileConstants.AZZ_MERCHANT);
+	    up.setSuffix(sufix);
+	    JsonResult<String> jr = systemImageUploadService.uploadImage(up);
 	    UploadFileInfo file = new UploadFileInfo();
 	    if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 	    	file.setImgUrl(jr.getData());

@@ -33,6 +33,7 @@ import com.azz.platform.merchant.pojo.bo.SearchSpecialParam;
 import com.azz.platform.merchant.pojo.bo.SpecialPic;
 import com.azz.platform.merchant.pojo.vo.SpecialInfo;
 import com.azz.system.api.SystemImageUploadService;
+import com.azz.system.bo.UploadImageParam;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
 import com.azz.util.StringUtils;
@@ -138,7 +139,14 @@ public class SpecialService {
         String newFileName = fileNameNoSufix + "_main_" + record.getSpecialPerformanceCode();
         
         // 图片url
-        JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_SPECIAL_PERFORMANCE_IMAGE_TYPE);
+        UploadImageParam up = new UploadImageParam();
+	    up.setBucketname(FileConstants.IMAGE_BUCKETNAME);
+	    up.setFiledata(filedata);
+	    up.setFilename(newFileName);
+	    up.setImagetype(FileConstants.AZZ_SPECIAL_PERFORMANCE_IMAGE_TYPE);
+	    up.setPlattype(FileConstants.AZZ_PLATFORM);
+	    up.setSuffix(sufix);
+        JsonResult<String> jr = systemImageUploadService.uploadImage(up);
         
         if (jr.getCode() != SystemErrorCode.SUCCESS.getCode()) {
             throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "主图上传失败，请重试");
@@ -168,7 +176,14 @@ public class SpecialService {
         String newFileNameBg = fileNameNoSufixBg + "_bg_" + record.getSpecialPerformanceCode();
         
         // 图片url
-        JsonResult<String> jrBg = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileNameBg, sufixBg, filedataBgPic, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_SPECIAL_PERFORMANCE_IMAGE_TYPE);
+        UploadImageParam up1 = new UploadImageParam();
+	    up1.setBucketname(FileConstants.IMAGE_BUCKETNAME);
+	    up1.setFiledata(filedata);
+	    up1.setFilename(newFileName);
+	    up1.setImagetype(FileConstants.AZZ_SPECIAL_PERFORMANCE_IMAGE_TYPE);
+	    up1.setPlattype(FileConstants.AZZ_PLATFORM);
+	    up1.setSuffix(sufix);
+        JsonResult<String> jrBg = systemImageUploadService.uploadImage(up1);
         
         if (jrBg.getCode() != SystemErrorCode.SUCCESS.getCode()) {
             throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "主图上传失败，请重试");
@@ -234,7 +249,14 @@ public class SpecialService {
             String newFileName = fileNameNoSufix + "_main_" + record.getSpecialPerformanceCode();
             
             // 图片url
-            JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_SPECIAL_PERFORMANCE_IMAGE_TYPE);
+            UploadImageParam up = new UploadImageParam();
+    	    up.setBucketname(FileConstants.IMAGE_BUCKETNAME);
+    	    up.setFiledata(filedata);
+    	    up.setFilename(newFileName);
+    	    up.setImagetype(FileConstants.AZZ_SPECIAL_PERFORMANCE_IMAGE_TYPE);
+    	    up.setPlattype(FileConstants.AZZ_PLATFORM);
+    	    up.setSuffix(sufix);
+            JsonResult<String> jr = systemImageUploadService.uploadImage(up);
             
             if (jr.getCode() != SystemErrorCode.SUCCESS.getCode()) {
                 throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "主图上传失败，请重试");
@@ -269,7 +291,14 @@ public class SpecialService {
             String newFileNameBg = fileNameNoSufixBg + "_bg_" + record.getSpecialPerformanceCode();
             
             // 图片url
-            JsonResult<String> jrBg = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileNameBg, sufixBg, filedataBgPic, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_SPECIAL_PERFORMANCE_IMAGE_TYPE);
+            UploadImageParam up = new UploadImageParam();
+    	    up.setBucketname(FileConstants.IMAGE_BUCKETNAME);
+    	    up.setFiledata(filedataBgPic);
+    	    up.setFilename(newFileNameBg);
+    	    up.setImagetype(FileConstants.AZZ_SPECIAL_PERFORMANCE_IMAGE_TYPE);
+    	    up.setPlattype(FileConstants.AZZ_PLATFORM);
+    	    up.setSuffix(sufixBg);
+            JsonResult<String> jrBg = systemImageUploadService.uploadImage(up);
             
             if (jrBg.getCode() != SystemErrorCode.SUCCESS.getCode()) {
                 throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "主图上传失败，请重试");

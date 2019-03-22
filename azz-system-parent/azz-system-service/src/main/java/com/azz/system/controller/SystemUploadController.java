@@ -12,14 +12,14 @@ import java.io.FileNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
-import com.azz.core.constants.FileConstants;
+import com.azz.system.bo.UploadImageParam;
 import com.azz.system.service.SystemImageService;
+import com.azz.util.JSR303ValidateUtils;
 
 /**
  * <P>TODO</P>
@@ -49,10 +49,9 @@ public class SystemUploadController {
 	 * @author 刘建麟  2018年10月23日 下午4:19:44
 	 */
 	@RequestMapping(value="imageUpload")
-	public JsonResult<String> imageUpload(String bucketname, String filename,String suffix, String filedata, Integer plattype, Integer imagetype) throws FileNotFoundException {
-		LOG.info("图片存储路径--------->"+bucketname);
-		JsonResult<String> image = imageService.uploadImage(bucketname,filename,suffix,filedata,plattype,imagetype);
-		return image;
+	public JsonResult<String> imageUpload(@RequestBody UploadImageParam up) throws FileNotFoundException {
+		JSR303ValidateUtils.validate(up);
+		return imageService.uploadImage(up);
 	}
 	
 }

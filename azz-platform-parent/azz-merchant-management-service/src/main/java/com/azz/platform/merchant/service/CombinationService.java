@@ -48,6 +48,7 @@ import com.azz.platform.merchant.pojo.vo.CombinationInfo;
 import com.azz.platform.merchant.pojo.vo.GoodsModuleInfo;
 import com.azz.platform.merchant.pojo.vo.ProdInfo;
 import com.azz.system.api.SystemImageUploadService;
+import com.azz.system.bo.UploadImageParam;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
@@ -381,8 +382,14 @@ public class CombinationService {
 	    // 新名称为文件名 + 组合编码
 	    String newFileName = fileNameNoSufix + "_" + combinationCode;
 	    // 图片url
-	    JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
-		    filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_COMBINATION_IMAGE_TYPE);
+	    UploadImageParam up = new UploadImageParam();
+	    up.setBucketname(FileConstants.IMAGE_BUCKETNAME);
+	    up.setFiledata(filedata);
+	    up.setFilename(newFileName);
+	    up.setImagetype(FileConstants.AZZ_COMBINATION_IMAGE_TYPE);
+	    up.setPlattype(FileConstants.AZZ_PLATFORM);
+	    up.setSuffix(sufix);
+	    JsonResult<String> jr = systemImageUploadService.uploadImage(up);
 	    UploadFileInfo file = new UploadFileInfo();
 	    if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 	    	file.setImgUrl(jr.getData());

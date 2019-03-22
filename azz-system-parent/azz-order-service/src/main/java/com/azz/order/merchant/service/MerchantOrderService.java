@@ -52,6 +52,7 @@ import com.azz.order.merchant.pojo.vo.ShipInfo;
 import com.azz.order.merchant.pojo.vo.SignFileInfo;
 import com.azz.order.merchant.pojo.vo.SignForInfo;
 import com.azz.system.api.SystemImageUploadService;
+import com.azz.system.bo.UploadImageParam;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
 import com.azz.util.StringUtils;
@@ -293,8 +294,14 @@ public class MerchantOrderService {
 	    	// 新名称为文件名  + 第几张
 	    	String newFileName = fileNameNoSufix + "_" + param.getOrderCode() + "_" + (i+1);
 	    	// 图片url
-	    	JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
-	    			filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_SHIPMENT_FORM_IMAGE_TYPE);
+	    	 UploadImageParam up = new UploadImageParam();
+	 	    	up.setBucketname(FileConstants.IMAGE_BUCKETNAME);
+	 	    	up.setFiledata(filedata);
+	 	    	up.setFilename(newFileName);
+	 	    	up.setImagetype(FileConstants.AZZ_SHIPMENT_FORM_IMAGE_TYPE);
+	 	    	up.setPlattype(FileConstants.AZZ_MERCHANT);
+	 	    	up.setSuffix(sufix);
+	    	JsonResult<String> jr = systemImageUploadService.uploadImage(up);
 	    	if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 	    		SignFileInfo file = new SignFileInfo(shipmentFile.getFileName(),jr.getData());
 	    		uploadFileInfos.add(file);

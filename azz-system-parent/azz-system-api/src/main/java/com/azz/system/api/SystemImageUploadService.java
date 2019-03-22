@@ -33,7 +33,7 @@ public interface SystemImageUploadService {
 	 * @return
 	 * @author 刘建麟  2018年10月23日 下午4:31:52
 	 */
-	@RequestMapping(value="/azz/api/imageUpload",method=RequestMethod.POST)
+	@RequestMapping(value="/azz/api/imageUpload")
 	JsonResult<String> uploadImage(@RequestParam("bucketname") String bucketname,@RequestParam("filename")String filename,@RequestParam("suffix") String suffix,@RequestParam("filedata") String filedata,@RequestParam("plattype") Integer plattype,@RequestParam("imagetype") Integer imagetype);
 }
 

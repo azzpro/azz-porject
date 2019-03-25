@@ -297,7 +297,7 @@
 		assortment_code as assortmentCode,
 		assortment_name as assortmentName,
 		assortment_parent_code as assortmentParentCode,
-		assortment_top as assortmentTop
+		assortment_top as assortmentTop,
 		assortment_pic_url as assortmentPicUrl
 	FROM
 		platform_goods_classification

@@ -35,6 +35,7 @@ import com.azz.platform.merchant.pojo.bo.GoodsBrandPic;
 import com.azz.platform.merchant.pojo.bo.SearchGoodsBrandParam;
 import com.azz.platform.merchant.pojo.vo.GoodsBrandInfo;
 import com.azz.system.api.SystemImageUploadService;
+import com.azz.system.bo.UploadImageParam;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
@@ -223,8 +224,14 @@ public class GoodsBrandService {
 	    // 新名称为文件名 + 品牌编码
 	    String newFileName = fileNameNoSufix + "_" + brandCode;
 	    // 图片url
-	    JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
-		    filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_BRAND_IMAGE_TYPE);
+	    UploadImageParam up = new UploadImageParam();
+	    up.setBucketname(FileConstants.IMAGE_BUCKETNAME);
+	    up.setFiledata(filedata);
+	    up.setFilename(newFileName);
+	    up.setImagetype(FileConstants.AZZ_BRAND_IMAGE_TYPE);
+	    up.setPlattype(FileConstants.AZZ_PLATFORM);
+	    up.setSuffix(sufix);
+	    JsonResult<String> jr = systemImageUploadService.uploadImage(up);
 	    UploadFileInfo file = new UploadFileInfo();
 	    if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 	    	file.setImgUrl(jr.getData());

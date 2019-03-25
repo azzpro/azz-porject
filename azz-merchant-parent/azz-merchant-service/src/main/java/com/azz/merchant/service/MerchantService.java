@@ -20,6 +20,8 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,6 +91,7 @@ import com.azz.system.bo.MailParam;
 import com.azz.system.bo.SmsCheck;
 import com.azz.system.bo.SmsCodeValidation;
 import com.azz.system.bo.SmsParams;
+import com.azz.system.bo.UploadImageParam;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.system.vo.SmsInfo;
 import com.azz.util.ExcelUtils;
@@ -115,7 +118,8 @@ import sun.misc.BASE64Decoder;
 @Transactional(rollbackFor = Exception.class)
 @Service
 public class MerchantService {
-
+	Logger log = LoggerFactory.getLogger(getClass());
+	
 	@Autowired
 	private MerchantMapper merchantMapper;
 
@@ -379,8 +383,14 @@ public class MerchantService {
 			// 新名称为文件名 + 商户编码 + 第几张
 			String newFileName = fileNameNoSufix + "_" + merchantCode + "_" + (i + 1);
 			// 图片url
-			JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName,
-					sufix, filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_BUSINESS_IMAGE_TYPE);
+			UploadImageParam up = new UploadImageParam();
+		    up.setBucketname(FileConstants.IMAGE_BUCKETNAME);
+		    up.setFiledata(filedata);
+		    up.setFilename(newFileName);
+		    up.setImagetype(FileConstants.AZZ_BUSINESS_IMAGE_TYPE);
+		    up.setPlattype(FileConstants.AZZ_MERCHANT);
+		    up.setSuffix(sufix);
+			JsonResult<String> jr = systemImageUploadService.uploadImage(up);
 			if (jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 				UploadFileInfo file = new UploadFileInfo(jr.getData(), originalFileName);
 				uploadBusinessLicenseFileInfos.add(file);
@@ -412,8 +422,14 @@ public class MerchantService {
 			// 新名称为文件名 + 商户编码 + 第几张
 			String newFileName = fileNameNoSufix + "_" + merchantCode + "_" + (i + 1);
 			// 图片url
-			JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName,
-					sufix, filedata, FileConstants.AZZ_MERCHANT, FileConstants.AZZ_TRADING_CERTIFICATE_IMAGE_TYPE);
+			UploadImageParam up = new UploadImageParam();
+		    up.setBucketname(FileConstants.IMAGE_BUCKETNAME);
+		    up.setFiledata(filedata);
+		    up.setFilename(newFileName);
+		    up.setImagetype(FileConstants.AZZ_TRADING_CERTIFICATE_IMAGE_TYPE);
+		    up.setPlattype(FileConstants.AZZ_MERCHANT);
+		    up.setSuffix(sufix);
+			JsonResult<String> jr = systemImageUploadService.uploadImage(up);
 			if (jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 				UploadFileInfo file = new UploadFileInfo(jr.getData(), originalFileName);
 				uploadTradingCertificateFileInfos.add(file);

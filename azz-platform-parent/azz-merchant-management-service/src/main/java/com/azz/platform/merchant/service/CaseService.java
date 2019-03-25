@@ -37,6 +37,7 @@ import com.azz.platform.merchant.pojo.vo.CaseList;
 import com.azz.platform.merchant.pojo.vo.CaseParams;
 import com.azz.platform.merchant.pojo.vo.CaseParamsList;
 import com.azz.system.api.SystemImageUploadService;
+import com.azz.system.bo.UploadImageParam;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.ObjectUtils;
@@ -137,7 +138,14 @@ public class CaseService {
         String newFileName = fileNameNoSufix +"_"+ SystemSeqUtils.getSeq(caseCode);
 
         // 图片url
-        JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_CASE_IMAGE_TYPE);
+        UploadImageParam up = new UploadImageParam();
+	    up.setBucketname(FileConstants.IMAGE_BUCKETNAME);
+	    up.setFiledata(filedata);
+	    up.setFilename(newFileName);
+	    up.setImagetype(FileConstants.AZZ_CASE_IMAGE_TYPE);
+	    up.setPlattype(FileConstants.AZZ_PLATFORM);
+	    up.setSuffix(sufix);
+        JsonResult<String> jr = systemImageUploadService.uploadImage(up);
         if (jr.getCode() != SystemErrorCode.SUCCESS.getCode()) {
             throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "主图上传失败，请重试");
         }
@@ -228,7 +236,14 @@ public class CaseService {
             String newFileName = fileNameNoSufix + "_" + param.getCaseCode();
             
             // 图片url
-            JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_CASE_IMAGE_TYPE);
+            UploadImageParam up = new UploadImageParam();
+    	    up.setBucketname(FileConstants.IMAGE_BUCKETNAME);
+    	    up.setFiledata(filedata);
+    	    up.setFilename(newFileName);
+    	    up.setImagetype(FileConstants.AZZ_CASE_IMAGE_TYPE);
+    	    up.setPlattype(FileConstants.AZZ_PLATFORM);
+    	    up.setSuffix(sufix);
+            JsonResult<String> jr = systemImageUploadService.uploadImage(up);
             
             if (jr.getCode() != SystemErrorCode.SUCCESS.getCode()) {
                 throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "主图上传失败，请重试");

@@ -59,6 +59,7 @@ import com.azz.order.merchant.pojo.ClientUser;
 import com.azz.order.merchant.pojo.MerchantOrder;
 import com.azz.order.merchant.pojo.MerchantOrderStatus;
 import com.azz.system.api.SystemImageUploadService;
+import com.azz.system.bo.UploadImageParam;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
 import com.github.pagehelper.PageHelper;
@@ -355,8 +356,14 @@ public class ClientOrderService {
 		    // 新名称为文件名 + 客户订单编码 + 第几张
 		    String newFileName = fileNameNoSufix + "_" + param.getClientOrderCode() + "_" + (i+1);
 		    // 图片url
-		    JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
-			    filedata, FileConstants.AZZ_CLIENT, FileConstants.AZZ_SIGN_FORM_IMAGE_TYPE);
+		    UploadImageParam up = new UploadImageParam();
+		    up.setBucketname(FileConstants.IMAGE_BUCKETNAME);
+		    up.setFiledata(filedata);
+		    up.setFilename(newFileName);
+		    up.setImagetype(FileConstants.AZZ_SIGN_FORM_IMAGE_TYPE);
+		    up.setPlattype(FileConstants.AZZ_CLIENT);
+		    up.setSuffix(sufix);
+		    JsonResult<String> jr = systemImageUploadService.uploadImage(up);
 		    if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 		    	UploadFileInfo file = new UploadFileInfo(jr.getData(), originalFileName);
 		    	uploadFiles.add(file);

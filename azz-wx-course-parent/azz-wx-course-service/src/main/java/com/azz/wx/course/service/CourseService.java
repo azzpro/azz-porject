@@ -30,6 +30,7 @@ import com.azz.core.constants.WxCourseConstants.IsChangeCoursePic;
 import com.azz.core.exception.BaseException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.system.api.SystemImageUploadService;
+import com.azz.system.bo.UploadImageParam;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.StringUtils;
@@ -327,8 +328,9 @@ public class CourseService {
 	    // 新名称为文件名 + 课程编码
 	    String newFileName = fileNameNoSufix + "_" + courseCode;
 	    // 图片url
-	    JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
-		    filedata, FileConstants.AZZ_PLATFORM, FileConstants.AZZ_WX_COURSE_IMAGE_TYPE);
+	    
+	    JsonResult<String> jr = systemImageUploadService.uploadImage(new UploadImageParam(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix, filedata,FileConstants.AZZ_PLATFORM,
+				FileConstants.AZZ_WX_COURSE_IMAGE_TYPE));
 	    UploadFileInfo file = new UploadFileInfo();
 	    if(jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 	    	file.setImgUrl(jr.getData());

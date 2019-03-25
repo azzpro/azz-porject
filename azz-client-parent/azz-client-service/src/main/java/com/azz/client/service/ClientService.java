@@ -81,6 +81,7 @@ import com.azz.system.bo.MailParam;
 import com.azz.system.bo.SmsCheck;
 import com.azz.system.bo.SmsCodeValidation;
 import com.azz.system.bo.SmsParams;
+import com.azz.system.bo.UploadImageParam;
 import com.azz.system.sequence.api.DbSequenceService;
 import com.azz.system.vo.SmsInfo;
 import com.azz.util.JSR303ValidateUtils;
@@ -350,8 +351,14 @@ public class ClientService {
 			// 新名称为文件名 + 客户编码 + 第几张
 			String newFileName = fileNameNoSufix + "_" + clientUserCode + "_" + (i + 1);
 			// 图片url
-			JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName,
-					sufix, filedata, FileConstants.AZZ_CLIENT, FileConstants.AZZ_TRADING_CERTIFICATE_IMAGE_TYPE);
+			 UploadImageParam up = new UploadImageParam();
+	    	    up.setBucketname(FileConstants.IMAGE_BUCKETNAME);
+	    	    up.setFiledata(filedata);
+	    	    up.setFilename(newFileName);
+	    	    up.setImagetype(FileConstants.AZZ_TRADING_CERTIFICATE_IMAGE_TYPE);
+	    	    up.setPlattype(FileConstants.AZZ_CLIENT);
+	    	    up.setSuffix(sufix);
+			JsonResult<String> jr = systemImageUploadService.uploadImage(up);
 			if (jr.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 				UploadFileInfo file = new UploadFileInfo(jr.getData(), originalFileName);
 				uploadTradingCertificateFileInfos.add(file);
@@ -646,8 +653,14 @@ public class ClientService {
 		String newFileName = fileNameNoSufix + "_" + clientUserCode;
 
 		// 图片url
-		JsonResult<String> jr = systemImageUploadService.uploadImage(FileConstants.IMAGE_BUCKETNAME, newFileName, sufix,
-				filedata, FileConstants.AZZ_CLIENT, FileConstants.AZZ_AVATAR_IMAGE_TYPE);
+		UploadImageParam up = new UploadImageParam();
+	    up.setBucketname(FileConstants.IMAGE_BUCKETNAME);
+	    up.setFiledata(filedata);
+	    up.setFilename(newFileName);
+	    up.setImagetype(FileConstants.AZZ_AVATAR_IMAGE_TYPE);
+	    up.setPlattype(FileConstants.AZZ_CLIENT);
+	    up.setSuffix(sufix);
+		JsonResult<String> jr = systemImageUploadService.uploadImage(up);
 		if (jr.getCode() != SystemErrorCode.SUCCESS.getCode()) {
 			throw new BaseException(SystemErrorCode.SYS_ERROR_SERVICE_NOT_USE, "头像上传失败，请重试");
 		}

@@ -17,6 +17,7 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import com.azz.core.common.errorcode.JSR303ErrorCode;
+import com.azz.core.reconstructed.exception.ValidationException;
 import com.azz.exception.JSR303ValidationException;
 
 import lombok.experimental.UtilityClass;
@@ -31,11 +32,12 @@ public class JSR303ValidateUtils {
 
     /**
      * 
-     * <p>验证符合JSR303规范的对象</p>
+     * <p>验证符合JSR303规范的对象（请使用JSR303ValidateUtils.validateInputParam(T input)）</p>
      * @param input 需被校验的参数
      * @throws JSR303ValidationException 验证不通过时,抛出此异常
      * @author 黄智聪（13510946256）  2018年8月30日 上午10:57:59
      */
+	@Deprecated
     public static <T> void validate(T input) throws JSR303ValidationException {
         validateInput(input);
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -50,12 +52,13 @@ public class JSR303ValidateUtils {
 
     /**
      * 
-     * <p>验证符合JSR303规范的对象 </p>
+     * <p>验证符合JSR303规范的对象（请使用JSR303ValidateUtils.validateInputParam(T input, String[] ignoreFields)） </p>
      * @param input 需被校验的参数
      * @param ignoreFields  忽略校验的字段
      * @throws JSR303ValidationException   验证不通过时,抛出此异常
      * @author 黄智聪（13510946256）  2018年8月30日 上午11:29:22
      */
+	@Deprecated
     public static <T> void validate(T input, String[] ignoreFields) throws JSR303ValidationException {
         validateInput(input);
         if (ignoreFields == null || ignoreFields.length == 0) {
@@ -82,11 +85,65 @@ public class JSR303ValidateUtils {
      * @throws JSR303ValidationException   验证不通过时,抛出此异常
      * @author 黄智聪（13510946256）  2018年8月30日 上午11:13:28
      */
+	@Deprecated
     private static <T> void validateInput(T input) throws JSR303ValidationException{
         if (input == null) {
             throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "输入参数为空");
         }
     }
     
+    /*************************************************  重构方法 start  *****************************************************/
+    
+	/**
+     * 
+     * <p>验证符合JSR303规范的对象</p>
+     * @param input 需被校验的参数
+     * @throws JSR303ValidationException 验证不通过时,抛出此异常
+     * @author 黄智聪（13510946256）  2018年8月30日 上午10:57:59
+     */
+    public static <T> void validateInputParam(T input) throws ValidationException {
+    	if (input == null) {
+            throw new ValidationException("输入参数为空");
+        }
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<T>> violations = validator.validate(input);
+        if (0 < violations.size()) {
+            for (ConstraintViolation<T> violation : violations) {
+                throw new ValidationException(violation.getMessage());
+            }
+        }
+    }
+
+    /**
+     * 
+     * <p>验证符合JSR303规范的对象 </p>
+     * @param input 需被校验的参数
+     * @param ignoreFields  忽略校验的字段
+     * @throws JSR303ValidationException   验证不通过时,抛出此异常
+     * @author 黄智聪（13510946256）  2018年8月30日 上午11:29:22
+     */
+    public static <T> void validateInputParam(T input, String... ignoreFields) throws ValidationException {
+    	if (input == null) {
+            throw new ValidationException("输入参数为空");
+        }
+        if (ignoreFields == null || ignoreFields.length == 0) {
+        	throw new ValidationException("忽略校验字段为空");
+        } else {
+            Collection<String> coll = Arrays.asList(ignoreFields);
+            ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+            Validator validator = factory.getValidator();
+            Set<ConstraintViolation<T>> violations = validator.validate(input);
+            if (0 < violations.size()) {
+                for (ConstraintViolation<T> violation : violations) {
+                    if (!coll.contains(violation.getPropertyPath().toString())) {
+                        throw new ValidationException(violation.getMessage());
+                    }
+                }
+            }
+        }
+    }
+    
+    /*************************************************  重构方法 end   *****************************************************/
 }
 

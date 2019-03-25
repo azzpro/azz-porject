@@ -16,8 +16,6 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import org.apache.commons.lang3.ObjectUtils;
-
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.reconstructed.exception.ValidationException;
 import com.azz.exception.JSR303ValidationException;

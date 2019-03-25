@@ -16,6 +16,8 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.reconstructed.exception.ValidationException;
 import com.azz.exception.JSR303ValidationException;
@@ -94,6 +96,36 @@ public class JSR303ValidateUtils {
     
     /*************************************************  重构方法 start  *****************************************************/
     
+	/**
+	 * 
+	 * <p>校验对象是否为空或为空字符串，并默认提示“输入参数为空或空字符串”</p>
+	 * @param input 校验参数
+	 * @throws ValidationException
+	 * @author 黄智聪  2019年3月25日 下午3:05:32
+	 */
+    public static <T> void validateNullOrBlank(Object input) throws ValidationException {
+    	validateNullOrBlank(input, "输入参数为空或空字符串");
+    }
+    
+    /**
+	 * 
+	 * <p>校验对象是否为空或为空字符串，并提示相应错误</p>
+	 * @param input 校验参数
+	 * @param errorMsg 提示的相应错误
+	 * @throws ValidationException
+	 * @author 黄智聪  2019年3月25日 下午3:05:32
+	 */
+    public static <T> void validateNullOrBlank(Object input, String errorMsg) throws ValidationException {
+    	if(input == null) {
+    		throw new ValidationException(errorMsg);
+    	}
+    	if(input instanceof String) {
+    		if(StringUtils.isBlank((String)input)) {
+    			throw new ValidationException(errorMsg);
+    		}
+    	}
+    }
+	
 	/**
      * 
      * <p>验证符合JSR303规范的对象</p>

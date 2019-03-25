@@ -9,7 +9,7 @@ package com.azz.core.reconstructed.errorcode;
 import com.azz.core.common.errorcode.BaseErrorCode;
 
 /**
- * <P>TODO</P>
+ * <P>系统错误码</P>
  * @version 1.0
  * @author 黄智聪（13510946256）  2018年8月29日 下午5:32:33
  */

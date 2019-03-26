@@ -140,8 +140,8 @@
        <if test="status != null">
         status,
       </if>
-      <if test="merchant_no != null">
-        merchantNo,
+      <if test="merchantNo != null">
+        merchant_no,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">

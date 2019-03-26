@@ -50,7 +50,7 @@ public class SystemUploadController {
 	 */
 	@RequestMapping(value="imageUpload")
 	public JsonResult<String> imageUpload(@RequestBody UploadImageParam up) throws FileNotFoundException {
-		JSR303ValidateUtils.validate(up);
+		//JSR303ValidateUtils.validate(up);
 		return imageService.uploadImage(up);
 	}
 	

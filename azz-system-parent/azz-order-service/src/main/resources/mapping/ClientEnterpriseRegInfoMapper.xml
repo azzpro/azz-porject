@@ -39,13 +39,13 @@
   
   <!-- 根据商户全称和开卡号 查询状态 -->
   <select id="selectStatusByCardNoAndMerFullName" resultType="java.lang.String">
-  	select status from client_enterprise_reg_info
+  	select status from merchant_yee_enterprise_account
   	where card_no = #{cn} and mer_full_name = #{mfn}
   </select>
   
   
   <insert id="insertSelective" parameterType="com.azz.order.client.pojo.Enterprisereginfoadd" useGeneratedKeys="true" keyProperty="id">
-    insert into client_enterprise_reg_info
+    insert into merchant_yee_enterprise_account
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         mer_full_name,

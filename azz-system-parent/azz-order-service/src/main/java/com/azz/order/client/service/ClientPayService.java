@@ -303,8 +303,9 @@ public class ClientPayService {
 		yps.add(legalBackPic);
 		Map<String, String> uploadModulePic = uploadModulePic(yps, po.getMerShortName());
 		JSONArray array = new JSONArray();
+		Set<Entry<String, String>> entrySet = null;
 		if (!uploadModulePic.isEmpty()) {
-			Set<Entry<String, String>> entrySet = uploadModulePic.entrySet();
+			 entrySet = uploadModulePic.entrySet();
 			for (Entry<String, String> entry : entrySet) {
 				log.info("上传图片url---->"+entry.getKey()+":::"+entry.getValue());
 			}
@@ -513,6 +514,23 @@ public class ClientPayService {
 			ef.setMerAuthorizeType(params.get("merAuthorizeType"));
 			ef.setBusinessFunction(params.get("businessFunction"));
 			ef.setMerchantNo(merchantNo);
+			for (Entry<String, String> entry : entrySet) {
+				if(entry.getKey().equals(PayConstants.RegYee.legalFrontPic.getCode())) {
+					ef.setLegalFrontPic(entry.getValue());
+				}
+				if(entry.getKey().equals(PayConstants.RegYee.legalBackPic.getCode())) {
+					ef.setLegalBackPic(entry.getValue());
+				}
+				if(entry.getKey().equals(PayConstants.RegYee.icpAuthPic.getCode())) {
+					ef.setIcpAuthPic(entry.getValue());
+				}
+				if(entry.getKey().equals(PayConstants.RegYee.openAccountPic.getCode())) {
+					ef.setOpenAccountPic(entry.getValue());
+				}
+				if(entry.getKey().equals(PayConstants.RegYee.businessPic.getCode())) {
+					ef.setBusinessPic(entry.getValue());
+				}
+			}
 			int insertSelective = clientEnterpriseRegInfoMapper.insertSelective(ef);
 			if(insertSelective != 1) {
 				resultMap.put("code", RegCode.FAILD.getCode());

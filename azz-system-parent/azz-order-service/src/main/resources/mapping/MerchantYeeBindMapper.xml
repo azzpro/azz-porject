@@ -25,7 +25,7 @@
   </update>
   
   <insert id="insertBind" parameterType="com.azz.order.client.pojo.MerchantYeeBind">
-    insert into client_pay
+    insert into merchant_yee_bind
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,

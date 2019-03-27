@@ -35,6 +35,11 @@
     <result column="business_function" jdbcType="VARCHAR" property="businessFunction" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="merchant_no" jdbcType="VARCHAR" property="merchantNo" />
+    <result column="legal_front_pic" jdbcType="VARCHAR" property="legalFrontPic" />
+    <result column="legal_back_pic" jdbcType="VARCHAR" property="legalBackPic" />
+    <result column="open_account_pic" jdbcType="VARCHAR" property="openAccountPic" />
+    <result column="business_pic" jdbcType="VARCHAR" property="businessPic" />
+    <result column="icp_auth_pic" jdbcType="VARCHAR" property="icpAuthPic" />
   </resultMap>
   
   <!-- 根据子商编查询 商户详情 -->
@@ -52,7 +57,7 @@
   <insert id="insertSelective" parameterType="com.azz.order.client.pojo.Enterprisereginfoadd" useGeneratedKeys="true" keyProperty="id">
     insert into merchant_yee_enterprise_account
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
+      <if test="merFullName != null">
         mer_full_name,
       </if>
       <if test="merShortName != null">
@@ -148,10 +153,25 @@
       <if test="merchantNo != null">
         merchant_no,
       </if>
+      <if test="legalFrontPic != null">
+        legal_front_pic,
+      </if>
+      <if test="legalBackPic != null">
+        legal_back_pic,
+      </if>
+      <if test="openAccountPic != null">
+        open_account_pic,
+      </if>
+      <if test="businessPic != null">
+        business_pic,
+      </if>
+      <if test="icpAuthPic != null">
+        icp_auth_pic,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
+      <if test="merFullName != null">
+        #{merFullName,jdbcType=VARCHAR},
       </if>
       <if test="merShortName != null">
         #{merShortName,jdbcType=VARCHAR},
@@ -245,6 +265,21 @@
       </if>
        <if test="merchantNo != null">
         #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="legalFrontPic != null">
+        #{legalFrontPic,jdbcType=VARCHAR},
+      </if>
+      <if test="legalBackPic != null">
+        #{legalBackPic,jdbcType=VARCHAR},
+      </if>
+      <if test="openAccountPic != null">
+        #{openAccountPic,jdbcType=VARCHAR},
+      </if>
+      <if test="businessPic != null">
+        #{businessPic,jdbcType=VARCHAR},
+      </if>
+      <if test="icpAuthPic != null">
+        #{icpAuthPic,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

@@ -26,7 +26,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.assertj.core.util.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -188,7 +187,7 @@ public class ClientPayService {
 		
 		// 根据客户订单编码查询所关联的商户编码
 		List<String> merchantCodes = clientOrderPersonalMapper.getMerchantCodesByClientOrderCode(po.getOrderCode());
-		List<MerchantOrderInfoParam> moips = Lists.newArrayList();
+		List<MerchantOrderInfoParam> moips = new ArrayList<>();
 		for (String merchantCode : merchantCodes) {
 			MerchantOrderInfoParam moip = new MerchantOrderInfoParam();
 			moip.setMerchantCode(merchantCode);
@@ -209,7 +208,7 @@ public class ClientPayService {
 			throw new ReturnDataException("客户订单拆分信息查询出错");
 		}
 		//组装分账信息
-		List<DivideDetail> ldds = Lists.newArrayList();
+		List<DivideDetail> ldds = new ArrayList<>();
 		List<MerchantOrderInfo> merchantOrderInfos = res.getData().getMerchantOrderInfos();
 		for (MerchantOrderInfo merchantOrderInfo : merchantOrderInfos) {
 			ldds.add(new DivideDetail(mybMapper.selectBindByMerchantNo(merchantOrderInfo.getMerchantCode()).getYeeMerchantNo(), merchantOrderInfo.getMerchantName(), merchantOrderInfo.getEachMerchantGrandTotal().toPlainString()));

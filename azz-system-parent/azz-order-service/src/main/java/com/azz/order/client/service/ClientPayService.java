@@ -959,12 +959,12 @@ public class ClientPayService {
 		MerchantYeeBind merchantNo = mybMapper.selectBindByMerchantNo(merchantCode);
 		if(merchantNo != null && merchantNo.getBindStatus() != 1) {
 			log.info("商户未审核通过");
-			return null;
+			return JsonResult.successJsonResult(new Enterprisereginfoadd());
 		}
 		Enterprisereginfoadd enterprisereginfo = clientEnterpriseRegInfoMapper.selectEnterpriseInfoByMerchantNo(merchantNo.getYeeMerchantNo());
 		if(enterprisereginfo == null) {
 			log.info("商户信息为空");
-			return null;
+			return JsonResult.successJsonResult(new Enterprisereginfoadd());
 		}
 		return JsonResult.successJsonResult(enterprisereginfo);
 	}

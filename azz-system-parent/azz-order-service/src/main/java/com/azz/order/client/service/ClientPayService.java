@@ -968,6 +968,10 @@ public class ClientPayService {
 			log.info("商户绑定信息不存在");
 			return JsonResult.successJsonResult(new Enterprisereginfoadd());
 		}
+		if(merchantNo.getBindStatus() != 1) {
+			log.info("商户信息审核不通过");
+			return JsonResult.successJsonResult(new Enterprisereginfoadd());
+		}
 		Enterprisereginfoadd enterprisereginfo = clientEnterpriseRegInfoMapper.selectEnterpriseInfoByMerchantNo(merchantNo.getYeeMerchantNo());
 		if(enterprisereginfo == null) {
 			log.info("商户信息为空");

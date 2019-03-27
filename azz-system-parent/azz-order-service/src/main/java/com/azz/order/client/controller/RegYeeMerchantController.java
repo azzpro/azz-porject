@@ -23,6 +23,7 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.PayConstants;
 import com.azz.order.client.pojo.ClientPay;
+import com.azz.order.client.pojo.Enterprisereginfoadd;
 import com.azz.order.client.pojo.RetBean;
 import com.azz.order.client.pojo.bo.BankBranch;
 import com.azz.order.client.pojo.bo.Enterprisereginfo;
@@ -78,6 +79,17 @@ public class RegYeeMerchantController {
 	@RequestMapping("getBankBranchInfo")
 	public Map<String,String> getBankBranchInfo(@RequestBody BankBranch bb){
 		return pps.getBankBranchInfo(bb);
+	}
+	
+	/**
+	 * 获取入网商户详细信息
+	 * @param request
+	 * @param po
+	 * @return
+	 */
+	@RequestMapping("enterpriseInfo")
+	public JsonResult<Enterprisereginfoadd> enterpriseInfo(@RequestParam("merchantCode") String merchantCode){
+		return pps.enterpriseInfo(merchantCode);
 	}
 	
 }

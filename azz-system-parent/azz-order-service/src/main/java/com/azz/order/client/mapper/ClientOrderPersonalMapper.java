@@ -104,8 +104,12 @@ public interface ClientOrderPersonalMapper {
      */
     List<ClientOrderInfo> getClientOrderInfoListByParam(@Param("orderCode") String orderCode, @Param("clientUserCode") String clientUserCode);
     
-    
-    
+    /**
+     * <p>根据客户订单编码查询所关联的商户编码</p>
+     * @param clientOrdeCode
+     * @return
+     */
+    List<String> getMerchantCodesByClientOrderCode(String clientOrdeCode);
     
     /***************************************************************************************/
     /************************************以上为客户端sql***************************************/

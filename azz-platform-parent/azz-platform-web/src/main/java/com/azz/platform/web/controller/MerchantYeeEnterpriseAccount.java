@@ -6,17 +6,22 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.constants.PayConstants;
+import com.azz.exception.JSR303ValidationException;
 import com.azz.order.api.client.RegYeeMerchantService;
+import com.azz.order.client.pojo.Enterprisereginfoadd;
 import com.azz.order.client.pojo.RetBean;
 import com.azz.order.client.pojo.bo.Enterprisereginfo;
 import com.azz.order.client.pojo.bo.EnterprisereginfoCopy;
@@ -49,6 +54,7 @@ public class MerchantYeeEnterpriseAccount {
 	public Map<String,String> regMerchantYeeEnterpriseAccount(Enterprisereginfo enInfo) throws IOException {
 		JSR303ValidateUtils.validate(enInfo);
 		EnterprisereginfoCopy param = new EnterprisereginfoCopy();
+		param.setCreator(WebUtils.getLoginUser().getUserInfo().getUserCode());
 		BeanUtils.copyProperties(enInfo, param);
 		MultipartFile businessPic = enInfo.getBusinessPic();
 		MultipartFile icpAuthPic = enInfo.getIcpAuthPic();
@@ -91,6 +97,19 @@ public class MerchantYeeEnterpriseAccount {
 		JsonResult<RetBean> notify = regYeeMerchantService.regEnterpriseNotify(responseMsg,customerId);
 		response.getWriter().write(notify.getMsg());
 		response.getWriter().flush();
+	}
+	
+	/**
+	 * 获取入网商户详细信息
+	 * @param merchantCode
+	 * @return
+	 */
+	@RequestMapping("enterpriseInfo")
+	public JsonResult<Enterprisereginfoadd> enterpriseInfo(@RequestParam("merchantCode") String merchantCode){
+		if(StringUtils.isBlank(merchantCode)) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "商户编号不能为空");
+		}
+		return regYeeMerchantService.enterpriseInfo(merchantCode);
 	}
 	
 }

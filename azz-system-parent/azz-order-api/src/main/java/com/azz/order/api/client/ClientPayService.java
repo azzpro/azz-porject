@@ -34,6 +34,13 @@ import com.azz.order.client.pojo.bo.Personreginfo;
 public interface ClientPayService {
 	
 	/**
+	 * <p>分账回调</p>
+	 * @author 刘建麟  2018年12月17日 下午6:27:10
+	 */
+	@RequestMapping(value="/azz/api/pay/divideNotify",method=RequestMethod.POST)
+	public JsonResult<RetBean> divideNotify(@RequestParam("responseMsg") String responseMsg,@RequestParam("customerId") String customerId);
+	
+	/**
 	 * <p>支付回调</p>
 	 * @author 刘建麟  2018年12月17日 下午6:27:10
 	 */

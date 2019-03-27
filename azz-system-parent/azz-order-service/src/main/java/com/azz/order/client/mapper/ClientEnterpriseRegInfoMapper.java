@@ -8,6 +8,14 @@ import com.azz.order.client.pojo.Enterprisereginfoadd;
 @Mapper
 public interface ClientEnterpriseRegInfoMapper {
 
+	
+	/**
+	 * 根据子商编查询 商户详情
+	 * @param merchantNo
+	 * @return
+	 */
+	Enterprisereginfoadd selectEnterpriseInfoByMerchantNo(String merchantNo);
+	
 	/**
 	 * 插入子商户入网企业信息
 	 * @param eif

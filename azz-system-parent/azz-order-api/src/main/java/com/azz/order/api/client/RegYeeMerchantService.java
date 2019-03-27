@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
+import com.azz.order.client.pojo.Enterprisereginfoadd;
 import com.azz.order.client.pojo.RetBean;
 import com.azz.order.client.pojo.bo.BankBranch;
 import com.azz.order.client.pojo.bo.EnterprisereginfoCopy;
@@ -30,6 +31,15 @@ import com.azz.order.client.pojo.bo.EnterprisereginfoCopy;
  */
 @FeignClient("azz-order-service")
 public interface RegYeeMerchantService {
+	
+	/**
+	 * 获取入网商户详细信息
+	 * @param merchantCode
+	 * @return
+	 */
+	@RequestMapping(value="/azz/api/merchant/enterpriseInfo",method=RequestMethod.POST)
+	public JsonResult<Enterprisereginfoadd> enterpriseInfo(@RequestParam("merchantCode") String merchantCode);
+		
 	
 	/**
 	 * 子商户入网注册 【企业】

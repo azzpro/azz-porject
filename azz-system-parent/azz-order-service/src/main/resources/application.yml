@@ -76,5 +76,6 @@ wx:
   callback: http://120.78.162.226:8081/azz/api/wx/pay/callback
 yeepay: 
   notify-url: http://120.78.162.226:8081/azz/api/pay/payNotify
+  divide_notify_url: http://120.78.162.226:8081/azz/api/pay/divideNotify
   regEn-notify-url: http://120.78.162.226:8080/azz/api/merchant/regEnterpriseNotify
   cashWithdralwal-notify-url: http://120.78.162.226:8080/azz/api/cashWithdrawal/cashWithdrawalCallback

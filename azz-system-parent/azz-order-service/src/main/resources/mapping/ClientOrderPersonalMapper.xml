@@ -666,4 +666,12 @@
 	</where>
 	ORDER BY cop.create_time DESC
   </select>
+  
+  <select id="getMerchantCodesByClientOrderCode" parameterType="string" resultType="string">
+  	select DISTINCT m.merchant_code from client_order_personal cop 
+	join client_order_item_personal coip on cop.id = coip.client_order_id
+	JOIN merchant_goods_product mgp ON mgp.product_code = coip.product_code
+	JOIN merchant m ON m.id = mgp.merchant_id
+	where cop.client_order_code = #{clientUserCode}
+  </select>
 </mapper>

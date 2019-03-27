@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.util.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
@@ -49,11 +52,13 @@ import com.azz.core.constants.PayConstants.PayCode;
 import com.azz.core.constants.PayConstants.RegCode;
 import com.azz.core.constants.PayConstants.YeeCode;
 import com.azz.core.constants.WithdralwalContants;
+import com.azz.core.reconstructed.exception.ReturnDataException;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.finance.merchant.mapper.MerchantWithdrawDepositApplyMapper;
 import com.azz.order.api.client.ClientOrderService;
 import com.azz.order.api.client.SelectionService;
 import com.azz.order.client.mapper.ClientEnterpriseRegInfoMapper;
+import com.azz.order.client.mapper.ClientOrderPersonalMapper;
 import com.azz.order.client.mapper.ClientPayMapper;
 import com.azz.order.client.mapper.MerchantYeeBindMapper;
 import com.azz.order.client.pojo.ClientPay;
@@ -69,6 +74,12 @@ import com.azz.order.client.pojo.bo.PayList;
 import com.azz.order.client.pojo.bo.YeeModulePic;
 import com.azz.order.client.pojo.vo.ClientOrderDetail;
 import com.azz.order.client.pojo.vo.ClientOrderInfo;
+import com.azz.order.client.pojo.vo.DivideDetail;
+import com.azz.order.platform.bo.AllocateClientOrderParam;
+import com.azz.order.platform.bo.MerchantOrderInfoParam;
+import com.azz.order.platform.service.PlatformClientOrderService;
+import com.azz.order.platform.vo.AllocatedMerchantOrderInfo;
+import com.azz.order.platform.vo.MerchantOrderInfo;
 import com.azz.order.selection.bo.CallBackParam;
 import com.azz.system.api.SystemImageUploadService;
 import com.azz.system.bo.UploadImageParam;
@@ -78,7 +89,6 @@ import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.LLPayUtil;
 import com.github.pagehelper.PageHelper;
 
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Service
@@ -94,6 +104,10 @@ public class ClientPayService {
 	
 	@Value("${yeepay.cashWithdralwal-notify-url}")
 	private String cashWithdralwalNotifyUrl;
+	
+	@Value("${yeepay.divide_notify_url}")
+	private String divideNotifyUrl;
+	
 	
 	@Autowired
 	private ClientPayMapper ppm;
@@ -114,7 +128,13 @@ public class ClientPayService {
 	private SystemImageUploadService systemImageUploadService;
 	
 	@Autowired
+	private PlatformClientOrderService platformClientOrderService;
+	
+	@Autowired
 	private MerchantWithdrawDepositApplyMapper merchantWithdrawDepositApplyMapper;
+	
+	@Autowired
+	private ClientOrderPersonalMapper clientOrderPersonalMapper;
 
 	public static String REQUEST_PREFIX = "YOP_ENREG";
 	
@@ -165,6 +185,37 @@ public class ClientPayService {
 		if (DecimalUtil.lt(new BigDecimal(orderDeadTime.getTime()), new BigDecimal(System.currentTimeMillis()))) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单已失效，请重新下单");
 		}
+		
+		// 根据客户订单编码查询所关联的商户编码
+		List<String> merchantCodes = clientOrderPersonalMapper.getMerchantCodesByClientOrderCode(po.getOrderCode());
+		List<MerchantOrderInfoParam> moips = Lists.newArrayList();
+		for (String merchantCode : merchantCodes) {
+			MerchantOrderInfoParam moip = new MerchantOrderInfoParam();
+			moip.setMerchantCode(merchantCode);
+			moip.setRemark("系统自动拆分成商户订单");
+			moips.add(moip);
+		}
+		// 拆分客户订单生成商户订单
+		AllocateClientOrderParam acop = new AllocateClientOrderParam();
+		acop.setClientOrderCode(po.getOrderCode());
+		acop.setInfos(moips);
+		acop.setAllocatePerson("admin");
+		JsonResult<String> results = platformClientOrderService.allocateClientOrder(acop);
+		if(results.getCode() != com.azz.core.reconstructed.errorcode.SystemErrorCode.SUCCESS.getCode()) {
+			throw new ReturnDataException("客户订单拆分出错");
+		}
+		JsonResult<AllocatedMerchantOrderInfo> res = platformClientOrderService.getGeneratedMerchantOrderInfo(po.getOrderCode());
+		if(res.getCode() != com.azz.core.reconstructed.errorcode.SystemErrorCode.SUCCESS.getCode()) {
+			throw new ReturnDataException("客户订单拆分信息查询出错");
+		}
+		//组装分账信息
+		List<DivideDetail> ldds = Lists.newArrayList();
+		List<MerchantOrderInfo> merchantOrderInfos = res.getData().getMerchantOrderInfos();
+		for (MerchantOrderInfo merchantOrderInfo : merchantOrderInfos) {
+			ldds.add(new DivideDetail(mybMapper.selectBindByMerchantNo(merchantOrderInfo.getMerchantCode()).getYeeMerchantNo(), merchantOrderInfo.getMerchantName(), merchantOrderInfo.getEachMerchantGrandTotal().toPlainString()));
+		}
+		JSONArray divideDetail= JSONArray.parseArray(JSON.toJSONString(ldds));
+		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		// 创建订单
 		OrderInfo order = createOrder(orderInfo);
@@ -196,9 +247,9 @@ public class ClientPayService {
 		params.put("csUrl", "");
 		params.put("assureType", "");
 		params.put("assurePeriod", "");
-		params.put("fundProcessType", "");
-		params.put("divideDetail", "");
-		params.put("divideNotifyUrl", "");
+		params.put("fundProcessType", "SPLIT_ACCOUNT_IN");//分账
+		params.put("divideDetail", divideDetail.toString());
+		params.put("divideNotifyUrl", divideNotifyUrl);
 		params.put("timeoutNotifyUrl", "");
 		Set<Entry<String, String>> entrySet = params.entrySet();
 		for (Entry<String, String> entry : entrySet) {
@@ -830,6 +881,95 @@ public class ClientPayService {
 
 	}
 
+	public JsonResult<RetBean> divideNotify(String responseMsg, String customerId) {
+		log.info("进入分账异步处理......");
+		RetBean retBean = new RetBean();
+		if (StringUtils.isBlank(responseMsg) || StringUtils.isBlank(customerId)) {
+			retBean.setRet_code(PayCode.FAILD.getCode());
+			retBean.setRet_msg(PayCode.FAILD.getDesc());
+			return new JsonResult<>(retBean);
+		}
+		log.info("接收分账异步通知数据：【" + responseMsg + "】:【" + customerId + "】");
+		Map<String, String> callback = YeepayService.callback(responseMsg);
+		Set<Entry<String, String>> entrySet = callback.entrySet();
+		for (Entry<String, String> entry : entrySet) {
+			log.info("回调处理结果--->" + entry.getKey() + "::--value---->" + entry.getValue());
+		}
+		String parentMerchantNo = callback.get("parentMerchantNo");// 主商编
+		String merchantNo = callback.get("merchantNo"); // 子商编
+		String orderId = callback.get("orderId");// 订单号
+		String uniqueOrderNo = callback.get("uniqueOrderNo");// 三方流水号
+		String divideRequestId = callback.get("divideRequestId");//商户分账请求号
+		String divideStatus = callback.get("divideStatus");// 分账状态 SUCCESS 成功
+		String divideDetail = callback.get("divideDetail");//分账详情
+		
+		if (StringUtils.isNotBlank(divideStatus) && divideStatus.equals("SUCCESS")) {
+			// 校验订单是否支付成功
+			/*Map<String, Object> map = new HashMap<String, Object>();
+			map.put("no_order", orderId);
+			map.put("money_order", payAmount);
+			if (getOrderStatus(map)) {
+				Map<String, Object> map1 = new HashMap<String, Object>();
+				map1.put("order_status", (byte) PayStatus.PAY_SUCCESS.getValue());
+				map1.put("order_info", "");
+				map1.put("order_type", PayConstants.PayType.getDesc(paymentProduct) + "::"
+						+ PayConstants.PayPlatForm.getDesc(platformType));
+				map1.put("pay_success_date", paySuccessDate);
+				map1.put("three_party_number", uniqueOrderNo);
+				map1.put("pay_number", orderId);
+				int number = ppm.updateOrderByNumber(map1);
+				if (number != 1) {
+					retBean.setRet_code(PayCode.UPDATEFAILD.getCode());
+					retBean.setRet_msg(PayCode.UPDATEFAILD.getDesc());
+					return new JsonResult<>(retBean);
+				}
+				String orderCode = ppm.selectOrderCode(orderId);
+				CallBackParam cbp = new CallBackParam();
+				cbp.setClientOrderCode(orderCode);
+				cbp.setPayMethod(PayMethod.ONLINE.getValue());
+				cbp.setOrderType(PayConstants.PayPlatForm.getNum(platformType));
+				selectService.clientOrderPaySuccessOpt(cbp);
+				retBean.setRet_code(PayCode.SUCCESS.getCode());
+				retBean.setRet_msg(PayCode.SUCCESS.getDesc());
+				return new JsonResult<>(retBean);
+			} else {
+				retBean.setRet_code(PayCode.PAID.getCode());
+				retBean.setRet_msg(PayCode.PAID.getDesc());
+				return new JsonResult<>(retBean);
+			}*/
+		} else {
+			retBean.setRet_code(PayCode.FAILD.getCode());
+			retBean.setRet_msg(PayCode.FAILD.getDesc());
+			return new JsonResult<>(retBean);
+		}
+		return null;
+
+	}
+
+	
+	/**
+	 * <p>
+	 * 支付列表
+	 * </p>
+	 * 
+	 * @param param
+	 * @return
+	 * @author 刘建麟 2018年10月31日 上午11:29:49
+	 */
+	public JsonResult<Enterprisereginfoadd> enterpriseInfo(String merchantCode) {
+		MerchantYeeBind merchantNo = mybMapper.selectBindByMerchantNo(merchantCode);
+		if(merchantNo != null && merchantNo.getBindStatus() != 1) {
+			log.info("商户未审核通过");
+			return null;
+		}
+		Enterprisereginfoadd enterprisereginfo = clientEnterpriseRegInfoMapper.selectEnterpriseInfoByMerchantNo(merchantNo.getYeeMerchantNo());
+		if(enterprisereginfo == null) {
+			log.info("商户信息为空");
+			return null;
+		}
+		return JsonResult.successJsonResult(enterprisereginfo);
+	}
+	
 	/**
 	 * <p>
 	 * 支付列表

@@ -37,6 +37,11 @@
     <result column="merchant_no" jdbcType="VARCHAR" property="merchantNo" />
   </resultMap>
   
+  <!-- 根据子商编查询 商户详情 -->
+  <select id="selectEnterpriseInfoByMerchantNo" resultMap="BaseResultMap">
+  	select * from merchant_yee_enterprise_account where merchant_no = #{merchantNo}
+  </select>
+  
   <!-- 根据商户全称和开卡号 查询状态 -->
   <select id="selectStatusByCardNoAndMerFullName" resultType="java.lang.String">
   	select status from merchant_yee_enterprise_account

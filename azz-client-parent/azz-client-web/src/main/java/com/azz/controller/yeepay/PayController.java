@@ -91,4 +91,21 @@ public class PayController {
 		response.getWriter().write(notify.getMsg());
 		response.getWriter().flush();
 	}
+	
+	/** 分账回调
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping(value="divideNotify",method=RequestMethod.POST)
+	public void divideNotify(HttpServletRequest request,HttpServletResponse response) throws Exception {
+		String responseMsg = request.getParameter("response");
+		String customerId = request.getParameter("customerIdentification");
+		log.info("进入分账回调接口");
+		log.info("responseMsg---->"+responseMsg);
+		log.info("customerId---->"+customerId);
+		JsonResult<RetBean> notify = pfps.divideNotify(responseMsg,customerId);
+		response.getWriter().write(notify.getMsg());
+		response.getWriter().flush();
+	}
 }

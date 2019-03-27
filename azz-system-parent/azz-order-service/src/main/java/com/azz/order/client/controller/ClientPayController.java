@@ -75,6 +75,16 @@ public class ClientPayController {
 		return pps.payNotify(responseMsg,customerId);
 	}
 	
+	/**
+	 * 分账回调
+	 * @param reqStr
+	 * @return
+	 */
+	@RequestMapping("divideNotify")
+	public JsonResult<RetBean> divideNotify(@RequestParam("responseMsg") String responseMsg,@RequestParam("customerId") String customerId) {
+		return pps.divideNotify(responseMsg,customerId);
+	}
+	
 	
 	/**
 	 * 获取支行信息

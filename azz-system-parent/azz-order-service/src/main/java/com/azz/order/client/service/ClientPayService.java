@@ -708,6 +708,13 @@ public class ClientPayService {
 		String merNetInStatus = callback.get("merNetInStatus");// 状态
 		log.info("商户全称:{},商户入网返回状态:{}",merFullName,merNetInStatus);
 		if (StringUtils.isNotBlank(merNetInStatus) && merNetInStatus.equals("PROCESS_SUCCESS")) {
+			//更新商户状态
+			int i = clientEnterpriseRegInfoMapper.updateEnterpriseStatus();
+			if(1 != i) {
+				retBean.setRet_code(YeeCode.FAILD.getCode());
+				retBean.setRet_msg(YeeCode.FAILD.getDesc());
+				return new JsonResult<>(retBean);
+			}
 			List<MerchantYeeBind> selectBindByYeeNo = mybMapper.selectBindByYeeNo(merNo);
 			if(selectBindByYeeNo.isEmpty()) {
 				retBean.setRet_code(YeeCode.FAILD.getCode());
@@ -957,8 +964,8 @@ public class ClientPayService {
 	 */
 	public JsonResult<Enterprisereginfoadd> enterpriseInfo(String merchantCode) {
 		MerchantYeeBind merchantNo = mybMapper.selectBindByMerchantNo(merchantCode);
-		if(merchantNo != null && merchantNo.getBindStatus() != 1) {
-			log.info("商户未审核通过");
+		if(merchantNo == null) {
+			log.info("商户绑定信息不存在");
 			return JsonResult.successJsonResult(new Enterprisereginfoadd());
 		}
 		Enterprisereginfoadd enterprisereginfo = clientEnterpriseRegInfoMapper.selectEnterpriseInfoByMerchantNo(merchantNo.getYeeMerchantNo());

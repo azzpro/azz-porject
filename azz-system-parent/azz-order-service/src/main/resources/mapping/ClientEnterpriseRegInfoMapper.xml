@@ -52,7 +52,10 @@
   	select status from merchant_yee_enterprise_account
   	where card_no = #{cn} and mer_full_name = #{mfn}
   </select>
-  
+ 
+ <update id="updateEnterpriseStatus">
+ 	update merchant_yee_enterprise_account set status = 1
+ </update> 
   
   <insert id="insertSelective" parameterType="com.azz.order.client.pojo.Enterprisereginfoadd" useGeneratedKeys="true" keyProperty="id">
     insert into merchant_yee_enterprise_account

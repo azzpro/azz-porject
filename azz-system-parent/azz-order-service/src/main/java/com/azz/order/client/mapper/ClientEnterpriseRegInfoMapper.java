@@ -8,6 +8,7 @@ import com.azz.order.client.pojo.Enterprisereginfoadd;
 @Mapper
 public interface ClientEnterpriseRegInfoMapper {
 
+	int updateEnterpriseStatus();
 	
 	/**
 	 * 根据子商编查询 商户详情

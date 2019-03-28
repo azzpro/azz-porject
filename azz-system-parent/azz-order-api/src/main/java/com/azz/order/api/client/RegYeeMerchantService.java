@@ -55,7 +55,7 @@ public interface RegYeeMerchantService {
 	 * @param po
 	 * @return
 	 */
-	@RequestMapping("regEnterpriseNotify")
+	@RequestMapping("/azz/api/merchant/regEnterpriseNotify")
 	public JsonResult<RetBean> regEnterpriseNotify(@RequestParam("responseMsg") String responseMsg,@RequestParam("customerId") String customerId);
 	/**
 	 * 获取支行信息
@@ -63,7 +63,7 @@ public interface RegYeeMerchantService {
 	 * @param po
 	 * @return
 	 */
-	@RequestMapping("getBankBranchInfo")
+	@RequestMapping("/azz/api/merchant/getBankBranchInfo")
 	public Map<String,String> getBankBranchInfo(@RequestBody BankBranch bb);
 		
 }

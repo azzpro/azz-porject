@@ -186,16 +186,16 @@ public class ClientPayService {
 		}
 		
 		// 根据客户订单编码查询所关联的商户编码
-		List<String> merchantCodes = clientOrderPersonalMapper.getMerchantCodesByClientOrderCode(po.getOrderCode());
+		/*List<String> merchantCodes = clientOrderPersonalMapper.getMerchantCodesByClientOrderCode(po.getOrderCode());
 		List<MerchantOrderInfoParam> moips = new ArrayList<>();
 		for (String merchantCode : merchantCodes) {
 			MerchantOrderInfoParam moip = new MerchantOrderInfoParam();
 			moip.setMerchantCode(merchantCode);
 			moip.setRemark("系统自动拆分成商户订单");
 			moips.add(moip);
-		}
+		}*/
 		// 拆分客户订单生成商户订单
-		AllocateClientOrderParam acop = new AllocateClientOrderParam();
+		/*AllocateClientOrderParam acop = new AllocateClientOrderParam();
 		acop.setClientOrderCode(po.getOrderCode());
 		acop.setInfos(moips);
 		acop.setAllocatePerson("admin");
@@ -213,7 +213,7 @@ public class ClientPayService {
 		for (MerchantOrderInfo merchantOrderInfo : merchantOrderInfos) {
 			ldds.add(new DivideDetail(mybMapper.selectBindByMerchantNo(merchantOrderInfo.getMerchantCode()).getYeeMerchantNo(), merchantOrderInfo.getMerchantName(), merchantOrderInfo.getEachMerchantGrandTotal().toPlainString()));
 		}
-		JSONArray divideDetail= JSONArray.parseArray(JSON.toJSONString(ldds));
+		JSONArray divideDetail= JSONArray.parseArray(JSON.toJSONString(ldds));*/
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		// 创建订单

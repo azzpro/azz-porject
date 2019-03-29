@@ -246,9 +246,12 @@ public class ClientPayService {
 		params.put("csUrl", "");
 		params.put("assureType", "");
 		params.put("assurePeriod", "");
-		params.put("fundProcessType", "SPLIT_ACCOUNT_IN");//分账
-		params.put("divideDetail", divideDetail.toString());
-		params.put("divideNotifyUrl", divideNotifyUrl);
+		//params.put("fundProcessType", "SPLIT_ACCOUNT_IN");//分账
+		//params.put("divideDetail", divideDetail.toString());
+		//params.put("divideNotifyUrl", divideNotifyUrl);
+		params.put("fundProcessType", "");//分账
+		params.put("divideDetail", "");
+		params.put("divideNotifyUrl", "");
 		params.put("timeoutNotifyUrl", "");
 		Set<Entry<String, String>> entrySet = params.entrySet();
 		for (Entry<String, String> entry : entrySet) {

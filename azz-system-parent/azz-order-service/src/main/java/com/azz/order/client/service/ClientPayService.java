@@ -107,6 +107,8 @@ public class ClientPayService {
 	@Value("${yeepay.divide_notify_url}")
 	private String divideNotifyUrl;
 	
+	//支付成功回调页面地址，yml 文件#为注释符号，故写在代码中
+	private static final String redirectUrl = "http://c.izz2025.com/main.html#!model/model-paymentOK.html";
 	
 	@Autowired
 	private ClientPayMapper ppm;
@@ -236,7 +238,7 @@ public class ClientPayService {
 		params.put("timeoutExpress", "360"); // 订单有效期 可以不传
 		params.put("timeoutExpressType", PayConstants.Unit.MINUTE.getPrc());
 		params.put("requestDate", order.getRequestDate()); // 请求时间
-		params.put("redirectUrl", ""); // 页面回调地址 可以不传
+		params.put("redirectUrl", redirectUrl); // 页面回调地址 可以不传
 		params.put("notifyUrl", notifyUrl); // 回调地址
 		params.put("industryParamExt", industryParamExt);
 		params.put("goodsParamExt", goodsParamExt);

@@ -238,7 +238,7 @@ public class ClientPayService {
 		params.put("timeoutExpress", "360"); // 订单有效期 可以不传
 		params.put("timeoutExpressType", PayConstants.Unit.MINUTE.getPrc());
 		params.put("requestDate", order.getRequestDate()); // 请求时间
-		params.put("redirectUrl", redirectUrl); // 页面回调地址 可以不传
+		params.put("redirectUrl", ""); // 页面回调地址 可以不传
 		params.put("notifyUrl", notifyUrl); // 回调地址
 		params.put("industryParamExt", industryParamExt);
 		params.put("goodsParamExt", goodsParamExt);

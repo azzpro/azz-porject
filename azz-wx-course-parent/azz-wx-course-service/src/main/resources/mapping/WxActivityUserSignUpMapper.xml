@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.wx.course.mapper.WxActivityUserSignUpMapper">
+  <resultMap id="BaseResultMap" type="com.azz.wx.course.pojo.WxActivityUserSignUp">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="activity_code" jdbcType="VARCHAR" property="activityCode" />
+    <result column="openid" jdbcType="VARCHAR" property="openid" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="head_image_url" jdbcType="VARCHAR" property="headImageUrl" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="position" jdbcType="VARCHAR" property="position" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, activity_code, openid, nickname, head_image_url, user_name, phone_number, company_name, 
+    position, create_time, creator
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wx_activity_user_sign_up
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from wx_activity_user_sign_up
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.azz.wx.course.pojo.WxActivityUserSignUp">
+    insert into wx_activity_user_sign_up (id, activity_code, openid, 
+      nickname, head_image_url, user_name, 
+      phone_number, company_name, position, 
+      create_time, creator)
+    values (#{id,jdbcType=INTEGER}, #{activityCode,jdbcType=VARCHAR}, #{openid,jdbcType=VARCHAR}, 
+      #{nickname,jdbcType=VARCHAR}, #{headImageUrl,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{phoneNumber,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.wx.course.pojo.WxActivityUserSignUp">
+    insert into wx_activity_user_sign_up
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="activityCode != null">
+        activity_code,
+      </if>
+      <if test="openid != null">
+        openid,
+      </if>
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="headImageUrl != null">
+        head_image_url,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="phoneNumber != null">
+        phone_number,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+      <if test="position != null">
+        position,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="activityCode != null">
+        #{activityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null">
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="headImageUrl != null">
+        #{headImageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.wx.course.pojo.WxActivityUserSignUp">
+    update wx_activity_user_sign_up
+    <set>
+      <if test="activityCode != null">
+        activity_code = #{activityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null">
+        openid = #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="headImageUrl != null">
+        head_image_url = #{headImageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        position = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.wx.course.pojo.WxActivityUserSignUp">
+    update wx_activity_user_sign_up
+    set activity_code = #{activityCode,jdbcType=VARCHAR},
+      openid = #{openid,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      head_image_url = #{headImageUrl,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      position = #{position,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

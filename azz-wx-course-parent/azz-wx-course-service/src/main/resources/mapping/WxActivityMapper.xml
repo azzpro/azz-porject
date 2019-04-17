@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.wx.course.mapper.WxActivityMapper">
+  <resultMap id="BaseResultMap" type="com.azz.wx.course.pojo.WxActivity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="activity_code" jdbcType="VARCHAR" property="activityCode" />
+    <result column="activity_name" jdbcType="VARCHAR" property="activityName" />
+    <result column="activity_status" jdbcType="TINYINT" property="activityStatus" />
+    <result column="activity_address" jdbcType="VARCHAR" property="activityAddress" />
+    <result column="activity_time" jdbcType="TIMESTAMP" property="activityTime" />
+    <result column="activity_pic_name" jdbcType="VARCHAR" property="activityPicName" />
+    <result column="activity_pic_url" jdbcType="VARCHAR" property="activityPicUrl" />
+    <result column="sign_up_limit" jdbcType="INTEGER" property="signUpLimit" />
+    <result column="sign_up_count" jdbcType="INTEGER" property="signUpCount" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.azz.wx.course.pojo.WxActivity">
+    <result column="activity_content" jdbcType="LONGVARCHAR" property="activityContent" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, activity_code, activity_name, activity_status, activity_address, activity_time, 
+    activity_pic_name, activity_pic_url, sign_up_limit, sign_up_count, price, status, 
+    remark, create_time, creator, modify_time, modifier
+  </sql>
+  <sql id="Blob_Column_List">
+    activity_content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from wx_activity
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from wx_activity
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.azz.wx.course.pojo.WxActivity">
+    insert into wx_activity (id, activity_code, activity_name, 
+      activity_status, activity_address, activity_time, 
+      activity_pic_name, activity_pic_url, sign_up_limit, 
+      sign_up_count, price, status, 
+      remark, create_time, creator, 
+      modify_time, modifier, activity_content
+      )
+    values (#{id,jdbcType=INTEGER}, #{activityCode,jdbcType=VARCHAR}, #{activityName,jdbcType=VARCHAR}, 
+      #{activityStatus,jdbcType=TINYINT}, #{activityAddress,jdbcType=VARCHAR}, #{activityTime,jdbcType=TIMESTAMP}, 
+      #{activityPicName,jdbcType=VARCHAR}, #{activityPicUrl,jdbcType=VARCHAR}, #{signUpLimit,jdbcType=INTEGER}, 
+      #{signUpCount,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, 
+      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{activityContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.wx.course.pojo.WxActivity">
+    insert into wx_activity
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="activityCode != null">
+        activity_code,
+      </if>
+      <if test="activityName != null">
+        activity_name,
+      </if>
+      <if test="activityStatus != null">
+        activity_status,
+      </if>
+      <if test="activityAddress != null">
+        activity_address,
+      </if>
+      <if test="activityTime != null">
+        activity_time,
+      </if>
+      <if test="activityPicName != null">
+        activity_pic_name,
+      </if>
+      <if test="activityPicUrl != null">
+        activity_pic_url,
+      </if>
+      <if test="signUpLimit != null">
+        sign_up_limit,
+      </if>
+      <if test="signUpCount != null">
+        sign_up_count,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="activityContent != null">
+        activity_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="activityCode != null">
+        #{activityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="activityName != null">
+        #{activityName,jdbcType=VARCHAR},
+      </if>
+      <if test="activityStatus != null">
+        #{activityStatus,jdbcType=TINYINT},
+      </if>
+      <if test="activityAddress != null">
+        #{activityAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="activityTime != null">
+        #{activityTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activityPicName != null">
+        #{activityPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="activityPicUrl != null">
+        #{activityPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="signUpLimit != null">
+        #{signUpLimit,jdbcType=INTEGER},
+      </if>
+      <if test="signUpCount != null">
+        #{signUpCount,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="activityContent != null">
+        #{activityContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.wx.course.pojo.WxActivity">
+    update wx_activity
+    <set>
+      <if test="activityCode != null">
+        activity_code = #{activityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="activityName != null">
+        activity_name = #{activityName,jdbcType=VARCHAR},
+      </if>
+      <if test="activityStatus != null">
+        activity_status = #{activityStatus,jdbcType=TINYINT},
+      </if>
+      <if test="activityAddress != null">
+        activity_address = #{activityAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="activityTime != null">
+        activity_time = #{activityTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activityPicName != null">
+        activity_pic_name = #{activityPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="activityPicUrl != null">
+        activity_pic_url = #{activityPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="signUpLimit != null">
+        sign_up_limit = #{signUpLimit,jdbcType=INTEGER},
+      </if>
+      <if test="signUpCount != null">
+        sign_up_count = #{signUpCount,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="activityContent != null">
+        activity_content = #{activityContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.azz.wx.course.pojo.WxActivity">
+    update wx_activity
+    set activity_code = #{activityCode,jdbcType=VARCHAR},
+      activity_name = #{activityName,jdbcType=VARCHAR},
+      activity_status = #{activityStatus,jdbcType=TINYINT},
+      activity_address = #{activityAddress,jdbcType=VARCHAR},
+      activity_time = #{activityTime,jdbcType=TIMESTAMP},
+      activity_pic_name = #{activityPicName,jdbcType=VARCHAR},
+      activity_pic_url = #{activityPicUrl,jdbcType=VARCHAR},
+      sign_up_limit = #{signUpLimit,jdbcType=INTEGER},
+      sign_up_count = #{signUpCount,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL},
+      status = #{status,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      activity_content = #{activityContent,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.wx.course.pojo.WxActivity">
+    update wx_activity
+    set activity_code = #{activityCode,jdbcType=VARCHAR},
+      activity_name = #{activityName,jdbcType=VARCHAR},
+      activity_status = #{activityStatus,jdbcType=TINYINT},
+      activity_address = #{activityAddress,jdbcType=VARCHAR},
+      activity_time = #{activityTime,jdbcType=TIMESTAMP},
+      activity_pic_name = #{activityPicName,jdbcType=VARCHAR},
+      activity_pic_url = #{activityPicUrl,jdbcType=VARCHAR},
+      sign_up_limit = #{signUpLimit,jdbcType=INTEGER},
+      sign_up_count = #{signUpCount,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL},
+      status = #{status,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getActivityByActivityCode" parameterType="string" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from wx_activity
+    where activity_code = #{activityCode}
+  </select>
+  
+  <select id="getActivityInfos" parameterType="com.azz.wx.course.pojo.bo.SearchActivityInfoParam" resultType="com.azz.wx.course.pojo.vo.ActivityInfo">
+  	SELECT 
+    	activity_code AS activityCode,
+		activity_name AS activityName,
+		activity_status AS activityStatus,
+		activity_address AS activityAddress,
+		activity_time AS activityTime,
+		sign_up_limit AS signUpLimit,
+		sign_up_count AS signUpCount,
+		activity_pic_name AS activityPicName,
+		activity_pic_url AS activityPicUrl,
+		activity_content AS activityContent,
+		status AS status,
+		price AS price,
+		create_time AS createTime
+    FROM wx_activity
+    WHERE status != 0
+	    <if test="activityName != null and activityName != ''">
+	        and activity_name LIKE CONCAT('%', #{activityName}, '%') 
+	    </if>
+	    <if test="status != null">
+	        and status = #{status}
+	    </if>
+    ORDER BY create_time desc
+  </select>
+  
+  <resultMap id="ActivityDetail" type="com.azz.wx.course.pojo.vo.ActivityDetail">
+    <result column="activityCode" jdbcType="VARCHAR" property="activityCode" />
+    <result column="activityName" jdbcType="VARCHAR" property="activityName" />
+    <result column="activityStatus" jdbcType="TINYINT" property="activityStatus" />
+    <result column="activityAddress" jdbcType="VARCHAR" property="activityAddress" />
+    <result column="activityTime" jdbcType="TIMESTAMP" property="activityTime" />
+    <result column="activityPicName" jdbcType="VARCHAR" property="activityPicName" />
+    <result column="activityPicUrl" jdbcType="VARCHAR" property="activityPicUrl" />
+    <result column="signUpLimit" jdbcType="INTEGER" property="signUpLimit" />
+    <result column="signUpCount" jdbcType="INTEGER" property="signUpCount" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <collection property="signUpInfos" ofType="com.azz.wx.course.pojo.vo.SignUpInfo">
+    	<result column="openid" jdbcType="VARCHAR" property="openid" />
+	    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+	    <result column="headImageUrl" jdbcType="VARCHAR" property="headImageUrl" />
+	    <result column="userName" jdbcType="VARCHAR" property="userName" />
+	    <result column="phoneNumber" jdbcType="VARCHAR" property="phoneNumber" />
+	    <result column="companyName" jdbcType="VARCHAR" property="companyName" />
+	    <result column="position" jdbcType="VARCHAR" property="position" />
+	    <result column="signUpTime" jdbcType="TIMESTAMP" property="signUpTime" />
+    </collection>
+  </resultMap>
+  <select id="getActivityDetail" parameterType="string" resultMap="ActivityDetail">
+	  SELECT
+		ac.activity_code AS activityCode,
+		ac.activity_name AS activityName,
+		ac.activity_status AS activityStatus,
+		ac.activity_address AS activityAddress,
+		ac.activity_time AS activityTime,
+		ac.sign_up_limit AS signUpLimit,
+		ac.sign_up_count AS signUpCount,
+		ac.activity_pic_name AS activityPicName,
+		ac.activity_pic_url AS activityPicUrl,
+		ac.activity_content AS activityContent,
+		ac. STATUS AS status,
+		ac.price AS price,
+		ausu.openid AS openid,
+		ausu.nickname AS nickname,
+		ausu.head_image_url AS headImageUrl,
+		ausu.user_name AS userName,
+		ausu.phone_number AS phoneNumber,
+		ausu.company_name AS companyName,
+		ausu.position AS position,
+		ausu.create_time AS signUpTime
+	FROM
+		wx_activity ac
+	LEFT JOIN wx_activity_user_sign_up ausu ON ac.activity_code = ausu.activity_code
+	where ac.activity_code = #{activityCode}
+  </select>
+  
+</mapper>

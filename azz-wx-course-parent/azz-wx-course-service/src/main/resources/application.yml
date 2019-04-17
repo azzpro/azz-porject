@@ -84,4 +84,18 @@ eureka:
 mybatis:
   config-location: classpath:mybatis/mybatis-config.xml
   mapper-locations: classpath:mapping/**/*.xml
-
+  
+wx:
+  config:
+    appid: wx59617000f73061f3
+    secret: a088c3a7db67ccdeb9fab66de1cc6515
+    api:
+      # 获取微信ACCESS_TOKEN接口
+      getAccessTokenUrl: https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${wx.config.appid}&secret=${wx.config.secret}
+      template:
+        # 消息模板id
+        templateId: 6eBadW2JTaR9MCVKGtV_DFPDT7uwyILwcXW5wAeLawU
+        # 微信发送消息模板接口
+        sendTemplateMessageUrl: https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN
+        # 用户接收到的推送消息的详情接口
+        detailUrl: www.baidu.com

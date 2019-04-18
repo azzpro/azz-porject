@@ -67,6 +67,8 @@ public class WxActivity implements Serializable {
      * @mbg.generated
      */
     private String activityPicUrl;
+    
+    private Date deadline;
 
     /**
      * 报名人数限制
@@ -657,4 +659,12 @@ public class WxActivity implements Serializable {
         sb.append("]");
         return sb.toString();
     }
+
+	public Date getDeadline() {
+		return deadline;
+	}
+
+	public void setDeadline(Date deadline) {
+		this.deadline = deadline;
+	}
 }

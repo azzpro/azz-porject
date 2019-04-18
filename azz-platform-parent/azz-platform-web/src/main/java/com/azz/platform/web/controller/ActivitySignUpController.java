@@ -11,7 +11,6 @@ import java.io.IOException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,7 +53,7 @@ public class ActivitySignUpController {
 	 * @author 黄智聪  2019年4月17日 上午11:58:12
 	 */
 	@RequestMapping("getPlatformActivityInfos")
-	public JsonResult<Pagination<ActivityInfo>> getPlatformActivityInfos(@RequestBody SearchActivityInfoParam param) {
+	public JsonResult<Pagination<ActivityInfo>> getPlatformActivityInfos(SearchActivityInfoParam param) {
 		return signUpService.getPlatformActivityInfos(param);
 	}
 	
@@ -79,7 +78,7 @@ public class ActivitySignUpController {
 	 * @throws IOException 
 	 */
 	@RequestMapping("addActivity")
-	public JsonResult<String> addActivity(@RequestBody AddActivityWebParam webParam) throws IOException {
+	public JsonResult<String> addActivity(AddActivityWebParam webParam) throws IOException {
 		JSR303ValidateUtils.validateInputParam(webParam);
 		AddActivityParam param = new AddActivityParam();
 		BeanUtils.copyProperties(webParam, param);
@@ -99,7 +98,7 @@ public class ActivitySignUpController {
 	 * @author 黄智聪  2019年4月17日 上午11:58:12
 	 */
 	@RequestMapping("editActivity")
-	public JsonResult<String> editActivity(@RequestBody EditActivityWebParam webParam) throws IOException{
+	public JsonResult<String> editActivity(EditActivityWebParam webParam) throws IOException{
 		JSR303ValidateUtils.validateInputParam(webParam);
 		EditActivityParam param = new EditActivityParam();
 		BeanUtils.copyProperties(webParam, param);
@@ -121,7 +120,8 @@ public class ActivitySignUpController {
 	 * @author 黄智聪  2019年1月4日 下午2:51:18
 	 */
 	@RequestMapping("putOnOrPutOffOrDelActivity")
-	public JsonResult<String> putOnOrPutOffOrDelActivity(@RequestBody PutOnOrPutOffOrDelActivityParam param){
+	public JsonResult<String> putOnOrPutOffOrDelActivity(PutOnOrPutOffOrDelActivityParam param){
+		param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
 		return signUpService.putOnOrPutOffOrDelActivity(param);
 	}
 	

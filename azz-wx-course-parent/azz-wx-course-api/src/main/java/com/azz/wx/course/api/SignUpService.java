@@ -59,7 +59,7 @@ public interface SignUpService {
 	 * @return
 	 * @author 黄智聪  2019年4月17日 上午11:58:12
 	 */
-	@RequestMapping("/platform/activity/getPlatformActivityInfos")
+	@RequestMapping("/azz/api/platform/activity/getPlatformActivityInfos")
 	JsonResult<Pagination<ActivityInfo>> getPlatformActivityInfos(@RequestBody SearchActivityInfoParam param);
 	
 	/**
@@ -69,7 +69,7 @@ public interface SignUpService {
 	 * @return
 	 * @author 黄智聪  2019年4月17日 上午11:58:12
 	 */
-	@RequestMapping("/platform/activity/getPlatformActivityDetail")
+	@RequestMapping("/azz/api/platform/activity/getPlatformActivityDetail")
 	JsonResult<ActivityDetail> getPlatformActivityDetail(@RequestParam("activityCode") String activityCode);
 	
 	/**
@@ -79,7 +79,7 @@ public interface SignUpService {
 	 * @return
 	 * @author 黄智聪  2019年4月17日 上午11:58:12
 	 */
-	@RequestMapping("/platform/activity/addActivity")
+	@RequestMapping("/azz/api/platform/activity/addActivity")
 	JsonResult<String> addActivity(@RequestBody AddActivityParam param);
 	
 	/**
@@ -89,7 +89,7 @@ public interface SignUpService {
 	 * @return
 	 * @author 黄智聪  2019年4月17日 上午11:58:12
 	 */
-	@RequestMapping("/platform/activity/editActivity")
+	@RequestMapping("/azz/api/platform/activity/editActivity")
 	JsonResult<String> editActivity(@RequestBody EditActivityParam param);
 	
 	/**
@@ -99,7 +99,7 @@ public interface SignUpService {
 	 * @return
 	 * @author 黄智聪  2019年1月4日 下午2:51:18
 	 */
-	@RequestMapping("/platform/activity/putOnOrPutOffOrDelActivity")
+	@RequestMapping("/azz/api/platform/activity/putOnOrPutOffOrDelActivity")
 	JsonResult<String> putOnOrPutOffOrDelActivity(@RequestBody PutOnOrPutOffOrDelActivityParam param);
 	
 }

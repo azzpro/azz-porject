@@ -25,6 +25,10 @@ public class ActivityInfo {
     private String activityPicName;
 
     private String activityPicUrl;
+    
+    private String activityContent;
+    
+    private Date deadline;
 
     private BigDecimal price;
     

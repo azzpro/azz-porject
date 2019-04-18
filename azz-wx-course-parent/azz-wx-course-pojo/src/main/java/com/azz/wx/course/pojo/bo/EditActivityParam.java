@@ -28,18 +28,21 @@ public class EditActivityParam {
 
     private Integer signUpLimit;
 
-    @NotBlank(message = "请选择活动状态")
+    @NotNull(message = "请选择活动状态")
     private Byte status;
     
     // 是否换了主图
  	@NotNull(message = "缺少请求参数")
  	private Integer isChangeActivityPic;
     
-    @NotNull(message = "请上传活动主图")
     private ActivityPic activityPic;
     
     @NotBlank(message = "请填写活动详情")
     private String activityContent;
+    
+    @NotNull(message = "请选择报名截止时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date deadline;
     
     private BigDecimal price;
     

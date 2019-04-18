@@ -25,7 +25,7 @@ public class AddActivityParam {
 
     private Integer signUpLimit;
 
-    @NotBlank(message = "请选择活动状态")
+    @NotNull(message = "请选择活动状态")
     private Byte status;
     
     @NotNull(message = "请上传活动主图")
@@ -33,6 +33,10 @@ public class AddActivityParam {
     
     @NotBlank(message = "请填写活动详情")
     private String activityContent;
+    
+    @NotNull(message = "请选择报名截止时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date deadline;
     
     private BigDecimal price = BigDecimal.ZERO;
     

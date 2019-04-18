@@ -12,6 +12,7 @@
     <result column="activity_pic_url" jdbcType="VARCHAR" property="activityPicUrl" />
     <result column="sign_up_limit" jdbcType="INTEGER" property="signUpLimit" />
     <result column="sign_up_count" jdbcType="INTEGER" property="signUpCount" />
+    <result column="deadline" jdbcType="TIMESTAMP" property="deadline" />
     <result column="price" jdbcType="DECIMAL" property="price" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
@@ -25,7 +26,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     id, activity_code, activity_name, activity_status, activity_address, activity_time, 
-    activity_pic_name, activity_pic_url, sign_up_limit, sign_up_count, price, status, 
+    activity_pic_name, activity_pic_url, sign_up_limit, sign_up_count, price, deadline, status, 
     remark, create_time, creator, modify_time, modifier
   </sql>
   <sql id="Blob_Column_List">
@@ -47,14 +48,14 @@
     insert into wx_activity (id, activity_code, activity_name, 
       activity_status, activity_address, activity_time, 
       activity_pic_name, activity_pic_url, sign_up_limit, 
-      sign_up_count, price, status, 
+      sign_up_count, price, status, deadline,
       remark, create_time, creator, 
       modify_time, modifier, activity_content
       )
     values (#{id,jdbcType=INTEGER}, #{activityCode,jdbcType=VARCHAR}, #{activityName,jdbcType=VARCHAR}, 
       #{activityStatus,jdbcType=TINYINT}, #{activityAddress,jdbcType=VARCHAR}, #{activityTime,jdbcType=TIMESTAMP}, 
       #{activityPicName,jdbcType=VARCHAR}, #{activityPicUrl,jdbcType=VARCHAR}, #{signUpLimit,jdbcType=INTEGER}, 
-      #{signUpCount,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, 
+      #{signUpCount,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, #{deadline,jdbcType=TIMESTAMP},
       #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{activityContent,jdbcType=LONGVARCHAR}
       )
@@ -100,6 +101,9 @@
       </if>
       <if test="remark != null">
         remark,
+      </if>
+      <if test="deadline != null">
+        deadline,
       </if>
       <if test="createTime != null">
         create_time,
@@ -157,6 +161,9 @@
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="deadline != null">
+        #{deadline,jdbcType=TIMESTAMP},
+      </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -213,6 +220,9 @@
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="deadline != null">
+        deadline = #{deadline,jdbcType=TIMESTAMP},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -245,6 +255,7 @@
       price = #{price,jdbcType=DECIMAL},
       status = #{status,jdbcType=TINYINT},
       remark = #{remark,jdbcType=VARCHAR},
+      deadline = #{deadline,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
@@ -266,6 +277,7 @@
       price = #{price,jdbcType=DECIMAL},
       status = #{status,jdbcType=TINYINT},
       remark = #{remark,jdbcType=VARCHAR},
+      deadline = #{deadline,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
@@ -294,6 +306,7 @@
 		activity_pic_name AS activityPicName,
 		activity_pic_url AS activityPicUrl,
 		activity_content AS activityContent,
+		deadline AS deadline,
 		status AS status,
 		price AS price,
 		create_time AS createTime
@@ -308,18 +321,22 @@
     ORDER BY create_time desc
   </select>
   
-  <resultMap id="ActivityDetail" type="com.azz.wx.course.pojo.vo.ActivityDetail">
-    <result column="activityCode" jdbcType="VARCHAR" property="activityCode" />
-    <result column="activityName" jdbcType="VARCHAR" property="activityName" />
-    <result column="activityStatus" jdbcType="TINYINT" property="activityStatus" />
-    <result column="activityAddress" jdbcType="VARCHAR" property="activityAddress" />
-    <result column="activityTime" jdbcType="TIMESTAMP" property="activityTime" />
-    <result column="activityPicName" jdbcType="VARCHAR" property="activityPicName" />
-    <result column="activityPicUrl" jdbcType="VARCHAR" property="activityPicUrl" />
-    <result column="signUpLimit" jdbcType="INTEGER" property="signUpLimit" />
-    <result column="signUpCount" jdbcType="INTEGER" property="signUpCount" />
-    <result column="price" jdbcType="DECIMAL" property="price" />
-    <result column="status" jdbcType="TINYINT" property="status" />
+  <resultMap id="activityDetail" type="com.azz.wx.course.pojo.vo.ActivityDetail">
+  	<association property="activityInfo" javaType="com.azz.wx.course.pojo.vo.ActivityInfo">
+	    <result column="activityCode" jdbcType="VARCHAR" property="activityCode" />
+	    <result column="activityName" jdbcType="VARCHAR" property="activityName" />
+	    <result column="activityStatus" jdbcType="TINYINT" property="activityStatus" />
+	    <result column="activityAddress" jdbcType="VARCHAR" property="activityAddress" />
+	    <result column="activityTime" jdbcType="TIMESTAMP" property="activityTime" />
+	    <result column="activityPicName" jdbcType="VARCHAR" property="activityPicName" />
+	    <result column="activityPicUrl" jdbcType="VARCHAR" property="activityPicUrl" />
+	    <result column="signUpLimit" jdbcType="INTEGER" property="signUpLimit" />
+	    <result column="signUpCount" jdbcType="INTEGER" property="signUpCount" />
+	    <result column="activityContent" jdbcType="LONGVARCHAR" property="activityContent" />
+	    <result column="price" jdbcType="DECIMAL" property="price" />
+	    <result column="status" jdbcType="TINYINT" property="status" />
+	    <result column="deadline" jdbcType="TIMESTAMP" property="deadline" />
+  	</association>
     <collection property="signUpInfos" ofType="com.azz.wx.course.pojo.vo.SignUpInfo">
     	<result column="openid" jdbcType="VARCHAR" property="openid" />
 	    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
@@ -331,7 +348,7 @@
 	    <result column="signUpTime" jdbcType="TIMESTAMP" property="signUpTime" />
     </collection>
   </resultMap>
-  <select id="getActivityDetail" parameterType="string" resultMap="ActivityDetail">
+  <select id="getActivityDetail" parameterType="string" resultMap="activityDetail">
 	  SELECT
 		ac.activity_code AS activityCode,
 		ac.activity_name AS activityName,
@@ -345,6 +362,7 @@
 		ac.activity_content AS activityContent,
 		ac. STATUS AS status,
 		ac.price AS price,
+		ac.deadline AS deadline,
 		ausu.openid AS openid,
 		ausu.nickname AS nickname,
 		ausu.head_image_url AS headImageUrl,

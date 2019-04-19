@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.alibaba.fastjson.JSONObject;
 import com.azz.core.common.JsonResult;
-import com.azz.core.common.errorcode.JSR303ErrorCode;
-import com.azz.core.common.errorcode.ShiroAuthErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.FileConstants;
@@ -32,7 +30,6 @@ import com.azz.core.constants.WxActivityConstants.ActivityStatus;
 import com.azz.core.constants.WxActivityConstants.IsChangeActivityPic;
 import com.azz.core.exception.BaseException;
 import com.azz.core.reconstructed.exception.ValidationException;
-import com.azz.exception.JSR303ValidationException;
 import com.azz.system.api.SystemImageUploadService;
 import com.azz.system.bo.UploadImageParam;
 import com.azz.util.DateUtils;

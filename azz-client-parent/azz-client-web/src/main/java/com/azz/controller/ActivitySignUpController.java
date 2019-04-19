@@ -52,7 +52,7 @@ public class ActivitySignUpController {
 	 * @author 黄智聪  2019年4月19日 下午6:03:31
 	 */
 	@RequestMapping("/getWxUserInfoByCode")
-	public JsonResult<WxUserInfo> getWxUserInfoByCode(String code) {
+	public JsonResult<WxUserInfo> getWxUserInfoByCode(@RequestParam("code")String code) {
 		return signUpService.getWxUserInfoByCode(code);
 	}
 	

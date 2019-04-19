@@ -107,7 +107,7 @@ public class SignUpService {
 	
 	/************************************************** 客户端start **********************************************/
 	
-	public JsonResult<WxUserInfo> getWxUserInfoByCode(String code) {
+	public JsonResult<WxUserInfo> getWxUserInfoByCode(@RequestParam("code")String code) {
 		WxUserInfo wxUserInfo = new WxUserInfo();
     	if(StringUtils.isBlank(code)) {
     		throw new ValidationException("缺少请求参数");

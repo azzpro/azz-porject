@@ -53,7 +53,7 @@ public interface SignUpService {
 	 * @author 黄智聪  2019年4月19日 下午6:03:31
 	 */
 	@RequestMapping("/azz/api/client/activity/getWxUserInfoByCode")
-	JsonResult<WxUserInfo> getWxUserInfoByCode(String code);
+	JsonResult<WxUserInfo> getWxUserInfoByCode(@RequestParam("code")String code);
 	
 	/**
 	 * 

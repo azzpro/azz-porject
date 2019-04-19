@@ -16,11 +16,14 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.alibaba.fastjson.JSONObject;
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.errorcode.JSR303ErrorCode;
+import com.azz.core.common.errorcode.ShiroAuthErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.FileConstants;
@@ -29,14 +32,18 @@ import com.azz.core.constants.WxActivityConstants.ActivityStatus;
 import com.azz.core.constants.WxActivityConstants.IsChangeActivityPic;
 import com.azz.core.exception.BaseException;
 import com.azz.core.reconstructed.exception.ValidationException;
+import com.azz.exception.JSR303ValidationException;
 import com.azz.system.api.SystemImageUploadService;
 import com.azz.system.bo.UploadImageParam;
 import com.azz.util.DateUtils;
 import com.azz.util.HttpClientUtils;
 import com.azz.util.JSR303ValidateUtils;
+import com.azz.util.OkHttpUtil;
 import com.azz.util.StringUtils;
 import com.azz.wx.course.mapper.WxActivityMapper;
+import com.azz.wx.course.mapper.WxActivityUserSignUpMapper;
 import com.azz.wx.course.pojo.WxActivity;
+import com.azz.wx.course.pojo.WxActivityUserSignUp;
 import com.azz.wx.course.pojo.bo.ActivityPic;
 import com.azz.wx.course.pojo.bo.AddActivityParam;
 import com.azz.wx.course.pojo.bo.EditActivityParam;
@@ -47,10 +54,12 @@ import com.azz.wx.course.pojo.bo.SuccessSignUpNoticeParam;
 import com.azz.wx.course.pojo.bo.TemplateData;
 import com.azz.wx.course.pojo.bo.WechatTemplate;
 import com.azz.wx.course.pojo.vo.ActivityInfo;
+import com.azz.wx.course.pojo.vo.ClientSignUpInfo;
 import com.azz.wx.course.pojo.vo.SignUpInfo;
 import com.azz.wx.course.pojo.vo.UploadFileInfo;
 import com.azz.wx.course.pojo.vo.WechatRequestParam;
 import com.azz.wx.course.pojo.vo.WechatResponse;
+import com.azz.wx.course.pojo.vo.WxUserInfo;
 import com.github.pagehelper.PageHelper;
 import com.google.gson.Gson;
 
@@ -62,12 +71,21 @@ import com.google.gson.Gson;
  * @version 1.0
  * @author 黄智聪 2019年4月16日 下午5:15:24
  */
+@Transactional(rollbackFor = Exception.class)
 @Service
 public class SignUpService {
 	
 	// 获取微信ACCESS_TOKEN接口
 	@Value("${wx.config.api.getAccessTokenUrl}")
 	private String getAccessTokenUrl;
+	
+	// 获取微信用户信息accessToken的接口
+	@Value("${wx.config.api.getWxUserAccessTokenUrl}")
+	private String getWxUserAccessTokenUrl;
+	
+	// 获取微信用户信息的接口
+	@Value("${wx.config.api.getWxUserInfoUrl}")
+	private String getWxUserInfoUrl;
 	
 	// 微信发送消息模板接口
 	@Value("${wx.config.api.template.sendTemplateMessageUrl}")
@@ -85,9 +103,40 @@ public class SignUpService {
 	private WxActivityMapper wxActivityMapper;
 	
 	@Autowired
+	private WxActivityUserSignUpMapper wxActivityUserSignUpMapper;
+	
+	@Autowired
 	SystemImageUploadService systemImageUploadService;
 	
 	/************************************************** 客户端start **********************************************/
+	
+	public JsonResult<WxUserInfo> getWxUserInfoByCode(String code) {
+		WxUserInfo wxUserInfo = new WxUserInfo();
+    	if(StringUtils.isBlank(code)) {
+    		throw new ValidationException("缺少请求参数");
+    	}
+		String url = getWxUserAccessTokenUrl.replace("CODE", code);
+		// 获取accessToken
+		String accessTokenResult = OkHttpUtil.get(url);
+		JSONObject jsonObject = JSONObject.parseObject(accessTokenResult);
+		String openid = jsonObject.getString("openid");
+        if (openid != null) {
+            //拉取用户信息
+            String access_token = jsonObject.getString("access_token");
+            url = getWxUserInfoUrl.replace("ACCESS_TOKEN", access_token).replace("OPENID", openid);
+            //第二次请求，用openid与access_token获取用户的信息
+            String usesrInfo = OkHttpUtil.get(url);
+            jsonObject = JSONObject.parseObject(usesrInfo);
+            String nickname = jsonObject.getString("nickname");
+            String headimgurl = jsonObject.getString("headimgurl");
+            wxUserInfo.setOpenid(openid);
+            wxUserInfo.setNickName(nickname);
+            wxUserInfo.setHeadimgurl(headimgurl);
+        }else {
+        	throw new ValidationException("获取微信用户信息出错");
+        }
+        return JsonResult.successJsonResult(wxUserInfo);
+	}
 	
 	/**
 	 * 
@@ -134,16 +183,56 @@ public class SignUpService {
 	 * @return
 	 * @author 黄智聪  2019年4月17日 上午11:58:12
 	 */
-	public JsonResult<Pagination<SignUpInfo>> getSignUpInfos(@RequestBody SearchActivityInfoParam param) {
+	public JsonResult<Pagination<ClientSignUpInfo>> getSignUpInfos(@RequestBody SearchActivityInfoParam param) {
 		if(StringUtils.isBlank(param.getActivityCode())) {
 			throw new ValidationException("请选择活动");
 		}
 		PageHelper.startPage(param.getPageNum(), param.getPageSize());
-		List<SignUpInfo> infos = wxActivityMapper.getActivitySignUpInfoByActivityCode(param.getActivityCode());
+		List<ClientSignUpInfo> infos = wxActivityMapper.getActivityClientSignUpInfoByActivityCode(param.getActivityCode());
 		return JsonResult.successJsonResult(new Pagination<>(infos));
 	}
 	
+	/**
+	 * 
+	 * <p>报名</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年4月19日 上午10:05:41
+	 */
 	public JsonResult<String> signUp(@RequestBody SignUpParam param){
+		JSR303ValidateUtils.validateInputParam(param);
+		WxActivity activity = wxActivityMapper.getActivityByActivityCode(param.getActivityCode());
+		if(activity == null) {
+			throw new ValidationException("活动不存在");
+		}
+		if(activity.getSignUpCount() == activity.getSignUpLimit()) {
+			throw new ValidationException("已超出报名人数上限，报名失败");
+		}
+		int count = wxActivityUserSignUpMapper.countSignUpRecodeByOpenid(param.getOpenid(), param.getActivityCode());
+		if(count > 0) {
+			throw new ValidationException("请勿重复报名");
+		}
+		Date nowDate = new Date();
+		WxActivityUserSignUp record = WxActivityUserSignUp.builder()
+				.activityCode(param.getActivityCode())
+				.companyName(param.getCompanyName())
+				.createTime(nowDate)
+				.headImageUrl(param.getHeadImageUrl())
+				.nickname(param.getNickname())
+				.openid(param.getOpenid())
+				.phoneNumber(param.getPhoneNumber())
+				.position(param.getPosition())
+				.userName(param.getUserName())
+				.build();
+		wxActivityUserSignUpMapper.insertSelective(record);
+		Integer signUpCount = activity.getSignUpCount();
+		signUpCount += 1;// 报名人数+1
+		WxActivity updateRecord = WxActivity.builder()
+				.id(activity.getId())
+				.signUpCount(signUpCount)
+				.createTime(nowDate)
+				.build();
+		wxActivityMapper.updateByPrimaryKeySelective(updateRecord);
 		return JsonResult.successJsonResult();
 	}
 	

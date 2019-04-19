@@ -19,8 +19,11 @@ import com.azz.wx.course.pojo.bo.AddActivityParam;
 import com.azz.wx.course.pojo.bo.EditActivityParam;
 import com.azz.wx.course.pojo.bo.PutOnOrPutOffOrDelActivityParam;
 import com.azz.wx.course.pojo.bo.SearchActivityInfoParam;
+import com.azz.wx.course.pojo.bo.SignUpParam;
 import com.azz.wx.course.pojo.vo.ActivityInfo;
+import com.azz.wx.course.pojo.vo.ClientSignUpInfo;
 import com.azz.wx.course.pojo.vo.SignUpInfo;
+import com.azz.wx.course.pojo.vo.WxUserInfo;
 
 /**
  * <P>
@@ -41,6 +44,16 @@ public interface SignUpService {
 	 */
 	@RequestMapping(value = "/azz/api/client/activity/getAccesstoken", method = RequestMethod.POST)
 	JsonResult<String> getAccesstoken();
+	
+	/**
+	 * 
+	 * <p>获取微信用户信息</p>
+	 * @param code
+	 * @return
+	 * @author 黄智聪  2019年4月19日 下午6:03:31
+	 */
+	@RequestMapping("/azz/api/client/activity/getWxUserInfoByCode")
+	JsonResult<WxUserInfo> getWxUserInfoByCode(String code);
 	
 	/**
 	 * 
@@ -70,7 +83,17 @@ public interface SignUpService {
 	 * @author 黄智聪  2019年4月17日 上午11:58:12
 	 */
 	@RequestMapping(value = "/azz/api/client/activity/getSignUpInfos", method = RequestMethod.POST)
-	JsonResult<Pagination<SignUpInfo>> getSignUpInfos(@RequestBody SearchActivityInfoParam param);
+	JsonResult<Pagination<ClientSignUpInfo>> getSignUpInfos(@RequestBody SearchActivityInfoParam param);
+	
+	/**
+	 * 
+	 * <p>报名</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年4月19日 上午10:56:40
+	 */
+	@RequestMapping(value = "/azz/api/client/activity/signUp", method = RequestMethod.POST)
+	JsonResult<String> signUp(@RequestBody SignUpParam param);
 	
 	/**
 	 * 

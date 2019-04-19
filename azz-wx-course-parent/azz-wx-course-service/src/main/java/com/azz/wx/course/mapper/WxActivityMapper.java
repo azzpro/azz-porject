@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.azz.wx.course.pojo.WxActivity;
 import com.azz.wx.course.pojo.bo.SearchActivityInfoParam;
 import com.azz.wx.course.pojo.vo.ActivityInfo;
+import com.azz.wx.course.pojo.vo.ClientSignUpInfo;
 import com.azz.wx.course.pojo.vo.SignUpInfo;
 
 @Mapper
@@ -53,4 +54,14 @@ public interface WxActivityMapper {
 	 * @author 黄智聪  2019年4月17日 下午7:20:20
 	 */
 	List<SignUpInfo> getActivitySignUpInfoByActivityCode(String activityCode);
+	
+	/**
+	 * 
+	 * <p>查询活动报名人数列表</p>
+	 * @param activityCode
+	 * @return
+	 * @author 黄智聪  2019年4月17日 下午7:20:20
+	 */
+	List<ClientSignUpInfo> getActivityClientSignUpInfoByActivityCode(String activityCode);
+
 }

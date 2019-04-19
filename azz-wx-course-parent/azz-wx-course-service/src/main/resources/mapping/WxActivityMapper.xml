@@ -298,14 +298,21 @@
   	SELECT 
     	activity_code AS activityCode,
 		activity_name AS activityName,
-		activity_status AS activityStatus,
+		CASE
+		WHEN (
+			now() > deadline
+			OR sign_up_count >= sign_up_limit
+		) THEN
+			2
+		ELSE
+			1
+		END AS activityStatus,
 		activity_address AS activityAddress,
 		activity_time AS activityTime,
 		sign_up_limit AS signUpLimit,
 		sign_up_count AS signUpCount,
 		activity_pic_name AS activityPicName,
 		activity_pic_url AS activityPicUrl,
-		activity_content AS activityContent,
 		deadline AS deadline,
 		status AS status,
 		price AS price,
@@ -325,7 +332,15 @@
 	  SELECT
 		ac.activity_code AS activityCode,
 		ac.activity_name AS activityName,
-		ac.activity_status AS activityStatus,
+		CASE
+		WHEN (
+			now() > deadline
+			OR sign_up_count >= sign_up_limit
+		) THEN
+			2
+		ELSE
+			1
+		END AS activityStatus,
 		ac.activity_address AS activityAddress,
 		ac.activity_time AS activityTime,
 		ac.sign_up_limit AS signUpLimit,
@@ -339,6 +354,15 @@
 	FROM
 		wx_activity ac
 	where ac.activity_code = #{activityCode}
+  </select>
+  
+  <select id="getActivityClientSignUpInfoByActivityCode" parameterType="string" resultType="com.azz.wx.course.pojo.vo.ClientSignUpInfo">
+	  SELECT
+		ausu.nickname AS nickname,
+		ausu.head_image_url AS headImageUrl
+	FROM
+		wx_activity_user_sign_up ausu 
+	where ausu.activity_code = #{activityCode}
   </select>
   
   <select id="getActivitySignUpInfoByActivityCode" parameterType="string" resultType="com.azz.wx.course.pojo.vo.SignUpInfo">
@@ -355,7 +379,5 @@
 		wx_activity_user_sign_up ausu 
 	where ausu.activity_code = #{activityCode}
   </select>
-  
-  
   
 </mapper>

@@ -161,4 +161,14 @@
       creator = #{creator,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <select id="countSignUpRecodeByOpenid" resultType="int">
+  	SELECT
+		count(1)
+	FROM
+		wx_activity_user_sign_up
+	WHERE
+		openid = #{openid}
+	AND activity_code = #{activityCode}
+  </select>
 </mapper>

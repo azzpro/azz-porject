@@ -3,6 +3,13 @@ package com.azz.wx.course.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class WxActivityUserSignUp implements Serializable {
     /**
      * 主键id

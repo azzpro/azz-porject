@@ -19,8 +19,8 @@ import com.azz.wx.course.pojo.bo.AddActivityParam;
 import com.azz.wx.course.pojo.bo.EditActivityParam;
 import com.azz.wx.course.pojo.bo.PutOnOrPutOffOrDelActivityParam;
 import com.azz.wx.course.pojo.bo.SearchActivityInfoParam;
-import com.azz.wx.course.pojo.vo.ActivityDetail;
 import com.azz.wx.course.pojo.vo.ActivityInfo;
+import com.azz.wx.course.pojo.vo.SignUpInfo;
 
 /**
  * <P>
@@ -54,6 +54,26 @@ public interface SignUpService {
 	
 	/**
 	 * 
+	 * <p>查询活动详情</p>
+	 * @param activityCode
+	 * @return
+	 * @author 黄智聪  2019年4月17日 上午11:58:12
+	 */
+	@RequestMapping(value = "/azz/api/client/activity/getActivityDetail", method = RequestMethod.POST)
+	JsonResult<ActivityInfo> getActivityDetail(@RequestParam("activityCode") String activityCode);
+	
+	/**
+	 * 
+	 * <p>查询活动报名人员信息</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年4月17日 上午11:58:12
+	 */
+	@RequestMapping(value = "/azz/api/client/activity/getSignUpInfos", method = RequestMethod.POST)
+	JsonResult<Pagination<SignUpInfo>> getSignUpInfos(@RequestBody SearchActivityInfoParam param);
+	
+	/**
+	 * 
 	 * <p>查询活动列表</p>
 	 * @param param
 	 * @return
@@ -70,7 +90,19 @@ public interface SignUpService {
 	 * @author 黄智聪  2019年4月17日 上午11:58:12
 	 */
 	@RequestMapping("/azz/api/platform/activity/getPlatformActivityDetail")
-	JsonResult<ActivityDetail> getPlatformActivityDetail(@RequestParam("activityCode") String activityCode);
+	JsonResult<ActivityInfo> getPlatformActivityDetail(@RequestParam("activityCode") String activityCode);
+	
+	
+	/**
+	 * 
+	 * <p>查询活动报名人员信息</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年4月17日 上午11:58:12
+	 */
+	@RequestMapping("/azz/api/platform/activity/getPlatformSignUpInfos")
+	JsonResult<Pagination<SignUpInfo>> getPlatformSignUpInfos(@RequestBody SearchActivityInfoParam param);
+	
 	
 	/**
 	 * 

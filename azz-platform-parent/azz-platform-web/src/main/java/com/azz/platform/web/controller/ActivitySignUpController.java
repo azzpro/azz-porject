@@ -30,8 +30,8 @@ import com.azz.wx.course.pojo.bo.EditActivityParam;
 import com.azz.wx.course.pojo.bo.EditActivityWebParam;
 import com.azz.wx.course.pojo.bo.PutOnOrPutOffOrDelActivityParam;
 import com.azz.wx.course.pojo.bo.SearchActivityInfoParam;
-import com.azz.wx.course.pojo.vo.ActivityDetail;
 import com.azz.wx.course.pojo.vo.ActivityInfo;
+import com.azz.wx.course.pojo.vo.SignUpInfo;
 
 /**
  * <P>TODO</P>
@@ -65,8 +65,20 @@ public class ActivitySignUpController {
 	 * @author 黄智聪  2019年4月17日 上午11:58:12
 	 */
 	@RequestMapping("getPlatformActivityDetail")
-	public JsonResult<ActivityDetail> getPlatformActivityDetail(@RequestParam("activityCode") String activityCode) {
+	public JsonResult<ActivityInfo> getPlatformActivityDetail(@RequestParam("activityCode") String activityCode) {
 		return signUpService.getPlatformActivityDetail(activityCode);
+	}
+	
+	/**
+	 * 
+	 * <p>查询活动报名人员信息</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年4月17日 上午11:58:12
+	 */
+	@RequestMapping("getPlatformSignUpInfos")
+	JsonResult<Pagination<SignUpInfo>> getPlatformSignUpInfos(SearchActivityInfoParam param) {
+		return signUpService.getPlatformSignUpInfos(param);
 	}
 	
 	/**

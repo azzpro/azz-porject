@@ -42,11 +42,12 @@ import com.azz.wx.course.pojo.bo.AddActivityParam;
 import com.azz.wx.course.pojo.bo.EditActivityParam;
 import com.azz.wx.course.pojo.bo.PutOnOrPutOffOrDelActivityParam;
 import com.azz.wx.course.pojo.bo.SearchActivityInfoParam;
+import com.azz.wx.course.pojo.bo.SignUpParam;
 import com.azz.wx.course.pojo.bo.SuccessSignUpNoticeParam;
 import com.azz.wx.course.pojo.bo.TemplateData;
 import com.azz.wx.course.pojo.bo.WechatTemplate;
-import com.azz.wx.course.pojo.vo.ActivityDetail;
 import com.azz.wx.course.pojo.vo.ActivityInfo;
+import com.azz.wx.course.pojo.vo.SignUpInfo;
 import com.azz.wx.course.pojo.vo.UploadFileInfo;
 import com.azz.wx.course.pojo.vo.WechatRequestParam;
 import com.azz.wx.course.pojo.vo.WechatResponse;
@@ -111,6 +112,40 @@ public class SignUpService {
 		return JsonResult.successJsonResult(new Pagination<>(infos));
 	}
 	
+	/**
+	 * 
+	 * <p>查询活动详情</p>
+	 * @param activityCode
+	 * @return
+	 * @author 黄智聪  2019年4月17日 上午11:58:12
+	 */
+	public JsonResult<ActivityInfo> getActivityDetail(@RequestParam("activityCode") String activityCode) {
+		ActivityInfo detail = wxActivityMapper.getActivityInfoByActivityCode(activityCode);
+		if(detail == null) {
+			throw new ValidationException("活动不存在");
+		}
+		return JsonResult.successJsonResult(detail);
+	}
+	
+	/**
+	 * 
+	 * <p>查询活动报名人员信息</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年4月17日 上午11:58:12
+	 */
+	public JsonResult<Pagination<SignUpInfo>> getSignUpInfos(@RequestBody SearchActivityInfoParam param) {
+		if(StringUtils.isBlank(param.getActivityCode())) {
+			throw new ValidationException("请选择活动");
+		}
+		PageHelper.startPage(param.getPageNum(), param.getPageSize());
+		List<SignUpInfo> infos = wxActivityMapper.getActivitySignUpInfoByActivityCode(param.getActivityCode());
+		return JsonResult.successJsonResult(new Pagination<>(infos));
+	}
+	
+	public JsonResult<String> signUp(@RequestBody SignUpParam param){
+		return JsonResult.successJsonResult();
+	}
 	
 	/**
 	 * 
@@ -213,12 +248,28 @@ public class SignUpService {
 	 * @return
 	 * @author 黄智聪  2019年4月17日 上午11:58:12
 	 */
-	public JsonResult<ActivityDetail> getPlatformActivityDetail(@RequestParam("activityCode") String activityCode) {
-		ActivityDetail detail = wxActivityMapper.getActivityDetail(activityCode);
+	public JsonResult<ActivityInfo> getPlatformActivityDetail(@RequestParam("activityCode") String activityCode) {
+		ActivityInfo detail = wxActivityMapper.getActivityInfoByActivityCode(activityCode);
 		if(detail == null) {
 			throw new ValidationException("活动不存在");
 		}
 		return JsonResult.successJsonResult(detail);
+	}
+	
+	/**
+	 * 
+	 * <p>查询活动报名人员信息</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年4月17日 上午11:58:12
+	 */
+	public JsonResult<Pagination<SignUpInfo>> getPlatformSignUpInfos(@RequestBody SearchActivityInfoParam param) {
+		if(StringUtils.isBlank(param.getActivityCode())) {
+			throw new ValidationException("请选择活动");
+		}
+		PageHelper.startPage(param.getPageNum(), param.getPageSize());
+		List<SignUpInfo> infos = wxActivityMapper.getActivitySignUpInfoByActivityCode(param.getActivityCode());
+		return JsonResult.successJsonResult(new Pagination<>(infos));
 	}
 	
 	/**

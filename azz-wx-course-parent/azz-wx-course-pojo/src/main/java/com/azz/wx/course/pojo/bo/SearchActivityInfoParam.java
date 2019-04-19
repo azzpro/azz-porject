@@ -23,6 +23,8 @@ public class SearchActivityInfoParam extends QueryPage{
 
 	private static final long serialVersionUID = 754959189102406644L;
 	
+	private String activityCode;
+	
 	private String activityName;
 	
 	private Byte status;

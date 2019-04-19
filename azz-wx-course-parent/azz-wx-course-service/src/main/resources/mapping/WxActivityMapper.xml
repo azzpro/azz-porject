@@ -321,34 +321,7 @@
     ORDER BY create_time desc
   </select>
   
-  <resultMap id="activityDetail" type="com.azz.wx.course.pojo.vo.ActivityDetail">
-  	<association property="activityInfo" javaType="com.azz.wx.course.pojo.vo.ActivityInfo">
-	    <result column="activityCode" jdbcType="VARCHAR" property="activityCode" />
-	    <result column="activityName" jdbcType="VARCHAR" property="activityName" />
-	    <result column="activityStatus" jdbcType="TINYINT" property="activityStatus" />
-	    <result column="activityAddress" jdbcType="VARCHAR" property="activityAddress" />
-	    <result column="activityTime" jdbcType="TIMESTAMP" property="activityTime" />
-	    <result column="activityPicName" jdbcType="VARCHAR" property="activityPicName" />
-	    <result column="activityPicUrl" jdbcType="VARCHAR" property="activityPicUrl" />
-	    <result column="signUpLimit" jdbcType="INTEGER" property="signUpLimit" />
-	    <result column="signUpCount" jdbcType="INTEGER" property="signUpCount" />
-	    <result column="activityContent" jdbcType="LONGVARCHAR" property="activityContent" />
-	    <result column="price" jdbcType="DECIMAL" property="price" />
-	    <result column="status" jdbcType="TINYINT" property="status" />
-	    <result column="deadline" jdbcType="TIMESTAMP" property="deadline" />
-  	</association>
-    <collection property="signUpInfos" ofType="com.azz.wx.course.pojo.vo.SignUpInfo">
-    	<result column="openid" jdbcType="VARCHAR" property="openid" />
-	    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
-	    <result column="headImageUrl" jdbcType="VARCHAR" property="headImageUrl" />
-	    <result column="userName" jdbcType="VARCHAR" property="userName" />
-	    <result column="phoneNumber" jdbcType="VARCHAR" property="phoneNumber" />
-	    <result column="companyName" jdbcType="VARCHAR" property="companyName" />
-	    <result column="position" jdbcType="VARCHAR" property="position" />
-	    <result column="signUpTime" jdbcType="TIMESTAMP" property="signUpTime" />
-    </collection>
-  </resultMap>
-  <select id="getActivityDetail" parameterType="string" resultMap="activityDetail">
+  <select id="getActivityInfoByActivityCode" parameterType="string" resultType="com.azz.wx.course.pojo.vo.ActivityInfo">
 	  SELECT
 		ac.activity_code AS activityCode,
 		ac.activity_name AS activityName,
@@ -362,7 +335,14 @@
 		ac.activity_content AS activityContent,
 		ac. STATUS AS status,
 		ac.price AS price,
-		ac.deadline AS deadline,
+		ac.deadline AS deadline
+	FROM
+		wx_activity ac
+	where ac.activity_code = #{activityCode}
+  </select>
+  
+  <select id="getActivitySignUpInfoByActivityCode" parameterType="string" resultType="com.azz.wx.course.pojo.vo.SignUpInfo">
+	  SELECT
 		ausu.openid AS openid,
 		ausu.nickname AS nickname,
 		ausu.head_image_url AS headImageUrl,
@@ -372,9 +352,10 @@
 		ausu.position AS position,
 		ausu.create_time AS signUpTime
 	FROM
-		wx_activity ac
-	LEFT JOIN wx_activity_user_sign_up ausu ON ac.activity_code = ausu.activity_code
-	where ac.activity_code = #{activityCode}
+		wx_activity_user_sign_up ausu 
+	where ausu.activity_code = #{activityCode}
   </select>
+  
+  
   
 </mapper>

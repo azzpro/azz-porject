@@ -10,6 +10,8 @@ package com.azz.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
@@ -51,5 +53,17 @@ public class ActivitySignUpController {
 	public JsonResult<Pagination<ActivityInfo>> getActivityInfos(@RequestBody SearchActivityInfoParam param) {
 		return signUpService.getActivityInfos(param);
 	}
+	
+	/**
+	 * 
+	 * <p>查询活动列表</p>
+	 * @return
+	 * @author 黄智聪  2019年4月16日 下午5:58:40
+	 */
+	@RequestMapping(value = "/getActivityDetail", method = RequestMethod.POST)
+	public JsonResult<ActivityInfo> getActivityDetail(@RequestParam("activityCode") String activityCode) {
+		return signUpService.getActivityDetail(activityCode);
+	}
+	
 }
 

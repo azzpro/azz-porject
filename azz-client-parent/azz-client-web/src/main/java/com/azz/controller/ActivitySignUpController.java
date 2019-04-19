@@ -8,9 +8,7 @@
 package com.azz.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,7 +16,10 @@ import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
 import com.azz.wx.course.api.SignUpService;
 import com.azz.wx.course.pojo.bo.SearchActivityInfoParam;
+import com.azz.wx.course.pojo.bo.SignUpParam;
 import com.azz.wx.course.pojo.vo.ActivityInfo;
+import com.azz.wx.course.pojo.vo.ClientSignUpInfo;
+import com.azz.wx.course.pojo.vo.WxUserInfo;
 
 /**
  * <P>TODO</P>
@@ -45,12 +46,24 @@ public class ActivitySignUpController {
 	
 	/**
 	 * 
+	 * <p>获取微信用户信息</p>
+	 * @param code
+	 * @return
+	 * @author 黄智聪  2019年4月19日 下午6:03:31
+	 */
+	@RequestMapping("/getWxUserInfoByCode")
+	public JsonResult<WxUserInfo> getWxUserInfoByCode(String code) {
+		return signUpService.getWxUserInfoByCode(code);
+	}
+	
+	/**
+	 * 
 	 * <p>查询活动列表</p>
 	 * @return
 	 * @author 黄智聪  2019年4月16日 下午5:58:40
 	 */
 	@RequestMapping("/getActivityInfos")
-	public JsonResult<Pagination<ActivityInfo>> getActivityInfos(@RequestBody SearchActivityInfoParam param) {
+	public JsonResult<Pagination<ActivityInfo>> getActivityInfos(SearchActivityInfoParam param) {
 		return signUpService.getActivityInfos(param);
 	}
 	
@@ -60,9 +73,33 @@ public class ActivitySignUpController {
 	 * @return
 	 * @author 黄智聪  2019年4月16日 下午5:58:40
 	 */
-	@RequestMapping(value = "/getActivityDetail", method = RequestMethod.POST)
+	@RequestMapping(value = "/getActivityDetail")
 	public JsonResult<ActivityInfo> getActivityDetail(@RequestParam("activityCode") String activityCode) {
 		return signUpService.getActivityDetail(activityCode);
+	}
+	
+	/**
+	 * 
+	 * <p>查询活动报名人员信息</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年4月17日 上午11:58:12
+	 */
+	@RequestMapping(value = "/getSignUpInfos")
+	public JsonResult<Pagination<ClientSignUpInfo>> getSignUpInfos(SearchActivityInfoParam param) {
+		return signUpService.getSignUpInfos(param);
+	}
+	
+	/**
+	 * 
+	 * <p>报名</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年4月19日 上午10:05:41
+	 */
+	@RequestMapping(value = "/signUp")
+	public JsonResult<String> signUp(SignUpParam param) {
+		return signUpService.signUp(param);
 	}
 	
 }

@@ -12,7 +12,7 @@ public class ActivityInfo {
 
     private String activityName;
 
-    private Byte activityStatus;
+    private Integer activityStatus;
 
     private String activityAddress;
 

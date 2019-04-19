@@ -23,6 +23,7 @@ public class AddActivityParam {
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date activityTime;
 
+	@NotNull(message = "请填写报名人数上限")
     private Integer signUpLimit;
 
     @NotNull(message = "请选择活动状态")

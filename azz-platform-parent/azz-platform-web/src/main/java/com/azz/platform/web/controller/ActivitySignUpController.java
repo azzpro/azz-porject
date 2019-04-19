@@ -77,7 +77,7 @@ public class ActivitySignUpController {
 	 * @author 黄智聪  2019年4月17日 上午11:58:12
 	 */
 	@RequestMapping("getPlatformSignUpInfos")
-	JsonResult<Pagination<SignUpInfo>> getPlatformSignUpInfos(SearchActivityInfoParam param) {
+	public JsonResult<Pagination<SignUpInfo>> getPlatformSignUpInfos(SearchActivityInfoParam param) {
 		return signUpService.getPlatformSignUpInfos(param);
 	}
 	

@@ -29,6 +29,7 @@ import com.azz.core.constants.WxActivityConstants;
 import com.azz.core.constants.WxActivityConstants.ActivityStatus;
 import com.azz.core.constants.WxActivityConstants.IsChangeActivityPic;
 import com.azz.core.exception.BaseException;
+import com.azz.core.reconstructed.exception.ReturnDataException;
 import com.azz.core.reconstructed.exception.ValidationException;
 import com.azz.system.api.SystemImageUploadService;
 import com.azz.system.bo.UploadImageParam;
@@ -130,7 +131,7 @@ public class SignUpService {
             wxUserInfo.setNickName(nickname);
             wxUserInfo.setHeadimgurl(headimgurl);
         }else {
-        	throw new ValidationException("获取微信用户信息出错");
+        	throw new ReturnDataException("获取微信用户信息出错");
         }
         return JsonResult.successJsonResult(wxUserInfo);
 	}
@@ -168,7 +169,7 @@ public class SignUpService {
 	public JsonResult<ActivityInfo> getActivityDetail(@RequestParam("activityCode") String activityCode) {
 		ActivityInfo detail = wxActivityMapper.getActivityInfoByActivityCode(activityCode);
 		if(detail == null) {
-			throw new ValidationException("活动不存在");
+			throw new ReturnDataException("活动不存在");
 		}
 		return JsonResult.successJsonResult(detail);
 	}
@@ -200,14 +201,14 @@ public class SignUpService {
 		JSR303ValidateUtils.validateInputParam(param);
 		WxActivity activity = wxActivityMapper.getActivityByActivityCode(param.getActivityCode());
 		if(activity == null) {
-			throw new ValidationException("活动不存在");
+			throw new ReturnDataException("活动不存在");
 		}
 		if(activity.getSignUpCount() == activity.getSignUpLimit()) {
-			throw new ValidationException("已超出报名人数上限，报名失败");
+			throw new ReturnDataException("已超出报名人数上限，报名失败");
 		}
 		int count = wxActivityUserSignUpMapper.countSignUpRecodeByOpenid(param.getOpenid(), param.getActivityCode());
 		if(count > 0) {
-			throw new ValidationException("请勿重复报名");
+			throw new ReturnDataException("请勿重复报名");
 		}
 		Date nowDate = new Date();
 		WxActivityUserSignUp record = WxActivityUserSignUp.builder()

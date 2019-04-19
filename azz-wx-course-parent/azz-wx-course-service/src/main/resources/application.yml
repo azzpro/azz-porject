@@ -87,11 +87,15 @@ mybatis:
   
 wx:
   config:
-    appid: wx59617000f73061f3
-    secret: a088c3a7db67ccdeb9fab66de1cc6515
+    appid: wx6657c21ece08b798
+    secret: a7bea96fb7fe6596d0c293ac36a6daaf
     api:
       # 获取微信ACCESS_TOKEN接口
       getAccessTokenUrl: https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${wx.config.appid}&secret=${wx.config.secret}
+      # 获取微信用户信息的接口
+      getWxUserAccessTokenUrl: https://api.weixin.qq.com/sns/oauth2/access_token?appid=${wx.config.appid}&secret=${wx.config.secret}&code=CODE&grant_type=authorization_code
+      # 获取用户信息接口
+      getWxUserInfoUrl: https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN
       template:
         # 消息模板id
         templateId: 6eBadW2JTaR9MCVKGtV_DFPDT7uwyILwcXW5wAeLawU

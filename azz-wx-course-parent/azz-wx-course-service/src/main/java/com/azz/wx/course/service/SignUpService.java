@@ -256,7 +256,7 @@ public class SignUpService {
 		TemplateData activityTime = new TemplateData();
 		activityTime.setColor("#0033ff");
 		activityTime.setValue(DateUtils.getYMDHMSDateTime(record.getActivityTime()));
-		m.put("startClassTime", activityTime);
+		m.put("activityTime", activityTime);
 		wechatTemplate.setData(m);
 		try {
 			sendTemplateMessage(accesstoken(), wechatTemplate);

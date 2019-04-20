@@ -85,6 +85,10 @@ public class SignUpService {
 	@Value("${wx.config.api.getWxUserInfoUrl}")
 	private String getWxUserInfoUrl;
 	
+	// 获取微信用户信息的接口
+	@Value("${wx.config.api.getWxUserSubscribeUrl}")
+	private String getWxUserSubscribeUrl;
+	
 	// 微信发送消息模板接口
 	@Value("${wx.config.api.template.sendTemplateMessageUrl}")
 	private String sendTemplateMessageUrl;
@@ -138,12 +142,26 @@ public class SignUpService {
 	
 	/**
 	 * 
-	 * <p>获取微信access_token</p>
+	 * <p>获取微信用户是否关注公众号</p>
 	 * @return
 	 * @author 黄智聪  2019年4月16日 下午5:54:47
 	 */
-	public JsonResult<String> getAccesstoken(){
-		return JsonResult.successJsonResult(accesstoken());
+	public JsonResult<Integer> getWxUserSubscribe(String openid){
+		if(StringUtils.isBlank(openid)) {
+			throw new ValidationException("缺少请求参数");
+		}
+		String accesstoken = accesstoken();
+		String url = getWxUserSubscribeUrl.replace("ACCESS_TOKEN", accesstoken).replace("OPENID", openid);
+		String json = HttpClientUtils.sendHttpGet(url);
+		JSONObject responseJson = JSONObject.parseObject(json);
+		if (null == responseJson) {
+			throw new ReturnDataException("获取微信用户信息出错");
+		}
+		Integer subscribe = responseJson.getInteger("subscribe");
+		if (null == subscribe) {
+			throw new ReturnDataException("获取微信用户信息出错");
+		} 
+		return	JsonResult.successJsonResult(subscribe);
 	}
 	
 	/**
@@ -236,6 +254,7 @@ public class SignUpService {
 			successSignUpNoticeParam.setActivityCode(param.getActivityCode());
 			successSignUpNoticeParam.setOpenid(param.getOpenid());
 			this.successSignUpNotice(successSignUpNoticeParam);
+			System.out.println("报名成功");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

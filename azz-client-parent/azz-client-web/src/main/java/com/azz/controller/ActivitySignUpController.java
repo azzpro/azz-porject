@@ -35,13 +35,13 @@ public class ActivitySignUpController {
 	
 	/**
 	 * 
-	 * <p>获取微信access_token</p>
+	 * <p>获取微信用户是否关注公众号</p>
 	 * @return
 	 * @author 黄智聪  2019年4月17日 下午4:39:29
 	 */
-	@RequestMapping("/getAccesstoken")
-	public JsonResult<String> getAccesstoken(){
-		return signUpService.getAccesstoken();
+	@RequestMapping("/getWxUserSubscribe")
+	public JsonResult<Integer> getWxUserSubscribe(@RequestParam("openid")String openid){
+		return signUpService.getWxUserSubscribe(openid);
 	}
 	
 	/**

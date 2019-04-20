@@ -38,12 +38,12 @@ public interface SignUpService {
 	
 	/**
 	 * 
-	 * <p>获取微信access_token</p>
+	 * <p>获取微信用户是否关注公众号</p>
 	 * @return
 	 * @author 黄智聪  2019年4月16日 下午5:54:47
 	 */
-	@RequestMapping(value = "/azz/api/client/activity/getAccesstoken", method = RequestMethod.POST)
-	JsonResult<String> getAccesstoken();
+	@RequestMapping(value = "/azz/api/client/activity/getWxUserSubscribe", method = RequestMethod.POST)
+	JsonResult<Integer> getWxUserSubscribe(@RequestParam("openid")String openid);
 	
 	/**
 	 * 

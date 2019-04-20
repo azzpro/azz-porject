@@ -96,6 +96,8 @@ wx:
       getWxUserAccessTokenUrl: https://api.weixin.qq.com/sns/oauth2/access_token?appid=${wx.config.appid}&secret=${wx.config.secret}&code=CODE&grant_type=authorization_code
       # 获取用户信息接口
       getWxUserInfoUrl: https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN
+      # 获取用户是否关注公众号接口
+      getWxUserSubscribeUrl: https://api.weixin.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN
       template:
         # 消息模板id
         templateId: Xm3bDLrY7QxzXAXq_tq_l3OKfWA4XJ_30Yc46uvPe54

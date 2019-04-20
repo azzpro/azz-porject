@@ -237,7 +237,7 @@ public class SignUpService {
 			successSignUpNoticeParam.setOpenid(param.getOpenid());
 			this.successSignUpNotice(successSignUpNoticeParam);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 		
 		return JsonResult.successJsonResult();
@@ -265,7 +265,7 @@ public class SignUpService {
 		WechatTemplate wechatTemplate = new WechatTemplate();
 		wechatTemplate.setTemplate_id(templateId);
 		wechatTemplate.setTouser(param.getOpenid());// 此处是用户的OpenId
-		wechatTemplate.setUrl(detailUrl);
+		wechatTemplate.setUrl(detailUrl.replace("ACTIVITY_CODE", param.getActivityCode()));
 		// 查询开课信息详情
 		WxActivity record = wxActivityMapper.getActivityByActivityCode(param.getActivityCode());
 		Map<String, TemplateData> m = new HashMap<String, TemplateData>();

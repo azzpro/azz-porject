@@ -62,7 +62,7 @@ public class ExceptionHandlerConfig {
 			detailMessage = e.getMessage();
 			log.error(detailMessage, e);
 		} else if (e instanceof MissingServletRequestParameterException) {// spring缺少请求参数异常
-			code = ValidationErrorCode.VALIDATION_ERROR_INVALID_REQUEST_PARAM.getCode();
+			code = ValidationErrorCode.VALIDATION_ERROR_MISSING_REQUEST_PARAM.getCode();
 			detailMessage = ValidationErrorCode.VALIDATION_ERROR_MISSING_REQUEST_PARAM.getMessage() + "["
 					+ ((MissingServletRequestParameterException) e).getParameterName() + "]";
 			log.error(detailMessage, e);

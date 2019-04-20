@@ -29,6 +29,7 @@ import com.azz.core.constants.WxActivityConstants;
 import com.azz.core.constants.WxActivityConstants.ActivityStatus;
 import com.azz.core.constants.WxActivityConstants.IsChangeActivityPic;
 import com.azz.core.exception.BaseException;
+import com.azz.core.reconstructed.errorcode.ValidationErrorCode;
 import com.azz.core.reconstructed.exception.ReturnDataException;
 import com.azz.core.reconstructed.exception.ValidationException;
 import com.azz.system.api.SystemImageUploadService;
@@ -115,7 +116,7 @@ public class SignUpService {
 	public JsonResult<WxUserInfo> getWxUserInfoByCode(@RequestParam("code")String code) {
 		WxUserInfo wxUserInfo = new WxUserInfo();
     	if(StringUtils.isBlank(code)) {
-    		throw new ValidationException("缺少请求参数");
+    		throw new ValidationException(ValidationErrorCode.VALIDATION_ERROR_MISSING_REQUEST_PARAM);
     	}
 		String url = getWxUserAccessTokenUrl.replace("CODE", code);
 		// 获取accessToken
@@ -148,7 +149,7 @@ public class SignUpService {
 	 */
 	public JsonResult<Integer> getWxUserSubscribe(String openid){
 		if(StringUtils.isBlank(openid)) {
-			throw new ValidationException("缺少请求参数");
+			throw new ValidationException(ValidationErrorCode.VALIDATION_ERROR_MISSING_REQUEST_PARAM);
 		}
 		String accesstoken = accesstoken();
 		String url = getWxUserSubscribeUrl.replace("ACCESS_TOKEN", accesstoken).replace("OPENID", openid);

@@ -231,6 +231,15 @@ public class SignUpService {
 				.createTime(nowDate)
 				.build();
 		wxActivityMapper.updateByPrimaryKeySelective(updateRecord);
+		try {
+			SuccessSignUpNoticeParam successSignUpNoticeParam = new SuccessSignUpNoticeParam();
+			successSignUpNoticeParam.setActivityCode(param.getActivityCode());
+			successSignUpNoticeParam.setOpenid(param.getOpenid());
+			this.successSignUpNotice(successSignUpNoticeParam);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 		return JsonResult.successJsonResult();
 	}
 	
@@ -242,6 +251,17 @@ public class SignUpService {
 	 */
 	public JsonResult<String> sendSuccessSignUpNotice(@RequestBody SuccessSignUpNoticeParam param) {
 		JSR303ValidateUtils.validateInputParam(param);
+		this.successSignUpNotice(param);
+		return JsonResult.successJsonResult();
+	}
+
+	/**
+	 * 
+	 * <p>发送报名成功通知</p>
+	 * @param param
+	 * @author 黄智聪  2019年4月20日 上午9:55:49
+	 */
+	private void successSignUpNotice(SuccessSignUpNoticeParam param) {
 		WechatTemplate wechatTemplate = new WechatTemplate();
 		wechatTemplate.setTemplate_id(templateId);
 		wechatTemplate.setTouser(param.getOpenid());// 此处是用户的OpenId
@@ -249,21 +269,32 @@ public class SignUpService {
 		// 查询开课信息详情
 		WxActivity record = wxActivityMapper.getActivityByActivityCode(param.getActivityCode());
 		Map<String, TemplateData> m = new HashMap<String, TemplateData>();
-		TemplateData course = new TemplateData();
-		course.setColor("#0033ff");
-		course.setValue(record.getActivityName());
-		m.put("course", course);
+		TemplateData title = new TemplateData();
+		title.setColor("#0033ff");
+		title.setValue("您好，你已成功报名了活动");
+		m.put("first", title);
+		TemplateData activityName = new TemplateData();
+		activityName.setColor("#0033ff");
+		activityName.setValue(record.getActivityName());
+		m.put("keyword1", activityName);
 		TemplateData activityTime = new TemplateData();
 		activityTime.setColor("#0033ff");
 		activityTime.setValue(DateUtils.getYMDHMSDateTime(record.getActivityTime()));
-		m.put("activityTime", activityTime);
+		m.put("keyword2", activityTime);
+		TemplateData activityAddress = new TemplateData();
+		activityAddress.setColor("#0033ff");
+		activityAddress.setValue(record.getActivityAddress());
+		m.put("keyword3", activityAddress);
+		TemplateData remark = new TemplateData();
+		remark.setColor("#0033ff");
+		remark.setValue("感谢你的参与，点击查看活动详情");
+		m.put("remark", remark);
 		wechatTemplate.setData(m);
 		try {
 			sendTemplateMessage(accesstoken(), wechatTemplate);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return JsonResult.successJsonResult();
 	}
 
 	/**

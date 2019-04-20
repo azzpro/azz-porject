@@ -19,7 +19,7 @@ public class TemplateData {
 	
 	private String value;  
 	
-    private String color;  
+    private String color;
   
 }
 

@@ -98,8 +98,8 @@ wx:
       getWxUserInfoUrl: https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN
       template:
         # 消息模板id
-        templateId: 6eBadW2JTaR9MCVKGtV_DFPDT7uwyILwcXW5wAeLawU
+        templateId: OPENTM201292805
         # 微信发送消息模板接口
         sendTemplateMessageUrl: https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN
         # 用户接收到的推送消息的详情接口
-        detailUrl: www.baidu.com
+        detailUrl: http://a.izz2025.com/activitysignDetail.html?activityCode=ACTIVITY_CODE

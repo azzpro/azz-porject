@@ -98,7 +98,7 @@ wx:
       getWxUserInfoUrl: https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN
       template:
         # 消息模板id
-        templateId: OPENTM201292805
+        templateId: Xm3bDLrY7QxzXAXq_tq_l3OKfWA4XJ_30Yc46uvPe54
         # 微信发送消息模板接口
         sendTemplateMessageUrl: https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN
         # 用户接收到的推送消息的详情接口

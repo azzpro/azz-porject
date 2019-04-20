@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
-import com.azz.core.reconstructed.exception.ReturnDataException;
 import com.azz.wx.course.api.SignUpService;
 import com.azz.wx.course.pojo.bo.SearchActivityInfoParam;
 import com.azz.wx.course.pojo.bo.SignUpParam;

@@ -468,7 +468,6 @@ public class SignUpService {
 				.modifier(param.getModifier())
 				.status(param.getStatus())
 				.signUpLimit(param.getSignUpLimit())
-				.signUpCount(0)
 				.price(param.getPrice() == null ? BigDecimal.ZERO : param.getPrice())
 				.build();
 		// 修改了主图，则重新上传

@@ -294,6 +294,13 @@
     where activity_code = #{activityCode}
   </select>
   
+  <select id="getActivityWithoutContentByActivityCode" parameterType="string" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from wx_activity
+    where activity_code = #{activityCode}
+  </select>
+  
   <select id="getActivityInfos" parameterType="com.azz.wx.course.pojo.bo.SearchActivityInfoParam" resultType="com.azz.wx.course.pojo.vo.ActivityInfo">
   	SELECT 
     	activity_code AS activityCode,

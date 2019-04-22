@@ -30,6 +30,7 @@ import com.azz.core.constants.WxActivityConstants.ActivityStatus;
 import com.azz.core.constants.WxActivityConstants.IsChangeActivityPic;
 import com.azz.core.exception.BaseException;
 import com.azz.core.reconstructed.errorcode.ValidationErrorCode;
+import com.azz.core.reconstructed.exception.BusinessException;
 import com.azz.core.reconstructed.exception.ReturnDataException;
 import com.azz.core.reconstructed.exception.ValidationException;
 import com.azz.system.api.SystemImageUploadService;
@@ -218,7 +219,7 @@ public class SignUpService {
 	 */
 	public JsonResult<String> signUp(@RequestBody SignUpParam param){
 		JSR303ValidateUtils.validateInputParam(param);
-		WxActivity activity = wxActivityMapper.getActivityByActivityCode(param.getActivityCode());
+		WxActivity activity = wxActivityMapper.getActivityWithoutContentByActivityCode(param.getActivityCode());
 		if(activity == null) {
 			throw new ReturnDataException("活动不存在");
 		}
@@ -227,7 +228,7 @@ public class SignUpService {
 		}
 		int count = wxActivityUserSignUpMapper.countSignUpRecodeByOpenid(param.getOpenid(), param.getActivityCode());
 		if(count > 0) {
-			throw new ReturnDataException("请勿重复报名");
+			throw new BusinessException("请勿重复报名");
 		}
 		Date nowDate = new Date();
 		WxActivityUserSignUp record = WxActivityUserSignUp.builder()

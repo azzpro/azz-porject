@@ -28,6 +28,8 @@ public interface WxActivityMapper {
 
 	WxActivity getActivityByActivityCode(String activityCode);
 	
+	WxActivity getActivityWithoutContentByActivityCode(String activityCode);
+	
 	/**
 	 * 
 	 * <p>查询活动列表</p>

@@ -8,6 +8,7 @@
 package com.azz.wx.course.service;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -222,6 +223,9 @@ public class SignUpService {
 		WxActivity activity = wxActivityMapper.getActivityWithoutContentByActivityCode(param.getActivityCode());
 		if(activity == null) {
 			throw new ReturnDataException("活动不存在");
+		}
+		if(Calendar.getInstance().after(activity.getDeadline())) {
+			throw new ReturnDataException("活动已结束，报名失败");
 		}
 		if(activity.getSignUpCount() == activity.getSignUpLimit()) {
 			throw new ReturnDataException("已超出报名人数上限，报名失败");

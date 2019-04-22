@@ -11,7 +11,7 @@ import com.azz.core.reconstructed.base.BaseException;
 import com.azz.core.reconstructed.errorcode.BusinessErrorCode;
 
 /**
- * <P>TODO</P>
+ * <P>业务异常</P>
  * @version 1.0
  * @author 黄智聪  2019年4月20日 下午3:46:49
  */

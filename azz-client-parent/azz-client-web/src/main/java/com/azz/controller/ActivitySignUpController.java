@@ -7,6 +7,10 @@
  
 package com.azz.controller;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -100,6 +104,19 @@ public class ActivitySignUpController {
 	@RequestMapping(value = "/signUp")
 	public JsonResult<String> signUp(SignUpParam param) {
 		return signUpService.signUp(param);
+	}
+	
+	/**
+	 * 
+	 * <p>getWxConfig获取微信的配置信息</p>
+	 * @param requestUrl
+	 * @return
+	 * @author 黄智聪  2019年4月23日 下午3:46:43
+	 */
+	@RequestMapping("/activity/getWxConfig")
+	public JsonResult<Map<String, Object>> getWxConfig(HttpServletRequest request) {
+		String requestUrl = request.getRequestURL().toString();
+		return signUpService.getWxConfig(requestUrl);
 	}
 	
 }

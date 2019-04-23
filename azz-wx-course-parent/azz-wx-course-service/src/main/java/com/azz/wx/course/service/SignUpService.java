@@ -7,12 +7,29 @@
 
 package com.azz.wx.course.service;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.ConnectException;
+import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -76,6 +93,9 @@ import com.google.gson.Gson;
 @Service
 public class SignUpService {
 	
+	@Value("${wx.config.appid}")
+	private String appid;
+	
 	// 获取微信ACCESS_TOKEN接口
 	@Value("${wx.config.api.getAccessTokenUrl}")
 	private String getAccessTokenUrl;
@@ -91,6 +111,10 @@ public class SignUpService {
 	// 获取微信用户信息的接口
 	@Value("${wx.config.api.getWxUserSubscribeUrl}")
 	private String getWxUserSubscribeUrl;
+	
+	// 获取JSSDK权限接口
+	@Value("${wx.config.api.getJsApiTicketURL}")
+	private String getJsApiTicketURL;
 	
 	// 微信发送消息模板接口
 	@Value("${wx.config.api.template.sendTemplateMessageUrl}")
@@ -279,6 +303,40 @@ public class SignUpService {
 		this.successSignUpNotice(param);
 		return JsonResult.successJsonResult();
 	}
+	
+	/**
+	 * 
+	 * <p>getWxConfig获取微信的配置信息</p>
+	 * @param request
+	 * @return
+	 * @author 黄智聪  2019年4月23日 下午3:38:03
+	 */
+	public JsonResult<Map<String, Object>> getWxConfig(String requestUrl) {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		String access_token = accesstoken();
+		String jsapi_ticket = jsApiTicket(access_token);
+		String timestamp = Long.toString(System.currentTimeMillis() / 1000); // 必填，生成签名的时间戳
+		String nonceStr = UUID.randomUUID().toString(); // 必填，生成签名的随机串
+		String signature = "";
+		// 注意这里参数名必须全部小写，且必须有序
+		String sign = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + nonceStr + "&timestamp=" + timestamp + "&url="
+				+ requestUrl;
+		try {
+			MessageDigest crypt = MessageDigest.getInstance("SHA-1");
+			crypt.reset();
+			crypt.update(sign.getBytes("UTF-8"));
+			signature = byteToHex(crypt.digest());
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		ret.put("appid", appid);
+		ret.put("timestamp", timestamp);
+		ret.put("nonceStr", nonceStr);
+		ret.put("signature", signature);
+		return JsonResult.successJsonResult(ret);
+	}
 
 	/**
 	 * 
@@ -363,6 +421,49 @@ public class SignUpService {
 		}
 		return null;
 	}
+	
+	/**
+	 * 
+	 * <p>获取微信jsApiTicket</p>
+	 * @return
+	 * @author 黄智聪  2019年4月16日 下午5:54:47
+	 */
+	private String jsApiTicket(String accessToken) {
+		try {
+			String url = getJsApiTicketURL.replace("ACCESS_TOKEN", accessToken);
+			String responseJson = HttpClientUtils.sendHttpGet(url);
+			JSONObject jsonObj = JSONObject.parseObject(responseJson);
+			if(jsonObj != null && jsonObj.getString("ticket") != null) {
+				return jsonObj.getString("ticket");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * 方法名：byteToHex</br>
+	 * 详述：字符串加密辅助方法 </br>
+	 * 开发人员：souvc </br>
+	 * 创建时间：2016-1-5 </br>
+	 * 
+	 * @param hash
+	 * @return 说明返回值含义
+	 * @throws 说明发生此异常的条件
+	 */
+	private String byteToHex(final byte[] hash) {
+		Formatter formatter = new Formatter();
+		for (byte b : hash) {
+			formatter.format("%02x", b);
+		}
+		String result = formatter.toString();
+		formatter.close();
+		return result;
+
+	}
+	
+	
 	/************************************************** 客户端end **********************************************/
 	
 	

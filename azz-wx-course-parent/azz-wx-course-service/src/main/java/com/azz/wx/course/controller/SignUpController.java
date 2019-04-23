@@ -7,6 +7,8 @@
 
 package com.azz.wx.course.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -115,6 +117,18 @@ public class SignUpController {
 	
 	/**
 	 * 
+	 * <p>getWxConfig获取微信的配置信息</p>
+	 * @param requestUrl
+	 * @return
+	 * @author 黄智聪  2019年4月23日 下午3:46:43
+	 */
+	@RequestMapping("/client/activity/getWxConfig")
+	public JsonResult<Map<String, Object>> getWxConfig(@RequestParam("requestUrl")String requestUrl) {
+		return signUpService.getWxConfig(requestUrl);
+	}
+	
+	/**
+	 * 
 	 * <p>查询活动列表</p>
 	 * @param param
 	 * @return
@@ -184,6 +198,5 @@ public class SignUpController {
 	public JsonResult<String> putOnOrPutOffOrDelActivity(@RequestBody PutOnOrPutOffOrDelActivityParam param){
 		return signUpService.putOnOrPutOffOrDelActivity(param);
 	}
-	
 	
 }

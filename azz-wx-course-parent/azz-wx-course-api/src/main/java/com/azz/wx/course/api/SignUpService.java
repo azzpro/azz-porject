@@ -7,6 +7,8 @@
 
 package com.azz.wx.course.api;
 
+import java.util.Map;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -94,6 +96,16 @@ public interface SignUpService {
 	 */
 	@RequestMapping(value = "/azz/api/client/activity/signUp", method = RequestMethod.POST)
 	JsonResult<String> signUp(@RequestBody SignUpParam param);
+	
+	/**
+	 * 
+	 * <p>getWxConfig获取微信的配置信息</p>
+	 * @param requestUrl
+	 * @return
+	 * @author 黄智聪  2019年4月23日 下午3:46:43
+	 */
+	@RequestMapping("/azz/api/client/activity/getWxConfig")
+	JsonResult<Map<String, Object>> getWxConfig(@RequestParam("requestUrl")String requestUrl);
 	
 	/**
 	 * 

@@ -113,7 +113,7 @@ public class ActivitySignUpController {
 	 * @return
 	 * @author 黄智聪  2019年4月23日 下午3:46:43
 	 */
-	@RequestMapping("/activity/getWxConfig")
+	@RequestMapping("/getWxConfig")
 	public JsonResult<Map<String, Object>> getWxConfig(HttpServletRequest request) {
 		String requestUrl = request.getRequestURL().toString();
 		return signUpService.getWxConfig(requestUrl);

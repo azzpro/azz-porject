@@ -210,8 +210,8 @@ public class SignUpService {
 		}
 		int intRemark = Integer.parseInt(remark);
 		intRemark += 1;
-		WxActivity record = WxActivity.builder().remark(intRemark + "").build();
-		wxActivityMapper.updateByPrimaryKeySelective(record);
+		WxActivity record = WxActivity.builder().remark(intRemark + "").activityCode(activityCode).build();
+		wxActivityMapper.updateByCodeSelective(record);
 		return JsonResult.successJsonResult(detail);
 	}
 	

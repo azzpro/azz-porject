@@ -21,6 +21,8 @@ public interface WxActivityMapper {
     WxActivity selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(WxActivity record);
+    
+    int updateByCodeSelective(WxActivity record);
 
     int updateByPrimaryKeyWithBLOBs(WxActivity record);
 

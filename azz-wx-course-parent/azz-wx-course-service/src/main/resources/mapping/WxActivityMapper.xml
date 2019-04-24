@@ -241,6 +241,63 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updateByCodeSelective" parameterType="com.azz.wx.course.pojo.WxActivity">
+    update wx_activity
+    <set>
+      <if test="activityName != null">
+        activity_name = #{activityName,jdbcType=VARCHAR},
+      </if>
+      <if test="activityStatus != null">
+        activity_status = #{activityStatus,jdbcType=TINYINT},
+      </if>
+      <if test="activityAddress != null">
+        activity_address = #{activityAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="activityTime != null">
+        activity_time = #{activityTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activityPicName != null">
+        activity_pic_name = #{activityPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="activityPicUrl != null">
+        activity_pic_url = #{activityPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="signUpLimit != null">
+        sign_up_limit = #{signUpLimit,jdbcType=INTEGER},
+      </if>
+      <if test="signUpCount != null">
+        sign_up_count = #{signUpCount,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="deadline != null">
+        deadline = #{deadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="activityContent != null">
+        activity_content = #{activityContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where activity_code = #{activityCode,jdbcType=VARCHAR}
+  </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.azz.wx.course.pojo.WxActivity">
     update wx_activity
     set activity_code = #{activityCode,jdbcType=VARCHAR},

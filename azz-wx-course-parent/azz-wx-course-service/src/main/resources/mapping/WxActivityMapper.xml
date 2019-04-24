@@ -416,7 +416,7 @@
 		ac. STATUS AS status,
 		ac.price AS price,
 		ac.deadline AS deadline,
-		remark as remark
+		ac.remark as remark
 	FROM
 		wx_activity ac
 	where ac.activity_code = #{activityCode}

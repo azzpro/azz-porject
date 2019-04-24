@@ -35,5 +35,7 @@ public class ActivityInfo {
     private Byte status;
 
     private Date createTime;
+    
+    private String remark;
 
 }

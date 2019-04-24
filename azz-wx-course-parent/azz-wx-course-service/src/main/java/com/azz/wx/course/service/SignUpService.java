@@ -204,6 +204,14 @@ public class SignUpService {
 		if(detail == null) {
 			throw new ReturnDataException("活动不存在");
 		}
+		String remark = detail.getRemark();
+		if(StringUtils.isBlank(remark)) {
+			remark = "0";
+		}
+		int intRemark = Integer.parseInt(remark);
+		intRemark += 1;
+		WxActivity record = WxActivity.builder().remark(intRemark + "").build();
+		wxActivityMapper.updateByPrimaryKeySelective(record);
 		return JsonResult.successJsonResult(detail);
 	}
 	

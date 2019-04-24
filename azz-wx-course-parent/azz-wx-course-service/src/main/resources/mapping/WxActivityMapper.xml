@@ -323,7 +323,8 @@
 		deadline AS deadline,
 		status AS status,
 		price AS price,
-		create_time AS createTime
+		create_time AS createTime,
+		remark as remark
     FROM wx_activity
     WHERE status != 0
 	    <if test="activityName != null and activityName != ''">
@@ -357,7 +358,8 @@
 		ac.activity_content AS activityContent,
 		ac. STATUS AS status,
 		ac.price AS price,
-		ac.deadline AS deadline
+		ac.deadline AS deadline,
+		remark as remark
 	FROM
 		wx_activity ac
 	where ac.activity_code = #{activityCode}

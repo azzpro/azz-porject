@@ -51,5 +51,14 @@ public interface WxPayService {
 	@RequestMapping(value="/azz/api/wx/pay/submitOrderPay",method=RequestMethod.POST)
 	public Map<String,String> submitOrderPay(@RequestBody WxPayOrderInfo po);
 	
+	/**
+	 * <p>提交活动支付</p>
+	 * @param spp
+	 * @return
+	 * @author 刘建麟  2018年11月26日 下午3:20:20
+	 */
+	@RequestMapping(value="/azz/api/wx/pay/submitWxActiveOrderPay",method=RequestMethod.POST)
+	public Map<String,String> submitWxActiveOrderPay(@RequestBody WxPayOrderInfo po);
+	
 }
 

@@ -71,6 +71,9 @@ public class WxPayService {
 	@Value("${wx.callback}")
 	private String callback;
 	
+	@Value("${wx.activecallback}")
+	private String activecallback;
+	
 	static {
 		st = SignType.MD5;
 	}
@@ -169,6 +172,89 @@ public class WxPayService {
 		}
 	}
 
+	/**
+	 * 微信支付 统一下单
+	 * @param po
+	 * @return
+	 */
+	@Transactional
+	public Map<String,String> submitWxActiveOrderPay(@RequestBody WxPayOrderInfo po) {
+		WXPayUtil.getLogger().info("openid--------->" + po.getOpenid());
+		//根据课程编号去判断该笔订单是否已支付
+		List<WxPay> wxPays = wpm.selectWxOrder(po.getCoursePayNum());
+		if(!wxPays.isEmpty()) {
+			for (WxPay wxPay2 : wxPays) {
+				if(wxPay2.getOrderStatus() == ClientConstants.PayStatus.PAY_CLOSED.getValue()) {
+					throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单已关闭");
+				}
+				if(wxPay2.getOrderStatus() == ClientConstants.PayStatus.PAY_SUCCESS.getValue()) {
+					throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单已完成");
+				}
+			}
+		}
+		JsonResult<CourseOrderDetail> detail = orderService.getCourseOrderDetail(po.getCoursePayNum());
+		//判断微信课程订单是否关闭
+		if(detail != null && detail.getCode() == SystemErrorCode.SUCCESS.getCode()) {
+			if(detail.getData().getOrderStatus() == CourseOrderStatus.CLOSED.getValue()) {
+				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单已失效，请重新下单");
+			}
+			WXPayUtil.getLogger().info("po.getOrderMoney()=====>"+po.getOrderMoney());
+			WXPayUtil.getLogger().info("po.toPlainString()=====>"+detail.getData().getGrandTotal().toPlainString());
+			if(!po.getOrderMoney().equals(detail.getData().getGrandTotal().toPlainString())) {
+				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单金额不一致");
+			}
+		}
+		Map<String, String> reqData = null;
+		try {
+			reqData = createActiveReqData(detail.getData().getGrandTotal(),detail.getData().getCourseInfo(),po);
+		}catch (Exception e) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "创建订单错误");
+		}
+		if (null == reqData) {
+			return null;
+		}
+		String reqUrl = "https://"+WXPayConstants.DOMAIN_API + WXPayConstants.UNIFIEDORDER_URL_SUFFIX;
+		String mapToXml = "";
+		try {
+			mapToXml = WXPayUtil.mapToXml(reqData);
+		} catch (Exception e) {
+			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "请求参数有误");
+		}
+		if (StringUtils.isBlank(mapToXml)) {
+			return null;
+		}
+		WXPayUtil.getLogger().info("reqUrl------------->" + reqUrl);
+		WXPayUtil.getLogger().info("mapToXml------------->" + mapToXml);
+		String result = "";
+		try {
+			result = HttpClientUtil.sendPost(reqUrl, mapToXml);
+		} catch (Exception e) {
+			WXPayUtil.getLogger().info(e.getMessage());
+			e.printStackTrace();
+		}
+		WXPayUtil.getLogger().info("统一下单请求返回结果------------->" + result);
+		String prepay_id = "";// 预支付id
+		Map<String, String> payMap = new HashMap<String, String>();
+		try {
+			if (result.indexOf("SUCCESS") != -1) {
+				Map<String, String> map = WXPayUtil.xmlToMap(result);
+				prepay_id = (String) map.get("prepay_id");
+			}
+			payMap.put("appId", appid);
+			payMap.put("timeStamp", WXPayUtil.getCurrentTimestamp() + "");
+			payMap.put("nonceStr", WXPayUtil.generateNonceStr());
+			payMap.put("signType", "MD5");
+			payMap.put("package", "prepay_id=" + prepay_id);
+			String paySign = WXPayUtil.generateSignature(payMap, api);
+			payMap.put("paySign", paySign);
+			
+			return payMap;
+		}catch (Exception e) {
+			WXPayUtil.getLogger().error(e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 	/**
 	 * 创建请求参数
@@ -190,6 +276,53 @@ public class WxPayService {
 		reqMap.put("total_fee", fenMoney); //单位分
 		reqMap.put("spbill_create_ip",po.getIp());
 		reqMap.put("notify_url", callback);
+		reqMap.put("trade_type", "JSAPI");
+		if(StringUtils.isBlank(po.getOpenid())) {
+			return null;
+		}
+		reqMap.put("openid", po.getOpenid());
+		reqMap.put("sign", WXPayUtil.generateSignature(reqMap, api, st));
+		WxPay wp = new WxPay();
+		wp.setCourseName(po.getCourseName());
+		wp.setCourseNum(po.getCourseNum());
+		wp.setCoursePayNum(po.getCoursePayNum());
+		wp.setCreateIp(po.getIp());
+		LocalDateTime now = LocalDateTime.now();
+		wp.setCreateOrderTime(now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
+		wp.setFeeType("CNY");
+		wp.setGoodsBody(po.getCourseName());
+		wp.setGoodsInfo(info);
+		wp.setOrderStatus(ClientConstants.PayStatus.NOT_PAID.getValue());
+		wp.setOutTradeNo(reqMap.get("out_trade_no"));
+		wp.setTotalFee(fenMoney);
+		int i = wpm.insertPay(wp);
+		if(i != 1) {
+			return null;
+		}
+		return reqMap;
+	}
+	
+	
+	/**
+	 * 创建请求参数
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	private Map<String,String> createActiveReqData(BigDecimal totalFee,String info,WxPayOrderInfo po) throws Exception{
+		Map<String,String> reqMap = new HashMap<String,String>();
+		reqMap.put("appid", appid);
+		reqMap.put("mch_id", mchid);
+		reqMap.put("nonce_str", WXPayUtil.generateNonceStr());
+		reqMap.put("sign_type", WXPayConstants.MD5);
+		reqMap.put("body", po.getCourseName());
+		reqMap.put("out_trade_no", String.valueOf(WXPayUtil.getCurrentTimestamp()));
+		BigDecimal multiply = totalFee.multiply(new BigDecimal(100));
+		String money = multiply.toPlainString();
+		String fenMoney = money.substring(0,money.indexOf("."));
+		reqMap.put("total_fee", fenMoney); //单位分
+		reqMap.put("spbill_create_ip",po.getIp());
+		reqMap.put("notify_url", activecallback);
 		reqMap.put("trade_type", "JSAPI");
 		if(StringUtils.isBlank(po.getOpenid())) {
 			return null;

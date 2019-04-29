@@ -53,6 +53,19 @@ public class WxPayController {
 		return submitOrderPay;
 	}
 	
+	/**
+	 * 微信活动支付提交订单
+	 * @param request
+	 * @param po
+	 * @return
+	 */
+	@RequestMapping("submitWxActiveOrderPay")
+	public Map<String,String> submitWxActiveOrderPay(HttpServletRequest request,WxPayOrderInfo po){
+		po.setIp(LLPayUtil.getIpAddrD(request));
+		Map<String, String> submitOrderPay = wx.submitWxActiveOrderPay(po);
+		return submitOrderPay;
+	}
+	
 	
 	
 	/** 支付回调

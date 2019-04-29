@@ -33,7 +33,6 @@ import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.constants.ClientConstants;
 import com.azz.core.constants.ClientConstants.PayMethod;
-import com.azz.core.constants.ClientConstants.PayStatus;
 import com.azz.core.constants.PayConstants;
 import com.azz.core.constants.WxCourseConstants.CourseOrderStatus;
 import com.azz.exception.JSR303ValidationException;
@@ -42,6 +41,7 @@ import com.azz.order.client.wx.bo.WxPayOrderInfo;
 import com.azz.order.client.wx.pojo.WxPay;
 import com.azz.util.HttpClientUtil;
 import com.azz.wx.course.api.OrderService;
+import com.azz.wx.course.api.SignUpService;
 import com.azz.wx.course.pojo.bo.CallBackParam;
 import com.azz.wx.course.pojo.vo.CourseOrderDetail;
 import com.github.wxpay.sdk.WXPayConstants;
@@ -81,6 +81,9 @@ public class WxPayService {
 	
 	@Autowired
 	private OrderService orderService;
+	
+	@Autowired
+	private SignUpService signUpService;
 	
 	/**
 	 * 微信支付 统一下单
@@ -266,6 +269,79 @@ public class WxPayService {
 		        		cbp.setPayMethod(PayMethod.ONLINE.getValue());
 		        		cbp.setOrderType(PayConstants.PayPlatForm.getNum("WECHAT"));
 						orderService.courseOrderPaySuccessOpt(cbp);
+						log.info("微信手机支付回调成功订单号:{}",out_trade_no);
+						resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>" + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
+						return resXml;
+					}
+				}
+			}else{
+				log.info("微信手机支付回调失败订单号:{}",out_trade_no);
+				resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
+				return resXml;
+			}
+		} catch (Exception e) {
+			log.error("手机支付回调通知失败",e);
+			 resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
+			 return resXml;
+		}
+		return null;
+	}
+	
+	/**
+	 * 微信活动支付回调
+	 * @param xml
+	 * @return
+	 */
+	public String activetyCallback(String xml) {
+		String resXml = "";
+		try {
+			//解析XML
+			Map<String, String> map = WXPayUtil.xmlToMap(xml);
+	        String return_code = map.get("return_code");//状态
+	        String out_trade_no = map.get("out_trade_no");//订单号
+			if (return_code.equals("SUCCESS")) {
+				if (out_trade_no != null) {
+					//处理订单逻辑
+					String transaction_id = map.get("transaction_id");
+					String time_end = map.get("time_end");
+					String device_info = map.get("device_info");
+					String total_fee = map.get("total_fee");
+					String sign = map.get("sign");
+					String signature = WXPayUtil.generateSignature(map, api, st);
+					Map<String,String> maps = wpm.selectTotalFeeByOrderNum(out_trade_no);
+					log.info("微信回调支付金额:{}",total_fee);
+					log.info("订单金额:{}",maps.get("total_fee"));
+					log.info("微信回调签名:{}",sign);
+					log.info("回调签名:{}",signature);
+					if(!total_fee.equals(maps.get("total_fee"))) {
+						log.info("微信手机支付回调金额不一致:{}",out_trade_no);
+						resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
+						return resXml;
+					}
+					if(!sign.equals(signature)) {
+						log.info("微信手机支付回调签名不一致:{}",out_trade_no);
+						resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
+						return resXml;
+					}
+					int i = wpm.updateWxPayByCallback(transaction_id, ClientConstants.PayStatus.PAY_SUCCESS.getValue(), time_end, device_info, out_trade_no);
+					if(i != 1) {
+						log.info("微信手机支付回调更新订单失败:{}",out_trade_no);
+						resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
+						return resXml;
+					}else {
+						String coursePayNum = wpm.selectWxCourseNum(out_trade_no);
+						if(StringUtils.isBlank(coursePayNum)) {
+							log.info("微信手机支付回调更新订单失败:{}",out_trade_no);
+							resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
+							return resXml;
+						}
+						
+						
+						CallBackParam cbp = new CallBackParam();
+		        		cbp.setOrderCode(coursePayNum);
+		        		cbp.setPayMethod(PayMethod.ONLINE.getValue());
+		        		cbp.setOrderType(PayConstants.PayPlatForm.getNum("WECHAT"));
+		        		signUpService.activityOrderPaySuccessOpt(cbp);
 						log.info("微信手机支付回调成功订单号:{}",out_trade_no);
 						resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>" + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
 						return resXml;

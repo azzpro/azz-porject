@@ -76,4 +76,26 @@ public class WxPayController {
 			e.printStackTrace();
 		}
 	}
+	
+	/** 活动支付回调
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping(value="activetyCallback",method=RequestMethod.POST)
+	public void activetyCallback(HttpServletRequest request,HttpServletResponse response) {
+		log.info("进入活动微信支付回调");
+		InputStream is = null;
+		try {
+			is = request.getInputStream();
+			String xml = HttpClientUtil.InputStream2String(is);
+			String callback = wx.activetyCallback(xml);
+			response.getWriter().write(callback);
+			response.getWriter().flush();
+			is.close();
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			e.printStackTrace();
+		}
+	}
 }

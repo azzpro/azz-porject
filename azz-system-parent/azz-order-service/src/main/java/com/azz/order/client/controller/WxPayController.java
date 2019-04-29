@@ -63,6 +63,16 @@ public class WxPayController {
 		return pps.callback(wx);
 	}
 	
+	/**
+	 * 活动支付回调
+	 * @param reqStr
+	 * @return
+	 */
+	@RequestMapping("activetyCallback")
+	public String callbactivetyCallbackack(@RequestParam("xml") String wx) {
+		return pps.activetyCallback(wx);
+	}
+	
 	
 }
 

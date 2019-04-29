@@ -34,6 +34,14 @@ public interface WxPayService {
 	@RequestMapping(value="/azz/api/wx/pay/callback",method=RequestMethod.POST)
 	public String callback(@RequestParam("xml") String xml);
 	
+	
+	/**
+	 * <p>活动支付回调</p>
+	 * @author 刘建麟  2018年12月17日 下午6:27:10
+	 */
+	@RequestMapping(value="/azz/api/wx/pay/activetyCallback",method=RequestMethod.POST)
+	public String activetyCallback(@RequestParam("xml") String xml);
+	
 	/**
 	 * <p>提交支付</p>
 	 * @param spp

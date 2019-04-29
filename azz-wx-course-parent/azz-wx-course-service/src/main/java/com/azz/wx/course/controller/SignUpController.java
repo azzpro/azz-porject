@@ -7,6 +7,7 @@
 
 package com.azz.wx.course.controller;
 
+import java.util.Date;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +17,29 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.QueryPage;
 import com.azz.core.common.page.Pagination;
+import com.azz.core.constants.ClientConstants.PayStatus;
+import com.azz.core.constants.WxActivityConstants.OrderStatus;
+import com.azz.core.reconstructed.exception.ReturnDataException;
+import com.azz.core.reconstructed.exception.ValidationException;
+import com.azz.util.JSR303ValidateUtils;
+import com.azz.wx.course.pojo.WxActivity;
+import com.azz.wx.course.pojo.WxActivityOrder;
+import com.azz.wx.course.pojo.WxActivityOrderItem;
+import com.azz.wx.course.pojo.WxActivityOrderStatus;
+import com.azz.wx.course.pojo.bo.ActivityPayOrderParam;
 import com.azz.wx.course.pojo.bo.AddActivityParam;
+import com.azz.wx.course.pojo.bo.CallBackParam;
 import com.azz.wx.course.pojo.bo.EditActivityParam;
+import com.azz.wx.course.pojo.bo.EvaluateActivityParam;
 import com.azz.wx.course.pojo.bo.PutOnOrPutOffOrDelActivityParam;
 import com.azz.wx.course.pojo.bo.SearchActivityInfoParam;
+import com.azz.wx.course.pojo.bo.ShieldOrCancelShiedEvaluationParam;
 import com.azz.wx.course.pojo.bo.SignUpParam;
+import com.azz.wx.course.pojo.vo.ActivityEvaluationInfo;
 import com.azz.wx.course.pojo.vo.ActivityInfo;
+import com.azz.wx.course.pojo.vo.ActivityPayOrderInfo;
 import com.azz.wx.course.pojo.vo.ClientSignUpInfo;
 import com.azz.wx.course.pojo.vo.SignUpInfo;
 import com.azz.wx.course.pojo.vo.WxUserInfo;
@@ -87,8 +104,8 @@ public class SignUpController {
 	 * @author 黄智聪  2019年4月17日 上午11:58:12
 	 */
 	@RequestMapping("/client/activity/getActivityDetail")
-	public JsonResult<ActivityInfo> getActivityDetail(@RequestParam("activityCode") String activityCode) {
-		return signUpService.getActivityDetail(activityCode);
+	public JsonResult<ActivityInfo> getActivityDetail(@RequestBody SearchActivityInfoParam param) {
+		return signUpService.getActivityDetail(param);
 	}
 	
 	/**
@@ -114,6 +131,57 @@ public class SignUpController {
 	public JsonResult<String> signUp(@RequestBody SignUpParam param) {
 		return signUpService.signUp(param);
 	}
+	
+	/**
+	 * 
+	 * <p>生成去付款的活动订单信息</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年4月29日 下午4:13:31
+	 */
+	@RequestMapping("/client/activity/generatePayOrderInfo")
+	public JsonResult<ActivityPayOrderInfo> generatePayOrderInfo(@RequestBody ActivityPayOrderParam param){
+		return signUpService.generatePayOrderInfo(param);
+	}
+	
+	/**
+	 * 
+	 * <p>微信订单支付成功后的操作</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月26日 下午3:41:55
+	 */
+	@RequestMapping("/client/activity/activityOrderPaySuccessOpt")
+	public JsonResult<String> activityOrderPaySuccessOpt(@RequestBody CallBackParam param){
+		return signUpService.activityOrderPaySuccessOpt(param);
+	}
+	
+	
+	/**
+	 * 
+	 * <p>查询活动评价</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年1月21日 下午7:26:26
+	 */
+	@RequestMapping("/client/activity/getEvaluationInfos")
+	public JsonResult<Pagination<ActivityEvaluationInfo>> getEvaluationInfos(@RequestBody QueryPage param){
+		return signUpService.getEvaluationInfos(param);
+	}
+	
+	
+	/**
+	 * 
+	 * <p>评价活动</p>
+	 * @return
+	 * @author 黄智聪  2019年1月23日 上午10:48:25
+	 */
+	@RequestMapping("/client/activity/evaluateActivity")
+	public JsonResult<String> evaluateActivity(@RequestBody EvaluateActivityParam param){
+		return signUpService.evaluateActivity(param);
+	}
+	
+	
 	
 	/**
 	 * 
@@ -161,6 +229,30 @@ public class SignUpController {
 	@RequestMapping("/platform/activity/getPlatformSignUpInfos")
 	public JsonResult<Pagination<SignUpInfo>> getPlatformSignUpInfos(@RequestBody SearchActivityInfoParam param) {
 		return signUpService.getPlatformSignUpInfos(param);
+	}
+	
+	/**
+	 * 
+	 * <p>查询活动评价</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年4月29日 下午2:01:16
+	 */
+	@RequestMapping("/platform/activity/getPlatformEvaluationInfos")
+	public JsonResult<Pagination<ActivityEvaluationInfo>> getPlatformEvaluationInfos(@RequestBody QueryPage param) {
+		return signUpService.getPlatformEvaluationInfos(param);
+	}
+	
+	/**
+	 * 
+	 * <p>屏蔽或取消屏蔽评论</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年4月29日 下午2:19:45
+	 */
+	@RequestMapping("/platform/activity/shieldOrCancelShiedEvaluation")
+	public JsonResult<String> shieldOrCancelShiedEvaluation(@RequestBody ShieldOrCancelShiedEvaluationParam param) {
+		return signUpService.shieldOrCancelShiedEvaluation(param);
 	}
 	
 	/**

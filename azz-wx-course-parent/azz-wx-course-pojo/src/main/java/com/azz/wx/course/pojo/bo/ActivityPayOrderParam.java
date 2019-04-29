@@ -1,35 +1,35 @@
 /*******************************************************************************
  * Project Key : CPPII
- * Create on 2019年1月4日 下午5:28:47
+ * Create on 2019年1月22日 下午1:46:47
  * Copyright (c) 2018. 爱智造.
  * 注意：本内容仅限于爱智造内部传阅，禁止外泄以及用于其他的商业目的
  ******************************************************************************/
  
 package com.azz.wx.course.pojo.bo;
 
-import com.azz.core.common.QueryPage;
+import org.hibernate.validator.constraints.NotBlank;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * <P>TODO</P>
  * @version 1.0
- * @author 黄智聪  2019年1月4日 下午5:28:47
+ * @author 黄智聪  2019年1月22日 下午1:46:47
  */
 @Data
-@EqualsAndHashCode(callSuper=false)
-public class SearchActivityInfoParam extends QueryPage{
+public class ActivityPayOrderParam {
 
-	private static final long serialVersionUID = 754959189102406644L;
-	
-	private String activityCode;
-	
-	private String activityName;
-	
-	private Byte status;
-	
+	@NotBlank(message = "缺少请求参数")
 	private String openid;
+
+	@NotBlank(message = "缺少请求参数")
+	private String nickname;
+	
+	@NotBlank(message = "缺少请求参数")
+	private String headImageUrl;
+
+	@NotBlank(message = "请选择开课信息")
+	private String activityCode;
 	
 }
 

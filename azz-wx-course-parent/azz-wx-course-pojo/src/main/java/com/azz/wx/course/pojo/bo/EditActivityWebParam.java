@@ -45,6 +45,7 @@ public class EditActivityWebParam {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date deadline;
     
+    @NotNull(message = "请输入价格")
     private BigDecimal price;
     
     private String modifier;

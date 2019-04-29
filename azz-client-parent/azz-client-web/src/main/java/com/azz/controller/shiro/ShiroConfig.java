@@ -71,8 +71,8 @@ public class ShiroConfig {
 	filterChainDefinitionMap.put("/azz/api/client/selection/getClassificationChildPagination", "anon");
 	filterChainDefinitionMap.put("/azz/api/client/selection/getClassificationList", "anon");
 	
-	// 开放活动报名获取accessToken接口
-	filterChainDefinitionMap.put("/azz/api/client/activity/*", "anon");
+	// 开放活动报名接口
+	//filterChainDefinitionMap.put("/azz/api/client/activity/*", "anon");
 	 
 	// 开放官网首页数据
 	filterChainDefinitionMap.put("/azz/api/index/*", "anon");

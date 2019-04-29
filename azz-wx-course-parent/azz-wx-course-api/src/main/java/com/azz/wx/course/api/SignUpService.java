@@ -16,13 +16,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.QueryPage;
 import com.azz.core.common.page.Pagination;
+import com.azz.wx.course.pojo.bo.ActivityPayOrderParam;
 import com.azz.wx.course.pojo.bo.AddActivityParam;
+import com.azz.wx.course.pojo.bo.CallBackParam;
 import com.azz.wx.course.pojo.bo.EditActivityParam;
+import com.azz.wx.course.pojo.bo.EvaluateActivityParam;
 import com.azz.wx.course.pojo.bo.PutOnOrPutOffOrDelActivityParam;
 import com.azz.wx.course.pojo.bo.SearchActivityInfoParam;
+import com.azz.wx.course.pojo.bo.ShieldOrCancelShiedEvaluationParam;
 import com.azz.wx.course.pojo.bo.SignUpParam;
+import com.azz.wx.course.pojo.vo.ActivityEvaluationInfo;
 import com.azz.wx.course.pojo.vo.ActivityInfo;
+import com.azz.wx.course.pojo.vo.ActivityPayOrderInfo;
 import com.azz.wx.course.pojo.vo.ClientSignUpInfo;
 import com.azz.wx.course.pojo.vo.SignUpInfo;
 import com.azz.wx.course.pojo.vo.WxUserInfo;
@@ -75,7 +82,26 @@ public interface SignUpService {
 	 * @author 黄智聪  2019年4月17日 上午11:58:12
 	 */
 	@RequestMapping(value = "/azz/api/client/activity/getActivityDetail", method = RequestMethod.POST)
-	JsonResult<ActivityInfo> getActivityDetail(@RequestParam("activityCode") String activityCode);
+	JsonResult<ActivityInfo> getActivityDetail(@RequestBody SearchActivityInfoParam param);
+	
+	/**
+	 * 
+	 * <p>查询活动评价</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年1月21日 下午7:26:26
+	 */
+	@RequestMapping(value = "/azz/api/client/activity/getEvaluationInfos", method = RequestMethod.POST)
+	JsonResult<Pagination<ActivityEvaluationInfo>> getEvaluationInfos(@RequestBody QueryPage param);
+	
+	/**
+	 * 
+	 * <p>评价活动</p>
+	 * @return
+	 * @author 黄智聪  2019年1月23日 上午10:48:25
+	 */
+	@RequestMapping(value = "/azz/api/client/activity/evaluateActivity", method = RequestMethod.POST)
+	JsonResult<String> evaluateActivity(@RequestBody EvaluateActivityParam param);
 	
 	/**
 	 * 
@@ -96,6 +122,26 @@ public interface SignUpService {
 	 */
 	@RequestMapping(value = "/azz/api/client/activity/signUp", method = RequestMethod.POST)
 	JsonResult<String> signUp(@RequestBody SignUpParam param);
+	
+	/**
+	 * 
+	 * <p>生成去付款的活动订单信息</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年4月29日 下午4:13:31
+	 */
+	@RequestMapping("/azz/api/client/activity/generatePayOrderInfo")
+	JsonResult<ActivityPayOrderInfo> generatePayOrderInfo(@RequestBody ActivityPayOrderParam param);
+	
+	/**
+	 * 
+	 * <p>微信订单支付成功后的操作</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月26日 下午3:41:55
+	 */
+	@RequestMapping("/azz/api/client/activity/activityOrderPaySuccessOpt")
+	JsonResult<String> activityOrderPaySuccessOpt(@RequestBody CallBackParam param);
 	
 	/**
 	 * 
@@ -138,6 +184,25 @@ public interface SignUpService {
 	@RequestMapping("/azz/api/platform/activity/getPlatformSignUpInfos")
 	JsonResult<Pagination<SignUpInfo>> getPlatformSignUpInfos(@RequestBody SearchActivityInfoParam param);
 	
+	/**
+	 * 
+	 * <p>查询活动评价</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年1月21日 下午7:26:26
+	 */
+	@RequestMapping("/azz/api/platform/activity/getPlatformEvaluationInfos")
+	JsonResult<Pagination<ActivityEvaluationInfo>> getPlatformEvaluationInfos(@RequestBody QueryPage param);
+	
+	/**
+	 * 
+	 * <p>屏蔽或取消屏蔽评论</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年4月29日 下午2:19:45
+	 */
+	@RequestMapping("/azz/api/platform/activity/shieldOrCancelShiedEvaluation")
+	JsonResult<String> shieldOrCancelShiedEvaluation(@RequestBody ShieldOrCancelShiedEvaluationParam param);
 	
 	/**
 	 * 

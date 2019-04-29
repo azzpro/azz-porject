@@ -3,6 +3,7 @@ package com.azz.wx.course.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.azz.wx.course.pojo.WxActivity;
 import com.azz.wx.course.pojo.bo.SearchActivityInfoParam;
@@ -48,7 +49,7 @@ public interface WxActivityMapper {
 	 * @return
 	 * @author 黄智聪  2019年4月17日 下午7:20:20
 	 */
-	ActivityInfo getActivityInfoByActivityCode(String activityCode);
+	ActivityInfo getActivityInfoByActivityCode(@Param("activityCode")String activityCode, @Param("openid")String openid);
 	
 	/**
 	 * 

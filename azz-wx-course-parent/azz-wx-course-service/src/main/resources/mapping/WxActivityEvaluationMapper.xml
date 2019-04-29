@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.wx.course.mapper.WxActivityEvaluationMapper">
+  <resultMap id="BaseResultMap" type="com.azz.wx.course.pojo.WxActivityEvaluation">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="evaluation_code" jdbcType="VARCHAR" property="evaluationCode" />
+    <result column="openid" jdbcType="VARCHAR" property="openid" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="head_image_url" jdbcType="VARCHAR" property="headImageUrl" />
+    <result column="activity_code" jdbcType="VARCHAR" property="activityCode" />
+    <result column="grade" jdbcType="TINYINT" property="grade" />
+    <result column="evaluation_content" jdbcType="VARCHAR" property="evaluationContent" />
+    <result column="is_show_on_top" jdbcType="TINYINT" property="isShowOnTop" />
+    <result column="is_shield" jdbcType="TINYINT" property="isShield" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, evaluation_code, openid, nickname, head_image_url, activity_code, grade, evaluation_content, 
+    is_show_on_top, is_shield, creator, create_time, modifier, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wx_activity_evaluation
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByCode" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wx_activity_evaluation
+    where evaluation_code = #{evaluationCode}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from wx_activity_evaluation
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.azz.wx.course.pojo.WxActivityEvaluation">
+    insert into wx_activity_evaluation (id, evaluation_code, openid, 
+      nickname, head_image_url, activity_code, 
+      grade, evaluation_content, is_show_on_top, 
+      is_shield, creator, create_time, 
+      modifier, modify_time)
+    values (#{id,jdbcType=BIGINT}, #{evaluationCode,jdbcType=VARCHAR}, #{openid,jdbcType=VARCHAR}, 
+      #{nickname,jdbcType=VARCHAR}, #{headImageUrl,jdbcType=VARCHAR}, #{activityCode,jdbcType=VARCHAR}, 
+      #{grade,jdbcType=TINYINT}, #{evaluationContent,jdbcType=VARCHAR}, #{isShowOnTop,jdbcType=TINYINT}, 
+      #{isShield,jdbcType=TINYINT}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.wx.course.pojo.WxActivityEvaluation">
+    insert into wx_activity_evaluation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="evaluationCode != null">
+        evaluation_code,
+      </if>
+      <if test="openid != null">
+        openid,
+      </if>
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="headImageUrl != null">
+        head_image_url,
+      </if>
+      <if test="activityCode != null">
+        activity_code,
+      </if>
+      <if test="grade != null">
+        grade,
+      </if>
+      <if test="evaluationContent != null">
+        evaluation_content,
+      </if>
+      <if test="isShowOnTop != null">
+        is_show_on_top,
+      </if>
+      <if test="isShield != null">
+        is_shield,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="evaluationCode != null">
+        #{evaluationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null">
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="headImageUrl != null">
+        #{headImageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="activityCode != null">
+        #{activityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null">
+        #{grade,jdbcType=TINYINT},
+      </if>
+      <if test="evaluationContent != null">
+        #{evaluationContent,jdbcType=VARCHAR},
+      </if>
+      <if test="isShowOnTop != null">
+        #{isShowOnTop,jdbcType=TINYINT},
+      </if>
+      <if test="isShield != null">
+        #{isShield,jdbcType=TINYINT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.wx.course.pojo.WxActivityEvaluation">
+    update wx_activity_evaluation
+    <set>
+      <if test="evaluationCode != null">
+        evaluation_code = #{evaluationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null">
+        openid = #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="headImageUrl != null">
+        head_image_url = #{headImageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="activityCode != null">
+        activity_code = #{activityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null">
+        grade = #{grade,jdbcType=TINYINT},
+      </if>
+      <if test="evaluationContent != null">
+        evaluation_content = #{evaluationContent,jdbcType=VARCHAR},
+      </if>
+      <if test="isShowOnTop != null">
+        is_show_on_top = #{isShowOnTop,jdbcType=TINYINT},
+      </if>
+      <if test="isShield != null">
+        is_shield = #{isShield,jdbcType=TINYINT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.wx.course.pojo.WxActivityEvaluation">
+    update wx_activity_evaluation
+    set evaluation_code = #{evaluationCode,jdbcType=VARCHAR},
+      openid = #{openid,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      head_image_url = #{headImageUrl,jdbcType=VARCHAR},
+      activity_code = #{activityCode,jdbcType=VARCHAR},
+      grade = #{grade,jdbcType=TINYINT},
+      evaluation_content = #{evaluationContent,jdbcType=VARCHAR},
+      is_show_on_top = #{isShowOnTop,jdbcType=TINYINT},
+      is_shield = #{isShield,jdbcType=TINYINT},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getEvaluationInfos" parameterType="java.lang.Integer" resultType="com.azz.wx.course.pojo.vo.ActivityEvaluationInfo">
+   	SELECT
+   		wae.evaluation_code as evaluationCode,
+		wae.create_time AS createTime,
+		wae.evaluation_content AS evaluationContent,
+		wae.grade AS grade,
+		wae.head_image_url AS headImageUrl,
+		wae.nickname AS nickname,
+		wae.openid AS openid
+	FROM
+		wx_activity_evaluation wae
+	<where>
+		<if test="isShield != null">
+			wae.is_shield = #{isShield}
+		</if>
+	</where>
+	ORDER BY wae.create_time DESC
+  </select>
+  
+  <select id="countActivityEvaluation" resultType="int">
+  	select 
+  		count(1)
+  	from 
+  		wx_activity_evaluation 
+  	where openid = #{openid}
+  	and activity_code = #{activityCode}
+  </select>
+</mapper>

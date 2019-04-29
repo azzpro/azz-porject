@@ -393,8 +393,16 @@
     ORDER BY create_time desc
   </select>
   
-  <select id="getActivityInfoByActivityCode" parameterType="string" resultType="com.azz.wx.course.pojo.vo.ActivityInfo">
+  <select id="getActivityInfoByActivityCode" resultType="com.azz.wx.course.pojo.vo.ActivityInfo">
 	  SELECT
+	  	<if test="openid != null and openid !='' ">
+			 CASE
+			WHEN wausu.id IS NULL THEN
+				0
+			ELSE
+				1
+			END AS isEvaluated,
+	  	</if>
 		ac.activity_code AS activityCode,
 		ac.activity_name AS activityName,
 		CASE
@@ -419,6 +427,9 @@
 		ac.remark as remark
 	FROM
 		wx_activity ac
+	<if test="openid != null and openid !='' ">
+		LEFT JOIN wx_activity_user_sign_up wausu ON ac.activity_code = wausu.activity_code AND wausu.openid = #{openid}
+	</if>
 	where ac.activity_code = #{activityCode}
   </select>
   
@@ -440,6 +451,7 @@
 		ausu.phone_number AS phoneNumber,
 		ausu.company_name AS companyName,
 		ausu.position AS position,
+		ausu.main_product_or_service AS mainProductOrService,
 		ausu.create_time AS signUpTime
 	FROM
 		wx_activity_user_sign_up ausu 

@@ -42,6 +42,8 @@ public class SignUpParam {
 
 	@NotBlank(message = "请填写职位")
     private String position;
+	
+	private String mainProductOrService;
 
 }
 

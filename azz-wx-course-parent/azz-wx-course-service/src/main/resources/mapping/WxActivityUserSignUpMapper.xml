@@ -10,13 +10,14 @@
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
     <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="main_product_or_service" jdbcType="VARCHAR" property="mainProductOrService" />
     <result column="position" jdbcType="VARCHAR" property="position" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
   </resultMap>
   <sql id="Base_Column_List">
     id, activity_code, openid, nickname, head_image_url, user_name, phone_number, company_name, 
-    position, create_time, creator
+    position, main_product_or_service, create_time, creator
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -31,11 +32,11 @@
   <insert id="insert" parameterType="com.azz.wx.course.pojo.WxActivityUserSignUp">
     insert into wx_activity_user_sign_up (id, activity_code, openid, 
       nickname, head_image_url, user_name, 
-      phone_number, company_name, position, 
+      phone_number, company_name, position, main_product_or_service,
       create_time, creator)
     values (#{id,jdbcType=INTEGER}, #{activityCode,jdbcType=VARCHAR}, #{openid,jdbcType=VARCHAR}, 
       #{nickname,jdbcType=VARCHAR}, #{headImageUrl,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
-      #{phoneNumber,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
+      #{phoneNumber,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{mainProductOrService,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.azz.wx.course.pojo.WxActivityUserSignUp">
@@ -67,6 +68,9 @@
       </if>
       <if test="position != null">
         position,
+      </if>
+      <if test="mainProductOrService != null">
+        main_product_or_service,
       </if>
       <if test="createTime != null">
         create_time,
@@ -103,6 +107,9 @@
       <if test="position != null">
         #{position,jdbcType=VARCHAR},
       </if>
+      <if test="mainProductOrService != null">
+        #{mainProductOrService,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -138,6 +145,9 @@
       <if test="position != null">
         position = #{position,jdbcType=VARCHAR},
       </if>
+      <if test="mainProductOrService != null">
+        main_product_or_service = #{mainProductOrService,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -157,6 +167,7 @@
       phone_number = #{phoneNumber,jdbcType=VARCHAR},
       company_name = #{companyName,jdbcType=VARCHAR},
       position = #{position,jdbcType=VARCHAR},
+      main_product_or_service = #{mainProductOrService,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}

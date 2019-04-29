@@ -88,6 +88,65 @@ public abstract class WxActivityConstants {
 			this.desc = desc;
 		}
 	}
+	
+	/**
+	 * 
+	 * <P>是否屏蔽</P>
+	 * @version 1.0
+	 * @author 黄智聪  2018年11月1日 下午5:29:36
+	 */
+	public enum IsShield {
+		N(0, "否"),
+
+		Y(1, "是");
+
+		@Getter
+		private int value;
+
+		@Getter
+		private String desc;
+
+		IsShield(int value, String desc) {
+			this.value = value;
+			this.desc = desc;
+		}
+		
+		public static boolean checkStatusExist(int value) {
+			IsShield[] values = IsShield.values();
+            for (IsShield status : values) {
+                if (status.getValue() == value) {
+                    return true;
+                }
+            }
+            return false;
+        }
+	}
+	
+	/**
+	 * 
+	 * <P>订单状态</P>
+	 * @version 1.0
+	 * @author 黄智聪  2018年11月1日 下午5:29:36
+	 */
+	public enum OrderStatus {
+		
+		NOT_PAID(1, "待支付"),
+
+		PAID(2, "已支付"),
+
+		CLOSED(3, "已关闭");
+
+		@Getter
+		private int value;
+
+		@Getter
+		private String desc;
+
+		OrderStatus(int value, String desc) {
+			this.value = value;
+			this.desc = desc;
+		}
+	}
 
 }
 

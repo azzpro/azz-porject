@@ -73,6 +73,8 @@ public class WxActivityUserSignUp implements Serializable {
      * @mbg.generated
      */
     private String position;
+    
+    private String mainProductOrService;
 
     /**
      * 创建时间
@@ -418,4 +420,12 @@ public class WxActivityUserSignUp implements Serializable {
         sb.append("]");
         return sb.toString();
     }
+
+	public String getMainProductOrService() {
+		return mainProductOrService;
+	}
+
+	public void setMainProductOrService(String mainProductOrService) {
+		this.mainProductOrService = mainProductOrService;
+	}
 }

@@ -37,5 +37,7 @@ public class ActivityInfo {
     private Date createTime;
     
     private String remark;
-
+    
+    private Integer isEvaluated;
+    
 }

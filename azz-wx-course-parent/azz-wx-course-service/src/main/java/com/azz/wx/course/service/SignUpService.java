@@ -8,7 +8,6 @@
 package com.azz.wx.course.service;
 
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
@@ -28,17 +27,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.alibaba.fastjson.JSONObject;
 import com.azz.core.common.JsonResult;
+import com.azz.core.common.QueryPage;
+import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.WxActivityConstants;
+import com.azz.core.constants.ClientConstants.PayStatus;
 import com.azz.core.constants.WxActivityConstants.ActivityStatus;
 import com.azz.core.constants.WxActivityConstants.IsChangeActivityPic;
+import com.azz.core.constants.WxActivityConstants.IsShield;
+import com.azz.core.constants.WxActivityConstants.OrderStatus;
+import com.azz.core.constants.WxCourseConstants.CourseOrderStatus;
 import com.azz.core.exception.BaseException;
 import com.azz.core.reconstructed.errorcode.ValidationErrorCode;
 import com.azz.core.reconstructed.exception.BusinessException;
 import com.azz.core.reconstructed.exception.ReturnDataException;
 import com.azz.core.reconstructed.exception.ValidationException;
+import com.azz.exception.JSR303ValidationException;
 import com.azz.system.api.SystemImageUploadService;
 import com.azz.system.bo.UploadImageParam;
 import com.azz.util.DateUtils;
@@ -46,21 +52,38 @@ import com.azz.util.HttpClientUtils;
 import com.azz.util.JSR303ValidateUtils;
 import com.azz.util.OkHttpUtil;
 import com.azz.util.StringUtils;
+import com.azz.wx.course.mapper.WxActivityEvaluationMapper;
 import com.azz.wx.course.mapper.WxActivityMapper;
+import com.azz.wx.course.mapper.WxActivityOrderItemMapper;
+import com.azz.wx.course.mapper.WxActivityOrderMapper;
+import com.azz.wx.course.mapper.WxActivityOrderStatusMapper;
 import com.azz.wx.course.mapper.WxActivityUserSignUpMapper;
 import com.azz.wx.course.pojo.WxActivity;
+import com.azz.wx.course.pojo.WxActivityEvaluation;
+import com.azz.wx.course.pojo.WxActivityOrder;
+import com.azz.wx.course.pojo.WxActivityOrderItem;
+import com.azz.wx.course.pojo.WxActivityOrderStatus;
 import com.azz.wx.course.pojo.WxActivityUserSignUp;
+import com.azz.wx.course.pojo.WxCourseOrder;
+import com.azz.wx.course.pojo.WxCourseOrderStatus;
+import com.azz.wx.course.pojo.bo.ActivityPayOrderParam;
 import com.azz.wx.course.pojo.bo.ActivityPic;
 import com.azz.wx.course.pojo.bo.AddActivityParam;
+import com.azz.wx.course.pojo.bo.CallBackParam;
 import com.azz.wx.course.pojo.bo.EditActivityParam;
+import com.azz.wx.course.pojo.bo.EvaluateActivityParam;
 import com.azz.wx.course.pojo.bo.PutOnOrPutOffOrDelActivityParam;
 import com.azz.wx.course.pojo.bo.SearchActivityInfoParam;
+import com.azz.wx.course.pojo.bo.ShieldOrCancelShiedEvaluationParam;
 import com.azz.wx.course.pojo.bo.SignUpParam;
 import com.azz.wx.course.pojo.bo.SuccessSignUpNoticeParam;
 import com.azz.wx.course.pojo.bo.TemplateData;
 import com.azz.wx.course.pojo.bo.WechatTemplate;
+import com.azz.wx.course.pojo.vo.ActivityEvaluationInfo;
 import com.azz.wx.course.pojo.vo.ActivityInfo;
+import com.azz.wx.course.pojo.vo.ActivityPayOrderInfo;
 import com.azz.wx.course.pojo.vo.ClientSignUpInfo;
+import com.azz.wx.course.pojo.vo.PayOrderInfo;
 import com.azz.wx.course.pojo.vo.SignUpInfo;
 import com.azz.wx.course.pojo.vo.UploadFileInfo;
 import com.azz.wx.course.pojo.vo.WechatRequestParam;
@@ -121,6 +144,18 @@ public class SignUpService {
 	
 	@Autowired
 	private WxActivityUserSignUpMapper wxActivityUserSignUpMapper;
+	
+	@Autowired
+	private WxActivityEvaluationMapper wxActivityEvaluationMapper;
+	
+	@Autowired
+	private WxActivityOrderItemMapper wxActivityOrderItemMapper;
+	
+	@Autowired
+	private WxActivityOrderMapper wxActivityOrderMapper;
+	
+	@Autowired
+	private WxActivityOrderStatusMapper wxActivityOrderStatusMapper;
 	
 	@Autowired
 	SystemImageUploadService systemImageUploadService;
@@ -199,8 +234,11 @@ public class SignUpService {
 	 * @return
 	 * @author 黄智聪  2019年4月17日 上午11:58:12
 	 */
-	public JsonResult<ActivityInfo> getActivityDetail(@RequestParam("activityCode") String activityCode) {
-		ActivityInfo detail = wxActivityMapper.getActivityInfoByActivityCode(activityCode);
+	public JsonResult<ActivityInfo> getActivityDetail(@RequestBody SearchActivityInfoParam param) {
+		if(StringUtils.isBlank(param.getOpenid())) {
+			throw new ValidationException(ValidationErrorCode.VALIDATION_ERROR_MISSING_REQUEST_PARAM);
+		}
+		ActivityInfo detail = wxActivityMapper.getActivityInfoByActivityCode(param.getActivityCode(), param.getOpenid());
 		if(detail == null) {
 			throw new ReturnDataException("活动不存在");
 		}
@@ -210,7 +248,7 @@ public class SignUpService {
 		}
 		int intRemark = Integer.parseInt(remark);
 		intRemark += 1;
-		WxActivity record = WxActivity.builder().remark(intRemark + "").activityCode(activityCode).build();
+		WxActivity record = WxActivity.builder().remark(intRemark + "").activityCode(param.getActivityCode()).build();
 		wxActivityMapper.updateByCodeSelective(record);
 		return JsonResult.successJsonResult(detail);
 	}
@@ -265,6 +303,7 @@ public class SignUpService {
 				.phoneNumber(param.getPhoneNumber())
 				.position(param.getPosition())
 				.userName(param.getUserName())
+				.mainProductOrService(param.getMainProductOrService())
 				.build();
 		wxActivityUserSignUpMapper.insertSelective(record);
 		Integer signUpCount = activity.getSignUpCount();
@@ -284,7 +323,107 @@ public class SignUpService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return JsonResult.successJsonResult();
+	}
+	
+	/**
+	 * 
+	 * <p>生成去付款的活动订单信息</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年4月29日 下午4:13:31
+	 */
+	public JsonResult<ActivityPayOrderInfo> generatePayOrderInfo(@RequestBody ActivityPayOrderParam param){
+		JSR303ValidateUtils.validateInputParam(param);
+		WxActivity activity = wxActivityMapper.getActivityWithoutContentByActivityCode(param.getActivityCode());
+		if(activity == null){
+			throw new ValidationException("活动不存在");
+		}
+		Date nowDate = new Date();
+		String orderCode = "AO"+System.currentTimeMillis();
+		// 插入活动订单记录
+		WxActivityOrder orderRecord = WxActivityOrder.builder()
+				.createTime(nowDate)
+				.creator(param.getOpenid())
+				.grandTotal(activity.getPrice())
+				.headImageUrl(param.getHeadImageUrl())
+				.nickName(param.getNickname())
+				.openid(param.getOpenid())
+				.orderCode(orderCode)
+				.orderStatus((byte)OrderStatus.NOT_PAID.getValue())
+				.build();
+		wxActivityOrderMapper.insertSelective(orderRecord);
 		
+		// 插入活动订单状态变化记录
+		WxActivityOrderStatus orderStatusRecord = WxActivityOrderStatus.builder()
+				.createTime(nowDate)
+				.creator(param.getOpenid())
+				.orderCode(orderCode)
+				.orderStatus((byte)OrderStatus.NOT_PAID.getValue())
+				.build();
+		wxActivityOrderStatusMapper.insertSelective(orderStatusRecord);
+		
+		// 插入订单细项记录
+		WxActivityOrderItem orderItemRecord = WxActivityOrderItem.builder()
+				.createTime(nowDate)
+				.creator(param.getOpenid())
+				.orderCode(orderCode)
+				.activityCode(param.getActivityCode())
+				.activityName(activity.getActivityName())
+				.price(activity.getPrice())
+				.quantity(1)
+				.build();
+		wxActivityOrderItemMapper.insert(orderItemRecord);
+		
+		// 支付信息
+		ActivityPayOrderInfo info = ActivityPayOrderInfo.builder()
+				.orderCode(orderCode)
+				.activityCode(param.getActivityCode())
+				.activityName(activity.getActivityName())
+			    .price(activity.getPrice())
+			    .activityTime(activity.getActivityTime())
+			    .orderStatus((byte)OrderStatus.NOT_PAID.getValue())
+				.build();
+		return JsonResult.successJsonResult(info);
+	}
+	
+	/**
+	 * 
+	 * <p>微信订单支付成功后的操作</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2018年11月26日 下午3:41:55
+	 */
+	public JsonResult<String> activityOrderPaySuccessOpt(@RequestBody CallBackParam param){
+		JSR303ValidateUtils.validateInputParam(param);
+		String orderCode = param.getOrderCode();
+		ActivityPayOrderInfo info = wxActivityOrderMapper.getPayOrderInfo(param.getOrderCode());
+		if(info == null) {
+			throw new ReturnDataException("活动订单不存在");
+		}
+		// 判断订单是否处于待支付状态
+		if(info.getOrderStatus() != OrderStatus.NOT_PAID.getValue()) {
+			throw new ReturnDataException("活动订单状态异常");
+		}
+		Date nowDate = new Date();
+		// 修改订单
+		WxActivityOrder orderRecord = WxActivityOrder.builder()
+				.orderCode(orderCode)
+				.orderStatus((byte)OrderStatus.PAID.getValue())
+				.paymentMethod(param.getPayMethod().byteValue())
+				.paymentType(param.getOrderType().byteValue())
+				.paymentStatus((byte)PayStatus.PAY_SUCCESS.getValue())
+				.modifyTime(nowDate)
+				.build();
+		wxActivityOrderMapper.updateByOrderCode(orderRecord);
+		
+		// 插入活动订单状态变化记录
+		WxActivityOrderStatus orderStatusRecord = WxActivityOrderStatus.builder()
+				.createTime(nowDate)
+				.orderCode(orderCode)
+				.orderStatus((byte)OrderStatus.PAID.getValue())
+				.build();
+		wxActivityOrderStatusMapper.insertSelective(orderStatusRecord);
 		return JsonResult.successJsonResult();
 	}
 	
@@ -333,6 +472,57 @@ public class SignUpService {
 		ret.put("signature", signature);
 		return JsonResult.successJsonResult(ret);
 	}
+	
+	/**
+	 * 
+	 * <p>查询活动评价</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年1月21日 下午7:26:26
+	 */
+	public JsonResult<Pagination<ActivityEvaluationInfo>> getEvaluationInfos(@RequestBody QueryPage param){
+		PageHelper.startPage(param.getPageNum(), param.getPageSize());
+		List<ActivityEvaluationInfo> infos = wxActivityEvaluationMapper.getEvaluationInfos(1);
+		return JsonResult.successJsonResult(new Pagination<>(infos));
+	}
+	
+	
+	/**
+	 * 
+	 * <p>评价活动</p>
+	 * @return
+	 * @author 黄智聪  2019年1月23日 上午10:48:25
+	 */
+	public JsonResult<String> evaluateActivity(@RequestBody EvaluateActivityParam param){
+		JSR303ValidateUtils.validateInputParam(param);
+		WxActivity activity = wxActivityMapper.getActivityWithoutContentByActivityCode(param.getActivityCode());
+		if(activity == null) {
+			throw new ReturnDataException("活动不存在");
+		}
+		int count = wxActivityEvaluationMapper.countActivityEvaluation(param.getOpenid(), param.getActivityCode());
+		if(count > 0) {
+			throw new ReturnDataException("您已评价");
+		}
+		Date nowDate = new Date();
+		// 新增评论记录
+		WxActivityEvaluation evaluationRecord = WxActivityEvaluation.builder()
+				.activityCode(param.getActivityCode())
+				.createTime(nowDate)
+				.creator(param.getOpenid())
+				.evaluationCode("EA" + System.currentTimeMillis())
+				.evaluationContent(param.getEvaluationContent())
+				.grade(param.getGrade())
+				.openid(param.getOpenid())
+				.headImageUrl(param.getHeadImageUrl())
+				.nickname(param.getNickname())
+				.build();
+		wxActivityEvaluationMapper.insertSelective(evaluationRecord);
+		
+		return JsonResult.successJsonResult();
+	}
+	
+	
+	
 
 	/**
 	 * 
@@ -489,9 +679,9 @@ public class SignUpService {
 	 * @author 黄智聪  2019年4月17日 上午11:58:12
 	 */
 	public JsonResult<ActivityInfo> getPlatformActivityDetail(@RequestParam("activityCode") String activityCode) {
-		ActivityInfo detail = wxActivityMapper.getActivityInfoByActivityCode(activityCode);
+		ActivityInfo detail = wxActivityMapper.getActivityInfoByActivityCode(activityCode, null);
 		if(detail == null) {
-			throw new ValidationException("活动不存在");
+			throw new ReturnDataException("活动不存在");
 		}
 		return JsonResult.successJsonResult(detail);
 	}
@@ -510,6 +700,45 @@ public class SignUpService {
 		PageHelper.startPage(param.getPageNum(), param.getPageSize());
 		List<SignUpInfo> infos = wxActivityMapper.getActivitySignUpInfoByActivityCode(param.getActivityCode());
 		return JsonResult.successJsonResult(new Pagination<>(infos));
+	}
+	
+	/**
+	 * 
+	 * <p>查询活动评价</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年1月21日 下午7:26:26
+	 */
+	public JsonResult<Pagination<ActivityEvaluationInfo>> getPlatformEvaluationInfos(@RequestBody QueryPage param){
+		PageHelper.startPage(param.getPageNum(), param.getPageSize());
+		List<ActivityEvaluationInfo> infos = wxActivityEvaluationMapper.getEvaluationInfos(0);
+		return JsonResult.successJsonResult(new Pagination<>(infos));
+	}
+	
+	/**
+	 * 
+	 * <p>屏蔽或取消屏蔽评论</p>
+	 * @param param
+	 * @return
+	 * @author 黄智聪  2019年4月29日 下午2:19:45
+	 */
+	public JsonResult<String> shieldOrCancelShiedEvaluation(@RequestBody ShieldOrCancelShiedEvaluationParam param) {
+		JSR303ValidateUtils.validateInputParam(param);
+		WxActivityEvaluation evaluation = wxActivityEvaluationMapper.selectByCode(param.getEvaluationCode());
+		if(evaluation == null) {
+			throw new ReturnDataException("评价记录不存在");
+		}
+		if(IsShield.checkStatusExist(param.getStatus())) {
+			throw new ValidationException("是否屏蔽参数有误");
+		}
+		WxActivityEvaluation record = WxActivityEvaluation.builder()
+				.id(evaluation.getId())
+				.isShield(param.getStatus())
+				.modifier(param.getModifier())
+				.modifyTime(new Date())
+				.build();
+		wxActivityEvaluationMapper.updateByPrimaryKeySelective(record);
+		return JsonResult.successJsonResult();
 	}
 	
 	/**
@@ -570,7 +799,7 @@ public class SignUpService {
 				.modifier(param.getModifier())
 				.status(param.getStatus())
 				.signUpLimit(param.getSignUpLimit())
-				.price(param.getPrice() == null ? BigDecimal.ZERO : param.getPrice())
+				.price(param.getPrice())
 				.build();
 		// 修改了主图，则重新上传
 		int isChangeActivityPic = param.getIsChangeActivityPic();
@@ -656,6 +885,23 @@ public class SignUpService {
 	    return file;
 	}
 	
+	
+	/*
+	public static void main(String[] args) throws IOException, InvalidFormatException {
+		File file = new File("C:\\Users\\THINK\\Desktop\\a.xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook(file);
+		XSSFSheet sheet = wb.getSheetAt(0);
+		int lastRowNum = sheet.getLastRowNum();
+		for (int i = 2 ; i < lastRowNum ;i++) {
+			XSSFRow row = sheet.getRow(i);
+			String name = row.getCell(2).getStringCellValue();
+			String companyName = row.getCell(3).getStringCellValue();
+			String phoneNumber = row.getCell(4).getRawValue();
+			String sql = "insert into wx_activity_user_sign_up(activity_code,user_name,phone_number,company_name) values('A1555671473934','"+name+"','"+phoneNumber+"','"+companyName+"');";
+			System.out.println(sql);
+		}
+		
+	}*/
 	
 	/************************************************** 平台端end **********************************************/
 	

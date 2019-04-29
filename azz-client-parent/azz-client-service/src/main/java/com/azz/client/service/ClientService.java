@@ -164,6 +164,12 @@ public class ClientService {
 			}
 			return JsonResult.successJsonResult();
 		}
+		// 来自于活动报名登录
+		if(phoneNumber.startsWith(WxCourseConstants.WX_ACTIVITY_LOGIN_USER_NAME_PREFIX)) {
+			// 截取并获取openid
+			String openid = phoneNumber.substring(WxCourseConstants.WX_ACTIVITY_LOGIN_USER_NAME_PREFIX.length());
+			return JsonResult.successJsonResult(openid);
+		}
 		// 其他登录：1.客户端手机号密码登录  2.客户端扫码登录
 		ClientUser clientUser = clientUserMapper.getClientUserByPhoneNumber(phoneNumber);
 		if (clientUser == null) {// 无效用户

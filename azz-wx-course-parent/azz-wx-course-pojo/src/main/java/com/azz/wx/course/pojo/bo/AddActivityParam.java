@@ -39,7 +39,8 @@ public class AddActivityParam {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date deadline;
     
-    private BigDecimal price = BigDecimal.ZERO;
+    @NotNull(message = "请输入价格")
+    private BigDecimal price;
     
     private String creator;
 

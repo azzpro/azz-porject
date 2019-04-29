@@ -283,7 +283,10 @@
       	waoi.position as position, 
       	waoi.main_product_or_service as mainProductOrService,
 		wa.activity_time AS activityTime,
-		wa.price AS price
+		wa.price AS price,
+		wao.openid AS openid,
+		wao.nick_name as nickname,
+		wao.head_image_url as headImageUrl 
 	FROM
 		wx_activity_order wao
 	JOIN wx_activity_order_item waoi ON wao.order_code = waoi.order_code

@@ -203,7 +203,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
-  <select id="getEvaluationInfos" parameterType="java.lang.Integer" resultType="com.azz.wx.course.pojo.vo.ActivityEvaluationInfo">
+  <select id="getEvaluationInfos" resultType="com.azz.wx.course.pojo.vo.ActivityEvaluationInfo">
    	SELECT
    		wae.evaluation_code as evaluationCode,
 		wae.create_time AS createTime,
@@ -211,12 +211,14 @@
 		wae.grade AS grade,
 		wae.head_image_url AS headImageUrl,
 		wae.nickname AS nickname,
-		wae.openid AS openid
+		wae.openid AS openid,
+		wae.is_shield as isShield
 	FROM
 		wx_activity_evaluation wae
 	<where>
+		wae.activity_code = #{activityCode}
 		<if test="isShield != null">
-			wae.is_shield = #{isShield}
+			and wae.is_shield = #{isShield}
 		</if>
 	</where>
 	ORDER BY wae.create_time DESC

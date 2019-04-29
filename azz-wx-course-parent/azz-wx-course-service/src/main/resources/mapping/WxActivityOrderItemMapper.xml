@@ -8,6 +8,11 @@
     <result column="activity_name" jdbcType="VARCHAR" property="activityName" />
     <result column="price" jdbcType="DECIMAL" property="price" />
     <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="main_product_or_service" jdbcType="VARCHAR" property="mainProductOrService" />
+    <result column="position" jdbcType="VARCHAR" property="position" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
@@ -15,7 +20,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     id, order_code, activity_code, activity_name, price, quantity, creator, create_time, 
-    modifier, modify_time
+    modifier, modify_time,user_name, phone_number, company_name, position, main_product_or_service
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -31,11 +36,13 @@
     insert into wx_activity_order_item (id, order_code, activity_code, 
       activity_name, price, quantity, 
       creator, create_time, modifier, 
-      modify_time)
+      modify_time,user_name, 
+      phone_number, company_name, position, main_product_or_service)
     values (#{id,jdbcType=BIGINT}, #{orderCode,jdbcType=VARCHAR}, #{activityCode,jdbcType=VARCHAR}, 
       #{activityName,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{quantity,jdbcType=INTEGER}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
-      #{modifyTime,jdbcType=TIMESTAMP})
+      #{modifyTime,jdbcType=TIMESTAMP}, #{userName,jdbcType=VARCHAR}, 
+      #{phoneNumber,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{mainProductOrService,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.azz.wx.course.pojo.WxActivityOrderItem">
     insert into wx_activity_order_item
@@ -57,6 +64,21 @@
       </if>
       <if test="quantity != null">
         quantity,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="phoneNumber != null">
+        phone_number,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+      <if test="position != null">
+        position,
+      </if>
+      <if test="mainProductOrService != null">
+        main_product_or_service,
       </if>
       <if test="creator != null">
         creator,
@@ -90,6 +112,21 @@
       <if test="quantity != null">
         #{quantity,jdbcType=INTEGER},
       </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="mainProductOrService != null">
+        #{mainProductOrService,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null">
         #{creator,jdbcType=VARCHAR},
       </if>
@@ -122,6 +159,21 @@
       <if test="quantity != null">
         quantity = #{quantity,jdbcType=INTEGER},
       </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        position = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="mainProductOrService != null">
+        main_product_or_service = #{mainProductOrService,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null">
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -144,6 +196,11 @@
       activity_name = #{activityName,jdbcType=VARCHAR},
       price = #{price,jdbcType=DECIMAL},
       quantity = #{quantity,jdbcType=INTEGER},
+      user_name = #{userName,jdbcType=VARCHAR},
+      phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      position = #{position,jdbcType=VARCHAR},
+      main_product_or_service = #{mainProductOrService,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modifier = #{modifier,jdbcType=VARCHAR},

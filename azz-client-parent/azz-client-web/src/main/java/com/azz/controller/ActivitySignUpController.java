@@ -24,7 +24,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.azz.client.pojo.vo.WxUserInfo;
 import com.azz.controller.utils.WebUtils;
 import com.azz.core.common.JsonResult;
-import com.azz.core.common.QueryPage;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.ShiroAuthErrorCode;
 import com.azz.core.common.page.Pagination;
@@ -40,6 +39,7 @@ import com.azz.wx.course.api.SignUpService;
 import com.azz.wx.course.pojo.bo.ActivityPayOrderParam;
 import com.azz.wx.course.pojo.bo.CallBackParam;
 import com.azz.wx.course.pojo.bo.EvaluateActivityParam;
+import com.azz.wx.course.pojo.bo.SearchActivityEvaluationInfoParam;
 import com.azz.wx.course.pojo.bo.SearchActivityInfoParam;
 import com.azz.wx.course.pojo.bo.SignUpParam;
 import com.azz.wx.course.pojo.vo.ActivityEvaluationInfo;
@@ -74,6 +74,41 @@ public class ActivitySignUpController {
 	 */
     @RequestMapping(value = "/login")
     public JsonResult<Map<Object, Object>> login(String code) {
+    	if("123".equals(code)) {
+    		WxUserInfo wxUserInfo = new WxUserInfo();
+    		Map<Object,Object> resultMap = new HashMap<Object, Object>();
+    		wxUserInfo.setOpenid("xxxxxxxxxxxxxxxx");
+    		wxUserInfo.setNickname("test user");
+    		wxUserInfo.setHeadimgurl("http://thirdwx.qlogo.cn/mmopen/vi_32/S1VUf9dStibxWO7rOQD2YmD5vyKicBQBuIibcDDJOaVq2V04yLQXkBVC6w7G9CcibFBXLzRLHpf71kzWOly14gQ1UA/132");
+        	// 从SecurityUtils里边创建一个 subject
+        	Subject subject = SecurityUtils.getSubject();
+        	// 在认证提交前准备 token（令牌）
+        	UsernamePasswordToken token = new UsernamePasswordToken(WxCourseConstants.WX_ACTIVITY_LOGIN_USER_NAME_PREFIX + "xxxxxxxxxxxxxxxx", "noUse");
+        	try {
+        		// 执行认证登陆
+        		subject.login(token);
+        		// 设置为负数表示永不超时
+        		subject.getSession().setTimeout(-1000L);
+        	} catch (AuthenticationException e) {
+        		Throwable[] throwables = e.getSuppressed();
+        		if(throwables != null && throwables.length != 0) {
+        			int c = ((SuppressedException) throwables[0]).getCode();
+        			String msg = ((SuppressedException) throwables[0]).getMessage();
+        			JsonResult<Map<Object,Object>> jr = new JsonResult<>();
+        			resultMap.put("wxUserInfo", wxUserInfo);
+        			jr.setData(resultMap);
+        			jr.setCode(c);
+        			jr.setMsg(msg);
+        			return jr;
+        		}
+        		throw new ShiroAuthException(ShiroAuthErrorCode.SHIRO_AUTH_ERROR_LOGIN_ERROR, "登录失败,请重试");
+        	}
+        	WebUtils.setShiroSessionAttr(ClientConstants.LOGIN_CLIENT_USER, wxUserInfo);
+        	resultMap.put("wxUserInfo", wxUserInfo);
+        	resultMap.put("sessionId", subject.getSession().getId());
+        	return JsonResult.successJsonResult(resultMap);
+    	}
+    	// 以下为正式环境
     	WxUserInfo wxUserInfo = new WxUserInfo();
     	Map<Object,Object> resultMap = new HashMap<Object, Object>();
     	if(StringUtils.isBlank(code)) {
@@ -232,7 +267,7 @@ public class ActivitySignUpController {
 	 * @author 黄智聪  2019年4月23日 下午3:46:43
 	 */
 	@RequestMapping("/getEvaluationInfos")
-	public JsonResult<Pagination<ActivityEvaluationInfo>> getEvaluationInfos(QueryPage param) {
+	public JsonResult<Pagination<ActivityEvaluationInfo>> getEvaluationInfos(SearchActivityEvaluationInfoParam param) {
 		return signUpService.getEvaluationInfos(param);
 	}
 	

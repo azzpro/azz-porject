@@ -11,14 +11,12 @@ import java.io.IOException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.azz.core.common.JsonResult;
-import com.azz.core.common.QueryPage;
 import com.azz.core.common.page.Pagination;
 import com.azz.core.constants.WxActivityConstants.IsChangeActivityPic;
 import com.azz.util.Base64;
@@ -149,7 +147,7 @@ public class ActivitySignUpController {
 	 * @author 黄智聪  2019年4月29日 下午2:01:16
 	 */
 	@RequestMapping("getPlatformEvaluationInfos")
-	public JsonResult<Pagination<ActivityEvaluationInfo>> getPlatformEvaluationInfos(@RequestBody QueryPage param) {
+	public JsonResult<Pagination<ActivityEvaluationInfo>> getPlatformEvaluationInfos(SearchActivityInfoParam param) {
 		return signUpService.getPlatformEvaluationInfos(param);
 	}
 	
@@ -161,7 +159,7 @@ public class ActivitySignUpController {
 	 * @author 黄智聪  2019年4月29日 下午2:19:45
 	 */
 	@RequestMapping("shieldOrCancelShiedEvaluation")
-	public JsonResult<String> shieldOrCancelShiedEvaluation(@RequestBody ShieldOrCancelShiedEvaluationParam param) {
+	public JsonResult<String> shieldOrCancelShiedEvaluation(ShieldOrCancelShiedEvaluationParam param) {
 		param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
 		return signUpService.shieldOrCancelShiedEvaluation(param);
 	}

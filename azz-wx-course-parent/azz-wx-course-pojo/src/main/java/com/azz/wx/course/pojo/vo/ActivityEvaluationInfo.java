@@ -31,6 +31,8 @@ public class ActivityEvaluationInfo {
     
     private String openid;
     
+    private Integer isShield;
+    
     private Date createTime;
     
 }

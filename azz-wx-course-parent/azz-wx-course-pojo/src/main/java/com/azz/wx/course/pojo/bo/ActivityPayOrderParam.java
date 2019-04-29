@@ -31,5 +31,19 @@ public class ActivityPayOrderParam {
 	@NotBlank(message = "请选择开课信息")
 	private String activityCode;
 	
+	@NotBlank(message = "请填写姓名")
+    private String userName;
+
+	@NotBlank(message = "请填写手机号")
+    private String phoneNumber;
+
+	@NotBlank(message = "请填写公司名称")
+    private String companyName;
+
+	@NotBlank(message = "请填写职位")
+    private String position;
+	
+	private String mainProductOrService;
+	
 }
 

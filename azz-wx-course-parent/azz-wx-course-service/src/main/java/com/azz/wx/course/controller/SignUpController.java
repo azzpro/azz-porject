@@ -7,7 +7,6 @@
 
 package com.azz.wx.course.controller;
 
-import java.util.Date;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,23 +16,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.azz.core.common.JsonResult;
-import com.azz.core.common.QueryPage;
 import com.azz.core.common.page.Pagination;
-import com.azz.core.constants.ClientConstants.PayStatus;
-import com.azz.core.constants.WxActivityConstants.OrderStatus;
-import com.azz.core.reconstructed.exception.ReturnDataException;
-import com.azz.core.reconstructed.exception.ValidationException;
-import com.azz.util.JSR303ValidateUtils;
-import com.azz.wx.course.pojo.WxActivity;
-import com.azz.wx.course.pojo.WxActivityOrder;
-import com.azz.wx.course.pojo.WxActivityOrderItem;
-import com.azz.wx.course.pojo.WxActivityOrderStatus;
 import com.azz.wx.course.pojo.bo.ActivityPayOrderParam;
 import com.azz.wx.course.pojo.bo.AddActivityParam;
 import com.azz.wx.course.pojo.bo.CallBackParam;
 import com.azz.wx.course.pojo.bo.EditActivityParam;
 import com.azz.wx.course.pojo.bo.EvaluateActivityParam;
 import com.azz.wx.course.pojo.bo.PutOnOrPutOffOrDelActivityParam;
+import com.azz.wx.course.pojo.bo.SearchActivityEvaluationInfoParam;
 import com.azz.wx.course.pojo.bo.SearchActivityInfoParam;
 import com.azz.wx.course.pojo.bo.ShieldOrCancelShiedEvaluationParam;
 import com.azz.wx.course.pojo.bo.SignUpParam;
@@ -165,7 +155,7 @@ public class SignUpController {
 	 * @author 黄智聪  2019年1月21日 下午7:26:26
 	 */
 	@RequestMapping("/client/activity/getEvaluationInfos")
-	public JsonResult<Pagination<ActivityEvaluationInfo>> getEvaluationInfos(@RequestBody QueryPage param){
+	public JsonResult<Pagination<ActivityEvaluationInfo>> getEvaluationInfos(@RequestBody SearchActivityEvaluationInfoParam param){
 		return signUpService.getEvaluationInfos(param);
 	}
 	
@@ -239,7 +229,7 @@ public class SignUpController {
 	 * @author 黄智聪  2019年4月29日 下午2:01:16
 	 */
 	@RequestMapping("/platform/activity/getPlatformEvaluationInfos")
-	public JsonResult<Pagination<ActivityEvaluationInfo>> getPlatformEvaluationInfos(@RequestBody QueryPage param) {
+	public JsonResult<Pagination<ActivityEvaluationInfo>> getPlatformEvaluationInfos(@RequestBody SearchActivityEvaluationInfoParam param) {
 		return signUpService.getPlatformEvaluationInfos(param);
 	}
 	

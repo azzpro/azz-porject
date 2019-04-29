@@ -27,24 +27,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.alibaba.fastjson.JSONObject;
 import com.azz.core.common.JsonResult;
-import com.azz.core.common.QueryPage;
-import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.common.page.Pagination;
+import com.azz.core.constants.ClientConstants.PayStatus;
 import com.azz.core.constants.FileConstants;
 import com.azz.core.constants.WxActivityConstants;
-import com.azz.core.constants.ClientConstants.PayStatus;
 import com.azz.core.constants.WxActivityConstants.ActivityStatus;
 import com.azz.core.constants.WxActivityConstants.IsChangeActivityPic;
 import com.azz.core.constants.WxActivityConstants.IsShield;
 import com.azz.core.constants.WxActivityConstants.OrderStatus;
-import com.azz.core.constants.WxCourseConstants.CourseOrderStatus;
 import com.azz.core.exception.BaseException;
 import com.azz.core.reconstructed.errorcode.ValidationErrorCode;
 import com.azz.core.reconstructed.exception.BusinessException;
 import com.azz.core.reconstructed.exception.ReturnDataException;
 import com.azz.core.reconstructed.exception.ValidationException;
-import com.azz.exception.JSR303ValidationException;
 import com.azz.system.api.SystemImageUploadService;
 import com.azz.system.bo.UploadImageParam;
 import com.azz.util.DateUtils;
@@ -64,8 +60,6 @@ import com.azz.wx.course.pojo.WxActivityOrder;
 import com.azz.wx.course.pojo.WxActivityOrderItem;
 import com.azz.wx.course.pojo.WxActivityOrderStatus;
 import com.azz.wx.course.pojo.WxActivityUserSignUp;
-import com.azz.wx.course.pojo.WxCourseOrder;
-import com.azz.wx.course.pojo.WxCourseOrderStatus;
 import com.azz.wx.course.pojo.bo.ActivityPayOrderParam;
 import com.azz.wx.course.pojo.bo.ActivityPic;
 import com.azz.wx.course.pojo.bo.AddActivityParam;
@@ -73,6 +67,7 @@ import com.azz.wx.course.pojo.bo.CallBackParam;
 import com.azz.wx.course.pojo.bo.EditActivityParam;
 import com.azz.wx.course.pojo.bo.EvaluateActivityParam;
 import com.azz.wx.course.pojo.bo.PutOnOrPutOffOrDelActivityParam;
+import com.azz.wx.course.pojo.bo.SearchActivityEvaluationInfoParam;
 import com.azz.wx.course.pojo.bo.SearchActivityInfoParam;
 import com.azz.wx.course.pojo.bo.ShieldOrCancelShiedEvaluationParam;
 import com.azz.wx.course.pojo.bo.SignUpParam;
@@ -83,7 +78,6 @@ import com.azz.wx.course.pojo.vo.ActivityEvaluationInfo;
 import com.azz.wx.course.pojo.vo.ActivityInfo;
 import com.azz.wx.course.pojo.vo.ActivityPayOrderInfo;
 import com.azz.wx.course.pojo.vo.ClientSignUpInfo;
-import com.azz.wx.course.pojo.vo.PayOrderInfo;
 import com.azz.wx.course.pojo.vo.SignUpInfo;
 import com.azz.wx.course.pojo.vo.UploadFileInfo;
 import com.azz.wx.course.pojo.vo.WechatRequestParam;
@@ -339,6 +333,16 @@ public class SignUpService {
 		if(activity == null){
 			throw new ValidationException("活动不存在");
 		}
+		if(Calendar.getInstance().after(activity.getDeadline())) {
+			throw new ReturnDataException("活动已结束，报名失败");
+		}
+		if(activity.getSignUpCount() == activity.getSignUpLimit()) {
+			throw new ReturnDataException("已超出报名人数上限，报名失败");
+		}
+		int count = wxActivityUserSignUpMapper.countSignUpRecodeByOpenid(param.getOpenid(), param.getActivityCode());
+		if(count > 0) {
+			throw new BusinessException("请勿重复报名");
+		}
 		Date nowDate = new Date();
 		String orderCode = "AO"+System.currentTimeMillis();
 		// 插入活动订单记录
@@ -372,6 +376,11 @@ public class SignUpService {
 				.activityName(activity.getActivityName())
 				.price(activity.getPrice())
 				.quantity(1)
+				.companyName(param.getCompanyName())
+				.phoneNumber(param.getPhoneNumber())
+				.position(param.getPosition())
+				.userName(param.getUserName())
+				.mainProductOrService(param.getMainProductOrService())
 				.build();
 		wxActivityOrderItemMapper.insert(orderItemRecord);
 		
@@ -380,10 +389,19 @@ public class SignUpService {
 				.orderCode(orderCode)
 				.activityCode(param.getActivityCode())
 				.activityName(activity.getActivityName())
-			    .price(activity.getPrice())
-			    .activityTime(activity.getActivityTime())
-			    .orderStatus((byte)OrderStatus.NOT_PAID.getValue())
+				.price(activity.getPrice())
+				.activityTime(activity.getActivityTime())
+				.headImageUrl(param.getHeadImageUrl())
+				.nickname(param.getNickname())
+				.openid(param.getOpenid())
+				.companyName(param.getCompanyName())
+				.phoneNumber(param.getPhoneNumber())
+				.position(param.getPosition())
+				.userName(param.getUserName())
+				.mainProductOrService(param.getMainProductOrService())
+				.orderStatus((byte)OrderStatus.NOT_PAID.getValue())
 				.build();
+		
 		return JsonResult.successJsonResult(info);
 	}
 	
@@ -406,7 +424,7 @@ public class SignUpService {
 			throw new ReturnDataException("活动订单状态异常");
 		}
 		Date nowDate = new Date();
-		// 修改订单
+		// 修改订单状态为已支付
 		WxActivityOrder orderRecord = WxActivityOrder.builder()
 				.orderCode(orderCode)
 				.orderStatus((byte)OrderStatus.PAID.getValue())
@@ -424,6 +442,42 @@ public class SignUpService {
 				.orderStatus((byte)OrderStatus.PAID.getValue())
 				.build();
 		wxActivityOrderStatusMapper.insertSelective(orderStatusRecord);
+		
+		// 查询活动信息
+		WxActivity activity = wxActivityMapper.getActivityWithoutContentByActivityCode(info.getActivityCode());
+		WxActivityUserSignUp record = WxActivityUserSignUp.builder()
+				.activityCode(info.getActivityCode())
+				.companyName(info.getCompanyName())
+				.createTime(nowDate)
+				.headImageUrl(info.getHeadImageUrl())
+				.nickname(info.getNickname())
+				.openid(info.getOpenid())
+				.phoneNumber(info.getPhoneNumber())
+				.position(info.getPosition())
+				.userName(info.getUserName())
+				.mainProductOrService(info.getMainProductOrService())
+				.build();
+		wxActivityUserSignUpMapper.insertSelective(record);
+		Integer signUpCount = activity.getSignUpCount();
+		signUpCount += 1;// 报名人数+1
+		WxActivity updateRecord = WxActivity.builder()
+				.id(activity.getId())
+				.signUpCount(signUpCount)
+				.createTime(nowDate)
+				.build();
+		wxActivityMapper.updateByPrimaryKeySelective(updateRecord);
+		
+		// 发送报名成功通知
+		try {
+			SuccessSignUpNoticeParam successSignUpNoticeParam = new SuccessSignUpNoticeParam();
+			successSignUpNoticeParam.setActivityCode(info.getActivityCode());
+			successSignUpNoticeParam.setOpenid(info.getOpenid());
+			this.successSignUpNotice(successSignUpNoticeParam);
+			System.out.println("报名成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return JsonResult.successJsonResult();
 	}
 	
@@ -480,9 +534,10 @@ public class SignUpService {
 	 * @return
 	 * @author 黄智聪  2019年1月21日 下午7:26:26
 	 */
-	public JsonResult<Pagination<ActivityEvaluationInfo>> getEvaluationInfos(@RequestBody QueryPage param){
+	public JsonResult<Pagination<ActivityEvaluationInfo>> getEvaluationInfos(@RequestBody SearchActivityEvaluationInfoParam param){
+		JSR303ValidateUtils.validateInputParam(param);
 		PageHelper.startPage(param.getPageNum(), param.getPageSize());
-		List<ActivityEvaluationInfo> infos = wxActivityEvaluationMapper.getEvaluationInfos(1);
+		List<ActivityEvaluationInfo> infos = wxActivityEvaluationMapper.getEvaluationInfos(param.getActivityCode(), 0);
 		return JsonResult.successJsonResult(new Pagination<>(infos));
 	}
 	
@@ -709,9 +764,10 @@ public class SignUpService {
 	 * @return
 	 * @author 黄智聪  2019年1月21日 下午7:26:26
 	 */
-	public JsonResult<Pagination<ActivityEvaluationInfo>> getPlatformEvaluationInfos(@RequestBody QueryPage param){
+	public JsonResult<Pagination<ActivityEvaluationInfo>> getPlatformEvaluationInfos(@RequestBody SearchActivityEvaluationInfoParam param){
+		JSR303ValidateUtils.validateInputParam(param);
 		PageHelper.startPage(param.getPageNum(), param.getPageSize());
-		List<ActivityEvaluationInfo> infos = wxActivityEvaluationMapper.getEvaluationInfos(0);
+		List<ActivityEvaluationInfo> infos = wxActivityEvaluationMapper.getEvaluationInfos(param.getActivityCode(), null);
 		return JsonResult.successJsonResult(new Pagination<>(infos));
 	}
 	
@@ -728,7 +784,7 @@ public class SignUpService {
 		if(evaluation == null) {
 			throw new ReturnDataException("评价记录不存在");
 		}
-		if(IsShield.checkStatusExist(param.getStatus())) {
+		if(!IsShield.checkStatusExist(param.getStatus())) {
 			throw new ValidationException("是否屏蔽参数有误");
 		}
 		WxActivityEvaluation record = WxActivityEvaluation.builder()

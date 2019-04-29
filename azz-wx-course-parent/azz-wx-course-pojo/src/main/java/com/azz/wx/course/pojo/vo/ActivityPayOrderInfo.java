@@ -38,5 +38,21 @@ public class ActivityPayOrderInfo {
     
     private Byte orderStatus;
     
+    private String userName;
+
+    private String phoneNumber;
+
+    private String companyName;
+
+    private String position;
+	
+	private String mainProductOrService;
+	
+	private String openid;
+	
+	private String nickname;
+	
+	private String headImageUrl;
+    
 }
 

@@ -48,6 +48,36 @@ public class WxActivityOrderItem implements Serializable {
      * @mbg.generated
      */
     private Integer quantity;
+    
+    /**
+     * 姓名
+     *
+     * @mbg.generated
+     */
+    private String userName;
+
+    /**
+     * 手机号
+     *
+     * @mbg.generated
+     */
+    private String phoneNumber;
+
+    /**
+     * 公司名称
+     *
+     * @mbg.generated
+     */
+    private String companyName;
+
+    /**
+     * 职位
+     *
+     * @mbg.generated
+     */
+    private String position;
+    
+    private String mainProductOrService;
 
     /**
      * 创建人
@@ -380,4 +410,44 @@ public class WxActivityOrderItem implements Serializable {
         sb.append("]");
         return sb.toString();
     }
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public String getPosition() {
+		return position;
+	}
+
+	public void setPosition(String position) {
+		this.position = position;
+	}
+
+	public String getMainProductOrService() {
+		return mainProductOrService;
+	}
+
+	public void setMainProductOrService(String mainProductOrService) {
+		this.mainProductOrService = mainProductOrService;
+	}
 }

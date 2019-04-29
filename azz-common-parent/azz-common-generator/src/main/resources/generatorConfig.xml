@@ -47,17 +47,10 @@
 			implementationPackage="com.test.dao.impl" targetProject="target">
 			<property name="enableSubPackages" value="true" />
 		</javaClientGenerator>
-
-		<table tableName="merchant_withdraw_deposit_apply"
-			domainObjectName="MerchantWithdrawDepositApply" enableCountByExample="false"
+		
+		<table tableName="wx_activity_order_item"
+			domainObjectName="WxActivityOrderItem" enableCountByExample="false"
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false"></table>
-			
-		<table tableName="merchant_withdraw_deposit_apply_order"
-			domainObjectName="MerchantWithdrawDepositApplyOrder" enableCountByExample="false"
-			enableUpdateByExample="false" enableDeleteByExample="false"
-			enableSelectByExample="false" selectByExampleQueryId="false"></table>
-
-			
 	</context>
 </generatorConfiguration>

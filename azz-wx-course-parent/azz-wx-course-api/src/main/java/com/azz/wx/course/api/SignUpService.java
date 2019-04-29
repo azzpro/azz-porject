@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.azz.core.common.JsonResult;
-import com.azz.core.common.QueryPage;
 import com.azz.core.common.page.Pagination;
 import com.azz.wx.course.pojo.bo.ActivityPayOrderParam;
 import com.azz.wx.course.pojo.bo.AddActivityParam;
@@ -24,6 +23,7 @@ import com.azz.wx.course.pojo.bo.CallBackParam;
 import com.azz.wx.course.pojo.bo.EditActivityParam;
 import com.azz.wx.course.pojo.bo.EvaluateActivityParam;
 import com.azz.wx.course.pojo.bo.PutOnOrPutOffOrDelActivityParam;
+import com.azz.wx.course.pojo.bo.SearchActivityEvaluationInfoParam;
 import com.azz.wx.course.pojo.bo.SearchActivityInfoParam;
 import com.azz.wx.course.pojo.bo.ShieldOrCancelShiedEvaluationParam;
 import com.azz.wx.course.pojo.bo.SignUpParam;
@@ -92,7 +92,7 @@ public interface SignUpService {
 	 * @author 黄智聪  2019年1月21日 下午7:26:26
 	 */
 	@RequestMapping(value = "/azz/api/client/activity/getEvaluationInfos", method = RequestMethod.POST)
-	JsonResult<Pagination<ActivityEvaluationInfo>> getEvaluationInfos(@RequestBody QueryPage param);
+	JsonResult<Pagination<ActivityEvaluationInfo>> getEvaluationInfos(@RequestBody SearchActivityEvaluationInfoParam param);
 	
 	/**
 	 * 
@@ -192,7 +192,7 @@ public interface SignUpService {
 	 * @author 黄智聪  2019年1月21日 下午7:26:26
 	 */
 	@RequestMapping("/azz/api/platform/activity/getPlatformEvaluationInfos")
-	JsonResult<Pagination<ActivityEvaluationInfo>> getPlatformEvaluationInfos(@RequestBody QueryPage param);
+	JsonResult<Pagination<ActivityEvaluationInfo>> getPlatformEvaluationInfos(@RequestBody SearchActivityInfoParam param);
 	
 	/**
 	 * 

@@ -3,6 +3,7 @@ package com.azz.wx.course.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.azz.wx.course.pojo.WxActivityEvaluation;
 import com.azz.wx.course.pojo.vo.ActivityEvaluationInfo;
@@ -23,8 +24,8 @@ public interface WxActivityEvaluationMapper {
 
     int updateByPrimaryKey(WxActivityEvaluation record);
     
-    List<ActivityEvaluationInfo> getEvaluationInfos(Integer isShield);
+    List<ActivityEvaluationInfo> getEvaluationInfos(@Param("activityCode")String activityCode, @Param("isShield")Integer isShield);
     
-    int countActivityEvaluation(String openid, String activityCode);
+    int countActivityEvaluation(@Param("openid")String openid, @Param("activityCode")String activityCode);
     
 }

@@ -277,6 +277,11 @@
 		wao.order_status AS orderStatus,
 		waoi.activity_code AS activityCode,
 		waoi.activity_name AS activityName,
+		waoi.user_name as userName, 
+      	waoi.phone_number as phoneNumber, 
+      	waoi.company_name as companyName, 
+      	waoi.position as position, 
+      	waoi.main_product_or_service as mainProductOrService,
 		wa.activity_time AS activityTime,
 		wa.price AS price
 	FROM

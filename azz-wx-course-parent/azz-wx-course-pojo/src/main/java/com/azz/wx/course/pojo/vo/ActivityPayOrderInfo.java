@@ -48,6 +48,8 @@ public class ActivityPayOrderInfo {
 	
 	private String mainProductOrService;
 	
+	private String email;
+	
 	private String openid;
 	
 	private String nickname;

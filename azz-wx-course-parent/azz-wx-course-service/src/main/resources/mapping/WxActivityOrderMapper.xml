@@ -282,6 +282,7 @@
       	waoi.company_name as companyName, 
       	waoi.position as position, 
       	waoi.main_product_or_service as mainProductOrService,
+      	waoi.email as email,
 		wa.activity_time AS activityTime,
 		wa.price AS price,
 		wao.openid AS openid,

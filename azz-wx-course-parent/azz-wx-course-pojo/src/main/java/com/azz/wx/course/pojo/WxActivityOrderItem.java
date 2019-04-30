@@ -78,6 +78,8 @@ public class WxActivityOrderItem implements Serializable {
     private String position;
     
     private String mainProductOrService;
+    
+    private String email;
 
     /**
      * 创建人
@@ -449,5 +451,13 @@ public class WxActivityOrderItem implements Serializable {
 
 	public void setMainProductOrService(String mainProductOrService) {
 		this.mainProductOrService = mainProductOrService;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

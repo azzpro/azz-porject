@@ -381,6 +381,7 @@ public class SignUpService {
 				.position(param.getPosition())
 				.userName(param.getUserName())
 				.mainProductOrService(param.getMainProductOrService())
+				.email(param.getEmail())
 				.build();
 		wxActivityOrderItemMapper.insert(orderItemRecord);
 		
@@ -399,6 +400,7 @@ public class SignUpService {
 				.position(param.getPosition())
 				.userName(param.getUserName())
 				.mainProductOrService(param.getMainProductOrService())
+				.email(param.getEmail())
 				.orderStatus((byte)OrderStatus.NOT_PAID.getValue())
 				.build();
 		
@@ -456,6 +458,7 @@ public class SignUpService {
 				.position(info.getPosition())
 				.userName(info.getUserName())
 				.mainProductOrService(info.getMainProductOrService())
+				.email(info.getEmail())
 				.build();
 		wxActivityUserSignUpMapper.insertSelective(record);
 		Integer signUpCount = activity.getSignUpCount();
@@ -554,7 +557,11 @@ public class SignUpService {
 		if(activity == null) {
 			throw new ReturnDataException("活动不存在");
 		}
-		int count = wxActivityEvaluationMapper.countActivityEvaluation(param.getOpenid(), param.getActivityCode());
+		int count = wxActivityUserSignUpMapper.countSignUpRecodeByOpenid(param.getOpenid(), param.getActivityCode());
+		if(count == 0) {
+			throw new ReturnDataException("您还未报名，无法评价哦");
+		}
+		count = wxActivityEvaluationMapper.countActivityEvaluation(param.getOpenid(), param.getActivityCode());
 		if(count > 0) {
 			throw new ReturnDataException("您已评价");
 		}

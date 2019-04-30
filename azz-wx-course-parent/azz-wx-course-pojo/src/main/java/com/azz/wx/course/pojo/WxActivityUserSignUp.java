@@ -75,6 +75,8 @@ public class WxActivityUserSignUp implements Serializable {
     private String position;
     
     private String mainProductOrService;
+    
+    private String email;
 
     /**
      * 创建时间
@@ -427,5 +429,13 @@ public class WxActivityUserSignUp implements Serializable {
 
 	public void setMainProductOrService(String mainProductOrService) {
 		this.mainProductOrService = mainProductOrService;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

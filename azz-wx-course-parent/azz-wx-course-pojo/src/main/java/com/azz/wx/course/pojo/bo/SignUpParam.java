@@ -43,7 +43,11 @@ public class SignUpParam {
 	@NotBlank(message = "请填写职位")
     private String position;
 	
+	@NotBlank(message = "请填写公司核心产品或服务")
 	private String mainProductOrService;
+	
+	@NotBlank(message = "请填写邮箱")
+	private String email;
 
 }
 

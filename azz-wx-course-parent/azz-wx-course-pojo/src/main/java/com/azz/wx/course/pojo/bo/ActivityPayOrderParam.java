@@ -28,22 +28,26 @@ public class ActivityPayOrderParam {
 	@NotBlank(message = "缺少请求参数")
 	private String headImageUrl;
 
-	@NotBlank(message = "请选择开课信息")
+	@NotBlank(message = "活动编码不能为空")
 	private String activityCode;
 	
-	@NotBlank(message = "请填写姓名")
+	@NotBlank(message = "姓名不能为空")
     private String userName;
 
-	@NotBlank(message = "请填写手机号")
+	@NotBlank(message = "手机号不能为空")
     private String phoneNumber;
 
-	@NotBlank(message = "请填写公司名称")
+	@NotBlank(message = "公司名称不能为空")
     private String companyName;
 
-	@NotBlank(message = "请填写职位")
+	@NotBlank(message = "职位不能为空")
     private String position;
 	
+	@NotBlank(message = "公司核心产品或服务不能为空")
 	private String mainProductOrService;
+	
+	@NotBlank(message = "邮箱不能为空")
+	private String email;
 	
 }
 

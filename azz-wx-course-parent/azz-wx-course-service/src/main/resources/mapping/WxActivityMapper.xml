@@ -401,6 +401,12 @@
 				0
 			ELSE
 				1
+			END AS isSignUp,
+			 CASE
+			WHEN wae.id IS NULL THEN
+				0
+			ELSE
+				1
 			END AS isEvaluated,
 	  	</if>
 		ac.activity_code AS activityCode,
@@ -429,6 +435,7 @@
 		wx_activity ac
 	<if test="openid != null and openid !='' ">
 		LEFT JOIN wx_activity_user_sign_up wausu ON ac.activity_code = wausu.activity_code AND wausu.openid = #{openid}
+		LEFT JOIN wx_activity_evaluation wae on wae.activity_code = ac.activity_code and wae.openid = #{openid}
 	</if>
 	where ac.activity_code = #{activityCode}
   </select>
@@ -452,6 +459,7 @@
 		ausu.company_name AS companyName,
 		ausu.position AS position,
 		ausu.main_product_or_service AS mainProductOrService,
+		ausu.email as email,
 		ausu.create_time AS signUpTime
 	FROM
 		wx_activity_user_sign_up ausu 

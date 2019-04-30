@@ -32,6 +32,8 @@ public class SignUpInfo {
     private String position;
     
     private String mainProductOrService;
+    
+    private String email;
 
     private Date signUpTime;
     

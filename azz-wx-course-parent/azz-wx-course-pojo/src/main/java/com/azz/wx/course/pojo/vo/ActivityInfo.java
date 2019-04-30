@@ -40,4 +40,6 @@ public class ActivityInfo {
     
     private Integer isEvaluated;
     
+    private Integer isSignUp;
+    
 }

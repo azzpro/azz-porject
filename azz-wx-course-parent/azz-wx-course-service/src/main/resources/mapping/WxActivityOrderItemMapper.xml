@@ -11,8 +11,9 @@
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
     <result column="company_name" jdbcType="VARCHAR" property="companyName" />
-    <result column="main_product_or_service" jdbcType="VARCHAR" property="mainProductOrService" />
     <result column="position" jdbcType="VARCHAR" property="position" />
+    <result column="main_product_or_service" jdbcType="VARCHAR" property="mainProductOrService" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
@@ -20,7 +21,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     id, order_code, activity_code, activity_name, price, quantity, creator, create_time, 
-    modifier, modify_time,user_name, phone_number, company_name, position, main_product_or_service
+    modifier, modify_time,user_name, phone_number, company_name, position, main_product_or_service,email
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -37,12 +38,13 @@
       activity_name, price, quantity, 
       creator, create_time, modifier, 
       modify_time,user_name, 
-      phone_number, company_name, position, main_product_or_service)
+      phone_number, company_name, position, main_product_or_service,email)
     values (#{id,jdbcType=BIGINT}, #{orderCode,jdbcType=VARCHAR}, #{activityCode,jdbcType=VARCHAR}, 
       #{activityName,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{quantity,jdbcType=INTEGER}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{userName,jdbcType=VARCHAR}, 
-      #{phoneNumber,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{mainProductOrService,jdbcType=VARCHAR})
+      #{phoneNumber,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{mainProductOrService,jdbcType=VARCHAR},
+      #{email,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.azz.wx.course.pojo.WxActivityOrderItem">
     insert into wx_activity_order_item
@@ -79,6 +81,9 @@
       </if>
       <if test="mainProductOrService != null">
         main_product_or_service,
+      </if>
+      <if test="email != null">
+        email,
       </if>
       <if test="creator != null">
         creator,
@@ -127,6 +132,9 @@
       <if test="mainProductOrService != null">
         #{mainProductOrService,jdbcType=VARCHAR},
       </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null">
         #{creator,jdbcType=VARCHAR},
       </if>
@@ -174,6 +182,9 @@
       <if test="mainProductOrService != null">
         main_product_or_service = #{mainProductOrService,jdbcType=VARCHAR},
       </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null">
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -201,6 +212,7 @@
       company_name = #{companyName,jdbcType=VARCHAR},
       position = #{position,jdbcType=VARCHAR},
       main_product_or_service = #{mainProductOrService,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modifier = #{modifier,jdbcType=VARCHAR},

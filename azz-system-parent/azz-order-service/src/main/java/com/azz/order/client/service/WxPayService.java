@@ -197,8 +197,8 @@ public class WxPayService {
 				}
 			}
 		}
-		JsonResult<ActivityPayOrderInfo> detail = signUpService.getActivityOrder(po.getCourseNum());
-		WXPayUtil.getLogger().info("ActivityPayOrderInfo=======>" + JSONObject.toJSONString(detail));
+		JsonResult<ActivityPayOrderInfo> detail = signUpService.getActivityOrder(po.getCoursePayNum());
+		//WXPayUtil.getLogger().info("ActivityPayOrderInfo=======>" + JSONObject.toJSONString(detail));
 		//判断微信课程订单是否关闭
 		if(detail != null && detail.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 			if(detail.getData().getOrderStatus() == WxActivityConstants.OrderStatus.CLOSED.getValue()) {

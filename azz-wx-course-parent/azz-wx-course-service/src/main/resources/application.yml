@@ -106,4 +106,4 @@ wx:
         # 微信发送消息模板接口
         sendTemplateMessageUrl: https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN
         # 用户接收到的推送消息的详情接口
-        detailUrl: http://a.izz2025.com/activitynoticeDetail.html?activityCode=ACTIVITY_CODE
+        detailUrl: http://a.izz2025.com/activitysignDetail.html?activityCode=ACTIVITY_CODE

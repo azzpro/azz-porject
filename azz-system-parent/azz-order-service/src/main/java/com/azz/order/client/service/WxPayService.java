@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.core.common.errorcode.SystemErrorCode;
@@ -197,6 +198,7 @@ public class WxPayService {
 			}
 		}
 		JsonResult<ActivityPayOrderInfo> detail = signUpService.getActivityOrder(po.getCourseNum());
+		System.out.println("ActivityPayOrderInfo=======>" + JSONObject.toJSONString(detail));
 		//判断微信课程订单是否关闭
 		if(detail != null && detail.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 			if(detail.getData().getOrderStatus() == WxActivityConstants.OrderStatus.CLOSED.getValue()) {

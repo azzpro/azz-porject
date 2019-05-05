@@ -79,7 +79,7 @@ public class WxLoginController {
 			    // 执行认证登陆
 			    subject.login(token);
 			    // 设置登录超时时间
-			    subject.getSession().setTimeout(Long.MAX_VALUE);
+			    subject.getSession().setTimeout(-1000L);
 			} catch (AuthenticationException e) {
 			    Throwable[] throwables = e.getSuppressed();
 			    if(throwables != null && throwables.length != 0) {

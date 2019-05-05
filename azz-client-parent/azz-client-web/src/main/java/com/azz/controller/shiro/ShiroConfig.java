@@ -63,6 +63,7 @@ public class ShiroConfig {
 	filterChainDefinitionMap.put("/azz/api/client/selection/getProductPrice", "anon");
 	filterChainDefinitionMap.put("/azz/api/pay/payNotify", "anon");
 	filterChainDefinitionMap.put("/azz/api/wx/pay/callback", "anon");
+	filterChainDefinitionMap.put("/azz/api/wx/pay/activetyCallback", "anon");
 	// 开放官网选型二期接口
 	filterChainDefinitionMap.put("/azz/api/client/selection/getSelectionIndexData", "anon");
 	filterChainDefinitionMap.put("/azz/api/client/selection/getSelectionModuleInfos", "anon");

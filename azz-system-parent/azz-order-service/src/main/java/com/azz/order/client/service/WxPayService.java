@@ -198,7 +198,7 @@ public class WxPayService {
 			}
 		}
 		JsonResult<ActivityPayOrderInfo> detail = signUpService.getActivityOrder(po.getCourseNum());
-		System.out.println("ActivityPayOrderInfo=======>" + JSONObject.toJSONString(detail));
+		WXPayUtil.getLogger().info("ActivityPayOrderInfo=======>" + JSONObject.toJSONString(detail));
 		//判断微信课程订单是否关闭
 		if(detail != null && detail.getCode() == SystemErrorCode.SUCCESS.getCode()) {
 			if(detail.getData().getOrderStatus() == WxActivityConstants.OrderStatus.CLOSED.getValue()) {

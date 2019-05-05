@@ -146,6 +146,18 @@ public class SignUpController {
 		return signUpService.activityOrderPaySuccessOpt(param);
 	}
 	
+	/**
+	 * 
+	 * <p>查询活动订单详情</p>
+	 * @param orderCode
+	 * @return
+	 * @author 黄智聪  2019年5月5日 下午2:06:26
+	 */
+	@RequestMapping("/client/activity/getActivityOrder")
+	public JsonResult<ActivityPayOrderInfo> getActivityOrder(@RequestParam("orderCode")String orderCode){
+		return signUpService.getActivityOrder(orderCode);
+	}
+	
 	
 	/**
 	 * 

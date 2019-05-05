@@ -145,6 +145,16 @@ public interface SignUpService {
 	
 	/**
 	 * 
+	 * <p>查询活动订单详情</p>
+	 * @param orderCode
+	 * @return
+	 * @author 黄智聪  2019年5月5日 下午2:06:26
+	 */
+	@RequestMapping("/azz/api/client/activity/getActivityOrder")
+	JsonResult<ActivityPayOrderInfo> getActivityOrder(@RequestParam("orderCode")String orderCode);
+	
+	/**
+	 * 
 	 * <p>getWxConfig获取微信的配置信息</p>
 	 * @param requestUrl
 	 * @return

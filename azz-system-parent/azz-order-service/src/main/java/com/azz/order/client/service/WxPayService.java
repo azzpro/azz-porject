@@ -34,6 +34,7 @@ import com.azz.core.common.errorcode.SystemErrorCode;
 import com.azz.core.constants.ClientConstants;
 import com.azz.core.constants.ClientConstants.PayMethod;
 import com.azz.core.constants.PayConstants;
+import com.azz.core.constants.WxActivityConstants;
 import com.azz.core.constants.WxCourseConstants.CourseOrderStatus;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.order.client.mapper.WxPayMapper;
@@ -43,6 +44,9 @@ import com.azz.util.HttpClientUtil;
 import com.azz.wx.course.api.OrderService;
 import com.azz.wx.course.api.SignUpService;
 import com.azz.wx.course.pojo.bo.CallBackParam;
+import com.azz.wx.course.pojo.bo.SearchActivityInfoParam;
+import com.azz.wx.course.pojo.vo.ActivityInfo;
+import com.azz.wx.course.pojo.vo.ActivityPayOrderInfo;
 import com.azz.wx.course.pojo.vo.CourseOrderDetail;
 import com.github.wxpay.sdk.WXPayConstants;
 import com.github.wxpay.sdk.WXPayConstants.SignType;
@@ -192,21 +196,21 @@ public class WxPayService {
 				}
 			}
 		}
-		JsonResult<CourseOrderDetail> detail = orderService.getCourseOrderDetail(po.getCoursePayNum());
+		JsonResult<ActivityPayOrderInfo> detail = signUpService.getActivityOrder(po.getCourseNum());
 		//判断微信课程订单是否关闭
 		if(detail != null && detail.getCode() == SystemErrorCode.SUCCESS.getCode()) {
-			if(detail.getData().getOrderStatus() == CourseOrderStatus.CLOSED.getValue()) {
+			if(detail.getData().getOrderStatus() == WxActivityConstants.OrderStatus.CLOSED.getValue()) {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单已失效，请重新下单");
 			}
 			WXPayUtil.getLogger().info("po.getOrderMoney()=====>"+po.getOrderMoney());
-			WXPayUtil.getLogger().info("po.toPlainString()=====>"+detail.getData().getGrandTotal().toPlainString());
-			if(!po.getOrderMoney().equals(detail.getData().getGrandTotal().toPlainString())) {
+			WXPayUtil.getLogger().info("po.toPlainString()=====>"+detail.getData().getPrice().toPlainString());
+			if(!po.getOrderMoney().equals(detail.getData().getPrice().toPlainString())) {
 				throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "订单金额不一致");
 			}
 		}
 		Map<String, String> reqData = null;
 		try {
-			reqData = createActiveReqData(detail.getData().getGrandTotal(),detail.getData().getCourseInfo(),po);
+			reqData = createActiveReqData(detail.getData().getPrice(),detail.getData().getActivityName(),po);
 		}catch (Exception e) {
 			throw new JSR303ValidationException(JSR303ErrorCode.SYS_ERROR_INVALID_REQUEST_PARAM, "创建订单错误");
 		}

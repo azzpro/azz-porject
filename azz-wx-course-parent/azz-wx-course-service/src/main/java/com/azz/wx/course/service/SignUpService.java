@@ -249,6 +249,22 @@ public class SignUpService {
 	
 	/**
 	 * 
+	 * <p>查询活动订单详情</p>
+	 * @param activityCode
+	 * @return
+	 * @author 黄智聪  2019年4月17日 上午11:58:12
+	 */
+	public JsonResult<ActivityPayOrderInfo> getActivityOrder(@RequestParam("orderCode")String orderCode) {
+		if(StringUtils.isBlank(orderCode)) {
+			throw new ValidationException(ValidationErrorCode.VALIDATION_ERROR_MISSING_REQUEST_PARAM);
+		}
+		ActivityPayOrderInfo detail = wxActivityOrderMapper.getPayOrderInfo(orderCode);
+		return JsonResult.successJsonResult(detail);
+	}
+	
+	
+	/**
+	 * 
 	 * <p>查询活动报名人员信息</p>
 	 * @param param
 	 * @return

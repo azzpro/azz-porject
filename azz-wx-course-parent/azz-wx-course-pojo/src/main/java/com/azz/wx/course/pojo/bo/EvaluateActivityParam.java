@@ -23,7 +23,7 @@ import lombok.Data;
 @Data
 public class EvaluateActivityParam {
 	
-	@NotBlank(message = "请选择课程")
+	@NotBlank(message = "请选择活动")
 	private String activityCode;
 	
 	@NotNull(message = "请选择星级")

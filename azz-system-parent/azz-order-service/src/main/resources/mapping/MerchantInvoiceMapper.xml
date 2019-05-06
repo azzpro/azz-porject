@@ -234,8 +234,8 @@
 	LEFT JOIN merchant_invoice mi ON mi.merchant_order_id = mo.id
 	LEFT JOIN client_order_personal cop ON cop.id = mo.client_order_id
 	LEFT JOIN client_user cu ON cop.client_user_id = cu.id
-	JOIN client_invoice_template cit ON cit.client_user_id = cu.id
-	JOIN client_invoice ci ON ci.invoice_template_id = cit.id
+	JOIN client_invoice ci ON ci.client_order_id = cop.id
+	JOIN client_invoice_template cit ON cit.id = ci.invoice_template_id
 	LEFT JOIN merchant_invoice_logistics mil ON mil.merchant_invoice_id = mi.id
 	LEFT JOIN merchant_user mu ON mu.merchant_user_code = mil.creator
 	LEFT JOIN express_company ec ON mil.express_company_id = ec.id

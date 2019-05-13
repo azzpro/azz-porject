@@ -33,6 +33,12 @@
                     <tr>
                        	<td><button id="ganji" onclick="window.open('${basePath}/azz/crawler/citySelection')">赶集网</button></td>
                     </tr>
+                     <tr>
+                       	<td><button id="testLogin">测试跳转</button></td>
+                    </tr>
+                    <tr>
+                       	<td><button id="testAddToShoppingCart">测试加入购物车</button></td>
+                    </tr>
                     
                 </table>
             <br>
@@ -40,6 +46,71 @@
 </body>
 
 <script type="text/javascript">
+
+	function setCookie(c_name,value,expiredays)
+	{
+	var exdate=new Date()
+	exdate.setDate(exdate.getDate()+expiredays)
+	document.cookie=c_name+ "=" +escape(value)+
+	((expiredays==null) ? "" : ";expires="+exdate.toGMTString())
+	}
+	
+	function getCookie(c_name)
+	{
+	if (document.cookie.length>0)
+	  {
+	  c_start=document.cookie.indexOf(c_name + "=")
+	  if (c_start!=-1)
+	    { 
+	    c_start=c_start + c_name.length+1 
+	    c_end=document.cookie.indexOf(";",c_start)
+	    if (c_end==-1) c_end=document.cookie.length
+	    return unescape(document.cookie.substring(c_start,c_end))
+	    } 
+	  }
+	return ""
+	}
+	
+	$("#testLogin").click(function(){
+		$.ajax({
+            type:"POST",
+            url:"${basePath}"+"/azz/crawler/testLogin",
+            dataType:"json",
+            cache: false, //禁用缓存   
+			async: false,
+            success:function(result){
+            	var userToken = result.data;
+            	setCookie("userToken",userToken,1);
+            	var cookie = getCookie("userToken")
+            	var url = "http://www.baidu.com?token="+cookie;
+            	//window.location.href = url;
+            },
+            error:function(jqXHR){
+                console.log("Error: "+jqXHR.status);
+            }
+        });
+	});
+	
+	$("#testAddToShoppingCart").click(function(){
+		var cookie = getCookie("userToken");
+		//alert(cookie);
+		$.ajax({
+            type:"POST",
+            headers:{
+            	'token':cookie
+            },
+            url:"http://192.168.1.175:8081/hefa/api/client/member/getUserInfo?token="+cookie,
+            dataType:"json",
+            cache: false, //禁用缓存   
+			async: true,
+            success:function(result){
+            	console.log(result);
+            },
+            error:function(jqXHR){
+                console.log("Error: "+jqXHR.status);
+            }
+        });
+	});
 	
 </script>
 

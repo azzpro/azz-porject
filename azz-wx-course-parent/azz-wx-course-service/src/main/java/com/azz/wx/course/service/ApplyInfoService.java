@@ -8,17 +8,23 @@
 package com.azz.wx.course.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.errorcode.JSR303ErrorCode;
 import com.azz.exception.JSR303ValidationException;
 import com.azz.util.JSR303ValidateUtils;
+import com.azz.util.MD5Encrypt;
+import com.azz.util.OkHttpUtil;
 import com.azz.wx.course.mapper.WxCourseApplyInfoMapper;
 import com.azz.wx.course.pojo.WxCourseApplyInfo;
 import com.azz.wx.course.pojo.bo.AddCourseApplyParam;
@@ -180,5 +186,43 @@ public class ApplyInfoService {
         CourseSignUpInfo csui = wxCourseApplyInfoMapper.getCourseInfoByApplyCode(applyCode);
         return JsonResult.successJsonResult(csui);
     }
+    
+    public static void main(String[] args) {
+		// 接口请求时，双方规定用于验签时的公钥
+		final String key = "MKtbZiEa8ZO9KfgY";
+		// 为了保证请求参数按照a-z从小到大的顺序，使用TreeMap
+		Map<String, String> paramMap = new TreeMap<>();
+		// 1.加入接口的请求参数
+		paramMap.put("productCode", "2");
+		// 签名时会用到的时间戳参数
+		String timestamp = System.currentTimeMillis() + "";
+		paramMap.put("timestamp", timestamp);
+		// 2.生成签名的步骤如下：
+		// （1）得到有序的参数json字符串：将有序的参数对象，转成json格式的字符串
+		String sortedParamJsonStr = JSONObject.toJSONString(paramMap);
+		System.out.println("1.得到有序的参数json字符串 ==> " + sortedParamJsonStr);
+		// （2）得到签名参数： 使用MD5加密，按照 “有序的参数json字符串、时间戳、双方约定的公钥” 的顺序拼接起来进行MD5加密
+		String signature = MD5Encrypt.encryptMD5(sortedParamJsonStr + timestamp + key, "UTF-8");
+		System.out.println("2.得到签名参数 ==> " + signature);
+		// （3）记得加入到接口请求参数中，作为我方校验使用
+		paramMap.put("signature", signature);
+		System.out.println("3.发送的接口请求参数 ==> " + JSONObject.toJSONString(paramMap));
+		// 3.请求url上要带上token（需通过调用登录接口获得）
+		String userToken = getUserToken();
+		System.out.println("4.用户token为 ==> " + userToken);
+		// 4.发送post接口请求
+		String requestUrl = "http://192.168.1.175:8081/hefa/api/client/selection/addProductToShoppingCart?ut=" + userToken;
+		String response = OkHttpUtil.postFormData(requestUrl, paramMap);
+		System.out.println("5.得到响应结果 ==> " + response);
+	}
+
+    
+    
+    
+    
+	private static String getUserToken() {
+		String userToken = "dWRHNmJlelBtMTF0TFpEV0hRMzFKdjh4V2t4Sk1TcXBiT1ZJQTVld0J6YkRhSTJyNVQrSUo4Tng5SFJKZXh3VzdSSXpDczlYYzdvTWNvS2VRYmJHSWV3eEhvSWVRYTVKU1ZVU29zSU1BWTZaOGljV015V29ISmFvbFJNbTYrUmx3bmFLQXpEN0hLbUt5emYyT1JwOUNtZFBjWlZ4anBsMmlUaE4xN2JRZzloL1N3dWlFZHVWTnV1eG9TRStKbjJjRHg1TCs1QlZLbFJCcitnd0VjMDlDV2FLTllmbllPbkZ4SXgrdGVvMmtVY1U4VlRUN0RYV0FFcG5tbzJ3dTNNM3hXbWZaUmR5QjlFZVY2UHVFRVdvblE9PQ==";
+		return userToken;
+	}
 }
 

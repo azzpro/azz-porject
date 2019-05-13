@@ -1,4 +1,4 @@
-package com.azz.util;
+package com.azz.crawler.common;
 
 import java.io.IOException;
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.collections.MapUtils;
+import org.springframework.util.CollectionUtils;
 
 import com.alibaba.fastjson.JSON;
 
@@ -93,9 +93,9 @@ public class OkHttpUtil {
      */
     public static String postFormData(String url, Map<String, String> params) {
         // 构造表单对象
-        //log.debug("post请求URL[{}],请求参数:{}", url, JSON.toJSONString(params));
+        log.debug("post请求URL[{}],请求参数:{}", url, JSON.toJSONString(params));
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
-        if (CollectionUtils.isNotEmpty(params)) {
+        if (!CollectionUtils.isEmpty(params)) {
             for (Entry<String, String> entry : params.entrySet()) {
                 formBodyBuilder.add(entry.getKey(), entry.getValue());
             }
@@ -111,7 +111,7 @@ public class OkHttpUtil {
         } catch (IOException e) {
             log.error("发送POST请求异常", e);
         }
-        //log.debug("formData发送POST请求结果:" + result);
+        log.debug("formData发送POST请求结果:" + result);
         return result;
     }
     
@@ -128,7 +128,7 @@ public class OkHttpUtil {
         // 构造表单对象
 //        log.debug("post请求URL[{}],请求参数:{}", url, JSON.toJSONString(params));
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
-        if (CollectionUtils.isNotEmpty(params)) {
+        if (!CollectionUtils.isEmpty(params)) {
             for (Entry<String, String> entry : params.entrySet()) {
                 formBodyBuilder.add(entry.getKey(), entry.getValue());
             }
@@ -167,7 +167,7 @@ public class OkHttpUtil {
         // 构造表单对象
         log.debug("post请求URL[{}],请求参数:{}", url, JSON.toJSONString(params));
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
-        if (CollectionUtils.isNotEmpty(params)) {
+        if (!CollectionUtils.isEmpty(params)) {
             for (Entry<String, String> entry : params.entrySet()) {
                 formBodyBuilder.add(entry.getKey(), entry.getValue());
             }
@@ -198,7 +198,7 @@ public class OkHttpUtil {
                 .host(host)
                 // geocoder/v2/
                 .addPathSegments(PathSegments);
-        if (MapUtils.isNotEmpty(queryParameter)) {
+        if (!CollectionUtils.isEmpty(queryParameter)) {
             for (Map.Entry<String, String> entry : queryParameter.entrySet()) {
                 builder.addQueryParameter(entry.getKey(), entry.getValue());
             }
@@ -216,7 +216,7 @@ public class OkHttpUtil {
     public static String generateURL(String baseURI, Map<String, String> queryParameter) {
         HttpUrl httpUrl = HttpUrl.parse(baseURI);
         HttpUrl.Builder builder = httpUrl.newBuilder();
-        if (MapUtils.isNotEmpty(queryParameter)) {
+        if (!CollectionUtils.isEmpty(queryParameter)) {
             for (Map.Entry<String, String> entry : queryParameter.entrySet()) {
                 builder.addQueryParameter(entry.getKey(), entry.getValue());
             }

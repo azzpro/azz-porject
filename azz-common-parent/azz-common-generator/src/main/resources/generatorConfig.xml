@@ -48,8 +48,8 @@
 			<property name="enableSubPackages" value="true" />
 		</javaClientGenerator>
 		
-		<table tableName="wx_activity_order_item"
-			domainObjectName="WxActivityOrderItem" enableCountByExample="false"
+		<table tableName="wx_solicit_contribution"
+			domainObjectName="WxSolicitContribution" enableCountByExample="false"
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false"></table>
 	</context>

@@ -48,7 +48,7 @@ public class IpPool {
 	private ProxyIp currentProxyIp;
 	
 	public IpPool() {
-		initIps();
+		//initIps();
 	}
 	
 	@SuppressWarnings("static-access")

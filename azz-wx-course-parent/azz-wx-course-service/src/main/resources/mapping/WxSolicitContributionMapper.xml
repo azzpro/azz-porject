@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azz.wx.course.mapper.WxSolicitContributionMapper">
+  <resultMap id="BaseResultMap" type="com.azz.wx.course.pojo.WxSolicitContribution">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="solicit_contribution_code" jdbcType="VARCHAR" property="solicitContributionCode" />
+    <result column="solicit_contribution_name" jdbcType="VARCHAR" property="solicitContributionName" />
+    <result column="solicit_contribution_pic_name" jdbcType="VARCHAR" property="solicitContributionPicName" />
+    <result column="solicit_contribution_pic_url" jdbcType="VARCHAR" property="solicitContributionPicUrl" />
+    <result column="solicit_contribution_status" jdbcType="TINYINT" property="solicitContributionStatus" />
+    <result column="vote_count" jdbcType="INTEGER" property="voteCount" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.azz.wx.course.pojo.WxSolicitContribution">
+    <result column="solicit_contribution_content" jdbcType="LONGVARCHAR" property="solicitContributionContent" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, solicit_contribution_code, solicit_contribution_name, solicit_contribution_pic_name, 
+    solicit_contribution_pic_url, solicit_contribution_status, vote_count, remark, create_time, 
+    creator, modify_time, modifier
+  </sql>
+  <sql id="Blob_Column_List">
+    solicit_contribution_content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from wx_solicit_contribution
+    where solicit_contribution_code = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByCode" parameterType="string" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from wx_solicit_contribution
+    where id = #{solicitContributionCode}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from wx_solicit_contribution
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.azz.wx.course.pojo.WxSolicitContribution">
+    insert into wx_solicit_contribution (id, solicit_contribution_code, solicit_contribution_name, 
+      solicit_contribution_pic_name, solicit_contribution_pic_url, 
+      solicit_contribution_status, vote_count, remark, 
+      create_time, creator, modify_time, 
+      modifier, solicit_contribution_content
+      )
+    values (#{id,jdbcType=INTEGER}, #{solicitContributionCode,jdbcType=VARCHAR}, #{solicitContributionName,jdbcType=VARCHAR}, 
+      #{solicitContributionPicName,jdbcType=VARCHAR}, #{solicitContributionPicUrl,jdbcType=VARCHAR}, 
+      #{solicitContributionStatus,jdbcType=TINYINT}, #{voteCount,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{modifier,jdbcType=VARCHAR}, #{solicitContributionContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.azz.wx.course.pojo.WxSolicitContribution">
+    insert into wx_solicit_contribution
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="solicitContributionCode != null">
+        solicit_contribution_code,
+      </if>
+      <if test="solicitContributionName != null">
+        solicit_contribution_name,
+      </if>
+      <if test="solicitContributionPicName != null">
+        solicit_contribution_pic_name,
+      </if>
+      <if test="solicitContributionPicUrl != null">
+        solicit_contribution_pic_url,
+      </if>
+      <if test="solicitContributionStatus != null">
+        solicit_contribution_status,
+      </if>
+      <if test="voteCount != null">
+        vote_count,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="solicitContributionContent != null">
+        solicit_contribution_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="solicitContributionCode != null">
+        #{solicitContributionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="solicitContributionName != null">
+        #{solicitContributionName,jdbcType=VARCHAR},
+      </if>
+      <if test="solicitContributionPicName != null">
+        #{solicitContributionPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="solicitContributionPicUrl != null">
+        #{solicitContributionPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="solicitContributionStatus != null">
+        #{solicitContributionStatus,jdbcType=TINYINT},
+      </if>
+      <if test="voteCount != null">
+        #{voteCount,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="solicitContributionContent != null">
+        #{solicitContributionContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azz.wx.course.pojo.WxSolicitContribution">
+    update wx_solicit_contribution
+    <set>
+      <if test="solicitContributionCode != null">
+        solicit_contribution_code = #{solicitContributionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="solicitContributionName != null">
+        solicit_contribution_name = #{solicitContributionName,jdbcType=VARCHAR},
+      </if>
+      <if test="solicitContributionPicName != null">
+        solicit_contribution_pic_name = #{solicitContributionPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="solicitContributionPicUrl != null">
+        solicit_contribution_pic_url = #{solicitContributionPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="solicitContributionStatus != null">
+        solicit_contribution_status = #{solicitContributionStatus,jdbcType=TINYINT},
+      </if>
+      <if test="voteCount != null">
+        vote_count = #{voteCount,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="solicitContributionContent != null">
+        solicit_contribution_content = #{solicitContributionContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.azz.wx.course.pojo.WxSolicitContribution">
+    update wx_solicit_contribution
+    set solicit_contribution_code = #{solicitContributionCode,jdbcType=VARCHAR},
+      solicit_contribution_name = #{solicitContributionName,jdbcType=VARCHAR},
+      solicit_contribution_pic_name = #{solicitContributionPicName,jdbcType=VARCHAR},
+      solicit_contribution_pic_url = #{solicitContributionPicUrl,jdbcType=VARCHAR},
+      solicit_contribution_status = #{solicitContributionStatus,jdbcType=TINYINT},
+      vote_count = #{voteCount,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      solicit_contribution_content = #{solicitContributionContent,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azz.wx.course.pojo.WxSolicitContribution">
+    update wx_solicit_contribution
+    set solicit_contribution_code = #{solicitContributionCode,jdbcType=VARCHAR},
+      solicit_contribution_name = #{solicitContributionName,jdbcType=VARCHAR},
+      solicit_contribution_pic_name = #{solicitContributionPicName,jdbcType=VARCHAR},
+      solicit_contribution_pic_url = #{solicitContributionPicUrl,jdbcType=VARCHAR},
+      solicit_contribution_status = #{solicitContributionStatus,jdbcType=TINYINT},
+      vote_count = #{voteCount,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getSolicitContributions" parameterType="com.azz.wx.course.pojo.bo.SearchSolicitContributionParam"  resultType="com.azz.wx.course.pojo.vo.SolicitContributionInfo">
+  	SELECT
+		wsc.solicit_contribution_code AS solicitContributionCode,
+		wsc.solicit_contribution_name AS solicitContributionName,
+		wsc.solicit_contribution_content AS solicitContributionContent,
+		wsc.solicit_contribution_pic_name AS solicitContributionPicName,
+		wsc.solicit_contribution_pic_url AS solicitContributionPicPrl,
+		wsc.solicit_contribution_status AS voteCount,
+		wsc.vote_count AS voteCount,
+		wsc.remark AS remark,
+		wsc.create_time AS createTime
+	FROM
+		wx_solicit_contribution wsc
+	<where>
+		wsc.solicit_contribution_status != 0
+		<if test="searchInput != null and searchInput != ''">
+			AND (
+					wsc.solicit_contribution_code = #{searchInput}
+				OR wsc.solicit_contribution_name LIKE CONCAT('%', #{searchInput}, '%') 
+			)
+	 	</if>
+	</where>
+  </select>
+  
+  <select id="getSolicitContributionDetail" parameterType="string"  resultType="com.azz.wx.course.pojo.vo.SolicitContributionInfo">
+  	SELECT
+		wsc.solicit_contribution_code AS solicitContributionCode,
+		wsc.solicit_contribution_name AS solicitContributionName,
+		wsc.solicit_contribution_content AS solicitContributionContent,
+		wsc.solicit_contribution_pic_name AS solicitContributionPicName,
+		wsc.solicit_contribution_pic_url AS solicitContributionPicPrl,
+		wsc.solicit_contribution_status AS voteCount,
+		wsc.vote_count AS voteCount,
+		wsc.remark AS remark,
+		wsc.create_time AS createTime
+	FROM
+		wx_solicit_contribution wsc
+	<where>
+		wsc.solicit_contribution_code = #{solicitContributionCode}
+	</where>
+	
+  </select>
+  
+</mapper>

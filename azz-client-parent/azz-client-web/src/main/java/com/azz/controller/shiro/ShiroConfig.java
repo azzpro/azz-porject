@@ -75,6 +75,9 @@ public class ShiroConfig {
 	// 开放活动报名接口 TODO
 	filterChainDefinitionMap.put("/azz/api/client/activity/*", "anon");
 	//filterChainDefinitionMap.put("/azz/api/client/activity/login", "anon");
+
+	// 开放征稿接口
+	filterChainDefinitionMap.put("/azz/api/client/solicitContribution/*", "anon");
 	
 	 
 	// 开放官网首页数据

@@ -7,19 +7,29 @@
  
 package com.azz.platform.web.controller;
 
+import java.io.IOException;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.azz.core.common.JsonResult;
 import com.azz.core.common.page.Pagination;
+import com.azz.core.constants.WxSolicitContributionConstants.IsChangeSolicitContributionPic;
+import com.azz.util.Base64;
+import com.azz.util.JSR303ValidateUtils;
 import com.azz.utils.WebUtils;
 import com.azz.wx.course.api.SolicitContributionService;
 import com.azz.wx.course.pojo.bo.AddSolicitContributionParam;
+import com.azz.wx.course.pojo.bo.AddSolicitContributionWebParam;
 import com.azz.wx.course.pojo.bo.EditSolicitContributionParam;
+import com.azz.wx.course.pojo.bo.EditSolicitContributionWebParam;
 import com.azz.wx.course.pojo.bo.PutOnOrPutOffOrDelSolicitContributionParam;
 import com.azz.wx.course.pojo.bo.SearchSolicitContributionParam;
+import com.azz.wx.course.pojo.bo.SolicitContributionPic;
 import com.azz.wx.course.pojo.vo.SolicitContributionInfo;
 
 /**
@@ -64,9 +74,17 @@ public class SolicitContributionController {
 	 * @param param
 	 * @return
 	 * @author 黄智聪  2019年5月13日 下午5:43:38
+	 * @throws IOException 
 	 */
 	@RequestMapping("/addSolicitContribution")
-	public JsonResult<String> addSolicitContribution(AddSolicitContributionParam param){
+	public JsonResult<String> addSolicitContribution(AddSolicitContributionWebParam webParam) throws IOException{
+		JSR303ValidateUtils.validateInputParam(webParam);
+		AddSolicitContributionParam param = new AddSolicitContributionParam();
+		BeanUtils.copyProperties(webParam, param);
+		MultipartFile solicitContributionPicFile = webParam.getSolicitContributionPicFile();
+		SolicitContributionPic solicitContributionPic = new SolicitContributionPic(solicitContributionPicFile.getOriginalFilename(),
+				solicitContributionPicFile.getSize(), Base64.encode(solicitContributionPicFile.getBytes()));
+		param.setSolicitContributionPicFile(solicitContributionPic);
 		param.setCreator(WebUtils.getLoginUser().getUserInfo().getUserCode());
 		return  solicitContributionService.addSolicitContribution(param);
 	}
@@ -78,9 +96,19 @@ public class SolicitContributionController {
 	 * @param param
 	 * @return
 	 * @author 黄智聪  2019年4月17日 上午11:58:12
+	 * @throws IOException 
 	 */
 	@RequestMapping("/editSolicitContribution")
-	public JsonResult<String> editSolicitContribution(EditSolicitContributionParam param) {
+	public JsonResult<String> editSolicitContribution(EditSolicitContributionWebParam webParam) throws IOException {
+		JSR303ValidateUtils.validateInputParam(webParam);
+		EditSolicitContributionParam param = new EditSolicitContributionParam();
+		BeanUtils.copyProperties(webParam, param);
+		MultipartFile solicitContributionPicFile = webParam.getSolicitContributionPicFile();
+		if (webParam.getIsChangeSolicitContributionPic() == IsChangeSolicitContributionPic.Y.getValue() && solicitContributionPicFile != null) {
+			SolicitContributionPic solicitContributionPic = new SolicitContributionPic(solicitContributionPicFile.getOriginalFilename(),
+					solicitContributionPicFile.getSize(), Base64.encode(solicitContributionPicFile.getBytes()));
+			param.setSolicitContributionPicFile(solicitContributionPic);
+		}
 		param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
 		return solicitContributionService.editSolicitContribution(param);
 	}
@@ -92,10 +120,10 @@ public class SolicitContributionController {
 	 * @return
 	 * @author 黄智聪  2019年1月4日 下午2:51:18
 	 */
-	@RequestMapping("/putOnOrPutOffOrDelActivity")
-	public JsonResult<String> putOnOrPutOffOrDelActivity(PutOnOrPutOffOrDelSolicitContributionParam param){
+	@RequestMapping("/putOnOrPutOffOrDelSolicitContribution")
+	public JsonResult<String> putOnOrPutOffOrDelSolicitContribution(PutOnOrPutOffOrDelSolicitContributionParam param){
 		param.setModifier(WebUtils.getLoginUser().getUserInfo().getUserCode());
-		return solicitContributionService.putOnOrPutOffOrDelActivity(param);
+		return solicitContributionService.putOnOrPutOffOrDelSolicitContribution(param);
 	}
 
 }

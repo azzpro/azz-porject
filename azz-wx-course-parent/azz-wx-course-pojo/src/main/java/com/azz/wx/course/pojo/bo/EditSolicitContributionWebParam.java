@@ -9,6 +9,9 @@ import lombok.Data;
 
 @Data
 public class EditSolicitContributionWebParam {
+	
+	@NotBlank(message = "请选择征稿")
+	private String solicitContributionCode;
 
 	@NotBlank(message = "请填写征稿名称")
     private String solicitContributionName;
@@ -18,6 +21,9 @@ public class EditSolicitContributionWebParam {
     
     @NotBlank(message = "请填写征稿详情")
     private String solicitContributionContent;
+    
+    @NotNull(message = "请选择状态")
+    private Byte solicitContributionStatus;
     
     private String remark;
     

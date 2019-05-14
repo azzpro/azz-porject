@@ -32,7 +32,7 @@
     ,
     <include refid="Blob_Column_List" />
     from wx_solicit_contribution
-    where solicit_contribution_code = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </select>
   
   <select id="selectByCode" parameterType="string" resultMap="ResultMapWithBLOBs">
@@ -41,7 +41,7 @@
     ,
     <include refid="Blob_Column_List" />
     from wx_solicit_contribution
-    where id = #{solicitContributionCode}
+    where solicit_contribution_code = #{solicitContributionCode}
   </select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
@@ -227,8 +227,8 @@
 		wsc.solicit_contribution_name AS solicitContributionName,
 		wsc.solicit_contribution_content AS solicitContributionContent,
 		wsc.solicit_contribution_pic_name AS solicitContributionPicName,
-		wsc.solicit_contribution_pic_url AS solicitContributionPicPrl,
-		wsc.solicit_contribution_status AS voteCount,
+		wsc.solicit_contribution_pic_url AS solicitContributionPicUrl,
+		wsc.solicit_contribution_status AS solicitContributionStatus,
 		wsc.vote_count AS voteCount,
 		wsc.remark AS remark,
 		wsc.create_time AS createTime
@@ -251,8 +251,8 @@
 		wsc.solicit_contribution_name AS solicitContributionName,
 		wsc.solicit_contribution_content AS solicitContributionContent,
 		wsc.solicit_contribution_pic_name AS solicitContributionPicName,
-		wsc.solicit_contribution_pic_url AS solicitContributionPicPrl,
-		wsc.solicit_contribution_status AS voteCount,
+		wsc.solicit_contribution_pic_url AS solicitContributionPicUrl,
+		wsc.solicit_contribution_status AS solicitContributionStatus,
 		wsc.vote_count AS voteCount,
 		wsc.remark AS remark,
 		wsc.create_time AS createTime

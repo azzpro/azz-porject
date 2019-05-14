@@ -193,7 +193,7 @@ public class ApplyInfoService {
 		// 为了保证请求参数按照a-z从小到大的顺序，使用TreeMap
 		Map<String, String> paramMap = new TreeMap<>();
 		// 1.加入接口的请求参数
-		paramMap.put("productCode", "2");
+		paramMap.put("productCode", "4");
 		// 签名时会用到的时间戳参数
 		String timestamp = System.currentTimeMillis() + "";
 		paramMap.put("timestamp", timestamp);
@@ -221,7 +221,7 @@ public class ApplyInfoService {
     
     
 	private static String getUserToken() {
-		String userToken = "dWRHNmJlelBtMTF0TFpEV0hRMzFKdjh4V2t4Sk1TcXBiT1ZJQTVld0J6YkRhSTJyNVQrSUo4Tng5SFJKZXh3VzdSSXpDczlYYzdvTWNvS2VRYmJHSWV3eEhvSWVRYTVKU1ZVU29zSU1BWTZaOGljV015V29ISmFvbFJNbTYrUmx3bmFLQXpEN0hLbUt5emYyT1JwOUNtZFBjWlZ4anBsMmlUaE4xN2JRZzloL1N3dWlFZHVWTnV1eG9TRStKbjJjRHg1TCs1QlZLbFJCcitnd0VjMDlDV2FLTllmbllPbkZ4SXgrdGVvMmtVY1U4VlRUN0RYV0FFcG5tbzJ3dTNNM3hXbWZaUmR5QjlFZVY2UHVFRVdvblE9PQ==";
+		String userToken = "dWRHNmJlelBtMTF0TFpEV0hRMzFKdjh4V2t4Sk1TcXBiT1ZJQTVld0J6WW95UmpJTTNpd3QyNWdhd3FzNWc4d2pzS3U4V2NZZ1oySDFvakFNVldWTE16UURTMWJXaHMyYnE3eXFVYXBCSVJPUjl1Sy91Rk95eHpNTTFHM0VMd2hVcmVGVWx3ZmtwTFYyOVNVaDhqeXZYQ0tUenphTVduNXFzcm9PVXNWQVZ3ekk3VXh4NGV3L0tIQ2JoSGMzS1JDU2VhYmVhcXRQTnFiT0UxRGxEaC8zcXBueFgyejJPWEF4dXZPUTI4cHEvSEltYVl3U3BTdmRmckZYOVNuWjcrL0JGZlJ1Y0tkaDVEQm9VOUN4UEFIT2c9PQ==";
 		return userToken;
 	}
 }

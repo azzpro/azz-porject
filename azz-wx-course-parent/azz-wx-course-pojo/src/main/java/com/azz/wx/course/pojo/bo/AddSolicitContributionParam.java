@@ -18,6 +18,9 @@ public class AddSolicitContributionParam {
     @NotBlank(message = "请填写征稿详情")
     private String solicitContributionContent;
     
+    @NotNull(message = "请选择状态")
+    private Byte solicitContributionStatus;
+    
     private String remark;
     
     private String creator;

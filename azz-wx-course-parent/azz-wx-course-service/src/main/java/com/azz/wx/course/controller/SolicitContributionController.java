@@ -125,9 +125,9 @@ public class SolicitContributionController {
 	 * @return
 	 * @author 黄智聪  2019年1月4日 下午2:51:18
 	 */
-	@RequestMapping("/platform/solicitContribution/putOnOrPutOffOrDelActivity")
-	public JsonResult<String> putOnOrPutOffOrDelActivity(@RequestBody PutOnOrPutOffOrDelSolicitContributionParam param){
-		return solicitContributionService.putOnOrPutOffOrDelActivity(param);
+	@RequestMapping("/platform/solicitContribution/putOnOrPutOffOrDelSolicitContribution")
+	public JsonResult<String> putOnOrPutOffOrDelSolicitContribution(@RequestBody PutOnOrPutOffOrDelSolicitContributionParam param){
+		return solicitContributionService.putOnOrPutOffOrDelSolicitContribution(param);
 	}
 	
 	/*************************************平台端end*************************************/

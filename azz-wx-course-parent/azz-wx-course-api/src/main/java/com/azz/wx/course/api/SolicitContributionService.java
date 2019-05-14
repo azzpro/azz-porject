@@ -107,8 +107,8 @@ public interface SolicitContributionService {
 	 * @return
 	 * @author 黄智聪  2019年1月4日 下午2:51:18
 	 */
-	@RequestMapping("/azz/api/platform/solicitContribution/putOnOrPutOffOrDelActivity")
-	public JsonResult<String> putOnOrPutOffOrDelActivity(@RequestBody PutOnOrPutOffOrDelSolicitContributionParam param);
+	@RequestMapping("/azz/api/platform/solicitContribution/putOnOrPutOffOrDelSolicitContribution")
+	public JsonResult<String> putOnOrPutOffOrDelSolicitContribution(@RequestBody PutOnOrPutOffOrDelSolicitContributionParam param);
 	
 	/*************************************平台端end*************************************/
 }

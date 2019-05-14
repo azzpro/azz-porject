@@ -106,7 +106,7 @@ public class SolicitContributionService {
 				.solicitContributionPicUrl(fileInfo.getImgUrl())
 				.solicitContributionPicName(fileInfo.getOriginalFileName())
 				.voteCount(0)
-				.solicitContributionStatus((byte)SolicitContributionStatus.PUT_ON.getValue())
+				.solicitContributionStatus(param.getSolicitContributionStatus())
 				.build();
 		wxSolicitContributionMapper.insertSelective(record);
 		return  JsonResult.successJsonResult();
@@ -128,9 +128,12 @@ public class SolicitContributionService {
 		}
 		WxSolicitContribution record = WxSolicitContribution.builder()
 				.id(solicitContribution.getId())
+				.solicitContributionContent(param.getSolicitContributionContent())
+				.solicitContributionName(param.getSolicitContributionName())
+				.solicitContributionStatus(param.getSolicitContributionStatus())
 				.modifyTime(new Date())
 				.modifier(param.getModifier())
-				.solicitContributionStatus(param.getSolicitContributionStatus())
+				.remark(param.getRemark())
 				.build();
 		// 修改了主图，则重新上传
 		int isChangeSolicitContributionPic = param.getIsChangeSolicitContributionPic();
@@ -150,7 +153,7 @@ public class SolicitContributionService {
 	 * @return
 	 * @author 黄智聪  2019年1月4日 下午2:51:18
 	 */
-	public JsonResult<String> putOnOrPutOffOrDelActivity(@RequestBody PutOnOrPutOffOrDelSolicitContributionParam param){
+	public JsonResult<String> putOnOrPutOffOrDelSolicitContribution(@RequestBody PutOnOrPutOffOrDelSolicitContributionParam param){
 		// 参数校验
 		JSR303ValidateUtils.validateInputParam(param);
 		WxSolicitContribution solicitContribution = wxSolicitContributionMapper.selectByCode(param.getSolicitContributionCode());

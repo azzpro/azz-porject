@@ -242,7 +242,7 @@
 			)
 	 	</if>
 	 	<if test="status != null">
-			AND status = #{status}
+			AND wsc.solicit_contribution_status = #{status}
 	 	</if>
 	</where>
   </select>

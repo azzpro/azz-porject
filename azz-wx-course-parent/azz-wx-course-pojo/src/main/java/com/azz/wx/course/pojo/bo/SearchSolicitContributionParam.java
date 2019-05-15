@@ -25,7 +25,7 @@ public class SearchSolicitContributionParam extends QueryPage{
 	
 	private String searchInput;
 	
-	private int status;
+	private Integer status;
 
 }
 

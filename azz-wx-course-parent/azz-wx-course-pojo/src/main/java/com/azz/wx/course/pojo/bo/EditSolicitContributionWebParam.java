@@ -16,7 +16,6 @@ public class EditSolicitContributionWebParam {
 	@NotBlank(message = "请填写征稿名称")
     private String solicitContributionName;
 	
-    @NotNull(message = "请上传征稿主图")
 	private MultipartFile solicitContributionPicFile;
     
     @NotBlank(message = "请填写征稿详情")

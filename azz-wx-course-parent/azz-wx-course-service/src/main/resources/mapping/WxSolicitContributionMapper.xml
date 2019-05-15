@@ -225,7 +225,6 @@
   	SELECT
 		wsc.solicit_contribution_code AS solicitContributionCode,
 		wsc.solicit_contribution_name AS solicitContributionName,
-		wsc.solicit_contribution_content AS solicitContributionContent,
 		wsc.solicit_contribution_pic_name AS solicitContributionPicName,
 		wsc.solicit_contribution_pic_url AS solicitContributionPicUrl,
 		wsc.solicit_contribution_status AS solicitContributionStatus,

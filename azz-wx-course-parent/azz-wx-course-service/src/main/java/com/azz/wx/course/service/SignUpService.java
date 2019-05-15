@@ -217,6 +217,7 @@ public class SignUpService {
 	 */
 	public JsonResult<Pagination<ActivityInfo>> getActivityInfos(@RequestBody SearchActivityInfoParam param) {
 		PageHelper.startPage(param.getPageNum(), param.getPageSize());
+		param.setStatus((byte)1);
 		List<ActivityInfo> infos = wxActivityMapper.getActivityInfos(param);
 		return JsonResult.successJsonResult(new Pagination<>(infos));
 	}

@@ -49,6 +49,7 @@ public class SolicitContributionController {
 	 */
 	@RequestMapping("/client/solicitContribution/getSolicitContributionInfos")
 	public JsonResult<Pagination<SolicitContributionInfo>> getSolicitContributionInfos(@RequestBody SearchSolicitContributionParam param) {
+		param.setStatus(1);
 		return solicitContributionService.getSolicitContributionInfos(param);
 	}
 	

@@ -242,6 +242,9 @@
 				OR wsc.solicit_contribution_name LIKE CONCAT('%', #{searchInput}, '%') 
 			)
 	 	</if>
+	 	<if test="status != null">
+			AND status = #{status}
+	 	</if>
 	</where>
   </select>
   

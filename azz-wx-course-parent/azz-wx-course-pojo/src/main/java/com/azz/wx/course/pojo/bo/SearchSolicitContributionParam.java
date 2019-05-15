@@ -24,6 +24,8 @@ public class SearchSolicitContributionParam extends QueryPage{
 	private static final long serialVersionUID = -1062490121712087302L;
 	
 	private String searchInput;
+	
+	private int status;
 
 }
 

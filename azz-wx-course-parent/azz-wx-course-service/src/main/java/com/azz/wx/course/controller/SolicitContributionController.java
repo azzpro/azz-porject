@@ -62,7 +62,7 @@ public class SolicitContributionController {
 	 */
 	@RequestMapping("/client/solicitContribution/getSolicitContributionDetail")
 	public JsonResult<SolicitContributionInfo> getSolicitContributionDetail(@RequestParam("solicitContributionCode")String solicitContributionCode){
-		return solicitContributionService.getSolicitContributionDetail(solicitContributionCode);
+		return solicitContributionService.getSolicitContributionDetail(solicitContributionCode, 1);
 	}
 	
 	/*************************************客户端end*************************************/
@@ -91,7 +91,7 @@ public class SolicitContributionController {
 	 */
 	@RequestMapping("/platform/solicitContribution/getSolicitContributionDetail")
 	public JsonResult<SolicitContributionInfo> getPlatformSolicitContributionDetail(@RequestParam("solicitContributionCode")String solicitContributionCode){
-		return solicitContributionService.getSolicitContributionDetail(solicitContributionCode);
+		return solicitContributionService.getSolicitContributionDetail(solicitContributionCode, 0);
 	}
 	
 	/**

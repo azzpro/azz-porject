@@ -23,8 +23,6 @@ public class EditSolicitContributionParam {
     @NotNull(message = "请选择状态")
     private Byte solicitContributionStatus;
     
-    private String remark;
-    
     @NotNull(message = "缺少请求参数")
 	private Integer isChangeSolicitContributionPic;
     

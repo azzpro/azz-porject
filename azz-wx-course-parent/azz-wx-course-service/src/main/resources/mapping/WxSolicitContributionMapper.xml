@@ -189,6 +189,46 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <update id="updateByCodeSelective" parameterType="com.azz.wx.course.pojo.WxSolicitContribution">
+    update wx_solicit_contribution
+    <set>
+      <if test="solicitContributionName != null">
+        solicit_contribution_name = #{solicitContributionName,jdbcType=VARCHAR},
+      </if>
+      <if test="solicitContributionPicName != null">
+        solicit_contribution_pic_name = #{solicitContributionPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="solicitContributionPicUrl != null">
+        solicit_contribution_pic_url = #{solicitContributionPicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="solicitContributionStatus != null">
+        solicit_contribution_status = #{solicitContributionStatus,jdbcType=TINYINT},
+      </if>
+      <if test="voteCount != null">
+        vote_count = #{voteCount,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="solicitContributionContent != null">
+        solicit_contribution_content = #{solicitContributionContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where solicit_contribution_code = #{solicitContributionCode,jdbcType=VARCHAR}
+  </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.azz.wx.course.pojo.WxSolicitContribution">
     update wx_solicit_contribution
     set solicit_contribution_code = #{solicitContributionCode,jdbcType=VARCHAR},

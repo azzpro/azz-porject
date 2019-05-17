@@ -21,8 +21,6 @@ public class AddSolicitContributionParam {
     @NotNull(message = "请选择状态")
     private Byte solicitContributionStatus;
     
-    private String remark;
-    
     private String creator;
 
 }

@@ -21,6 +21,8 @@ public interface WxSolicitContributionMapper {
     WxSolicitContribution selectByCode(String solicitContributionCode);
 
     int updateByPrimaryKeySelective(WxSolicitContribution record);
+    
+    int updateByCodeSelective(WxSolicitContribution record);
 
     int updateByPrimaryKeyWithBLOBs(WxSolicitContribution record);
 

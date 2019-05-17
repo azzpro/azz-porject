@@ -211,7 +211,7 @@ public class ApplyInfoService {
 		String userToken = getUserToken();
 		System.out.println("4.用户token为 ==> " + userToken);
 		// 4.发送post接口请求
-		String requestUrl = "http://192.168.1.175:8081/hefa/api/client/selection/addProductToShoppingCart?ut=" + userToken;
+		String requestUrl = "http://120.78.162.226:8092/hefa/api/client/selection/addProductToShoppingCart?ut=" + userToken;
 		String response = OkHttpUtil.postFormData(requestUrl, paramMap);
 		System.out.println("5.得到响应结果 ==> " + response);
 	}
@@ -221,7 +221,7 @@ public class ApplyInfoService {
     
     
 	private static String getUserToken() {
-		String userToken = "dWRHNmJlelBtMTF0TFpEV0hRMzFKdjh4V2t4Sk1TcXBiT1ZJQTVld0J6WW95UmpJTTNpd3QyNWdhd3FzNWc4d1F0WVFBbHNid0Qva3cwUWM4MUpLRHFpNndMRHNsV3c0aUJYbjZVcGdtT2xPUjl1Sy91Rk95eHpNTTFHM0VMd2hVcmVGVWx3ZmtwTFYyOVNVaDhqeXZYQ0tUenphTVduNXFzcm9PVXNWQVZ3ekk3VXh4NGV3L0tIQ2JoSGMzS1JDU2VhYmVhcXRQTnFiT0UxRGxEaC8zcXBueFgyejJPWEF4dXZPUTI4cHEvSEltYVl3U3BTdmRmckZYOVNuWjcrL0JGZlJ1Y0tkaDVEQm9VOUN4UEFIT2c9PQ==";
+		String userToken = "Q2RZN2tTYmZOdXRrclR3NU5uYWFoS21ma2ducTkvOEN3Q29uMDZpWWg4MXFzVk95OXVraEV3cGc0QUN1UE01Ri8zZkg4alE1MzRIZ3dTRis2QkdlNjAyNmVvVlZtb1NQV3pWazEyNUNDN2Q3Z2pRNFVpb0NIYm5JclUvWjVmdGx2UjA0RU5NcjJCditDbmN3MUZBQm9yQjJsSTF3aXlDMmpIS2ZDSGdpNndjPQ==";
 		return userToken;
 	}
 }

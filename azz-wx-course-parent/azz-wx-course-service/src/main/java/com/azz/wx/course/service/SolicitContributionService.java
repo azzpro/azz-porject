@@ -75,11 +75,20 @@ public class SolicitContributionService {
 	 * @return
 	 * @author 黄智聪  2019年5月13日 下午5:23:36
 	 */
-	public JsonResult<SolicitContributionInfo> getSolicitContributionDetail(@RequestParam("solicitContributionCode")String solicitContributionCode){
+	public JsonResult<SolicitContributionInfo> getSolicitContributionDetail(@RequestParam("solicitContributionCode")String solicitContributionCode, Integer number){
 		JSR303ValidateUtils.validateNullOrBlank(solicitContributionCode, "请选择记录");
 		SolicitContributionInfo detail = wxSolicitContributionMapper.getSolicitContributionDetail(solicitContributionCode);
 		if(detail == null) {
 			throw new ValidationException("征稿记录不存在");
+		}
+		if(number > 0) {
+			// 浏览量 + 1
+			int count = Integer.parseInt(detail.getRemark()) + number;
+			WxSolicitContribution record = WxSolicitContribution.builder()
+					.solicitContributionCode(solicitContributionCode)
+					.remark(count + "")
+					.build();
+			wxSolicitContributionMapper.updateByCodeSelective(record);
 		}
 		return JsonResult.successJsonResult(detail);
 	}
@@ -99,7 +108,6 @@ public class SolicitContributionService {
 		WxSolicitContribution record = WxSolicitContribution.builder()
 				.createTime(new Date())
 				.creator(param.getCreator())
-				.remark(param.getRemark())
 				.solicitContributionCode(solicitContributionCode)
 				.solicitContributionContent(param.getSolicitContributionContent())
 				.solicitContributionName(param.getSolicitContributionName())
@@ -133,7 +141,6 @@ public class SolicitContributionService {
 				.solicitContributionStatus(param.getSolicitContributionStatus())
 				.modifyTime(new Date())
 				.modifier(param.getModifier())
-				.remark(param.getRemark())
 				.build();
 		// 修改了主图，则重新上传
 		int isChangeSolicitContributionPic = param.getIsChangeSolicitContributionPic();
